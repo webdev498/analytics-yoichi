@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import '../../styles/core.scss';
+// import '../../styles/core.scss';
 
 // Note: Stateless/function components *will not* hot reload!
 // react-transform *only* works on component classes.
@@ -10,18 +10,31 @@ import '../../styles/core.scss';
 //
 // CoreLayout is a pure function of its props, so we can
 // define it with a plain javascript function...
-function CoreLayout ({ children }) {
-  return (
-    <div className='page-container'>
+// function CoreLayout ({ children }) {
+//   return (
+//     <div className='page-container'>
+//       <div className='view-container'>
+//         {children}
+//       </div>
+//     </div>
+//   );
+// }
+
+// CoreLayout.propTypes = {
+//   children: PropTypes.element
+// };
+
+
+class CoreLayout extends React.Component {
+  render () {
+    return (
+    <div>
       <div className='view-container'>
-        {children}
+        {this.props.children}
       </div>
     </div>
-  );
+    )
+  }
 }
-
-CoreLayout.propTypes = {
-  children: PropTypes.element
-};
 
 export default CoreLayout;
