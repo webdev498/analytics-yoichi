@@ -12,7 +12,7 @@ import './login.scss';
 
 const LoginView = () => (
   <Card className='login'>
-    <CustomCardHeader />
+    <CustomCardHeader title='Sign in' />
 
     <form className='login-form' action={loginUrl} method='post'>
       <div style={{padding: '0 20px'}}>
