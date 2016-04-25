@@ -1,17 +1,11 @@
 import React from 'react';
+import AppBar from 'material-ui/lib/app-bar';
 
-class HeaderComponent extends React.Component {
-  render () {
-    return (
-      <header id="header">
-        <div className="brand-holder">
-          <a href="/">
-            <span className="text-lg text-bold text-primary">RANK</span>
-          </a>
-        </div>
-      </header>
-    )
-  }
-}
+const HeaderComponent = () => (
+  <AppBar
+    title="RANK"
+    iconClassNameRight="muidocs-icon-navigation-expand-more"
+  />
+);
 
 export default HeaderComponent;

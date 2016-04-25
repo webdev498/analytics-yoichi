@@ -1,54 +1,38 @@
 /* @flow */
-import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { loginUser } from './login.actions';
+import React from 'react';
+import Card from 'material-ui/lib/card/card';
+import TextField from 'material-ui/lib/text-field';
+import CardActions from 'material-ui/lib/card/card-actions';
+import RaisedButton from 'material-ui/lib/raised-button';
 
-// import { localeChange } from '../../redux/modules/locale';
-// import { defineMessages, FormattedMessage } from 'react-intl';
+import CustomCardHeader from '../components/CustomCardHeader.component';
+import {loginUrl, responseType, clientId, redirectUri} from '../config';
 
-// We avoid using the `@connect` decorator on the class definition so
-// that we can export the undecorated component for testing.
-// See: http://rackt.github.io/redux/docs/recipes/WritingTests.html
-export class LoginView extends React.Component {
-  handleLogin () {
-    console.log(this.refs);
-    loginUser({
-      username: this.refs.username.value.trim(),
-      password: this.refs.password.value.trim()
-    });
-  }
+import './login.scss';
 
-  render () {
-    return (
-      <div className="login col-md-5">
-        <form className="form">
-          <div className="card">
-            <div className="card-head style-primary">
-              <header>Sign In</header>
-            </div>
-            <div className="card-body floating-label">
-              <div className="form-group">
-                <input type="text" className="form-control" id="Username2" />
-                <label htmlFor="Username2">Username</label>
-              </div>
-              <div className="form-group">
-                <input type="password" className="form-control" id="Password2" />
-                <label htmlFor="Password2">Password</label>
-              </div>
-            </div>
-            <div className="card-actionbar">
-              <div className="card-actionbar-row">
-                <button type="submit"
-                        className="btn btn-flat btn-primary ink-reaction">
-                        Login
-                </button>
-              </div>
-            </div>
-          </div>
-        </form>
+const LoginView = () => (
+  <Card className='login'>
+    <CustomCardHeader />
+
+    <form className='login-form' action={loginUrl} method='post'>
+      <div style={{padding: '0 20px'}}>
+        <TextField style={{width: '100%'}} floatingLabelText='Username' name='username' />
       </div>
-    );
-  }
-}
+
+      <div style={{padding: '0 20px'}}>
+        <TextField style={{width: '100%'}} floatingLabelText='Password' type='password' name='password'/>
+      </div>
+
+      <div style={{textAlign: 'right', marginTop: '25px', marginRight: '20px'}}>
+        <RaisedButton primary={true} label='Login' type='submit' />
+      </div>
+
+      <input type='hidden' name='response_type' value={responseType} />
+      <input type='hidden' name='client_id' value={clientId} />
+      <input type='hidden' name='redirect_uri' value={redirectUri} />
+    </form>
+  </Card>
+)
+
 
 export default LoginView;

@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { increment, doubleAsync } from '../../redux/modules/counter';
 import DuckImage from './Duck.jpg';
-import classes from './HomeView.scss';
+// import classes from './HomeView.scss';
 import { localeChange } from '../../redux/modules/locale';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import LanguageSelector from 'components/LanguageSelector';

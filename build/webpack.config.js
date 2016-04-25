@@ -188,23 +188,7 @@ if (isUsingCSSModules) {
   webpackConfig.module.loaders.push({
     test: /\.scss$/,
     include: cssModulesRegex,
-    loaders: [
-      'style',
-      cssModulesLoader,
-      'postcss',
-      'sass?sourceMap'
-    ]
-  });
-
-  webpackConfig.module.loaders.push({
-    test: /\.less$/,
-    include: cssModulesRegex,
-    loaders: [
-      'style',
-      cssModulesLoader,
-      'postcss',
-      'less?sourceMap'
-    ]
+    loader: 'style!css!sass?sourceMap'
   });
 
   webpackConfig.module.loaders.push({
@@ -223,22 +207,7 @@ const excludeCSSModules = isUsingCSSModules ? cssModulesRegex : false;
 webpackConfig.module.loaders.push({
   test: /\.scss$/,
   exclude: excludeCSSModules,
-  loaders: [
-    'style',
-    BASE_CSS_LOADER,
-    'postcss',
-    'sass?sourceMap'
-  ]
-});
-webpackConfig.module.loaders.push({
-  test: /\.less$/,
-  exclude: excludeCSSModules,
-  loaders: [
-    'style',
-    BASE_CSS_LOADER,
-    'postcss',
-    'less?sourceMap'
-  ]
+  loader: 'style!css!sass?sourceMap'
 });
 webpackConfig.module.loaders.push({
   test: /\.css$/,
@@ -254,10 +223,6 @@ webpackConfig.module.loaders.push({
 // Style Configuration
 // ------------------------------------
 webpackConfig.sassLoader = {
-  includePaths: paths.client('styles')
-};
-
-webpackConfig.lessLoader = {
   includePaths: paths.client('styles')
 };
 
