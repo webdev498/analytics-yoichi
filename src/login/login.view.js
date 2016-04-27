@@ -10,8 +10,8 @@ import {loginUrl, responseType, clientId, redirectUri} from '../config';
 
 import './login.scss';
 
-const LoginView = () => (
-  <Card className='login'>
+const LoginView = (props) => (
+  <Card className='login' {...props} >
     <CustomCardHeader title='Sign in' />
 
     <form className='login-form' action={loginUrl} method='post'>

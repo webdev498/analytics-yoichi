@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import Header from '../NonLoggedLayout/Header.component';
+import Header from 'components/PageHeader.component';
 import Sidebar from 'components/Sidebar.component';
 
 import 'styles/core.scss';
@@ -16,7 +16,7 @@ class CoreLayout extends React.Component {
   render () {
     return (
       <div className="menubar-hoverable header-fixed menubar-visible">
-        <Header></Header>
+        <Header title="RANK" />
         <Sidebar></Sidebar>
         <div id="base">
           <div id="content">
