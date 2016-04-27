@@ -7,11 +7,7 @@ class NonLoggedLayout extends React.Component {
   render() {
     return (
       <div>
-        <div id="content">
-          <div className="section-body contain-lg">
-              <Login />
-          </div>
-        </div>
+        <Login />
       </div>
     )
   }
