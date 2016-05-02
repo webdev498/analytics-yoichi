@@ -10,7 +10,7 @@ import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
-    if (!isAuthLoaded(store.getState(), nextState.location.hash)) {
+    if (!isAuthLoaded(store.getState(), nextState.location.hash, store)) {
       replace('/');
     }
 

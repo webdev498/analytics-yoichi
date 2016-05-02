@@ -2,8 +2,8 @@ import React from 'react';
 
 import CardHeader from 'material-ui/lib/card/card-header';
 
-const getStyles = (props) => {
-  return {
+const getStyles = (props) => (
+  {
     backgroundColor: '#00bcd4',
     height: '56px',
     display: 'flex',
@@ -12,13 +12,17 @@ const getStyles = (props) => {
     top: 0,
     width: '100%',
     ...props.style
-  };
-}
+  }
+)
+
+const getTitleStyle = props => (
+  {color: 'white', fontSize: '20px', fontWeight: 300, ...props.titleStyle}
+)
 
 const CustomCardHeader = (props) => (
   <CardHeader {...props}
             style={getStyles(props)}
-            titleStyle={{color: 'white', fontSize: '20px', fontWeight: 300, ...props.titleStyle}}>
+            titleStyle={getTitleStyle(props)}>
     {props.children}
   </CardHeader>
 );
