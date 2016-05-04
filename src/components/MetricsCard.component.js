@@ -18,8 +18,7 @@ const styles = {
     fontWeight: 500
   },
   wrapStyle: {
-    display: 'flex',
-    'align-items': 'flex-start'
+    display: 'flex'
   },
   countStyle: {
     fontSize: '24px'
@@ -31,12 +30,10 @@ const styles = {
 }
 
 function getText (data) {
-  console.log(data ? data.columns[0].displayName : '');
   return data ? data.columns[0].displayName : '';
 }
 
 function getCount (data) {
-  console.log(data ? data.columns[0].displayName : '');
   return data ? data.columns[0].displayName : '';
 }
 
