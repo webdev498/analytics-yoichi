@@ -8,7 +8,7 @@ const styles = {
     padding: '10px'
   },
   iconStyle: {
-    fill: 'rgb(255, 255, 255)',
+    fontSize: '44px',
     height: '50px',
     width: '50px'
   },
@@ -37,11 +37,16 @@ function getCount (data) {
   return data ? data.columns[0].displayName : '';
 }
 
+function getIconElm(props) {
+  const elm = props.children[0]
+  return React.cloneElement(props.children[0], {style: {...styles.iconStyle}});
+}
+
 const MetricsCard = (props) => (
   <Card style={{...styles.cardStyle, ...props.style}}>
     <div style={styles.wrapStyle}>
       <div>
-        {props.children}
+        {getIconElm(props)}
       </div>
       <div style={{marginLeft: 'auto', textAlign: 'right'}}>
         <div style={styles.countStyle}>24</div>
