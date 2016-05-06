@@ -58,7 +58,6 @@ export default class Dashboard extends React.Component {
         </section>*/}
 
         <section>
-          <div id="react-chart">Just a moment!</div>
           <TableComponent></TableComponent>
         </section>
 
