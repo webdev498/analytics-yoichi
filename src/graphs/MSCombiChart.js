@@ -1,6 +1,10 @@
 import React from 'react';
 
 import Card from 'material-ui/lib/card/card';
+/*import FusionCharts from 'fusioncharts';
+import FusionChartsTheme from 'fusionchartsTheme';
+window.FusionCharts = FusionCharts;
+window.FusionChartsTheme = FusionChartsTheme;*/
 
 const renderChart = (id) => {
   FusionCharts.ready(function(){
@@ -17,7 +21,7 @@ const renderChart = (id) => {
               "xAxisname": "Month",
               "yAxisName": "Amount (In USD)",
               "numberPrefix": "$",
-              "theme": "fint"
+              "theme": "zune"
           },
           "categories": [{
               "category": [{

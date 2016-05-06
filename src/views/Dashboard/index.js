@@ -8,9 +8,11 @@ import AssetsIcon from 'material-ui/lib/svg-icons/hardware/devices-other';
 
 import ParentCard from 'containers/ParentCard';
 import MetricCard from 'components/MetricsCard.component';
+import TableComponent from 'components/Table.component';
 
 import ParetoChart from 'graphs/ParetoChart'
 import MSCombiChart from 'graphs/MSCombiChart'
+
 
 const iconStyle = {
   fill: 'rgb(255, 255, 255)',
@@ -51,6 +53,12 @@ export default class Dashboard extends React.Component {
             </MetricCard>
           </ParentCard>
         </section>
+
+	     <section><ParentCard api='https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_highpriority?window=1w&count=200'>
+          <TableComponent></TableComponent></ParentCard>
+        </section>
+
+        <section><TableComponent></TableComponent></section>
 
         <section style={{display: 'flex'}}>
           <ParentCard>

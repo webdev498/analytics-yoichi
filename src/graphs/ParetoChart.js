@@ -1,6 +1,8 @@
 import React from 'react';
 
 import Card from 'material-ui/lib/card/card';
+/*import FusionCharts from 'fusioncharts';
+import FusionChartsTheme from 'fusionchartsTheme';*/
 
 const renderChart = (id) => {
   FusionCharts.ready(function(){
@@ -18,8 +20,7 @@ const renderChart = (id) => {
               "pYAxisName": "No. of Occurrence",
               "sYAxisname": "Cumulative Percentage",
               "showHoverEffect": "1",
-              "theme": "fint"
-
+              "theme": "zune"
           },
           "data": [{
               "label": "Traffic",

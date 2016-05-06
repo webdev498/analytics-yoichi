@@ -56,6 +56,11 @@ const obj = {
       ],
       [
         {
+          type: 'Table.component'
+        }
+      ],
+      [
+        {
           type: 'ParetoChart',
           attributes: {
             style: {width: '50%', marginRight: '20px'},
