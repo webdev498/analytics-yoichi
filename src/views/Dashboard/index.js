@@ -13,7 +13,6 @@ import TableComponent from 'components/Table.component';
 import ParetoChart from 'graphs/ParetoChart'
 import MSCombiChart from 'graphs/MSCombiChart'
 
-
 const iconStyle = {
   fill: 'rgb(255, 255, 255)',
   height: '50px',
@@ -54,11 +53,14 @@ export default class Dashboard extends React.Component {
           </ParentCard>
         </section>
 
-	     <section><ParentCard api='https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_highpriority?window=1w&count=200'>
+	      {/*<section><ParentCard api='https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_highpriority?window=1w&count=200'>
           <TableComponent></TableComponent></ParentCard>
-        </section>
+        </section>*/}
 
-        <section><TableComponent></TableComponent></section>
+        <section>
+          <div id="react-chart">Just a moment!</div>
+          <TableComponent></TableComponent>
+        </section>
 
         <section style={{display: 'flex'}}>
           <ParentCard>

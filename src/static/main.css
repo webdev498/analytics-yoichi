@@ -93,12 +93,18 @@ body {
 .threatTable th {
   font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding: 10px;
+  font-size: 14px;
   background: #00bcd4;
   color: #fff;
+  text-align: left;
+  cursor: pointer;
  }
 
 .threatTable td {
+  font-size: 14px;
   padding: 10px;
+  color: #555;
+  vertical-align: top;
   /*border: 1px solid #00bcd4;*/
  }
 
@@ -158,10 +164,6 @@ body {
   cursor: default;
 }
 
-.threatTable th {
-  cursor: pointer;
-}
-
 .threatTable th.reactable-header-sort-desc, .threatTable th.reactable-header-sort-asc {
   background-color: #00bcd4;
 }
@@ -187,6 +189,9 @@ tr.reactable-filterer {
 tr.reactable-filterer td {
   width: 100%;
 }
+
+.threatTable tr:nth-child(even) {background: #fff}
+.threatTable tr:nth-child(odd) {background: #F0F0F0}
 
 .reactable-filter-input {
   width: 95%;
