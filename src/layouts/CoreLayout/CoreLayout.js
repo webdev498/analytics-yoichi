@@ -13,7 +13,8 @@ const obj = {
           type: 'MetricsCard.component',
           name: 'MetricsCard',
           attributes: {
-            style: {backgroundColor: '#d9534f'}
+            style: {backgroundColor: '#d9534f'},
+            title: 'High Priority Alerts'
           },
           children: [{
             type: 'FontIcon',
@@ -24,7 +25,8 @@ const obj = {
           type: 'MetricsCard.component',
           name: 'MetricsCard',
           attributes: {
-            style: {backgroundColor: '#f0ad4e'}
+            style: {backgroundColor: '#f0ad4e'},
+            title: 'High Priority Malware'
           },
           children: [{
             type: 'FontIcon',
@@ -35,7 +37,8 @@ const obj = {
           type: 'MetricsCard.component',
           name: 'MetricsCard',
           attributes: {
-            style: {backgroundColor: '#337ab7'}
+            style: {backgroundColor: '#337ab7'},
+            title: 'Events Processed'
           },
           children: [{
             type: 'FontIcon',
@@ -46,7 +49,8 @@ const obj = {
           type: 'MetricsCard.component',
           name: 'MetricsCard',
           attributes: {
-            style: {backgroundColor: '#5cb85c'}
+            style: {backgroundColor: '#5cb85c'},
+            title: 'Assets Monitored'
           },
           children: [{
             type: 'FontIcon',

@@ -5,7 +5,7 @@ import Card from 'material-ui/lib/card/card';
 const renderChart = (id) => {
   FusionCharts.ready(function(){
       var fusioncharts = new FusionCharts({
-      type: 'pareto3d',
+      type: 'pareto2d',
       renderAt: id,
       width: '100%',
       height: '400',
