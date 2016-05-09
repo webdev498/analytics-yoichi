@@ -27,7 +27,8 @@ var tableDataSource = [{
                 'column3': unsafe('<b>Dridex Malware</b><br/>170.3.162.105 is likely infected with Dridex'),
                 'column4': unsafe('<b>IP:</b>172.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
                 'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
+                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
+                'columnWidths': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
             },
             {
                 'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('65'),
@@ -40,7 +41,8 @@ var tableDataSource = [{
                 'column3': unsafe('<b>Malware Alert</b><br/>10.3.162.105 is likely infected with Dridex'),
                 'column4': unsafe('<b>IP:</b>172.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
                 'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
+                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
+                'columnWidths': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
             },
             {
                 'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('45'),
@@ -53,7 +55,8 @@ var tableDataSource = [{
                 'column3': unsafe('<b>Connection from bad reputation</b><br/>103.3.162.105 is likely infected with Dridex'),
                 'column4': unsafe('<b>IP:</b>172.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
                 'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
+                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
+                'columnWidths': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
             },
             {
                 'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('65'),
@@ -66,7 +69,8 @@ var tableDataSource = [{
                 'column3': unsafe('<b>Malware Alert</b><br/>10.3.162.105 is likely infected with Dridex'),
                 'column4': unsafe('<b>IP:</b>172.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
                 'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
+                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
+                'columnWidths': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
             },
             {
                 'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('45'),
@@ -79,7 +83,8 @@ var tableDataSource = [{
                 'column3': unsafe('<b>Connection from bad reputation</b><br/>103.3.162.105 is likely infected with Dridex'),
                 'column4': unsafe('<b>IP:</b>172.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
                 'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
+                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
+                'columnWidths': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
             },
             {
                 'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('65'),
@@ -92,7 +97,8 @@ var tableDataSource = [{
                 'column3': unsafe('<b>Malware Alert</b><br/>10.3.162.105 is likely infected with Dridex'),
                 'column4': unsafe('<b>IP:</b>172.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
                 'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
+                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
+                'columnWidths': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
             },
             {
                 'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('45'),
@@ -105,7 +111,8 @@ var tableDataSource = [{
                 'column3': unsafe('<b>Connection from bad reputation</b><br/>103.3.162.105 is likely infected with Dridex'),
                 'column4': unsafe('<b>IP:</b>172.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
                 'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
+                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
+                'columnWidths': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
             }];
 
 var tableCard = React.createClass({
@@ -123,11 +130,11 @@ var tableCard = React.createClass({
             {tableDataSource.map(function(tableRow, index){
               return (
                   <Tr>
-                    <Td column={tableRow.columnNames.column1} value={tableRow.chartValue}><ThreatAnalyticsGraph chartProperties={tableRow}/></Td>
-                    <Td column={tableRow.columnNames.column2}>{tableRow.column2}</Td>
-                    <Td column={tableRow.columnNames.column3}>{tableRow.column3}</Td>
-                    <Td column={tableRow.columnNames.column4}>{tableRow.column4}</Td>
-                    <Td column={tableRow.columnNames.column5}>{tableRow.column5}</Td>
+                    <Td column={tableRow.columnNames.column1} value={tableRow.chartValue} style={tableRow.columnWidths.column1}><ThreatAnalyticsGraph chartProperties={tableRow}/></Td>
+                    <Td column={tableRow.columnNames.column2} style={tableRow.columnWidths.column2}>{tableRow.column2}</Td>
+                    <Td column={tableRow.columnNames.column3} style={tableRow.columnWidths.column3}>{tableRow.column3}</Td>
+                    <Td column={tableRow.columnNames.column4} style={tableRow.columnWidths.column4}>{tableRow.column4}</Td>
+                    <Td column={tableRow.columnNames.column5} style={tableRow.columnWidths.column5}>{tableRow.column5}</Td>
                   </Tr>
                 );
             })}
