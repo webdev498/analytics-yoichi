@@ -1,6 +1,6 @@
 import React from 'react';
 import Reactable from 'reactable';
-import ThreatAnalyticsGraph from 'graphs/ThreatAnalyticsGraph';
+import ThreatAnalyticsGraph from 'components/ThreatAnalyticsGraph.component';
 //import utils from 'utils/utils';
 //import constants from 'utils/constants';
 //import fusionChartInterface from 'utils/fusionChartInterface.js';
@@ -17,7 +17,7 @@ var generateChartDataSourceForAngularGaugeFusionChart = function (rankScore) {
 
 //Currently tableDataSource is hardcoded JSOn array. But later on this will generated from API Response
 var tableDataSource = [{
-                'column1': generateChartDataSourceForAngularGaugeFusionChart('75'),
+                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('75'),
                 'chartValue': '75',
                 'chartId': 'tablechart1',
                 'chartType': 'angulargauge',
@@ -30,7 +30,7 @@ var tableDataSource = [{
                 'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
             },
             {
-                'column1': generateChartDataSourceForAngularGaugeFusionChart('65'),
+                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('65'),
                 'chartValue': '65',
                 'chartId': 'tablechart2',
                 'chartType': 'angulargauge',
@@ -43,7 +43,7 @@ var tableDataSource = [{
                 'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
             },
             {
-                'column1': generateChartDataSourceForAngularGaugeFusionChart('45'),
+                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('45'),
                 'chartValue': '45',
                 'chartId': 'tablechart3',
                 'chartType': 'angulargauge',
@@ -56,7 +56,7 @@ var tableDataSource = [{
                 'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
             },
             {
-                'column1': generateChartDataSourceForAngularGaugeFusionChart('65'),
+                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('65'),
                 'chartValue': '65',
                 'chartId': 'tablechart4',
                 'chartType': 'angulargauge',
@@ -69,7 +69,7 @@ var tableDataSource = [{
                 'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
             },
             {
-                'column1': generateChartDataSourceForAngularGaugeFusionChart('45'),
+                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('45'),
                 'chartValue': '45',
                 'chartId': 'tablechart5',
                 'chartType': 'angulargauge',
@@ -82,7 +82,7 @@ var tableDataSource = [{
                 'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
             },
             {
-                'column1': generateChartDataSourceForAngularGaugeFusionChart('65'),
+                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('65'),
                 'chartValue': '65',
                 'chartId': 'tablechart6',
                 'chartType': 'angulargauge',
@@ -95,7 +95,7 @@ var tableDataSource = [{
                 'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'}
             },
             {
-                'column1': generateChartDataSourceForAngularGaugeFusionChart('45'),
+                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('45'),
                 'chartValue': '45',
                 'chartId': 'tablechart7',
                 'chartType': 'angulargauge',
@@ -112,11 +112,18 @@ var tableCard = React.createClass({
   render: function() {
     return (
       <div style={{width:'100%'}}>
-          <Table style={{width:'100%'}} className="threatTable" sortable={['Rank Score','Date']} defaultSort={{column: 'Rank Score', direction: 'desc'}} filterable={['Date', 'Details', 'Source', 'Destination']} filterBy="" itemsPerPage={5} pageButtonLimit={5}>
+          <Table style={{width:'100%'}}
+                 className="threatTable"
+                 sortable={['Rank Score','Date','test']}
+                 defaultSort={{column: 'Rank Score', direction: 'desc'}}
+                 filterable={['Date', 'Details', 'Source', 'Destination']}
+                 filterBy=""
+                 itemsPerPage={5}
+                 pageButtonLimit={5}>
             {tableDataSource.map(function(tableRow, index){
               return (
                   <Tr>
-                    <Td column={tableRow.columnNames.column1}><ThreatAnalyticsGraph id={tableRow.chartId} chartDataSource={tableRow.column1} width={tableRow.chartWidth} height={tableRow.chartHeight} chartType={tableRow.chartType}/></Td>
+                    <Td column={tableRow.columnNames.column1} value={tableRow.chartValue}><ThreatAnalyticsGraph chartProperties={tableRow}/></Td>
                     <Td column={tableRow.columnNames.column2}>{tableRow.column2}</Td>
                     <Td column={tableRow.columnNames.column3}>{tableRow.column3}</Td>
                     <Td column={tableRow.columnNames.column4}>{tableRow.column4}</Td>
