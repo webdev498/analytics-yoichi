@@ -1,6 +1,8 @@
 import React from 'react';
 
 import Cookies from 'cookies-js';
+import Card from 'material-ui/lib/card/card';
+import FontIcon from 'material-ui/lib/font-icon';
 
 export default class ParentCard extends React.Component {
   constructor(props) {
@@ -12,8 +14,9 @@ export default class ParentCard extends React.Component {
     const accessToken = Cookies.get("access_token");
     const tokenType = Cookies.get("token_type");
 
-    if(this.props.api) {
-      fetch(this.props.api, {
+    const api = this.props.meta.api;
+    if(api) {
+      fetch(api, {
         method: 'GET',
         headers: {
           'Authorization': `${tokenType} ${accessToken}`
@@ -29,6 +32,28 @@ export default class ParentCard extends React.Component {
   }
 
   render() {
-    return React.cloneElement(this.props.children, { data: this.state.data })
+    if(this.props.meta.showHeader) {
+      return (
+        <Card style={{...this.props.attributes.style}}>
+          <header style={{padding: '10px 15px', height: '56px',
+                          display: 'flex', alignItems: 'center', backgroundColor: '#cdcdcd'}}>
+            <span style={{textTransform: 'capitalize', fontSize: '20px'}}>{this.props.meta.title}</span>
+
+            <div style={{marginLeft: 'auto'}}>
+              <FontIcon className='material-icons' style={{marginRight: '10px', fontSize: '20px'}}>refresh</FontIcon>
+              <FontIcon className='material-icons' style={{fontSize: '20px'}}>clear</FontIcon>
+            </div>
+
+          </header>
+
+          <div>
+            {React.cloneElement(this.props.children, { data: this.state.data })}
+          </div>
+        </Card>
+      )
+    }
+    else {
+      return React.cloneElement(this.props.children, { data: this.state.data })
+    }
   }
 }

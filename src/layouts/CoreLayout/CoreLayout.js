@@ -4,6 +4,8 @@ import Header from 'components/PageHeader.component';
 import Sidebar from 'components/Sidebar.component';
 import FontIcon from 'material-ui/lib/font-icon';
 
+import ParentCard from 'containers/ParentCard';
+
 import 'styles/core.scss';
 
 const obj = {
@@ -11,6 +13,10 @@ const obj = {
       [
         {
           type: 'MetricsCard.component',
+          meta: {
+            showHeader: false,
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_count_time_shifted?window=1d&timeShift=1d'
+          },
           name: 'MetricsCard',
           attributes: {
             style: {backgroundColor: '#d9534f'},
@@ -23,6 +29,10 @@ const obj = {
         },
         {
           type: 'MetricsCard.component',
+          meta: {
+            showHeader: false,
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_malware_count_time_shifted?window=1d&timeShift=1d'
+          },
           name: 'MetricsCard',
           attributes: {
             style: {backgroundColor: '#f0ad4e'},
@@ -35,6 +45,10 @@ const obj = {
         },
         {
           type: 'MetricsCard.component',
+          meta: {
+            showHeader: false,
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_event_count_time_shifted?window=1d&timeShift=1d'
+          },
           name: 'MetricsCard',
           attributes: {
             style: {backgroundColor: '#337ab7'},
@@ -47,6 +61,10 @@ const obj = {
         },
         {
           type: 'MetricsCard.component',
+          meta: {
+            showHeader: false,
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_asset_count_time_shifted?window=1d&timeShift=1d'
+          },
           name: 'MetricsCard',
           attributes: {
             style: {backgroundColor: '#5cb85c'},
@@ -61,6 +79,11 @@ const obj = {
       [
         {
           type: 'ParetoChart',
+          meta: {
+            showHeader: true,
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_threat_trend?window=1h',
+            title: 'Alert by type',
+          },
           attributes: {
             style: {width: '50%', marginRight: '20px'},
             id: 'chart1',
@@ -69,6 +92,11 @@ const obj = {
         },
         {
           type: 'MSCombiChart',
+          meta: {
+            showHeader: true,
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_priority_time?window=1h',
+            title: 'Alert priority'
+          },
           attributes: {
             style: {width: '50%'},
             id: 'chart2',
@@ -115,7 +143,10 @@ class CoreLayout extends React.Component {
         }
 
         const componentElm = elm({...componentDetails.attributes}, grandChildrenArray);
-        children.push(componentElm);
+
+        const ParentCardElement = React.createElement(ParentCard, {...componentDetails}, componentElm);
+
+        children.push(ParentCardElement);
       }
 
       const currentSection = React.DOM.section(

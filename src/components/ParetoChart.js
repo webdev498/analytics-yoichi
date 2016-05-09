@@ -1,10 +1,8 @@
 import React from 'react';
 
-import Card from 'material-ui/lib/card/card';
-
 const renderChart = (id) => {
   FusionCharts.ready(function(){
-      var fusioncharts = new FusionCharts({
+      let fusioncharts = new FusionCharts({
       type: 'pareto2d',
       renderAt: id,
       width: '100%',
@@ -48,9 +46,7 @@ const renderChart = (id) => {
 }
 
 const ParetoChart = (props) => (
-  <Card style={{...props.style, color: 'black'}}>
-     <div id={props.id}>{renderChart(props.id)}</div>
-  </Card>
+  <div id={props.id}>{renderChart(props.id)}</div>
 )
 
 export default ParetoChart;

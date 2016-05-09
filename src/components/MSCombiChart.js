@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Card from 'material-ui/lib/card/card';
-
 const renderChart = (id) => {
   FusionCharts.ready(function(){
       var fusioncharts = new FusionCharts({
@@ -140,9 +138,7 @@ const renderChart = (id) => {
 }
 
 const MSCombiChart = (props) => (
-  <Card style={{...props.style, color: 'black'}}>
-     <div id={props.id}>{renderChart(props.id)}</div>
-  </Card>
+  <div id={props.id}>{renderChart(props.id)}</div>
 )
 
 export default MSCombiChart;
