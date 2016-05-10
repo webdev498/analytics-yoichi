@@ -37,7 +37,10 @@ export default class ParentCard extends React.Component {
         <Card style={{...this.props.attributes.style}}>
           <header style={{padding: '10px 15px', height: '56px',
                           display: 'flex', alignItems: 'center', backgroundColor: '#cdcdcd'}}>
-            <span style={{textTransform: 'capitalize', fontSize: '20px'}}>{this.props.meta.title}</span>
+
+            <div>
+              <span style={{textTransform: 'capitalize', fontSize: '18px'}}>{this.props.meta.title}</span>
+            </div>
 
             <div style={{marginLeft: 'auto'}}>
               <FontIcon className='material-icons' style={{marginRight: '10px', fontSize: '20px'}}>refresh</FontIcon>

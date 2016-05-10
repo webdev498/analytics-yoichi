@@ -166,7 +166,7 @@ class CoreLayout extends React.Component {
     return (
       <div className="menubar-hoverable header-fixed menubar-visible">
         <Header title="RANK" />
-        <Sidebar></Sidebar>
+        <Sidebar style={{width: '72px'}}></Sidebar>
         <div id="base">
           <div id="content" style={{padding: '20px'}}>
             {this.renderChildren()}
