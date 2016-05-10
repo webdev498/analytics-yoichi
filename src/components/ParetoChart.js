@@ -55,7 +55,7 @@ const renderChart = (props) => {
   }
 
   FusionCharts.ready(function(){
-    let fusioncharts = new FusionCharts({
+    const fusioncharts = new FusionCharts({
       type: 'pareto2d',
       renderAt: props.id,
       width: '100%',
