@@ -56,8 +56,6 @@ const renderChart = (props) => {
     return;
   }
 
-  console.log(JSON.stringify(props.data));
-
   FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({
       type: 'pareto2d',

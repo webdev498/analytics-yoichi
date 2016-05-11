@@ -81,7 +81,7 @@ const obj = {
           type: 'Table.component',
           meta: {
             showHeader: true,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_highpriority?window=1h&count=200',
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_highpriority?window=1w&count=200',
             title: 'Recent Alerts',
           },
           name: 'Table',

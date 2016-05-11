@@ -1,9 +1,8 @@
 import React from 'react';
 import Reactable from 'reactable';
 import ThreatAnalyticsGraph from 'components/ThreatAnalyticsGraph.component';
-//import utils from 'utils/utils';
-//import constants from 'utils/constants';
-//import fusionChartInterface from 'utils/fusionChartInterface.js';
+//import flagIcon from 'flag-icon';
+
 var Table = Reactable.Table;
 var Tr = Reactable.Tr;
 var Td = Reactable.Td;
@@ -15,115 +14,62 @@ var generateChartDataSourceForAngularGaugeFusionChart = function (rankScore) {
   return chartDataSource;
 }
 
-//Currently tableDataSource is hardcoded JSON array. But later on this will generated from API Response
-var tableDataSource = [{
-                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('75'),
-                'chartValue': '75',
-                'chartId': 'tablechart1',
-                'chartType': 'angulargauge',
-                'chartWidth': '70',
-                'chartHeight': '60',
-                'column2': 'May 3 12:00:32.768',
-                'column3': unsafe('<b>Dridex Malware</b><br/>170.3.162.105 is likely infected with Dridex'),
-                'column4': unsafe('<b>IP:</b>172.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
-                'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
-                'columnStyles': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
-            },
-            {
-                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('65'),
-                'chartValue': '65',
-                'chartId': 'tablechart2',
-                'chartType': 'angulargauge',
-                'chartWidth': '70',
-                'chartHeight': '60',
-                'column2': 'May 4 12:00:32.768',
-                'column3': unsafe('<b>Malware Alert</b><br/>10.3.162.105 is likely infected with Dridex'),
-                'column4': unsafe('<b>IP:</b>173.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
-                'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
-                'columnStyles': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
-            },
-            {
-                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('45'),
-                'chartValue': '45',
-                'chartId': 'tablechart3',
-                'chartType': 'angulargauge',
-                'chartWidth': '70',
-                'chartHeight': '60',
-                'column2': 'May 4 12:00:32.768',
-                'column3': unsafe('<b>Connection from bad reputation</b><br/>103.3.162.105 is likely infected with Dridex'),
-                'column4': unsafe('<b>IP:</b>174.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
-                'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
-                'columnStyles': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
-            },
-            {
-                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('65'),
-                'chartValue': '65',
-                'chartId': 'tablechart4',
-                'chartType': 'angulargauge',
-                'chartWidth': '70',
-                'chartHeight': '60',
-                'column2': 'May 4 12:00:32.768',
-                'column3': unsafe('<b>Malware Alert</b><br/>10.3.162.105 is likely infected with Dridex'),
-                'column4': unsafe('<b>IP:</b>175.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
-                'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
-                'columnStyles': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
-            },
-            {
-                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('45'),
-                'chartValue': '45',
-                'chartId': 'tablechart5',
-                'chartType': 'angulargauge',
-                'chartWidth': '70',
-                'chartHeight': '60',
-                'column2': 'May 4 12:00:32.768',
-                'column3': unsafe('<b>Connection from bad reputation</b><br/>103.3.162.105 is likely infected with Dridex'),
-                'column4': unsafe('<b>IP:</b>176.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
-                'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
-                'columnStyles': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
-            },
-            {
-                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('65'),
-                'chartValue': '65',
-                'chartId': 'tablechart6',
-                'chartType': 'angulargauge',
-                'chartWidth': '70',
-                'chartHeight': '60',
-                'column2': 'May 4 12:00:32.768',
-                'column3': unsafe('<b>Malware Alert</b><br/>10.3.162.105 is likely infected with Dridex'),
-                'column4': unsafe('<b>IP:</b>177.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
-                'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
-                'columnStyles': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
-            },
-            {
-                'chartDataSource': generateChartDataSourceForAngularGaugeFusionChart('45'),
-                'chartValue': '45',
-                'chartId': 'tablechart7',
-                'chartType': 'angulargauge',
-                'chartWidth': '70',
-                'chartHeight': '60',
-                'column2': 'May 4 12:00:32.768',
-                'column3': unsafe('<b>Connection from bad reputation</b><br/>103.3.162.105 is likely infected with Dridex'),
-                'column4': unsafe('<b>IP:</b>178.31.9.170:48633<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-us"></span>'),
-                'column5': unsafe('<b>IP:</b>172.31.9.170:20<br/><b>Machine:</b>rank-master <span className="flag-icon flag-icon-de"></span>'),
-                'columnNames': {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'},
-                'columnStyles': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
-            }];
+//Initilization of variables
+const tableDataSource = [];
 
-const renderData = (props) => {
+const generateDataSource = (props) => {
   if(!props.data) {
     return;
   }
-  console.log(JSON.stringify(props.data.rows));
+
+  let data = props.data.rows;
+
+  for (let i=0;i<data.length;i++) {
+    let currentRow = data[i][0];
+    const obj1 = {};
+    obj1.chartDataSource = generateChartDataSourceForAngularGaugeFusionChart(currentRow.data.rank_alert.score);
+    obj1.chartValue = currentRow.data.rank_alert.score;
+    obj1.chartId = 'recentAlert' + i;
+    obj1.chartType = 'angulargauge';
+    obj1.chartWidth = '70';
+    obj1.chartHeight = '60';
+    obj1.column2 = currentRow.date;
+    let column3 = "<b>" + currentRow.data.rank_alert.description + "</b><br/>" + currentRow.data.rank_alert.message;
+
+    let column4 = "";
+    if (currentRow.source != undefined) {
+      if (currentRow.source.ip != undefined && currentRow.source.ip != '') column4 = column4 + "<b>IP:</b> " + currentRow.source.ip;
+      if (currentRow.source.port != undefined && currentRow.source.port != '' && column4 != '') column4 = column4 + ":" + currentRow.source.port;
+      if (currentRow.source.country != undefined && currentRow.source.country != '') column4 = column4 + " <span class='flag-icon flag-icon-"+currentRow.source.country.toLowerCase()+"'></span>";
+      if (column4 != '') column4 = column4 + "<br/>";
+      if (currentRow.source.additionalInfo != undefined && currentRow.source.additionalInfo.user != undefined && currentRow.source.additionalInfo.user != '') column4 = column4 + "<b>User:</b> " + currentRow.source.additionalInfo.user;
+      if (column4 != '') column4 = column4 + "<br/>";
+      if (currentRow.source.additionalInfo != undefined && currentRow.source.additionalInfo.machine != undefined && currentRow.source.additionalInfo.machine != '') column4 = column4 + "<b>Machine:</b> " + currentRow.source.additionalInfo.machine;
+    }
+
+    let column5 = "";
+    if (currentRow.destination != undefined) {
+      if (currentRow.destination.ip != undefined && currentRow.destination.ip != '') column5 = column5 + "<b>IP:</b> " + currentRow.destination.ip;
+      if (currentRow.destination.port != undefined && currentRow.destination.port != '' && column5 != '') column5 = column5 + ":" + currentRow.destination.port;
+      if (currentRow.destination.country != undefined && currentRow.destination.country != '') column5 = column5 + " <span class='flag-icon flag-icon-"+currentRow.destination.country.toLowerCase()+"'></span>";
+      if (column5 != '') column5 = column5 + "<br/>";
+      if (currentRow.destination.additionalInfo != undefined && currentRow.destination.additionalInfo.user != undefined && currentRow.destination.additionalInfo.user != '') column5 = column5 + "<b>User:</b> " + currentRow.destination.additionalInfo.user;
+      if (column5 != '') column5 = column5 + "<br/>";
+      if (currentRow.destination.additionalInfo != undefined && currentRow.destination.additionalInfo.machine != undefined && currentRow.destination.additionalInfo.machine != '') column5 = column5 + "<b>Machine:</b> " + currentRow.destination.additionalInfo.machine;
+    }
+
+    obj1.column3 = unsafe(column3);
+    obj1.column4 = unsafe(column4);
+    obj1.column5 = unsafe(column5);
+    obj1.columnNames = {'column1':'Rank Score','column2':'Date','column3':'Details','column4':'Source','column5':'Destination'};
+    obj1.columnStyles = {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}};
+
+    tableDataSource.push(obj1);
+  }
 }
 
 const tableCard = (props) => (
-  <div style={{width:'100%'}}>{renderData(props)}
+  <div style={{width:'100%'}}>{generateDataSource(props)}
       <Table style={{width:'100%'}}
              className="threatTable"
              sortable={['Rank Score','Date','Details', 'Source', 'Destination']}
