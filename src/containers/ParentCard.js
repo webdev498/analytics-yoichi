@@ -38,25 +38,25 @@ export default class ParentCard extends React.Component {
         if(this.props.meta.showHeader) {
       return (
         <Loader loaded={this.state.loaded} style={{width:'100%'}}>
-        <Card style={{...this.props.attributes.style}}>
-          <header style={{padding: '10px 15px', height: '56px',
-                          display: 'flex', alignItems: 'center', backgroundColor: '#cdcdcd'}}>
-            <div>
-              <span style={{textTransform: 'capitalize', fontSize: '18px'}}>{this.props.meta.title}</span>
-            </div>
+          <Card style={{...this.props.attributes.style}}>
+            <header style={{padding: '10px 15px', height: '56px',
+                            display: 'flex', alignItems: 'center', backgroundColor: '#cdcdcd'}}>
+              <div>
+                <span style={{textTransform: 'capitalize', fontSize: '18px'}}>{this.props.meta.title}</span>
+              </div>
 
-            <div style={{marginLeft: 'auto'}}>
-              <FontIcon className='material-icons' style={{marginRight: '10px', fontSize: '20px'}}>refresh</FontIcon>
-              <FontIcon className='material-icons' style={{fontSize: '20px'}}>clear</FontIcon>
-            </div>
+              <div style={{marginLeft: 'auto'}}>
+                <FontIcon className='material-icons' style={{marginRight: '10px', fontSize: '20px'}}>refresh</FontIcon>
+                <FontIcon className='material-icons' style={{fontSize: '20px'}}>clear</FontIcon>
+              </div>
 
-          </header>
+            </header>
 
             <div>
               {React.cloneElement(this.props.children, { data: this.state.data })}
             </div>
 
-        </Card>
+          </Card>
         </Loader>
       )
     }
