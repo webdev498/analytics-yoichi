@@ -1,0 +1,20 @@
+export function calculateDateDisplayFormat(timeWindow) {
+  let dateDisplayFormat = 'D MMM YYYY, HH:mm';
+  switch (timeWindow) {
+    case '1h':
+      dateDisplayFormat = 'HH:mm';
+      break;
+    case '1d':
+      dateDisplayFormat = 'HH:mm';
+      break;
+    case '1w':
+      dateDisplayFormat = 'ddd, D MMM';
+      break;
+    case '1mo':
+      dateDisplayFormat = 'ddd, D MMM';
+      break;
+    default:
+      break;
+  }
+  return dateDisplayFormat;
+}

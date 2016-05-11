@@ -8,9 +8,8 @@ const styles = {
     padding: '10px'
   },
   iconStyle: {
-    fontSize: '44px',
-    height: '50px',
-    width: '50px'
+    fontSize: '50px',
+    color: 'white'
   },
   detailsStyle: {
     paddingTop: '10px',
@@ -24,7 +23,7 @@ const styles = {
     fontSize: '24px'
   },
   textStyle: {
-    fontSize: '18px',
+    fontSize: '17px',
     fontWeight: 300
   }
 }
@@ -50,7 +49,7 @@ const MetricsCard = (props) => (
       </div>
       <div style={{marginLeft: 'auto', textAlign: 'right'}}>
         <div style={styles.countStyle}>24</div>
-        <div style={styles.textStyle}>High Priority Alerts</div>
+        <div style={styles.textStyle}>{props.title}</div>
       </div>
     </div>
 

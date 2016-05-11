@@ -10,7 +10,7 @@ import AssetsIcon from 'material-ui/lib/svg-icons/action/important-devices';
 import UserAgentIcon from 'material-ui/lib/svg-icons/action/dns';
 
 const Sidebar = (props) => (
-  <LeftNav open={props.open} style={{top: '64px'}}>
+  <LeftNav open={props.open} style={{...props.style, top: '64px'}}>
     <MenuItem leftIcon={<AlertIcon />}>Alert Details</MenuItem>
     <MenuItem leftIcon={<CountryIcon />}>Country Details</MenuItem>
     <MenuItem leftIcon={<TrafficIcon />}>Traffic Details</MenuItem>
