@@ -115,8 +115,40 @@ var tableDataSource = [{
                 'columnStyles': {'column1':{width:"10%"},'column2':{width:"20%"},'column3':{width:"30%"},'column4':{width:"20%"},'column5':{width:"20%"}}
             }];
 
-var tableCard = React.createClass({
+const renderData = (props) => {
+  if(!props.data) {
+    return;
+  }
+  console.log(JSON.stringify(props.data.rows));
+}
+
+const tableCard = (props) => (
+  <div style={{width:'100%'}}>{renderData(props)}
+      <Table style={{width:'100%'}}
+             className="threatTable"
+             sortable={['Rank Score','Date','Details', 'Source', 'Destination']}
+             defaultSort={{column: 'Rank Score', direction: 'desc'}}
+             filterable={['Date', 'Details', 'Source', 'Destination']}
+             filterBy=""
+             itemsPerPage={5}
+             pageButtonLimit={5}>
+        {tableDataSource.map(function(tableRow, index){
+          return (
+              <Tr>
+                <Td column={tableRow.columnNames.column1} value={tableRow.chartValue} style={tableRow.columnStyles.column1}><ThreatAnalyticsGraph chartProperties={tableRow}/></Td>
+                <Td column={tableRow.columnNames.column2} style={tableRow.columnStyles.column2}>{tableRow.column2}</Td>
+                <Td column={tableRow.columnNames.column3} style={tableRow.columnStyles.column3}>{tableRow.column3}</Td>
+                <Td column={tableRow.columnNames.column4} style={tableRow.columnStyles.column4}>{tableRow.column4}</Td>
+                <Td column={tableRow.columnNames.column5} style={tableRow.columnStyles.column5}>{tableRow.column5}</Td>
+              </Tr>
+            );
+        })}
+      </Table>
+  </div>
+);
+/*var tableCard = React.createClass({
   render: function() {
+    console.log(JSON.stringify(props));
     return (
       <div style={{width:'100%'}}>
           <Table style={{width:'100%'}}
@@ -143,5 +175,5 @@ var tableCard = React.createClass({
     );
   }
 });
-
+*/
 export default tableCard;

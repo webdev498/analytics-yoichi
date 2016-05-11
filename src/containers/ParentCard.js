@@ -3,11 +3,12 @@ import React from 'react';
 import Cookies from 'cookies-js';
 import Card from 'material-ui/lib/card/card';
 import FontIcon from 'material-ui/lib/font-icon';
+import Loader from 'react-loader';
 
 export default class ParentCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {data: null};
+    this.state = {data: null,loaded: false };
   }
 
   componentDidMount() {
@@ -25,7 +26,8 @@ export default class ParentCard extends React.Component {
       .then(response => response.json())
       .then(json => {
         this.setState({
-          data: json
+          data: json,
+          loaded: true
         })
 
       })
@@ -35,6 +37,7 @@ export default class ParentCard extends React.Component {
   render() {
         if(this.props.meta.showHeader) {
       return (
+        <Loader loaded={this.state.loaded} style={{width:'100%'}}>
         <Card style={{...this.props.attributes.style}}>
           <header style={{padding: '10px 15px', height: '56px',
                           display: 'flex', alignItems: 'center', backgroundColor: '#cdcdcd'}}>
@@ -49,10 +52,12 @@ export default class ParentCard extends React.Component {
 
           </header>
 
-          <div>
-            {React.cloneElement(this.props.children, { data: this.state.data })}
-          </div>
+            <div>
+              {React.cloneElement(this.props.children, { data: this.state.data })}
+            </div>
+
         </Card>
+        </Loader>
       )
     }
     else {
