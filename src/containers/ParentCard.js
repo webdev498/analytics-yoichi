@@ -8,7 +8,7 @@ import Loader from 'react-loader';
 export default class ParentCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {data: null,loaded: false };
+    this.state = {data: null,firstData: null,secondData: null,loaded: false };
   }
 
   componentDidMount() {
@@ -32,12 +32,52 @@ export default class ParentCard extends React.Component {
 
       })
     }
+
+    const apis = this.props.meta.apis;
+    if (apis != undefined) {
+      const api1 = apis[0];
+      const api2 = apis[1];
+      //for (let i=0; i < apis.length; i++) {
+        if(api1) {
+          fetch(api1, {
+            method: 'GET',
+            headers: {
+              'Authorization': `${tokenType} ${accessToken}`
+            }
+          })
+          .then(response => response.json())
+          .then(json => {
+            this.setState({
+              firstData: json,
+              loaded: true
+            })
+
+          })
+        }
+        if(api2) {
+          fetch(api2, {
+            method: 'GET',
+            headers: {
+              'Authorization': `${tokenType} ${accessToken}`
+            }
+          })
+          .then(response => response.json())
+          .then(json => {
+            this.setState({
+              secondData: json,
+              loaded: true
+            })
+
+          })
+        }
+      //}
+    }
   }
 
   render() {
         if(this.props.meta.showHeader) {
       return (
-        <Loader loaded={this.state.loaded} style={{width:'100%'}}>
+
           <Card style={{...this.props.attributes.style}}>
             <header style={{padding: '10px 15px', height: '56px',
                             display: 'flex', alignItems: 'center', backgroundColor: '#cdcdcd'}}>
@@ -53,11 +93,11 @@ export default class ParentCard extends React.Component {
             </header>
 
             <div>
-              {React.cloneElement(this.props.children, { data: this.state.data })}
+              {React.cloneElement(this.props.children, { data: this.state.data , multiData: [this.state.firstData, this.state.secondData] })}
             </div>
 
           </Card>
-        </Loader>
+
       )
     }
     else {

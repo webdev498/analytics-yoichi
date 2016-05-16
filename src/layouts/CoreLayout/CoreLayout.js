@@ -117,6 +117,42 @@ const obj = {
             variation: '3d'
           }
         }*/
+      ],
+      [
+        {
+          type: 'WorldMap',
+          meta: {
+            showHeader: true,
+            apis: [
+              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h',
+              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h&filter=source.reputation OR destination.reputation'
+              ],
+            title: 'Outgoing Traffic Heatmap',
+          },
+          attributes: {
+            style: {width: '50%', marginRight: '20px'},
+            id: ['OutgoingTrafficHeatmap','OutgoingTopCountries','OutgoingTopBandwidthCountries'],
+            variation: '3d',
+            mapType: 'Outgoing'
+          }
+        },
+        {
+          type: 'WorldMap',
+          meta: {
+            showHeader: true,
+            apis: [
+              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h',
+              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h&filter=source.reputation OR destination.reputation'
+              ],
+            title: 'Incoming Traffic Heatmap',
+          },
+          attributes: {
+            style: {width: '50%', marginRight: '20px'},
+            id: ['IncomingTrafficHeatmap','IncomingTopCountries','IncomingTopBandwidthCountries'],
+            variation: '3d',
+            mapType: 'Incoming'
+          }
+        }
       ]
     ]
   };
