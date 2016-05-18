@@ -11,10 +11,10 @@ var Td = Reactable.Td;
 var unsafe = Reactable.unsafe;
 
 //Initilization of variables
-const tableDataSource = [];
+let tableDataSource = [];
 let tableProperties = {};
 
-const generateDataSource = (props) => {
+let generateDataSource = (props) => {
   if(!props.data) {
     return;
   }
@@ -26,17 +26,17 @@ const generateDataSource = (props) => {
 
   let data = props.data.rows;
   for (let i=0;i<data.length;i++) {
-    let currentRow = data[i][0];
-    const obj1 = {};
+    let currentRow = data[i];//[0];
+    let obj1 = {};
     obj1.columns = [];
 
-    const columns = props.columns;
+    let columns = props.columns;
     for (let k=0; k<columns.length; k++) {
       var column = columns[k];
       let obj2 = {};
       switch (column.type) {
         case "chart":
-          const chartValueArray = column.data.chartValue;
+          let chartValueArray = column.data.chartValue;
           var chartValue = column.data.chartValue;
           for(let v=0; v<chartValueArray.length; v++) {
             if (v == 0) {
@@ -59,11 +59,11 @@ const generateDataSource = (props) => {
           break;
         case "text":
           let columnText = '';
-          const dataArray = column.data;
+          let dataArray = column.data;
           for (let d=0; d<dataArray.length; d++) {
             let fieldName = dataArray[d].fieldName;
 
-            const fieldValueArray = dataArray[d].fieldValue;
+            let fieldValueArray = dataArray[d].fieldValue;
             let fieldValue = dataArray[d].fieldValue;
             for(let v=0; v<fieldValueArray.length; v++) {
               if (v == 0) {
@@ -134,14 +134,14 @@ const generateDataSource = (props) => {
   }
 }
 
-const tableCard = (props) => (
-  <div style={{width:'100%'}}>{generateDataSource(props)}{console.log(tableProperties)}
+let tableCard = (props) => (
+  <div style={{width:'100%'}}>{generateDataSource(props)}
       <Table style={{width:'100%'}}
              className="threatTable"
-             sortable={tableProperties.sortable}
+             sortable={true}
              defaultSort={tableProperties.defaultSort}
              filterable={tableProperties.filterable}
-             filterBy={tableProperties.filterBy}
+             filterBy=""
              itemsPerPage={5}
              pageButtonLimit={5}>
         {tableDataSource.map(function(tableRow, index){

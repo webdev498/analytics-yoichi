@@ -98,7 +98,8 @@ export default class ParentCard extends React.Component {
             </header>
 
             <div>
-              {React.cloneElement(this.props.children, { data: this.state.data , multiData: [this.state.firstData, this.state.secondData] , columns: this.state.columns, attributes: this.state.attributes})}
+              {React.cloneElement(this.props.children, { data: this.state.data , multiData: [this.state.firstData, this.state.secondData] ,
+               columns: this.state.columns, attributes: this.state.attributes})}
             </div>
 
           </Card>

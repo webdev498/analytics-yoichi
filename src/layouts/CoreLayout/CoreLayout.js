@@ -101,13 +101,176 @@ const obj = {
                 chartId: 'recentAlert',
                 chartWidth: '70',
                 chartHeight: '60',
-                chartValue: ['data','rank_alert','score']
+                chartValue: [0,'data','rank_alert','score']
               },
               style: {width: '10%'}
             },
             {
               type: 'text',
               columnName: 'Date',
+              data: [
+                {
+                  fieldName: "date",
+                  fieldValue: [0,'date']
+                }
+              ],
+              style: {width: '20%'}
+            },
+            {
+              type: 'text',
+              columnName: 'Details',
+              data: [
+                {
+                  fieldValue: [0,'data','rank_alert','description'],
+                  style: 'bold'
+                },
+                {
+                  fieldValue: [0,'data','rank_alert','message']
+                }
+              ],
+              style: {width: '30%'}
+            },
+            {
+              type: 'text',
+              columnName: 'Source',
+              data: [
+                {
+                  fieldName: "IP",
+                  fieldValue: [0,'source','ip']
+                },
+                {
+                  fieldName: "port",
+                  fieldValue: [0,'source','port']
+                },
+                {
+                  fieldName: "countryFlag",
+                  fieldValue: [0,'source','country']
+                },
+                {
+                  fieldName: "User",
+                  fieldValue: [0,'source','additionalInfo','user']
+                },
+                {
+                  fieldName: "Machine",
+                  fieldValue: [0,'source','additionalInfo','machine']
+                }
+              ],
+              style: {width: '20%'}
+            },
+            {
+              type: 'text',
+              columnName: 'Destination',
+              data: [
+                {
+                  fieldName: "IP",
+                  fieldValue: [0,'destination','ip']
+                },
+                {
+                  fieldName: "port",
+                  fieldValue: [0,'destination','port']
+                },
+                {
+                  fieldName: "countryFlag",
+                  fieldValue: [0,'destination','country']
+                },
+                {
+                  fieldName: "User",
+                  fieldValue: [0,'destination','additionalInfo','user']
+                },
+                {
+                  fieldName: "Machine",
+                  fieldValue: [0,'destination','additionalInfo','machine']
+                }
+              ],
+              style: {width: '20%'}
+            }
+          ]
+        }
+      ],
+      [
+        {
+          type: 'ParetoChart',
+          meta: {
+            showHeader: true,
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_threat_trend?window=1h',
+            title: 'Alert by type',
+          },
+          attributes: {
+            style: {width: '50%', marginRight: '20px'},
+            id: 'chart1',
+            variation: '3d'
+          }
+        }/*,
+        {
+          type: 'MSCombiChart',
+          meta: {
+            showHeader: true,
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_priority_time?window=1h',
+            title: 'Alert priority'
+          },
+          attributes: {
+            style: {width: '50%'},
+            id: 'chart2',
+            variation: '3d'
+          }
+        }*/
+      ],
+      [
+        {
+          type: 'WorldMap',
+          meta: {
+            showHeader: true,
+            apis: [
+              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h',
+              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h&filter=source.reputation OR destination.reputation'
+              ],
+            title: 'Outgoing Traffic Heatmap',
+          },
+          attributes: {
+            style: {width: '50%', marginRight: '20px'},
+            id: ['OutgoingTrafficHeatmap','OutgoingTopCountries','OutgoingTopBandwidthCountries'],
+            variation: '3d',
+            mapType: 'Outgoing'
+          }
+        },
+        {
+          type: 'WorldMap',
+          meta: {
+            showHeader: true,
+            apis: [
+              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h',
+              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h&filter=source.reputation OR destination.reputation'
+              ],
+            title: 'Incoming Traffic Heatmap',
+          },
+          attributes: {
+            style: {width: '50%', marginRight: '20px'},
+            id: ['IncomingTrafficHeatmap','IncomingTopCountries','IncomingTopBandwidthCountries'],
+            variation: '3d',
+            mapType: 'Incoming'
+          }
+        }
+      ]/*,
+      [
+        {
+          type: 'Table.component',
+          meta: {
+            showHeader: true,
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_top_longest_connections?window=1h',
+            title: 'Longest Connections',
+          },
+          name: 'Table',
+          attributes: {
+            style: {width: '100%'},
+            sortable:['End Date','Duration','Details', 'Source', 'Destination'],
+            defaultSort:{column: 'Duration', direction: 'asc'},
+            filterable:['End Date', 'Details', 'Source', 'Destination'],
+            filterBy:""
+          },
+          columns: [
+            {
+              type: 'text',
+              columnName: 'End Date',
               data: [
                 {
                   fieldName: "date",
@@ -186,71 +349,7 @@ const obj = {
             }
           ]
         }
-      ],
-      [
-        {
-          type: 'ParetoChart',
-          meta: {
-            showHeader: true,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_threat_trend?window=1h',
-            title: 'Alert by type',
-          },
-          attributes: {
-            style: {width: '50%', marginRight: '20px'},
-            id: 'chart1',
-            variation: '3d'
-          }
-        }/*,
-        {
-          type: 'MSCombiChart',
-          meta: {
-            showHeader: true,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_priority_time?window=1h',
-            title: 'Alert priority'
-          },
-          attributes: {
-            style: {width: '50%'},
-            id: 'chart2',
-            variation: '3d'
-          }
-        }*/
-      ],
-      [
-        {
-          type: 'WorldMap',
-          meta: {
-            showHeader: true,
-            apis: [
-              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h',
-              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h&filter=source.reputation OR destination.reputation'
-              ],
-            title: 'Outgoing Traffic Heatmap',
-          },
-          attributes: {
-            style: {width: '50%', marginRight: '20px'},
-            id: ['OutgoingTrafficHeatmap','OutgoingTopCountries','OutgoingTopBandwidthCountries'],
-            variation: '3d',
-            mapType: 'Outgoing'
-          }
-        },
-        {
-          type: 'WorldMap',
-          meta: {
-            showHeader: true,
-            apis: [
-              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h',
-              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h&filter=source.reputation OR destination.reputation'
-              ],
-            title: 'Incoming Traffic Heatmap',
-          },
-          attributes: {
-            style: {width: '50%', marginRight: '20px'},
-            id: ['IncomingTrafficHeatmap','IncomingTopCountries','IncomingTopBandwidthCountries'],
-            variation: '3d',
-            mapType: 'Incoming'
-          }
-        }
-      ]
+      ]*/
     ]
   };
 
