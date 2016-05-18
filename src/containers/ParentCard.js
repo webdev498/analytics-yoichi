@@ -8,12 +8,19 @@ import Loader from 'react-loader';
 export default class ParentCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {data: null,firstData: null,secondData: null,loaded: false };
+    this.state = {data: null,firstData: null,secondData: null,loaded: false, columns:null, attributes: null };
   }
 
   componentDidMount() {
     const accessToken = Cookies.get("access_token");
     const tokenType = Cookies.get("token_type");
+
+    if (this.props.name == 'Table') {
+      this.setState({
+        columns: this.props.columns,
+        attributes: this.props.attributes
+      })
+    }
 
     const api = this.props.meta.api;
     if(api) {
@@ -51,7 +58,6 @@ export default class ParentCard extends React.Component {
               firstData: json,
               loaded: true
             })
-
           })
         }
         if(api2) {
@@ -67,7 +73,6 @@ export default class ParentCard extends React.Component {
               secondData: json,
               loaded: true
             })
-
           })
         }
       //}
@@ -93,7 +98,7 @@ export default class ParentCard extends React.Component {
             </header>
 
             <div>
-              {React.cloneElement(this.props.children, { data: this.state.data , multiData: [this.state.firstData, this.state.secondData] })}
+              {React.cloneElement(this.props.children, { data: this.state.data , multiData: [this.state.firstData, this.state.secondData] , columns: this.state.columns, attributes: this.state.attributes})}
             </div>
 
           </Card>

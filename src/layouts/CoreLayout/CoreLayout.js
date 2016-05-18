@@ -81,13 +81,110 @@ const obj = {
           type: 'Table.component',
           meta: {
             showHeader: true,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_highpriority?window=1w&count=200',
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_highpriority?window=1d&count=200',
             title: 'Recent Alerts',
           },
           name: 'Table',
           attributes: {
-            style: {width: '100%'}
-          }
+            style: {width: '100%'},
+            sortable:['Rank Score','Date','Details', 'Source', 'Destination'],
+            defaultSort:{column: 'Rank Score', direction: 'desc'},
+            filterable:['Date', 'Details', 'Source', 'Destination'],
+            filterBy:""
+          },
+          columns: [
+            {
+              type: 'chart',
+              columnName: 'Rank Score',
+              data : {
+                chartType: 'angulargauge',
+                chartId: 'recentAlert',
+                chartWidth: '70',
+                chartHeight: '60',
+                chartValue: ['data','rank_alert','score']
+              },
+              style: {width: '10%'}
+            },
+            {
+              type: 'text',
+              columnName: 'Date',
+              data: [
+                {
+                  fieldName: "date",
+                  fieldValue: ['date']
+                }
+              ],
+              style: {width: '20%'}
+            },
+            {
+              type: 'text',
+              columnName: 'Details',
+              data: [
+                {
+                  fieldValue: ['data','rank_alert','description'],
+                  style: 'bold'
+                },
+                {
+                  fieldValue: ['data','rank_alert','message']
+                }
+              ],
+              style: {width: '30%'}
+            },
+            {
+              type: 'text',
+              columnName: 'Source',
+              data: [
+                {
+                  fieldName: "IP",
+                  fieldValue: ['source','ip']
+                },
+                {
+                  fieldName: "port",
+                  fieldValue: ['source','port']
+                },
+                {
+                  fieldName: "countryFlag",
+                  fieldValue: ['source','country']
+                },
+                {
+                  fieldName: "User",
+                  fieldValue: ['source','additionalInfo','user']
+                },
+                {
+                  fieldName: "Machine",
+                  fieldValue: ['source','additionalInfo','machine']
+                }
+              ],
+              style: {width: '20%'}
+            },
+            {
+              type: 'text',
+              columnName: 'Destination',
+              data: [
+                {
+                  fieldName: "IP",
+                  fieldValue: ['destination','ip']
+                },
+                {
+                  fieldName: "port",
+                  fieldValue: ['destination','port']
+                },
+                {
+                  fieldName: "countryFlag",
+                  fieldValue: ['destination','country']
+                },
+                {
+                  fieldName: "User",
+                  fieldValue: ['destination','additionalInfo','user']
+                },
+                {
+                  fieldName: "Machine",
+                  fieldValue: ['destination','additionalInfo','machine']
+                }
+              ],
+              style: {width: '20%'}
+            }
+          ]
         }
       ],
       [
