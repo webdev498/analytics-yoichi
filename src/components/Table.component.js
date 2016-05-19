@@ -3,7 +3,7 @@ import Reactable from 'reactable';
 import ThreatAnalyticsGraph from 'components/ThreatAnalyticsGraph.component';
 //import 'flag-icon-css/flag-icon-css';
 import moment from 'moment';
-import {generateChartDataSource} from 'utils/utils';
+import {generateChartDataSource, msToTime} from 'utils/utils';
 
 var Table = Reactable.Table;
 var Tr = Reactable.Tr;
@@ -11,10 +11,14 @@ var Td = Reactable.Td;
 var unsafe = Reactable.unsafe;
 
 //Initilization of variables
-let tableDataSource = [];
 let tableProperties = {};
+let tableDataSource = [];
 
-let generateDataSource = (props) => {
+const generateDataSource = (props) => {
+  //Initilization of variables
+  tableProperties = {};
+  tableDataSource = [];
+
   if(!props.data) {
     return;
   }
@@ -31,6 +35,7 @@ let generateDataSource = (props) => {
     obj1.columns = [];
 
     let columns = props.columns;
+    console.log(JSON.stringify(columns));
     for (let k=0; k<columns.length; k++) {
       var column = columns[k];
       let obj2 = {};
@@ -91,6 +96,10 @@ let generateDataSource = (props) => {
                     fieldValue = fieldValueInLocalTime;
                     columnText = columnText + fieldValue;
                   }
+                  else if (fieldName == 'duration') {
+                    let time = msToTime(fieldValue);
+                    columnText = columnText + time[0] + ":" + time[1] + ":" + time[2];
+                  }
                   else if (fieldName == 'port') {
                     columnText = columnText + ':' + fieldValue;
                   }
@@ -109,6 +118,10 @@ let generateDataSource = (props) => {
                     fieldValueInLocalTime = moment(fieldValueInLocalTime).format('D MMM YYYY HH:mm');
                     fieldValue = fieldValueInLocalTime;
                     columnText = columnText + fieldValue;
+                  }
+                  else if (fieldName == 'duration') {
+                    let time = msToTime(fieldValue);
+                    columnText = columnText + time[0] + ":" + time[1] + ":" + time[2];
                   } else {
                     columnText = columnText + '<b>' + fieldName + '</b>: ' + fieldValue;
                   }

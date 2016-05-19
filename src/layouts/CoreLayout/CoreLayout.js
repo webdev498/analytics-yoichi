@@ -250,7 +250,7 @@ const obj = {
             mapType: 'Incoming'
           }
         }
-      ]/*,
+      ],
       [
         {
           type: 'Table.component',
@@ -274,7 +274,18 @@ const obj = {
               data: [
                 {
                   fieldName: "date",
-                  fieldValue: ['date']
+                  fieldValue: [0]
+                }
+              ],
+              style: {width: '20%'}
+            },
+            {
+              type: 'text',
+              columnName: 'Duration',
+              data: [
+                {
+                  fieldName: "duration",
+                  fieldValue: [1]
                 }
               ],
               style: {width: '20%'}
@@ -284,11 +295,15 @@ const obj = {
               columnName: 'Details',
               data: [
                 {
-                  fieldValue: ['data','rank_alert','description'],
-                  style: 'bold'
+                  fieldValue: [2]
                 },
                 {
-                  fieldValue: ['data','rank_alert','message']
+                  fieldName: "Incoming bytes",
+                  fieldValue: [17]
+                },
+                {
+                  fieldName: "Outcoming bytes",
+                  fieldValue: [18]
                 }
               ],
               style: {width: '30%'}
@@ -299,23 +314,31 @@ const obj = {
               data: [
                 {
                   fieldName: "IP",
-                  fieldValue: ['source','ip']
+                  fieldValue: [3]
                 },
                 {
                   fieldName: "port",
-                  fieldValue: ['source','port']
+                  fieldValue: [4]
                 },
                 {
                   fieldName: "countryFlag",
-                  fieldValue: ['source','country']
+                  fieldValue: [8]
                 },
                 {
                   fieldName: "User",
-                  fieldValue: ['source','additionalInfo','user']
+                  fieldValue: [6]
                 },
                 {
                   fieldName: "Machine",
-                  fieldValue: ['source','additionalInfo','machine']
+                  fieldValue: [5]
+                },
+                {
+                  fieldName: "Owner",
+                  fieldValue: [7]
+                },
+                {
+                  fieldName: "ASN",
+                  fieldValue: [9]
                 }
               ],
               style: {width: '20%'}
@@ -326,30 +349,38 @@ const obj = {
               data: [
                 {
                   fieldName: "IP",
-                  fieldValue: ['destination','ip']
+                  fieldValue: [10]
                 },
                 {
                   fieldName: "port",
-                  fieldValue: ['destination','port']
+                  fieldValue: [11]
                 },
                 {
                   fieldName: "countryFlag",
-                  fieldValue: ['destination','country']
+                  fieldValue: [15]
                 },
                 {
                   fieldName: "User",
-                  fieldValue: ['destination','additionalInfo','user']
+                  fieldValue: [13]
                 },
                 {
                   fieldName: "Machine",
-                  fieldValue: ['destination','additionalInfo','machine']
+                  fieldValue: [12]
+                },
+                {
+                  fieldName: "Owner",
+                  fieldValue: [14]
+                },
+                {
+                  fieldName: "ASN",
+                  fieldValue: [16]
                 }
               ],
               style: {width: '20%'}
             }
           ]
         }
-      ]*/
+      ]
     ]
   };
 

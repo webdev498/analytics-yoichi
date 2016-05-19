@@ -38,7 +38,7 @@ function getData(data) {
       showPercentInTooltip: "1",
       showValues: "1",
       showYAxisValues: "1",
-      theme: "fint",
+      theme: "zune",
       xAxisNameFontSize: "14",
       xAxisname: "Alert Types",
       yAxisNameFontSize: "14",
