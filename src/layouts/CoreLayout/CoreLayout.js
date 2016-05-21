@@ -380,6 +380,48 @@ const obj = {
             }
           ]
         }
+      ],
+      [
+        {
+          type: 'Compound.component',
+          name: 'Compound',
+          meta: {
+            showHeader: true,
+            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_threat_trend1?window=1h',
+            title: 'Asset Details',
+          },
+          attributes: {
+            style: {width: '100%', marginRight: '20px'},
+            id: 'AssetDetails',
+            variation: '3d'
+          },
+          children: [
+            {
+              type: 'ParetoChart',
+              meta: {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_threat_trend?window=1h',
+                title: 'Alert by type'
+              },
+              attributes: {
+                style: {width: '50%', marginRight: '20px'},
+                id: 'ParetoChart1',
+                variation: '3d'
+              }
+            },
+            {
+              type: 'ParetoChart',
+              meta: {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_threat_trend?window=1h',
+                title: 'Alert by type'
+              },
+              attributes: {
+                style: {width: '50%', marginRight: '20px'},
+                id: 'ParetoChart2',
+                variation: '3d'
+              }
+            }
+          ]
+        }
       ]
     ]
   };
@@ -415,6 +457,12 @@ class CoreLayout extends React.Component {
             const grandChildElm = grandChildren[k];
             if(grandChildElm.type === 'FontIcon') {
               grandChildrenArray.push(React.createElement(FontIcon, {className:"material-icons"}, grandChildElm.content));
+            }
+
+            if (componentDetails.name == 'Compound') {
+              const elmSub = React.createFactory(require('components/' + grandChildElm.type).default,);
+              const componentElmSub = elmSub({...grandChildElm.attributes}, []);
+              grandChildrenArray.push(React.createElement(ParentCard, {...grandChildElm}, componentElmSub));
             }
           }
         }

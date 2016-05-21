@@ -35,7 +35,7 @@ const generateDataSource = (props) => {
     obj1.columns = [];
 
     let columns = props.columns;
-    console.log(JSON.stringify(columns));
+
     for (let k=0; k<columns.length; k++) {
       var column = columns[k];
       let obj2 = {};
@@ -147,7 +147,7 @@ const generateDataSource = (props) => {
   }
 }
 
-let tableCard = (props) => (
+const tableCard = (props) => (
   <div style={{width:'100%'}}>{generateDataSource(props)}
       <Table style={{width:'100%'}}
              className="threatTable"
