@@ -8,8 +8,8 @@ function getData(dataSource) {
   const data = dataSource[0];
   const badReputationData = dataSource[1];
   const items = data.rows;
-  const dataSourceObject = {};
-  const markersItemsObject = [];
+  var dataSourceObject = {};
+  var markersItemsObject = [];
   var topFiveCountries = [];
   var bandwidthUsage = [];
   var minValue = "0";
@@ -17,9 +17,9 @@ function getData(dataSource) {
   var markerIdSuffix = 0;
 
   for (let a=0; a<items.length; a++) {
-    const obj1 = {};
-    const countryData = {};
-    const bandwidthUsageData = {};
+    var obj1 = {};
+    var countryData = {};
+    var bandwidthUsageData = {};
 
     countryData.label = items[a][3];
     countryData.value = items[a][4];
@@ -34,7 +34,7 @@ function getData(dataSource) {
       //continue;
     }
     else {
-      const countryCode = items[a][0];
+      var countryCode = items[a][0];
       obj1.shapeid = "circle";
       obj1.label = items[a][3];
       obj1.id = getCountryIDByCountryCode(countryCode) + markerIdSuffix;
@@ -66,14 +66,14 @@ function getData(dataSource) {
   bandwidthUsage = bandwidthUsage.slice(0, 5);
 
   /***************************************/
-  const items1 = badReputationData.rows;
+  var items1 = badReputationData.rows;
   for (let a=0; a<items1.length; a++) {
-    const obj1 = {};
+    var obj1 = {};
     if(items1[a][1] === "N/A" || items1[a][2] === "N/A" ) {
       //continue;
     }
     else {
-      const countryCode1 = items1[a][0];
+      var countryCode1 = items1[a][0];
       obj1.shapeid = "maliciousIcon";
       obj1.label = items1[a][3];
       obj1.id = getCountryIDByCountryCode(countryCode1) + markerIdSuffix;
@@ -88,7 +88,7 @@ function getData(dataSource) {
   }
   /***************************************/
 
-  const dataSourceObject_1 = {};
+  var dataSourceObject_1 = {};
   dataSourceObject_1.chart = {
                 "entityFillHoverColor": "#cccccc",
                 "nullEntityColor" : "aaaaaa",
@@ -110,7 +110,7 @@ function getData(dataSource) {
                 "bgAlpha":"0",
         };
 
-  const shapesObject = [
+  var shapesObject = [
           {
               "id": "maliciousIcon",
               "type": "image",
@@ -126,7 +126,7 @@ function getData(dataSource) {
     "items":markersItemsObject
   };
 
-  const dataSourceObject_2 = {};
+  var dataSourceObject_2 = {};
   dataSourceObject_2.chart = {
                 "caption": "Top 5 Connections",
                 "bgColor": "#ffffff",
@@ -158,7 +158,7 @@ function getData(dataSource) {
         };
   dataSourceObject_2.data = topFiveCountries;
 
-  const dataSourceObject_3 = {};
+  var dataSourceObject_3 = {};
   dataSourceObject_3.chart = {
                 "caption": "Top 5 Bandwidth",
                 "bgColor": "#ffffff",
@@ -198,6 +198,9 @@ function getData(dataSource) {
 };
 
 const renderChart = (props) => {
+  if(props.multiData == null) {
+    return;
+  }
   if(props.multiData[0] == null || props.multiData[1] == null) {
     return;
   }

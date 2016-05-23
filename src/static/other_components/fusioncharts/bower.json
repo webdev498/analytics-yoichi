@@ -1,0 +1,14 @@
+{
+  "name": "bower-fusioncharts",
+  "description": "FusionCharts",
+  "version": "3.10.0",
+  "main": "js/fusioncharts.js",
+  "ignore": [
+      "export-handlers"
+  ],
+  "homepage": "http://www.fusioncharts.com",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.ranksoftwareinc.com:bower/bower-fusioncharts.git"
+  }
+}

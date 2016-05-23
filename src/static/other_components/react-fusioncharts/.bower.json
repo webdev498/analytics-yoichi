@@ -1,0 +1,21 @@
+{
+  "name": "bower-react-fusioncharts",
+  "description": "React plugin for FusionCharts",
+  "version": "1.0.0",
+  "main": "react-fusioncharts.min.js",
+  "ignore": [],
+  "homepage": "http://fusioncharts.github.io/react-fusioncharts",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.ranksoftwareinc.com:bower/bower-react-fusioncharts.git"
+  },
+  "_release": "1.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.0",
+    "commit": "ba9ff2cce315210c253a5a24cf27c357cd3f54f1"
+  },
+  "_source": "git@gitlab.ranksoftwareinc.com:bower/bower-react-fusioncharts.git",
+  "_target": "1.0.0",
+  "_originalSource": "react-fusioncharts"
+}

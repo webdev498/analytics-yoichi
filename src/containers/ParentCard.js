@@ -8,7 +8,7 @@ import Loader from 'react-loader';
 export default class ParentCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {data: null,firstData: null,secondData: null,loaded: false, columns:null, attributes: null };
+    this.state = {data: null,loaded: false, columns:null, attributes: null, multiData: null, apisFieldMapping: null };
   }
 
   componentDidMount() {
@@ -36,7 +36,6 @@ export default class ParentCard extends React.Component {
           data: json,
           loaded: true
         })
-
       })
     }
 
@@ -44,38 +43,24 @@ export default class ParentCard extends React.Component {
     if (apis != undefined) {
       const api1 = apis[0];
       const api2 = apis[1];
-      //for (let i=0; i < apis.length; i++) {
-        if(api1) {
-          fetch(api1, {
-            method: 'GET',
-            headers: {
-              'Authorization': `${tokenType} ${accessToken}`
-            }
-          })
-          .then(response => response.json())
-          .then(json => {
-            this.setState({
-              firstData: json,
-              loaded: true
-            })
-          })
-        }
-        if(api2) {
-          fetch(api2, {
-            method: 'GET',
-            headers: {
-              'Authorization': `${tokenType} ${accessToken}`
-            }
-          })
-          .then(response => response.json())
-          .then(json => {
-            this.setState({
-              secondData: json,
-              loaded: true
-            })
-          })
-        }
-      //}
+      let multiDataArray = [];
+      for (let i=0; i < apis.length; i++) {
+        fetch(apis[i]['api'], {
+          method: 'GET',
+          headers: {
+            'Authorization': `${tokenType} ${accessToken}`
+          }
+        })
+        .then(response => response.json())
+        .then(json => {
+          multiDataArray.push(json);
+          this.setState({
+            multiData: multiDataArray,
+            apisFieldMapping: apis,
+            loaded: true
+          });
+        })
+      }
     }
   }
 
@@ -98,8 +83,11 @@ export default class ParentCard extends React.Component {
             </header>
 
             <div>
-              {React.cloneElement(this.props.children, { data: this.state.data , multiData: [this.state.firstData, this.state.secondData] ,
-               columns: this.state.columns, attributes: this.state.attributes})}
+              {React.cloneElement(this.props.children,
+                { data: this.state.data , multiData: this.state.multiData ,
+                  columns: this.state.columns, attributes: this.state.attributes,
+                  apisFieldMapping: this.state.apisFieldMapping
+                })}
             </div>
 
           </Card>
@@ -107,7 +95,10 @@ export default class ParentCard extends React.Component {
       )
     }
     else {
-      return React.cloneElement(this.props.children, { data: this.state.data })
+      return React.cloneElement(this.props.children,
+        { data: this.state.data, multiData: this.props.multiData,
+          apisFieldMapping: this.props.apisFieldMapping
+        })
     }
   }
 }

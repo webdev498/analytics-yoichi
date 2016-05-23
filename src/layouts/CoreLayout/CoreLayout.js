@@ -221,9 +221,13 @@ const obj = {
           meta: {
             showHeader: true,
             apis: [
-              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h',
-              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h&filter=source.reputation OR destination.reputation'
-              ],
+              {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h'
+              },
+              {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h&filter=source.reputation OR destination.reputation'
+              }
+            ],
             title: 'Outgoing Traffic Heatmap',
           },
           attributes: {
@@ -238,9 +242,13 @@ const obj = {
           meta: {
             showHeader: true,
             apis: [
-              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h',
-              'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h&filter=source.reputation OR destination.reputation'
-              ],
+              {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h'
+              },
+              {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h&filter=source.reputation OR destination.reputation'
+              }
+            ],
             title: 'Incoming Traffic Heatmap',
           },
           attributes: {
@@ -387,8 +395,49 @@ const obj = {
           name: 'Compound',
           meta: {
             showHeader: true,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_threat_trend1?window=1h',
-            title: 'Asset Details',
+            apis: [
+              {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_total_usage?window=1h',
+                data: [
+                  {
+                    fieldName: 'totalConnections',
+                    fieldValue: [0,0]
+                  },
+                  {
+                    fieldName: 'totalBandwidth',
+                    fieldValue: [0,1]
+                  }
+                ]
+              },
+              {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_top_talkers_connections?window=1h',
+                data: [
+                  {
+                    fieldName: 'top10Connections',
+                    fieldValue: [1]
+                  }
+                ]
+              },
+              {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_top_talkers_bandwidth?window=1h',
+                data: [
+                  {
+                    fieldName: 'top10Bandwidth',
+                    fieldValue: [1]
+                  }
+                ]
+              },
+              {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_asset_count_time_shifted?window=1h&timeShift=1h',
+                data: [
+                  {
+                    fieldName: 'assetCount',
+                    fieldValue: [0,0,0]
+                  }
+                ]
+              }
+            ],
+            title: 'Asset Details'
           },
           attributes: {
             style: {width: '100%', marginRight: '20px'},
@@ -397,26 +446,26 @@ const obj = {
           },
           children: [
             {
-              type: 'ParetoChart',
+              type: 'DoughnutChart',
               meta: {
-                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_threat_trend?window=1h',
-                title: 'Alert by type'
+                showHeader: false,
+                title: 'Top Connections'
               },
               attributes: {
                 style: {width: '50%', marginRight: '20px'},
-                id: 'ParetoChart1',
+                id: 'DoughnutChart1',
                 variation: '3d'
               }
             },
             {
-              type: 'ParetoChart',
+              type: 'DoughnutChart',
               meta: {
-                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_threat_trend?window=1h',
-                title: 'Alert by type'
+                showHeader: false,
+                title: 'Top Bandwidth'
               },
               attributes: {
                 style: {width: '50%', marginRight: '20px'},
-                id: 'ParetoChart2',
+                id: 'DoughnutChart2',
                 variation: '3d'
               }
             }
