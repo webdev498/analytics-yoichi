@@ -12,6 +12,7 @@ const obj = {
     layout: [
       [
         {
+          id: '1',
           type: 'MetricsCard.component',
           meta: {
             showHeader: false,
@@ -28,6 +29,7 @@ const obj = {
           }]
         },
         {
+          id: '2',
           type: 'MetricsCard.component',
           meta: {
             showHeader: false,
@@ -44,6 +46,7 @@ const obj = {
           }]
         },
         {
+          id: '3',
           type: 'MetricsCard.component',
           meta: {
             showHeader: false,
@@ -60,6 +63,7 @@ const obj = {
           }]
         },
         {
+          id: '4',
           type: 'MetricsCard.component',
           meta: {
             showHeader: false,
@@ -78,6 +82,7 @@ const obj = {
       ],
       [
         {
+          id: '5',
           type: 'ParetoChart',
           meta: {
             showHeader: true,
@@ -91,6 +96,7 @@ const obj = {
           }
         },
         {
+          id: '6',
           type: 'MSCombiChart',
           meta: {
             showHeader: true,

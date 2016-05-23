@@ -9,8 +9,8 @@ import AssetsIcon from 'material-ui/lib/svg-icons/hardware/devices-other';
 import ParentCard from 'containers/ParentCard';
 import MetricCard from 'components/MetricsCard.component';
 
-import ParetoChart from 'graphs/ParetoChart'
-import MSCombiChart from 'graphs/MSCombiChart'
+import ParetoChart from 'components/ParetoChart'
+import MSCombiChart from 'components/MSCombiChart'
 
 const iconStyle = {
   fill: 'rgb(255, 255, 255)',
