@@ -143,14 +143,14 @@ class CoreLayout extends React.Component {
           for(let k = 0, grandChildrenLen = grandChildren.length; k < grandChildrenLen; k++) {
             const grandChildElm = grandChildren[k];
             if(grandChildElm.type === 'FontIcon') {
-              grandChildrenArray.push(React.createElement(FontIcon, {className:"material-icons"}, grandChildElm.content));
+              grandChildrenArray.push(React.createElement(FontIcon, {className:'material-icons'}, grandChildElm.content));
             }
           }
         }
 
         const componentElm = elm({...componentDetails.attributes}, grandChildrenArray);
 
-        const ParentCardElement = React.createElement(ParentCard, {...componentDetails}, componentElm);
+        const ParentCardElement = React.createElement(ParentCard, {...componentDetails, key: componentDetails.id}, componentElm);
 
         children.push(ParentCardElement);
       }
