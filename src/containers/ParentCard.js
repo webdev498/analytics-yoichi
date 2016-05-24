@@ -8,7 +8,9 @@ import Loader from 'react-loader';
 export default class ParentCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {data: null,loaded: false, columns:null, attributes: null, multiData: null, apiFieldMapping: null, sectionTitle: null, legend: [] };
+    this.state = {data: null,loaded: false, columns:null, attributes: null, multiData: null,
+      apiFieldMapping: [], sectionTitle: null, legend: [], chartOptions: {}
+    };
   }
 
   componentDidMount() {
@@ -25,7 +27,8 @@ export default class ParentCard extends React.Component {
       this.setState({
         sectionTitle: this.props.meta.title,
         apiFieldMapping: this.props.apiFieldMapping,
-        legend: this.props.meta.legend
+        legend: this.props.meta.legend,
+        chartOptions: this.props.meta.chartOptions
       })
     }
 
@@ -102,7 +105,8 @@ export default class ParentCard extends React.Component {
     else {
       return React.cloneElement(this.props.children,
         { data: this.state.data, multiData: this.props.multiData,
-          apiFieldMapping: this.state.apiFieldMapping, sectionTitle: this.state.sectionTitle, legend: this.state.legend
+          apiFieldMapping: this.state.apiFieldMapping, sectionTitle: this.state.sectionTitle, legend: this.state.legend,
+          chartOptions: this.state.chartOptions
         })
     }
   }

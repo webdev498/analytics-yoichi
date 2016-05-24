@@ -5,9 +5,9 @@ import Card from 'material-ui/lib/card/card';
 import {getCountryIDByCountryCode} from 'utils/utils';
 
 function getData(dataSource) {
-  const data = dataSource[0];
-  const badReputationData = dataSource[1];
-  const items = data.rows;
+  var data = dataSource[0];
+  var badReputationData = dataSource[1];
+  var items = data.rows;
   var dataSourceObject = {};
   var markersItemsObject = [];
   var topFiveCountries = [];
@@ -16,7 +16,7 @@ function getData(dataSource) {
   var maxValue = "0";
   var markerIdSuffix = 0;
 
-  for (let a=0; a<items.length; a++) {
+  for (var a=0; a<items.length; a++) {
     var obj1 = {};
     var countryData = {};
     var bandwidthUsageData = {};
@@ -67,7 +67,7 @@ function getData(dataSource) {
 
   /***************************************/
   var items1 = badReputationData.rows;
-  for (let a=0; a<items1.length; a++) {
+  for (var a=0; a<items1.length; a++) {
     var obj1 = {};
     if(items1[a][1] === "N/A" || items1[a][2] === "N/A" ) {
       //continue;

@@ -397,6 +397,9 @@ const obj = {
             showHeader: true,
             apis: [
               {
+                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_asset_count_time_shifted?window=1h&timeShift=1h'
+              },
+              {
                 api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_total_usage?window=1h'
               },
               {
@@ -404,9 +407,6 @@ const obj = {
               },
               {
                 api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_top_talkers_bandwidth?window=1h'
-              },
-              {
-                api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_asset_count_time_shifted?window=1h&timeShift=1h'
               }
             ],
             title: 'Asset Details'
@@ -433,18 +433,18 @@ const obj = {
               apiFieldMapping: [
                 {
                   api: 0,
+                  fieldName: 'assetCount',
+                  fieldValue: [0,0,0]
+                },
+                {
+                  api: 1,
                   fieldName: 'totalConnections',
                   fieldValue: [0,0]
                 },
                 {
-                  api: 1,
+                  api: 2,
                   fieldName: 'top10Connections',
                   fieldValue: [1]
-                },
-                {
-                  api: 3,
-                  fieldName: 'assetCount',
-                  fieldValue: [0,0,0]
                 }
               ]
             },
@@ -464,18 +464,84 @@ const obj = {
               apiFieldMapping: [
                 {
                   api: 0,
+                  fieldName: 'assetCount',
+                  fieldValue: [0,0,0]
+                },
+                {
+                  api: 1,
                   fieldName: 'totalBandwidth',
                   fieldValue: [0,1]
                 },
                 {
-                  api: 2,
+                  api: 3,
                   fieldName: 'top10Bandwidth',
                   fieldValue: [1]
+                }
+              ]
+            },
+            {
+              type: 'HorizontalBarChart',
+              parent:'Compound',
+              meta: {
+                showHeader: false,
+                title: 'Top IPs using the highest number of connections',
+                chartOptions: {
+                  'numberSuffix': '%'
+                }
+              },
+              attributes: {
+                style: {width: '50%', marginRight: '20px'},
+                id: 'HorizontalBarChartConnections',
+                variation: '3d'
+              },
+              apiFieldMapping: [
+                {
+                  api: 0,
+                  fieldName: 'assetCount',
+                  fieldValue: [0,0,0]
+                },
+                {
+                  api: 1,
+                  fieldName: 'totalConnections',
+                  fieldValue: [0,0]
+                },
+                {
+                  api: 2,
+                  fieldName: 'top10Connections',
+                  fieldValue: [1]
+                }
+              ]
+            },
+            {
+              type: 'HorizontalBarChart',
+              parent:'Compound',
+              meta: {
+                showHeader: false,
+                title: 'Top IPs using the highest bandwidth',
+                chartOptions: {
+                  'numberSuffix': '%'
+                }
+              },
+              attributes: {
+                style: {width: '50%', marginRight: '20px'},
+                id: 'HorizontalBarChartBandwidth',
+                variation: '3d'
+              },
+              apiFieldMapping: [
+                {
+                  api: 0,
+                  fieldName: 'assetCount',
+                  fieldValue: [0,0,0]
+                },
+                {
+                  api: 1,
+                  fieldName: 'totalBandwidth',
+                  fieldValue: [0,1]
                 },
                 {
                   api: 3,
-                  fieldName: 'assetCount',
-                  fieldValue: [0,0,0]
+                  fieldName: 'top10Bandwidth',
+                  fieldValue: [1]
                 }
               ]
             }

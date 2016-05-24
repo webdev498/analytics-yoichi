@@ -95,7 +95,7 @@ const renderChart = (props) => {
     return;
   }
 
-  const apiFieldMapping = props.apiFieldMapping;
+  var apiFieldMapping = props.apiFieldMapping;
   var totalValue = 0;//totalConnections OR totalBandwidth
   var countValue = 0;//assetsCount
   var top10TotalValue = 0;//top10Connections OR top10Bandwidth
@@ -115,12 +115,25 @@ const renderChart = (props) => {
             fieldValue = apiData[fieldValueArray[v]];
           }
           else {
+            fieldValue = apiData[fieldValueArray[v]];
+          }
+        }
+        countValue = parseInt(fieldValue);
+        break;
+      case 1:
+        var fieldValueArray = apiFieldMappingIndividual.fieldValue;
+        var fieldValue = 0;
+        for(let v=0; v<fieldValueArray.length; v++) {
+          if (v == 0) {
+            fieldValue = apiData[fieldValueArray[v]];
+          }
+          else {
             fieldValue = fieldValue[fieldValueArray[v]];
           }
         }
         totalValue = parseInt(fieldValue);
         break;
-      case 1:
+      case 2:
         for (var i=0; i<apiData.length; i++) {
           var fieldValueArray = apiFieldMappingIndividual.fieldValue;
           var fieldValue = 0;
@@ -138,19 +151,6 @@ const renderChart = (props) => {
             top10TotalValue = top10TotalValue + parseInt(fieldValue);
           }
         }
-        break;
-      case 2:
-        var fieldValueArray = apiFieldMappingIndividual.fieldValue;
-        var fieldValue = 0;
-        for(let v=0; v<fieldValueArray.length; v++) {
-          if (v == 0) {
-            fieldValue = apiData[fieldValueArray[v]];
-          }
-          else {
-            fieldValue = apiData[fieldValueArray[v]];
-          }
-        }
-        countValue = parseInt(fieldValue);
         break;
       default:
         break;
