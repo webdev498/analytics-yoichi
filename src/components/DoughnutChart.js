@@ -68,6 +68,8 @@ function generateDoughnutChart (assetsCount, topAssetsCount, top10Count, totalCo
   if (percentage1 == 0) {assetPercentage = assetsCount;}
   else {assetPercentage = percentage1;}
 
+  var displayPercentage1 = percentage1.toString() + '%';
+
   /*if (chart1 == "chart1") {
     $("#connectionsPercentage").html("<span style='font-weight:bold;color:"+highlightedColor1+";'>" + percentage2 + "%</span> of connections are used by <span style='font-weight:bold;color:"+highlightedColor2+";'>" + assetPercentage + "%</span> of assets");
   }
@@ -78,7 +80,7 @@ function generateDoughnutChart (assetsCount, topAssetsCount, top10Count, totalCo
   var percentage2Color = {fontWeight:'bold',color:highlightedColor1};
   var percentage1Color = {fontWeight:'bold',color:highlightedColor2};
 
-  doughnutAttributes = {percentage1: percentage1,
+  doughnutAttributes = {displayPercentage1: displayPercentage1,
     percentage2: percentage2,
     chart1Background: chart1Background,
     chart1SliceOneStyle: chart1SliceOneStyle,
@@ -142,7 +144,7 @@ const renderChart = (props) => {
 
 const DoughnutChart = (props) => (
   <div id={props.id}>{renderChart(props)}
-    <div className="donutChartBorder">
+    <div className="chartBorder">
       <div className="chartCaption">Top Connections</div>
       <div className="row">
         <div className="col-sm-12" >
@@ -158,7 +160,7 @@ const DoughnutChart = (props) => (
             <div className="donut-chart chart1" style={doughnutAttributes.chart1Background}>
               <div className="slice one" style={doughnutAttributes.chart1SliceOneStyle}></div>
               <div className="slice two" style={doughnutAttributes.chart1SliceTwoStyle}></div>
-              <div className="chart-center"><span>{doughnutAttributes.percentage1}%</span></div>
+              <div className="chart-center"><span>{doughnutAttributes.displayPercentage1}</span></div>
             </div>
           </div>
         </div>
@@ -166,7 +168,7 @@ const DoughnutChart = (props) => (
       <div className="row"><br/><br/>
         <div className="col-sm-12 text-center" id="connectionsPercentage">
           <span style={doughnutAttributes.percentage2Color}>{doughnutAttributes.percentage2}%</span> of connections are used by
-          <span style={doughnutAttributes.percentage1Color}>{doughnutAttributes.assetPercentage}%</span> of assets
+          <span style={doughnutAttributes.percentage1Color}> {doughnutAttributes.assetPercentage}%</span> of assets
         </div><br/><br/>
       </div>
     </div>
