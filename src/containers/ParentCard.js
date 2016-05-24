@@ -8,7 +8,7 @@ import Loader from 'react-loader';
 export default class ParentCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {data: null,loaded: false, columns:null, attributes: null, multiData: null, apisFieldMapping: null };
+    this.state = {data: null,loaded: false, columns:null, attributes: null, multiData: null, apiFieldMapping: null, sectionTitle: null, legend: [] };
   }
 
   componentDidMount() {
@@ -19,6 +19,13 @@ export default class ParentCard extends React.Component {
       this.setState({
         columns: this.props.columns,
         attributes: this.props.attributes
+      })
+    }
+    if (this.props.parent == 'Compound') {
+      this.setState({
+        sectionTitle: this.props.meta.title,
+        apiFieldMapping: this.props.apiFieldMapping,
+        legend: this.props.meta.legend
       })
     }
 
@@ -56,7 +63,6 @@ export default class ParentCard extends React.Component {
           multiDataArray.push(json);
           this.setState({
             multiData: multiDataArray,
-            apisFieldMapping: apis,
             loaded: true
           });
         })
@@ -85,8 +91,7 @@ export default class ParentCard extends React.Component {
             <div>
               {React.cloneElement(this.props.children,
                 { data: this.state.data , multiData: this.state.multiData ,
-                  columns: this.state.columns, attributes: this.state.attributes,
-                  apisFieldMapping: this.state.apisFieldMapping
+                  columns: this.state.columns, attributes: this.state.attributes
                 })}
             </div>
 
@@ -97,7 +102,7 @@ export default class ParentCard extends React.Component {
     else {
       return React.cloneElement(this.props.children,
         { data: this.state.data, multiData: this.props.multiData,
-          apisFieldMapping: this.props.apisFieldMapping
+          apiFieldMapping: this.state.apiFieldMapping, sectionTitle: this.state.sectionTitle, legend: this.state.legend
         })
     }
   }

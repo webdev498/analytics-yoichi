@@ -6,7 +6,7 @@ const compoundCard = (props) => (
         return (
           <div>
             {React.cloneElement(props.children[index],
-              { multiData: props.multiData, apisFieldMapping: props.apisFieldMapping})}
+              { multiData: props.multiData})}
           </div>
         );
       })}

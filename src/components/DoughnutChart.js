@@ -70,13 +70,6 @@ function generateDoughnutChart (assetsCount, topAssetsCount, top10Count, totalCo
 
   var displayPercentage1 = percentage1.toString() + '%';
 
-  /*if (chart1 == "chart1") {
-    $("#connectionsPercentage").html("<span style='font-weight:bold;color:"+highlightedColor1+";'>" + percentage2 + "%</span> of connections are used by <span style='font-weight:bold;color:"+highlightedColor2+";'>" + assetPercentage + "%</span> of assets");
-  }
-  if (chart1 == "chart3") {
-    $("#bandwidthPercentage").html("<span style='font-weight:bold;color:"+highlightedColor1+";'>" + percentage2 + "%</span> of bandwidth are used by <span style='font-weight:bold;color:"+highlightedColor2+";'>" + assetPercentage + "%</span> of assets");
-  }*/
-
   var percentage2Color = {fontWeight:'bold',color:highlightedColor1};
   var percentage1Color = {fontWeight:'bold',color:highlightedColor2};
 
@@ -90,11 +83,8 @@ function generateDoughnutChart (assetsCount, topAssetsCount, top10Count, totalCo
     chart2SliceTwoStyle: chart2SliceTwoStyle,
     percentage1Color: percentage1Color,
     percentage2Color: percentage2Color,
-    assetPercentage: assetPercentage,
-    assetsCount:assetsCount, topAssetsCount:topAssetsCount, top10Count:top10Count, totalCount:totalCount
+    assetPercentage: assetPercentage
   };
-
-  console.log(JSON.stringify(doughnutAttributes));
 }
 
 const renderChart = (props) => {
@@ -104,48 +94,76 @@ const renderChart = (props) => {
   if(props.multiData[0] == null || props.multiData[1] == null || props.multiData[2] == null || props.multiData[3] == null) {
     return;
   }
-  //console.log(props.sectionTitle);
-  const data1 = props.multiData[0];
-  const data2 = props.multiData[1];
-  const data3 = props.multiData[2];
-  const data4 = props.multiData[3];
 
-  //console.log(props.apisFieldMapping);
-  var totalConnections = parseInt(data1.rows[0][0]);
-  var totalBandwidth = parseInt(data1.rows[0][1]);
-  var assetsCount = data4.rows[0][0][0];
+  const apiFieldMapping = props.apiFieldMapping;
+  var totalValue = 0;//totalConnections OR totalBandwidth
+  var countValue = 0;//assetsCount
+  var top10TotalValue = 0;//top10Connections OR top10Bandwidth
+  var top10CountValue = 0;//topConnectionsAssetsCount OR topBandwidthAssetsCount
 
-  var top10Connections = 0;
-  var top10Bandwidth = 0;
-  var topConnectionsAssetsCount = 0;
-  var topBandwidthAssetsCount = 0;
+  for (let a=0; a < apiFieldMapping.length; a++) {
+    var apiFieldMappingIndividual = apiFieldMapping[a];
+    var apiData = props.multiData[apiFieldMappingIndividual.api];
+    apiData = apiData.rows;
 
-  for (var i=0; i<data2.rows.length; i++) {
-    var value = Math.round(((data2.rows[i][1] * 100) / totalConnections), 2);
-    if (value > 0) {
-      topConnectionsAssetsCount = topConnectionsAssetsCount + 1;
-      top10Connections = top10Connections + parseInt(data2.rows[i][1]);
+    switch (a) {
+      case 0:
+        var fieldValueArray = apiFieldMappingIndividual.fieldValue;
+        var fieldValue = 0;
+        for(let v=0; v<fieldValueArray.length; v++) {
+          if (v == 0) {
+            fieldValue = apiData[fieldValueArray[v]];
+          }
+          else {
+            fieldValue = fieldValue[fieldValueArray[v]];
+          }
+        }
+        totalValue = parseInt(fieldValue);
+        break;
+      case 1:
+        for (var i=0; i<apiData.length; i++) {
+          var fieldValueArray = apiFieldMappingIndividual.fieldValue;
+          var fieldValue = 0;
+          for(let v=0; v<fieldValueArray.length; v++) {
+            if (v == 0) {
+              fieldValue = apiData[i][fieldValueArray[v]];
+            }
+            else {
+              fieldValue = fieldValue[fieldValueArray[v]];
+            }
+          }
+          var value = Math.round(((fieldValue * 100) / totalValue), 2);
+          if (value > 0) {
+            top10CountValue = top10CountValue + 1;
+            top10TotalValue = top10TotalValue + parseInt(fieldValue);
+          }
+        }
+        break;
+      case 2:
+        var fieldValueArray = apiFieldMappingIndividual.fieldValue;
+        var fieldValue = 0;
+        for(let v=0; v<fieldValueArray.length; v++) {
+          if (v == 0) {
+            fieldValue = apiData[fieldValueArray[v]];
+          }
+          else {
+            fieldValue = apiData[fieldValueArray[v]];
+          }
+        }
+        countValue = parseInt(fieldValue);
+        break;
+      default:
+        break;
     }
   }
-  for (var i=0; i<data3.rows.length; i++) {
-    var value = Math.round(((data3.rows[i][1] * 100) / totalBandwidth), 2);
-    if (value > 0) {
-      topBandwidthAssetsCount = topBandwidthAssetsCount + 1;
-      top10Bandwidth = top10Bandwidth + parseInt(data3.rows[i][1]);
-    }
-  }
 
-  var averageConnections = top10Connections / parseInt(assetsCount);
-  var averageBandwidth = top10Bandwidth / parseInt(assetsCount);
-
-  generateDoughnutChart(assetsCount, topConnectionsAssetsCount, top10Connections, totalConnections.toPrecision());
-  //generateDoughnutCharts(assetsCount, topBandwidthAssetsCount, top10Bandwidth, totalBandwidth.toPrecision(), "chart3", "chart4");
+  generateDoughnutChart(countValue, top10CountValue, top10TotalValue, totalValue.toPrecision());
 }
 
 const DoughnutChart = (props) => (
   <div id={props.id}>{renderChart(props)}
     <div className="chartBorder">
-      <div className="chartCaption">Top Connections</div>
+      <div className="chartCaption">{props.sectionTitle}</div>
       <div className="row">
         <div className="col-sm-12" >
           <div className="card1 text-center">
@@ -167,8 +185,8 @@ const DoughnutChart = (props) => (
       </div>
       <div className="row"><br/><br/>
         <div className="col-sm-12 text-center" id="connectionsPercentage">
-          <span style={doughnutAttributes.percentage2Color}>{doughnutAttributes.percentage2}%</span> of connections are used by
-          <span style={doughnutAttributes.percentage1Color}> {doughnutAttributes.assetPercentage}%</span> of assets
+          <span style={doughnutAttributes.percentage2Color}>{doughnutAttributes.percentage2}%</span> {props.legend[0]}
+          <span style={doughnutAttributes.percentage1Color}> {doughnutAttributes.assetPercentage}%</span> {props.legend[1]}
         </div><br/><br/>
       </div>
     </div>
