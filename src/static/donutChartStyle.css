@@ -1,27 +1,10 @@
-/* {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: sans-serif;
-  background: #e1e1e1;
-}*/
-
 .card1 {
-  /*float: left;*/
-  /*background: #fff;*/
   padding: 0 20px 20px;
-  /*margin: 0 20px 0 0;*/
 }
 
 .card2 {
-  /*float: left;*/
-  /*background: #fff;*/
   padding: 20px;
-  margin:-305px -326px 0 -324px
-  /*margin:50px 13px 0 -324px;*/
-  /*margin: 65px 13px 0 -309px;*/
+  margin:-305px -326px 0 -324px;
 }
 
 .donut-chart {
@@ -96,61 +79,7 @@ body {
   color: #818181;
 }
 /****************************************************************/
-.donut-chart.chart3 {
-  width: 230px;
-  height: 230px;
-  margin: 0px auto;
-}
-.donut-chart.chart3 .slice.one {
-  clip: rect(0 230px 115px 0);
-}
-.donut-chart.chart3 .slice.two {
-  clip: rect(0 115px 230px 0);
-}
-.donut-chart.chart3 .chart-center {
-  top: 25px;
-  left: 25px;
-  width: 180px;
-  height: 180px;
-  background: #fff;
-}
-.donut-chart.chart3 .chart-center span {
-  font-size: 20px;
-  line-height: 35px;
-  color: #818181;
-}
-/****************************************************************/
-
-.donut-chart.chart4 {
-  width: 300px;
-  height: 300px;
-  margin: 0px auto;
-}
-.donut-chart.chart4 .slice.one {
-  clip: rect(0 300px 150px 0);
-  background: #5E2B78;
-}
-.donut-chart.chart4 .slice.two {
-  clip: rect(0 150px 300px 0);
-  background: #5E2B78;
-}
-.donut-chart.chart4 .chart-center {
-  top: 25px;
-  left: 25px;
-  width: 250px;
-  height: 250px;
-  background: #fff;
-}
-.donut-chart.chart4 .chart-center span {
-  font-size: 20px;
-  line-height: 35px;
-  color: #818181;
-}
-/****************************************************************/
-
 .donutChartLegends {
-  /*font-size:12px;
-  margin-left:350px;margin-top:100px;*/
   font-size: 14px;
   padding: 10px 10px 10px 50px;
 }

@@ -199,7 +199,17 @@ const obj = {
             style: {width: '50%', marginRight: '20px'},
             id: 'chart1',
             variation: '3d'
-          }
+          },
+          apiFieldMapping: [{
+            xAxis: {
+              fieldName: 'Alert Types',
+              fieldValue: [0]
+            },
+            yAxis: {
+              fieldName: 'Connections',
+              fieldValue: [1]
+            }
+          }]
         }/*,
         {
           type: 'MSCombiChart',

@@ -99,7 +99,7 @@ const renderChart = (props) => {
             fieldValue = apiData[fieldValueArray[v]];
           }
           else {
-            fieldValue = apiData[fieldValueArray[v]];
+            fieldValue = fieldValue[fieldValueArray[v]];
           }
         }
         countValue = parseInt(fieldValue);

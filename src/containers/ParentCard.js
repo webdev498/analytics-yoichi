@@ -44,6 +44,7 @@ export default class ParentCard extends React.Component {
       .then(json => {
         this.setState({
           data: json,
+          apiFieldMapping: this.props.apiFieldMapping,
           loaded: true
         })
       })
@@ -94,6 +95,7 @@ export default class ParentCard extends React.Component {
             <div>
               {React.cloneElement(this.props.children,
                 { data: this.state.data , multiData: this.state.multiData ,
+                  apiFieldMapping: this.state.apiFieldMapping,
                   columns: this.state.columns, attributes: this.state.attributes
                 })}
             </div>
