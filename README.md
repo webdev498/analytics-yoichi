@@ -56,3 +56,8 @@ https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopl
 ```
 https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
 ```
+
+* Style guide and Best Practices for JS
+```
+https://github.com/airbnb/javascript
+```

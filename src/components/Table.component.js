@@ -5,14 +5,10 @@ import ThreatAnalyticsGraph from 'components/ThreatAnalyticsGraph.component';
 import moment from 'moment';
 import {generateChartDataSource, msToTime} from 'utils/utils';
 
-var Table = Reactable.Table;
-var Tr = Reactable.Tr;
-var Td = Reactable.Td;
-var unsafe = Reactable.unsafe;
+const {Table, Tr, Td, unsafe} = Reactable;
 
-//Initilization of variables
-let tableProperties = {};
-let tableDataSource = [];
+//Declaration of variables
+let tableProperties, tableDataSource;
 
 const generateDataSource = (props) => {
   //Initilization of variables
@@ -23,121 +19,141 @@ const generateDataSource = (props) => {
     return;
   }
 
-  tableProperties.sortable = props.attributes.sortable;
-  tableProperties.defaultSort = props.attributes.defaultSort;
-  tableProperties.filterable = props.attributes.filterable;
-  tableProperties.filterBy = props.attributes.filterBy;
+  tableProperties = {...props.attributes};
 
-  let data = props.data.rows;
-  for (let i=0;i<data.length;i++) {
-    let currentRow = data[i];//[0];
-    let obj1 = {};
+  const data = props.data.rows;
+
+  for (let i = 0; i < data.length;i++) {
+    const currentRow = data[i];
+    const obj1 = {};
     obj1.columns = [];
 
-    let columns = props.columns;
+    const columns = props.columns;
 
-    for (let k=0; k<columns.length; k++) {
-      var column = columns[k];
-      let obj2 = {};
+    for (let k = 0, colLen = columns.length; k < colLen; k++) {
+      const column = columns[k];
+
+      console.log(column);
+
       switch (column.type) {
-        case "chart":
-          let chartValueArray = column.data.chartValue;
-          var chartValue = column.data.chartValue;
-          for(let v=0; v<chartValueArray.length; v++) {
-            if (v == 0) {
+        case "chart": {
+          const chartValueArray = column.data.chartValue;
+          let chartValue = column.data.chartValue;
+
+          for(let v = 0; v < chartValueArray.length; v++) {
+            if (v === 0) {
               chartValue = currentRow[chartValueArray[v]];
             }
             else {
               chartValue = chartValue[chartValueArray[v]];
             }
           }
-          obj2.chartDataSource = generateChartDataSource(column.data.chartType, chartValue);
-          obj2.chartValue = chartValue;
-          obj2.chartId = column.data.chartId + i;
-          obj2.chartType = column.data.chartType;
-          obj2.chartWidth = column.data.chartWidth;
-          obj2.chartHeight = column.data.chartHeight;
-          obj2.columnType = 'chart';
-          obj2.columnName = column.columnName;
-          obj2.columnStyle = column.style;
+
+          const obj2 = {
+            chartDataSource: generateChartDataSource(column.data.chartType, chartValue),
+            chartValue: chartValue,
+            chartId: column.data.chartId + i,
+            chartType: column.data.chartType,
+            chartWidth: column.data.chartWidth,
+            chartHeight: column.data.chartHeight,
+            columnType: 'chart',
+            columnName: column.columnName,
+            columnStyle: column.style
+          }
+
+          console.log(obj2);
           obj1.columns.push(obj2);
           break;
-        case "text":
+        }
+        case "text": {
           let columnText = '';
           let dataArray = column.data;
-          for (let d=0; d<dataArray.length; d++) {
-            let fieldName = dataArray[d].fieldName;
+          for (let d = 0; d < dataArray.length; d++) {
+            let {fieldName, fieldValue: fieldValueArray, fieldValue} = dataArray[d];
 
-            let fieldValueArray = dataArray[d].fieldValue;
-            let fieldValue = dataArray[d].fieldValue;
-            for(let v=0; v<fieldValueArray.length; v++) {
-              if (v == 0) {
+            for(let v = 0; v < fieldValueArray.length; v++) {
+              if (v === 0) {
                 fieldValue = currentRow[fieldValueArray[v]];
-                if (fieldValue == undefined) {
+                if (fieldValue === undefined) {
                   break;
                 }
               }
               else {
                 fieldValue = fieldValue[fieldValueArray[v]];
-                if (fieldValue == undefined) {
+                if (fieldValue === undefined) {
                   break;
                 }
               }
             }
-            if(dataArray[d].style != undefined && dataArray[d].style == 'bold' && fieldValue != undefined && fieldValue != '') {
+
+            if( dataArray[d].style !== undefined &&
+                dataArray[d].style === 'bold' &&
+                fieldValue !== undefined &&
+                fieldValue !== '')
+            {
               fieldValue = '<b>' + fieldValue + '</b>';
             }
-            if (fieldValue != undefined && fieldValue != '') {
+
+            if (fieldValue !== undefined && fieldValue !== '') {
               if (columnText != '') {
                 if (fieldName != undefined) {
                   if (fieldName == 'date') {
                     var fieldValueInLocalTime = moment.utc(fieldValue).toDate();
                     fieldValueInLocalTime = moment(fieldValueInLocalTime).format('D MMM YYYY HH:mm:ss');
                     fieldValue = fieldValueInLocalTime;
-                    columnText = columnText + fieldValue;
+                    columnText += fieldValue;
                   }
                   else if (fieldName == 'duration') {
                     let time = msToTime(fieldValue);
-                    columnText = columnText + time[0] + ":" + time[1] + ":" + time[2];
+                    columnText += time[0] + ":" + time[1] + ":" + time[2];
                   }
                   else if (fieldName == 'port') {
-                    columnText = columnText + ':' + fieldValue;
+                    columnText += ':' + fieldValue;
                   }
                   else if (fieldName == 'countryFlag') {
-                    columnText = columnText + ' <span class="flag-icon flag-icon-'+fieldValue.toLowerCase()+'"></span>';
+                    columnText += ' <span class="flag-icon flag-icon-'+fieldValue.toLowerCase()+'"></span>';
                   } else {
-                    columnText = columnText + '<br/>' + '<b>' + fieldName + '</b>: ' + fieldValue;
+                    columnText += '<br/>' + '<b>' + fieldName + '</b>: ' + fieldValue;
                   }
-                } else {
-                  columnText = columnText + '<br/>' + fieldValue;
                 }
-              } else {
+                else {
+                  columnText += '<br/>' + fieldValue;
+                }
+              }
+              else {
                 if (fieldName != undefined) {
                   if (fieldName == 'date') {
                     var fieldValueInLocalTime = moment.utc(fieldValue).toDate();
                     fieldValueInLocalTime = moment(fieldValueInLocalTime).format('D MMM YYYY HH:mm');
                     fieldValue = fieldValueInLocalTime;
-                    columnText = columnText + fieldValue;
+                    columnText += fieldValue;
                   }
                   else if (fieldName == 'duration') {
                     let time = msToTime(fieldValue);
-                    columnText = columnText + time[0] + ":" + time[1] + ":" + time[2];
-                  } else {
-                    columnText = columnText + '<b>' + fieldName + '</b>: ' + fieldValue;
+                    columnText += time[0] + ":" + time[1] + ":" + time[2];
                   }
-                } else {
-                  columnText = columnText + fieldValue;
+                  else {
+                    columnText += '<b>' + fieldName + '</b>: ' + fieldValue;
+                  }
+                }
+                else {
+                  columnText += fieldValue;
                 }
               }
             }
           }
+
           let columnIndex = k + 1;
-          obj2.columnType = 'text';
-          obj2.columnName = column.columnName;
-          obj2.columnStyle = column.style;
-          obj2.columnText = unsafe(columnText);
+          const obj2 = {
+            columnType: 'text',
+            columnName: column.columnName,
+            columnStyle: column.style,
+            columnText: unsafe(columnText)
+          }
+
           obj1.columns.push(obj2);
           break;
+        }
         default:
           break;
       }
@@ -148,7 +164,8 @@ const generateDataSource = (props) => {
 }
 
 const tableCard = (props) => (
-  <div style={{width:'100%'}}>{generateDataSource(props)}
+  <div style={{width:'100%'}}>
+      {generateDataSource(props)}
       <Table style={{width:'100%'}}
              className="threatTable"
              sortable={true}
@@ -157,26 +174,34 @@ const tableCard = (props) => (
              filterBy=""
              itemsPerPage={5}
              pageButtonLimit={5}>
-        {tableDataSource.map(function(tableRow, index){
-          return (
+
+        {
+          tableDataSource.map(function(tableRow, index){
+            return (
               <Tr>
                 {tableRow.columns.map(function(tableColumn, indexCol){
                   if (tableColumn.columnType == 'chart') {
                     return (
-                      <Td column={tableColumn.columnName} value={tableColumn.chartValue} style={tableColumn.columnStyle}>
+                      <Td column={tableColumn.columnName}
+                          value={tableColumn.chartValue}
+                          style={tableColumn.columnStyle}>
                         <ThreatAnalyticsGraph chartProperties={tableColumn}/>
                       </Td>
                     );
                   }
+
                   if (tableColumn.columnType == 'text') {
                     return (
-                        <Td column={tableColumn.columnName} style={tableColumn.columnStyle}>{tableColumn.columnText}</Td>
+                        <Td column={tableColumn.columnName}
+                            style={tableColumn.columnStyle}>{tableColumn.columnText}
+                        </Td>
                       );
                   }
                 })}
               </Tr>
             );
-        })}
+        })
+      }
       </Table>
   </div>
 );

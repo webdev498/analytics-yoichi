@@ -1,42 +1,42 @@
 import React from 'react';
 
-import Card from 'material-ui/lib/card/card';
-
 function generateChartDataSource(props) {
-  var data = props.data;
+  const data = props.data;
+  const apiFieldMapping = props.apiFieldMapping;
 
-  var apiFieldMapping = props.apiFieldMapping;
   const graphBars = [];
   const chartColors = ["D93609","0505F5","ACF50F","FCFC0D","05E9F5","003300","FF66FF","999999","009999","66CDAA"];
 
   let colorIndex = -1,
       numberOfColors = chartColors.length;
 
-  var xAxisName = '';
-  var yAxisName = '';
+  let xAxisName = '',
+      yAxisName = '';
 
-  for (let a=0; a < apiFieldMapping.length; a++) {
-    var apiFieldMappingIndividual = apiFieldMapping[a];
-    var apiData = data.rows;
-    var xfieldValueArray = apiFieldMappingIndividual.xAxis.fieldValue;
-    var yfieldValueArray = apiFieldMappingIndividual.yAxis.fieldValue;
+  for (let a = 0; a < apiFieldMapping.length; a++) {
+    const apiFieldMappingIndividual = apiFieldMapping[a],
+          apiData = data.rows;
+
+    const xfieldValueArray = apiFieldMappingIndividual.xAxis.fieldValue,
+          yfieldValueArray = apiFieldMappingIndividual.yAxis.fieldValue;
 
     xAxisName = apiFieldMappingIndividual.xAxis.fieldName;
     yAxisName = apiFieldMappingIndividual.yAxis.fieldName;
 
     for (let i = 0; i < apiData.length; i++) {
-      var xValue = '';
-      var yValue = '';
-      for(let v=0; v<xfieldValueArray.length; v++) {
-        if (v == 0) {
+      let xValue = '',
+          yValue = '';
+
+      for(let v = 0; v < xfieldValueArray.length; v++) {
+        if (v === 0) {
           xValue = apiData[i][xfieldValueArray[v]];
         }
         else {
           xValue = xValue[xfieldValueArray[v]];
         }
       }
-      for(let v=0; v<yfieldValueArray.length; v++) {
-        if (v == 0) {
+      for(let v = 0; v < yfieldValueArray.length; v++) {
+        if (v === 0) {
           yValue = apiData[i][yfieldValueArray[v]];
         }
         else {
@@ -45,7 +45,7 @@ function generateChartDataSource(props) {
       }
 
       const barObject = {};
-      if (xValue == "") {
+      if (xValue === "") {
         barObject.label = "Other";
       }
       else{
@@ -62,6 +62,7 @@ function generateChartDataSource(props) {
       barObject.color = chartColors[colorIndex];
       graphBars.push(barObject);
     }
+
   }
 
   const dataSourceObject = {
@@ -92,15 +93,16 @@ const renderChart = (props) => {
   }
 
   FusionCharts.ready(function(){
-      const fusioncharts = new FusionCharts({
+    const fusioncharts = new FusionCharts({
       type: 'pareto2d',
       renderAt: props.id,
       width: '100%',
       height: '400',
       dataFormat: 'json',
       dataSource: generateChartDataSource(props)
-  });
-      fusioncharts.render();
+    });
+
+    fusioncharts.render();
   });
 }
 

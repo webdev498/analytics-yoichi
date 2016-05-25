@@ -1,7 +1,4 @@
 import React from 'react';
-
-import Card from 'material-ui/lib/card/card';
-
 import moment from 'moment';
 
 import {calculateDateDisplayFormat} from 'utils/dateUtils';
@@ -27,7 +24,7 @@ function getData(data, timeWindow) {
         dateDisplayFormat = calculateDateDisplayFormat(timeWindow),
         dataset = [];
 
-  for (let i = 0, rowsLen = data.rows.length; i < rowsLen; i) {
+  for (let i = 0, rowsLen = data.rows.length; i < rowsLen; i++) {
     let localTime = moment.utc(data.rows[i][0]).toDate();
     localTime = moment(localTime).format('D MMM YYYY HH:mm');
 
@@ -45,7 +42,7 @@ function getData(data, timeWindow) {
     }
   }
 
-  for(let j = 0; j < 3; j) {
+  for(let j = 0; j < 3; j++) {
     const tempObj = {
       renderas: "Line",
       lineThickness: "0",
@@ -62,7 +59,7 @@ function getData(data, timeWindow) {
       tempObj.parentyaxis = parentyaxes[j];
     }
 
-    for (let i = 0, rowsLen = data.rows.length; i < rowsLen; i) {
+    for (let i = 0, rowsLen = data.rows.length; i < rowsLen; i++) {
       if ((seriesNames[j]).toLowerCase() === data.rows[i][1]){
         const rowObj = {};
         if(0 !== data.rows[i][2]) {
@@ -126,22 +123,24 @@ function getData(data, timeWindow) {
 const renderChart = (props) => {
   if(!props.data) {
     return;
-}
+  }
+
   FusionCharts.ready(function(){
-      const fusioncharts = new FusionCharts({
+    const fusioncharts = new FusionCharts({
       type: 'mscombi2d',
       renderAt: props.id,
       width: '100%',
       height: '400',
       dataFormat: 'json',
       dataSource: getData(props.data, '1h')
-  });
-      fusioncharts.render();
+    });
+
+    fusioncharts.render();
   });
 }
 
 const MSCombiChart = (props) => (
-    <div id={props.id}>{renderChart(props)}</div>
+  <div id={props.id}>{renderChart(props)}</div>
 )
 
 export default MSCombiChart;
