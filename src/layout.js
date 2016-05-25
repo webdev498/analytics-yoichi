@@ -92,7 +92,7 @@ const layout = {
         type: 'Table.component',
         meta: {
           showHeader: true,
-          "api": "/api/analytics/reporting/execute/taf_alert_count_time_shifted",
+          "api": "/api/analytics/reporting/execute/taf_alert_highpriority",
           "query": {
             "window": "1h",
             "count":200

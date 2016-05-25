@@ -119,7 +119,6 @@ class ParentCard extends React.Component {
               <FontIcon className='material-icons' style={{marginRight: '10px', fontSize: '20px'}}>refresh</FontIcon>
               <FontIcon className='material-icons' style={{fontSize: '20px'}}>clear</FontIcon>
             </div>
-
           </header>
 
           <div>
@@ -138,6 +137,8 @@ class ParentCard extends React.Component {
                 React.cloneElement(props.children, {
                   data: props.data,
                   apiFieldMapping: props.apiFieldMapping,
+                  attributes: props.attributes,
+                  columns: props.columns
                 })
               )
           }
