@@ -15,15 +15,24 @@ export default function APIDataReducer(state = initialState, action) {
   switch (actionType) {
     case REQUEST_API_DATA: {
       const {id} = action;
-      const dataMap = Map({
-        id,
-        isFetching: true,
-        data: null,
-        isError: false
-      });
 
-      const newState = state.updateIn(['components'], val => val.set(id, dataMap));
-      return newState;
+      if(state.hasIn(['components', id])) {
+        return  state.updateIn(['components', id], value => {
+                      return value.set('isFetching', true)
+                                  .set('isError', false);
+                });
+      }
+      else {
+        const dataMap = Map({
+          id,
+          isFetching: true,
+          isError: false
+        });
+
+        return state.updateIn(['components'], val => val.set(id, dataMap));
+      }
+
+
     }
     case RECEIVE_API_DATA: {
       const {id, data} = action;

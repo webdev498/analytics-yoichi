@@ -127,15 +127,18 @@ class ParentCard extends React.Component {
             props.meta.apis ?
               (
                 React.cloneElement(props.children, {
-                    data: props.data,
-                    multiData: this.state.multiData ,
-                    apiFieldMapping: props.apiFieldMapping,
-                    columns: props.columns,
-                    attributes: props.attributes
-                  })
+                  data: props.data,
+                  multiData: this.state.multiData ,
+                  apiFieldMapping: props.apiFieldMapping,
+                  columns: props.columns,
+                  attributes: props.attributes
+                })
               ) :
               (
-                React.cloneElement(props.children, { data: props.data })
+                React.cloneElement(props.children, {
+                  data: props.data,
+                  apiFieldMapping: props.apiFieldMapping,
+                })
               )
           }
           </div>
