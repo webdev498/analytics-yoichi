@@ -65,6 +65,7 @@ if (!global.Intl) {
     requ('intl');
     start();
   }, 'IntlBundle');
-} else {
+}
+else {
   start();
 }

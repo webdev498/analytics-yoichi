@@ -29,6 +29,39 @@ const getStyles = props => (
   }
 )
 
+const TimeRanges = [
+  {
+    text: '1 hour',
+    param: '1h'
+  },
+  {
+    text: '6 hour',
+    param: '6h'
+  },
+  {
+    text: '12 hour',
+    param: '12h'
+  },
+  {
+    text: '1 day',
+    param: '1d'
+  },
+  {
+    text: '1 week',
+    param: '1w'
+  },
+  {
+    text: '1 month',
+    param: '1mo'
+  },
+];
+
+function getTimeRangeItems () {
+  return TimeRanges.map((val, index) => {
+    return <MenuItem value={index + 1} primaryText={val.text} key={index}/>
+  });
+}
+
 class PageHeader extends React.Component {
   static fetchData(dispatch) {
     var authActions = bindActionCreators(AuthActions, dispatch);
@@ -39,7 +72,7 @@ class PageHeader extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {value: 2};
+    this.state = {value: 1};
   }
 
   componentDidMount() {
@@ -49,6 +82,7 @@ class PageHeader extends React.Component {
   }
 
   handleChange = (event, index, value) => {
+    this.props.handleTimeChange(TimeRanges[index]);
     this.setState({value})
   };
 
@@ -58,15 +92,10 @@ class PageHeader extends React.Component {
         <AppBar {...this.props} style={getStyles(this.props)}
                 iconClassNameRight='muidocs-icon-navigation-expand-more'>
 
-          <DropDownMenu value={1}
+          <DropDownMenu value={this.state.value}
                         onChange={this.handleChange}
                         menuStyle={{top: '64px'}}>
-            <MenuItem value={1} primaryText='1 Hour'/>
-            <MenuItem value={2} primaryText='6 Hour'/>
-            <MenuItem value={3} primaryText='12 Hour'/>
-            <MenuItem value={4} primaryText='1 Day'/>
-            <MenuItem value={5} primaryText='1 Week'/>
-            <MenuItem value={5} primaryText='1 Month'/>
+            {getTimeRangeItems()}
           </DropDownMenu>
 
           <MenuItem primaryText={name} leftIcon={<FaceIcon />} />
