@@ -1,117 +1,17 @@
 import React, { PropTypes } from 'react';
 
+import { connect } from 'react-redux';
 import Header from 'components/PageHeader.component';
 import Sidebar from 'components/Sidebar.component';
 import FontIcon from 'material-ui/lib/font-icon';
 
 import ParentCard from 'containers/ParentCard';
 
-import 'styles/core.scss';
+import obj from 'layout';
 
-const obj = {
-    layout: [
-      [
-        {
-          id: '1',
-          type: 'MetricsCard.component',
-          meta: {
-            showHeader: false,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_count_time_shifted?window=1d&timeShift=1d'
-          },
-          name: 'MetricsCard',
-          attributes: {
-            style: {backgroundColor: '#d9534f'},
-            title: 'High Priority Alerts'
-          },
-          children: [{
-            type: 'FontIcon',
-            content: 'add_alert'
-          }]
-        },
-        {
-          id: '2',
-          type: 'MetricsCard.component',
-          meta: {
-            showHeader: false,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_malware_count_time_shifted?window=1d&timeShift=1d'
-          },
-          name: 'MetricsCard',
-          attributes: {
-            style: {backgroundColor: '#f0ad4e'},
-            title: 'High Priority Malware'
-          },
-          children: [{
-            type: 'FontIcon',
-            content: 'bug_report'
-          }]
-        },
-        {
-          id: '3',
-          type: 'MetricsCard.component',
-          meta: {
-            showHeader: false,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_event_count_time_shifted?window=1d&timeShift=1d'
-          },
-          name: 'MetricsCard',
-          attributes: {
-            style: {backgroundColor: '#337ab7'},
-            title: 'Events Processed'
-          },
-          children: [{
-            type: 'FontIcon',
-            content: 'bug_report'
-          }]
-        },
-        {
-          id: '4',
-          type: 'MetricsCard.component',
-          meta: {
-            showHeader: false,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_asset_count_time_shifted?window=1d&timeShift=1d'
-          },
-          name: 'MetricsCard',
-          attributes: {
-            style: {backgroundColor: '#5cb85c'},
-            title: 'Assets Monitored'
-          },
-          children: [{
-            type: 'FontIcon',
-            content: 'devices_other'
-          }]
-        }
-      ],
-      [
-        {
-          id: '5',
-          type: 'ParetoChart',
-          meta: {
-            showHeader: true,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_threat_trend?window=1h',
-            title: 'Alert by type',
-          },
-          attributes: {
-            style: {width: '50%', marginRight: '20px'},
-            id: 'chart1',
-            variation: '3d'
-          }
-        },
-        {
-          id: '6',
-          type: 'MSCombiChart',
-          meta: {
-            showHeader: true,
-            api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_alert_priority_time?window=1h',
-            title: 'Alert priority'
-          },
-          attributes: {
-            style: {width: '50%'},
-            id: 'chart2',
-            variation: '3d'
-          }
-        }
-      ]
-    ]
-  };
+import {updatedApiData} from 'actions/ParentCard.actions';
+
+import 'styles/core.scss';
 
 class CoreLayout extends React.Component {
   constructor(props) {
@@ -168,10 +68,14 @@ class CoreLayout extends React.Component {
     return React.DOM.div({}, finalElmements);
   }
 
+  handleTimeChange(timeRange) {
+    this.props.updatedApiData(timeRange);
+  }
+
   render () {
     return (
       <div className="menubar-hoverable header-fixed menubar-visible">
-        <Header title="RANK" />
+        <Header title="RANK" handleTimeChange={this.handleTimeChange.bind(this)} />
         <Sidebar style={{width: '72px'}}></Sidebar>
         <div id="base">
           <div id="content" style={{padding: '20px'}}>
@@ -187,4 +91,8 @@ CoreLayout.propTypes = {
   children: PropTypes.element
 };
 
-export default CoreLayout;
+ParentCard.contextTypes = {
+  store: React.PropTypes.object
+}
+
+export default connect(null, {updatedApiData})(CoreLayout);

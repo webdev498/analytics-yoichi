@@ -17,11 +17,11 @@ class ParentCard extends React.Component {
     const { store } = this.context;
     const { props } = this;
 
-    const api = props.meta.api;
+    const {api, query} = props.meta;
     this.unsubscribe = store.subscribe(() => {});
 
     if(api) {
-      props.fetchApiData(props.id, api);
+      props.fetchApiData(props.id, api, query);
     }
   }
 

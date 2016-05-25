@@ -45,8 +45,8 @@ function getCount (data) {
 
 function getPercent (data) {
   return (data && data.rows && data.rows[0] && data.rows[0][0][2] !== "N/A")
-          ? Math.abs(Math.round(data.rows[0][0][2]), 2)
-          : '-';
+          ? Math.abs(Math.round(data.rows[0][0][2]), 2) + "%"
+          : "";
 }
 
 function getIconElm(props) {
@@ -68,9 +68,8 @@ function getArrowIcon(data) {
     }
   }
   else {
-    return <span>-</span>
+    return "-";
   }
-
 }
 
 const MetricsCard = (props) => (
@@ -88,7 +87,7 @@ const MetricsCard = (props) => (
     <div style={styles.detailsStyle}>
       <span>View Details</span>
       <div style={styles.percentageStyle}>
-        <span>{getPercent(props.data)} %</span>
+        <span>{getPercent(props.data)}</span>
         {getArrowIcon(props.data)}
       </div>
     </div>
