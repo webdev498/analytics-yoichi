@@ -99,6 +99,7 @@ const renderChart = (props) => {
       width: '100%',
       height: '400',
       dataFormat: 'json',
+      containerBackgroundOpacity:'0',
       dataSource: generateChartDataSource(props)
     });
 

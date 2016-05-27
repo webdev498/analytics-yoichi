@@ -171,8 +171,6 @@ const renderChart = (props) => {
     }
   }
 
-
-
   FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({
       type: 'bar2d',
@@ -180,6 +178,7 @@ const renderChart = (props) => {
       width: '100%',
       height: '400',
       dataFormat: 'json',
+      containerBackgroundOpacity:'0',
       dataSource: generateChartDataSource(rawData, chartOptions)
     });
       fusioncharts.render();

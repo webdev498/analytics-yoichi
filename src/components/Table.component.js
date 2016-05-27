@@ -21,8 +21,8 @@ const generateDataSource = (props) => {
 
   tableProperties = {...props.attributes};
 
-  const data = props.data.rows;
-
+  let data = props.data.rows;
+console.log(data);
   for (let i = 0; i < data.length;i++) {
     const currentRow = data[i];
     const obj1 = {};
@@ -32,8 +32,6 @@ const generateDataSource = (props) => {
 
     for (let k = 0, colLen = columns.length; k < colLen; k++) {
       const column = columns[k];
-
-      console.log(column);
 
       switch (column.type) {
         case "chart": {
@@ -61,7 +59,6 @@ const generateDataSource = (props) => {
             columnStyle: column.style
           }
 
-          console.log(obj2);
           obj1.columns.push(obj2);
           break;
         }
@@ -111,7 +108,9 @@ const generateDataSource = (props) => {
                     columnText += ':' + fieldValue;
                   }
                   else if (fieldName == 'countryFlag') {
-                    columnText += ' <span class="flag-icon flag-icon-'+fieldValue.toLowerCase()+'"></span>';
+                    if (fieldValue != '' && fieldValue != null) {
+                      columnText += ' <span class="flag-icon flag-icon-'+fieldValue.toLowerCase()+'"></span>';
+                    }
                   } else {
                     columnText += '<br/>' + '<b>' + fieldName + '</b>: ' + fieldValue;
                   }

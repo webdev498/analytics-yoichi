@@ -11,7 +11,6 @@ import MetricCard from 'components/MetricsCard.component';
 import TableComponent from 'components/Table.component';
 
 import ParetoChart from 'components/ParetoChart'
-import MSCombiChart from 'components/MSCombiChart'
 
 const iconStyle = {
   fill: 'rgb(255, 255, 255)',
@@ -60,9 +59,6 @@ export default class Dashboard extends React.Component {
         <section style={{display: 'flex'}}>
           <ParentCard>
             <ParetoChart style={{width: '50%', marginRight: '20px'}} id='chart1'/>
-          </ParentCard>
-          <ParentCard>
-            <MSCombiChart style={{width: '50%'}} id='chart2' />
           </ParentCard>
         </section>
       </div>

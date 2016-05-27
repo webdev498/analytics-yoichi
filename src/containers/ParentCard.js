@@ -20,7 +20,9 @@ class ParentCard extends React.Component {
       apiFieldMapping: [],
       sectionTitle: null,
       legend: [],
-      chartOptions: {}
+      chartOptions: {},
+      parent: null,
+      props:{}
     };
   }
 
@@ -43,7 +45,10 @@ class ParentCard extends React.Component {
         sectionTitle: props.meta.title,
         apiFieldMapping: props.apiFieldMapping,
         legend: props.meta.legend,
-        chartOptions: props.meta.chartOptions
+        chartOptions: props.meta.chartOptions,
+        attributes: props.attributes,
+        parent: props.parent,
+        props: props
       })
     }
 
@@ -89,14 +94,19 @@ class ParentCard extends React.Component {
               apiFieldMapping: props.apiFieldMapping,
               sectionTitle: props.meta.title,
               legend: props.meta.legend,
-              chartOptions: props.meta.chartOptions
+              chartOptions: props.meta.chartOptions,
+              series: state.series,
+              attributes: state.attributes,
+              columns: state.columns,
+              parent: state.parent,
+              props: state.props
             });
+
     // }
     // else {
     //   console.log(props);
-      return React.cloneElement(props.children, { ...props });
+      //return React.cloneElement(props.children, { ...props });
     // }
-
   }
 
   componentWillUnmount() {

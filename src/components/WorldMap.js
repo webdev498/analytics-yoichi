@@ -213,6 +213,7 @@ const renderChart = (props) => {
       width: '100%',
       height: '400',
       dataFormat: 'json',
+      containerBackgroundOpacity:'0',
       dataSource: dataSourceObject.countriesContactedMapDataSource
   });
       fusioncharts.render();
@@ -225,6 +226,7 @@ const renderChart = (props) => {
       width: '100%',
       height: '200',
       dataFormat: 'json',
+      containerBackgroundOpacity:'0',
       dataSource: dataSourceObject.topFiveCountriesDataSource
   });
       fusioncharts.render();
@@ -237,6 +239,7 @@ const renderChart = (props) => {
       width: '100%',
       height: '200',
       dataFormat: 'json',
+      containerBackgroundOpacity:'0',
       dataSource: dataSourceObject.topBandwidthCountriesDataSource
   });
       fusioncharts.render();

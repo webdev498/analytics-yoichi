@@ -18,3 +18,24 @@ export function calculateDateDisplayFormat(timeWindow) {
   }
   return dateDisplayFormat;
 }
+
+export function calculateDateDisplayFormatForHistogram(timeWindow) {
+  var dateDisplayFormat = "D MMM YYYY, HH:mm";
+  switch (timeWindow) {
+    case "1h":
+      dateDisplayFormat = "ddd, D HH:mm";
+      break;
+    case "1d":
+      dateDisplayFormat = "ddd, D HH:mm";
+      break;
+    case "1w":
+      dateDisplayFormat = "ddd, D MMM HH:mm";
+      break;
+    case "1mo":
+      dateDisplayFormat = "ddd, D MMM HH:mm";
+      break;
+    default:
+      break;
+  }
+  return dateDisplayFormat;
+}

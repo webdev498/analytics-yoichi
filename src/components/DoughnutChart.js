@@ -83,8 +83,10 @@ function generateDoughnutChart (assetsCount, topAssetsCount, top10Count, totalCo
     chart2SliceTwoStyle: chart2SliceTwoStyle,
     percentage1Color: percentage1Color,
     percentage2Color: percentage2Color,
-    assetPercentage: assetPercentage
+    assetPercentage: assetPercentage,
+    assetsCount: assetsCount, topAssetsCount: topAssetsCount, top10Count: top10Count, totalCount: totalCount
   };
+  //console.log(JSON.stringify(doughnutAttributes));
 }
 
 const renderChart = (props) => {
@@ -94,14 +96,14 @@ const renderChart = (props) => {
   if(props.multiData[0] == null || props.multiData[1] == null || props.multiData[2] == null || props.multiData[3] == null) {
     return;
   }
-
-  var apiFieldMapping = props.apiFieldMapping;
+  //console.log(JSON.stringify(props.multiData));
+  var apiFieldMapping = props.apiFieldMapping;//console.log(props.apiFieldMapping);
   var totalValue = 0;//totalConnections OR totalBandwidth
   var countValue = 0;//assetsCount
   var top10TotalValue = 0;//top10Connections OR top10Bandwidth
   var top10CountValue = 0;//topConnectionsAssetsCount OR topBandwidthAssetsCount
 
-  for (let a=0; a < apiFieldMapping.length; a++) {
+  for (var a=0; a < apiFieldMapping.length; a++) {
     var apiFieldMappingIndividual = apiFieldMapping[a];
     var apiData = props.multiData[apiFieldMappingIndividual.api];
     apiData = apiData.rows;
