@@ -88,7 +88,7 @@ const layout = {
     ],
     [
       {
-        id: 5,
+        id: "5",
         type: 'Table.component',
         meta: {
           showHeader: true,
@@ -250,6 +250,7 @@ const layout = {
     ],
     [
       {
+        id: "8",
         type: 'WorldMap',
         meta: {
           showHeader: true,
@@ -271,6 +272,7 @@ const layout = {
         }
       },
       {
+        id: "9",
         type: 'WorldMap',
         meta: {
           showHeader: true,
@@ -294,6 +296,7 @@ const layout = {
     ],
     [
       {
+        id: "10",
         type: 'Table.component',
         meta: {
           showHeader: true,
@@ -427,6 +430,7 @@ const layout = {
     ],
     [
       {
+        id: "9",
         type: 'Compound.component',
         name: 'Compound',
         meta: {

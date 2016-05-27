@@ -31,14 +31,14 @@ class ParentCard extends React.Component {
     const {api, query} = props.meta;
     this.unsubscribe = store.subscribe(() => {});
 
-    if (props.name == 'Table') {
+    if (props.name === 'Table') {
       this.setState({
         columns: props.columns,
         attributes: props.attributes
       })
     }
 
-    if (props.parent == 'Compound') {
+    if (props.parent === 'Compound') {
       this.setState({
         sectionTitle: props.meta.title,
         apiFieldMapping: props.apiFieldMapping,
@@ -53,9 +53,6 @@ class ParentCard extends React.Component {
 
     const apis = props.meta.apis;
     if (apis !== undefined) {
-      const api1 = apis[0];
-      const api2 = apis[1];
-
       const accessToken = Cookies.get("access_token");
       const tokenType = Cookies.get("token_type");
 
@@ -82,21 +79,14 @@ class ParentCard extends React.Component {
   getElement() {
     const {props, state} = this;
 
-    // if(props.meta.apis) {
-      return React.cloneElement(props.children, {
-              data: props.data,
-              multiData: props.multiData,
-              apiFieldMapping: props.apiFieldMapping,
-              sectionTitle: props.meta.title,
-              legend: props.meta.legend,
-              chartOptions: props.meta.chartOptions
-            });
-    // }
-    // else {
-    //   console.log(props);
-      return React.cloneElement(props.children, { ...props });
-    // }
-
+    return React.cloneElement(props.children, {
+            data: props.data,
+            multiData: props.multiData,
+            apiFieldMapping: props.apiFieldMapping,
+            sectionTitle: props.meta.title,
+            legend: props.meta.legend,
+            chartOptions: props.meta.chartOptions
+          });
   }
 
   componentWillUnmount() {

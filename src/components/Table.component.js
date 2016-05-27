@@ -33,8 +33,6 @@ const generateDataSource = (props) => {
     for (let k = 0, colLen = columns.length; k < colLen; k++) {
       const column = columns[k];
 
-      console.log(column);
-
       switch (column.type) {
         case "chart": {
           const chartValueArray = column.data.chartValue;
@@ -61,7 +59,6 @@ const generateDataSource = (props) => {
             columnStyle: column.style
           }
 
-          console.log(obj2);
           obj1.columns.push(obj2);
           break;
         }
