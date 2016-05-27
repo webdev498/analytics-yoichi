@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Header from 'components/PageHeader.component';
 import Sidebar from 'components/Sidebar.component';
-import FontIcon from 'material-ui/lib/font-icon';
+import FontIcon from 'material-ui/FontIcon';
 
 import ParentCard from 'containers/ParentCard';
 

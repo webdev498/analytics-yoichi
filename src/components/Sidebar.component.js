@@ -1,16 +1,16 @@
 import React from 'react';
 
-import LeftNav from 'material-ui/lib/left-nav';
-import MenuItem from 'material-ui/lib/menus/menu-item';
+import LeftNav from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
 
-import AlertIcon from 'material-ui/lib/svg-icons/image/flash-auto';
-import TrafficIcon from 'material-ui/lib/svg-icons/action/flight-takeoff';
-import CountryIcon from 'material-ui/lib/svg-icons/action/language';
-import AssetsIcon from 'material-ui/lib/svg-icons/action/important-devices';
-import UserAgentIcon from 'material-ui/lib/svg-icons/action/dns';
+import AlertIcon from 'material-ui/svg-icons/image/flash-auto';
+import TrafficIcon from 'material-ui/svg-icons/action/flight-takeoff';
+import CountryIcon from 'material-ui/svg-icons/action/language';
+import AssetsIcon from 'material-ui/svg-icons/action/important-devices';
+import UserAgentIcon from 'material-ui/svg-icons/action/dns';
 
 const Sidebar = (props) => (
-  <LeftNav open={props.open} style={{...props.style, top: '64px'}}>
+  <LeftNav open={true} containerStyle={{...props.style, position: 'fixed', top: '64px'}}>
     <MenuItem leftIcon={<AlertIcon />}>Alert Details</MenuItem>
     <MenuItem leftIcon={<CountryIcon />}>Country Details</MenuItem>
     <MenuItem leftIcon={<TrafficIcon />}>Traffic Details</MenuItem>

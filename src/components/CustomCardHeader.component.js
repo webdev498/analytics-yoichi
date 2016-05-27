@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CardHeader from 'material-ui/lib/card/card-header';
+import CardHeader from 'material-ui/Card/CardHeader';
 
 const getStyles = (props) => (
   {

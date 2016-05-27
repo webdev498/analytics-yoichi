@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Card from 'material-ui/lib/card/card';
-import FontIcon from 'material-ui/lib/font-icon';
+import Card from 'material-ui/Card/Card';
+import FontIcon from 'material-ui/FontIcon';
 
 const styles = {
   cardStyle: {
