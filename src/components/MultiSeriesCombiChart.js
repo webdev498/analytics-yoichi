@@ -2,9 +2,9 @@ import React from 'react';
 import moment from 'moment';
 import {calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
 
-let className = '';
+let className;
 
-function generateChartDataSource(data, props) {
+function generateChartDataSource(rawData, props) {
   const timeWindow = '1h';
   const series = props.props.chartData;
   const chartOptions = props.props.chartOptions;
@@ -19,14 +19,14 @@ function generateChartDataSource(data, props) {
 
   for (let i = 0; i < chartData.length; i++) {
     let currentChartData = chartData[i];
-    let currentDataRows = data[currentChartData.reportId].rows;
+    let currentDataRows = rawData[currentChartData.reportId].rows;
     let xColumnIndex = '';
     let yColumnIndex = '';
 
     //Check for x-axis chart data
     if (currentChartData.axis !== undefined && currentChartData.axis === 'x') {
       //Calculate column index from API response
-      let columnsArray = data[currentChartData.reportId].columns;
+      let columnsArray = rawData[currentChartData.reportId].columns;
       for (let c = 0; c < columnsArray.length; c++) {
         if (currentChartData.columns[0] === columnsArray[c].name) {
           xColumnIndex = c;
@@ -59,7 +59,7 @@ function generateChartDataSource(data, props) {
     //Check for y-axis chart data (i.e. multiple series)
     if (currentChartData.seriesname !== undefined) {
       //Calculate column index from API response
-      let columnsArray = data[currentChartData.reportId].columns;
+      let columnsArray = rawData[currentChartData.reportId].columns;
       for (let c = 0; c < columnsArray.length; c++) {
         if (currentChartData.columns[0] === columnsArray[c].name) {
           yColumnIndex = c;
@@ -74,11 +74,11 @@ function generateChartDataSource(data, props) {
       //Get column data for x-axis
       if (yColumnIndex !== '') {
         for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
-          var rowObj = {};
+          let rowObj = {};
           if (currentDataRows[d][yColumnIndex][seriesCount] != "NaN") {
-            rowObj["value"] = currentDataRows[d][yColumnIndex][seriesCount];
+            rowObj.value = currentDataRows[d][yColumnIndex][seriesCount];
           } else {
-            rowObj["value"] = '0';
+            rowObj.value = '0';
           }
           tempObj.data.push(rowObj);
         }
@@ -113,7 +113,7 @@ function generateChartDataSource(data, props) {
     },
   };
 
-  var finalChartOptions = Object.assign(dataSourceObject.chart, chartOptions);
+  let finalChartOptions = Object.assign(dataSourceObject.chart, chartOptions);
   dataSourceObject.chart = finalChartOptions;
 
   if (categories.length > 0){
@@ -137,22 +137,23 @@ const renderChart = (props) => {
 
   const mainData = props.multiData[0];
   const chartData = props.props.chartData;
-  const parent = props.props.parent;
+  let parent = props.props.parent;
 
-  let data = {};
+  let rawData = {};
   for (let i = 0; i < chartData.length; i++) {
     let currentChartData = chartData[i];
     if (props.multiData === null && mainData[currentChartData.reportId] === undefined){
       return;
     } else {
-      if (!data.hasOwnProperty(currentChartData.reportId)) {
-        data[currentChartData.reportId] = mainData[currentChartData.reportId];
+      if (!rawData.hasOwnProperty(currentChartData.reportId)) {
+        rawData[currentChartData.reportId] = mainData[currentChartData.reportId];
       }
     }
   }
 
   if (parent === 'Compound') {
     className = "chartBorder";
+    console.log(className);
   }
 
   FusionCharts.ready(function(){
@@ -163,7 +164,7 @@ const renderChart = (props) => {
       height: '400',
       dataFormat: 'json',
       containerBackgroundOpacity:'0',
-      dataSource: generateChartDataSource(data, props)
+      dataSource: generateChartDataSource(rawData, props)
     });
 
     fusioncharts.render();
@@ -171,7 +172,7 @@ const renderChart = (props) => {
 }
 
 const MultiSeriesCombiChart = (props) => (
-  <div className={className}>
+  <div className="chartBorder">
     <div className="chartCaption">{props.sectionTitle}</div>
     <div id={props.id}>{renderChart(props)}</div>
   </div>

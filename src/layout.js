@@ -497,7 +497,7 @@ const layout = {
                 ]
               }
             ]
-          }/*,
+          },
           {
             type: 'HorizontalBarChart',
             parent:'Compound',
@@ -505,10 +505,12 @@ const layout = {
               showHeader: false,
               title: 'Top Connections By Protocol'
             },
-            htmlAttributes: {
+            attributes: {
               style: {width: '50%', marginRight: '20px'},
               id: 'TopConnectionsByProtocol'
-            }
+            },
+            chartOptions: {
+            },
             chartData: [
               {
                 reportId: 'taf_connections_by_protocol',
@@ -518,7 +520,7 @@ const layout = {
                 ]
               }
             ]
-          },
+          }/*,
           {
             type: 'Table.component',
             parent:'Compound',
