@@ -86,10 +86,10 @@ const layout = {
         }]
       }
     ],
-    /*[
+    [
       {
-        id: 5,
         type: 'Table.component',
+        name: 'Table',
         meta: {
           showHeader: true,
           "api": "/api/analytics/reporting/execute/taf_alert_highpriority",
@@ -99,109 +99,106 @@ const layout = {
           },
           title: 'Recent Alerts',
         },
-        name: 'Table',
         attributes: {
           style: {width: '100%'},
+          id: 'RecentAlerts'
+        },
+        tableData: [
+          {
+            reportId: 'taf_alert_highpriority',
+            columns: [
+              {
+                type: 'text',
+                columnNameToDisplay: 'Date',
+                data: [
+                  {
+                    fieldName: "date",
+                    displayName: 'date'
+                  }
+                ],
+                style: {width: '15%'}
+              },
+              {
+                type: 'text',
+                columnNameToDisplay: 'Details',
+                data: [
+                  {
+                    fieldName: "data.rank_alert.description",
+                    displayName: ''
+                  },
+                  {
+                    fieldName: "data.rank_alert.message",
+                    displayName: ''
+                  }
+                ],
+                style: {width: '30%'}
+              },
+              {
+                type: 'text',
+                columnNameToDisplay: 'Source',
+                data: [
+                  {
+                    fieldName: "source.ip",
+                    displayName: 'IP'
+                  },
+                  {
+                    fieldName: "source.port",
+                    displayName: 'port'
+                  },
+                  {
+                    fieldName: "source.country",
+                    displayName: 'countryFlag'
+                  },
+                  {
+                    fieldName: "source.additionalInfo.user",
+                    displayName: 'User'
+                  },
+                  {
+                    fieldName: "source.additionalInfo.machine",
+                    displayName: 'Machine'
+                  }
+                ],
+                style: {width: '30%'}
+              },
+              {
+                type: 'text',
+                columnNameToDisplay: 'Destination',
+                data: [
+                  {
+                    fieldName: "destination.ip",
+                    displayName: 'IP'
+                  },
+                  {
+                    fieldName: "destination.port",
+                    displayName: 'port'
+                  },
+                  {
+                    fieldName: "destination.country",
+                    displayName: 'countryFlag'
+                  },
+                  {
+                    fieldName: "destination.additionalInfo.user",
+                    displayName: 'User'
+                  },
+                  {
+                    fieldName: "destination.additionalInfo.machine",
+                    displayName: 'Machine'
+                  }
+                ],
+                style: {width: '30%'}
+              }
+            ]
+          }
+        ],
+        tableOptions: {
           sortable:['Rank Score','Date','Details', 'Source', 'Destination'],
           defaultSort:{column: 'Rank Score', direction: 'desc'},
-          filterable:['Date', 'Details', 'Source', 'Destination'],
+          filterable:false,/*['Date', 'Details', 'Source', 'Destination'],*/
           filterBy:""
-        },
-        columns: [
-          {
-            type: 'chart',
-            columnName: 'Rank Score',
-            data : {
-              chartType: 'angulargauge',
-              chartId: 'recentAlert',
-              chartWidth: '70',
-              chartHeight: '60',
-              chartValue: [0,'data','rank_alert','score']
-            },
-            style: {width: '10%'}
-          },
-          {
-            type: 'text',
-            columnName: 'Date',
-            data: [
-              {
-                fieldName: "date",
-                fieldValue: [0,'date']
-              }
-            ],
-            style: {width: '20%'}
-          },
-          {
-            type: 'text',
-            columnName: 'Details',
-            data: [
-              {
-                fieldValue: [0,'data','rank_alert','description'],
-                style: 'bold'
-              },
-              {
-                fieldValue: [0,'data','rank_alert','message']
-              }
-            ],
-            style: {width: '30%'}
-          },
-          {
-            type: 'text',
-            columnName: 'Source',
-            data: [
-              {
-                fieldName: "IP",
-                fieldValue: [0,'source','ip']
-              },
-              {
-                fieldName: "port",
-                fieldValue: [0,'source','port']
-              },
-              {
-                fieldName: "countryFlag",
-                fieldValue: [0,'source','country']
-              },
-              {
-                fieldName: "User",
-                fieldValue: [0,'source','additionalInfo','user']
-              },
-              {
-                fieldName: "Machine",
-                fieldValue: [0,'source','additionalInfo','machine']
-              }
-            ],
-            style: {width: '20%'}
-          },
-          {
-            type: 'text',
-            columnName: 'Destination',
-            data: [
-              {
-                fieldName: "IP",
-                fieldValue: [0,'destination','ip']
-              },
-              {
-                fieldName: "port",
-                fieldValue: [0,'destination','port']
-              },
-              {
-                fieldName: "countryFlag",
-                fieldValue: [0,'destination','country']
-              },
-              {
-                fieldName: "User",
-                fieldValue: [0,'destination','additionalInfo','user']
-              },
-              {
-                fieldName: "Machine",
-                fieldValue: [0,'destination','additionalInfo','machine']
-              }
-            ],
-            style: {width: '20%'}
-          }
-        ]
+        }
       }
     ],
+    /*
     [
       {
         "id": "6",
@@ -654,7 +651,7 @@ const layout = {
             tableOptions: {
               sortable:['End Date','Duration','Details', 'Source', 'Destination'],
               defaultSort:{column: 'Duration', direction: 'asc'},
-              filterable:['End Date', 'Details', 'Source', 'Destination'],
+              filterable:false,
               filterBy:""
             }
           }

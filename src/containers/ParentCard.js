@@ -35,8 +35,7 @@ class ParentCard extends React.Component {
 
     if (props.name == 'Table') {
       this.setState({
-        columns: props.columns,
-        attributes: props.attributes
+        props: props
       })
     }
 
@@ -138,17 +137,14 @@ class ParentCard extends React.Component {
                 React.cloneElement(props.children, {
                   data: props.data,
                   multiData: this.state.multiData ,
-                  apiFieldMapping: props.apiFieldMapping,
-                  columns: props.columns,
-                  attributes: props.attributes
+                  apiFieldMapping: props.apiFieldMapping
                 })
               ) :
               (
                 React.cloneElement(props.children, {
-                  data: props.data,
+                  multiData: props.data,
                   apiFieldMapping: props.apiFieldMapping,
-                  attributes: props.attributes,
-                  columns: props.columns
+                  props: this.state.props
                 })
               )
           }

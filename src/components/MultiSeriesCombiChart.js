@@ -153,7 +153,6 @@ const renderChart = (props) => {
 
   if (parent === 'Compound') {
     className = "chartBorder";
-    console.log(className);
   }
 
   FusionCharts.ready(function(){
