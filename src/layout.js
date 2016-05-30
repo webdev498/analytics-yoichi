@@ -520,7 +520,7 @@ const layout = {
                 ]
               }
             ]
-          }/*,
+          },
           {
             type: 'Table.component',
             parent:'Compound',
@@ -529,10 +529,10 @@ const layout = {
               showHeader: false,
               title: 'Longest Connections',
             },
-            htmlAttributes: {
+            attributes: {
               style: {width: '100%'},
               id: 'LongestConnections'
-            }
+            },
             tableData: [
               {
                 reportId: 'taf_top_longest_connections',
@@ -542,20 +542,22 @@ const layout = {
                     columnNameToDisplay: 'End Date',
                     data: [
                       {
-                        fieldName: "date"
+                        fieldName: "date",
+                        displayName: 'date'
                       }
                     ],
-                    style: {width: '20%'}
+                    style: {width: '15%'}
                   },
                   {
-                    type: 'durationWidget',
+                    type: 'text',
                     columnNameToDisplay: 'Duration',
                     data: [
                       {
-                        fieldName: "data.conn.duration"
+                        fieldName: "data.conn.duration",
+                        displayName: 'duration'
                       }
                     ],
-                    style: {width: '10%'}
+                    style: {width: '15%'}
                   },
                   {
                     type: 'text',
@@ -649,11 +651,13 @@ const layout = {
                 ]
               }
             ],
-            sortable:['End Date','Duration','Details', 'Source', 'Destination'],
-            defaultSort:{column: 'Duration', direction: 'asc'},
-            filterable:['End Date', 'Details', 'Source', 'Destination'],
-            filterBy:""
-          }*/
+            tableOptions: {
+              sortable:['End Date','Duration','Details', 'Source', 'Destination'],
+              defaultSort:{column: 'Duration', direction: 'asc'},
+              filterable:['End Date', 'Details', 'Source', 'Destination'],
+              filterBy:""
+            }
+          }
         ]
       }
     ]/*,

@@ -110,7 +110,7 @@ function generateChartDataSource(rawData, props) {
       "yAxisNameFontSize":"14",
       "slantLabels":"1",
       "labelFontSize": "13"
-    },
+    }
   };
 
   let finalChartOptions = Object.assign(dataSourceObject.chart, chartOptions);
