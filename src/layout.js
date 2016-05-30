@@ -14,7 +14,11 @@ const layout = {
         },
         "name": "MetricsCard",
         "attributes": {
-          "style": {"backgroundColor": "#d9534f"},
+          "style": {
+            "backgroundColor": "#d9534f",
+            "width": "24%",
+            "padding": "10px"
+          },
           "title": "High Priority Alerts"
         },
         "children": [{
@@ -35,7 +39,11 @@ const layout = {
         },
         "name": "MetricsCard",
         "attributes": {
-          "style": {"backgroundColor": "#f0ad4e"},
+          "style": {
+            "backgroundColor": "#f0ad4e",
+            "width": "24%",
+            "padding": "10px"
+          },
           "title": "High Priority Malware"
         },
         "children": [{
@@ -56,7 +64,11 @@ const layout = {
         },
         "name": "MetricsCard",
         "attributes": {
-          "style": {"backgroundColor": "#337ab7"},
+          "style": {
+            "backgroundColor": "#337ab7",
+            "width": "24%",
+            "padding": "10px"
+          },
           "title": "Events Processed"
         },
         "children": [{
@@ -77,7 +89,11 @@ const layout = {
         },
         "name": "MetricsCard",
         "attributes": {
-          "style": {"backgroundColor": "#5cb85c"},
+          "style": {
+            "backgroundColor": "#5cb85c",
+            "width": "24%",
+            "padding": "10px"
+          },
           "title": "Assets Monitored"
         },
         "children": [{
