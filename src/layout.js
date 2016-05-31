@@ -6,7 +6,15 @@ const layout = {
         "type": "MetricsCard.component",
         "meta": {
           "showHeader": false,
-          "api": "/api/analytics/reporting/execute/taf_alert_count_time_shifted",
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window":"1h"
+            },
+            "pathParams": {
+              "reportId": "taf_alert_count_time_shifted",
+            }
+          },
           "query": {
             "window": "1h",
             "timeShift": "1h"
@@ -14,7 +22,11 @@ const layout = {
         },
         "name": "MetricsCard",
         "attributes": {
-          "style": {"backgroundColor": "#d9534f"},
+          "style": {
+            "backgroundColor": "#d9534f",
+            "width": "24%",
+            "padding": "10px"
+          },
           "title": "High Priority Alerts"
         },
         "children": [{
@@ -27,7 +39,16 @@ const layout = {
         "type": "MetricsCard.component",
         "meta": {
           "showHeader": false,
-          "api": "/api/analytics/reporting/execute/taf_malware_count_time_shifted",
+          // "api": "/api/analytics/reporting/execute/taf_malware_count_time_shifted",
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window":"1h"
+            },
+            "pathParams": {
+              "reportId": "taf_malware_count_time_shifted",
+            }
+          },
           "query": {
             "window": "1h",
             "timeShift": "1h"
@@ -35,7 +56,11 @@ const layout = {
         },
         "name": "MetricsCard",
         "attributes": {
-          "style": {"backgroundColor": "#f0ad4e"},
+          "style": {
+            "backgroundColor": "#f0ad4e",
+            "width": "24%",
+            "padding": "10px"
+          },
           "title": "High Priority Malware"
         },
         "children": [{
@@ -48,7 +73,16 @@ const layout = {
         "type": "MetricsCard.component",
         "meta": {
           "showHeader": false,
-          "api": "/api/analytics/reporting/execute/taf_event_count_time_shifted",
+          // "api": "/api/analytics/reporting/execute/taf_event_count_time_shifted",
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window":"1h"
+            },
+            "pathParams": {
+              "reportId": "taf_event_count_time_shifted",
+            }
+          },
           "query": {
             "window": "1h",
             "timeShift": "1h"
@@ -56,7 +90,11 @@ const layout = {
         },
         "name": "MetricsCard",
         "attributes": {
-          "style": {"backgroundColor": "#337ab7"},
+          "style": {
+            "backgroundColor": "#337ab7",
+            "width": "24%",
+            "padding": "10px"
+          },
           "title": "Events Processed"
         },
         "children": [{
@@ -69,7 +107,16 @@ const layout = {
         "type": "MetricsCard.component",
         "meta": {
           "showHeader": false,
-          "api": "/api/analytics/reporting/execute/taf_asset_count_time_shifted",
+          // "api": "/api/analytics/reporting/execute/taf_asset_count_time_shifted",
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window":"1h"
+            },
+            "pathParams": {
+              "reportId": "taf_asset_count_time_shifted",
+            }
+          },
           "query": {
             "window": "1h",
             "timeShift": "1h"
@@ -77,7 +124,11 @@ const layout = {
         },
         "name": "MetricsCard",
         "attributes": {
-          "style": {"backgroundColor": "#5cb85c"},
+          "style": {
+            "backgroundColor": "#5cb85c",
+            "width": "24%",
+            "padding": "10px"
+          },
           "title": "Assets Monitored"
         },
         "children": [{
@@ -92,10 +143,15 @@ const layout = {
         name: 'Table',
         meta: {
           showHeader: true,
-          "api": "/api/analytics/reporting/execute/taf_alert_highpriority",
-          "query": {
-            "window": "1h",
-            "count":200
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window": "1h",
+              "count":200
+            },
+            "pathParams": {
+              "reportId": "taf_alert_highpriority",
+            }
           },
           title: 'Recent Alerts',
         },
@@ -334,12 +390,7 @@ const layout = {
         name: 'Compound',
         meta: {
           showHeader: true,
-          apis: [
-            {
-              api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_stats_histogram,taf_connections_by_protocol,taf_top_longest_connections?window=1d'
-            }
-          ],
-          /*api: {
+          api: {
             path:"/api/analytics/reporting/execute/{reportId}",
             queryParams:
             {
@@ -349,7 +400,7 @@ const layout = {
             {
               reportId: "taf_stats_histogram,taf_connections_by_protocol,taf_top_longest_connections",
             },
-          },*/
+          },
           title: 'Traffic Details'
         },
         attributes: {

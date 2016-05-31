@@ -5,12 +5,7 @@
   "homepage": "https://gitlab.ranksoftwareinc.com/rank/yoichi",
   "private": true,
   "dependencies": {
-    "jquery": "~2.1.1",
-    "moment": "2.9.0",
-    "moment-timezone": "0.3.0",
-    "react-fusioncharts": "1.0.0",
     "fusioncharts": "3.10.1",
-    "components-font-awesome" : "4.4.x",
     "flag-icon-css" : "0.8.2"
   }
 }
