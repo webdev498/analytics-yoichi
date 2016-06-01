@@ -104,11 +104,13 @@ const renderChart = (props) => {
   if (props.props.parent === undefined) {
     return;
   }
-  if (props.multiData === null || props.multiData === undefined) {
+  const data = props.data;
+
+  if (!data) {
     return;
   }
 
-  const mainData = props.multiData[0];
+  const mainData = data;
   const chartData = props.props.chartData;
   const parent = props.props.parent;
 

@@ -41,16 +41,17 @@ class ParentCard extends React.Component {
     super(props);
     this.state = {
       data: null,
-      loaded: false,
-      columns: null,
-      attributes: null,
-      multiData: null,
-      apiFieldMapping: [],
-      sectionTitle: null,
-      legend: [],
-      chartOptions: {},
-      parent: null,
-      props:{}
+      // loaded: false,
+      // columns: null,
+      // attributes: null,
+      // multiData: null,
+      // apiFieldMapping: [],
+      // sectionTitle: null,
+      // legend: [],
+      // chartOptions: {},
+      // parent: null,
+      props:{},
+      duration: null
     };
   }
 
@@ -82,30 +83,6 @@ class ParentCard extends React.Component {
     if(api) {
       props.fetchApiData(props.id, api, query);
     }
-
-    const apis = props.meta.apis;
-    if (apis !== undefined) {
-      const accessToken = Cookies.get("access_token");
-      const tokenType = Cookies.get("token_type");
-
-      let multiDataArray = [];
-      for (let i=0; i < apis.length; i++) {
-        fetch(apis[i]['api'], {
-          method: 'GET',
-          headers: {
-            'Authorization': `${tokenType} ${accessToken}`
-          }
-        })
-        .then(response => response.json())
-        .then(json => {
-          multiDataArray.push(json);
-          this.setState({
-            multiData: multiDataArray,
-            loaded: true
-          });
-        })
-      }
-    }
   }
 
   getElement() {
@@ -122,16 +99,17 @@ class ParentCard extends React.Component {
             isError,
             errorData,
             data: props.data,
-            multiData: props.multiData,
-            apiFieldMapping: props.apiFieldMapping,
-            sectionTitle: props.meta.title,
-            legend: props.meta.legend,
-            chartOptions: props.meta.chartOptions,
-            series: state.series,
-            attributes: state.attributes,
-            columns: state.columns,
+            // multiData: props.multiData,
+            // apiFieldMapping: props.apiFieldMapping,
+            // sectionTitle: props.meta.title,
+            // legend: props.meta.legend,
+            // chartOptions: props.meta.chartOptions,
+            // series: state.series,
+            // attributes: state.attributes,
+            // columns: state.columns,
             parent: state.parent,
-            props: state.props
+            props: state.props,
+            duration: props.duration
           });
   }
 
@@ -168,18 +146,10 @@ class ParentCard extends React.Component {
           {
             props.meta.apis ?
               (
-                React.cloneElement(props.children, {
-                  data: props.data,
-                  multiData: this.state.multiData ,
-                  apiFieldMapping: props.apiFieldMapping
-                })
+                React.cloneElement(props.children, {data: props.data})
               ) :
               (
-                React.cloneElement(props.children, {
-                  multiData: props.data,
-                  apiFieldMapping: props.apiFieldMapping,
-                  props: this.state.props
-                })
+                React.cloneElement(props.children, {props: this.state.props})
               )
           }
           </div>
@@ -218,11 +188,14 @@ function mapStateToProps(state, ownProps) {
     errorData = propsById.get('errorData');
   }
 
+  const duration = apiData.get('duration');
+
   return {
     data,
     isFetching,
     isError,
-    errorData
+    errorData,
+    duration
   };
 }
 

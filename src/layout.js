@@ -137,7 +137,7 @@ const layout = {
         }]
       }
     ],
-    [
+    /*[
       {
         type: 'Table.component',
         name: 'Table',
@@ -249,11 +249,11 @@ const layout = {
         tableOptions: {
           sortable:['Rank Score','Date','Details', 'Source', 'Destination'],
           defaultSort:{column: 'Rank Score', direction: 'desc'},
-          filterable:false,/*['Date', 'Details', 'Source', 'Destination'],*/
+          filterable:false,
           filterBy:""
         }
       }
-    ],
+    ],*/
     /*
     [
       {
@@ -269,19 +269,29 @@ const layout = {
         },
         "attributes": {
           "style": {"width": "50%", "marginRight": "20px"},
-          "id": "chart1",
+          "id": "AlertByType",
           "variation": "3d"
         },
-        apiFieldMapping: [{
-          xAxis: {
-            fieldName: 'Alert Types',
-            fieldValue: [0]
+        chartOptions: {
+          pYAxisname: "Connections",
+          xAxisname: "Alert Types"
+        },
+        chartData: [
+          {
+            axis: 'x',
+            reportId: 'taf_threat_trend',
+            columns: [
+              'data.rank_alert.category'
+            ]
           },
-          yAxis: {
-            fieldName: 'Connections',
-            fieldValue: [1]
+          {
+            axis: 'y',
+            reportId: 'taf_threat_trend',
+            columns: [
+              'count of date'
+            ]
           }
-        }]
+        ]
       },
       {
         "id": "7",
@@ -394,7 +404,7 @@ const layout = {
             path:"/api/analytics/reporting/execute/{reportId}",
             queryParams:
             {
-              "window":"1h"
+              "window":"1d"
             },
             pathParams:
             {
@@ -416,7 +426,7 @@ const layout = {
               title: 'Incoming Bandwidth'
             },
             attributes: {
-              style: {width: '50%'},
+              style: {width: '48%'},
               id: 'HistogramChart1'
             },
             chartOptions: {
@@ -462,7 +472,7 @@ const layout = {
               title: 'Outgoing Bandwidth'
             },
             attributes: {
-              style: {width: '50%'},
+              style: {width: '48%'},
               id: 'HistogramChart2'
             },
             chartOptions: {
@@ -508,7 +518,7 @@ const layout = {
               title: 'No. of Connections'
             },
             attributes: {
-              style: {width: '50%'},
+              style: {width: '48%'},
               id: 'HistogramChart3'
             },
             chartOptions: {
@@ -554,7 +564,7 @@ const layout = {
               title: 'Top Connections By Protocol'
             },
             attributes: {
-              style: {width: '50%', marginRight: '20px'},
+              style: {width: '48%', marginRight: '20px'},
               id: 'TopConnectionsByProtocol'
             },
             chartOptions: {
@@ -568,7 +578,7 @@ const layout = {
                 ]
               }
             ]
-          },
+          }/*,
           {
             type: 'Table.component',
             parent:'Compound',
@@ -705,7 +715,7 @@ const layout = {
               filterable:false,
               filterBy:""
             }
-          }
+          }*/
         ]
       }
     ]/*,

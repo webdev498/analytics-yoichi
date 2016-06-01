@@ -68,7 +68,6 @@ function generateChartDataSource(props) {
   const dataSourceObject = {
     chart: {
       labelFontSize: "10",
-      pYAxisname: yAxisName,
       showAxisLines: "1",
       showLabels: "1",
       showPercentInTooltip: "1",
@@ -76,7 +75,6 @@ function generateChartDataSource(props) {
       showYAxisValues: "1",
       theme: "zune",
       xAxisNameFontSize: "14",
-      xAxisname: xAxisName,
       yAxisNameFontSize: "14",
       caption: "",
       baseFont: "Roboto, sans-serif"

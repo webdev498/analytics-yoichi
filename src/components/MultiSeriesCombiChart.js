@@ -5,7 +5,8 @@ import {calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
 let className;
 
 function generateChartDataSource(rawData, props) {
-  const timeWindow = '1h';
+  const timeWindow = props.duration;
+
   const series = props.props.chartData;
   const chartOptions = props.props.chartOptions;
   const chartData = props.props.chartData;
@@ -131,13 +132,23 @@ const renderChart = (props) => {
   if (props.props.parent === undefined) {
     return;
   }
-  if (props.multiData === null || props.multiData === undefined) {
+  if (!props.duration) {
     return;
   }
 
-  const mainData = props.multiData[0];
+  const data = props.data;
+
+  if (!data) {
+    return;
+  }
+
+  const mainData = data;
   const chartData = props.props.chartData;
   let parent = props.props.parent;
+
+  //const mainData = props.multiData[0];
+  //const chartData = props.props.chartData;
+  //let parent = props.props.parent;
 
   let rawData = {};
   for (let i = 0; i < chartData.length; i++) {

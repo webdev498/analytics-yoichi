@@ -12,7 +12,8 @@ let tableProperties = {},
     tableDataSource = [];
 
 const generateDataSource = (props) => {
-  if (props.multiData === null || props.multiData === undefined) {
+  const data = props.data;
+  if (!data) {
     return;
   }
 
@@ -24,13 +25,13 @@ const generateDataSource = (props) => {
   tableProperties = {};
   tableDataSource = [];
 
-  let mainData, tableData, tableOptions;
+  let mainData = data, tableData, tableOptions;
 
-  if (props.multiData[0] !== undefined) {
-    mainData = props.multiData[0];
-  } else {
-    mainData = props.multiData;
-  }
+  // if (props.multiData[0] !== undefined) {
+  //   mainData = props.multiData[0];
+  // } else {
+  //   mainData = props.multiData;
+  // }
 
   if (props.props !== undefined) {
     tableData = props.props.tableData;
@@ -43,13 +44,13 @@ const generateDataSource = (props) => {
   let rawData = {};
   for (let i = 0; i < tableData.length; i++) {
     let currentTableData = tableData[i];
-    if (props.multiData === null && (props.multiData[0] !== undefined && mainData[currentTableData.reportId] === undefined)){
+    /*if (props.multiData === null && (props.multiData[0] !== undefined && mainData[currentTableData.reportId] === undefined)){
       return;
-    } else if (props.multiData === null && (props.multiData[0] === undefined && mainData === undefined)){
+    } else */if (mainData === undefined){//props.multiData === null && (props.multiData[0] === undefined &&
       return;
     } else {
       if (!rawData.hasOwnProperty(currentTableData.reportId)) {
-        if (props.multiData[0] !== undefined) {
+        if (mainData[currentTableData.reportId] !== undefined) {
           rawData[currentTableData.reportId] = mainData[currentTableData.reportId];
         } else {
           rawData[currentTableData.reportId] = mainData;
@@ -66,9 +67,9 @@ const generateDataSource = (props) => {
         columnsArray = rawData[currentTableData.reportId].columns,
         columnText = '';
 
-    if (props.multiData[0] === undefined && props.multiData !== undefined) {
-      currentDataRows = rawData[currentTableData.reportId].rows;
-    }
+    // if (props.multiData[0] === undefined && props.multiData !== undefined) {
+    //   currentDataRows = rawData[currentTableData.reportId].rows;
+    // }
 
     for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
       const obj1 = {};
@@ -156,6 +157,7 @@ const generateDataSource = (props) => {
       tableDataSource.push(obj1);
     }
   }
+  console.log(tableDataSource);
 }
 
 function getColumnText(currentColumnType, fieldName, displayName, fieldValue, columnText) {
