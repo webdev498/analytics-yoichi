@@ -1,9 +1,9 @@
 /* @flow */
 import React from 'react';
-import Card from 'material-ui/lib/card/card';
-import TextField from 'material-ui/lib/text-field';
-import CardActions from 'material-ui/lib/card/card-actions';
-import RaisedButton from 'material-ui/lib/raised-button';
+import Card from 'material-ui/Card/Card';
+import TextField from 'material-ui/TextField';
+import CardActions from 'material-ui/Card/CardActions';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import CustomCardHeader from '../components/CustomCardHeader.component';
 import {loginUrl, responseType, clientId, redirectUri} from '../config';

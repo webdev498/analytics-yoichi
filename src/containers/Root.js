@@ -5,6 +5,9 @@ import { IntlProvider } from 'react-intl';
 import * as messages from 'i18n/';
 import { connect } from 'react-redux';
 
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 class Root extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
@@ -45,10 +48,12 @@ class Root extends React.Component {
   render () {
     return (
       <Provider store={this.props.store}>
-        <div style={{ height: '100%' }}>
-          {this.content}
-          {this.devTools}
-        </div>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <div style={{ height: '100%' }}>
+            {this.content}
+            {this.devTools}
+          </div>
+        </MuiThemeProvider>
       </Provider>
     );
   }

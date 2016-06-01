@@ -1,12 +1,12 @@
 import React from 'react';
 
-import AppBar from 'material-ui/lib/app-bar';
-import CardHeader from 'material-ui/lib/card/card-header';
+import AppBar from 'material-ui/AppBar';
+import CardHeader from 'material-ui/Card/CardHeader';
 
-import DropDownMenu from 'material-ui/lib/DropDownMenu';
-import Menu from 'material-ui/lib/menus/menu';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import FaceIcon from 'material-ui/lib/svg-icons/social/person';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import Menu from 'material-ui/Menu/Menu';
+import MenuItem from 'material-ui/MenuItem/MenuItem';
+import FaceIcon from 'material-ui/svg-icons/social/person';
 
 import * as AuthActions from 'actions/auth.actions';
 

@@ -39,7 +39,17 @@ export function changeTimeRange(timeRange) {
   }
 }
 
-function getUrl(url, query, duration) {
+function getUrl(api, duration) {
+  const {queryParams: query, path, pathParams} = api;
+
+  let url = path;
+
+  const pathKeys = Object.keys(pathParams);
+  pathKeys.forEach((key) => {
+    let templateString = `{${key}}`;
+    url = url.replace(templateString, pathParams[key]);
+  });
+
   const keys = Object.keys(query);
   let queryString = "";
 
@@ -74,7 +84,7 @@ export function fetchApiData(id, api, query) {
 
     dispatch(requestApiData(id));
 
-    return fetch(getUrl(api, query, currentDuration), {
+    return fetch(getUrl(api, currentDuration), {
       method: 'GET',
       headers: {
         'Authorization': `${tokenType} ${accessToken}`
@@ -82,7 +92,7 @@ export function fetchApiData(id, api, query) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(receiveApiData(id, {json, api, query}))
+      dispatch(receiveApiData(id, {json, api}))
     })
     .catch((ex) => {
       dispatch(errorApiData(id, ex))
@@ -107,8 +117,7 @@ export function updatedApiData(newDuration) {
         components.forEach((component, index) => {
           const id = component.get('id');
           const api = component.get('api');
-          const query = component.get('query');
-          fetchApiData(id, api, query)(dispatch, getState);
+          fetchApiData(id, api)(dispatch, getState);
         });
       }
     }

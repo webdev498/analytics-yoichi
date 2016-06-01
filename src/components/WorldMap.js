@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Card from 'material-ui/lib/card/card';
+import Card from 'material-ui/Card/Card';
 
 import {getCountryIDByCountryCode} from 'utils/utils';
 

@@ -1,13 +1,8 @@
 import React from 'react';
 
-import Card from 'material-ui/lib/card/card';
-import FontIcon from 'material-ui/lib/font-icon';
+import FontIcon from 'material-ui/FontIcon';
 
 const styles = {
-  cardStyle: {
-    width: '24%',
-    padding: '10px'
-  },
   iconStyle: {
     fontSize: '50px',
     color: 'white'
@@ -74,7 +69,7 @@ function getArrowIcon(data) {
 }
 
 const MetricsCard = (props) => (
-  <Card style={{...styles.cardStyle, ...props.style}}>
+  <div style={{...styles.cardStyle}}>
     <div style={styles.wrapStyle}>
       <div>
         {getIconElm(props)}
@@ -92,7 +87,7 @@ const MetricsCard = (props) => (
         {getArrowIcon(props.data)}
       </div>
     </div>
-  </Card>
+  </div>
 )
 
 export default MetricsCard;

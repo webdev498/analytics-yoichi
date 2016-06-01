@@ -2,11 +2,39 @@ import React from 'react';
 import { connect } from 'react-redux'
 
 import Cookies from 'cookies-js';
-import Card from 'material-ui/lib/card/card';
-import FontIcon from 'material-ui/lib/font-icon';
-import Loader from 'react-loader';
+import Card from 'material-ui/Card/Card';
+import FontIcon from 'material-ui/FontIcon';
+
+import Loader from '../components/Loader.component';
 
 import {fetchApiData} from 'actions/ParentCard.actions';
+
+const styles = {
+  wrap: {
+    position: 'relative',
+  },
+  header: {
+    padding: '10px 15px',
+    height: '56px',
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: '#cdcdcd'
+  },
+  title: {
+    textTransform: 'capitalize',
+    fontSize: '18px'
+  },
+  iconWrap: {
+    marginLeft: 'auto'
+  },
+  refreshIcon: {
+    marginRight: '10px',
+    fontSize: '20px'
+  },
+  crossIcon: {
+    fontSize: '20px'
+  }
+}
 
 class ParentCard extends React.Component {
   constructor(props) {
@@ -33,13 +61,13 @@ class ParentCard extends React.Component {
     const {api, query} = props.meta;
     this.unsubscribe = store.subscribe(() => {});
 
-    if (props.name == 'Table') {
+    if (props.name === 'Table') {
       this.setState({
         props: props
       })
     }
 
-    if (props.parent == 'Compound') {
+    if (props.parent === 'Compound') {
       this.setState({
         sectionTitle: props.meta.title,
         apiFieldMapping: props.apiFieldMapping,
@@ -57,9 +85,6 @@ class ParentCard extends React.Component {
 
     const apis = props.meta.apis;
     if (apis !== undefined) {
-      const api1 = apis[0];
-      const api2 = apis[1];
-
       const accessToken = Cookies.get("access_token");
       const tokenType = Cookies.get("token_type");
 
@@ -86,26 +111,28 @@ class ParentCard extends React.Component {
   getElement() {
     const {props, state} = this;
 
-    // if(props.meta.apis) {
-      return React.cloneElement(props.children, {
-              data: props.data,
-              multiData: props.multiData,
-              apiFieldMapping: props.apiFieldMapping,
-              sectionTitle: props.meta.title,
-              legend: props.meta.legend,
-              chartOptions: props.meta.chartOptions,
-              series: state.series,
-              attributes: state.attributes,
-              columns: state.columns,
-              parent: state.parent,
-              props: state.props
-            });
+    const {
+      isFetching,
+      isError,
+      errorData
+    } = props;
 
-    // }
-    // else {
-    //   console.log(props);
-      //return React.cloneElement(props.children, { ...props });
-    // }
+    return React.cloneElement(props.children, {
+            isFetching,
+            isError,
+            errorData,
+            data: props.data,
+            multiData: props.multiData,
+            apiFieldMapping: props.apiFieldMapping,
+            sectionTitle: props.meta.title,
+            legend: props.meta.legend,
+            chartOptions: props.meta.chartOptions,
+            series: state.series,
+            attributes: state.attributes,
+            columns: state.columns,
+            parent: state.parent,
+            props: state.props
+          });
   }
 
   componentWillUnmount() {
@@ -117,16 +144,23 @@ class ParentCard extends React.Component {
 
     if(props.meta.showHeader) {
       return (
-        <Card style={{...props.attributes.style}}>
-          <header style={{padding: '10px 15px', height: '56px',
-                          display: 'flex', alignItems: 'center', backgroundColor: '#cdcdcd'}}>
+        <Card style={{...styles.wrap, ...props.attributes.style}}>
+          {/*props.isFetching ? <Loader /> : null*/}
+
+          <header style={styles.header}>
             <div>
-              <span style={{textTransform: 'capitalize', fontSize: '18px'}}>{props.meta.title}</span>
+              <span style={styles.title}>{props.meta.title}</span>
             </div>
 
-            <div style={{marginLeft: 'auto'}}>
-              <FontIcon className='material-icons' style={{marginRight: '10px', fontSize: '20px'}}>refresh</FontIcon>
-              <FontIcon className='material-icons' style={{fontSize: '20px'}}>clear</FontIcon>
+            <div style={styles.iconWrap}>
+              <FontIcon className='material-icons'
+                        style={styles.refreshIcon}>
+                        refresh
+              </FontIcon>
+              <FontIcon className='material-icons'
+                        style={styles.crossIcon}>
+                        clear
+              </FontIcon>
             </div>
           </header>
 
@@ -153,7 +187,12 @@ class ParentCard extends React.Component {
       )
     }
     else {
-      return this.getElement()
+      return (
+        <Card style={{...styles.wrap, ...props.attributes.style}}>
+          {/*props.isFetching ? <Loader /> : null*/}
+          {this.getElement()}
+        </Card>
+      )
     }
   }
 }
@@ -165,17 +204,25 @@ ParentCard.contextTypes = {
 function mapStateToProps(state, ownProps) {
   const {apiData} = state;
 
-  let data;
+  let data = null,
+      isFetching = true,
+      isError = false,
+      errorData = null;
+
   if(apiData.hasIn(['components', ownProps.id])) {
-    data = apiData.getIn(['components', ownProps.id])
-                  .get('data');
-  }
-  else {
-    data = null;
+    const propsById = apiData.getIn(['components', ownProps.id]);
+
+    data = propsById.get('data');
+    isFetching = propsById.get('isFetching');
+    isError = propsById.get('isError');
+    errorData = propsById.get('errorData');
   }
 
   return {
-    data: data
+    data,
+    isFetching,
+    isError,
+    errorData
   };
 }
 

@@ -9,3 +9,5 @@ coverage
 target
 .settings
 .project
+
+src/static/bower_components

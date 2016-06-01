@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Card from 'material-ui/lib/card/card';
+import Card from 'material-ui/Card/Card';
 
-import AlertIcon from 'material-ui/lib/svg-icons/alert/add-alert';
-import BugIcon from 'material-ui/lib/svg-icons/action/bug-report';
-import AssetsIcon from 'material-ui/lib/svg-icons/hardware/devices-other';
+import AlertIcon from 'material-ui/svg-icons/alert/add-alert';
+import BugIcon from 'material-ui/svg-icons/action/bug-report';
+import AssetsIcon from 'material-ui/svg-icons/hardware/devices-other';
 
 import ParentCard from 'containers/ParentCard';
 import MetricCard from 'components/MetricsCard.component';
