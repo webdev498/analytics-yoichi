@@ -136,8 +136,8 @@ const layout = {
           "content": "devices_other"
         }]
       }
-    ],
-    /*[
+    ],/*
+    [
       {
         type: 'Table.component',
         name: 'Table',
@@ -578,7 +578,7 @@ const layout = {
                 ]
               }
             ]
-          }/*,
+          },
           {
             type: 'Table.component',
             parent:'Compound',
@@ -715,7 +715,7 @@ const layout = {
               filterable:false,
               filterBy:""
             }
-          }*/
+          }
         ]
       }
     ]/*,

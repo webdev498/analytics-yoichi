@@ -25,7 +25,9 @@ const generateDataSource = (props) => {
   tableProperties = {};
   tableDataSource = [];
 
-  let mainData = data, tableData, tableOptions;
+  let mainData = data,
+      tableData = [],
+      tableOptions = {};
 
   // if (props.multiData[0] !== undefined) {
   //   mainData = props.multiData[0];
@@ -246,7 +248,8 @@ const tableCard = (props) => (
            filterable={tableProperties.filterable}
            filterBy=""
            itemsPerPage={5}
-           pageButtonLimit={5}>
+           pageButtonLimit={5}
+           currentPage={0}>
       {
         tableDataSource.map(function(tableRow, index){
           return (
