@@ -5,8 +5,8 @@ import Card from 'material-ui/Card/Card';
 import {getCountryIDByCountryCode} from 'utils/utils';
 
 function getData(dataSource) {
-  var data = dataSource[0];
-  var badReputationData = dataSource[1];
+  var data = dataSource;//dataSource[0];
+  var badReputationData = [];//dataSource[1];
   var items = data.rows;
   var dataSourceObject = {};
   var markersItemsObject = [];
@@ -198,13 +198,11 @@ function getData(dataSource) {
 };
 
 const renderChart = (props) => {
-  if(props.multiData == null) {
+  if(!props.data) {
     return;
   }
-  if(props.multiData[0] == null || props.multiData[1] == null) {
-    return;
-  }
-  const dataSourceObject = getData(props.multiData);
+
+  const dataSourceObject = getData(props.data);
 
   FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({

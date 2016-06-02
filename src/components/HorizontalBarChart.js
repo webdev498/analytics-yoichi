@@ -4,8 +4,8 @@ let className;
 
 function generateChartDataSource(rawData, props) {
 
-  const chartOptions = props.props.chartOptions;
-  const chartData = props.props.chartData;
+  const chartOptions = props.chartOptions;
+  const chartData = props.chartData;
   const dataset = [];
 
   for (let i = 0; i < chartData.length; i++) {
@@ -107,9 +107,9 @@ function generateChartDataSource(rawData, props) {
 };
 
 const renderChart = (props) => {
-  if (props.props.parent === undefined) {
+  /*if (props.props.parent === undefined) {
     return;
-  }
+  }*/
   const data = props.data;
 
   if (!data) {
@@ -117,8 +117,8 @@ const renderChart = (props) => {
   }
 
   const mainData = data;
-  const chartData = props.props.chartData;
-  const parent = props.props.parent;
+  const chartData = props.chartData;
+  const parent = props.parent;
 
   let rawData = {};
   for (let i = 0; i < chartData.length; i++) {
@@ -132,9 +132,9 @@ const renderChart = (props) => {
     }
   }
 
-  if (parent === 'Compound') {
+  /*if (parent === 'Compound') {
     className = "chartBorder";
-  }
+  }*/
 
   /*if(props.multiData == null) {
     return;
@@ -239,7 +239,7 @@ const renderChart = (props) => {
   FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({
       type: 'bar2d',
-      renderAt: props.id,
+      renderAt: props.attributes.id,
       width: '100%',
       height: '400',
       dataFormat: 'json',
@@ -252,8 +252,8 @@ const renderChart = (props) => {
 
 const HorizontalBarChart = (props) => (
   <div className="chartBorder">
-    <div className="chartCaption">{props.sectionTitle}</div>
-    <div id={props.id}>{renderChart(props)}</div>
+    <div className="chartCaption">{props.meta.title}</div>
+    <div id={props.attributes.id}>{renderChart(props)}</div>
   </div>
 )
 

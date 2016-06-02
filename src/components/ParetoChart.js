@@ -1,84 +1,74 @@
 import React from 'react';
 
 function generateChartDataSource(props) {
-  const data = props.data;
+  const {data, chartOptions, chartData} = props;
   const apiFieldMapping = props.apiFieldMapping;
 
   const graphBars = [];
   const chartColors = ["D93609","0505F5","ACF50F","FCFC0D","05E9F5","003300","FF66FF","999999","009999","66CDAA"];
 
-  let colorIndex = -1,
+  let colorIndex = 0,
       numberOfColors = chartColors.length;
 
-  let xAxisName = '',
-      yAxisName = '';
+  const apiData = data.rows;
 
-  for (let a = 0; a < apiFieldMapping.length; a++) {
-    const apiFieldMappingIndividual = apiFieldMapping[a],
-          apiData = data.rows;
+  for (let i = 0; i < apiData.length; i++) {
+    // const apiFieldMappingIndividual = apiFieldMapping[i];
 
-    const xfieldValueArray = apiFieldMappingIndividual.xAxis.fieldValue,
-          yfieldValueArray = apiFieldMappingIndividual.yAxis.fieldValue;
+    // const xfieldValueArray = apiFieldMappingIndividual.xAxis.fieldValue,
+    //       yfieldValueArray = apiFieldMappingIndividual.yAxis.fieldValue;
 
-    xAxisName = apiFieldMappingIndividual.xAxis.fieldName;
-    yAxisName = apiFieldMappingIndividual.yAxis.fieldName;
+    // for (let j = 0; j < apiData.length; j++) {
+    //   let xValue = '',
+    //       yValue = '';
 
-    for (let i = 0; i < apiData.length; i++) {
-      let xValue = '',
-          yValue = '';
+    //   for(let v = 0; v < xfieldValueArray.length; v++) {
+    //     if (v === 0) {
+    //       xValue = apiData[j][xfieldValueArray[v]];
+    //     }
+    //     else {
+    //       xValue = xValue[xfieldValueArray[v]];
+    //     }
+    //   }
 
-      for(let v = 0; v < xfieldValueArray.length; v++) {
-        if (v === 0) {
-          xValue = apiData[i][xfieldValueArray[v]];
-        }
-        else {
-          xValue = xValue[xfieldValueArray[v]];
-        }
-      }
-      for(let v = 0; v < yfieldValueArray.length; v++) {
-        if (v === 0) {
-          yValue = apiData[i][yfieldValueArray[v]];
-        }
-        else {
-          yValue = xValue[yfieldValueArray[v]];
-        }
-      }
+    //   for(let v = 0; v < yfieldValueArray.length; v++) {
+    //     if (v === 0) {
+    //       yValue = apiData[j][yfieldValueArray[v]];
+    //     }
+    //     else {
+    //       yValue = xValue[yfieldValueArray[v]];
+    //     }
+    //   }
 
-      const barObject = {};
-      if (xValue === "") {
-        barObject.label = "Other";
-      }
-      else{
-        barObject.label = xValue;
-      }
+      const xValue = apiData[i][0];
+      const yValue = apiData[i][1];
 
-      barObject.value = yValue;
-      colorIndex = colorIndex + 1;
+      const barObject = {
+        label: xValue ? xValue : "Other",
+        value: yValue,
+        color: chartColors[(colorIndex++) % numberOfColors]
+      };
 
-      if (chartColors[colorIndex] === undefined) {
-        colorIndex = 0;
-      }
-
-      barObject.color = chartColors[colorIndex];
       graphBars.push(barObject);
-    }
-
+    // }
   }
 
+  // console.log(graphBars);
+
   const dataSourceObject = {
-    chart: {
-      labelFontSize: "10",
-      showAxisLines: "1",
-      showLabels: "1",
-      showPercentInTooltip: "1",
-      showValues: "1",
-      showYAxisValues: "1",
-      theme: "zune",
-      xAxisNameFontSize: "14",
-      yAxisNameFontSize: "14",
-      caption: "",
-      baseFont: "Roboto, sans-serif"
-    },
+    chart: Object.assign({
+          labelFontSize: "10",
+          showAxisLines: "1",
+          showLabels: "1",
+          showPercentInTooltip: "1",
+          showValues: "1",
+          showYAxisValues: "1",
+          theme: "zune",
+          xAxisNameFontSize: "14",
+          yAxisNameFontSize: "14",
+          caption: "",
+          baseFont: "Roboto, sans-serif"
+        }, chartOptions),
     data: graphBars
   };
 

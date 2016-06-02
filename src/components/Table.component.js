@@ -11,7 +11,7 @@ const {Table, Tr, Td, unsafe} = Reactable;
 let tableProperties = {},
     tableDataSource = [];
 
-const generateDataSource = (props) => {console.log((props));
+const generateDataSource = (props) => {
   const data = props.data;
   if (!data) {
     return;
@@ -61,7 +61,7 @@ const generateDataSource = (props) => {console.log((props));
     //}
   }
   tableProperties = {...tableOptions};
-  console.log((tableProperties));
+
   for (let i = 0; i < tableData.length; i++) {
     let currentTableData = tableData[i],
         currentDataRows = rawData[currentTableData.reportId].rows,

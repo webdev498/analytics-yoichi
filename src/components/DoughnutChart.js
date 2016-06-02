@@ -90,9 +90,11 @@ function generateDoughnutChart (assetsCount, topAssetsCount, top10Count, totalCo
 }
 
 const renderChart = (props) => {
+  console.log(props);
   if(props.multiData == null) {
     return;
   }
+  console.log('here');
   if(props.multiData[0] == null || props.multiData[1] == null || props.multiData[2] == null || props.multiData[3] == null) {
     return;
   }
@@ -187,8 +189,8 @@ const DoughnutChart = (props) => (
       </div>
       <div className="row"><br/><br/>
         <div className="col-sm-12 text-center" id="connectionsPercentage">
-          <span style={doughnutAttributes.percentage2Color}>{doughnutAttributes.percentage2}%</span> {props.legend[0]}
-          <span style={doughnutAttributes.percentage1Color}> {doughnutAttributes.assetPercentage}%</span> {props.legend[1]}
+          <span style={doughnutAttributes.percentage2Color}>{doughnutAttributes.percentage2}%</span> {props.meta.legend[0]}
+          <span style={doughnutAttributes.percentage1Color}> {doughnutAttributes.assetPercentage}%</span> {props.meta.legend[1]}
         </div><br/><br/>
       </div>
     </div>

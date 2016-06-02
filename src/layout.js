@@ -267,8 +267,7 @@ const layout = {
           filterBy:"connection"
         }
       }
-    ],
-    /*
+    ]/*,
     [
       {
         "id": "6",
@@ -363,20 +362,21 @@ const layout = {
           ]
         }
       }
-    ],
-    [
+    ],*/
+    /*[
       {
         type: 'WorldMap',
         meta: {
           showHeader: true,
-          apis: [
-            {
-              api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h'
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window": "1h"
             },
-            {
-              api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_dest_countries?window=1h&filter=source.reputation OR destination.reputation'
+            "pathParams": {
+              "reportId": "taf_dest_countries",
             }
-          ],
+          },
           title: 'Outgoing Traffic Heatmap',
         },
         attributes: {
@@ -407,9 +407,10 @@ const layout = {
           mapType: 'Incoming'
         }
       }
-    ],*/
-    /*[
+    ]*/,
+    [
       {
+        id: '21',
         type: 'Compound.component',
         name: 'Compound',
         meta: {
@@ -431,7 +432,7 @@ const layout = {
           style: {width: '100%', marginRight: '20px'},
           id: 'TrafficDetails'
         },
-        subComponents: [
+        children: [
           {
             type: 'MultiSeriesCombiChart',
             parent:'Compound',
@@ -732,7 +733,7 @@ const layout = {
           }
         ]
       }
-    ]*//*,
+    ]/*,
     [
       {
         type: 'Compound.component',

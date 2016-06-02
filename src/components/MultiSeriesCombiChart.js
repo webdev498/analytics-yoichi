@@ -137,10 +137,10 @@ function generateChartDataSource(rawData, props) {
   return dataSourceObject;
 }
 
-const renderChart = (props) => {console.log((props))
-  if (props.parent === undefined) {
+const renderChart = (props) => {
+  /*if (props.parent === undefined) {
     return;
-  }
+  }*/
   if (!props.duration) {
     return;
   }
@@ -153,7 +153,7 @@ const renderChart = (props) => {console.log((props))
 
   const mainData = data;
   const chartData = props.chartData;
-  let parent = props.parent;
+  //let parent = props.parent;
 
   //const mainData = props.multiData[0];
   //const chartData = props.props.chartData;
@@ -171,14 +171,14 @@ const renderChart = (props) => {console.log((props))
     }
   }
 
-  if (parent === 'Compound') {
+  /*if (parent === 'Compound') {
     className = "chartBorder";
-  }
+  }*/
 
   FusionCharts.ready(function(){
     const fusioncharts = new FusionCharts({
       type: 'mscombi2d',
-      renderAt: props.id,
+      renderAt: props.attributes.id,
       width: '100%',
       height: '400',
       dataFormat: 'json',
@@ -192,8 +192,8 @@ const renderChart = (props) => {console.log((props))
 
 const MultiSeriesCombiChart = (props) => (
   <div className="chartBorder">
-    <div className="chartCaption">{props.sectionTitle}</div>
-    <div id={props.id}>{renderChart(props)}</div>
+    <div className="chartCaption">{props.meta.title}</div>
+    <div id={props.attributes.id}>{renderChart(props)}</div>
   </div>
 )
 
