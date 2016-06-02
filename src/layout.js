@@ -363,7 +363,7 @@ const layout = {
         }
       }
     ],*/
-    /*[
+    [
       {
         type: 'WorldMap',
         meta: {
@@ -407,7 +407,7 @@ const layout = {
           mapType: 'Incoming'
         }
       }
-    ]*/,
+    ],
     [
       {
         id: '21',
@@ -423,7 +423,7 @@ const layout = {
             },
             pathParams:
             {
-              reportId: "taf_stats_histogram,taf_connections_by_protocol,taf_top_longest_connections",
+              reportId: "taf_stats_histogram,taf_connections_by_protocol",
             },
           },
           title: 'Traffic Details'
@@ -593,145 +593,154 @@ const layout = {
                 ]
               }
             ]
-          },
-          {
-            type: 'Table.component',
-            parent:'Compound',
-            name: 'Table',
-            meta: {
-              showHeader: false,
-              title: 'Longest Connections',
-            },
-            attributes: {
-              style: {width: '100%'},
-              id: 'LongestConnections'
-            },
-            tableData: [
-              {
-                reportId: 'taf_top_longest_connections',
-                columns: [
-                  {
-                    type: 'text',
-                    columnNameToDisplay: 'End Date',
-                    data: [
-                      {
-                        fieldName: "date",
-                        displayName: 'date'
-                      }
-                    ],
-                    style: {width: '15%'}
-                  },
-                  {
-                    type: 'text',
-                    columnNameToDisplay: 'Duration',
-                    data: [
-                      {
-                        fieldName: "data.conn.duration",
-                        displayName: 'duration'
-                      }
-                    ],
-                    style: {width: '15%'}
-                  },
-                  {
-                    type: 'text',
-                    columnNameToDisplay: 'Details',
-                    data: [
-                      {
-                        fieldName: "protocol.service",
-                        displayName: ''
-                      },
-                      {
-                        fieldName: "data.conn.reqBytes",
-                        displayName: "Incoming bytes"
-                      },
-                      {
-                        fieldName: "data.conn.respBytes",
-                        displayName: "Outcoming bytes"
-                      }
-                    ],
-                    style: {width: '30%'}
-                  },
-                  {
-                    type: 'text',
-                    columnNameToDisplay: 'Source',
-                    data: [
-                      {
-                        fieldName: "source.ip",
-                        displayName: 'IP'
-                      },
-                      {
-                        fieldName: "source.port",
-                        displayName: "port"
-                      },
-                      {
-                        fieldName: "source.country",
-                        displayName: "countryFlag"
-                      },
-                      {
-                        fieldName: "source.additionalInfo.user",
-                        displayName: "User"
-                      },
-                      {
-                        fieldName: "source.additionalInfo.machine",
-                        displayName: "Machine"
-                      },
-                      {
-                        fieldName: "source.owner",
-                        displayName: "Owner"
-                      },
-                      {
-                        fieldName: "source.asn",
-                        displayName: "ASN"
-                      }
-                    ],
-                    style: {width: '20%'}
-                  },
-                  {
-                    type: 'text',
-                    columnNameToDisplay: 'Destination',
-                    data: [
-                      {
-                        fieldName: "destination.ip",
-                        displayName: 'IP'
-                      },
-                      {
-                        fieldName: "destination.port",
-                        displayName: "port"
-                      },
-                      {
-                        fieldName: "destination.country",
-                        displayName: "countryFlag"
-                      },
-                      {
-                        fieldName: "destination.additionalInfo.user",
-                        displayName: "User"
-                      },
-                      {
-                        fieldName: "destination.additionalInfo.machine",
-                        displayName: "Machine"
-                      },
-                      {
-                        fieldName: "destination.owner",
-                        displayName: "Owner"
-                      },
-                      {
-                        fieldName: "destination.asn",
-                        displayName: "ASN"
-                      }
-                    ],
-                    style: {width: '20%'}
-                  }
-                ]
-              }
-            ],
-            tableOptions: {
-              sortable:['End Date','Duration','Details', 'Source', 'Destination'],
-              defaultSort:{column: 'Duration', direction: 'asc'},
-              filterable:false,
-              filterBy:""
-            }
           }
         ]
+      }
+      {
+        "id": "22",
+        type: 'Table.component',
+        name: 'Table',
+        meta: {
+          showHeader: false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window": "1h"
+            },
+            "pathParams": {
+              "reportId": "taf_top_longest_connections",
+            }
+          },
+          title: 'Longest Connections',
+        },
+        attributes: {
+          style: {width: '100%'},
+          id: 'LongestConnections'
+        },
+        tableData: [
+          {
+            reportId: 'taf_top_longest_connections',
+            columns: [
+              {
+                type: 'text',
+                columnNameToDisplay: 'End Date',
+                data: [
+                  {
+                    fieldName: "date",
+                    displayName: 'date'
+                  }
+                ],
+                style: {width: '15%'}
+              },
+              {
+                type: 'text',
+                columnNameToDisplay: 'Duration',
+                data: [
+                  {
+                    fieldName: "data.conn.duration",
+                    displayName: 'duration'
+                  }
+                ],
+                style: {width: '15%'}
+              },
+              {
+                type: 'text',
+                columnNameToDisplay: 'Details',
+                data: [
+                  {
+                    fieldName: "protocol.service",
+                    displayName: ''
+                  },
+                  {
+                    fieldName: "data.conn.reqBytes",
+                    displayName: "Incoming bytes"
+                  },
+                  {
+                    fieldName: "data.conn.respBytes",
+                    displayName: "Outcoming bytes"
+                  }
+                ],
+                style: {width: '30%'}
+              },
+              {
+                type: 'text',
+                columnNameToDisplay: 'Source',
+                data: [
+                  {
+                    fieldName: "source.ip",
+                    displayName: 'IP'
+                  },
+                  {
+                    fieldName: "source.port",
+                    displayName: "port"
+                  },
+                  {
+                    fieldName: "source.country",
+                    displayName: "countryFlag"
+                  },
+                  {
+                    fieldName: "source.additionalInfo.user",
+                    displayName: "User"
+                  },
+                  {
+                    fieldName: "source.additionalInfo.machine",
+                    displayName: "Machine"
+                  },
+                  {
+                    fieldName: "source.owner",
+                    displayName: "Owner"
+                  },
+                  {
+                    fieldName: "source.asn",
+                    displayName: "ASN"
+                  }
+                ],
+                style: {width: '20%'}
+              },
+              {
+                type: 'text',
+                columnNameToDisplay: 'Destination',
+                data: [
+                  {
+                    fieldName: "destination.ip",
+                    displayName: 'IP'
+                  },
+                  {
+                    fieldName: "destination.port",
+                    displayName: "port"
+                  },
+                  {
+                    fieldName: "destination.country",
+                    displayName: "countryFlag"
+                  },
+                  {
+                    fieldName: "destination.additionalInfo.user",
+                    displayName: "User"
+                  },
+                  {
+                    fieldName: "destination.additionalInfo.machine",
+                    displayName: "Machine"
+                  },
+                  {
+                    fieldName: "destination.owner",
+                    displayName: "Owner"
+                  },
+                  {
+                    fieldName: "destination.asn",
+                    displayName: "ASN"
+                  }
+                ],
+                style: {width: '20%'}
+              }
+            ]
+          }
+        ],
+        tableOptions: {
+          sortable:['End Date','Duration','Details', 'Source', 'Destination'],
+          defaultSort:{column: 'Duration', direction: 'asc'},
+          filterable:false,
+          filterBy:""
+        }
       }
     ]/*,
     [
