@@ -7,9 +7,9 @@ let className;
 function generateChartDataSource(rawData, props) {
   const timeWindow = props.duration;
 
-  const series = props.props.chartData;
-  const chartOptions = props.props.chartOptions;
-  const chartData = props.props.chartData;
+  const series = props.chartData;
+  const chartOptions = props.chartOptions;
+  const chartData = props.chartData;
   const categories = [{
     category: []
   }];
@@ -20,14 +20,20 @@ function generateChartDataSource(rawData, props) {
 
   for (let i = 0; i < chartData.length; i++) {
     let currentChartData = chartData[i];
-    let currentDataRows = rawData[currentChartData.reportId].rows;
+    let currentDataRows = [];
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
+      currentDataRows = rawData[currentChartData.reportId].rows;
+    }
     let xColumnIndex = '';
     let yColumnIndex = '';
 
     //Check for x-axis chart data
     if (currentChartData.axis !== undefined && currentChartData.axis === 'x') {
       //Calculate column index from API response
-      let columnsArray = rawData[currentChartData.reportId].columns;
+      let columnsArray = [];
+      if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
+        columnsArray = rawData[currentChartData.reportId].columns;
+      }
       for (let c = 0; c < columnsArray.length; c++) {
         if (currentChartData.columns[0] === columnsArray[c].name) {
           xColumnIndex = c;
@@ -60,7 +66,10 @@ function generateChartDataSource(rawData, props) {
     //Check for y-axis chart data (i.e. multiple series)
     if (currentChartData.seriesname !== undefined) {
       //Calculate column index from API response
-      let columnsArray = rawData[currentChartData.reportId].columns;
+      let columnsArray = [];
+      if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
+        columnsArray = rawData[currentChartData.reportId].columns;
+      }
       for (let c = 0; c < columnsArray.length; c++) {
         if (currentChartData.columns[0] === columnsArray[c].name) {
           yColumnIndex = c;
@@ -128,8 +137,8 @@ function generateChartDataSource(rawData, props) {
   return dataSourceObject;
 }
 
-const renderChart = (props) => {
-  if (props.props.parent === undefined) {
+const renderChart = (props) => {console.log((props))
+  if (props.parent === undefined) {
     return;
   }
   if (!props.duration) {
@@ -143,8 +152,8 @@ const renderChart = (props) => {
   }
 
   const mainData = data;
-  const chartData = props.props.chartData;
-  let parent = props.props.parent;
+  const chartData = props.chartData;
+  let parent = props.parent;
 
   //const mainData = props.multiData[0];
   //const chartData = props.props.chartData;
@@ -153,7 +162,7 @@ const renderChart = (props) => {
   let rawData = {};
   for (let i = 0; i < chartData.length; i++) {
     let currentChartData = chartData[i];
-    if (props.multiData === null && mainData[currentChartData.reportId] === undefined){
+    if (mainData === null && mainData[currentChartData.reportId] === undefined){
       return;
     } else {
       if (!rawData.hasOwnProperty(currentChartData.reportId)) {

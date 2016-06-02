@@ -39,20 +39,6 @@ const styles = {
 class ParentCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data: null,
-      // loaded: false,
-      // columns: null,
-      // attributes: null,
-      // multiData: null,
-      // apiFieldMapping: [],
-      // sectionTitle: null,
-      // legend: [],
-      // chartOptions: {},
-      // parent: null,
-      props:{},
-      duration: null
-    };
   }
 
   componentDidMount() {
@@ -62,31 +48,13 @@ class ParentCard extends React.Component {
     const {api, query} = props.meta;
     this.unsubscribe = store.subscribe(() => {});
 
-    if (props.name === 'Table') {
-      this.setState({
-        props: props
-      })
-    }
-
-    if (props.parent === 'Compound') {
-      this.setState({
-        sectionTitle: props.meta.title,
-        apiFieldMapping: props.apiFieldMapping,
-        legend: props.meta.legend,
-        chartOptions: props.meta.chartOptions,
-        attributes: props.attributes,
-        parent: props.parent,
-        props: props
-      })
-    }
-
     if(api) {
       props.fetchApiData(props.id, api, query);
     }
   }
 
   getElement() {
-    const {props, state} = this;
+    const {props} = this;
 
     const {
       isFetching,
@@ -99,16 +67,6 @@ class ParentCard extends React.Component {
             isError,
             errorData,
             data: props.data,
-            // multiData: props.multiData,
-            // apiFieldMapping: props.apiFieldMapping,
-            // sectionTitle: props.meta.title,
-            // legend: props.meta.legend,
-            // chartOptions: props.meta.chartOptions,
-            // series: state.series,
-            // attributes: state.attributes,
-            // columns: state.columns,
-            parent: state.parent,
-            props: state.props,
             duration: props.duration
           });
   }
@@ -141,18 +99,7 @@ class ParentCard extends React.Component {
               </FontIcon>
             </div>
           </header>
-
-          <div>
-          {
-            props.meta.apis ?
-              (
-                React.cloneElement(props.children, {data: props.data})
-              ) :
-              (
-                React.cloneElement(props.children, {props: this.state.props})
-              )
-          }
-          </div>
+          <div> {React.cloneElement(props.children, {...props})} </div>
         </Card>
       )
     }

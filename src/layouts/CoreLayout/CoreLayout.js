@@ -43,13 +43,18 @@ class CoreLayout extends React.Component {
           for(let k = 0, grandChildrenLen = grandChildren.length; k < grandChildrenLen; k++) {
             const grandChildElm = grandChildren[k];
             if(grandChildElm.type === 'FontIcon') {
-              grandChildrenArray.push(React.createElement(FontIcon, {className:'material-icons'}, grandChildElm.content));
+              //grandChildrenArray.push(React.createElement(FontIcon, {className:'material-icons'}, grandChildElm.content));
+              grandChildrenArray.push(React.createElement(FontIcon,
+                           {className:'material-icons'}, grandChildElm.content));
             }
 
             if (componentDetails.name === 'Compound') {
-              const elmSub = React.createFactory(require('components/' + grandChildElm.type).default,);
-              const componentElmSub = elmSub({...grandChildElm.attributes}, []);
-              grandChildrenArray.push(React.createElement(ParentCard, {...grandChildElm}, componentElmSub));
+              // const elmSub = React.createFactory(require('components/' + grandChildElm.type).default,);
+              // const componentElmSub = elmSub({...grandChildElm.attributes}, []);
+              // grandChildrenArray.push(React.createElement(ParentCard, {...grandChildElm}, componentElmSub));
+              const elmSub = React.createFactory(require('components/' + grandChildElm.type).default);
+              const componentElmSub = elmSub({...grandChildElm}, []);
+              grandChildrenArray.push(componentElmSub);
             }
           }
         }

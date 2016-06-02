@@ -10,9 +10,15 @@ function generateChartDataSource(rawData, props) {
 
   for (let i = 0; i < chartData.length; i++) {
     let currentChartData = chartData[i];
-    let currentDataRows = rawData[currentChartData.reportId].rows;
+    let currentDataRows = [];
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
+      currentDataRows = rawData[currentChartData.reportId].rows;
+    }
     let columnIndexArray = [];
-    let columnsArray = rawData[currentChartData.reportId].columns;
+    let columnsArray = [];
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
+      columnsArray = rawData[currentChartData.reportId].columns;
+    }
 
     //Calculate column index from API response
     for (let a = 0; a < currentChartData.columns.length; a++) {

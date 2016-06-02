@@ -136,7 +136,7 @@ const layout = {
           "content": "devices_other"
         }]
       }
-    ],/*
+    ],
     [
       {
         type: 'Table.component',
@@ -163,6 +163,20 @@ const layout = {
           {
             reportId: 'taf_alert_highpriority',
             columns: [
+              {
+                type: 'chart',
+                columnNameToDisplay: 'Rank Score',
+                chartType: 'angulargauge',
+                chartId: 'recentAlert',
+                chartWidth: '70',
+                chartHeight: '60',
+                data: [
+                  {
+                    fieldName: "data.rank_alert.score"
+                  }
+                ],
+                style: {width: '10%'}
+              },
               {
                 type: 'text',
                 columnNameToDisplay: 'Date',
@@ -214,7 +228,7 @@ const layout = {
                     displayName: 'Machine'
                   }
                 ],
-                style: {width: '30%'}
+                style: {width: '20%'}
               },
               {
                 type: 'text',
@@ -241,7 +255,7 @@ const layout = {
                     displayName: 'Machine'
                   }
                 ],
-                style: {width: '30%'}
+                style: {width: '20%'}
               }
             ]
           }
@@ -249,11 +263,11 @@ const layout = {
         tableOptions: {
           sortable:['Rank Score','Date','Details', 'Source', 'Destination'],
           defaultSort:{column: 'Rank Score', direction: 'desc'},
-          filterable:false,
-          filterBy:""
+          filterable:['Date', 'Details', 'Source', 'Destination'],
+          filterBy:"connection"
         }
       }
-    ],*/
+    ],
     /*
     [
       {
@@ -394,7 +408,7 @@ const layout = {
         }
       }
     ],*/
-    [
+    /*[
       {
         type: 'Compound.component',
         name: 'Compound',
@@ -417,7 +431,7 @@ const layout = {
           style: {width: '100%', marginRight: '20px'},
           id: 'TrafficDetails'
         },
-        children: [
+        subComponents: [
           {
             type: 'MultiSeriesCombiChart',
             parent:'Compound',
@@ -718,7 +732,7 @@ const layout = {
           }
         ]
       }
-    ]/*,
+    ]*//*,
     [
       {
         type: 'Compound.component',

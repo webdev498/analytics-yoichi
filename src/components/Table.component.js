@@ -11,15 +11,15 @@ const {Table, Tr, Td, unsafe} = Reactable;
 let tableProperties = {},
     tableDataSource = [];
 
-const generateDataSource = (props) => {
+const generateDataSource = (props) => {console.log((props));
   const data = props.data;
   if (!data) {
     return;
   }
 
-  if (props.props.tableData === undefined && props.tableData === undefined) {
-    return;
-  }
+  //if (props.tableData === undefined) {//props.child.tableData === undefined &&
+   // return;
+ // }
 
   //Initializing the variables
   tableProperties = {};
@@ -35,22 +35,22 @@ const generateDataSource = (props) => {
   //   mainData = props.multiData;
   // }
 
-  if (props.props !== undefined) {
+  /*if (props.props !== undefined) {
     tableData = props.props.tableData;
     tableOptions = props.props.tableOptions;
-  } else {
+  } else {*/
     tableData = props.tableData;
     tableOptions = props.tableOptions;
-  }
+ // }
 
   let rawData = {};
   for (let i = 0; i < tableData.length; i++) {
     let currentTableData = tableData[i];
     /*if (props.multiData === null && (props.multiData[0] !== undefined && mainData[currentTableData.reportId] === undefined)){
       return;
-    } else */if (mainData === undefined){//props.multiData === null && (props.multiData[0] === undefined &&
-      return;
-    } else {
+    } else *///if (mainData === undefined){//props.multiData === null && (props.multiData[0] === undefined &&
+      //return;
+    //} else {
       if (!rawData.hasOwnProperty(currentTableData.reportId)) {
         if (mainData[currentTableData.reportId] !== undefined) {
           rawData[currentTableData.reportId] = mainData[currentTableData.reportId];
@@ -58,33 +58,39 @@ const generateDataSource = (props) => {
           rawData[currentTableData.reportId] = mainData;
         }
       }
-    }
+    //}
   }
   tableProperties = {...tableOptions};
-
+  console.log((tableProperties));
   for (let i = 0; i < tableData.length; i++) {
     let currentTableData = tableData[i],
         currentDataRows = rawData[currentTableData.reportId].rows,
         columnIndexArray = [],
         columnsArray = rawData[currentTableData.reportId].columns,
-        columnText = '';
+        columnText = '',
+        chartValue = '';
 
     // if (props.multiData[0] === undefined && props.multiData !== undefined) {
     //   currentDataRows = rawData[currentTableData.reportId].rows;
     // }
 
-    for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
+    let currentDataRowsCount = 0;
+    if (currentDataRows !== undefined && currentDataRows.length !== undefined) {
+      currentDataRowsCount = currentDataRows.length;
+    }
+
+    for (let d = 0, rowsLen = currentDataRowsCount; d < rowsLen; d++) {
       const obj1 = {};
       obj1.columns = [];
 
-      if (columnsArray.length === 1 && columnsArray[0].name === 'json') {
-        //This condition is if API response returns a single column with one JSON object. e.g. recent alerts table
-        //Calculate column index from API response
-        for (let a = 0; a < currentTableData.columns.length; a++) {
-          let currentColumnType = currentTableData.columns[a].type;
-          let currentColumnDataArray = currentTableData.columns[a].data;
+      //Calculate column index from API response
+      for (let a = 0; a < currentTableData.columns.length; a++) {
+        let currentColumnType = currentTableData.columns[a].type;
+        let currentColumnDataArray = currentTableData.columns[a].data;
 
-          for (let cd = 0; cd < currentColumnDataArray.length; cd++) {
+        for (let cd = 0; cd < currentColumnDataArray.length; cd++) {
+          if (columnsArray.length === 1 && columnsArray[0].name === 'json') {
+          //This condition is if API response returns a single column with one JSON object. e.g. recent alerts table
             let fieldValue = '',
                 {fieldName, displayName} = currentColumnDataArray[cd],
                 fieldValueArray = [];
@@ -112,26 +118,27 @@ const generateDataSource = (props) => {
               }
             }
 
+            const columnDetails = {
+              currentColumnType: currentColumnType,
+              fieldName: fieldName,
+              displayName: displayName,
+              fieldValue: fieldValue,
+              columnText: columnText
+            }
+
             //Get Column Text
-            columnText = getColumnText(currentColumnType, fieldName, displayName, fieldValue, columnText);
-          }//Column data loop ends
-          const obj2 = {
-            columnType: currentColumnType,
-            columnName: currentTableData.columns[a].columnNameToDisplay,
-            columnStyle: currentTableData.columns[a].style,
-            columnText: unsafe(columnText)
-          }
-
-          columnText = '';
-          obj1.columns.push(obj2);
-        }
-      } else {
-        //Calculate column index from API response
-        for (let a = 0; a < currentTableData.columns.length; a++) {
-          let currentColumnType = currentTableData.columns[a].type;
-          let currentColumnDataArray = currentTableData.columns[a].data;
-
-          for (let cd = 0; cd < currentColumnDataArray.length; cd++) {
+            switch(currentColumnType) {
+              case 'chart':
+                chartValue = fieldValue;
+                break;
+              case 'text':
+                columnText = getColumnText(columnDetails);
+                break;
+              default:
+                break;
+            }
+          } else {
+            //Calculate column index from API response
             for (let c = 0; c < columnsArray.length; c++) {
               if (columnsArray[c].name === currentColumnDataArray[cd].fieldName) {
                 columnIndexArray[a] = c;
@@ -140,32 +147,70 @@ const generateDataSource = (props) => {
                 if (currentDataRows[d][c] !== undefined) {
                   fieldValue = currentDataRows[d][c];
                 }
+                const columnDetails = {
+                  currentColumnType: currentColumnType,
+                  fieldName: fieldName,
+                  displayName: displayName,
+                  fieldValue: fieldValue,
+                  columnText: columnText
+                }
                 //Get Column Text
-                columnText = getColumnText(currentColumnType, fieldName, displayName, fieldValue, columnText);
+                switch(currentColumnType) {
+                  case 'chart':
+                    chartValue = fieldValue;
+                    break;
+                  case 'text':
+                    columnText = getColumnText(columnDetails);
+                    break;
+                  default:
+                    break;
+                }
                 break;
               }
             }
-          }//Column data loop ends
-          const obj2 = {
-            columnType: currentColumnType,
-            columnName: currentTableData.columns[a].columnNameToDisplay,
-            columnStyle: currentTableData.columns[a].style,
-            columnText: unsafe(columnText)
           }
-          columnText = '';
-          obj1.columns.push(obj2);
+        }//Column data loop ends
+
+        let obj2 = {};
+        switch(currentColumnType) {
+          case 'chart':
+            obj2 = {
+              chartDataSource: generateChartDataSource(currentTableData.columns[a].chartType, chartValue),
+              chartValue: chartValue,
+              chartId: currentTableData.columns[a].chartId + d,
+              chartType: currentTableData.columns[a].chartType,
+              chartWidth: currentTableData.columns[a].chartWidth,
+              chartHeight: currentTableData.columns[a].chartHeight,
+              columnType: 'chart',
+              columnName: currentTableData.columns[a].columnNameToDisplay,
+              columnStyle: currentTableData.columns[a].style
+            }
+            chartValue = '';
+            obj1.columns.push(obj2);
+            break;
+          case 'text':
+            obj2 = {
+              columnType: currentColumnType,
+              columnName: currentTableData.columns[a].columnNameToDisplay,
+              columnStyle: currentTableData.columns[a].style,
+              columnText: unsafe(columnText)
+            }
+            columnText = '';
+            obj1.columns.push(obj2);
+            break;
+          default:
+            break;
         }
       }
       tableDataSource.push(obj1);
-    }
+    }//mainData loop end
   }
-  console.log(tableDataSource);
 }
 
-function getColumnText(currentColumnType, fieldName, displayName, fieldValue, columnText) {
+function getColumnText(columnDetails) {
+  let {currentColumnType, fieldName, displayName, fieldValue, columnText} = columnDetails;
+
   switch (currentColumnType) {
-    case "chart":
-      break;
     case "text":
       if (fieldValue !== undefined && fieldValue !== '' && fieldValue !== null) {
         if (columnText != '') {
@@ -240,7 +285,7 @@ function getColumnText(currentColumnType, fieldName, displayName, fieldValue, co
 const tableCard = (props) => (
   <div style={{width:'100%'}}>
     <div className="tableCaption">{props.sectionTitle}</div>
-    {generateDataSource(props)}
+    {generateDataSource(props)}{console.log(tableProperties)}
     <Table style={{width:'100%'}}
            className="threatTable"
            sortable={true}
