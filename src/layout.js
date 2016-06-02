@@ -391,7 +391,15 @@ const layout = {
         type: 'WorldMap',
         meta: {
           showHeader: true,
-          apis: [
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window": "1h"
+            },
+            "pathParams": {
+              "reportId": "taf_source_countries",
+            }
+          },apis: [
             {
               api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h'
             },

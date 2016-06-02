@@ -6,7 +6,8 @@ import {getCountryIDByCountryCode} from 'utils/utils';
 
 function getData(dataSource) {
   var data = dataSource;//dataSource[0];
-  var badReputationData = [];//dataSource[1];
+  var badReputationData = {};//dataSource[1];
+  badReputationData.rows = [];
   var items = data.rows;
   var dataSourceObject = {};
   var markersItemsObject = [];
@@ -207,7 +208,7 @@ const renderChart = (props) => {console.log(props);
   FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({
       type: 'maps/worldwithcountries',
-      renderAt: props.id[0],
+      renderAt: props.attributes.id[0],
       width: '100%',
       height: '400',
       dataFormat: 'json',
@@ -220,7 +221,7 @@ const renderChart = (props) => {console.log(props);
   FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({
       type: 'bar2d',
-      renderAt: props.id[1],
+      renderAt: props.attributes.id[1],
       width: '100%',
       height: '200',
       dataFormat: 'json',
@@ -233,7 +234,7 @@ const renderChart = (props) => {console.log(props);
   FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({
       type: 'bar2d',
-      renderAt: props.id[2],
+      renderAt: props.attributes.id[2],
       width: '100%',
       height: '200',
       dataFormat: 'json',
@@ -250,10 +251,10 @@ const WorldMap = (props) => (
     <div style={{textAlign:'center'}}><br/>
       <img src="/img/biohazard.png" width="20" height="20"/>&nbsp;Malicious Connections
     </div>
-    <div id={props.id[0]}></div>
+    <div id={props.attributes.id[0]}></div>
     <div style={{width:'100%'}}>
-      <div id={props.id[1]} style={{width:'50%',float:'left'}}></div>
-      <div id={props.id[2]} style={{width:'50%',float:'left'}}></div>
+      <div id={props.attributes.id[1]} style={{width:'50%',float:'left'}}></div>
+      <div id={props.attributes.id[2]} style={{width:'50%',float:'left'}}></div>
     </div>
     {renderChart(props)}
   </div>
