@@ -197,7 +197,7 @@ function getData(dataSource) {
   return dataSourceObject;
 };
 
-const renderChart = (props) => {
+const renderChart = (props) => {console.log(props);
   if(!props.data) {
     return;
   }

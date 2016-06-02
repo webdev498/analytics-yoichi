@@ -267,7 +267,7 @@ const layout = {
           filterBy:"connection"
         }
       }
-    ]/*,
+    ],/*,
     [
       {
         "id": "6",
@@ -365,6 +365,7 @@ const layout = {
     ],*/
     [
       {
+        id: "12",
         type: 'WorldMap',
         meta: {
           showHeader: true,
@@ -382,11 +383,11 @@ const layout = {
         attributes: {
           style: {width: '50%', marginRight: '20px'},
           id: ['OutgoingTrafficHeatmap','OutgoingTopCountries','OutgoingTopBandwidthCountries'],
-          variation: '3d',
           mapType: 'Outgoing'
         }
       },
       {
+        id: "13",
         type: 'WorldMap',
         meta: {
           showHeader: true,
@@ -403,7 +404,6 @@ const layout = {
         attributes: {
           style: {width: '50%', marginRight: '20px'},
           id: ['IncomingTrafficHeatmap','IncomingTopCountries','IncomingTopBandwidthCountries'],
-          variation: '3d',
           mapType: 'Incoming'
         }
       }
@@ -596,12 +596,14 @@ const layout = {
           }
         ]
       }
+    ],
+    [
       {
         "id": "22",
         type: 'Table.component',
         name: 'Table',
         meta: {
-          showHeader: false,
+          showHeader: true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "queryParams": {

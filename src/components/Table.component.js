@@ -285,7 +285,7 @@ function getColumnText(columnDetails) {
 const tableCard = (props) => (
   <div style={{width:'100%'}}>
     <div className="tableCaption">{props.sectionTitle}</div>
-    {generateDataSource(props)}{console.log(tableProperties)}
+    {generateDataSource(props)}
     <Table style={{width:'100%'}}
            className="threatTable"
            sortable={true}
