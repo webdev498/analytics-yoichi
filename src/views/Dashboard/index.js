@@ -7,8 +7,8 @@ import BugIcon from 'material-ui/svg-icons/action/bug-report';
 import AssetsIcon from 'material-ui/svg-icons/hardware/devices-other';
 
 import ParentCard from 'containers/ParentCard';
-import MetricCard from 'components/MetricsCard.component';
-import TableComponent from 'components/Table.component';
+import MetricCard from 'components/MetricsCard';
+import TableComponent from 'components/Table';
 
 import ParetoChart from 'components/ParetoChart'
 

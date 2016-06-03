@@ -6,7 +6,7 @@ import LoginView from 'login/login.view';
 import Dashboard from 'views/Dashboard/index';
 import NonLoggedLayout from 'layouts/NonLoggedLayout/index';
 
-import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
+import { isLoaded as isAuthLoaded} from 'redux/reducer/auth';
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
