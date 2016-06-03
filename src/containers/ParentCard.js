@@ -81,7 +81,7 @@ class ParentCard extends React.Component {
     if(props.meta.showHeader) {
       return (
         <Card style={{...styles.wrap, ...props.attributes.style}}>
-          {/*props.isFetching ? <Loader /> : null*/}
+          {props.isFetching ? <Loader /> : null}
 
           <header style={styles.header}>
             <div>
@@ -106,7 +106,7 @@ class ParentCard extends React.Component {
     else {
       return (
         <Card style={{...styles.wrap, ...props.attributes.style}}>
-          {/*props.isFetching ? <Loader /> : null*/}
+          {props.isFetching ? <Loader /> : null}
           {this.getElement()}
         </Card>
       )
