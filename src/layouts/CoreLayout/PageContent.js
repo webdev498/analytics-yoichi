@@ -1,25 +1,15 @@
 import React, { PropTypes } from 'react';
 
-import { connect } from 'react-redux';
-import Header from 'components/PageHeader';
-import Sidebar from 'components/Sidebar';
 import FontIcon from 'material-ui/FontIcon';
-
 import ParentCard from 'containers/ParentCard';
-
-import {updatedApiData} from 'actions/ParentCard';
-
-import 'styles/core.scss';
 
 import obj from 'layout';
 
-class CoreLayout extends React.Component {
+class PageContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {open: true};
   }
-
-  handleToggle = () => this.setState({open: !this.state.open});
 
   renderChildren() {
     const layout = obj.layout;
@@ -74,31 +64,17 @@ class CoreLayout extends React.Component {
     return React.DOM.div({}, finalElmements);
   }
 
-  handleTimeChange(timeRange) {
-    this.props.updatedApiData(timeRange);
-  }
-
   render () {
     return (
-      <div className="menubar-hoverable header-fixed menubar-visible">
-        <Header title="RANK" handleTimeChange={this.handleTimeChange.bind(this)} />
-        <Sidebar style={{width: '72px'}}></Sidebar>
-        <div id="base">
-          <div id="content" style={{padding: '20px'}}>
-            {this.renderChildren()}
-          </div>
-        </div>
+      <div id="content" style={{padding: '20px'}}>
+        {this.renderChildren()}
       </div>
     )
   }
 }
 
-CoreLayout.propTypes = {
-  children: PropTypes.element
-};
-
 ParentCard.contextTypes = {
   store: React.PropTypes.object
 }
 
-export default connect(null, {updatedApiData})(CoreLayout);
+export default PageContent;

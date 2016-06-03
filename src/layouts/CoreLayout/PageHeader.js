@@ -63,12 +63,13 @@ function getTimeRangeItems () {
 }
 
 class PageHeader extends React.Component {
-  static fetchData(dispatch) {
-    var authActions = bindActionCreators(AuthActions, dispatch);
-    return Promise.all([
-      authActions.loadUser()
-    ]);
-  }
+
+  // static fetchData(dispatch) {
+  //   var authActions = bindActionCreators(AuthActions, dispatch);
+  //   return Promise.all([
+  //     authActions.loadUser()
+  //   ]);
+  // }
 
   constructor(props) {
     super(props);
@@ -76,9 +77,9 @@ class PageHeader extends React.Component {
   }
 
   componentDidMount() {
-    if (!this.props.list) {
-      this.constructor.fetchData(this.props.dispatch);
-    }
+    // if (!this.props.list) {
+    //   this.constructor.fetchData(this.props.dispatch);
+    // }
   }
 
   handleChange = (event, index, value) => {

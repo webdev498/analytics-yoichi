@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
-import CoreLayout from 'layouts/CoreLayout/CoreLayout';
+import CoreLayout from 'layouts/CoreLayout';
 import LoginView from 'login/login.view';
 import Dashboard from 'views/Dashboard/index';
 import NonLoggedLayout from 'layouts/NonLoggedLayout/index';

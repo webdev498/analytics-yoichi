@@ -21,7 +21,7 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 export function isLoaded(globalState, urlHash, store) {
-  if(urlHash) {
+  if(urlHash && urlHash.indexOf("#access_token") === 0) {
     let individualParameters = urlHash.split("&");
 
     if (individualParameters.length > 0) {
