@@ -7,7 +7,7 @@ import FontIcon from 'material-ui/FontIcon';
 
 import Loader from '../components/Loader.component';
 
-import {fetchApiData} from 'actions/ParentCard.actions';
+import {fetchApiData} from 'actions/ParentCard';
 
 const styles = {
   wrap: {

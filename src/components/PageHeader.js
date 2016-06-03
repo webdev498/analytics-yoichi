@@ -8,7 +8,7 @@ import Menu from 'material-ui/Menu/Menu';
 import MenuItem from 'material-ui/MenuItem/MenuItem';
 import FaceIcon from 'material-ui/svg-icons/social/person';
 
-import * as AuthActions from 'actions/auth.actions';
+import * as AuthActions from 'actions/auth';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';

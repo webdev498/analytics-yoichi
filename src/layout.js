@@ -3,7 +3,7 @@ const layout = {
     [
       {
         "id": "1",
-        "type": "MetricsCard.component",
+        "type": "MetricsCard",
         "meta": {
           "showHeader": false,
           "api": {
@@ -36,7 +36,7 @@ const layout = {
       },
       {
         "id": "2",
-        "type": "MetricsCard.component",
+        "type": "MetricsCard",
         "meta": {
           "showHeader": false,
           // "api": "/api/analytics/reporting/execute/taf_malware_count_time_shifted",
@@ -70,7 +70,7 @@ const layout = {
       },
       {
         "id": "3",
-        "type": "MetricsCard.component",
+        "type": "MetricsCard",
         "meta": {
           "showHeader": false,
           // "api": "/api/analytics/reporting/execute/taf_event_count_time_shifted",
@@ -104,7 +104,7 @@ const layout = {
       },
       {
         "id": "4",
-        "type": "MetricsCard.component",
+        "type": "MetricsCard",
         "meta": {
           "showHeader": false,
           // "api": "/api/analytics/reporting/execute/taf_asset_count_time_shifted",
@@ -139,7 +139,7 @@ const layout = {
     ],
     [
       {
-        type: 'Table.component',
+        type: 'Table',
         name: 'Table',
         meta: {
           showHeader: true,
@@ -267,16 +267,21 @@ const layout = {
           filterBy:"connection"
         }
       }
-    ]/*,
+    ],
     [
       {
         "id": "6",
         "type": "ParetoChart",
         "meta": {
           "showHeader": true,
-          "api": "/api/analytics/reporting/execute/taf_threat_trend",
-          "query": {
-            "window": "1h"
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window":"1h"
+            },
+            "pathParams": {
+              "reportId": "taf_threat_trend",
+            }
           },
           "title": "Alert by type",
         },
@@ -306,63 +311,68 @@ const layout = {
           }
         ]
       },
-      {
-        "id": "7",
-        type: 'MultiSeriesCombiChart',
-        meta: {
-          showHeader: true,
-          api: '/api/analytics/reporting/execute/taf_alert_priority_time',
-          query: {
-            "window": "1h"
-          },
-          title: 'Alert priority'
-        },
-        attributes: {
-          style: {width: '50%'},
-          id: 'AlertPriorityChart',
-          timeWindow: '1h',
-          chartOptions: {
-            "yAxisName": "Alert Count",
-            "drawAnchors": "1",
-            "legendPosition": "right",
-            "linealpha":"0",
-            "paletteColors": "#0505F5, #D93609, #ACF50F,#FCFC0D, #05E9F5"
-          },
-          series: [
-            {
-              seriesname: 'Low',
-              renderas: "Line",
-              lineThickness: "0",
-              drawanchors: "1",
-              anchorradius: "10",
-              anchorBorderColor: '#ff0000',
-              anchorbgcolor: '#ED6172',
-              anchorsides: '0'
-            },
-            {
-              seriesname: 'Medium',
-              renderas: "Line",
-              lineThickness: "0",
-              drawanchors: "1",
-              anchorradius: "10",
-              anchorBorderColor: '#0F4D1F',
-              anchorbgcolor: '#3DF26A',
-              anchorsides: '4'
-            },
-            {
-              seriesname: 'High',
-              renderas: "Line",
-              lineThickness: "0",
-              drawanchors: "1",
-              anchorradius: "10",
-              anchorBorderColor: '#0000ff',
-              anchorbgcolor: '#9F9FF5',
-              anchorsides: '3'
-            }
-          ]
-        }
-      }
-    ],*/
+      // {
+      //   "id": "7",
+      //   type: 'MultiSeriesCombiChart',
+      //   meta: {
+      //     showHeader: true,
+      //     "api": {
+      //       "path": "/api/analytics/reporting/execute/{reportId}",
+      //       "queryParams": {
+      //         "window":"1h"
+      //       },
+      //       "pathParams": {
+      //         "reportId": "taf_alert_priority_time"
+      //       }
+      //     },
+      //     title: 'Alert priority'
+      //   },
+      //   attributes: {
+      //     style: {width: '50%'},
+      //     id: 'AlertPriorityChart',
+      //     timeWindow: '1h',
+      //     chartOptions: {
+      //       "yAxisName": "Alert Count",
+      //       "drawAnchors": "1",
+      //       "legendPosition": "right",
+      //       "linealpha":"0",
+      //       "paletteColors": "#0505F5, #D93609, #ACF50F,#FCFC0D, #05E9F5"
+      //     },
+      //     series: [
+      //       {
+      //         seriesname: 'Low',
+      //         renderas: "Line",
+      //         lineThickness: "0",
+      //         drawanchors: "1",
+      //         anchorradius: "10",
+      //         anchorBorderColor: '#ff0000',
+      //         anchorbgcolor: '#ED6172',
+      //         anchorsides: '0'
+      //       },
+      //       {
+      //         seriesname: 'Medium',
+      //         renderas: "Line",
+      //         lineThickness: "0",
+      //         drawanchors: "1",
+      //         anchorradius: "10",
+      //         anchorBorderColor: '#0F4D1F',
+      //         anchorbgcolor: '#3DF26A',
+      //         anchorsides: '4'
+      //       },
+      //       {
+      //         seriesname: 'High',
+      //         renderas: "Line",
+      //         lineThickness: "0",
+      //         drawanchors: "1",
+      //         anchorradius: "10",
+      //         anchorBorderColor: '#0000ff',
+      //         anchorbgcolor: '#9F9FF5',
+      //         anchorsides: '3'
+      //       }
+      //     ]
+      //   }
+      // }
+    ],
     /*[
       {
         type: 'WorldMap',
@@ -407,11 +417,11 @@ const layout = {
           mapType: 'Incoming'
         }
       }
-    ]*/,
+    ],*/
     [
       {
         id: '21',
-        type: 'Compound.component',
+        type: 'Compound',
         name: 'Compound',
         meta: {
           showHeader: true,
@@ -595,7 +605,7 @@ const layout = {
             ]
           },
           {
-            type: 'Table.component',
+            type: 'Table',
             parent:'Compound',
             name: 'Table',
             meta: {
@@ -736,7 +746,7 @@ const layout = {
     ]/*,
     [
       {
-        type: 'Compound.component',
+        type: 'Compound',
         name: 'Compound',
         meta: {
           showHeader: true,

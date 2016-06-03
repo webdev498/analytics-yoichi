@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
 
 import { connect } from 'react-redux';
-import Header from 'components/PageHeader.component';
-import Sidebar from 'components/Sidebar.component';
+import Header from 'components/PageHeader';
+import Sidebar from 'components/Sidebar';
 import FontIcon from 'material-ui/FontIcon';
 
 import ParentCard from 'containers/ParentCard';
 
-import {updatedApiData} from 'actions/ParentCard.actions';
+import {updatedApiData} from 'actions/ParentCard';
 
 import 'styles/core.scss';
 
