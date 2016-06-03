@@ -118,7 +118,7 @@ const renderChart = (props) => {
 
   const mainData = data;
   const chartData = props.chartData;
-  const parent = props.parent;
+  //const parent = props.parent;
 
   let rawData = {};
   for (let i = 0; i < chartData.length; i++) {

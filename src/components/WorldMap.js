@@ -4,10 +4,9 @@ import Card from 'material-ui/Card/Card';
 
 import {getCountryIDByCountryCode} from 'utils/utils';
 
-function getData(dataSource) {
-  var data = dataSource;//dataSource[0];
-  var badReputationData = {};//dataSource[1];
-  badReputationData.rows = [];
+function generateChartDataSourceOld(dataSource) {
+  var data = dataSource[0];
+  var badReputationData = dataSource[1];
   var items = data.rows;
   var dataSourceObject = {};
   var markersItemsObject = [];
@@ -198,12 +197,133 @@ function getData(dataSource) {
   return dataSourceObject;
 };
 
-const renderChart = (props) => {console.log(props);
+function generateChartDataSource(rawData, props) {
+  const chartOptions = props.chartOptions;
+  const chartData = props.chartData;
+  let markersItemsObject = [];
+  let minValue = "0";
+  let maxValue = "0";
+  let markerIdSuffix = 0;
+
+  for (let i = 0; i < chartData.length; i++) {
+    let currentChartData = chartData[i];
+    let currentDataRows = [];
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
+      currentDataRows = rawData[currentChartData.reportId].rows;
+    }
+    let columnIndexArray = [];
+    let columnsArray = [];
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
+      columnsArray = rawData[currentChartData.reportId].columns;
+    }
+
+    //Calculate column index from API response
+    for (let a = 0; a < currentChartData.columns.length; a++) {
+      for (let c = 0; c < columnsArray.length; c++) {
+        if (currentChartData.columns[a] === columnsArray[c].name) {
+          columnIndexArray[a] = c;
+          break;
+        }
+      }
+    }
+
+    //Get column data for x-axis
+    //if (columnIndexArray.length !== 0) {
+      for (let a = 0, rowsLen = currentDataRows.length; a < rowsLen; a++) {
+        let obj1 = {};
+        if(currentDataRows[a][1] === "N/A" || currentDataRows[a][2] === "N/A") {
+          //continue;
+        }
+        else {
+          let countryCode = currentDataRows[a][0];
+          obj1.shapeid = currentChartData.shapeid;
+          obj1.label = currentDataRows[a][3];
+          obj1.id = getCountryIDByCountryCode(countryCode) + markerIdSuffix;
+          obj1.x = currentDataRows[a][1];
+          obj1.y = currentDataRows[a][2];
+          obj1.value = currentDataRows[a][4];
+          obj1.alpha = currentChartData.alpha;
+
+          markersItemsObject.push(obj1);
+
+          if (a == 0)
+            minValue = currentDataRows[a][4];
+          if (a == (currentDataRows.length - 1))
+            maxValue = currentDataRows[a][4];
+
+          markerIdSuffix = markerIdSuffix + 1;
+        }
+      }
+    //}
+  }
+
+  let dataSourceObject = {};
+  dataSourceObject.chart = {
+    "entityFillHoverColor": "#cccccc",
+    "nullEntityColor" : "aaaaaa",
+    "showLabels": "0",
+    "theme":"zune",
+    "useValuesForMarkers": "1",
+    "showMarkerLabels":"0",
+    "showvalue":"0",
+    "autoScaleMarkers":"0",
+    "showLegend":"0",
+    "chartLeftMargin": "0",
+    "chartRightMargin": "0",
+    "chartTopMargin": "0",
+    "chartBottomMargin": "0",
+    "markerBgColor": "#00AFF0",
+    "alignCaptionWithCanvas": "0",
+    "captionFontSize": "14",
+    "captionFontColor": "#555555",
+    "bgAlpha":"0",
+  };
+
+  var shapesObject = [
+    {
+      "id": "maliciousIcon",
+      "type": "image",
+      "url": "/img/biohazard.png",
+      "xscale": "30",
+      "yscale": "30",
+      "labelPadding": "15"
+    }
+  ];
+
+  dataSourceObject.markers = {
+    "shapes": shapesObject,
+    "items":markersItemsObject
+  };
+
+  return dataSourceObject;
+}
+
+const renderChart = (props) => {
   if(!props.data) {
     return;
   }
 
-  const dataSourceObject = getData(props.data);
+  if(!props.chartData) {
+    return;
+  }
+
+  const mainData = props.data;
+  const chartData = props.chartData;
+
+  let rawData = {};
+  for (let i = 0; i < chartData.length; i++) {
+    let currentChartData = chartData[i];
+    if (props.multiData === null && mainData[currentChartData.reportId] === undefined){
+      return;
+    } else {
+      if (!rawData.hasOwnProperty(currentChartData.reportId)) {
+        rawData[currentChartData.reportId] = mainData[currentChartData.reportId];
+      }
+    }
+  }
+
+  // const dataSourceObject = generateChartDataSource(rawData, props);
+  // console.log(dataSourceObject);
 
   FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({
@@ -213,12 +333,12 @@ const renderChart = (props) => {console.log(props);
       height: '400',
       dataFormat: 'json',
       containerBackgroundOpacity:'0',
-      dataSource: dataSourceObject.countriesContactedMapDataSource
+      dataSource: generateChartDataSource(rawData, props)
   });
       fusioncharts.render();
   });
 
-  FusionCharts.ready(function(){
+  /*FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({
       type: 'bar2d',
       renderAt: props.attributes.id[1],
@@ -242,12 +362,12 @@ const renderChart = (props) => {console.log(props);
       dataSource: dataSourceObject.topBandwidthCountriesDataSource
   });
       fusioncharts.render();
-  });
+  });*/
 }
 
 const WorldMap = (props) => (
   <div>
-    <div className="chartCaption">Number of {props.mapType} Connections By Country</div>
+    <div className="chartCaption">{props.meta.subTitle}</div>
     <div style={{textAlign:'center'}}><br/>
       <img src="/img/biohazard.png" width="20" height="20"/>&nbsp;Malicious Connections
     </div>

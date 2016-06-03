@@ -139,6 +139,7 @@ const layout = {
     ],
     [
       {
+        id: '56',
         type: 'Table.component',
         name: 'Table',
         meta: {
@@ -267,16 +268,21 @@ const layout = {
           filterBy:"connection"
         }
       }
-    ],/*,
-    [
+    ],
+    /*[
       {
         "id": "6",
         "type": "ParetoChart",
         "meta": {
           "showHeader": true,
-          "api": "/api/analytics/reporting/execute/taf_threat_trend",
-          "query": {
-            "window": "1h"
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window": "1h"
+            },
+            "pathParams": {
+              "reportId": "taf_threat_trend",
+            }
           },
           "title": "Alert by type",
         },
@@ -311,56 +317,79 @@ const layout = {
         type: 'MultiSeriesCombiChart',
         meta: {
           showHeader: true,
-          api: '/api/analytics/reporting/execute/taf_alert_priority_time',
-          query: {
-            "window": "1h"
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window": "1h"
+            },
+            "pathParams": {
+              "reportId": "taf_alert_priority_time",
+            }
           },
           title: 'Alert priority'
         },
         attributes: {
           style: {width: '50%'},
           id: 'AlertPriorityChart',
-          timeWindow: '1h',
-          chartOptions: {
-            "yAxisName": "Alert Count",
-            "drawAnchors": "1",
-            "legendPosition": "right",
-            "linealpha":"0",
-            "paletteColors": "#0505F5, #D93609, #ACF50F,#FCFC0D, #05E9F5"
+        },
+        chartOptions: {
+          "yAxisName": "Alert Count",
+          "drawAnchors": "1",
+          "legendPosition": "right",
+          "linealpha":"0",
+          "paletteColors": "#0505F5, #D93609, #ACF50F,#FCFC0D, #05E9F5"
+        },
+        chartData: [
+          {
+            axis: 'x',
+            reportId: 'taf_alert_priority_time',
+            columns: [
+              'date'
+            ]
           },
-          series: [
-            {
-              seriesname: 'Low',
-              renderas: "Line",
-              lineThickness: "0",
-              drawanchors: "1",
-              anchorradius: "10",
-              anchorBorderColor: '#ff0000',
-              anchorbgcolor: '#ED6172',
-              anchorsides: '0'
-            },
-            {
-              seriesname: 'Medium',
-              renderas: "Line",
-              lineThickness: "0",
-              drawanchors: "1",
-              anchorradius: "10",
-              anchorBorderColor: '#0F4D1F',
-              anchorbgcolor: '#3DF26A',
-              anchorsides: '4'
-            },
-            {
-              seriesname: 'High',
-              renderas: "Line",
-              lineThickness: "0",
-              drawanchors: "1",
-              anchorradius: "10",
-              anchorBorderColor: '#0000ff',
-              anchorbgcolor: '#9F9FF5',
-              anchorsides: '3'
-            }
-          ]
-        }
+          {
+            seriesname: 'Low',
+            renderas: "Line",
+            lineThickness: "0",
+            drawanchors: "1",
+            anchorradius: "10",
+            anchorBorderColor: '#ff0000',
+            anchorbgcolor: '#ED6172',
+            anchorsides: '0',
+            reportId: 'taf_alert_priority_time',
+            columns: [
+              'formula 2'
+            ]
+          },
+          {
+            seriesname: 'Medium',
+            renderas: "Line",
+            lineThickness: "0",
+            drawanchors: "1",
+            anchorradius: "10",
+            anchorBorderColor: '#0F4D1F',
+            anchorbgcolor: '#3DF26A',
+            anchorsides: '4',
+            reportId: 'taf_alert_priority_time',
+            columns: [
+              'formula 2'
+            ]
+          },
+          {
+            seriesname: 'High',
+            renderas: "Line",
+            lineThickness: "0",
+            drawanchors: "1",
+            anchorradius: "10",
+            anchorBorderColor: '#0000ff',
+            anchorbgcolor: '#9F9FF5',
+            anchorsides: '3',
+            reportId: 'taf_alert_priority_time',
+            columns: [
+              'formula 2'
+            ]
+          }
+        ]
       }
     ],*/
     [
@@ -375,16 +404,34 @@ const layout = {
               "window": "1h"
             },
             "pathParams": {
-              "reportId": "taf_dest_countries",
+              "reportId": "taf_dest_countries,taf_dest_bad_reputation_countries",
             }
           },
           title: 'Outgoing Traffic Heatmap',
+          subTitle: 'Number of Outgoing Connections By Country'
         },
         attributes: {
           style: {width: '50%', marginRight: '20px'},
-          id: ['OutgoingTrafficHeatmap','OutgoingTopCountries','OutgoingTopBandwidthCountries'],
-          mapType: 'Outgoing'
-        }
+          id: ['OutgoingTrafficHeatmap','OutgoingTopCountries','OutgoingTopBandwidthCountries']
+        },
+        chartOptions: {
+        },
+        chartData: [
+          {
+            reportId: 'taf_dest_countries',
+            columns: [
+            ],
+            shapeid: 'circle',
+            alpha: '60'
+          },
+          {
+            reportId: 'taf_dest_bad_reputation_countries',
+            columns: [
+            ],
+            shapeid: 'maliciousIcon',
+            alpha: '100'
+          }
+        ]
       },
       {
         id: "13",
@@ -397,23 +444,34 @@ const layout = {
               "window": "1h"
             },
             "pathParams": {
-              "reportId": "taf_source_countries",
+              "reportId": "taf_source_countries,taf_source_bad_reputation_countries",
             }
-          },apis: [
-            {
-              api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h'
-            },
-            {
-              api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_source_countries?window=1h&filter=source.reputation OR destination.reputation'
-            }
-          ],
+          },
           title: 'Incoming Traffic Heatmap',
+          subTitle: 'Number of Incoming Connections By Country'
         },
         attributes: {
           style: {width: '50%', marginRight: '20px'},
-          id: ['IncomingTrafficHeatmap','IncomingTopCountries','IncomingTopBandwidthCountries'],
-          mapType: 'Incoming'
-        }
+          id: ['IncomingTrafficHeatmap','IncomingTopCountries','IncomingTopBandwidthCountries']
+        },
+        chartOptions: {
+        },
+        chartData: [
+          {
+            reportId: 'taf_source_countries',
+            columns: [
+            ],
+            shapeid: 'circle',
+            alpha: '60'
+          },
+          {
+            reportId: 'taf_source_bad_reputation_countries',
+            columns: [
+            ],
+            shapeid: 'maliciousIcon',
+            alpha: '100'
+          }
+        ]
       }
     ],
     [
@@ -755,24 +813,23 @@ const layout = {
     ]/*,
     [
       {
+        id:'85',
         type: 'Compound.component',
         name: 'Compound',
         meta: {
           showHeader: true,
-          apis: [
+          api: {
+            path:"/api/analytics/reporting/execute/{reportId}",
+            queryParams:
             {
-              api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_asset_count_time_shifted?window=1h&timeShift=1h'
+              "window":"1d",
+              "timeShift":"1d"
             },
+            pathParams:
             {
-              api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_total_usage?window=1h'
+              reportId: "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
             },
-            {
-              api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_top_talkers_connections?window=1h'
-            },
-            {
-              api: 'https://demo.ranksoftwareinc.com/api/analytics/reporting/execute/taf_top_talkers_bandwidth?window=1h'
-            }
-          ],
+          },
           title: 'Asset Details'
         },
         attributes: {
@@ -791,24 +848,35 @@ const layout = {
             },
             attributes: {
               style: {width: '50%', marginRight: '20px'},
-              id: 'DoughnutChartConnections',
-              variation: '3d'
+              id: 'DoughnutChartConnections'
             },
-            apiFieldMapping: [
+            chartOptions: {
+              "xAxisName": "Time",
+              "yAxisName": "Incoming Bandwidth",
+              "lineThickness":"5",
+              "paletteColors": "#d3d3d3, #D93609, #0505F5, #ACF50F,#FCFC0D, #05E9F5",
+              "drawAnchors":"0",
+              "usePlotGradientColor": "1",
+              "plotGradientColor": "#887788"
+            },
+            chartData: [
               {
-                api: 0,
-                fieldName: 'assetCount',
-                fieldValue: [0,0,0]
+                reportId: 'taf_asset_count_time_shifted',
+                columns: [
+                  '0.0'
+                ]
               },
               {
-                api: 1,
-                fieldName: 'totalConnections',
-                fieldValue: [0,0]
+                reportId: 'taf_total_usage',
+                columns: [
+                  'count of date'
+                ]
               },
               {
-                api: 2,
-                fieldName: 'top10Connections',
-                fieldValue: [1]
+                reportId: 'taf_top_talkers_connections',
+                columns: [
+                  'count of date'
+                ]
               }
             ]
           },
