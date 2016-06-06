@@ -1,22 +1,24 @@
 import React from 'react';
 import moment from 'moment';
-import {calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
-
-let className;
+import {calculateDateDisplayFormat, calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
 
 function generateChartDataSource(rawData, props) {
-  const timeWindow = props.duration;
-
-  const series = props.chartData;
-  const chartOptions = props.chartOptions;
-  const chartData = props.chartData;
+  const timeWindow = props.duration,
+        chartOptions = props.chartOptions,
+        chartData = props.chartData.fieldMapping,
+        combinedResult = props.chartData.combinedResult,
+        lookup = {},
+        dataset = [];
   const categories = [{
     category: []
   }];
-  const lookup = {},
-        dateDisplayFormat = calculateDateDisplayFormatForHistogram(timeWindow),
-        dataset = [];
-  let seriesCount = 0;
+  let seriesCount = 0,
+      dateDisplayFormat = calculateDateDisplayFormat(timeWindow),
+      xColumnIndex = '';
+
+  if (combinedResult) {
+    dateDisplayFormat = calculateDateDisplayFormatForHistogram(timeWindow);
+  }
 
   for (let i = 0; i < chartData.length; i++) {
     let currentChartData = chartData[i];
@@ -24,8 +26,8 @@ function generateChartDataSource(rawData, props) {
     if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
       currentDataRows = rawData[currentChartData.reportId].rows;
     }
-    let xColumnIndex = '';
-    let yColumnIndex = '';
+    let yColumnIndex = '',
+        yColumnSeriesIndex = '';
 
     //Check for x-axis chart data
     if (currentChartData.axis !== undefined && currentChartData.axis === 'x') {
@@ -34,6 +36,7 @@ function generateChartDataSource(rawData, props) {
       if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
         columnsArray = rawData[currentChartData.reportId].columns;
       }
+
       for (let c = 0; c < columnsArray.length; c++) {
         if (currentChartData.columns[0] === columnsArray[c].name) {
           xColumnIndex = c;
@@ -64,37 +67,114 @@ function generateChartDataSource(rawData, props) {
     }
 
     //Check for y-axis chart data (i.e. multiple series)
-    if (currentChartData.seriesname !== undefined) {
+    if (currentChartData.axis !== undefined && currentChartData.axis === 'y') {
       //Calculate column index from API response
       let columnsArray = [];
       if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
         columnsArray = rawData[currentChartData.reportId].columns;
       }
       for (let c = 0; c < columnsArray.length; c++) {
-        if (currentChartData.columns[0] === columnsArray[c].name) {
-          yColumnIndex = c;
-          break;
-        }
-      }
-      const tempObj = {};
-      tempObj.seriesname = currentChartData.seriesname;
-      tempObj.renderas = currentChartData.renderas;
-      tempObj.data = [];
-
-      //Get column data for x-axis
-      if (yColumnIndex !== '') {
-        for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
-          let rowObj = {};
-          if (currentDataRows[d][yColumnIndex][seriesCount] != "NaN") {
-            rowObj.value = currentDataRows[d][yColumnIndex][seriesCount];
+        if (currentChartData.columns[0] !== undefined && currentChartData.columns[0] === columnsArray[c].name) {
+          if (!combinedResult) {
+            yColumnSeriesIndex = c;
           } else {
-            rowObj.value = '0';
+            yColumnIndex = c;
           }
-          tempObj.data.push(rowObj);
         }
-        seriesCount += 1;
+        if (currentChartData.columns[1] !== undefined && currentChartData.columns[1] === columnsArray[c].name) {
+          yColumnIndex = c;
+        }
       }
-      dataset.push(tempObj);
+      if (currentChartData.seriesOptions !== undefined) {
+        let newRawData = [],
+            newRawDataRow = [],
+            seriesValuesIndex = 0,
+            seriesNameArray = [],
+            lookup = {};
+
+        for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
+          let seriesName = currentDataRows[d][yColumnSeriesIndex],
+              currentXAxisName = currentDataRows[d][xColumnIndex],
+              previousXAxisName = '';
+
+          if (currentXAxisName !== '') {
+            if (currentXAxisName !== previousXAxisName || d === 0) {
+              if (d !== 0) {
+                newRawData.push(newRawDataRow);
+              }
+              newRawDataRow = [];
+              newRawDataRow[0] = currentXAxisName;
+              newRawDataRow[1] = [0,0,0];
+              seriesValuesIndex = 0;
+            }
+            if (seriesName !== '') {
+              newRawDataRow[1][seriesValuesIndex] = currentDataRows[d][yColumnIndex];
+              seriesValuesIndex += 1;
+
+              if (!(seriesName in lookup)) {
+                lookup[seriesName] = 1;
+                const obj1 = {
+                  seriesname: seriesName
+                };
+                seriesNameArray.push(obj1);
+              }
+            }
+            previousXAxisName = currentXAxisName;
+          }
+        }
+
+        for (let seriesCount = 0, rowsLen = seriesNameArray.length; seriesCount < rowsLen; seriesCount++) {
+          const seriesOptions = currentChartData.seriesOptions,
+                tempObj = {};
+          tempObj.seriesname = seriesNameArray[seriesCount].seriesname;
+          tempObj.data = [];
+
+          for (let s in seriesOptions) {
+            if (s !== 'anchorBorderColor' || s !== 'anchorbgcolor') {
+              tempObj[s] = seriesOptions[s];
+            }
+          }
+          if (seriesOptions.anchorBorderColor !== undefined) {
+            tempObj.anchorBorderColor = seriesOptions.anchorBorderColor[seriesCount];
+          }
+          if (seriesOptions.anchorbgcolor !== undefined) {
+            tempObj.anchorbgcolor = seriesOptions.anchorbgcolor[seriesCount];
+          }
+
+          //Get column data for y-axis
+          for (let d = 0, rowsLen = newRawData.length; d < rowsLen; d++) {
+            let rowObj = {};
+            if (newRawData[d][1][seriesCount] !== "NaN") {
+              rowObj.value = newRawData[d][1][seriesCount];
+            } else {
+              rowObj.value = '0';
+            }
+            tempObj.data.push(rowObj);
+          }
+          dataset.push(tempObj);
+        }
+      }
+      if (currentChartData.seriesname !== undefined) {
+        const tempObj = {};
+        tempObj.seriesname = currentChartData.seriesname;
+        tempObj.renderas = currentChartData.renderas;
+        tempObj.data = [];
+
+        //Get column data for y-axis
+        if (yColumnIndex !== '') {
+          for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
+            let rowObj = {};
+            if (currentDataRows[d][yColumnIndex][seriesCount] !== "NaN") {
+              rowObj.value = currentDataRows[d][yColumnIndex][seriesCount];
+            } else {
+              rowObj.value = '0';
+            }
+            tempObj.data.push(rowObj);
+          }
+          seriesCount += 1;
+        }
+        dataset.push(tempObj);
+      }
     }
   }
 
@@ -138,42 +218,33 @@ function generateChartDataSource(rawData, props) {
 }
 
 const renderChart = (props) => {
-  /*if (props.parent === undefined) {
-    return;
-  }*/
   if (!props.duration) {
     return;
   }
 
-  const data = props.data;
-
-  if (!data) {
+  if (!props.data) {
     return;
   }
 
-  const mainData = data;
-  const chartData = props.chartData;
-  //let parent = props.parent;
-
-  //const mainData = props.multiData[0];
-  //const chartData = props.props.chartData;
-  //let parent = props.props.parent;
+  const data = props.data,
+        chartData = props.chartData.fieldMapping;
 
   let rawData = {};
+
   for (let i = 0; i < chartData.length; i++) {
     let currentChartData = chartData[i];
-    if (mainData === null && mainData[currentChartData.reportId] === undefined){
+    if (data === null && data[currentChartData.reportId] === undefined){
       return;
     } else {
       if (!rawData.hasOwnProperty(currentChartData.reportId)) {
-        rawData[currentChartData.reportId] = mainData[currentChartData.reportId];
+        if (data[currentChartData.reportId] !== undefined) {
+          rawData[currentChartData.reportId] = data[currentChartData.reportId];
+        } else {
+          rawData[currentChartData.reportId] = data;
+        }
       }
     }
   }
-
-  /*if (parent === 'Compound') {
-    className = "chartBorder";
-  }*/
 
   FusionCharts.ready(function(){
     const fusioncharts = new FusionCharts({
@@ -191,8 +262,8 @@ const renderChart = (props) => {
 }
 
 const MultiSeriesCombiChart = (props) => (
-  <div className="chartBorder">
-    <div className="chartCaption">{props.meta.title}</div>
+  <div style={props.attributes.chartBorder}>
+    <div style={props.attributes.chartCaption}>{props.meta.title}</div>
     <div id={props.attributes.id}>{renderChart(props)}</div>
   </div>
 )

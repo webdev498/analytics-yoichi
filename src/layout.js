@@ -269,7 +269,7 @@ const layout = {
         }
       }
     ],
-    /*[
+    [
       {
         "id": "6",
         "type": "ParetoChart",
@@ -313,7 +313,7 @@ const layout = {
         ]
       },
       {
-        "id": "7",
+        "id": "71",
         type: 'MultiSeriesCombiChart',
         meta: {
           showHeader: true,
@@ -331,6 +331,8 @@ const layout = {
         attributes: {
           style: {width: '50%'},
           id: 'AlertPriorityChart',
+          chartBorder: {},
+          chartCaption: {display:'none'}
         },
         chartOptions: {
           "yAxisName": "Alert Count",
@@ -339,59 +341,37 @@ const layout = {
           "linealpha":"0",
           "paletteColors": "#0505F5, #D93609, #ACF50F,#FCFC0D, #05E9F5"
         },
-        chartData: [
-          {
-            axis: 'x',
-            reportId: 'taf_alert_priority_time',
-            columns: [
-              'date'
-            ]
-          },
-          {
-            seriesname: 'Low',
-            renderas: "Line",
-            lineThickness: "0",
-            drawanchors: "1",
-            anchorradius: "10",
-            anchorBorderColor: '#ff0000',
-            anchorbgcolor: '#ED6172',
-            anchorsides: '0',
-            reportId: 'taf_alert_priority_time',
-            columns: [
-              'formula 2'
-            ]
-          },
-          {
-            seriesname: 'Medium',
-            renderas: "Line",
-            lineThickness: "0",
-            drawanchors: "1",
-            anchorradius: "10",
-            anchorBorderColor: '#0F4D1F',
-            anchorbgcolor: '#3DF26A',
-            anchorsides: '4',
-            reportId: 'taf_alert_priority_time',
-            columns: [
-              'formula 2'
-            ]
-          },
-          {
-            seriesname: 'High',
-            renderas: "Line",
-            lineThickness: "0",
-            drawanchors: "1",
-            anchorradius: "10",
-            anchorBorderColor: '#0000ff',
-            anchorbgcolor: '#9F9FF5',
-            anchorsides: '3',
-            reportId: 'taf_alert_priority_time',
-            columns: [
-              'formula 2'
-            ]
-          }
-        ]
+        chartData: {
+          combinedResult: false,
+          fieldMapping: [
+            {
+              axis: 'x',
+              reportId: 'taf_alert_priority_time',
+              columns: [
+                'date'
+              ]
+            },
+            {
+              axis: 'y',
+              seriesOptions: {
+                renderas: "Line",
+                lineThickness: "0",
+                drawanchors: "1",
+                anchorradius: "10",
+                anchorsides: '0',
+                anchorBorderColor: ['#ff0000','#0F4D1F','#0000ff'],
+                anchorbgcolor: ['#ff0000','#0F4D1F','#0000ff']
+              },
+              reportId: 'taf_alert_priority_time',
+              columns: [
+                'data.rank_alert.score',
+                'count'
+              ]
+            }
+          ]
+        }
       }
-    ],*/
+    ],
     [
       {
         id: "12",
@@ -508,7 +488,9 @@ const layout = {
             },
             attributes: {
               style: {width: '48%'},
-              id: 'HistogramChart1'
+              id: 'HistogramChart1',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'}
             },
             chartOptions: {
               "xAxisName": "Time",
@@ -519,31 +501,36 @@ const layout = {
               "usePlotGradientColor": "1",
               "plotGradientColor": "#887788"
             },
-            chartData: [
-              {
-                axis: 'x',
-                reportId: 'taf_stats_histogram',
-                columns: [
-                  'date'
-                ]
-              },
-              {
-                seriesname: 'Historical Incoming Bandwidth',
-                renderas: "Area",
-                reportId: 'taf_stats_histogram',
-                columns: [
-                  'bytes_in'
-                ]
-              },
-              {
-                seriesname: 'Current Incoming Bandwidth',
-                renderas: "Line",
-                reportId: 'taf_stats_histogram',
-                columns: [
-                  'bytes_in'
-                ]
-              }
-            ]
+            chartData: {
+              combinedResult: true,
+              fieldMapping: [
+                {
+                  axis: 'x',
+                  reportId: 'taf_stats_histogram',
+                  columns: [
+                    'date'
+                  ]
+                },
+                {
+                  axis: 'y',
+                  seriesname: 'Historical Incoming Bandwidth',
+                  renderas: "Area",
+                  reportId: 'taf_stats_histogram',
+                  columns: [
+                    'bytes_in'
+                  ]
+                },
+                {
+                  axis: 'y',
+                  seriesname: 'Current Incoming Bandwidth',
+                  renderas: "Line",
+                  reportId: 'taf_stats_histogram',
+                  columns: [
+                    'bytes_in'
+                  ]
+                }
+              ]
+            }
           },
           {
             type: 'MultiSeriesCombiChart',
@@ -554,7 +541,9 @@ const layout = {
             },
             attributes: {
               style: {width: '48%'},
-              id: 'HistogramChart2'
+              id: 'HistogramChart2',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'}
             },
             chartOptions: {
               "xAxisName": "Time",
@@ -565,31 +554,36 @@ const layout = {
               "usePlotGradientColor": "1",
               "plotGradientColor": "#887788"
             },
-            chartData: [
-              {
-                axis: 'x',
-                reportId: 'taf_stats_histogram',
-                columns: [
-                  'date'
-                ]
-              },
-              {
-                seriesname: 'Historical Outgoing Bandwidth',
-                renderas: "Area",
-                reportId: 'taf_stats_histogram',
-                columns: [
-                  'bytes_out'
-                ]
-              },
-              {
-                seriesname: 'Current Outgoing Bandwidth',
-                renderas: "Line",
-                reportId: 'taf_stats_histogram',
-                columns: [
-                  'bytes_out'
-                ]
-              }
-            ]
+            chartData: {
+              combinedResult: true,
+              fieldMapping: [
+                {
+                  axis: 'x',
+                  reportId: 'taf_stats_histogram',
+                  columns: [
+                    'date'
+                  ]
+                },
+                {
+                  axis: 'y',
+                  seriesname: 'Historical Outgoing Bandwidth',
+                  renderas: "Area",
+                  reportId: 'taf_stats_histogram',
+                  columns: [
+                    'bytes_out'
+                  ]
+                },
+                {
+                  axis: 'y',
+                  seriesname: 'Current Outgoing Bandwidth',
+                  renderas: "Line",
+                  reportId: 'taf_stats_histogram',
+                  columns: [
+                    'bytes_out'
+                  ]
+                }
+              ]
+            }
           },
           {
             type: 'MultiSeriesCombiChart',
@@ -600,7 +594,9 @@ const layout = {
             },
             attributes: {
               style: {width: '48%'},
-              id: 'HistogramChart3'
+              id: 'HistogramChart3',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'}
             },
             chartOptions: {
               "xAxisName": "Time",
@@ -611,31 +607,36 @@ const layout = {
               "usePlotGradientColor": "1",
               "plotGradientColor": "#887788"
             },
-            chartData: [
-              {
-                axis: 'x',
-                reportId: 'taf_stats_histogram',
-                columns: [
-                  'date'
-                ]
-              },
-              {
-                seriesname: 'Historical Connections',
-                renderas: "Area",
-                reportId: 'taf_stats_histogram',
-                columns: [
-                  'conn'
-                ]
-              },
-              {
-                seriesname: 'Current Connections',
-                renderas: "Line",
-                reportId: 'taf_stats_histogram',
-                columns: [
-                  'conn'
-                ]
-              }
-            ]
+            chartData: {
+              combinedResult: true,
+              fieldMapping: [
+                {
+                  axis: 'x',
+                  reportId: 'taf_stats_histogram',
+                  columns: [
+                    'date'
+                  ]
+                },
+                {
+                  axis: 'y',
+                  seriesname: 'Historical Connections',
+                  renderas: "Area",
+                  reportId: 'taf_stats_histogram',
+                  columns: [
+                    'conn'
+                  ]
+                },
+                {
+                  axis: 'y',
+                  seriesname: 'Current Connections',
+                  renderas: "Line",
+                  reportId: 'taf_stats_histogram',
+                  columns: [
+                    'conn'
+                  ]
+                }
+              ]
+            }
           },
           {
             type: 'HorizontalBarChart',
