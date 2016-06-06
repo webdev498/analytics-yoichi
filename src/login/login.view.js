@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 import CardActions from 'material-ui/Card/CardActions';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import CustomCardHeader from '../components/CustomCardHeader.component';
+import CustomCardHeader from '../components/CustomCardHeader';
 import {loginUrl, responseType, clientId, redirectUri} from '../config';
 
 import './login.scss';

@@ -1,6 +1,6 @@
 import React from 'react';
 import Reactable from 'reactable';
-import ThreatAnalyticsGraph from 'components/ThreatAnalyticsGraph.component';
+import ThreatAnalyticsGraph from 'components/ThreatAnalyticsGraph';
 //import 'flag-icon-css/flag-icon-css';
 import moment from 'moment';
 import {generateChartDataSource, msToTime} from 'utils/utils';

@@ -3,7 +3,7 @@ const layout = {
     [
       {
         "id": "1",
-        "type": "MetricsCard.component",
+        "type": "MetricsCard",
         "meta": {
           "showHeader": false,
           "api": {
@@ -36,7 +36,7 @@ const layout = {
       },
       {
         "id": "2",
-        "type": "MetricsCard.component",
+        "type": "MetricsCard",
         "meta": {
           "showHeader": false,
           // "api": "/api/analytics/reporting/execute/taf_malware_count_time_shifted",
@@ -70,7 +70,7 @@ const layout = {
       },
       {
         "id": "3",
-        "type": "MetricsCard.component",
+        "type": "MetricsCard",
         "meta": {
           "showHeader": false,
           // "api": "/api/analytics/reporting/execute/taf_event_count_time_shifted",
@@ -104,7 +104,7 @@ const layout = {
       },
       {
         "id": "4",
-        "type": "MetricsCard.component",
+        "type": "MetricsCard",
         "meta": {
           "showHeader": false,
           // "api": "/api/analytics/reporting/execute/taf_asset_count_time_shifted",
@@ -140,7 +140,7 @@ const layout = {
     [
       {
         id: '56',
-        type: 'Table.component',
+        type: 'Table',
         name: 'Table',
         meta: {
           showHeader: true,
@@ -477,7 +477,7 @@ const layout = {
     [
       {
         id: '21',
-        type: 'Compound.component',
+        type: 'Compound',
         name: 'Compound',
         meta: {
           showHeader: true,
@@ -666,7 +666,7 @@ const layout = {
     [
       {
         "id": "22",
-        type: 'Table.component',
+        type: 'Table',
         name: 'Table',
         meta: {
           showHeader: true,
@@ -814,7 +814,7 @@ const layout = {
     [
       {
         id:'85',
-        type: 'Compound.component',
+        type: 'Compound',
         name: 'Compound',
         meta: {
           showHeader: true,
