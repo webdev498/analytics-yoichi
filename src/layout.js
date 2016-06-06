@@ -532,7 +532,7 @@ const layout = {
                 renderas: "Area",
                 reportId: 'taf_stats_histogram',
                 columns: [
-                  'formula 2'
+                  'bytes_in'
                 ]
               },
               {
@@ -540,7 +540,7 @@ const layout = {
                 renderas: "Line",
                 reportId: 'taf_stats_histogram',
                 columns: [
-                  'formula 2'
+                  'bytes_in'
                 ]
               }
             ]
@@ -578,7 +578,7 @@ const layout = {
                 renderas: "Area",
                 reportId: 'taf_stats_histogram',
                 columns: [
-                  'formula 3'
+                  'bytes_out'
                 ]
               },
               {
@@ -586,7 +586,7 @@ const layout = {
                 renderas: "Line",
                 reportId: 'taf_stats_histogram',
                 columns: [
-                  'formula 3'
+                  'bytes_out'
                 ]
               }
             ]
@@ -624,7 +624,7 @@ const layout = {
                 renderas: "Area",
                 reportId: 'taf_stats_histogram',
                 columns: [
-                  'formula 1'
+                  'conn'
                 ]
               },
               {
@@ -632,7 +632,7 @@ const layout = {
                 renderas: "Line",
                 reportId: 'taf_stats_histogram',
                 columns: [
-                  'formula 1'
+                  'conn'
                 ]
               }
             ]
@@ -655,7 +655,7 @@ const layout = {
                 reportId: 'taf_connections_by_protocol',
                 columns: [
                   'protocol.service',
-                  'count of date'
+                  'date'
                 ]
               }
             ]
