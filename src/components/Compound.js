@@ -5,7 +5,7 @@ function getChild(child, props) {
 }
 
 const compoundCard = (props) => (
-  <div style={{width:'100%',display:'flex',flexWrap:'wrap'}}>{console.log(props)}
+  <div style={{width:'100%',display:'flex',flexWrap:'wrap'}}>
       {
         props.children.props.children.map((child, index) => {
           return getChild(child, props)

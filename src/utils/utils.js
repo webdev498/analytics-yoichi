@@ -55,8 +55,66 @@ export function msToTime(duration) {
     hours = (hours < 10) ? "0" + hours : hours;
     minutes = (minutes < 10) ? "0" + minutes : minutes;
     seconds = (seconds < 10) ? "0" + seconds : seconds;
-  
+
   milliseconds = (milliseconds > 0) ? ":" + milliseconds : "";
 
   return [hours, minutes, seconds];// + milliseconds;
+}
+
+export function generateRawData(fieldMapping, apiData) {
+  let rawData = {};
+  for (let i = 0; i < fieldMapping.length; i++) {
+    let currentChartData = fieldMapping[i];
+    if (apiData === null && apiData[currentChartData.reportId] === undefined){
+      return;
+    } else {
+      if (!rawData.hasOwnProperty(currentChartData.reportId)) {
+        if (apiData[currentChartData.reportId] !== undefined) {
+          rawData[currentChartData.reportId] = apiData[currentChartData.reportId];
+        } else {
+          rawData[currentChartData.reportId] = apiData;
+        }
+      }
+    }
+  }
+  return rawData;
+}
+
+export function getIndexFromColumnName(columnIndex, currentChartDataColumns, columnsArray) {
+  for (let a = 0; a < currentChartDataColumns.length; a++) {
+    for (let c = 0; c < columnsArray.length; c++) {
+      if (currentChartDataColumns[a] === columnsArray[c].name) {
+        columnIndex = c;
+        break;
+      }
+    }
+  }
+  return columnIndex;
+}
+
+export function getIndexFromObjectName(inputArray) {
+  let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
+  if (fieldName.indexOf('.') > -1) {
+    fieldValueArray = fieldName.split(".");
+  } else {
+    fieldValueArray = [fieldName];
+  }
+
+  for(let v = 0; v < fieldValueArray.length; v++) {
+    if (v == 0) {
+      fieldValue = dataArray[fieldValueArray[v]];
+      if (fieldValue === undefined) {
+        fieldValue = '';
+        break;
+      }
+    }
+    else {
+      fieldValue = fieldValue[fieldValueArray[v]];
+      if (fieldValue === undefined) {
+        fieldValue = '';
+        break;
+      }
+    }
+  }
+  return fieldValue;
 }

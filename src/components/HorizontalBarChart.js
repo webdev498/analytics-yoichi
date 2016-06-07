@@ -118,7 +118,7 @@ const renderChart = (props) => {
 
   const mainData = data;
   const chartData = props.chartData;
-  const parent = props.parent;
+  //const parent = props.parent;
 
   let rawData = {};
   for (let i = 0; i < chartData.length; i++) {
@@ -131,110 +131,6 @@ const renderChart = (props) => {
       }
     }
   }
-
-  /*if (parent === 'Compound') {
-    className = "chartBorder";
-  }*/
-
-  /*if(props.multiData == null) {
-    return;
-  }
-  if(props.multiData[0] == null || props.multiData[1] == null || props.multiData[2] == null || props.multiData[3] == null) {
-    return;
-  }*/
-
-  /*var apiFieldMapping = props.apiFieldMapping;
-  var totalValue = 0;//totalConnections OR totalBandwidth
-  var countValue = 0;//assetsCount
-  var top10TotalValue = 0;//top10Connections OR top10Bandwidth
-  var top10CountValue = 0;//topConnectionsAssetsCount OR topBandwidthAssetsCount
-  var dataForGeneratingChartDataSource;
-
-  for (let a=0; a < apiFieldMapping.length; a++) {
-    var apiFieldMappingIndividual = apiFieldMapping[a];
-    var apiData = props.multiData[apiFieldMappingIndividual.api];
-    apiData = apiData.rows;
-
-    switch (a) {
-      case 0:
-        var fieldValueArray = apiFieldMappingIndividual.fieldValue;
-        var fieldValue = 0;
-        for(let v=0; v<fieldValueArray.length; v++) {
-          if (v == 0) {
-            fieldValue = apiData[fieldValueArray[v]];
-          }
-          else {
-            fieldValue = fieldValue[fieldValueArray[v]];
-          }
-        }
-        countValue = parseInt(fieldValue);
-        break;
-      case 1:
-        var fieldValueArray = apiFieldMappingIndividual.fieldValue;
-        var fieldValue = 0;
-        for(let v=0; v<fieldValueArray.length; v++) {
-          if (v == 0) {
-            fieldValue = apiData[fieldValueArray[v]];
-          }
-          else {
-            fieldValue = fieldValue[fieldValueArray[v]];
-          }
-        }
-        totalValue = parseInt(fieldValue);
-        break;
-      case 2:
-        for (var i=0; i<apiData.length; i++) {
-          var fieldValueArray = apiFieldMappingIndividual.fieldValue;
-          var fieldValue = 0;
-          for(let v=0; v<fieldValueArray.length; v++) {
-            if (v == 0) {
-              fieldValue = apiData[i][fieldValueArray[v]];
-            }
-            else {
-              fieldValue = fieldValue[fieldValueArray[v]];
-            }
-          }
-          var value = Math.round(((fieldValue * 100) / totalValue), 2);
-          if (value > 0) {
-            top10CountValue = top10CountValue + 1;
-            top10TotalValue = top10TotalValue + parseInt(fieldValue);
-          }
-        }
-        dataForGeneratingChartDataSource = apiData;
-
-        var average = top10TotalValue / parseInt(countValue);
-        var totalCount = totalValue;
-        var averageValue = Math.round(((average * 100) / totalCount), 2);
-        var rawData = [];
-        for (var i=0; i<dataForGeneratingChartDataSource.length; i++) {
-          var fieldValueArray = apiFieldMappingIndividual.fieldValue;
-          var fieldValue = 0;
-          for(let v=0; v<fieldValueArray.length; v++) {
-            if (v == 0) {
-              fieldValue = dataForGeneratingChartDataSource[i][fieldValueArray[v]];
-            }
-            else {
-              fieldValue = fieldValue[fieldValueArray[v]];
-            }
-          }
-          var obj = [];
-          obj[0] = dataForGeneratingChartDataSource[i][0];
-          var value = Math.round(((fieldValue * 100) / totalCount), 2);
-          obj[1] = value;
-          if (value > 0) {
-            rawData.push(obj);
-          }
-        }
-
-        var chartOptions = {};
-        chartOptions = props.chartOptions;
-        chartOptions.caption = props.sectionTitle;
-        chartOptions.averageValue = averageValue;
-        break;
-      default:
-        break;
-    }
-  }*/
 
   FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({

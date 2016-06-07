@@ -73,7 +73,8 @@ function generateDoughnutChart (assetsCount, topAssetsCount, top10Count, totalCo
   var percentage2Color = {fontWeight:'bold',color:highlightedColor1};
   var percentage1Color = {fontWeight:'bold',color:highlightedColor2};
 
-  doughnutAttributes = {displayPercentage1: displayPercentage1,
+  doughnutAttributes = {
+    displayPercentage1: displayPercentage1,
     percentage2: percentage2,
     chart1Background: chart1Background,
     chart1SliceOneStyle: chart1SliceOneStyle,
@@ -83,23 +84,103 @@ function generateDoughnutChart (assetsCount, topAssetsCount, top10Count, totalCo
     chart2SliceTwoStyle: chart2SliceTwoStyle,
     percentage1Color: percentage1Color,
     percentage2Color: percentage2Color,
-    assetPercentage: assetPercentage,
-    assetsCount: assetsCount, topAssetsCount: topAssetsCount, top10Count: top10Count, totalCount: totalCount
+    assetPercentage: assetPercentage
+    //assetsCount: assetsCount, topAssetsCount: topAssetsCount, top10Count: top10Count, totalCount: totalCount
   };
   //console.log(JSON.stringify(doughnutAttributes));
 }
 
 const renderChart = (props) => {
-  console.log(props);
-  if(props.multiData == null) {
+
+  if(!props.data) {
     return;
   }
-  console.log('here');
-  if(props.multiData[0] == null || props.multiData[1] == null || props.multiData[2] == null || props.multiData[3] == null) {
-    return;
+
+  const mainData = props.data;
+  const chartData = props.chartData;
+  let rawData = {};
+  for (let i = 0; i < chartData.length; i++) {
+    let currentChartData = chartData[i];
+    if (mainData === null && mainData[currentChartData.reportId] === undefined){
+      return;
+    } else {
+      if (!rawData.hasOwnProperty(currentChartData.reportId)) {
+        rawData[currentChartData.reportId] = mainData[currentChartData.reportId];
+      }
+    }
   }
+
+  console.log(JSON.stringify(rawData));
+
+  for (let i = 0; i < chartData.length; i++) {
+    let currentChartData = chartData[i];
+    let currentDataRows = [];
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
+      currentDataRows = rawData[currentChartData.reportId].rows;
+    }
+    console.log(JSON.stringify(currentDataRows));
+
+    let columnIndexArray = [];
+    let columnsArray = [];
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
+      columnsArray = rawData[currentChartData.reportId].columns;
+    }
+
+    let columnIndex = null;
+    for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
+      //Calculate column index from API response
+      for (let a = 0; a < currentChartData.columns.length; a++) {
+        for (let c = 0; c < columnsArray.length; c++) {
+          if (currentChartData.columns[a] === columnsArray[c].name) {
+            columnIndexArray[a] = c;
+            columnIndex = c;
+            break;
+          }
+        }
+
+        if (!columnIndex) {
+          let fieldValue = '',
+            fieldName = currentChartData.columns[a],
+            fieldValueArray = [];alert(fieldName);
+          if (fieldName.indexOf('.') > -1) {
+            fieldValueArray = fieldName.split(".");
+          } else {
+            fieldValueArray = [fieldName];
+          }
+
+          for(let v=0; v<fieldValueArray.length; v++) {
+            if (v == 0) {
+              fieldValue = currentDataRows[d][fieldValueArray[v]];
+              if (fieldValue === undefined) {
+                fieldValue = '';
+                break;
+              }
+            }
+            else {
+              fieldValue = fieldValue[fieldValueArray[v]];
+              if (fieldValue === undefined) {
+                fieldValue = '';
+                break;
+              }
+            }
+          }
+          console.log(fieldValue);
+        }
+      }
+    }
+      /*let obj1 = {};
+      obj1.label = currentDataRows[d][columnIndexArray[0]];
+      if (obj1.label.length > 13) {
+        obj1.label = obj1.label.substring(0, 13) + " (...)";
+      }
+      obj1.value = currentDataRows[d][columnIndexArray[1]];
+      obj1.toolText = currentDataRows[d][columnIndexArray[0]] + ", " + currentDataRows[d][columnIndexArray[1]];
+      dataset.push(obj1);*/
+  //   }
+    }
+
   //console.log(JSON.stringify(props.multiData));
-  var apiFieldMapping = props.apiFieldMapping;//console.log(props.apiFieldMapping);
+  /*var apiFieldMapping = props.apiFieldMapping;//console.log(props.apiFieldMapping);
   var totalValue = 0;//totalConnections OR totalBandwidth
   var countValue = 0;//assetsCount
   var top10TotalValue = 0;//top10Connections OR top10Bandwidth
@@ -159,9 +240,9 @@ const renderChart = (props) => {
       default:
         break;
     }
-  }
+  }*/
 
-  generateDoughnutChart(countValue, top10CountValue, top10TotalValue, totalValue.toPrecision());
+  //generateDoughnutChart(countValue, top10CountValue, top10TotalValue, totalValue.toPrecision());
 }
 
 const DoughnutChart = (props) => (

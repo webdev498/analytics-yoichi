@@ -78,6 +78,13 @@ class ParentCard extends React.Component {
   render() {
     const {props} = this;
 
+    if (!props) {
+      return;
+    }
+    if (!props.meta) {
+      return;
+    }
+
     if(props.meta.showHeader) {
       return (
         <Card style={{...styles.wrap, ...props.attributes.style}}>

@@ -1,9 +1,9 @@
 import React from 'react';
 import Reactable from 'reactable';
 import ThreatAnalyticsGraph from 'components/ThreatAnalyticsGraph';
-//import 'flag-icon-css/flag-icon-css';
+
 import moment from 'moment';
-import {generateChartDataSource, msToTime} from 'utils/utils';
+import {generateChartDataSource, msToTime, generateRawData, getIndexFromObjectName} from 'utils/utils';
 
 const {Table, Tr, Td, unsafe} = Reactable;
 
@@ -17,49 +17,16 @@ const generateDataSource = (props) => {
     return;
   }
 
-  //if (props.tableData === undefined) {//props.child.tableData === undefined &&
-   // return;
- // }
-
   //Initializing the variables
   tableProperties = {};
   tableDataSource = [];
 
-  let mainData = data,
-      tableData = [],
-      tableOptions = {};
-
-  // if (props.multiData[0] !== undefined) {
-  //   mainData = props.multiData[0];
-  // } else {
-  //   mainData = props.multiData;
-  // }
-
-  /*if (props.props !== undefined) {
-    tableData = props.props.tableData;
-    tableOptions = props.props.tableOptions;
-  } else {*/
-    tableData = props.tableData;
-    tableOptions = props.tableOptions;
- // }
+  let tableData = props.tableData,
+      tableOptions = props.tableOptions;
 
   let rawData = {};
-  for (let i = 0; i < tableData.length; i++) {
-    let currentTableData = tableData[i];
-    /*if (props.multiData === null && (props.multiData[0] !== undefined && mainData[currentTableData.reportId] === undefined)){
-      return;
-    } else *///if (mainData === undefined){//props.multiData === null && (props.multiData[0] === undefined &&
-      //return;
-    //} else {
-      if (!rawData.hasOwnProperty(currentTableData.reportId)) {
-        if (mainData[currentTableData.reportId] !== undefined) {
-          rawData[currentTableData.reportId] = mainData[currentTableData.reportId];
-        } else {
-          rawData[currentTableData.reportId] = mainData;
-        }
-      }
-    //}
-  }
+  rawData = generateRawData(tableData, data);
+
   tableProperties = {...tableOptions};
 
   for (let i = 0; i < tableData.length; i++) {
@@ -70,18 +37,14 @@ const generateDataSource = (props) => {
         columnText = '',
         chartValue = '';
 
-    // if (props.multiData[0] === undefined && props.multiData !== undefined) {
-    //   currentDataRows = rawData[currentTableData.reportId].rows;
-    // }
-
     let currentDataRowsCount = 0;
     if (currentDataRows !== undefined && currentDataRows.length !== undefined) {
       currentDataRowsCount = currentDataRows.length;
     }
 
     for (let d = 0, rowsLen = currentDataRowsCount; d < rowsLen; d++) {
-      const obj1 = {};
-      obj1.columns = [];
+      let mainObject = {};
+      mainObject.columns = [];
 
       //Calculate column index from API response
       for (let a = 0; a < currentTableData.columns.length; a++) {
@@ -90,53 +53,31 @@ const generateDataSource = (props) => {
 
         for (let cd = 0; cd < currentColumnDataArray.length; cd++) {
           if (columnsArray.length === 1 && columnsArray[0].name === 'json') {
-          //This condition is if API response returns a single column with one JSON object. e.g. recent alerts table
+            //This condition is if API response returns a single column with one JSON object. e.g. recent alerts table
             let fieldValue = '',
                 {fieldName, displayName} = currentColumnDataArray[cd],
-                fieldValueArray = [];
+                fieldValueArray = [],
+                inputArray = {
+                  fieldName: fieldName,
+                  fieldValueArray: fieldValueArray,
+                  fieldValue: fieldValue,
+                  dataArray: currentDataRows[d][0]
+                };
 
-            if (fieldName.indexOf('.') > -1) {
-              fieldValueArray = fieldName.split(".");
-            } else {
-              fieldValueArray = [fieldName];
-            }
-
-            for(let v=0; v<fieldValueArray.length; v++) {
-              if (v == 0) {
-                fieldValue = currentDataRows[d][0][fieldValueArray[v]];
-                if (fieldValue === undefined) {
-                  fieldValue = '';
-                  break;
-                }
-              }
-              else {
-                fieldValue = fieldValue[fieldValueArray[v]];
-                if (fieldValue === undefined) {
-                  fieldValue = '';
-                  break;
-                }
-              }
-            }
+            fieldValue = getIndexFromObjectName(inputArray);
 
             const columnDetails = {
               currentColumnType: currentColumnType,
               fieldName: fieldName,
               displayName: displayName,
               fieldValue: fieldValue,
-              columnText: columnText
+              columnText: columnText,
+              chartValue: chartValue
             }
 
-            //Get Column Text
-            switch(currentColumnType) {
-              case 'chart':
-                chartValue = fieldValue;
-                break;
-              case 'text':
-                columnText = getColumnText(columnDetails);
-                break;
-              default:
-                break;
-            }
+            let columnTextObj = getColumnText(columnDetails);
+            chartValue = columnTextObj.chartValue;
+            columnText = columnTextObj.columnText;
           } else {
             //Calculate column index from API response
             for (let c = 0; c < columnsArray.length; c++) {
@@ -152,65 +93,43 @@ const generateDataSource = (props) => {
                   fieldName: fieldName,
                   displayName: displayName,
                   fieldValue: fieldValue,
-                  columnText: columnText
+                  columnText: columnText,
+                  chartValue: chartValue
                 }
-                //Get Column Text
-                switch(currentColumnType) {
-                  case 'chart':
-                    chartValue = fieldValue;
-                    break;
-                  case 'text':
-                    columnText = getColumnText(columnDetails);
-                    break;
-                  default:
-                    break;
-                }
+
+                let columnTextObj = getColumnText(columnDetails);
+                chartValue = columnTextObj.chartValue;
+                columnText = columnTextObj.columnText;
                 break;
               }
             }
           }
         }//Column data loop ends
 
-        let obj2 = {};
-        switch(currentColumnType) {
-          case 'chart':
-            obj2 = {
-              chartDataSource: generateChartDataSource(currentTableData.columns[a].chartType, chartValue),
+        let rowObj = {},
+            rowDetails = {
+              currentColumnType: currentColumnType,
+              currentTableData: currentTableData.columns[a],
               chartValue: chartValue,
-              chartId: currentTableData.columns[a].chartId + d,
-              chartType: currentTableData.columns[a].chartType,
-              chartWidth: currentTableData.columns[a].chartWidth,
-              chartHeight: currentTableData.columns[a].chartHeight,
-              columnType: 'chart',
-              columnName: currentTableData.columns[a].columnNameToDisplay,
-              columnStyle: currentTableData.columns[a].style
-            }
-            chartValue = '';
-            obj1.columns.push(obj2);
-            break;
-          case 'text':
-            obj2 = {
-              columnType: currentColumnType,
-              columnName: currentTableData.columns[a].columnNameToDisplay,
-              columnStyle: currentTableData.columns[a].style,
-              columnText: unsafe(columnText)
-            }
-            columnText = '';
-            obj1.columns.push(obj2);
-            break;
-          default:
-            break;
-        }
+              columnText: columnText,
+              rowNumber: d
+            };
+        mainObject = generateRowObject(rowDetails, mainObject);
+        columnText = '';
+        chartValue = '';
       }
-      tableDataSource.push(obj1);
+      tableDataSource.push(mainObject);
     }//mainData loop end
   }
 }
 
 function getColumnText(columnDetails) {
-  let {currentColumnType, fieldName, displayName, fieldValue, columnText} = columnDetails;
+  let {currentColumnType, fieldName, displayName, fieldValue, columnText, chartValue} = columnDetails;
 
   switch (currentColumnType) {
+    case 'chart':
+      chartValue = fieldValue;
+      break;
     case "text":
       if (fieldValue !== undefined && fieldValue !== '' && fieldValue !== null) {
         if (columnText != '') {
@@ -231,7 +150,7 @@ function getColumnText(columnDetails) {
             }
             else if (displayName == 'countryFlag') {
               if (fieldValue != '' && fieldValue != null) {
-                columnText += ' <span className="flag-icon flag-icon-'+fieldValue.toLowerCase()+'"></span>';
+                columnText += ' <span class="flag-icon flag-icon-'+fieldValue.toLowerCase()+'"></span>';
               }
             } else if (displayName === undefined) {
               columnText += '<br/>' + fieldValue;
@@ -272,20 +191,55 @@ function getColumnText(columnDetails) {
           }
         }
       }
-
       break;
     case "durationWidget":
       break;
     default:
       break;
   }
-  return columnText;
+  return {columnText: columnText,
+    chartValue: chartValue
+  };
+}
+
+function generateRowObject(rowDetails, mainObject) {
+  let rowObj = {},
+      {currentColumnType, currentTableData, chartValue, columnText, rowNumber} = rowDetails;
+  switch(currentColumnType) {
+    case 'chart':
+      rowObj = {
+        chartDataSource: generateChartDataSource(currentTableData.chartType, chartValue),
+        chartValue: chartValue,
+        chartId: currentTableData.chartId + rowNumber,
+        chartType: currentTableData.chartType,
+        chartWidth: currentTableData.chartWidth,
+        chartHeight: currentTableData.chartHeight,
+        columnType: 'chart',
+        columnName: currentTableData.columnNameToDisplay,
+        columnStyle: currentTableData.style
+      }
+      chartValue = '';
+      mainObject.columns.push(rowObj);
+      break;
+    case 'text':
+      rowObj = {
+        columnType: currentColumnType,
+        columnName: currentTableData.columnNameToDisplay,
+        columnStyle: currentTableData.style,
+        columnText: unsafe(columnText)
+      }
+      columnText = '';
+      mainObject.columns.push(rowObj);
+      break;
+    default:
+      break;
+  }
+  return mainObject;
 }
 
 const tableCard = (props) => (
   <div style={{width:'100%'}}>
-    <div className="tableCaption">{props.sectionTitle}</div>
-    {generateDataSource(props)}{console.log(tableProperties)}
+    {generateDataSource(props)}
     <Table style={{width:'100%'}}
            className="threatTable"
            sortable={true}
