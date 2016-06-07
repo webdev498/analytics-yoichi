@@ -2,8 +2,11 @@ import React, { PropTypes } from 'react';
 
 import FontIcon from 'material-ui/FontIcon';
 import ParentCard from 'containers/ParentCard';
+import Loader from 'components/Loader.component';
 
-import obj from 'layout';
+import {fetchLayoutData} from 'actions/core';
+
+import { connect } from 'react-redux';
 
 class PageContent extends React.Component {
   constructor(props) {
@@ -11,8 +14,12 @@ class PageContent extends React.Component {
     this.state = {open: true};
   }
 
+  componentDidMount() {
+    this.props.fetchLayoutData('taf_dashboard');
+  }
+
   renderChildren() {
-    const layout = obj.layout;
+    const {layout} = this.props;
 
     const finalElmements = [];
 
@@ -67,14 +74,37 @@ class PageContent extends React.Component {
   render () {
     return (
       <div id="content" style={{padding: '20px'}}>
-        {this.renderChildren()}
+        {
+          this.props.isFetching ?
+          <Loader /> :
+          this.renderChildren()
+        }
       </div>
     )
   }
 }
 
-ParentCard.contextTypes = {
-  store: React.PropTypes.object
+PageContent.contextTypes = {
+  location: React.PropTypes.object
+};
+
+function mapStateToProps(state, ownProps) {
+  const {layout: layouts} = state;
+
+  const id = "taf_dashboard";
+
+  const { layout = [],
+          isFetching = true,
+          isError = false,
+          errorData = null
+        } = layouts.get(id) ? layouts.get(id).toObject() : {};
+
+  return {
+    layout,
+    isFetching,
+    isError,
+    errorData
+  };
 }
 
-export default PageContent;
+export default connect(mapStateToProps, {fetchLayoutData})(PageContent);

@@ -239,6 +239,7 @@ function generateRowObject(rowDetails, mainObject) {
 
 const tableCard = (props) => (
   <div style={{width:'100%'}}>
+    <div className="tableCaption">{props.sectionTitle}</div>
     {generateDataSource(props)}
     <Table style={{width:'100%'}}
            className="threatTable"
