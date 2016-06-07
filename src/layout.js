@@ -705,7 +705,7 @@ const layout = {
                 style: {width: '15%'}
               },
               {
-                type: 'text',
+                type: 'durationWidget',
                 columnNameToDisplay: 'Duration',
                 data: [
                   {
