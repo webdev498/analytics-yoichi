@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import {calculateDateDisplayFormat, calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
-import {generateRawData, getIndexFromColumnName} from 'utils/utils';
+import {generateRawData} from 'utils/utils';
 
 function generateChartDataSource(rawData, props) {
   const {duration, chartOptions, chartData} = props,

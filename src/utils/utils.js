@@ -91,3 +91,30 @@ export function getIndexFromColumnName(columnIndex, currentChartDataColumns, col
   }
   return columnIndex;
 }
+
+export function getIndexFromObjectName(inputArray) {
+  let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
+  if (fieldName.indexOf('.') > -1) {
+    fieldValueArray = fieldName.split(".");
+  } else {
+    fieldValueArray = [fieldName];
+  }
+
+  for(let v = 0; v < fieldValueArray.length; v++) {
+    if (v == 0) {
+      fieldValue = dataArray[fieldValueArray[v]];
+      if (fieldValue === undefined) {
+        fieldValue = '';
+        break;
+      }
+    }
+    else {
+      fieldValue = fieldValue[fieldValueArray[v]];
+      if (fieldValue === undefined) {
+        fieldValue = '';
+        break;
+      }
+    }
+  }
+  return fieldValue;
+}
