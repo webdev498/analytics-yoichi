@@ -142,7 +142,7 @@ function generateChartDataSource(rawData, props) {
           }
 
           //Get column data for y-axis
-          tempObj = generateDataArray(tempObj, 1, newRawData, seriesCount);
+          tempObj.data = generateDataArray(tempObj, 1, newRawData, seriesCount);
           dataset.push(tempObj);
         }
       }
@@ -154,7 +154,7 @@ function generateChartDataSource(rawData, props) {
 
         //Get column data for y-axis
         if (yColumnIndex !== '') {
-          tempObj = generateDataArray(tempObj, yColumnIndex, currentDataRows, seriesCount);
+          tempObj.data = generateDataArray(tempObj, yColumnIndex, currentDataRows, seriesCount);
           seriesCount += 1;
         }
         dataset.push(tempObj);
@@ -212,7 +212,7 @@ function generateDataArray(tempObj, yColumnIndex, currentDataRows, seriesCount) 
     }
     tempObj.data.push(rowObj);
   }
-  return tempObj;
+  return tempObj.data;
 }
 
 const renderChart = (props) => {
