@@ -12,6 +12,43 @@ function generateChartDataSource(props) {
 
   const apiData = data.rows;
 
+  for (let i = 0; i < chartData.length; i++) {
+    let currentChartData = chartData[i];
+    let currentDataRows = [];
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
+      currentDataRows = rawData[currentChartData.reportId].rows;
+    }
+    let columnIndexArray = [];
+    let columnsArray = [];
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
+      columnsArray = rawData[currentChartData.reportId].columns;
+    }
+
+    //Calculate column index from API response
+    for (let a = 0; a < currentChartData.columns.length; a++) {
+      for (let c = 0; c < columnsArray.length; c++) {
+        if (currentChartData.columns[a] === columnsArray[c].name) {
+          columnIndexArray[a] = c;
+          break;
+        }
+      }
+    }
+
+    //Get column data for x-axis
+    if (columnIndexArray.length !== 0) {
+      for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
+        let obj1 = {};
+        obj1.label = currentDataRows[d][columnIndexArray[0]];
+        if (obj1.label.length > 13) {
+          obj1.label = obj1.label.substring(0, 13) + " (...)";
+        }
+        obj1.value = currentDataRows[d][columnIndexArray[1]];
+        obj1.toolText = currentDataRows[d][columnIndexArray[0]] + ", " + currentDataRows[d][columnIndexArray[1]];
+        dataset.push(obj1);
+      }
+    }
+  }
+
   for (let i = 0; i < apiData.length; i++) {
     // const apiFieldMappingIndividual = apiFieldMapping[i];
 
@@ -66,7 +103,6 @@ function generateChartDataSource(props) {
           theme: "zune",
           xAxisNameFontSize: "14",
           yAxisNameFontSize: "14",
-          caption: "",
           baseFont: "Roboto, sans-serif"
         }, chartOptions),
     data: graphBars

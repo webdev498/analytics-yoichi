@@ -3,16 +3,16 @@ import moment from 'moment';
 import {calculateDateDisplayFormat, calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
 
 function generateChartDataSource(rawData, props) {
-  const timeWindow = props.duration,
-        chartOptions = props.chartOptions,
-        chartData = props.chartData.fieldMapping,
-        combinedResult = props.chartData.combinedResult,
+  const {duration, chartOptions, chartData} = props,
+        fieldMapping = chartData.fieldMapping,
+        combinedResult = chartData.combinedResult,
         lookup = {},
         dataset = [];
   const categories = [{
     category: []
   }];
   let seriesCount = 0,
+      timeWindow = duration,
       dateDisplayFormat = calculateDateDisplayFormat(timeWindow),
       xColumnIndex = '';
 
@@ -20,8 +20,8 @@ function generateChartDataSource(rawData, props) {
     dateDisplayFormat = calculateDateDisplayFormatForHistogram(timeWindow);
   }
 
-  for (let i = 0; i < chartData.length; i++) {
-    let currentChartData = chartData[i];
+  for (let i = 0; i < fieldMapping.length; i++) {
+    let currentChartData = fieldMapping[i];
     let currentDataRows = [];
     if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
       currentDataRows = rawData[currentChartData.reportId].rows;
