@@ -295,22 +295,24 @@ const layout = {
           pYAxisname: "Connections",
           xAxisname: "Alert Types"
         },
-        chartData: [
-          {
-            axis: 'x',
-            reportId: 'taf_threat_trend',
-            columns: [
-              'data.rank_alert.category'
-            ]
-          },
-          {
-            axis: 'y',
-            reportId: 'taf_threat_trend',
-            columns: [
-              'count of date'
-            ]
-          }
-        ]
+        chartData: {
+          fieldMapping: [
+            {
+              axis: 'x',
+              reportId: 'taf_threat_trend',
+              columns: [
+                'data.rank_alert.category'
+              ]
+            },
+            {
+              axis: 'y',
+              reportId: 'taf_threat_trend',
+              columns: [
+                'count of date'
+              ]
+            }
+          ]
+        }
       },
       {
         "id": "71",

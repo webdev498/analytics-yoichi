@@ -142,15 +142,7 @@ function generateChartDataSource(rawData, props) {
           }
 
           //Get column data for y-axis
-          for (let d = 0, rowsLen = newRawData.length; d < rowsLen; d++) {
-            let rowObj = {};
-            if (newRawData[d][1][seriesCount] !== "NaN") {
-              rowObj.value = newRawData[d][1][seriesCount];
-            } else {
-              rowObj.value = '0';
-            }
-            tempObj.data.push(rowObj);
-          }
+          tempObj = generateDataArray(tempObj, 1, newRawData, seriesCount);
           dataset.push(tempObj);
         }
       }
@@ -162,15 +154,7 @@ function generateChartDataSource(rawData, props) {
 
         //Get column data for y-axis
         if (yColumnIndex !== '') {
-          for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
-            let rowObj = {};
-            if (currentDataRows[d][yColumnIndex][seriesCount] !== "NaN") {
-              rowObj.value = currentDataRows[d][yColumnIndex][seriesCount];
-            } else {
-              rowObj.value = '0';
-            }
-            tempObj.data.push(rowObj);
-          }
+          tempObj = generateDataArray(tempObj, yColumnIndex, currentDataRows, seriesCount);
           seriesCount += 1;
         }
         dataset.push(tempObj);
@@ -215,6 +199,20 @@ function generateChartDataSource(rawData, props) {
   }
 
   return dataSourceObject;
+}
+
+//Function to generate data array for chart data source
+function generateDataArray(tempObj, yColumnIndex, currentDataRows, seriesCount) {
+  for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
+    let rowObj = {};
+    if (currentDataRows[d][yColumnIndex][seriesCount] !== "NaN") {
+      rowObj.value = currentDataRows[d][yColumnIndex][seriesCount];
+    } else {
+      rowObj.value = '0';
+    }
+    tempObj.data.push(rowObj);
+  }
+  return tempObj;
 }
 
 const renderChart = (props) => {
