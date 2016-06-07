@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import {calculateDateDisplayFormat, calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
+import {generateRawData, getIndexFromColumnName} from 'utils/utils';
 
 function generateChartDataSource(rawData, props) {
   const {duration, chartOptions, chartData} = props,
@@ -225,24 +226,10 @@ const renderChart = (props) => {
   }
 
   const data = props.data,
-        chartData = props.chartData.fieldMapping;
+        fieldMapping = props.chartData.fieldMapping;
 
   let rawData = {};
-
-  for (let i = 0; i < chartData.length; i++) {
-    let currentChartData = chartData[i];
-    if (data === null && data[currentChartData.reportId] === undefined){
-      return;
-    } else {
-      if (!rawData.hasOwnProperty(currentChartData.reportId)) {
-        if (data[currentChartData.reportId] !== undefined) {
-          rawData[currentChartData.reportId] = data[currentChartData.reportId];
-        } else {
-          rawData[currentChartData.reportId] = data;
-        }
-      }
-    }
-  }
+  rawData = generateRawData(fieldMapping, data);
 
   FusionCharts.ready(function(){
     const fusioncharts = new FusionCharts({

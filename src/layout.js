@@ -289,7 +289,8 @@ const layout = {
         "attributes": {
           "style": {"width": "50%", "marginRight": "20px"},
           "id": "AlertByType",
-          "variation": "3d"
+          "chartWidth": "100%",
+          "chartHeight": "400"
         },
         chartOptions: {
           pYAxisname: "Connections",
@@ -308,7 +309,7 @@ const layout = {
               axis: 'y',
               reportId: 'taf_threat_trend',
               columns: [
-                'count of date'
+                'date'
               ]
             }
           ]
