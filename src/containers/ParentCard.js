@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
-import Cookies from 'cookies-js';
 import Card from 'material-ui/Card/Card';
 import FontIcon from 'material-ui/FontIcon';
 

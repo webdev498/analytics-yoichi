@@ -8,9 +8,8 @@ import Menu from 'material-ui/Menu/Menu';
 import MenuItem from 'material-ui/MenuItem/MenuItem';
 import FaceIcon from 'material-ui/svg-icons/social/person';
 
-import * as AuthActions from 'actions/auth';
+import {updateApiData} from 'actions/ParentCard';
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 function select(state) {
@@ -63,38 +62,26 @@ function getTimeRangeItems () {
 }
 
 class PageHeader extends React.Component {
-
-  // static fetchData(dispatch) {
-  //   var authActions = bindActionCreators(AuthActions, dispatch);
-  //   return Promise.all([
-  //     authActions.loadUser()
-  //   ]);
-  // }
-
   constructor(props) {
     super(props);
     this.state = {value: 1};
   }
 
-  componentDidMount() {
-    // if (!this.props.list) {
-    //   this.constructor.fetchData(this.props.dispatch);
-    // }
+  handleTimeChange(event, index, value) {
+    this.props.updateApiData(TimeRanges[index]);
+    this.setState({value});
   }
 
-  handleChange = (event, index, value) => {
-    this.props.handleTimeChange(TimeRanges[index]);
-    this.setState({value})
-  };
-
   render () {
-    let name = this.props.auth.user ? this.props.auth.user.name : "";
+    const {props} = this,
+          name = props.auth.user ? props.auth.user.name : "";
+
     return (
-        <AppBar {...this.props} style={getStyles(this.props)}
+        <AppBar {...props} style={getStyles(props)}
                 iconClassNameRight='muidocs-icon-navigation-expand-more'>
 
           <DropDownMenu value={this.state.value}
-                        onChange={this.handleChange}
+                        onChange={this.handleTimeChange}
                         menuStyle={{top: '64px'}}>
             {getTimeRangeItems()}
           </DropDownMenu>
@@ -114,4 +101,4 @@ class PageHeader extends React.Component {
   }
 }
 
-export default connect(select)(PageHeader);
+export default connect(select, {updateApiData})(PageHeader);
