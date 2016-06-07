@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 
 import FontIcon from 'material-ui/FontIcon';
 import ParentCard from 'containers/ParentCard';
+import Loader from 'components/Loader.component';
 
 import {fetchLayoutData} from 'actions/core';
 
@@ -73,15 +74,19 @@ class PageContent extends React.Component {
   render () {
     return (
       <div id="content" style={{padding: '20px'}}>
-        {this.renderChildren()}
+        {
+          this.props.isFetching ?
+          <Loader /> :
+          this.renderChildren()
+        }
       </div>
     )
   }
 }
 
-ParentCard.contextTypes = {
-  store: React.PropTypes.object
-}
+PageContent.contextTypes = {
+  location: React.PropTypes.object
+};
 
 function mapStateToProps(state, ownProps) {
   const {layout: layouts} = state;

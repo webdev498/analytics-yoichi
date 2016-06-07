@@ -7,6 +7,8 @@ import PageContent from './PageContent';
 
 import {fetchUserData} from 'actions/auth';
 
+import Loader from 'components/Loader.component';
+
 import 'styles/core.scss';
 
 class CoreLayout extends React.Component {
@@ -26,8 +28,8 @@ class CoreLayout extends React.Component {
         <Sidebar style={{width: '72px'}}></Sidebar>
         <div id="base">
           {
-            (props.isLoading || props.isError) ?
-              "" :
+            (props.auth.isLoading) ?
+              <Loader /> :
               <PageContent />
           }
         </div>
