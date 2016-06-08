@@ -1,5 +1,5 @@
 import React from 'react';
-import {generateRawData, getIndexFromObjectName, getIndexFromColumnName} from 'utils/utils';
+import {generateRawData, getIndexFromObjectName, getIndexFromColumnName, checkForUndefinedChartOptionObject} from 'utils/utils';
 
 let highlightedColor1 = "#5E2B78", //Purple (Default colors set)
     highlightedColor2 = "#8ABB24", //Green (Default colors set)
@@ -99,6 +99,10 @@ const renderChart = (props) => {
         chartOptions = props.chartOptions;
 
   let rawData = {};
+
+  highlightedColor1 = checkForUndefinedChartOptionObject(chartOptions, 'highlightedColor1', highlightedColor1);
+  highlightedColor2 = checkForUndefinedChartOptionObject(chartOptions, 'highlightedColor2', highlightedColor2);
+  nonHighlightedColor = checkForUndefinedChartOptionObject(chartOptions, 'nonHighlightedColor', nonHighlightedColor);
 
   rawData = generateRawData(fieldMapping, data);
 

@@ -118,3 +118,12 @@ export function getIndexFromObjectName(inputArray) {
   }
   return fieldValue;
 }
+
+export function checkForUndefinedChartOptionObject(chartOptions, objectName, defaultValue) {
+  let value = defaultValue;
+  if (chartOptions !== undefined && chartOptions[objectName] !== undefined) {
+    value = chartOptions[objectName];
+  }
+  console.log(value);
+  return value;
+}
