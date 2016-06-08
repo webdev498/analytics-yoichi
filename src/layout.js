@@ -814,7 +814,7 @@ const layout = {
           filterBy:""
         }
       }
-    ]/*,
+    ],
     [
       {
         id:'85',
@@ -852,38 +852,80 @@ const layout = {
             },
             attributes: {
               style: {width: '50%', marginRight: '20px'},
-              id: 'DoughnutChartConnections'
+              id: 'DoughnutChartConnections',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'}
             },
             chartOptions: {
-              "xAxisName": "Time",
-              "yAxisName": "Incoming Bandwidth",
-              "lineThickness":"5",
-              "paletteColors": "#d3d3d3, #D93609, #0505F5, #ACF50F,#FCFC0D, #05E9F5",
-              "drawAnchors":"0",
-              "usePlotGradientColor": "1",
-              "plotGradientColor": "#887788"
+              highlightedColor1: "#5E2B78",
+              highlightedColor2: "#8ABB24",
+              nonHighlightedColor: "#CCCCCC"
             },
-            chartData: [
-              {
-                reportId: 'taf_asset_count_time_shifted',
-                columns: [
-                  '0.0'
-                ]
-              },
-              {
-                reportId: 'taf_total_usage',
-                columns: [
-                  'count of date'
-                ]
-              },
-              {
-                reportId: 'taf_top_talkers_connections',
-                columns: [
-                  'count of date'
-                ]
-              }
-            ]
+            chartData: {
+              fieldMapping: [
+                {
+                  reportId: 'taf_asset_count_time_shifted',
+                  columns: [
+                    '0.0'
+                  ]
+                },
+                {
+                  reportId: 'taf_total_usage',
+                  columns: [
+                    'date'
+                  ]
+                },
+                {
+                  reportId: 'taf_top_talkers_connections',
+                  columns: [
+                    'connections'
+                  ]
+                }
+              ]
+            }
           },
+          {
+            type: 'DoughnutChart',
+            parent:'Compound',
+            meta: {
+              showHeader: false,
+              title: 'Top Bandwidth',
+              legend: ['of bandwidth are used by ', 'of assets']
+            },
+            attributes: {
+              style: {width: '50%', marginRight: '20px'},
+              id: 'DoughnutChartBandwidth',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'}
+            },
+            chartOptions: {
+              highlightedColor1: "#5E2B78",
+              highlightedColor2: "#8ABB24",
+              nonHighlightedColor: "#CCCCCC"
+            },
+            chartData: {
+              fieldMapping: [
+                {
+                  reportId: 'taf_asset_count_time_shifted',
+                  columns: [
+                    '0.0'
+                  ]
+                },
+                {
+                  reportId: 'taf_total_usage',
+                  columns: [
+                    'bandwidth'
+                  ]
+                },
+                {
+                  reportId: 'taf_top_talkers_bandwidth',
+                  columns: [
+                    'bandwidth'
+                  ]
+                }
+              ]
+            }
+          }/*,
           {
             type: 'DoughnutChart',
             parent:'Compound',
@@ -980,10 +1022,10 @@ const layout = {
                 fieldValue: [1]
               }
             ]
-          }
+          }*/
         ]
       }
-    ]*/
+    ]
   ]
 };
 
