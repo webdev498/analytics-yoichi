@@ -5,7 +5,9 @@ import Header from './PageHeader';
 import Sidebar from './Sidebar';
 import PageContent from './PageContent';
 
-import {updatedApiData} from 'actions/ParentCard';
+import {fetchUserData} from 'actions/auth';
+
+import Loader from 'components/Loader.component';
 
 import 'styles/core.scss';
 
@@ -14,17 +16,22 @@ class CoreLayout extends React.Component {
     super(props);
   }
 
-  handleTimeChange(timeRange) {
-    this.props.updatedApiData(timeRange);
+  componentDidMount() {
+    this.props.fetchUserData();
   }
 
   render () {
+    const {props} = this;
     return (
       <div className="menubar-hoverable header-fixed menubar-visible">
-        <Header title="RANK" handleTimeChange={this.handleTimeChange.bind(this)} />
+        <Header title="RANK" />
         <Sidebar style={{width: '72px'}}></Sidebar>
         <div id="base">
-          <PageContent />
+          {
+            (props.auth.isLoading) ?
+              <Loader /> :
+              <PageContent />
+          }
         </div>
       </div>
     )
@@ -35,4 +42,11 @@ CoreLayout.propTypes = {
   children: PropTypes.element
 };
 
-export default connect(null, {updatedApiData})(CoreLayout);
+function mapStateToProps(state, ownProps) {
+  const {auth} = state;
+  return {
+    auth
+  };
+}
+
+export default connect(mapStateToProps, {fetchUserData})(CoreLayout);

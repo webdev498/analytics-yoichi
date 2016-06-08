@@ -11,3 +11,4 @@ target
 .project
 
 src/static/bower_components
+src/layout.js

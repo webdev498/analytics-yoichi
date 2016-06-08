@@ -1,49 +1,37 @@
 import Cookies from 'cookies-js';
-
-import 'whatwg-fetch';
+import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR} from 'Constants';
 
 const initialState = {
-  loaded: false
+  isLoading: true,
+  isError: false
 };
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case 'USER_DETAILS_LOADED':
+    case USER_DETAILS_LOADING: {
       return {
-        ...state,
-        application: action.result.application,
-        roles: action.result.roles,
-        user: action.result.user
+        isLoading: true,
+        isError: false
+      }
+    }
+    case USER_DETAILS_LOADED: {
+      const {application, roles, user} = action.data.__authDetails;
+      return {
+        application,
+        roles,
+        user,
+        isLoading: false,
+        isError: false
       };
+    }
+    case USER_DETAILS_ERROR: {
+      return {
+        isLoading: false,
+        isError: true,
+        errorData: action.errorData
+      }
+    }
     default:
       return state;
   }
-}
-
-export function isLoaded(globalState, urlHash, store) {
-  if(urlHash && urlHash.indexOf("#access_token") === 0) {
-    let individualParameters = urlHash.split("&");
-
-    if (individualParameters.length > 0) {
-      const accessToken = (individualParameters[0]).replace("#access_token=","");
-      const tokenType = (individualParameters[1]).replace("token_type=","");
-
-      Cookies.set('access_token', accessToken, { path: '/' });
-      Cookies.set('token_type', tokenType, { path: '/' });
-      Cookies.set('loggedin', 'true');
-
-      return true;
-    }
-
-    return false;
-  }
-
-  return Cookies.get('access_token') && Cookies.get('token_type');
-}
-
-export function logout() {
-  return {
-    types: [LOGOUT],
-    promise: (client) => client.get('/logout')
-  };
 }
