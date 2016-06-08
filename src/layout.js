@@ -516,8 +516,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Historical Incoming Bandwidth',
-                  renderas: "Area",
+                  seriesname: 'Current Incoming Bandwidth',
+                  renderas: "Line",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'bytes_in'
@@ -525,8 +525,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Current Incoming Bandwidth',
-                  renderas: "Line",
+                  seriesname: 'Historical Incoming Bandwidth',
+                  renderas: "Area",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'bytes_in'
@@ -569,8 +569,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Historical Outgoing Bandwidth',
-                  renderas: "Area",
+                  seriesname: 'Current Outgoing Bandwidth',
+                  renderas: "Line",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'bytes_out'
@@ -578,8 +578,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Current Outgoing Bandwidth',
-                  renderas: "Line",
+                  seriesname: 'Historical Outgoing Bandwidth',
+                  renderas: "Area",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'bytes_out'
@@ -622,8 +622,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Historical Connections',
-                  renderas: "Area",
+                  seriesname: 'Current Connections',
+                  renderas: "Line",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'conn'
@@ -631,8 +631,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Current Connections',
-                  renderas: "Line",
+                  seriesname: 'Historical Connections',
+                  renderas: "Area",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'conn'
