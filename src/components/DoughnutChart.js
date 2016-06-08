@@ -23,10 +23,19 @@ function calculateDoughnutAttributes(inputArray, chartId) {
       percentage = Math.round((totalValue / parseInt(countValue)) * 100, 2),
       percentage1 = percentage;
 
+  background = '';
+  background2 = '';
+  color = '';
+  color2 = '';
+  transform1 = '';
+  transform2 = '';
+  calculateTransform1 = 0;
+  calculateTransform2 = 0;
+
   if (percentage == 0) {
     percentage = Math.round((totalValue / parseInt(countValue)) * 100, 4);
   }
-  if (percentage > 100){
+  if (percentage > 100) {
     percentage = 100;
   }
   background = nonHighlightedColor;
@@ -58,6 +67,7 @@ function calculateDoughnutAttributes(inputArray, chartId) {
 }
 
 function generateDoughnutChart (inputArray) {
+  doughnutAttributes = {};//This initialization is required
   const doughnutInputArray1 = {
                                 countValue: inputArray.countValue,
                                 totalValue: inputArray.top10CountValue
@@ -107,20 +117,22 @@ const renderChart = (props) => {
   rawData = generateRawData(fieldMapping, data);
 
   for (let i = 0; i < fieldMapping.length; i++) {
-    let currentChartData = fieldMapping[i];
-    let currentDataRows = [];
+    let currentChartData = fieldMapping[i],
+        currentDataRows = [],
+        columnsArray = [],
+        columnIndex = '';
+
     if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
       currentDataRows = rawData[currentChartData.reportId].rows;
     }
 
-    let columnIndexArray = [];
-    let columnsArray = [];
     if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
       columnsArray = rawData[currentChartData.reportId].columns;
     }
 
-    let columnIndex = '';
     top10CountValue = 0;
+    top10TotalValue = 0;
+
     for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
       if (currentChartData.reportId === 'taf_asset_count_time_shifted') {
         let fieldValue = '',
@@ -135,13 +147,15 @@ const renderChart = (props) => {
 
         countValue = getIndexFromObjectName(inputArray);
       }
+
       if (currentChartData.reportId === 'taf_total_usage') {
-        columnIndex = getIndexFromColumnName(columnIndex, currentChartData.columns, columnsArray);
+        columnIndex = getIndexFromColumnName(currentChartData.columns, columnsArray);
         totalValue = currentDataRows[d][columnIndex];
       }
+
       if (currentChartData.reportId === 'taf_top_talkers_connections' || currentChartData.reportId === 'taf_top_talkers_bandwidth') {
         let fieldValue = '';
-        columnIndex = getIndexFromColumnName(columnIndex, currentChartData.columns, columnsArray);
+        columnIndex = getIndexFromColumnName(currentChartData.columns, columnsArray);
         fieldValue = currentDataRows[d][columnIndex];
         let value = Math.round(((fieldValue * 100) / totalValue), 2);
         if (value > 0) {

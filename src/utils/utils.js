@@ -61,6 +61,7 @@ export function msToTime(duration) {
   return [hours, minutes, seconds];// + milliseconds;
 }
 
+//Function to generate row data
 export function generateRawData(fieldMapping, apiData) {
   let rawData = {};
   for (let i = 0; i < fieldMapping.length; i++) {
@@ -80,7 +81,9 @@ export function generateRawData(fieldMapping, apiData) {
   return rawData;
 }
 
-export function getIndexFromColumnName(columnIndex, currentChartDataColumns, columnsArray) {
+//Function to get index from column name specified in layout JSON
+export function getIndexFromColumnName(currentChartDataColumns, columnsArray) {
+  let columnIndex = '';
   for (let a = 0; a < currentChartDataColumns.length; a++) {
     for (let c = 0; c < columnsArray.length; c++) {
       if (currentChartDataColumns[a] === columnsArray[c].name) {
@@ -92,6 +95,21 @@ export function getIndexFromColumnName(columnIndex, currentChartDataColumns, col
   return columnIndex;
 }
 
+//Function to get column index array from column names specified in layout JSON
+export function getColumnIndexArrayFromColumnName(currentChartDataColumns, columnsArray) {
+  let columnIndexArray = [];
+  for (let a = 0; a < currentChartDataColumns.length; a++) {
+    for (let c = 0; c < columnsArray.length; c++) {
+      if (currentChartDataColumns[a] === columnsArray[c].name) {
+        columnIndexArray[a] = c;
+        break;
+      }
+    }
+  }
+  return columnIndexArray;
+}
+
+//Function to get index from object name specified in layout JSON
 export function getIndexFromObjectName(inputArray) {
   let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
   if (fieldName.indexOf('.') > -1) {
@@ -119,11 +137,11 @@ export function getIndexFromObjectName(inputArray) {
   return fieldValue;
 }
 
+//Function to check for undefined chartOption object
 export function checkForUndefinedChartOptionObject(chartOptions, objectName, defaultValue) {
   let value = defaultValue;
   if (chartOptions !== undefined && chartOptions[objectName] !== undefined) {
     value = chartOptions[objectName];
   }
-  console.log(value);
   return value;
 }

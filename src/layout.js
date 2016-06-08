@@ -654,15 +654,18 @@ const layout = {
             },
             chartOptions: {
             },
-            chartData: [
-              {
-                reportId: 'taf_connections_by_protocol',
-                columns: [
-                  'protocol.service',
-                  'date'
-                ]
-              }
-            ]
+            chartData: {
+              multipleReportIds: false,
+              fieldMapping: [
+                {
+                  reportId: 'taf_connections_by_protocol',
+                  columns: [
+                    'protocol.service',
+                    'date'
+                  ]
+                }
+              ]
+            }
           }
         ]
       }
@@ -925,104 +928,85 @@ const layout = {
                 }
               ]
             }
-          }/*,
-          {
-            type: 'DoughnutChart',
-            parent:'Compound',
-            meta: {
-              showHeader: false,
-              title: 'Top Bandwidth',
-              legend: ['of bandwidth are used by ', 'of assets']
-            },
-            attributes: {
-              style: {width: '50%', marginRight: '20px'},
-              id: 'DoughnutChartBandwidth',
-              variation: '3d'
-            },
-            apiFieldMapping: [
-              {
-                api: 0,
-                fieldName: 'assetCount',
-                fieldValue: [0,0,0]
-              },
-              {
-                api: 1,
-                fieldName: 'totalBandwidth',
-                fieldValue: [0,1]
-              },
-              {
-                api: 3,
-                fieldName: 'top10Bandwidth',
-                fieldValue: [1]
-              }
-            ]
           },
           {
             type: 'HorizontalBarChart',
             parent:'Compound',
             meta: {
               showHeader: false,
-              title: 'Top IPs using the highest number of connections',
-              chartOptions: {
-                'numberSuffix': '%'
-              }
+              title: 'Top IPs using the highest number of connections'
             },
             attributes: {
-              style: {width: '50%', marginRight: '20px'},
-              id: 'HorizontalBarChartConnections',
-              variation: '3d'
+              style: {width: '48%', marginRight: '20px'},
+              id: 'HorizontalBarChartConnections'
             },
-            apiFieldMapping: [
-              {
-                api: 0,
-                fieldName: 'assetCount',
-                fieldValue: [0,0,0]
-              },
-              {
-                api: 1,
-                fieldName: 'totalConnections',
-                fieldValue: [0,0]
-              },
-              {
-                api: 2,
-                fieldName: 'top10Connections',
-                fieldValue: [1]
-              }
-            ]
+            chartOptions: {
+              'numberSuffix': '%'
+            },
+            chartData: {
+              multipleReportIds: true,
+              reportId: 'taf_top_talkers_connections',
+              fieldMapping: [
+                {
+                  reportId: 'taf_asset_count_time_shifted',
+                  columns: [
+                    '0.0'
+                  ]
+                },
+                {
+                  reportId: 'taf_total_usage',
+                  columns: [
+                    'date'
+                  ]
+                },
+                {
+                  reportId: 'taf_top_talkers_connections',
+                  columns: [
+                    'connections'
+                  ]
+                }
+              ]
+            }
           },
           {
             type: 'HorizontalBarChart',
             parent:'Compound',
             meta: {
               showHeader: false,
-              title: 'Top IPs using the highest bandwidth',
-              chartOptions: {
-                'numberSuffix': '%'
-              }
+              title: 'Top IPs using the highest bandwidth'
             },
             attributes: {
-              style: {width: '50%', marginRight: '20px'},
-              id: 'HorizontalBarChartBandwidth',
-              variation: '3d'
+              style: {width: '48%', marginRight: '20px'},
+              id: 'HorizontalBarChartBandwidth'
             },
-            apiFieldMapping: [
-              {
-                api: 0,
-                fieldName: 'assetCount',
-                fieldValue: [0,0,0]
-              },
-              {
-                api: 1,
-                fieldName: 'totalBandwidth',
-                fieldValue: [0,1]
-              },
-              {
-                api: 3,
-                fieldName: 'top10Bandwidth',
-                fieldValue: [1]
-              }
-            ]
-          }*/
+            chartOptions: {
+              'numberSuffix': '%'
+            },
+            chartData: {
+              multipleReportIds: true,
+              reportId: 'taf_top_talkers_bandwidth',
+              fieldMapping: [
+                {
+                  reportId: 'taf_asset_count_time_shifted',
+                  columns: [
+                    '0.0'
+                  ]
+                },
+                {
+                  reportId: 'taf_total_usage',
+                  columns: [
+                    'bandwidth'
+                  ]
+                },
+                {
+                  reportId: 'taf_top_talkers_bandwidth',
+                  columns: [
+                    'bandwidth'
+                  ]
+                }
+              ]
+            }
+          }
         ]
       }
     ]
