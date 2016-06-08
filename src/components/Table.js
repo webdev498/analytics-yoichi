@@ -2,6 +2,7 @@ import React from 'react';
 import Reactable from 'reactable';
 import ThreatAnalyticsGraph from 'components/ThreatAnalyticsGraph';
 
+import DurationWidget from 'components/DurationWidget';
 import moment from 'moment';
 import {generateChartDataSource, msToTime, generateRawData, getIndexFromObjectName} from 'utils/utils';
 
@@ -35,7 +36,8 @@ const generateDataSource = (props) => {
         columnIndexArray = [],
         columnsArray = rawData[currentTableData.reportId].columns,
         columnText = '',
-        chartValue = '';
+        chartValue = '',
+        timeValue = '';
 
     let currentDataRowsCount = 0;
     if (currentDataRows !== undefined && currentDataRows.length !== undefined) {
@@ -72,12 +74,14 @@ const generateDataSource = (props) => {
               displayName: displayName,
               fieldValue: fieldValue,
               columnText: columnText,
-              chartValue: chartValue
+              chartValue: chartValue,
+              timeValue: timeValue
             }
 
             let columnTextObj = getColumnText(columnDetails);
             chartValue = columnTextObj.chartValue;
             columnText = columnTextObj.columnText;
+            timeValue = columnTextObj.timeValue;
           } else {
             //Calculate column index from API response
             for (let c = 0; c < columnsArray.length; c++) {
@@ -94,12 +98,14 @@ const generateDataSource = (props) => {
                   displayName: displayName,
                   fieldValue: fieldValue,
                   columnText: columnText,
-                  chartValue: chartValue
+                  chartValue: chartValue,
+                  timeValue: timeValue
                 }
 
                 let columnTextObj = getColumnText(columnDetails);
                 chartValue = columnTextObj.chartValue;
                 columnText = columnTextObj.columnText;
+                timeValue = columnTextObj.timeValue;
                 break;
               }
             }
@@ -112,7 +118,8 @@ const generateDataSource = (props) => {
               currentTableData: currentTableData.columns[a],
               chartValue: chartValue,
               columnText: columnText,
-              rowNumber: d
+              rowNumber: d,
+              timeValue: timeValue
             };
         mainObject = generateRowObject(rowDetails, mainObject);
         columnText = '';
@@ -124,11 +131,14 @@ const generateDataSource = (props) => {
 }
 
 function getColumnText(columnDetails) {
-  let {currentColumnType, fieldName, displayName, fieldValue, columnText, chartValue} = columnDetails;
+  let {currentColumnType, fieldName, displayName, fieldValue, columnText, chartValue, timeValue} = columnDetails;
 
   switch (currentColumnType) {
     case 'chart':
       chartValue = fieldValue;
+      break;
+    case 'durationWidget':
+      timeValue = fieldValue;
       break;
     case "text":
       if (fieldValue !== undefined && fieldValue !== '' && fieldValue !== null) {
@@ -139,11 +149,6 @@ function getColumnText(columnDetails) {
               fieldValueInLocalTime = moment(fieldValueInLocalTime).format('D MMM YYYY HH:mm:ss');
               fieldValue = fieldValueInLocalTime;
               columnText += fieldValue;
-            }
-            else if (displayName == 'duration') {
-              let time = msToTime(fieldValue);
-              let durationWidgetDisplay = '<div style="float:left;"><div class="duration">' + time[0] + '</div><br/><div class="durationLabel">Hour</div></div><div class="durationSeparator">:</div><div style="float:left;"><div class="duration">' + time[1] + '</div><br/><div class="durationLabel">Min</div></div><div class="durationSeparator">:</div><div style="float:left;"><div class="duration">' + time[2] + '</div><br/><div class="durationLabel">Sec</div></div>';
-              columnText += durationWidgetDisplay;//time[0] + ":" + time[1] + ":" + time[2];
             }
             else if (displayName == 'port') {
               columnText += ':' + fieldValue;
@@ -173,11 +178,7 @@ function getColumnText(columnDetails) {
               fieldValue = fieldValueInLocalTime;
               columnText += fieldValue;
             }
-            else if (displayName == 'duration') {
-              let time = msToTime(fieldValue);
-              let durationWidgetDisplay = '<div style="float:left;"><div class="duration">' + time[0] + '</div><br/><div class="durationLabel">Hour</div></div><div class="durationSeparator">:</div><div style="float:left;"><div class="duration">' + time[1] + '</div><br/><div class="durationLabel">Min</div></div><div class="durationSeparator">:</div><div style="float:left;"><div class="duration">' + time[2] + '</div><br/><div class="durationLabel">Sec</div></div>';
-              columnText += durationWidgetDisplay;//time[0] + ":" + time[1] + ":" + time[2];
-            } else if (displayName === undefined) {
+            else if (displayName === undefined) {
               columnText += '<br/>' + fieldValue;
             } else {
               if (displayName !== '') {
@@ -192,19 +193,18 @@ function getColumnText(columnDetails) {
         }
       }
       break;
-    case "durationWidget":
-      break;
     default:
       break;
   }
   return {columnText: columnText,
-    chartValue: chartValue
+    chartValue: chartValue,
+    timeValue: timeValue
   };
 }
 
 function generateRowObject(rowDetails, mainObject) {
   let rowObj = {},
-      {currentColumnType, currentTableData, chartValue, columnText, rowNumber} = rowDetails;
+      {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue} = rowDetails;
   switch(currentColumnType) {
     case 'chart':
       rowObj = {
@@ -227,6 +227,17 @@ function generateRowObject(rowDetails, mainObject) {
         columnName: currentTableData.columnNameToDisplay,
         columnStyle: currentTableData.style,
         columnText: unsafe(columnText)
+      }
+      columnText = '';
+      mainObject.columns.push(rowObj);
+      break;
+    case 'durationWidget':
+      rowObj = {
+        columnType: currentColumnType,
+        columnName: currentTableData.columnNameToDisplay,
+        columnStyle: currentTableData.style,
+        columnText: unsafe(columnText),
+        timeValue: timeValue
       }
       columnText = '';
       mainObject.columns.push(rowObj);
@@ -261,6 +272,15 @@ const tableCard = (props) => (
                         value={tableColumn.chartValue}
                         style={tableColumn.columnStyle}>
                       <ThreatAnalyticsGraph chartProperties={tableColumn}/>
+                    </Td>
+                  );
+                }
+                if (tableColumn.columnType == 'durationWidget') {
+                  return (
+                    <Td column={tableColumn.columnName}
+                        value={tableColumn.timeValue}
+                        style={tableColumn.columnStyle}>
+                      <DurationWidget timeValue={tableColumn.timeValue}/>
                     </Td>
                   );
                 }

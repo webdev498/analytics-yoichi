@@ -516,8 +516,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Historical Incoming Bandwidth',
-                  renderas: "Area",
+                  seriesname: 'Current Incoming Bandwidth',
+                  renderas: "Line",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'bytes_in'
@@ -525,8 +525,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Current Incoming Bandwidth',
-                  renderas: "Line",
+                  seriesname: 'Historical Incoming Bandwidth',
+                  renderas: "Area",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'bytes_in'
@@ -569,8 +569,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Historical Outgoing Bandwidth',
-                  renderas: "Area",
+                  seriesname: 'Current Outgoing Bandwidth',
+                  renderas: "Line",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'bytes_out'
@@ -578,8 +578,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Current Outgoing Bandwidth',
-                  renderas: "Line",
+                  seriesname: 'Historical Outgoing Bandwidth',
+                  renderas: "Area",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'bytes_out'
@@ -622,8 +622,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Historical Connections',
-                  renderas: "Area",
+                  seriesname: 'Current Connections',
+                  renderas: "Line",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'conn'
@@ -631,8 +631,8 @@ const layout = {
                 },
                 {
                   axis: 'y',
-                  seriesname: 'Current Connections',
-                  renderas: "Line",
+                  seriesname: 'Historical Connections',
+                  renderas: "Area",
                   reportId: 'taf_stats_histogram',
                   columns: [
                     'conn'
@@ -654,15 +654,18 @@ const layout = {
             },
             chartOptions: {
             },
-            chartData: [
-              {
-                reportId: 'taf_connections_by_protocol',
-                columns: [
-                  'protocol.service',
-                  'date'
-                ]
-              }
-            ]
+            chartData: {
+              multipleReportIds: false,
+              fieldMapping: [
+                {
+                  reportId: 'taf_connections_by_protocol',
+                  columns: [
+                    'protocol.service',
+                    'date'
+                  ]
+                }
+              ]
+            }
           }
         ]
       }
@@ -705,7 +708,7 @@ const layout = {
                 style: {width: '15%'}
               },
               {
-                type: 'text',
+                type: 'durationWidget',
                 columnNameToDisplay: 'Duration',
                 data: [
                   {
@@ -814,7 +817,7 @@ const layout = {
           filterBy:""
         }
       }
-    ]/*,
+    ],
     [
       {
         id:'85',
@@ -852,37 +855,37 @@ const layout = {
             },
             attributes: {
               style: {width: '50%', marginRight: '20px'},
-              id: 'DoughnutChartConnections'
+              id: 'DoughnutChartConnections',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'}
             },
             chartOptions: {
-              "xAxisName": "Time",
-              "yAxisName": "Incoming Bandwidth",
-              "lineThickness":"5",
-              "paletteColors": "#d3d3d3, #D93609, #0505F5, #ACF50F,#FCFC0D, #05E9F5",
-              "drawAnchors":"0",
-              "usePlotGradientColor": "1",
-              "plotGradientColor": "#887788"
+              highlightedColor1: "#5E2B78",
+              highlightedColor2: "#8ABB24",
+              nonHighlightedColor: "#CCCCCC"
             },
-            chartData: [
-              {
-                reportId: 'taf_asset_count_time_shifted',
-                columns: [
-                  '0.0'
-                ]
-              },
-              {
-                reportId: 'taf_total_usage',
-                columns: [
-                  'count of date'
-                ]
-              },
-              {
-                reportId: 'taf_top_talkers_connections',
-                columns: [
-                  'count of date'
-                ]
-              }
-            ]
+            chartData: {
+              fieldMapping: [
+                {
+                  reportId: 'taf_asset_count_time_shifted',
+                  columns: [
+                    '0.0'
+                  ]
+                },
+                {
+                  reportId: 'taf_total_usage',
+                  columns: [
+                    'date'
+                  ]
+                },
+                {
+                  reportId: 'taf_top_talkers_connections',
+                  columns: [
+                    'connections'
+                  ]
+                }
+              ]
+            }
           },
           {
             type: 'DoughnutChart',
@@ -895,95 +898,118 @@ const layout = {
             attributes: {
               style: {width: '50%', marginRight: '20px'},
               id: 'DoughnutChartBandwidth',
-              variation: '3d'
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'}
             },
-            apiFieldMapping: [
-              {
-                api: 0,
-                fieldName: 'assetCount',
-                fieldValue: [0,0,0]
-              },
-              {
-                api: 1,
-                fieldName: 'totalBandwidth',
-                fieldValue: [0,1]
-              },
-              {
-                api: 3,
-                fieldName: 'top10Bandwidth',
-                fieldValue: [1]
-              }
-            ]
+            chartOptions: {
+              highlightedColor1: "#5E2B78",
+              highlightedColor2: "#8ABB24",
+              nonHighlightedColor: "#CCCCCC"
+            },
+            chartData: {
+              fieldMapping: [
+                {
+                  reportId: 'taf_asset_count_time_shifted',
+                  columns: [
+                    '0.0'
+                  ]
+                },
+                {
+                  reportId: 'taf_total_usage',
+                  columns: [
+                    'bandwidth'
+                  ]
+                },
+                {
+                  reportId: 'taf_top_talkers_bandwidth',
+                  columns: [
+                    'bandwidth'
+                  ]
+                }
+              ]
+            }
           },
           {
             type: 'HorizontalBarChart',
             parent:'Compound',
             meta: {
               showHeader: false,
-              title: 'Top IPs using the highest number of connections',
-              chartOptions: {
-                'numberSuffix': '%'
-              }
+              title: 'Top IPs using the highest number of connections'
             },
             attributes: {
-              style: {width: '50%', marginRight: '20px'},
-              id: 'HorizontalBarChartConnections',
-              variation: '3d'
+              style: {width: '48%', marginRight: '20px'},
+              id: 'HorizontalBarChartConnections'
             },
-            apiFieldMapping: [
-              {
-                api: 0,
-                fieldName: 'assetCount',
-                fieldValue: [0,0,0]
-              },
-              {
-                api: 1,
-                fieldName: 'totalConnections',
-                fieldValue: [0,0]
-              },
-              {
-                api: 2,
-                fieldName: 'top10Connections',
-                fieldValue: [1]
-              }
-            ]
+            chartOptions: {
+              'numberSuffix': '%'
+            },
+            chartData: {
+              multipleReportIds: true,
+              reportId: 'taf_top_talkers_connections',
+              fieldMapping: [
+                {
+                  reportId: 'taf_asset_count_time_shifted',
+                  columns: [
+                    '0.0'
+                  ]
+                },
+                {
+                  reportId: 'taf_total_usage',
+                  columns: [
+                    'date'
+                  ]
+                },
+                {
+                  reportId: 'taf_top_talkers_connections',
+                  columns: [
+                    'connections'
+                  ]
+                }
+              ]
+            }
           },
           {
             type: 'HorizontalBarChart',
             parent:'Compound',
             meta: {
               showHeader: false,
-              title: 'Top IPs using the highest bandwidth',
-              chartOptions: {
-                'numberSuffix': '%'
-              }
+              title: 'Top IPs using the highest bandwidth'
             },
             attributes: {
-              style: {width: '50%', marginRight: '20px'},
-              id: 'HorizontalBarChartBandwidth',
-              variation: '3d'
+              style: {width: '48%', marginRight: '20px'},
+              id: 'HorizontalBarChartBandwidth'
             },
-            apiFieldMapping: [
-              {
-                api: 0,
-                fieldName: 'assetCount',
-                fieldValue: [0,0,0]
-              },
-              {
-                api: 1,
-                fieldName: 'totalBandwidth',
-                fieldValue: [0,1]
-              },
-              {
-                api: 3,
-                fieldName: 'top10Bandwidth',
-                fieldValue: [1]
-              }
-            ]
+            chartOptions: {
+              'numberSuffix': '%'
+            },
+            chartData: {
+              multipleReportIds: true,
+              reportId: 'taf_top_talkers_bandwidth',
+              fieldMapping: [
+                {
+                  reportId: 'taf_asset_count_time_shifted',
+                  columns: [
+                    '0.0'
+                  ]
+                },
+                {
+                  reportId: 'taf_total_usage',
+                  columns: [
+                    'bandwidth'
+                  ]
+                },
+                {
+                  reportId: 'taf_top_talkers_bandwidth',
+                  columns: [
+                    'bandwidth'
+                  ]
+                }
+              ]
+            }
           }
         ]
       }
-    ]*/
+    ]
   ]
 };
 

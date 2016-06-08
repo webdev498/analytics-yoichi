@@ -29,13 +29,13 @@ function generateChartDataSource(rawData, props) {
     //Check for x-axis chart data
     if (currentChartData.axis !== undefined && currentChartData.axis === 'x') {
       //Calculate column index from API response
-      xColumnIndex = getIndexFromColumnName(xColumnIndex, currentChartData.columns, columnsArray);
+      xColumnIndex = getIndexFromColumnName(currentChartData.columns, columnsArray);
     }
 
     //Check for y-axis chart data
     if (currentChartData.axis !== undefined && currentChartData.axis === 'y') {
       //Calculate column index from API response
-      yColumnIndex = getIndexFromColumnName(yColumnIndex, currentChartData.columns, columnsArray);
+      yColumnIndex = getIndexFromColumnName(currentChartData.columns, columnsArray);
     }
   }
 

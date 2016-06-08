@@ -1,51 +1,7 @@
 import React from 'react';
+import {generateRawData, getColumnIndexArrayFromColumnName, getIndexFromColumnName, getIndexFromObjectName} from 'utils/utils';
 
-let className;
-
-function generateChartDataSource(rawData, props) {
-
-  const chartOptions = props.chartOptions;
-  const chartData = props.chartData;
-  const dataset = [];
-
-  for (let i = 0; i < chartData.length; i++) {
-    let currentChartData = chartData[i];
-    let currentDataRows = [];
-    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
-      currentDataRows = rawData[currentChartData.reportId].rows;
-    }
-    let columnIndexArray = [];
-    let columnsArray = [];
-    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
-      columnsArray = rawData[currentChartData.reportId].columns;
-    }
-
-    //Calculate column index from API response
-    for (let a = 0; a < currentChartData.columns.length; a++) {
-      for (let c = 0; c < columnsArray.length; c++) {
-        if (currentChartData.columns[a] === columnsArray[c].name) {
-          columnIndexArray[a] = c;
-          break;
-        }
-      }
-    }
-
-    //Get column data for x-axis
-    if (columnIndexArray.length !== 0) {
-      for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
-        let obj1 = {};
-        obj1.label = currentDataRows[d][columnIndexArray[0]];
-        if (obj1.label.length > 13) {
-          obj1.label = obj1.label.substring(0, 13) + " (...)";
-        }
-        obj1.value = currentDataRows[d][columnIndexArray[1]];
-        obj1.toolText = currentDataRows[d][columnIndexArray[0]] + ", " + currentDataRows[d][columnIndexArray[1]];
-        dataset.push(obj1);
-      }
-    }
-  }
-
-  const dataSourceObject = {
+const dataSourceObject = {
     chart: {
       "bgColor": "#ffffff",
       "showborder": "0",
@@ -70,30 +26,137 @@ function generateChartDataSource(rawData, props) {
       "toolTipBgAlpha": "80",
       "toolTipBorderRadius": "2",
       "toolTipPadding": "5",
-      "useRoundEdges":"1",
       "showYAxisValues":"0",
       'showValues':'1',
       "paletteColors": "#ACF50F,#D93609,#FCFC0D, #05E9F5,#0505F5",
       "xAxisNameFontSize":"14",
       "yAxisNameFontSize":"14",
-      "labelFontSize": "13",
+      "labelFontSize": "13"
     }
   };
+
+let countValue = 0,
+    totalValue = 0,
+    top10TotalValue = 0,
+    top10CountValue = 0,
+    averageValue = '';
+
+
+function generateDataArray(columnIndexArray, rowsArray) {
+  let dataset = [];
+  if (columnIndexArray.length !== 0) {
+    for (let d = 0, rowsLen = rowsArray.length; d < rowsLen; d++) {
+      let obj1 = {};
+      obj1.label = rowsArray[d][columnIndexArray[0]];
+      if (obj1.label.length > 15) {
+        obj1.label = obj1.label.substring(0, 15) + " (...)";
+      }
+      obj1.value = rowsArray[d][columnIndexArray[1]];
+      obj1.toolText = rowsArray[d][columnIndexArray[0]] + ", " + rowsArray[d][columnIndexArray[1]];
+      dataset.push(obj1);
+    }
+  }
+  return dataset;
+}
+
+function generateChartDataSource(rawData, props) {
+  const chartOptions = props.chartOptions,
+        fieldMapping = props.chartData.fieldMapping,
+        multipleReportIds = props.chartData.multipleReportIds;
+
+  let dataset = [],
+      columnsArray = [];
+
+  for (let i = 0; i < fieldMapping.length; i++) {
+    let currentChartData = fieldMapping[i],
+        currentDataRows = [],
+        columnIndexArray = [];
+
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
+      currentDataRows = rawData[currentChartData.reportId].rows;
+    }
+
+    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
+      columnsArray = rawData[currentChartData.reportId].columns;
+    }
+
+    //Calculate column index from API response
+    if (multipleReportIds) {
+      top10CountValue = 0;
+      top10TotalValue = 0;
+
+      for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
+        if (currentChartData.reportId === 'taf_asset_count_time_shifted') {
+          let fieldValue = '',
+            fieldName = currentChartData.columns[0],
+            fieldValueArray = [],
+            inputArray = {
+                  fieldName: fieldName,
+                  fieldValueArray: fieldValueArray,
+                  fieldValue: fieldValue,
+                  dataArray: currentDataRows[d]
+                };
+
+          countValue = getIndexFromObjectName(inputArray);
+        }
+
+        if (currentChartData.reportId === 'taf_total_usage') {
+          let columnIndex = '';
+          columnIndex = getIndexFromColumnName(currentChartData.columns, columnsArray);
+          totalValue = currentDataRows[d][columnIndex];
+        }
+
+        if (currentChartData.reportId === 'taf_top_talkers_connections' ||
+          currentChartData.reportId === 'taf_top_talkers_bandwidth') {
+          let fieldValue = '',
+              columnIndex = '';
+          columnIndex = getIndexFromColumnName(currentChartData.columns, columnsArray);
+          fieldValue = currentDataRows[d][columnIndex];
+          let value = Math.round(((fieldValue * 100) / totalValue), 2);
+          if (value > 0) {
+            top10CountValue = top10CountValue + 1;
+            top10TotalValue = top10TotalValue + parseInt(fieldValue);
+          }
+        }
+      }
+
+      const reportId = props.chartData.reportId;
+      currentDataRows = rawData[reportId].rows;
+      let average = top10TotalValue / parseInt(countValue),
+          newRawData = [];
+      averageValue = Math.round(((average * 100) / totalValue), 2);
+
+      for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
+        let obj = [];
+        obj[0] = currentDataRows[d][0];
+        let value = Math.round(((currentDataRows[d][1] * 100) / totalValue), 2);
+        obj[1] = value;
+        if (value > 0) {
+          newRawData.push(obj);
+        }
+      }
+      columnIndexArray = [0,1];
+      dataset = generateDataArray(columnIndexArray, newRawData);
+    } else {
+      columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columnsArray);
+      dataset = generateDataArray(columnIndexArray, currentDataRows);
+    }
+  }
 
   let finalChartOptions = Object.assign(dataSourceObject.chart, chartOptions);
   dataSourceObject.chart = finalChartOptions;
 
   if (dataset.length > 0) dataSourceObject.data = dataset;
 
-  if (chartOptions.averageValue != undefined) {
+  if (averageValue !== undefined && averageValue !== '') {
     dataSourceObject.trendlines = [
       {
         "line": [
           {
-            "startvalue": chartOptions.averageValue,
+            "startvalue": averageValue,
             "color": "#1aaf5d",
             "valueOnRight": "1",
-            "displayvalue": chartOptions.averageValue + "%",
+            "displayvalue": averageValue + "%",
             "dashed": "1",
             "dashLen": "4",
             "dashGap": "2"
@@ -104,33 +167,18 @@ function generateChartDataSource(rawData, props) {
   }
 
   return dataSourceObject;
-};
+}
 
 const renderChart = (props) => {
-  /*if (props.props.parent === undefined) {
-    return;
-  }*/
-  const data = props.data;
-
-  if (!data) {
+  if (!props.data) {
     return;
   }
 
-  const mainData = data;
-  const chartData = props.chartData;
-  //const parent = props.parent;
+  const data = props.data,
+        fieldMapping = props.chartData.fieldMapping;
 
   let rawData = {};
-  for (let i = 0; i < chartData.length; i++) {
-    let currentChartData = chartData[i];
-    if (props.multiData === null && mainData[currentChartData.reportId] === undefined){
-      return;
-    } else {
-      if (!rawData.hasOwnProperty(currentChartData.reportId)) {
-        rawData[currentChartData.reportId] = mainData[currentChartData.reportId];
-      }
-    }
-  }
+  rawData = generateRawData(fieldMapping, data);
 
   FusionCharts.ready(function(){
       const fusioncharts = new FusionCharts({

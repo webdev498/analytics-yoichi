@@ -1,280 +1,205 @@
 import React from 'react';
+import {generateRawData, getIndexFromObjectName, getIndexFromColumnName, checkForUndefinedChartOptionObject} from 'utils/utils';
 
-var doughnutAttributes = {};
+let highlightedColor1 = "#5E2B78", //Purple (Default colors set)
+    highlightedColor2 = "#8ABB24", //Green (Default colors set)
+    nonHighlightedColor = "#CCCCCC", //Gray (Default colors set)
+    doughnutAttributes = {},
+    countValue = 0,
+    totalValue = 0,
+    top10TotalValue = 0,
+    top10CountValue = 0,
+    background = '',
+    background2 = '',
+    color = '',
+    color2 = '',
+    transform1 = '',
+    transform2 = '',
+    calculateTransform1 = 0,
+    calculateTransform2 = 0;
 
-function generateDoughnutChart (assetsCount, topAssetsCount, top10Count, totalCount) {
-  var highlightedColor1 = "#5E2B78"; //Purple
-  var highlightedColor2 = "#8ABB24"; //Green
-  var nonHighlightedColor = "#CCCCCC"; //Gray
+function calculateDoughnutAttributes(inputArray, chartId) {
+  let {countValue, totalValue} = inputArray,
+      percentage = Math.round((totalValue / parseInt(countValue)) * 100, 2),
+      percentage1 = percentage;
 
-  var percentage = Math.round((topAssetsCount / parseInt(assetsCount)) * 100, 2);
-  var percentage1 = percentage;
+  background = '';
+  background2 = '';
+  color = '';
+  color2 = '';
+  transform1 = '';
+  transform2 = '';
+  calculateTransform1 = 0;
+  calculateTransform2 = 0;
+
   if (percentage == 0) {
-    percentage = Math.round((topAssetsCount / parseInt(assetsCount)) * 100, 4);
+    percentage = Math.round((totalValue / parseInt(countValue)) * 100, 4);
   }
-
-  if (percentage > 100) percentage = 100;
-  var background = nonHighlightedColor;
-  var color = highlightedColor2;
-  var background2 = background;
-  var color2 = color;
-  var transform1 = "rotate(90deg)";
-  var calculateTransform2 = (percentage/100*360);
-  var transform2 = "rotate("+calculateTransform2+"deg)";
+  if (percentage > 100) {
+    percentage = 100;
+  }
+  background = nonHighlightedColor;
+  color = (chartId === 1) ? highlightedColor2 : highlightedColor1;
+  background2 = background;
+  color2 = color;
+  transform1 = "rotate(90deg)";
+  calculateTransform2 = (percentage/100*360);
+  transform2 = "rotate("+calculateTransform2+"deg)";
 
   if (percentage < 50) {
     background = color;
     color = background2;
     color2 = background2;
-    var calculateTransform1 = (percentage/100*360+90);
+    calculateTransform1 = (percentage/100*360+90);
     transform1 = "rotate("+calculateTransform1+"deg)";
     transform2 = "rotate(0deg)";
   }
 
-  var chart1Background = {background: background};
-  var chart1SliceOneStyle = {transform: transform1, WebkitTransform: transform1, background: color};
-  var chart1SliceTwoStyle = {transform: transform2, WebkitTransform: transform2, background: color2};
-  /**********************************************************/
+  const chartBackground = {background: background},
+        chartSliceOneStyle = {transform: transform1, WebkitTransform: transform1, background: color},
+        chartSliceTwoStyle = {transform: transform2, WebkitTransform: transform2, background: color2};
 
-  var percentage = Math.round((top10Count / totalCount) * 100, 2);
-  var percentage2 = percentage;
-  if (percentage == 0) {
-    percentage = Math.round((top10Count / totalCount) * 100, 4);
+  return {
+    chartBackground: chartBackground,
+    chartSliceOneStyle: chartSliceOneStyle,
+    chartSliceTwoStyle: chartSliceTwoStyle
   }
+}
 
-  if (percentage > 100) percentage = 100;
-  var background = nonHighlightedColor;
-  var color = highlightedColor1;
-  var background2 = background;
-  var color2 = color;
-  var transform1 = "rotate(90deg)";
-  var calculateTransform2 = (percentage/100*360);
-  var transform2 = "rotate("+calculateTransform2+"deg)";
-
-  if (percentage < 50) {
-    background = color;
-    color = background2;
-    color2 = background2;
-    var calculateTransform1 = (percentage/100*360+90);
-    transform1 = "rotate("+calculateTransform1+"deg)";
-    transform2 = "rotate(0deg)";
-  }
-
-  var chart2Background = {background: background};
-  var chart2SliceOneStyle = {transform: transform1, WebkitTransform: transform1, background: color};
-  var chart2SliceTwoStyle = {transform: transform2, WebkitTransform: transform2, background: color2};
-
-  var assetPercentage = "";
-  if (percentage1 == 0) {assetPercentage = assetsCount;}
-  else {assetPercentage = percentage1;}
-
-  var displayPercentage1 = percentage1.toString() + '%';
-
-  var percentage2Color = {fontWeight:'bold',color:highlightedColor1};
-  var percentage1Color = {fontWeight:'bold',color:highlightedColor2};
+function generateDoughnutChart (inputArray) {
+  doughnutAttributes = {};//This initialization is required
+  const doughnutInputArray1 = {
+                                countValue: inputArray.countValue,
+                                totalValue: inputArray.top10CountValue
+                              },
+        doughnutAttributes1 = calculateDoughnutAttributes(doughnutInputArray1, 1),
+        doughnutInputArray2 = {
+                                countValue: inputArray.totalValue,
+                                totalValue: inputArray.top10TotalValue
+                              },
+        doughnutAttributes2 = calculateDoughnutAttributes(doughnutInputArray2, 2),
+        percentage1 = Math.round((inputArray.top10CountValue / parseInt(inputArray.countValue)) * 100, 2),
+        percentage2 = Math.round((inputArray.top10TotalValue / parseInt(inputArray.totalValue)) * 100, 2),
+        displayPercentage1 = percentage1.toString() + '%',
+        displayPercentage2 = percentage2.toString() + '%',
+        percentage2Color = {fontWeight:'bold',color:highlightedColor1},
+        percentage1Color = {fontWeight:'bold',color:highlightedColor2};
 
   doughnutAttributes = {
-    displayPercentage1: displayPercentage1,
-    percentage2: percentage2,
-    chart1Background: chart1Background,
-    chart1SliceOneStyle: chart1SliceOneStyle,
-    chart1SliceTwoStyle: chart1SliceTwoStyle,
-    chart2Background: chart2Background,
-    chart2SliceOneStyle: chart2SliceOneStyle,
-    chart2SliceTwoStyle: chart2SliceTwoStyle,
+    chart1Background: doughnutAttributes1.chartBackground,
+    chart1SliceOneStyle: doughnutAttributes1.chartSliceOneStyle,
+    chart1SliceTwoStyle: doughnutAttributes1.chartSliceTwoStyle,
+    chart2Background: doughnutAttributes2.chartBackground,
+    chart2SliceOneStyle: doughnutAttributes2.chartSliceOneStyle,
+    chart2SliceTwoStyle: doughnutAttributes2.chartSliceTwoStyle,
     percentage1Color: percentage1Color,
     percentage2Color: percentage2Color,
-    assetPercentage: assetPercentage
-    //assetsCount: assetsCount, topAssetsCount: topAssetsCount, top10Count: top10Count, totalCount: totalCount
+    displayPercentage1: displayPercentage1,
+    displayPercentage2: displayPercentage2
   };
-  //console.log(JSON.stringify(doughnutAttributes));
 }
 
 const renderChart = (props) => {
-
   if(!props.data) {
     return;
   }
 
-  const mainData = props.data;
-  const chartData = props.chartData;
+  const data = props.data,
+        fieldMapping = props.chartData.fieldMapping,
+        chartOptions = props.chartOptions;
+
   let rawData = {};
-  for (let i = 0; i < chartData.length; i++) {
-    let currentChartData = chartData[i];
-    if (mainData === null && mainData[currentChartData.reportId] === undefined){
-      return;
-    } else {
-      if (!rawData.hasOwnProperty(currentChartData.reportId)) {
-        rawData[currentChartData.reportId] = mainData[currentChartData.reportId];
-      }
-    }
-  }
 
-  console.log(JSON.stringify(rawData));
+  highlightedColor1 = checkForUndefinedChartOptionObject(chartOptions, 'highlightedColor1', highlightedColor1);
+  highlightedColor2 = checkForUndefinedChartOptionObject(chartOptions, 'highlightedColor2', highlightedColor2);
+  nonHighlightedColor = checkForUndefinedChartOptionObject(chartOptions, 'nonHighlightedColor', nonHighlightedColor);
 
-  for (let i = 0; i < chartData.length; i++) {
-    let currentChartData = chartData[i];
-    let currentDataRows = [];
+  rawData = generateRawData(fieldMapping, data);
+
+  for (let i = 0; i < fieldMapping.length; i++) {
+    let currentChartData = fieldMapping[i],
+        currentDataRows = [],
+        columnsArray = [],
+        columnIndex = '';
+
     if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
       currentDataRows = rawData[currentChartData.reportId].rows;
     }
-    console.log(JSON.stringify(currentDataRows));
 
-    let columnIndexArray = [];
-    let columnsArray = [];
     if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
       columnsArray = rawData[currentChartData.reportId].columns;
     }
 
-    let columnIndex = null;
+    top10CountValue = 0;
+    top10TotalValue = 0;
+
     for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
-      //Calculate column index from API response
-      for (let a = 0; a < currentChartData.columns.length; a++) {
-        for (let c = 0; c < columnsArray.length; c++) {
-          if (currentChartData.columns[a] === columnsArray[c].name) {
-            columnIndexArray[a] = c;
-            columnIndex = c;
-            break;
-          }
-        }
+      if (currentChartData.reportId === 'taf_asset_count_time_shifted') {
+        let fieldValue = '',
+          fieldName = currentChartData.columns[0],
+          fieldValueArray = [],
+          inputArray = {
+                fieldName: fieldName,
+                fieldValueArray: fieldValueArray,
+                fieldValue: fieldValue,
+                dataArray: currentDataRows[d]
+              };
 
-        if (!columnIndex) {
-          let fieldValue = '',
-            fieldName = currentChartData.columns[a],
-            fieldValueArray = [];alert(fieldName);
-          if (fieldName.indexOf('.') > -1) {
-            fieldValueArray = fieldName.split(".");
-          } else {
-            fieldValueArray = [fieldName];
-          }
+        countValue = getIndexFromObjectName(inputArray);
+      }
 
-          for(let v=0; v<fieldValueArray.length; v++) {
-            if (v == 0) {
-              fieldValue = currentDataRows[d][fieldValueArray[v]];
-              if (fieldValue === undefined) {
-                fieldValue = '';
-                break;
-              }
-            }
-            else {
-              fieldValue = fieldValue[fieldValueArray[v]];
-              if (fieldValue === undefined) {
-                fieldValue = '';
-                break;
-              }
-            }
-          }
-          console.log(fieldValue);
+      if (currentChartData.reportId === 'taf_total_usage') {
+        columnIndex = getIndexFromColumnName(currentChartData.columns, columnsArray);
+        totalValue = currentDataRows[d][columnIndex];
+      }
+
+      if (currentChartData.reportId === 'taf_top_talkers_connections' || currentChartData.reportId === 'taf_top_talkers_bandwidth') {
+        let fieldValue = '';
+        columnIndex = getIndexFromColumnName(currentChartData.columns, columnsArray);
+        fieldValue = currentDataRows[d][columnIndex];
+        let value = Math.round(((fieldValue * 100) / totalValue), 2);
+        if (value > 0) {
+          top10CountValue = top10CountValue + 1;
+          top10TotalValue = top10TotalValue + parseInt(fieldValue);
         }
       }
     }
-      /*let obj1 = {};
-      obj1.label = currentDataRows[d][columnIndexArray[0]];
-      if (obj1.label.length > 13) {
-        obj1.label = obj1.label.substring(0, 13) + " (...)";
-      }
-      obj1.value = currentDataRows[d][columnIndexArray[1]];
-      obj1.toolText = currentDataRows[d][columnIndexArray[0]] + ", " + currentDataRows[d][columnIndexArray[1]];
-      dataset.push(obj1);*/
-  //   }
-    }
+  }
 
-  //console.log(JSON.stringify(props.multiData));
-  /*var apiFieldMapping = props.apiFieldMapping;//console.log(props.apiFieldMapping);
-  var totalValue = 0;//totalConnections OR totalBandwidth
-  var countValue = 0;//assetsCount
-  var top10TotalValue = 0;//top10Connections OR top10Bandwidth
-  var top10CountValue = 0;//topConnectionsAssetsCount OR topBandwidthAssetsCount
+  let inputArray = {
+    countValue:countValue,
+    top10CountValue: top10CountValue,
+    top10TotalValue: top10TotalValue,
+    totalValue: totalValue.toPrecision()
+  };
 
-  for (var a=0; a < apiFieldMapping.length; a++) {
-    var apiFieldMappingIndividual = apiFieldMapping[a];
-    var apiData = props.multiData[apiFieldMappingIndividual.api];
-    apiData = apiData.rows;
-
-    switch (a) {
-      case 0:
-        var fieldValueArray = apiFieldMappingIndividual.fieldValue;
-        var fieldValue = 0;
-        for(let v=0; v<fieldValueArray.length; v++) {
-          if (v == 0) {
-            fieldValue = apiData[fieldValueArray[v]];
-          }
-          else {
-            fieldValue = fieldValue[fieldValueArray[v]];
-          }
-        }
-        countValue = parseInt(fieldValue);
-        break;
-      case 1:
-        var fieldValueArray = apiFieldMappingIndividual.fieldValue;
-        var fieldValue = 0;
-        for(let v=0; v<fieldValueArray.length; v++) {
-          if (v == 0) {
-            fieldValue = apiData[fieldValueArray[v]];
-          }
-          else {
-            fieldValue = fieldValue[fieldValueArray[v]];
-          }
-        }
-        totalValue = parseInt(fieldValue);
-        break;
-      case 2:
-        for (var i=0; i<apiData.length; i++) {
-          var fieldValueArray = apiFieldMappingIndividual.fieldValue;
-          var fieldValue = 0;
-          for(let v=0; v<fieldValueArray.length; v++) {
-            if (v == 0) {
-              fieldValue = apiData[i][fieldValueArray[v]];
-            }
-            else {
-              fieldValue = fieldValue[fieldValueArray[v]];
-            }
-          }
-          var value = Math.round(((fieldValue * 100) / totalValue), 2);
-          if (value > 0) {
-            top10CountValue = top10CountValue + 1;
-            top10TotalValue = top10TotalValue + parseInt(fieldValue);
-          }
-        }
-        break;
-      default:
-        break;
-    }
-  }*/
-
-  //generateDoughnutChart(countValue, top10CountValue, top10TotalValue, totalValue.toPrecision());
+  generateDoughnutChart(inputArray);
 }
 
 const DoughnutChart = (props) => (
-  <div id={props.id}>{renderChart(props)}
-    <div className="chartBorder">
-      <div className="chartCaption">{props.sectionTitle}</div>
-      <div className="row">
-        <div className="col-sm-12" >
-          <div className="card1 text-center">
-            <div className="percentage1 chart2">{doughnutAttributes.percentage2}%</div>
-            <div className="donut-chart chart2" style={doughnutAttributes.chart2Background}>
-              <div className="slice one" style={doughnutAttributes.chart2SliceOneStyle}></div>
-              <div className="slice two" style={doughnutAttributes.chart2SliceTwoStyle}></div>
-              <div className="chart-center"><span></span></div>
-            </div>
-          </div>
-          <div className="card2">
-            <div className="donut-chart chart1" style={doughnutAttributes.chart1Background}>
-              <div className="slice one" style={doughnutAttributes.chart1SliceOneStyle}></div>
-              <div className="slice two" style={doughnutAttributes.chart1SliceTwoStyle}></div>
-              <div className="chart-center"><span>{doughnutAttributes.displayPercentage1}</span></div>
-            </div>
-          </div>
+  <div style={props.attributes.chartBorder}>{renderChart(props)}
+    <div style={props.attributes.chartCaption}>{props.meta.title}</div>
+    <div>
+      <div className="card1 text-center">
+        <div className="percentage1 chart2">{doughnutAttributes.displayPercentage2}</div>
+        <div className="donut-chart chart2" style={doughnutAttributes.chart2Background}>
+          <div className="slice one" style={doughnutAttributes.chart2SliceOneStyle}></div>
+          <div className="slice two" style={doughnutAttributes.chart2SliceTwoStyle}></div>
+          <div className="chart-center"><span></span></div>
         </div>
       </div>
-      <div className="row"><br/><br/>
-        <div className="col-sm-12 text-center" id="connectionsPercentage">
-          <span style={doughnutAttributes.percentage2Color}>{doughnutAttributes.percentage2}%</span> {props.meta.legend[0]}
-          <span style={doughnutAttributes.percentage1Color}> {doughnutAttributes.assetPercentage}%</span> {props.meta.legend[1]}
-        </div><br/><br/>
+      <div className="card2">
+        <div className="donut-chart chart1" style={doughnutAttributes.chart1Background}>
+          <div className="slice one" style={doughnutAttributes.chart1SliceOneStyle}></div>
+          <div className="slice two" style={doughnutAttributes.chart1SliceTwoStyle}></div>
+          <div className="chart-center"><span>{doughnutAttributes.displayPercentage1}</span></div>
+        </div>
       </div>
     </div>
+    <div className="text-center" id="connectionsPercentage"><br/><br/>
+      <span style={doughnutAttributes.percentage2Color}>{doughnutAttributes.displayPercentage2}</span> {props.meta.legend[0]}
+      <span style={doughnutAttributes.percentage1Color}> {doughnutAttributes.displayPercentage1}</span> {props.meta.legend[1]}
+    </div><br/><br/>
   </div>
 )
 
