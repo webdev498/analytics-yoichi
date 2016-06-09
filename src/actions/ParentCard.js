@@ -84,7 +84,7 @@ export function fetchApiData(id, api, query) {
 
     dispatch(requestApiData(id));
 
-    const defaultHeaders = Object.assign({
+    const defaultHeaders = Object.assign ({
       'Authorization': `${tokenType} ${accessToken}`
     }, api.headers);
 
