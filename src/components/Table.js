@@ -22,16 +22,16 @@ const generateDataSource = (props) => {
   tableProperties = {};
   tableDataSource = [];
 
-  let tableData = props.tableData,
+  let {fieldMapping, nestedResult, emptyValueMessage} = props.tableData,
       tableOptions = props.tableOptions;
 
   let rawData = {};
-  rawData = generateRawData(tableData, data);
+  rawData = generateRawData(fieldMapping, data);
 
   tableProperties = {...tableOptions};
 
-  for (let i = 0; i < tableData.length; i++) {
-    let currentTableData = tableData[i],
+  for (let i = 0; i < fieldMapping.length; i++) {
+    let currentTableData = fieldMapping[i],
         currentDataRows = rawData[currentTableData.reportId].rows,
         columnIndexArray = [],
         columnsArray = rawData[currentTableData.reportId].columns,
@@ -50,8 +50,8 @@ const generateDataSource = (props) => {
 
       //Calculate column index from API response
       for (let a = 0; a < currentTableData.columns.length; a++) {
-        let currentColumnType = currentTableData.columns[a].type;
-        let currentColumnDataArray = currentTableData.columns[a].data;
+        let currentColumnType = currentTableData.columns[a].type,
+            currentColumnDataArray = currentTableData.columns[a].data;
 
         for (let cd = 0; cd < currentColumnDataArray.length; cd++) {
           if (columnsArray.length === 1 && columnsArray[0].name === 'json') {
@@ -92,6 +92,21 @@ const generateDataSource = (props) => {
                 if (currentDataRows[d][c] !== undefined) {
                   fieldValue = currentDataRows[d][c];
                 }
+
+                //Following condition is for nested API response
+                if (nestedResult) {
+                  for (let key in currentDataRows[d]) {
+                    if (key !== undefined) {
+                      if (c == 0) {
+                        fieldValue = (key !== '') ? key : '<i>' + emptyValueMessage + '</i>';
+                      }
+                      if (c == 1) {
+                        fieldValue = currentDataRows[d][key];
+                      }
+                    }
+                  }
+                }
+
                 const columnDetails = {
                   currentColumnType: currentColumnType,
                   fieldName: fieldName,
@@ -249,8 +264,7 @@ function generateRowObject(rowDetails, mainObject) {
 }
 
 const tableCard = (props) => (
-  <div style={{width:'100%'}}>
-    <div className="tableCaption">{props.sectionTitle}</div>
+  <div style={props.attributes.style}>
     {generateDataSource(props)}
     <Table style={{width:'100%'}}
            className="threatTable"
@@ -266,11 +280,22 @@ const tableCard = (props) => (
           return (
             <Tr>
               {tableRow.columns.map(function(tableColumn, indexCol){
-                if (tableColumn.columnType == 'chart') {
+                if (tableColumn.columnType === 'chart') {
                   return (
                     <Td column={tableColumn.columnName}
                         value={tableColumn.chartValue}
                         style={tableColumn.columnStyle}>
+                      {/*function(tableColumn, indexCol){
+                        if (tableColumn.chartType === 'angulargauge') {
+                          return (
+                            <ThreatAnalyticsGraph chartProperties={tableColumn}/>
+                          )
+                        } else if (tableColumn.chartType === 'area2d') {
+                          return (
+                            <ThreatAnalyticsGraph chartProperties={tableColumn}/>
+                          )
+                        }
+                      }*/}
                       <ThreatAnalyticsGraph chartProperties={tableColumn}/>
                     </Td>
                   );

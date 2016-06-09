@@ -1,4 +1,4 @@
-const layout = {
+const staticLayout = {
   "layout": [
     [
       {
@@ -160,107 +160,109 @@ const layout = {
           style: {width: '100%'},
           id: 'RecentAlerts'
         },
-        tableData: [
-          {
-            reportId: 'taf_alert_highpriority',
-            columns: [
-              {
-                type: 'chart',
-                columnNameToDisplay: 'Rank Score',
-                chartType: 'angulargauge',
-                chartId: 'recentAlert',
-                chartWidth: '70',
-                chartHeight: '60',
-                data: [
-                  {
-                    fieldName: "data.rank_alert.score"
-                  }
-                ],
-                style: {width: '10%'}
-              },
-              {
-                type: 'text',
-                columnNameToDisplay: 'Date',
-                data: [
-                  {
-                    fieldName: "date",
-                    displayName: 'date'
-                  }
-                ],
-                style: {width: '15%'}
-              },
-              {
-                type: 'text',
-                columnNameToDisplay: 'Details',
-                data: [
-                  {
-                    fieldName: "data.rank_alert.description",
-                    displayName: ''
-                  },
-                  {
-                    fieldName: "data.rank_alert.message",
-                    displayName: ''
-                  }
-                ],
-                style: {width: '30%'}
-              },
-              {
-                type: 'text',
-                columnNameToDisplay: 'Source',
-                data: [
-                  {
-                    fieldName: "source.ip",
-                    displayName: 'IP'
-                  },
-                  {
-                    fieldName: "source.port",
-                    displayName: 'port'
-                  },
-                  {
-                    fieldName: "source.country",
-                    displayName: 'countryFlag'
-                  },
-                  {
-                    fieldName: "source.additionalInfo.user",
-                    displayName: 'User'
-                  },
-                  {
-                    fieldName: "source.additionalInfo.machine",
-                    displayName: 'Machine'
-                  }
-                ],
-                style: {width: '20%'}
-              },
-              {
-                type: 'text',
-                columnNameToDisplay: 'Destination',
-                data: [
-                  {
-                    fieldName: "destination.ip",
-                    displayName: 'IP'
-                  },
-                  {
-                    fieldName: "destination.port",
-                    displayName: 'port'
-                  },
-                  {
-                    fieldName: "destination.country",
-                    displayName: 'countryFlag'
-                  },
-                  {
-                    fieldName: "destination.additionalInfo.user",
-                    displayName: 'User'
-                  },
-                  {
-                    fieldName: "destination.additionalInfo.machine",
-                    displayName: 'Machine'
-                  }
-                ],
-                style: {width: '20%'}
-              }
-            ]
-          }
-        ],
+        tableData: {
+          fieldMapping: [
+            {
+              reportId: 'taf_alert_highpriority',
+              columns: [
+                {
+                  type: 'chart',
+                  columnNameToDisplay: 'Rank Score',
+                  chartType: 'angulargauge',
+                  chartId: 'recentAlert',
+                  chartWidth: '70',
+                  chartHeight: '60',
+                  data: [
+                    {
+                      fieldName: "data.rank_alert.score"
+                    }
+                  ],
+                  style: {width: '10%'}
+                },
+                {
+                  type: 'text',
+                  columnNameToDisplay: 'Date',
+                  data: [
+                    {
+                      fieldName: "date",
+                      displayName: 'date'
+                    }
+                  ],
+                  style: {width: '15%'}
+                },
+                {
+                  type: 'text',
+                  columnNameToDisplay: 'Details',
+                  data: [
+                    {
+                      fieldName: "data.rank_alert.description",
+                      displayName: ''
+                    },
+                    {
+                      fieldName: "data.rank_alert.message",
+                      displayName: ''
+                    }
+                  ],
+                  style: {width: '30%'}
+                },
+                {
+                  type: 'text',
+                  columnNameToDisplay: 'Source',
+                  data: [
+                    {
+                      fieldName: "source.ip",
+                      displayName: 'IP'
+                    },
+                    {
+                      fieldName: "source.port",
+                      displayName: 'port'
+                    },
+                    {
+                      fieldName: "source.country",
+                      displayName: 'countryFlag'
+                    },
+                    {
+                      fieldName: "source.additionalInfo.user",
+                      displayName: 'User'
+                    },
+                    {
+                      fieldName: "source.additionalInfo.machine",
+                      displayName: 'Machine'
+                    }
+                  ],
+                  style: {width: '20%'}
+                },
+                {
+                  type: 'text',
+                  columnNameToDisplay: 'Destination',
+                  data: [
+                    {
+                      fieldName: "destination.ip",
+                      displayName: 'IP'
+                    },
+                    {
+                      fieldName: "destination.port",
+                      displayName: 'port'
+                    },
+                    {
+                      fieldName: "destination.country",
+                      displayName: 'countryFlag'
+                    },
+                    {
+                      fieldName: "destination.additionalInfo.user",
+                      displayName: 'User'
+                    },
+                    {
+                      fieldName: "destination.additionalInfo.machine",
+                      displayName: 'Machine'
+                    }
+                  ],
+                  style: {width: '20%'}
+                }
+              ]
+            }
+          ]
+        },
         tableOptions: {
           sortable:['Rank Score','Date','Details', 'Source', 'Destination'],
           defaultSort:{column: 'Rank Score', direction: 'desc'},
@@ -692,124 +694,126 @@ const layout = {
           style: {width: '100%'},
           id: 'LongestConnections'
         },
-        tableData: [
-          {
-            reportId: 'taf_top_longest_connections',
-            columns: [
-              {
-                type: 'text',
-                columnNameToDisplay: 'End Date',
-                data: [
-                  {
-                    fieldName: "date",
-                    displayName: 'date'
-                  }
-                ],
-                style: {width: '15%'}
-              },
-              {
-                type: 'durationWidget',
-                columnNameToDisplay: 'Duration',
-                data: [
-                  {
-                    fieldName: "data.conn.duration",
-                    displayName: 'duration'
-                  }
-                ],
-                style: {width: '15%'}
-              },
-              {
-                type: 'text',
-                columnNameToDisplay: 'Details',
-                data: [
-                  {
-                    fieldName: "protocol.service",
-                    displayName: ''
-                  },
-                  {
-                    fieldName: "data.conn.reqBytes",
-                    displayName: "Incoming bytes"
-                  },
-                  {
-                    fieldName: "data.conn.respBytes",
-                    displayName: "Outcoming bytes"
-                  }
-                ],
-                style: {width: '30%'}
-              },
-              {
-                type: 'text',
-                columnNameToDisplay: 'Source',
-                data: [
-                  {
-                    fieldName: "source.ip",
-                    displayName: 'IP'
-                  },
-                  {
-                    fieldName: "source.port",
-                    displayName: "port"
-                  },
-                  {
-                    fieldName: "source.country",
-                    displayName: "countryFlag"
-                  },
-                  {
-                    fieldName: "source.additionalInfo.user",
-                    displayName: "User"
-                  },
-                  {
-                    fieldName: "source.additionalInfo.machine",
-                    displayName: "Machine"
-                  },
-                  {
-                    fieldName: "source.owner",
-                    displayName: "Owner"
-                  },
-                  {
-                    fieldName: "source.asn",
-                    displayName: "ASN"
-                  }
-                ],
-                style: {width: '20%'}
-              },
-              {
-                type: 'text',
-                columnNameToDisplay: 'Destination',
-                data: [
-                  {
-                    fieldName: "destination.ip",
-                    displayName: 'IP'
-                  },
-                  {
-                    fieldName: "destination.port",
-                    displayName: "port"
-                  },
-                  {
-                    fieldName: "destination.country",
-                    displayName: "countryFlag"
-                  },
-                  {
-                    fieldName: "destination.additionalInfo.user",
-                    displayName: "User"
-                  },
-                  {
-                    fieldName: "destination.additionalInfo.machine",
-                    displayName: "Machine"
-                  },
-                  {
-                    fieldName: "destination.owner",
-                    displayName: "Owner"
-                  },
-                  {
-                    fieldName: "destination.asn",
-                    displayName: "ASN"
-                  }
-                ],
-                style: {width: '20%'}
-              }
-            ]
-          }
-        ],
+        tableData: {
+          fieldMapping: [
+            {
+              reportId: 'taf_top_longest_connections',
+              columns: [
+                {
+                  type: 'text',
+                  columnNameToDisplay: 'End Date',
+                  data: [
+                    {
+                      fieldName: "date",
+                      displayName: 'date'
+                    }
+                  ],
+                  style: {width: '15%'}
+                },
+                {
+                  type: 'durationWidget',
+                  columnNameToDisplay: 'Duration',
+                  data: [
+                    {
+                      fieldName: "data.conn.duration",
+                      displayName: 'duration'
+                    }
+                  ],
+                  style: {width: '15%'}
+                },
+                {
+                  type: 'text',
+                  columnNameToDisplay: 'Details',
+                  data: [
+                    {
+                      fieldName: "protocol.service",
+                      displayName: ''
+                    },
+                    {
+                      fieldName: "data.conn.reqBytes",
+                      displayName: "Incoming bytes"
+                    },
+                    {
+                      fieldName: "data.conn.respBytes",
+                      displayName: "Outcoming bytes"
+                    }
+                  ],
+                  style: {width: '30%'}
+                },
+                {
+                  type: 'text',
+                  columnNameToDisplay: 'Source',
+                  data: [
+                    {
+                      fieldName: "source.ip",
+                      displayName: 'IP'
+                    },
+                    {
+                      fieldName: "source.port",
+                      displayName: "port"
+                    },
+                    {
+                      fieldName: "source.country",
+                      displayName: "countryFlag"
+                    },
+                    {
+                      fieldName: "source.additionalInfo.user",
+                      displayName: "User"
+                    },
+                    {
+                      fieldName: "source.additionalInfo.machine",
+                      displayName: "Machine"
+                    },
+                    {
+                      fieldName: "source.owner",
+                      displayName: "Owner"
+                    },
+                    {
+                      fieldName: "source.asn",
+                      displayName: "ASN"
+                    }
+                  ],
+                  style: {width: '20%'}
+                },
+                {
+                  type: 'text',
+                  columnNameToDisplay: 'Destination',
+                  data: [
+                    {
+                      fieldName: "destination.ip",
+                      displayName: 'IP'
+                    },
+                    {
+                      fieldName: "destination.port",
+                      displayName: "port"
+                    },
+                    {
+                      fieldName: "destination.country",
+                      displayName: "countryFlag"
+                    },
+                    {
+                      fieldName: "destination.additionalInfo.user",
+                      displayName: "User"
+                    },
+                    {
+                      fieldName: "destination.additionalInfo.machine",
+                      displayName: "Machine"
+                    },
+                    {
+                      fieldName: "destination.owner",
+                      displayName: "Owner"
+                    },
+                    {
+                      fieldName: "destination.asn",
+                      displayName: "ASN"
+                    }
+                  ],
+                  style: {width: '20%'}
+                }
+              ]
+            }
+          ]
+        },
         tableOptions: {
           sortable:['End Date','Duration','Details', 'Source', 'Destination'],
           defaultSort:{column: 'Duration', direction: 'asc'},
@@ -1009,8 +1013,139 @@ const layout = {
           }
         ]
       }
+    ],
+    [
+      {
+        id:'78',
+        type: 'Compound',
+        name: 'Compound',
+        meta: {
+          showHeader: true,
+          api: {
+            path:"/api/analytics/reporting/execute/{reportId}",
+            headers: {
+              "Accept": "application/json;report-format=nested"
+            },
+            queryParams:
+            {
+              "window":"1d"
+            },
+            pathParams:
+            {
+              reportId: "taf_top_longest_user_agents,taf_top_shortest_user_agents"
+            },
+          },
+          title: 'User Agent Details'
+        },
+        attributes: {
+          style: {width: '100%', marginRight: '20px'},
+          id: 'UserAgentDetails'
+        },
+        children: [
+          {
+            type: 'Table',
+            name: 'Table',
+            meta: {
+              showHeader: false,
+              title: 'Longest User Agents',
+            },
+            attributes: {
+              style: {"width": "50%"},
+              id: 'LongestUserAgents'
+            },
+            tableData: {
+              nestedResult: true,
+              emptyValueMessage: "{empty user agent}",
+              fieldMapping: [
+                {
+                  reportId: 'taf_top_longest_user_agents',
+                  columns: [
+                    {
+                      type: 'text',
+                      columnNameToDisplay: 'User Agent',
+                      data: [
+                        {
+                          fieldName: "data.http.userAgent"
+                        }
+                      ],
+                      style: {width: '30%'}
+                    },
+                    {
+                      type: 'chart',
+                      columnNameToDisplay: 'Connections',
+                      chartType: 'area2d',
+                      chartId: 'connection',
+                      chartWidth: '70',
+                      chartHeight: '60',
+                      data: [
+                        {
+                          fieldName: "count"
+                        }
+                      ],
+                      style: {width: '10%'}
+                    }
+                  ]
+                }
+              ]
+            },
+            tableOptions: {
+              filterable:false
+            }
+          },
+          {
+            type: 'Table',
+            name: 'Table',
+            meta: {
+              showHeader: false,
+              title: 'Shortest User Agents',
+            },
+            attributes: {
+              style: {"width": "50%","paddingLeft": "2%"},
+              id: 'ShortestUserAgents'
+            },
+            tableData: {
+              nestedResult: true,
+              emptyValueMessage: "{empty user agent}",
+              fieldMapping: [
+                {
+                  reportId: 'taf_top_shortest_user_agents',
+                  columns: [
+                    {
+                      type: 'text',
+                      columnNameToDisplay: 'User Agent',
+                      data: [
+                        {
+                          fieldName: "data.http.userAgent"
+                        }
+                      ],
+                      style: {width: '30%'}
+                    },
+                    {
+                      type: 'chart',
+                      columnNameToDisplay: 'Connections',
+                      chartType: 'area2d',
+                      chartId: 'connection',
+                      chartWidth: '70',
+                      chartHeight: '60',
+                      data: [
+                        {
+                          fieldName: "count"
+                        }
+                      ],
+                      style: {width: '10%'}
+                    }
+                  ]
+                }
+              ]
+            },
+            tableOptions: {
+              filterable:false
+            }
+          }
+        ]
+      }
     ]
   ]
 };
 
-export default layout;
+export default staticLayout;

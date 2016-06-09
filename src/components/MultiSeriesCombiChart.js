@@ -8,10 +8,11 @@ function generateChartDataSource(rawData, props) {
         fieldMapping = chartData.fieldMapping,
         combinedResult = chartData.combinedResult,
         lookup = {},
-        dataset = [];
-  const categories = [{
-    category: []
-  }];
+        dataset = [],
+        categories = [{
+                      category: []
+                    }];
+
   let seriesCount = 0,
       timeWindow = duration,
       dateDisplayFormat = calculateDateDisplayFormat(timeWindow),
@@ -188,7 +189,7 @@ function generateChartDataSource(rawData, props) {
     }
   };
 
-  let finalChartOptions = Object.assign(dataSourceObject.chart, chartOptions);
+  const finalChartOptions = Object.assign(dataSourceObject.chart, chartOptions);
   dataSourceObject.chart = finalChartOptions;
 
   if (categories.length > 0){
