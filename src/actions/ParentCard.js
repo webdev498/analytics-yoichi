@@ -104,7 +104,7 @@ export function fetchApiData(id, api, query) {
 
 // Update api data for all the components that are visible on the page
 // when time range is changed.
-export function updatedApiData(newDuration) {
+export function updateApiData(newDuration) {
   return function(dispatch, getState) {
     const {apiData} = getState();
 
