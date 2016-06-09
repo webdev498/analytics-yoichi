@@ -15,11 +15,21 @@ class PageContent extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchLayoutData(this.props.location.pathname);
+    const {props} = this;
+    props.fetchLayoutData(props.location.pathname);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {props} = this;
+
+    if(props.location.pathname !== nextProps.location.pathname) {
+      props.fetchLayoutData(nextProps.location.pathname);
+    }
   }
 
   renderChildren() {
     const {layout} = this.props;
+
     const finalElmements = [];
 
     for(let i = 0, len = layout.length; i < len; i++) {
