@@ -30,7 +30,7 @@ class CoreLayout extends React.Component {
           {
             (props.auth.isLoading) ?
               <Loader /> :
-              <PageContent />
+              <PageContent location={props.location} />
           }
         </div>
       </div>

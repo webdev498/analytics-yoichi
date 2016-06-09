@@ -12,10 +12,6 @@ import {updateApiData} from 'actions/ParentCard';
 
 import { connect } from 'react-redux';
 
-function select(state) {
-  return { auth: state.auth };
-}
-
 const getStyles = props => (
   {
     backgroundColor: '#00bcd4',
@@ -77,28 +73,34 @@ class PageHeader extends React.Component {
           name = props.auth.user ? props.auth.user.name : "";
 
     return (
-        <AppBar {...props} style={getStyles(props)}
-                iconClassNameRight='muidocs-icon-navigation-expand-more'>
+      <AppBar {...props} style={getStyles(props)}
+              iconClassNameRight='muidocs-icon-navigation-expand-more'>
 
-          <DropDownMenu value={this.state.value}
-                        onChange={this.handleTimeChange}
-                        menuStyle={{top: '64px'}}>
-            {getTimeRangeItems()}
-          </DropDownMenu>
+        <DropDownMenu value={this.state.value}
+                      onChange={this.handleTimeChange.bind(this)}
+                      menuStyle={{top: '64px'}}>
+          {getTimeRangeItems()}
+        </DropDownMenu>
 
-          <MenuItem primaryText={name} leftIcon={<FaceIcon />} />
+        <MenuItem primaryText={name} leftIcon={<FaceIcon />} />
 
-        {/*
-          <Menu value={1}
-                        onChange={this.handleChange}
-                        menuStyle={{top: '64px'}}>
-            <MenuItem value={1} primaryText='View Token'/>
-            <MenuItem value={2} primaryText='Log Out'/>
-          </Menu>
-          */}
-        </AppBar>
-      )
+      {/*
+        <Menu value={1}
+                      onChange={this.handleChange}
+                      menuStyle={{top: '64px'}}>
+          <MenuItem value={1} primaryText='View Token'/>
+          <MenuItem value={2} primaryText='Log Out'/>
+        </Menu>
+        */}
+      </AppBar>
+    )
   }
 }
 
-export default connect(select, {updateApiData})(PageHeader);
+function mapStateToProps(state) {
+  return { auth: state.auth };
+}
+
+export default connect(mapStateToProps, {
+  updateApiData
+})(PageHeader);
