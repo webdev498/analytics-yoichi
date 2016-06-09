@@ -14,7 +14,7 @@ const styles = {
   },
   header: {
     padding: '10px 15px',
-    height: '56px',
+    height: '48px',
     display: 'flex',
     alignItems: 'center',
     backgroundColor: '#cdcdcd'
@@ -27,7 +27,6 @@ const styles = {
     marginLeft: 'auto'
   },
   refreshIcon: {
-    marginRight: '10px',
     fontSize: '20px'
   },
   crossIcon: {
@@ -98,10 +97,6 @@ class ParentCard extends React.Component {
               <FontIcon className='material-icons'
                         style={styles.refreshIcon}>
                         refresh
-              </FontIcon>
-              <FontIcon className='material-icons'
-                        style={styles.crossIcon}>
-                        clear
               </FontIcon>
             </div>
           </header>
