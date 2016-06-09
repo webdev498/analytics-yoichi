@@ -17,19 +17,20 @@ export default (store) => {
     cb();
   };
 
-  /**
-   * Please keep routes in alphabetical order
-   */
   return (
     <Route path="/" >
       <IndexRoute component={NonLoggedLayout} />
 
       { /* Routes requiring login */ }
       <Route onEnter={requireLogin} component={CoreLayout}>
-        <Redirect from="dashboard" to="dashboard/taf" />
+        <Redirect from="dashboard" to="dashboard/alert" />
 
         <Route path="dashboard" component={Dashboard}>
-          <Route path="taf" component={Dashboard} />
+          <Route path="alert" component={Dashboard} />
+          <Route path="country" component={Dashboard} />
+          <Route path="traffic" component={Dashboard} />
+          <Route path="asset" component={Dashboard} />
+          <Route path="user-agent" component={Dashboard} />
         </Route>
       </Route>
 

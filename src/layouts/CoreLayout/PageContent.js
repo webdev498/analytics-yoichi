@@ -15,12 +15,11 @@ class PageContent extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchLayoutData('taf_dashboard');
+    this.props.fetchLayoutData(this.props.location.pathname);
   }
 
   renderChildren() {
     const {layout} = this.props;
-
     const finalElmements = [];
 
     for(let i = 0, len = layout.length; i < len; i++) {
@@ -90,8 +89,7 @@ PageContent.contextTypes = {
 
 function mapStateToProps(state, ownProps) {
   const {layout: layouts} = state;
-
-  const id = "taf_dashboard";
+  const id = ownProps.location.pathname;
 
   const { layout = [],
           isFetching = true,
