@@ -1,6 +1,6 @@
 import React from 'react';
 import Reactable from 'reactable';
-import ThreatAnalyticsGraph from 'components/ThreatAnalyticsGraph';
+import AngularGaugeChart from 'components/AngularGaugeChart';
 
 import DurationWidget from 'components/DurationWidget';
 import moment from 'moment';
@@ -296,7 +296,7 @@ const tableCard = (props) => (
                           )
                         }
                       }*/}
-                      <ThreatAnalyticsGraph chartProperties={tableColumn}/>
+                      <AngularGaugeChart chartProperties={tableColumn}/>
                     </Td>
                   );
                 }
