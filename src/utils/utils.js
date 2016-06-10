@@ -22,29 +22,6 @@ export function getCountryIDByCountryCode(countryCode) {
   return countryID;
 }
 
-//Function to generate chart data source
-export function generateChartDataSource(chartType, chartValue) {
-  let chartDataSource = '';
-  switch (chartType) {
-    case "angulargauge":
-      chartDataSource = {"chart":
-        {"lowerLimit":"0","upperLimit":"100","showValue":"1","valueBelowPivot":"1","valueFontSize":"11",
-          "valueFontBold":"1","gaugeOuterRadius":"33","gaugeInnerRadius":16.5,"showtickvalues":"0","showTickMarks":"0",
-          "tickvaluedistance":"25","showborder":0,"gaugeFillMix":"{dark-30},{light-60},{dark-10}","bgAlpha":"0",
-          "canvasBgAlpha":"0","caption":""},
-          "colorRange":{"color":[{"minValue":"0","maxValue":"35","code":"#6baa01"},
-          {"minValue":"35","maxValue":"65","code":"#f8bd19"},
-          {"minValue":"65","maxValue":"100","code":"#e44a00"}]},
-          "dials":{"dial":[{"value":chartValue,"bgcolor":"333333","bordercolor":"333333"}]},
-          "value":chartValue
-        };
-      break;
-    default:
-      break;
-  }
-  return chartDataSource;
-}
-
 //Function to convert milliseconds to time
 export function msToTime(duration) {
     var milliseconds = parseInt((duration%1000)/100)

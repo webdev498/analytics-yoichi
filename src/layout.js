@@ -1071,7 +1071,7 @@ const staticLayout = {
                       style: {width: '30%'}
                     },
                     {
-                      type: 'chart',
+                      type: 'text',
                       columnNameToDisplay: 'Connections',
                       chartType: 'area2d',
                       chartId: 'connection',
