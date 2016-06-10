@@ -1,7 +1,7 @@
 import React from 'react';
 
 function generateChartDataSource(chartData) {
-  const chartDataSource = {
+  const dataSourceObject = {
                             "chart":
                             {
                               "lowerLimit":"0","upperLimit":"100","showValue":"1",
@@ -23,7 +23,7 @@ function generateChartDataSource(chartData) {
                             "dials":{"dial":[{"value":chartData,"bgcolor":"333333","bordercolor":"333333"}]},
                             "value":chartData
                           };
-  return chartDataSource;
+  return dataSourceObject;
 }
 
 const renderChart = (props) => {

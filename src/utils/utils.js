@@ -122,3 +122,20 @@ export function checkForUndefinedChartOptionObject(chartOptions, objectName, def
   }
   return value;
 }
+
+//Function to translate time window
+export function translateTimeWindow(window) {
+  if (window == "1 hour") return "1h";
+  if (window == "6 hour") return "6h";
+  if (window == "12 hour") return "12h";
+  if (window == "1 day") return "1d";
+  if (window == "1 week") return "1w";
+  if (window == "1 month") return "1mo";
+  if (window == "1h") return "1 hour";
+  if (window == "6h") return "6 hour";
+  if (window == "12h") return "12 hour";
+  if (window == "1d") return "1 day";
+  if (window == "1w") return "1 week";
+  if (window == "1mo") return "1 month";
+  return window;
+}
