@@ -126,6 +126,7 @@ function generateColumnTextForColumnTypeAsText(columnDetails) {
           columnText += ':' + fieldValue;
         }
         else if (displayName == 'countryFlag') {
+          fieldValue = generateColumnTextForDisplayingCountryFlag(fieldValue);
           columnText += fieldValue;
         } else if (displayName === undefined) {
           columnText += '<br/>' + fieldValue;
@@ -164,41 +165,36 @@ function generateColumnTextForColumnTypeAsText(columnDetails) {
 }
 
 function generateRowObject(rowDetails, mainObject) {
-  let rowObj = {},
-      {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue} = rowDetails;
-  switch(currentColumnType) {
-    case 'chart':
+  let {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue} = rowDetails,
       rowObj = {
-        chartValue: chartValue,
-        chartId: currentTableData.chartId + rowNumber,
-        chartType: currentTableData.chartType,
-        chartWidth: currentTableData.chartWidth,
-        chartHeight: currentTableData.chartHeight,
-        columnType: 'chart',
+        columnType: currentColumnType,
         columnName: currentTableData.columnNameToDisplay,
         columnStyle: currentTableData.style
-      }
+      };
+  switch(currentColumnType) {
+    case 'chart':
+      rowObj = Object.assign(rowObj, {
+                  chartValue: chartValue,
+                  chartId: currentTableData.chartId + rowNumber,
+                  chartType: currentTableData.chartType,
+                  chartWidth: currentTableData.chartWidth,
+                  chartHeight: currentTableData.chartHeight,
+                });
       chartValue = '';
       mainObject.columns.push(rowObj);
       break;
     case 'text':
-      rowObj = {
-        columnType: currentColumnType,
-        columnName: currentTableData.columnNameToDisplay,
-        columnStyle: currentTableData.style,
-        columnText: unsafe(columnText)
-      }
+      rowObj = Object.assign(rowObj, {
+                  columnText: unsafe(columnText)
+                });
       columnText = '';
       mainObject.columns.push(rowObj);
       break;
     case 'durationWidget':
-      rowObj = {
-        columnType: currentColumnType,
-        columnName: currentTableData.columnNameToDisplay,
-        columnStyle: currentTableData.style,
-        columnText: unsafe(columnText),
-        timeValue: timeValue
-      }
+      rowObj = Object.assign(rowObj, {
+                  columnText: unsafe(columnText),
+                  timeValue: timeValue
+                });
       columnText = '';
       mainObject.columns.push(rowObj);
       break;
