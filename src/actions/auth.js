@@ -66,7 +66,6 @@ export function isLoggedIn(globalState, urlHash, store) {
 
       Cookies.set('access_token', accessToken, { path: '/' });
       Cookies.set('token_type', tokenType, { path: '/' });
-      Cookies.set('loggedin', 'true');
 
       return true;
     }

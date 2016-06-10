@@ -1,5 +1,8 @@
 /* @flow */
 import React from 'react';
+import Cookies from 'cookies-js';
+import { browserHistory } from 'react-router';
+
 import Card from 'material-ui/Card/Card';
 import TextField from 'material-ui/TextField';
 import CardActions from 'material-ui/Card/CardActions';
@@ -8,31 +11,50 @@ import RaisedButton from 'material-ui/RaisedButton';
 import CustomCardHeader from '../components/CustomCardHeader';
 import {loginUrl, responseType, clientId, redirectUri} from '../config';
 
+import {defaultRoute} from 'config';
+
 import './login.scss';
 
-const LoginView = (props) => (
-  <Card className='login' {...props} >
-    <CustomCardHeader title='Sign in' />
+class LoginView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-    <form className='login-form' action={loginUrl} method='post'>
-      <div style={{padding: '0 20px'}}>
-        <TextField style={{width: '100%'}} floatingLabelText='Username' name='username' />
-      </div>
+  componentWillMount() {
+    const accessToken = Cookies.get("access_token");
+    const tokenType = Cookies.get("token_type");
 
-      <div style={{padding: '0 20px'}}>
-        <TextField style={{width: '100%'}} floatingLabelText='Password' type='password' name='password'/>
-      </div>
+    if(accessToken) {
+      window.location = defaultRoute;
+    }
+  }
 
-      <div style={{textAlign: 'right', marginTop: '25px', marginRight: '20px'}}>
-        <RaisedButton primary={true} label='Login' type='submit' />
-      </div>
+  render () {
+    const {props} = this;
+    return (
+      <Card className='login' {...props} >
+        <CustomCardHeader title='Sign in' />
 
-      <input type='hidden' name='response_type' value={responseType} />
-      <input type='hidden' name='client_id' value={clientId} />
-      <input type='hidden' name='redirect_uri' value={redirectUri} />
-    </form>
-  </Card>
-)
+        <form className='login-form' action={loginUrl} method='post'>
+          <div style={{padding: '0 20px'}}>
+            <TextField style={{width: '100%'}} floatingLabelText='Username' name='username' />
+          </div>
 
+          <div style={{padding: '0 20px'}}>
+            <TextField style={{width: '100%'}} floatingLabelText='Password' type='password' name='password'/>
+          </div>
+
+          <div style={{textAlign: 'right', marginTop: '25px', marginRight: '20px'}}>
+            <RaisedButton primary={true} label='Login' type='submit' />
+          </div>
+
+          <input type='hidden' name='response_type' value={responseType} />
+          <input type='hidden' name='client_id' value={clientId} />
+          <input type='hidden' name='redirect_uri' value={redirectUri} />
+        </form>
+      </Card>
+    )
+  }
+}
 
 export default LoginView;
