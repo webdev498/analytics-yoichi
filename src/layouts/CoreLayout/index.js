@@ -20,6 +20,20 @@ class CoreLayout extends React.Component {
     this.props.fetchUserData();
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {props} = this;
+
+    // if user api returns error redirect to auth page.
+    if(nextProps.auth.isError) {
+      // delete the auth cookies
+      Cookies('accessToken', undefined);
+      Cookies('token_type', undefined);
+
+      // redirect to login page
+      window.location = "/";
+    }
+  }
+
   render () {
     const {props} = this;
     return (
