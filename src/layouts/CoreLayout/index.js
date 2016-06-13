@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import Cookies from 'cookies-js';
 
 import { connect } from 'react-redux';
 import Header from './PageHeader';
@@ -26,8 +27,10 @@ class CoreLayout extends React.Component {
     // if user api returns error redirect to auth page.
     if(nextProps.auth.isError) {
       // delete the auth cookies
-      Cookies('accessToken', undefined);
+      Cookies('access_token', undefined);
       Cookies('token_type', undefined);
+
+      console.log(Cookies.get("access_token"));
 
       // redirect to login page
       window.location = "/";

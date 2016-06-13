@@ -24,7 +24,7 @@ class LoginView extends React.Component {
     const accessToken = Cookies.get("access_token");
     const tokenType = Cookies.get("token_type");
 
-    if(accessToken) {
+    if(accessToken && tokenType) {
       window.location = defaultRoute;
     }
   }

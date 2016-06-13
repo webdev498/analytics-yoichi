@@ -1,4 +1,3 @@
-import Cookies from 'cookies-js';
 import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR} from 'Constants';
 
 const initialState = {
