@@ -27,7 +27,7 @@ function generateChartDataSource(rawData, props) {
     let columnIndexes = getXYIndexFromColumnNames(currentChartData.columns, columnsArray);
     xColumnIndex = columnIndexes[0];
     yColumnIndex = columnIndexes[1];
-console.log(xColumnIndex, yColumnIndex, rawData);
+
     let dataObject = [];
     for (let d = 0; d < currentDataRows.length; d++) {
       let dataPoint = {};
@@ -62,7 +62,6 @@ console.log(xColumnIndex, yColumnIndex, rawData);
 
   if (dataSet.length > 0)
     dataSourceObject.dataset = dataSet;
-console.log(JSON.stringify(dataSourceObject));
 
   return dataSourceObject;
 }
@@ -77,7 +76,6 @@ const renderChart = (props) => {
   let rawData = {};
 
   rawData = generateRawData(fieldMapping, data);
-console.log(JSON.stringify(rawData));
 
   FusionCharts.ready(function(){
       let fusioncharts = new FusionCharts({
