@@ -30,8 +30,6 @@ class CoreLayout extends React.Component {
       Cookies('access_token', undefined);
       Cookies('token_type', undefined);
 
-      console.log(Cookies.get("access_token"));
-
       // redirect to login page
       window.location = "/";
     }
