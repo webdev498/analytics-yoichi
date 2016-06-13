@@ -379,6 +379,250 @@ const staticLayout = {
     ],
     [
       {
+        id:'79',
+        type: 'Compound',
+        name: 'Compound',
+        meta: {
+          showHeader: true,
+          api: {
+            path:"/api/analytics/reporting/execute/{reportId}",
+            queryParams:
+            {
+              "window":"1d"
+            },
+            pathParams:
+            {
+              reportId: "taf_dest_countries,taf_dest_bad_reputation_countries,taf_connections_by_protocol"
+            }
+          },
+          title: 'Outgoing Traffic HeatMap'
+        },
+        attributes: {
+          style: {width: '50%', marginRight: '20px'},
+          id: 'OutgoingTrafficHeatMap'
+        },
+        children: [
+          {
+            type: 'WorldMap',
+            parent: "compound",
+            meta: {
+              showHeader: false,
+              title: 'Outgoing Traffic Heatmap',
+              subTitle: 'Number of Outgoing Connections By Country'
+            },
+            attributes: {
+              style: {width: '100%', marginRight: '20px'},
+              id: 'OutgoingTrafficWorldMap'
+            },
+            chartOptions: {
+            },
+            chartData: [
+              {
+                reportId: 'taf_dest_countries',
+                columns: [
+                ],
+                shapeid: 'circle',
+                alpha: '60'
+              },
+              {
+                reportId: 'taf_dest_bad_reputation_countries',
+                columns: [
+                ],
+                shapeid: 'maliciousIcon',
+                alpha: '100'
+              }
+            ]
+          },
+          {
+            type: 'HorizontalBarChart',
+            parent:'Compound',
+            meta: {
+              showHeader: false,
+              title: 'Top 5 Connections'
+            },
+            attributes: {
+              style: {width: '48%', marginRight: '20px'},
+              id: 'OutgoingTopCountries',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'},
+              chartWidth:"100%",
+              chartHeight:"200"
+            },
+            chartOptions: {
+            },
+            chartData: {
+              multipleReportIds: false,
+              displayTopFive:true,
+              showTrendLines:false,
+              fieldMapping: [
+                {
+                  reportId: 'taf_dest_countries',
+                  columns: [
+                    'country_name',
+                    'connections'
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            type: 'HorizontalBarChart',
+            parent:'Compound',
+            meta: {
+              showHeader: false,
+              title: 'Top 5 Bandwidth'
+            },
+            attributes: {
+              style: {width: '48%', marginRight: '20px'},
+              id: 'OutgoingTopBandwidth',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'},
+              chartWidth:"100%",
+              chartHeight:"200"
+            },
+            chartOptions: {
+            },
+            chartData: {
+              multipleReportIds: false,
+              displayTopFive:true,
+              showTrendLines:false,
+              fieldMapping: [
+                {
+                  reportId: 'taf_dest_countries',
+                  columns: [
+                    'country_name',
+                    'bandwidth'
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        id:'80',
+        type: 'Compound',
+        name: 'Compound',
+        meta: {
+          showHeader: true,
+          api: {
+            path:"/api/analytics/reporting/execute/{reportId}",
+            queryParams:
+            {
+              "window":"1d"
+            },
+            pathParams:
+            {
+              reportId: "taf_source_countries,taf_source_bad_reputation_countries"
+            }
+          },
+          title: 'Incoming Traffic HeatMap'
+        },
+        attributes: {
+          style: {width: '50%', marginRight: '20px'},
+          id: 'IncomingTrafficHeatMap'
+        },
+        children: [
+          {
+            type: 'WorldMap',
+            parent: "compound",
+            meta: {
+              showHeader: false,
+              title: 'Incoming Traffic Heatmap',
+              subTitle: 'Number of Incoming Connections By Country'
+            },
+            attributes: {
+              style: {width: '100%', marginRight: '20px'},
+              id: 'IncomingTrafficWorldMap'
+            },
+            chartOptions: {
+            },
+            chartData: [
+              {
+                reportId: 'taf_source_countries',
+                columns: [
+                ],
+                shapeid: 'circle',
+                alpha: '60'
+              },
+              {
+                reportId: 'taf_source_bad_reputation_countries',
+                columns: [
+                ],
+                shapeid: 'maliciousIcon',
+                alpha: '100'
+              }
+            ]
+          },
+          {
+            type: 'HorizontalBarChart',
+            parent:'Compound',
+            meta: {
+              showHeader: false,
+              title: 'Top 5 Connections'
+            },
+            attributes: {
+              style: {width: '48%', marginRight: '20px'},
+              id: 'IncomingTopCountries',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'},
+              chartWidth:"100%",
+              chartHeight:"200"
+            },
+            chartOptions: {
+            },
+            chartData: {
+              multipleReportIds: false,
+              displayTopFive:true,
+              showTrendLines:false,
+              fieldMapping: [
+                {
+                  reportId: 'taf_source_countries',
+                  columns: [
+                    'country_name',
+                    'connections'
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            type: 'HorizontalBarChart',
+            parent:'Compound',
+            meta: {
+              showHeader: false,
+              title: 'Top 5 Bandwidth'
+            },
+            attributes: {
+              style: {width: '48%', marginRight: '20px'},
+              id: 'IncomingTopBandwidth',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'},
+              chartWidth:"100%",
+              chartHeight:"200"
+            },
+            chartOptions: {
+            },
+            chartData: {
+              multipleReportIds: false,
+              displayTopFive:true,
+              showTrendLines:false,
+              fieldMapping: [
+                {
+                  reportId: 'taf_source_countries',
+                  columns: [
+                    'country_name',
+                    'bandwidth'
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    /*[
+      {
         id: "12",
         type: 'WorldMap',
         meta: {
@@ -458,7 +702,7 @@ const staticLayout = {
           }
         ]
       }
-    ],
+    ],*/
     [
       {
         id: '21',
@@ -652,12 +896,15 @@ const staticLayout = {
             },
             attributes: {
               style: {width: '48%', marginRight: '20px'},
-              id: 'TopConnectionsByProtocol'
+              id: 'TopConnectionsByProtocol',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'}
             },
             chartOptions: {
             },
             chartData: {
               multipleReportIds: false,
+              showTrendLines:false,
               fieldMapping: [
                 {
                   reportId: 'taf_connections_by_protocol',
@@ -941,13 +1188,29 @@ const staticLayout = {
             },
             attributes: {
               style: {width: '48%', marginRight: '20px'},
-              id: 'HorizontalBarChartConnections'
+              id: 'HorizontalBarChartConnections',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'}
             },
             chartOptions: {
               'numberSuffix': '%'
             },
             chartData: {
               multipleReportIds: true,
+              showTrendLines:true,
+              trendLines: [
+                {
+                  "line": [
+                    {
+                      "color": "#1aaf5d",
+                      "valueOnRight": "1",
+                      "dashed": "1",
+                      "dashLen": "4",
+                      "dashGap": "2"
+                    }
+                  ]
+                }
+              ],
               reportId: 'taf_top_talkers_connections',
               fieldMapping: [
                 {
@@ -980,13 +1243,29 @@ const staticLayout = {
             },
             attributes: {
               style: {width: '48%', marginRight: '20px'},
-              id: 'HorizontalBarChartBandwidth'
+              id: 'HorizontalBarChartBandwidth',
+              chartBorder: {border:'3px solid #BBBABA',float:'left',width:'48%',margin:'1%'},
+              chartCaption: {width:'100%',color: '#555555',fontFamily: 'Verdana,sans',fontSize: '14px',fontWeight: 'bold',textAlign: 'center',paddingTop:'10px'}
             },
             chartOptions: {
               'numberSuffix': '%'
             },
             chartData: {
               multipleReportIds: true,
+              showTrendLines:true,
+              trendLines: [
+                {
+                  "line": [
+                    {
+                      "color": "#1aaf5d",
+                      "valueOnRight": "1",
+                      "dashed": "1",
+                      "dashLen": "4",
+                      "dashGap": "2"
+                    }
+                  ]
+                }
+              ],
               reportId: 'taf_top_talkers_bandwidth',
               fieldMapping: [
                 {

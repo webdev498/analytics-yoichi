@@ -366,13 +366,13 @@ const renderChart = (props) => {
 }
 
 const WorldMap = (props) => (
-  <div>
+  <div style={{width:'100%'}}>
     <div className="chartCaption">{props.meta.subTitle}</div>
     <div style={{textAlign:'center'}}><br/>
       <img src="/img/biohazard.png" width="20" height="20"/>&nbsp;Malicious Connections
     </div>
     <div id={props.attributes.id[0]}></div>
-    <div style={{width:'100%'}}>
+    <div>
       <div id={props.attributes.id[1]} style={{width:'50%',float:'left'}}></div>
       <div id={props.attributes.id[2]} style={{width:'50%',float:'left'}}></div>
     </div>
