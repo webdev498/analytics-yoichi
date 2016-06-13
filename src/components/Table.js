@@ -13,7 +13,7 @@ let tableProperties = {},
     tableDataSource = [];
 
 function getColumnText(columnDetails) {
-  let {currentColumnType, fieldName, displayName, fieldValue, columnText, chartValue, timeValue} = columnDetails;
+  let {currentColumnType, fieldValue, columnText, chartValue, timeValue} = columnDetails;
 
   switch (currentColumnType) {
     case 'chart':
@@ -34,34 +34,20 @@ function getColumnText(columnDetails) {
   };
 }
 
-function generateColumnTextForDisplayingDate(fieldValue) {
-  let fieldValueInLocalTime = moment.utc(fieldValue).toDate();
-  fieldValueInLocalTime = moment(fieldValueInLocalTime).format('D MMM YYYY HH:mm:ss');
-  fieldValue = fieldValueInLocalTime;
-  return fieldValue;
-}
-
-function generateColumnTextForDisplayingCountryFlag(fieldValue) {
-  if (fieldValue != '' && fieldValue != null) {
-    fieldValue = ' <span class="flag-icon flag-icon-'+fieldValue.toLowerCase()+'"></span>';
-  }
-  return fieldValue;
-}
-
 function generateColumnTextForColumnTypeAsText(columnDetails) {
   let {currentColumnType, fieldName, displayName, fieldValue, columnText, chartValue, timeValue} = columnDetails;
 
   if (fieldValue !== undefined && fieldValue !== '' && fieldValue !== null) {
-    if (columnText != '') {
-      if (fieldName != undefined) {
-        if (displayName == 'date') {
+    if (columnText !== '') {
+      if (fieldName !== undefined) {
+        if (displayName === 'date') {
           fieldValue = generateColumnTextForDisplayingDate(fieldValue);
           columnText += fieldValue;
         }
-        else if (displayName == 'port') {
+        else if (displayName === 'port') {
           columnText += ':' + fieldValue;
         }
-        else if (displayName == 'countryFlag') {
+        else if (displayName === 'countryFlag') {
           fieldValue = generateColumnTextForDisplayingCountryFlag(fieldValue);
           columnText += fieldValue;
         } else if (displayName === undefined) {
@@ -78,8 +64,8 @@ function generateColumnTextForColumnTypeAsText(columnDetails) {
       }
     }
     else {
-      if (fieldName != undefined) {
-        if (displayName == 'date') {
+      if (fieldName !== undefined) {
+        if (displayName === 'date') {
           fieldValue = generateColumnTextForDisplayingDate(fieldValue);
           columnText += fieldValue;
         }
@@ -98,6 +84,20 @@ function generateColumnTextForColumnTypeAsText(columnDetails) {
     }
   }
   return columnText;
+}
+
+function generateColumnTextForDisplayingDate(fieldValue) {
+  let fieldValueInLocalTime = moment.utc(fieldValue).toDate();
+  fieldValueInLocalTime = moment(fieldValueInLocalTime).format('D MMM YYYY HH:mm:ss');
+  fieldValue = fieldValueInLocalTime;
+  return fieldValue;
+}
+
+function generateColumnTextForDisplayingCountryFlag(fieldValue) {
+  if (fieldValue !== '' && fieldValue !== null) {
+    fieldValue = ' <span class="flag-icon flag-icon-' + fieldValue.toLowerCase() + '"></span>';
+  }
+  return fieldValue;
 }
 
 function generateRowObject(rowDetails, mainObject) {
@@ -343,7 +343,7 @@ const tableCard = (props) => (
                     </Td>
                   );
                 }
-                if (tableColumn.columnType == 'durationWidget') {
+                if (tableColumn.columnType === 'durationWidget') {
                   return (
                     <Td column={tableColumn.columnName}
                         value={tableColumn.timeValue}
@@ -352,7 +352,7 @@ const tableCard = (props) => (
                     </Td>
                   );
                 }
-                if (tableColumn.columnType == 'text') {
+                if (tableColumn.columnType === 'text') {
                   return (
                     <Td column={tableColumn.columnName}
                         style={tableColumn.columnStyle}>{tableColumn.columnText}

@@ -845,8 +845,7 @@ const staticLayout = {
         },
         attributes: {
           style: {width: '100%', marginRight: '20px'},
-          id: 'AssetDetails',
-          variation: '3d'
+          id: 'AssetDetails'
         },
         children: [
           {
@@ -1016,6 +1015,54 @@ const staticLayout = {
     ],
     [
       {
+        type: 'ScatterChart',
+        meta: {
+          showHeader: true,
+          api: {
+            path:"/api/analytics/reporting/execute/{reportId}",
+            queryParams:
+            {
+              "window":"1d"
+            },
+            pathParams:
+            {
+              reportId: "taf_user_agent_unique"
+            }
+          },
+          title: 'User Agent Details'
+        },
+        attributes: {
+          style: {width: '100%'},
+          id: 'UserAgentLength',
+          "chartWidth": "100%",
+          "chartHeight": "200"
+        },
+        chartOptions: {
+          "xAxisName": "User Agent Length",
+          "yAxisName": "Connection Count"
+        },
+        chartData: {
+          fieldMapping: [
+            {
+              "seriesname": 'User Agent Length',
+              "drawline": "0",
+              "anchorsides": "3",
+              "anchorradius": "10",
+              "color":"#0505F5",
+              "anchorbgcolor":"#9F9FF5",
+              "anchorbordercolor":"#0505F5",
+              "reportId": 'taf_user_agent_unique',
+              "columns": {
+                "x":"data.http.__info.userAgentLen",
+                "y":"date"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    [
+      {
         id:'78',
         type: 'Compound',
         name: 'Compound',
@@ -1033,9 +1080,9 @@ const staticLayout = {
             pathParams:
             {
               reportId: "taf_top_longest_user_agents,taf_top_shortest_user_agents"
-            },
+            }
           },
-          title: 'User Agent Details'
+          title: 'Longest and Shortest User Agents'
         },
         attributes: {
           style: {width: '100%', marginRight: '20px'},

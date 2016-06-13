@@ -236,8 +236,8 @@ const renderChart = (props) => {
     const fusioncharts = new FusionCharts({
       type: 'mscombi2d',
       renderAt: props.attributes.id,
-      width: '100%',
-      height: '400',
+      width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
+      height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
       dataFormat: 'json',
       containerBackgroundOpacity:'0',
       dataSource: generateChartDataSource(rawData, props)

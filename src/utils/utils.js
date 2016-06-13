@@ -86,6 +86,21 @@ export function getColumnIndexArrayFromColumnName(currentChartDataColumns, colum
   return columnIndexArray;
 }
 
+//Function to get x and y indexes from column names specified in layout JSON
+export function getXYIndexFromColumnNames(currentChartDataColumns, columnsArray) {
+  let xColumnIndex = '',
+      yColumnIndex = '';
+  for (let c = 0; c < columnsArray.length; c++) {
+    if (currentChartDataColumns.x === columnsArray[c].name) {
+      xColumnIndex = c;
+    }
+    if (currentChartDataColumns.y === columnsArray[c].name) {
+      yColumnIndex = c;
+    }
+  }
+  return [xColumnIndex, yColumnIndex];
+}
+
 //Function to get index from object name specified in layout JSON
 export function getIndexFromObjectName(inputArray) {
   let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;

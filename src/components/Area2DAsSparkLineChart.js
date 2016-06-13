@@ -8,7 +8,7 @@ function generateChartDataSource(chartData, duration) {
       dataSeries = {};
 
   for (let key in chartData) {
-    var dataPoint = {};
+    let dataPoint = {};
     dataPoint.label = "";
     if (chartData[key][0] !== 0 && chartData[key][0] !== '') {
       dataPoint.value = chartData[key][0];

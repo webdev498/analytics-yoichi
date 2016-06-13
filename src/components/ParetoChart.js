@@ -40,14 +40,14 @@ function generateChartDataSource(rawData, props) {
   }
 
   for (let i = 0; i < currentDataRows.length; i++) {
-      const xValue = currentDataRows[i][xColumnIndex],
-            yValue = currentDataRows[i][yColumnIndex],
-            barObject = {
-              label: xValue ? xValue : "Other",
-              value: yValue,
-              color: chartColors[(colorIndex++) % numberOfColors]
-            };
-      graphBars.push(barObject);
+    const xValue = currentDataRows[i][xColumnIndex],
+          yValue = currentDataRows[i][yColumnIndex],
+          barObject = {
+            label: xValue ? xValue : "Other",
+            value: yValue,
+            color: chartColors[(colorIndex++) % numberOfColors]
+          };
+    graphBars.push(barObject);
   }
 
   const dataSourceObject = {
