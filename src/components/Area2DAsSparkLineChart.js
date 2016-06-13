@@ -48,8 +48,6 @@ function generateChartDataSource(chartData, duration) {
   if (dataSet.length > 0)
     dataSourceObject.dataset = dataSet;
 
-  console.log(JSON.stringify(dataSet));
-
   return dataSourceObject;
 }
 

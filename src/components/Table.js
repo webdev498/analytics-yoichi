@@ -141,7 +141,6 @@ function generateRowObject(rowDetails, mainObject) {
 }
 
 function loadChartComponentInTableRow(tableColumn, duration) {
-  if (tableColumn.chartType === 'area2d') console.log(JSON.stringify(tableColumn));
   switch(tableColumn.chartType) {
     case "angulargauge":
       return (
