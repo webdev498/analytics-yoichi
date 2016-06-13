@@ -1115,7 +1115,7 @@ const staticLayout = {
                           fieldName: "data.http.userAgent"
                         }
                       ],
-                      style: {width: '40%'}
+                      style: {width: '70%'}
                     },
                     {
                       type: 'chart',
@@ -1129,7 +1129,7 @@ const staticLayout = {
                           fieldName: "count"
                         }
                       ],
-                      style: {width: '10%'}
+                      style: {width: '30%'}
                     }
                   ]
                 }
@@ -1165,7 +1165,7 @@ const staticLayout = {
                           fieldName: "data.http.userAgent"
                         }
                       ],
-                      style: {width: '40%'}
+                      style: {width: '70%'}
                     },
                     {
                       type: 'chart',
@@ -1179,7 +1179,7 @@ const staticLayout = {
                           fieldName: "count"
                         }
                       ],
-                      style: {width: '10%'}
+                      style: {width: '30%'}
                     }
                   ]
                 }

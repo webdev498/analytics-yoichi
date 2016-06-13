@@ -8,8 +8,10 @@ function generateChartDataSource(chartData, duration) {
       dataSeries = {};
 
   for (let key in chartData) {
-    let dataPoint = {};
-    dataPoint.label = "";
+    let dataPoint = {
+      label: "",
+      value: "0"
+    };
     if (chartData[key][0] !== 0 && chartData[key][0] !== '') {
       dataPoint.value = chartData[key][0];
     }
@@ -44,7 +46,9 @@ function generateChartDataSource(chartData, duration) {
   dataSourceObject.chart.xAxisName = "Past " + translateTimeWindow(duration);
 
   if (dataSet.length > 0)
-    dataSourceObject["dataset"] = dataSet;
+    dataSourceObject.dataset = dataSet;
+
+  console.log(JSON.stringify(dataSet));
 
   return dataSourceObject;
 }
