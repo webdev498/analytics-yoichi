@@ -24,6 +24,8 @@ class CoreLayout extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {props} = this;
 
+    const {store} = this.context;
+
     // if user api returns error redirect to auth page.
     if(nextProps.auth.isError) {
       // delete the auth cookies
@@ -31,7 +33,7 @@ class CoreLayout extends React.Component {
       Cookies('token_type', undefined);
 
       // redirect to login page
-      window.location = "/";
+      store.dispatch(push("/"));
     }
   }
 
@@ -56,6 +58,10 @@ class CoreLayout extends React.Component {
 CoreLayout.propTypes = {
   children: PropTypes.element
 };
+
+CoreLayout.contextTypes = {
+  store: React.PropTypes.object
+}
 
 function mapStateToProps(state, ownProps) {
   const {auth} = state;

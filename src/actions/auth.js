@@ -56,21 +56,15 @@ export function fetchUserData() {
   }
 }
 
-export function isLoggedIn(globalState, urlHash, store) {
-  if(urlHash && urlHash.indexOf("#access_token") === 0) {
-    let individualParameters = urlHash.split("&");
+export function isLoggedIn(globalState, query, store) {
+  if((query && query["access_token"])) {
+    const accessToken = query["access_token"];
+    const tokenType = query["token_type"];
 
-    if (individualParameters.length > 0) {
-      const accessToken = (individualParameters[0]).replace("#access_token=","");
-      const tokenType = (individualParameters[1]).replace("token_type=","");
+    Cookies.set('access_token', accessToken, { path: '/' });
+    Cookies.set('token_type', tokenType, { path: '/' });
 
-      Cookies.set('access_token', accessToken, { path: '/' });
-      Cookies.set('token_type', tokenType, { path: '/' });
-
-      return true;
-    }
-
-    return false;
+    return true;
   }
 
   return Cookies.get('access_token') && Cookies.get('token_type');
