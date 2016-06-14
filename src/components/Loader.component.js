@@ -7,10 +7,9 @@ const style = {
   top: 0,
   bottom: 0,
   display: 'flex',
+  zIndex: 1,
   backgroundColor: 'rgba(0,0,0, 0.3)'
 }
-
-
 
 const Loader = (props) => (
   <div style={{...style, ...props.style}}>

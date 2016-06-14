@@ -27,6 +27,7 @@ const styles = {
     marginLeft: 'auto'
   },
   refreshIcon: {
+    cursor: 'pointer',
     fontSize: '20px'
   },
   crossIcon: {
@@ -39,15 +40,20 @@ class ParentCard extends React.Component {
     super(props);
   }
 
+  getData() {
+    const { props } = this;
+    const {api, query} = props.meta;
+
+    props.fetchApiData(props.id, api, query);
+  }
+
   componentDidMount() {
     const { store } = this.context;
-    const { props } = this;
 
-    const {api, query} = props.meta;
     this.unsubscribe = store.subscribe(() => {});
 
-    if(api) {
-      props.fetchApiData(props.id, api, query);
+    if(this.props.meta.api) {
+      this.getData();
     }
   }
 
@@ -67,6 +73,10 @@ class ParentCard extends React.Component {
             data: props.data,
             duration: props.duration
           });
+  }
+
+  refreshData() {
+    this.getData();
   }
 
   componentWillUnmount() {
@@ -95,7 +105,8 @@ class ParentCard extends React.Component {
 
             <div style={styles.iconWrap}>
               <FontIcon className='material-icons'
-                        style={styles.refreshIcon}>
+                        style={styles.refreshIcon}
+                        onClick={this.refreshData.bind(this)}>
                         refresh
               </FontIcon>
             </div>
