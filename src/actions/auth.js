@@ -2,6 +2,8 @@ import Cookies from 'cookies-js';
 import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR} from 'Constants';
 import {baseUrl} from 'config';
 
+import { push } from 'react-router-redux';
+
 export function userDetailsLoading() {
   return {
     type: USER_DETAILS_LOADING
@@ -68,4 +70,15 @@ export function isLoggedIn(globalState, query, store) {
   }
 
   return Cookies.get('access_token') && Cookies.get('token_type');
+}
+
+export function logout() {
+  return function(dispatch) {
+    // delete the auth cookies
+    Cookies('access_token', undefined);
+    Cookies('token_type', undefined);
+
+    // redirect to login page
+    dispatch(push("/"));
+  }
 }

@@ -1,12 +1,11 @@
 import React, { PropTypes } from 'react';
-import Cookies from 'cookies-js';
 
 import { connect } from 'react-redux';
 import Header from './PageHeader';
 import Sidebar from './Sidebar';
 import PageContent from './PageContent';
 
-import {fetchUserData} from 'actions/auth';
+import { fetchUserData, logout } from 'actions/auth';
 
 import Loader from 'components/Loader.component';
 
@@ -24,16 +23,9 @@ class CoreLayout extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {props} = this;
 
-    const {store} = this.context;
-
     // if user api returns error redirect to auth page.
     if(nextProps.auth.isError) {
-      // delete the auth cookies
-      Cookies('access_token', undefined);
-      Cookies('token_type', undefined);
-
-      // redirect to login page
-      store.dispatch(push("/"));
+      logout();
     }
   }
 
@@ -59,10 +51,6 @@ CoreLayout.propTypes = {
   children: PropTypes.element
 };
 
-CoreLayout.contextTypes = {
-  store: React.PropTypes.object
-}
-
 function mapStateToProps(state, ownProps) {
   const {auth} = state;
   return {
@@ -70,4 +58,6 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps, {fetchUserData})(CoreLayout);
+export default connect(mapStateToProps, {
+  fetchUserData, logout
+})(CoreLayout);
