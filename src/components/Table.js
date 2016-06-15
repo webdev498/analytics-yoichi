@@ -10,7 +10,8 @@ const {Table, Tr, Td, unsafe} = Reactable;
 
 //Declaration of variables
 let tableProperties = {},
-    tableDataSource = [];
+    tableDataSource = [],
+    filterableObject = {true};
 
 function getColumnText(columnDetails) {
   let {currentColumnType, fieldValue, columnText, chartValue, timeValue} = columnDetails;
@@ -273,6 +274,16 @@ const generateDataSource = (props) => {
   rawData = generateRawData(fieldMapping, data);
   tableProperties = {...tableOptions};
 
+  let filterableArray = ["Date","Details","Source","Destination"];//tableOptions.filterable;//
+
+  filterableObject = {filterableArray};
+
+  // if (props.attributes.id == 'RecentAlerts') {
+  //   console.log(JSON.stringify(tableOptions.filterable));
+  //   console.log(JSON.stringify(filterableArray));
+  //   console.log(JSON.stringify(filterableObject));
+  // }
+
   for (let i = 0; i < fieldMapping.length; i++) {
     let currentTableData = fieldMapping[i],
         currentDataRows = rawData[currentTableData.reportId].rows,
@@ -320,12 +331,10 @@ const generateDataSource = (props) => {
 const tableCard = (props) => (
   <div style={props.attributes.style}>
     {generateDataSource(props)}
+    {(tableProperties !== undefined)?
     <Table style={{width:'100%'}}
            className="threatTable"
-           sortable={true}
-           defaultSort={tableProperties.defaultSort}
-           filterable={tableProperties.filterable}
-           filterBy=""
+           sortable={tableProperties.defaultSort}
            itemsPerPage={5}
            pageButtonLimit={5}
            currentPage={0}>
@@ -365,6 +374,7 @@ const tableCard = (props) => (
         })
       }
     </Table>
+    : <div></div>}
   </div>
 );
 

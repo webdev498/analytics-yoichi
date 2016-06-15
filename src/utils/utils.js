@@ -91,10 +91,10 @@ export function getXYIndexFromColumnNames(currentChartDataColumns, columnsArray)
   let xColumnIndex = '',
       yColumnIndex = '';
   for (let c = 0; c < columnsArray.length; c++) {
-    if (currentChartDataColumns.x === columnsArray[c].name) {
+    if (currentChartDataColumns[0] === columnsArray[c].name) {
       xColumnIndex = c;
     }
-    if (currentChartDataColumns.y === columnsArray[c].name) {
+    if (currentChartDataColumns[1] === columnsArray[c].name) {
       yColumnIndex = c;
     }
   }

@@ -1,6 +1,6 @@
 window.global = {};
 
-export const baseUrl = window.global.baseUrl || 'https://demo.ranksoftwareinc.com';
+export const baseUrl = window.global.baseUrl || 'https://demo.ranksoftwareinc.com:9443';
 export const loginUrl = baseUrl + '/oauth/authorize';
 export const responseType = 'token';
 export const clientId = 'taf_dashboard';

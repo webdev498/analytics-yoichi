@@ -337,32 +337,6 @@ const renderChart = (props) => {
   });
       fusioncharts.render();
   });
-
-  /*FusionCharts.ready(function(){
-      const fusioncharts = new FusionCharts({
-      type: 'bar2d',
-      renderAt: props.attributes.id[1],
-      width: '100%',
-      height: '200',
-      dataFormat: 'json',
-      containerBackgroundOpacity:'0',
-      dataSource: dataSourceObject.topFiveCountriesDataSource
-  });
-      fusioncharts.render();
-  });
-
-  FusionCharts.ready(function(){
-      const fusioncharts = new FusionCharts({
-      type: 'bar2d',
-      renderAt: props.attributes.id[2],
-      width: '100%',
-      height: '200',
-      dataFormat: 'json',
-      containerBackgroundOpacity:'0',
-      dataSource: dataSourceObject.topBandwidthCountriesDataSource
-  });
-      fusioncharts.render();
-  });*/
 }
 
 const WorldMap = (props) => (
