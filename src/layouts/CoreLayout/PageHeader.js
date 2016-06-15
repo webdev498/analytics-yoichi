@@ -9,6 +9,7 @@ import MenuItem from 'material-ui/MenuItem/MenuItem';
 import FaceIcon from 'material-ui/svg-icons/social/person';
 
 import {updateApiData} from 'actions/ParentCard';
+import {logout} from 'actions/auth';
 
 import { connect } from 'react-redux';
 
@@ -82,16 +83,19 @@ class PageHeader extends React.Component {
           {getTimeRangeItems()}
         </DropDownMenu>
 
-        <MenuItem primaryText={name} leftIcon={<FaceIcon />} />
+        {name ? <MenuItem primaryText={name} leftIcon={<FaceIcon />} /> : null }
 
-      {/*
-        <Menu value={1}
-                      onChange={this.handleChange}
-                      menuStyle={{top: '64px'}}>
-          <MenuItem value={1} primaryText='View Token'/>
-          <MenuItem value={2} primaryText='Log Out'/>
-        </Menu>
-        */}
+        {
+          name ?
+            <Menu value={1}
+                  onChange={this.handleChange}
+                  menuStyle={{top: '64px'}} >
+              {/*<MenuItem value={1} primaryText='View Token'/>*/}
+              <MenuItem value={2} primaryText='Log Out' onClick={props.logout} />
+            </Menu>
+          : null
+        }
+
       </AppBar>
     )
   }
@@ -102,5 +106,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  updateApiData
+  updateApiData, logout
 })(PageHeader);

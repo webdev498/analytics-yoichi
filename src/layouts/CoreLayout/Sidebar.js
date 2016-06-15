@@ -12,27 +12,27 @@ import UserAgentIcon from 'material-ui/svg-icons/action/dns';
 
 const Sidebar = (props) => (
   <LeftNav open={true} containerStyle={{...props.style, position: 'fixed', top: '64px'}}>
-    <Link to='/dashboard/alert'>
+    <Link to='/alert'>
       <MenuItem leftIcon={<AlertIcon />}>
         Alert Details
       </MenuItem>
     </Link>
-    <Link to='/dashboard/country'>
+    <Link to='/country'>
       <MenuItem leftIcon={<CountryIcon />}>
         Country Details
       </MenuItem>
     </Link>
-    <Link to='/dashboard/traffic'>
+    <Link to='/traffic'>
       <MenuItem leftIcon={<TrafficIcon />}>
         Traffic Details
       </MenuItem>
     </Link>
-    <Link to='/dashboard/asset'>
+    <Link to='/asset'>
       <MenuItem leftIcon={<AssetsIcon />}>
         Asset Details
       </MenuItem>
     </Link>
-    <Link to='/dashboard/user-agent'>
+    <Link to='/user-agent'>
       <MenuItem leftIcon={<UserAgentIcon />}>
         User-Agent Details
       </MenuItem>

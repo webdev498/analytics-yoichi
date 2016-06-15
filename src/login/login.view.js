@@ -1,7 +1,7 @@
 /* @flow */
 import React from 'react';
 import Cookies from 'cookies-js';
-import { browserHistory } from 'react-router';
+import { push } from 'react-router-redux';
 
 import Card from 'material-ui/Card/Card';
 import TextField from 'material-ui/TextField';
@@ -20,12 +20,14 @@ class LoginView extends React.Component {
     super(props);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const accessToken = Cookies.get("access_token");
     const tokenType = Cookies.get("token_type");
 
-    if(accessToken) {
-      window.location = defaultRoute;
+    const {store} = this.context;
+
+    if(accessToken && tokenType) {
+      store.dispatch(push(defaultRoute));
     }
   }
 
@@ -55,6 +57,10 @@ class LoginView extends React.Component {
       </Card>
     )
   }
+}
+
+LoginView.contextTypes = {
+  store: React.PropTypes.object
 }
 
 export default LoginView;

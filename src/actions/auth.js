@@ -2,6 +2,8 @@ import Cookies from 'cookies-js';
 import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR} from 'Constants';
 import {baseUrl} from 'config';
 
+import { push } from 'react-router-redux';
+
 export function userDetailsLoading() {
   return {
     type: USER_DETAILS_LOADING
@@ -56,22 +58,27 @@ export function fetchUserData() {
   }
 }
 
-export function isLoggedIn(globalState, urlHash, store) {
-  if(urlHash && urlHash.indexOf("#access_token") === 0) {
-    let individualParameters = urlHash.split("&");
+export function isLoggedIn(globalState, query, store) {
+  if((query && query["access_token"])) {
+    const accessToken = query["access_token"];
+    const tokenType = query["token_type"];
 
-    if (individualParameters.length > 0) {
-      const accessToken = (individualParameters[0]).replace("#access_token=","");
-      const tokenType = (individualParameters[1]).replace("token_type=","");
+    Cookies.set('access_token', accessToken, { path: '/' });
+    Cookies.set('token_type', tokenType, { path: '/' });
 
-      Cookies.set('access_token', accessToken, { path: '/' });
-      Cookies.set('token_type', tokenType, { path: '/' });
-
-      return true;
-    }
-
-    return false;
+    return true;
   }
 
   return Cookies.get('access_token') && Cookies.get('token_type');
+}
+
+export function logout() {
+  return function(dispatch) {
+    // delete the auth cookies
+    Cookies('access_token', undefined);
+    Cookies('token_type', undefined);
+
+    // redirect to login page
+    dispatch(push("/"));
+  }
 }

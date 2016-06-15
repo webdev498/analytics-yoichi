@@ -84,13 +84,11 @@ export function fetchApiData(id, api, query) {
 
     dispatch(requestApiData(id));
 
-    const defaultHeaders = Object.assign ({
-      'Authorization': `${tokenType} ${accessToken}`
-    }, api.headers);
-
     return fetch(getUrl(api, currentDuration), {
       method: 'GET',
-      headers: defaultHeaders
+      headers: {
+        'Authorization': `${tokenType} ${accessToken}`
+      }
     })
     .then(response => response.json())
     .then(json => {

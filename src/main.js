@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
-import { useRouterHistory } from 'react-router';
+import { createHashHistory } from 'history'
+import { useRouterHistory, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import makeRoutes from './routes';
 import Root from './containers/Root';
@@ -22,8 +23,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 // Configure history for react-router
-const browserHistory = useRouterHistory(createBrowserHistory)({
-  basename: __BASENAME__
+const browserHistory = useRouterHistory(createHashHistory)({
+  queryKey: false
 });
 
 // Create redux store and sync with react-router-redux. We have installed the
@@ -52,7 +53,7 @@ function start () {
   // React application to the DOM!
 
   ReactDOM.render(
-    <Root history={history} routes={routes} store={store} />,
+    <Root history={browserHistory} routes={routes} store={store} />,
     document.getElementById('root')
   );
 }
