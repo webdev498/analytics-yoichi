@@ -2,11 +2,26 @@ import React, { PropTypes } from 'react';
 
 import FontIcon from 'material-ui/FontIcon';
 import ParentCard from 'containers/ParentCard';
-import Loader from 'components/Loader.component';
+import Loader from 'components/Loader';
+import Kibana from 'components/Kibana';
 
 import {fetchLayoutData} from 'actions/core';
 
 import { connect } from 'react-redux';
+
+const styles = {
+  kibana: {
+    padding: '5px 5px 0 5px',
+    position: 'fixed',
+    top: '64px',
+    left: '72px',
+    bottom: 0,
+    right: 0
+  },
+  content: {
+    padding: '20px'
+  }
+}
 
 class PageContent extends React.Component {
   constructor(props) {
@@ -81,13 +96,36 @@ class PageContent extends React.Component {
   }
 
   render () {
+    let showKibana = false;
+
+    const show = {display: 'block'},
+          hide = {display: 'none'};
+
+    let contentStyle = styles.content,
+        kibanaStyle = styles.kibana;
+
+    if(showKibana) {
+      contentStyle = Object.assign({}, contentStyle, hide);
+      kibanaStyle = Object.assign({}, kibanaStyle, show);
+    }
+    else {
+      contentStyle = Object.assign({}, contentStyle, show);
+      kibanaStyle = Object.assign({}, kibanaStyle, hide);
+    }
+
     return (
-      <div id="content" style={{padding: '20px'}}>
-        {
-          this.props.isFetching ?
-          <Loader /> :
-          this.renderChildren()
-        }
+      <div>
+        <div style={contentStyle}>
+          {
+            this.props.isFetching ?
+            <Loader /> :
+            this.renderChildren()
+          }
+        </div>
+
+        <div style={kibanaStyle}>
+          <Kibana src='https://demo.ranksoftwareinc.com/api/kibana/query/alerts-score?lowScore=36&highScore=64&from=2016-06-14T07:00:00.000&to=2016-06-14T07:05:00.000'/>
+        </div>
       </div>
     )
   }

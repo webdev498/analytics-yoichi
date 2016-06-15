@@ -7,9 +7,21 @@ import PageContent from './PageContent';
 
 import { fetchUserData, logout } from 'actions/auth';
 
-import Loader from 'components/Loader.component';
+import Loader from 'components/Loader';
 
 import 'styles/core.scss';
+
+const styles = {
+  sidebar: {
+    width: '72px'
+  },
+  base: {
+    paddingLeft: '72px',
+    paddingTop: '64px',
+    boxSizing: 'border-box',
+    height: '100%'
+  }
+}
 
 class CoreLayout extends React.Component {
   constructor(props) {
@@ -32,10 +44,10 @@ class CoreLayout extends React.Component {
   render () {
     const {props} = this;
     return (
-      <div className="menubar-hoverable header-fixed menubar-visible">
-        <Header title="RANK" />
-        <Sidebar style={{width: '72px'}}></Sidebar>
-        <div id="base">
+      <div>
+        <Header title='RANK' />
+        <Sidebar style={styles.sidebar}></Sidebar>
+        <div style={styles.base}>
           {
             (props.auth.isLoading) ?
               <Loader /> :
