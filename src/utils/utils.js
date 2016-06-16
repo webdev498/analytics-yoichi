@@ -154,3 +154,12 @@ export function translateTimeWindow(window) {
   if (window == "1mo") return "1 month";
   return window;
 }
+
+export function isUndefined(value) {
+  if (value === undefined) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
