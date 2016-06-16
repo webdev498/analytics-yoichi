@@ -38,7 +38,7 @@ const styles = {
 class ParentCard extends React.Component {
 
   static propTypes = {
-    meta: PropTypes.obj.isRequired
+    meta: PropTypes.object.isRequired
   }
 
   getData() {

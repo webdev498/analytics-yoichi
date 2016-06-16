@@ -16,7 +16,7 @@ class PageContent extends React.Component {
   }
 
   static propTypes = {
-    layout: PropTypes.obj.isRequired,
+    layout: PropTypes.object.isRequired,
     isFetching: PropTypes.bool.isRequired
   }
 
