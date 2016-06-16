@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
 
 import Card from 'material-ui/Card/Card';
@@ -10,7 +10,7 @@ import {fetchApiData} from 'actions/ParentCard';
 
 const styles = {
   wrap: {
-    position: 'relative',
+    position: 'relative'
   },
   header: {
     padding: '10px 15px',
@@ -33,11 +33,12 @@ const styles = {
   crossIcon: {
     fontSize: '20px'
   }
-}
+};
 
 class ParentCard extends React.Component {
-  constructor(props) {
-    super(props);
+
+  static propTypes = {
+    meta: PropTypes.obj.isRequired
   }
 
   getData() {
@@ -52,7 +53,7 @@ class ParentCard extends React.Component {
 
     this.unsubscribe = store.subscribe(() => {});
 
-    if(this.props.meta.api) {
+    if (this.props.meta.api) {
       this.getData();
     }
   }
@@ -67,12 +68,12 @@ class ParentCard extends React.Component {
     } = props;
 
     return React.cloneElement(props.children, {
-            isFetching,
-            isError,
-            errorData,
-            data: props.data,
-            duration: props.duration
-          });
+      isFetching,
+      isError,
+      errorData,
+      data: props.data,
+      duration: props.duration
+    });
   }
 
   refreshData() {
@@ -93,7 +94,7 @@ class ParentCard extends React.Component {
       return;
     }
 
-    if(props.meta.showHeader) {
+    if (props.meta.showHeader) {
       return (
         <Card style={{...styles.wrap, ...props.attributes.style}}>
           {props.isFetching ? <Loader /> : null}
@@ -105,15 +106,15 @@ class ParentCard extends React.Component {
 
             <div style={styles.iconWrap}>
               <FontIcon className='material-icons'
-                        style={styles.refreshIcon}
-                        onClick={this.refreshData.bind(this)}>
+                style={styles.refreshIcon}
+                onClick={this.refreshData.bind(this)}>
                         refresh
               </FontIcon>
             </div>
           </header>
           <div> {React.cloneElement(props.children, {...props})} </div>
         </Card>
-      )
+      );
     }
     else {
       return (
@@ -121,24 +122,24 @@ class ParentCard extends React.Component {
           {props.isFetching ? <Loader /> : null}
           {this.getElement()}
         </Card>
-      )
+      );
     }
   }
 }
 
 ParentCard.contextTypes = {
   store: React.PropTypes.object
-}
+};
 
 function mapStateToProps(state, ownProps) {
   const {apiData} = state;
 
   let data = null,
-      isFetching = true,
-      isError = false,
-      errorData = null;
+    isFetching = true,
+    isError = false,
+    errorData = null;
 
-  if(apiData.hasIn(['components', ownProps.id])) {
+  if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
 
     data = propsById.get('data');
