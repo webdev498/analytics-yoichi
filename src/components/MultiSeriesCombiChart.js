@@ -283,6 +283,6 @@ const MultiSeriesCombiChart = (props) => (
     <div style={props.attributes.chartCaption}>{props.meta.title}</div>
     <div id={props.attributes.id}>{renderChart(props)}</div>
   </div>
-)
+);
 
 export default MultiSeriesCombiChart;
