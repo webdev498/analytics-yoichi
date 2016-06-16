@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, {PropTypes} from 'react';
 
 import FontIcon from 'material-ui/FontIcon';
 import ParentCard from 'containers/ParentCard';
@@ -15,6 +15,11 @@ class PageContent extends React.Component {
     this.state = {open: true};
   }
 
+  static propTypes = {
+    layout: PropTypes.obj.isRequired,
+    isFetching: PropTypes.bool.isRequired
+  }
+
   componentDidMount() {
     const {props} = this;
     props.fetchLayoutData(props.location.pathname);
@@ -23,7 +28,7 @@ class PageContent extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {props} = this;
 
-    if(props.location.pathname !== nextProps.location.pathname) {
+    if (props.location.pathname !== nextProps.location.pathname) {
       props.fetchLayoutData(nextProps.location.pathname);
     }
   }
@@ -34,25 +39,25 @@ class PageContent extends React.Component {
 
     const finalElmements = [];
 
-    for(let i = 0, len = layout.length; i < len; i++) {
+    for (let i = 0, len = layout.length; i < len; i++) {
       const section = layout[i];
 
       let children = [];
-      for(let j = 0, numberOfColumns = section.length; j < numberOfColumns; j++) {
+      for (let j = 0, numberOfColumns = section.length; j < numberOfColumns; j++) {
         let componentDetails = section[j];
 
-        const elm = React.createFactory(require('components/' + componentDetails.type).default,);
+        const elm = React.createFactory(require('components/' + componentDetails.type).default, null);
 
         const grandChildrenArray = [];
 
-        if(componentDetails.children) {
+        if (componentDetails.children) {
           const grandChildren = componentDetails.children;
 
-          for(let k = 0, grandChildrenLen = grandChildren.length; k < grandChildrenLen; k++) {
+          for (let k = 0, grandChildrenLen = grandChildren.length; k < grandChildrenLen; k++) {
             const grandChildElm = grandChildren[k];
-            if(grandChildElm.type === 'FontIcon') {
+            if (grandChildElm.type === 'FontIcon') {
               grandChildrenArray.push(React.createElement(FontIcon,
-                           {className:'material-icons'}, grandChildElm.content));
+                           {className: 'material-icons'}, grandChildElm.content));
             }
 
             if (componentDetails.name === 'Compound') {
@@ -82,21 +87,21 @@ class PageContent extends React.Component {
     return React.DOM.div({}, finalElmements);
   }
 
-  render () {
+  render() {
     return (
-      <div id="content" style={{padding: '20px'}}>
+      <div id='content' style={{padding: '20px'}}>
         {
-          this.props.isFetching ?
-          <Loader /> :
-          this.renderChildren()
+          this.props.isFetching
+            ? <Loader />
+            : this.renderChildren()
         }
       </div>
-    )
+    );
   }
 }
 
 PageContent.contextTypes = {
-  location: React.PropTypes.object
+  location: PropTypes.object
 };
 
 function mapStateToProps(state, ownProps) {

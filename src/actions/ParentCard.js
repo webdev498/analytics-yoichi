@@ -2,7 +2,6 @@ import {
   REQUEST_API_DATA,
   RECEIVE_API_DATA,
   ERROR_API_DATA,
-  UPDATE_API_DATA,
   TIME_INTERVAL_UPDATE
 } from 'Constants';
 
@@ -21,7 +20,7 @@ export function receiveApiData(id, json) {
     type: RECEIVE_API_DATA,
     id,
     data: json
-  }
+  };
 }
 
 export function errorApiData(id, ex) {
@@ -29,14 +28,14 @@ export function errorApiData(id, ex) {
     type: ERROR_API_DATA,
     id,
     errorData: ex
-  }
+  };
 }
 
 export function changeTimeRange(timeRange) {
   return {
     type: TIME_INTERVAL_UPDATE,
     data: timeRange
-  }
+  };
 }
 
 function getUrl(api, duration) {
@@ -51,17 +50,17 @@ function getUrl(api, duration) {
   });
 
   const keys = Object.keys(query);
-  let queryString = "";
+  let queryString = '';
 
-  if(keys.length > 0) {
-    queryString += "?";
+  if (keys.length > 0) {
+    queryString += '?';
 
     keys.forEach((key) => {
-      if(key === 'window' || key === 'timeShift') {
-        queryString += key + "=" + duration + "&";
+      if (key === 'window' || key === 'timeShift') {
+        queryString += key + '=' + duration + '&';
       }
       else {
-        queryString += key + "=" + query[key] + "&";
+        queryString += key + '=' + query[key] + '&';
       }
     });
 
@@ -72,14 +71,14 @@ function getUrl(api, duration) {
 }
 
 export function fetchApiData(id, api, query) {
-  const accessToken = Cookies.get("access_token");
-  const tokenType = Cookies.get("token_type");
+  const accessToken = Cookies.get('access_token');
+  const tokenType = Cookies.get('token_type');
 
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
-  return function (dispatch, getState) {
+  return function(dispatch, getState) {
     const currentDuration = getState().apiData.get('duration');
 
     dispatch(requestApiData(id));
@@ -94,26 +93,26 @@ export function fetchApiData(id, api, query) {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(receiveApiData(id, {json, api}))
+      dispatch(receiveApiData(id, {json, api}));
     })
     .catch((ex) => {
-      dispatch(errorApiData(id, ex))
-    })
-  }
+      dispatch(errorApiData(id, ex));
+    });
+  };
 }
 
 // Update api data for all the components that are visible on the page
 // when time range is changed.
 export function updateApiData(newDuration) {
-  return function(dispatch, getState) {
+  return function(dispatch, getState){
     const {apiData} = getState();
 
     const currentDuration = apiData.get('duration');
 
-    if(currentDuration !== newDuration.param) {
+    if (currentDuration !== newDuration.param) {
       dispatch(changeTimeRange(newDuration.param));
 
-      if(apiData && apiData.has('components')) {
+      if (apiData && apiData.has('components')) {
         const components = apiData.get('components');
 
         components.forEach((component, index) => {
@@ -123,5 +122,5 @@ export function updateApiData(newDuration) {
         });
       }
     }
-  }
+  };
 }
