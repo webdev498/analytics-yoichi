@@ -1626,7 +1626,10 @@ const staticLayout = {
             },
             "tableOptions": {
               "sortable": [],
-              "defaultSort": {},
+              "defaultSort": {
+                "column": "",
+                "direction": "asc"
+              },
               "filterable": [],
               "filterBy": ""
             }
@@ -1686,7 +1689,10 @@ const staticLayout = {
             },
             "tableOptions": {
               "sortable": [],
-              "defaultSort": {},
+              "defaultSort": {
+                "column": "User Agent",
+                "direction": "asc"
+              },
               "filterable": [],
               "filterBy": ""
             }

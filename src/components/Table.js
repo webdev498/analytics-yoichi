@@ -331,10 +331,12 @@ const generateDataSource = (props) => {
 const tableCard = (props) => (
   <div style={props.attributes.style}>
     {generateDataSource(props)}
-    {(tableProperties !== undefined)?
+    {(props.tableOptions !== undefined)?
     <Table style={{width:'100%'}}
            className="threatTable"
-           sortable={tableProperties.defaultSort}
+           sortable={props.tableOptions.sortable}
+           filterable={props.tableOptions.filterable}
+           defaultSort={props.tableOptions.defaultSort}
            itemsPerPage={5}
            pageButtonLimit={5}
            currentPage={0}>
