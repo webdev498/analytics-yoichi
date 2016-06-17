@@ -329,50 +329,24 @@ const renderChart = (props) => {
       const fusioncharts = new FusionCharts({
       type: 'maps/worldwithcountries',
       renderAt: props.attributes.id[0],
-      width: '100%',
-      height: '400',
+      width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
+      height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
       dataFormat: 'json',
       containerBackgroundOpacity:'0',
       dataSource: generateChartDataSource(rawData, props)
   });
       fusioncharts.render();
   });
-
-  /*FusionCharts.ready(function(){
-      const fusioncharts = new FusionCharts({
-      type: 'bar2d',
-      renderAt: props.attributes.id[1],
-      width: '100%',
-      height: '200',
-      dataFormat: 'json',
-      containerBackgroundOpacity:'0',
-      dataSource: dataSourceObject.topFiveCountriesDataSource
-  });
-      fusioncharts.render();
-  });
-
-  FusionCharts.ready(function(){
-      const fusioncharts = new FusionCharts({
-      type: 'bar2d',
-      renderAt: props.attributes.id[2],
-      width: '100%',
-      height: '200',
-      dataFormat: 'json',
-      containerBackgroundOpacity:'0',
-      dataSource: dataSourceObject.topBandwidthCountriesDataSource
-  });
-      fusioncharts.render();
-  });*/
 }
 
 const WorldMap = (props) => (
-  <div>
+  <div style={{width:'100%'}}>
     <div className="chartCaption">{props.meta.subTitle}</div>
     <div style={{textAlign:'center'}}><br/>
       <img src="/img/biohazard.png" width="20" height="20"/>&nbsp;Malicious Connections
     </div>
     <div id={props.attributes.id[0]}></div>
-    <div style={{width:'100%'}}>
+    <div>
       <div id={props.attributes.id[1]} style={{width:'50%',float:'left'}}></div>
       <div id={props.attributes.id[2]} style={{width:'50%',float:'left'}}></div>
     </div>

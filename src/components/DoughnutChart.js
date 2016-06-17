@@ -18,6 +18,39 @@ let highlightedColor1 = "#5E2B78", //Purple (Default colors set)
     calculateTransform1 = 0,
     calculateTransform2 = 0;
 
+function generateDoughnutChart (inputArray) {
+  doughnutAttributes = {};//This initialization is required
+  const doughnutInputArray1 = {
+                                countValue: inputArray.countValue,
+                                totalValue: inputArray.top10CountValue
+                              },
+        doughnutAttributes1 = calculateDoughnutAttributes(doughnutInputArray1, 1),
+        doughnutInputArray2 = {
+                                countValue: inputArray.totalValue,
+                                totalValue: inputArray.top10TotalValue
+                              },
+        doughnutAttributes2 = calculateDoughnutAttributes(doughnutInputArray2, 2),
+        percentage1 = Math.round((inputArray.top10CountValue / parseInt(inputArray.countValue)) * 100, 2),
+        percentage2 = Math.round((inputArray.top10TotalValue / parseInt(inputArray.totalValue)) * 100, 2),
+        displayPercentage1 = percentage1.toString() + '%',
+        displayPercentage2 = percentage2.toString() + '%',
+        percentage2Color = {fontWeight:'bold',color:highlightedColor1},
+        percentage1Color = {fontWeight:'bold',color:highlightedColor2};
+
+  doughnutAttributes = {
+    chart1Background: doughnutAttributes1.chartBackground,
+    chart1SliceOneStyle: doughnutAttributes1.chartSliceOneStyle,
+    chart1SliceTwoStyle: doughnutAttributes1.chartSliceTwoStyle,
+    chart2Background: doughnutAttributes2.chartBackground,
+    chart2SliceOneStyle: doughnutAttributes2.chartSliceOneStyle,
+    chart2SliceTwoStyle: doughnutAttributes2.chartSliceTwoStyle,
+    percentage1Color: percentage1Color,
+    percentage2Color: percentage2Color,
+    displayPercentage1: displayPercentage1,
+    displayPercentage2: displayPercentage2
+  };
+}
+
 function calculateDoughnutAttributes(inputArray, chartId) {
   let {countValue, totalValue} = inputArray,
       percentage = Math.round((totalValue / parseInt(countValue)) * 100, 2),
@@ -64,39 +97,6 @@ function calculateDoughnutAttributes(inputArray, chartId) {
     chartSliceOneStyle: chartSliceOneStyle,
     chartSliceTwoStyle: chartSliceTwoStyle
   }
-}
-
-function generateDoughnutChart (inputArray) {
-  doughnutAttributes = {};//This initialization is required
-  const doughnutInputArray1 = {
-                                countValue: inputArray.countValue,
-                                totalValue: inputArray.top10CountValue
-                              },
-        doughnutAttributes1 = calculateDoughnutAttributes(doughnutInputArray1, 1),
-        doughnutInputArray2 = {
-                                countValue: inputArray.totalValue,
-                                totalValue: inputArray.top10TotalValue
-                              },
-        doughnutAttributes2 = calculateDoughnutAttributes(doughnutInputArray2, 2),
-        percentage1 = Math.round((inputArray.top10CountValue / parseInt(inputArray.countValue)) * 100, 2),
-        percentage2 = Math.round((inputArray.top10TotalValue / parseInt(inputArray.totalValue)) * 100, 2),
-        displayPercentage1 = percentage1.toString() + '%',
-        displayPercentage2 = percentage2.toString() + '%',
-        percentage2Color = {fontWeight:'bold',color:highlightedColor1},
-        percentage1Color = {fontWeight:'bold',color:highlightedColor2};
-
-  doughnutAttributes = {
-    chart1Background: doughnutAttributes1.chartBackground,
-    chart1SliceOneStyle: doughnutAttributes1.chartSliceOneStyle,
-    chart1SliceTwoStyle: doughnutAttributes1.chartSliceTwoStyle,
-    chart2Background: doughnutAttributes2.chartBackground,
-    chart2SliceOneStyle: doughnutAttributes2.chartSliceOneStyle,
-    chart2SliceTwoStyle: doughnutAttributes2.chartSliceTwoStyle,
-    percentage1Color: percentage1Color,
-    percentage2Color: percentage2Color,
-    displayPercentage1: displayPercentage1,
-    displayPercentage2: displayPercentage2
-  };
 }
 
 const renderChart = (props) => {

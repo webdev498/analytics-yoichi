@@ -22,29 +22,6 @@ export function getCountryIDByCountryCode(countryCode) {
   return countryID;
 }
 
-//Function to generate chart data source
-export function generateChartDataSource(chartType, chartValue) {
-  let chartDataSource = '';
-  switch (chartType) {
-    case "angulargauge":
-      chartDataSource = {"chart":
-        {"lowerLimit":"0","upperLimit":"100","showValue":"1","valueBelowPivot":"1","valueFontSize":"11",
-          "valueFontBold":"1","gaugeOuterRadius":"33","gaugeInnerRadius":16.5,"showtickvalues":"0","showTickMarks":"0",
-          "tickvaluedistance":"25","showborder":0,"gaugeFillMix":"{dark-30},{light-60},{dark-10}","bgAlpha":"0",
-          "canvasBgAlpha":"0","caption":""},
-          "colorRange":{"color":[{"minValue":"0","maxValue":"35","code":"#6baa01"},
-          {"minValue":"35","maxValue":"65","code":"#f8bd19"},
-          {"minValue":"65","maxValue":"100","code":"#e44a00"}]},
-          "dials":{"dial":[{"value":chartValue,"bgcolor":"333333","bordercolor":"333333"}]},
-          "value":chartValue
-        };
-      break;
-    default:
-      break;
-  }
-  return chartDataSource;
-}
-
 //Function to convert milliseconds to time
 export function msToTime(duration) {
     var milliseconds = parseInt((duration%1000)/100)
@@ -109,6 +86,21 @@ export function getColumnIndexArrayFromColumnName(currentChartDataColumns, colum
   return columnIndexArray;
 }
 
+//Function to get x and y indexes from column names specified in layout JSON
+export function getXYIndexFromColumnNames(currentChartDataColumns, columnsArray) {
+  let xColumnIndex = '',
+      yColumnIndex = '';
+  for (let c = 0; c < columnsArray.length; c++) {
+    if (currentChartDataColumns[0] === columnsArray[c].name) {
+      xColumnIndex = c;
+    }
+    if (currentChartDataColumns[1] === columnsArray[c].name) {
+      yColumnIndex = c;
+    }
+  }
+  return [xColumnIndex, yColumnIndex];
+}
+
 //Function to get index from object name specified in layout JSON
 export function getIndexFromObjectName(inputArray) {
   let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
@@ -144,4 +136,21 @@ export function checkForUndefinedChartOptionObject(chartOptions, objectName, def
     value = chartOptions[objectName];
   }
   return value;
+}
+
+//Function to translate time window
+export function translateTimeWindow(window) {
+  if (window == "1 hour") return "1h";
+  if (window == "6 hour") return "6h";
+  if (window == "12 hour") return "12h";
+  if (window == "1 day") return "1d";
+  if (window == "1 week") return "1w";
+  if (window == "1 month") return "1mo";
+  if (window == "1h") return "1 hour";
+  if (window == "6h") return "6 hour";
+  if (window == "12h") return "12 hour";
+  if (window == "1d") return "1 day";
+  if (window == "1w") return "1 week";
+  if (window == "1mo") return "1 month";
+  return window;
 }
