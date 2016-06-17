@@ -26,7 +26,18 @@ const styles = {
 class PageContent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {open: true};
+    this.state = {showKibana: false};
+  }
+
+  getChildContext() {
+    const that = this;
+    return {
+      clickThrough() {
+        that.setState({
+          showKibana: true
+        })
+      }
+    };
   }
 
   componentDidMount() {
@@ -96,7 +107,7 @@ class PageContent extends React.Component {
   }
 
   render () {
-    let showKibana = false;
+    const {showKibana} = this.state;
 
     const show = {display: 'block'},
           hide = {display: 'none'};
@@ -133,6 +144,10 @@ class PageContent extends React.Component {
 
 PageContent.contextTypes = {
   location: React.PropTypes.object
+};
+
+PageContent.childContextTypes = {
+  clickThrough: React.PropTypes.func
 };
 
 function mapStateToProps(state, ownProps) {

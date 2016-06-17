@@ -27,12 +27,11 @@ const styles = {
     marginLeft: 'auto',
     display: 'flex',
     alignItems: 'center'
+  },
+  clickThrough: {
+    cursor: 'pointer'
   }
-}
-
-function getText (data) {
-  return data ? data.columns[0].displayName : '';
-}
+};
 
 function getCount (data) {
   data = data.data;
@@ -40,54 +39,67 @@ function getCount (data) {
 }
 
 function getPercent (data) {
-  return (data && data.rows && data.rows[0] && data.rows[0][0][2] !== "N/A")
-          ? Math.abs(Math.round(data.rows[0][0][2]), 2) + "%"
-          : "";
+  return (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A')
+          ? Math.abs(Math.round(data.rows[0][0][2]), 2) + '%'
+          : '';
 }
 
-function getIconElm(props) {
+function getIconElm (props) {
   const elm = props.children[0];
   return React.cloneElement(elm, {style: {...styles.iconStyle}});
 }
 
-function getArrowIcon(data) {
-  if(data && data.rows && data.rows[0] && data.rows[0][0][2] !== "N/A") {
+function getArrowIcon (data) {
+  if (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A') {
     const percent = Math.round(data.rows[0][0][2]);
-    if(percent > 0) {
-      return <FontIcon className='material-icons'>arrow_drop_up</FontIcon>
+    if (percent > 0) {
+      return <FontIcon className='material-icons'>arrow_drop_up</FontIcon>;
     }
-    else if(percent === 0) {
-      return <FontIcon className='material-icons'>trending_flat</FontIcon>
+    else if (percent === 0) {
+      return <FontIcon className='material-icons'>trending_flat</FontIcon>;
     }
     else {
-      return <FontIcon className='material-icons'>arrow_drop_down</FontIcon>
+      return <FontIcon className='material-icons'>arrow_drop_down</FontIcon>;
     }
   }
   else {
-    return "-";
+    return '-';
   }
 }
 
-const MetricsCard = (props) => (
-  <div style={{...styles.cardStyle}}>
-    <div style={styles.wrapStyle}>
-      <div>
-        {getIconElm(props)}
-      </div>
-      <div style={{marginLeft: 'auto', textAlign: 'right'}}>
-        <div style={styles.countStyle}>{getCount(props)}</div>
-        <div style={styles.textStyle}>{props.title}</div>
-      </div>
-    </div>
+class MetricsCard extends React.Component {
+  render () {
+    const { props } = this;
+    return (
+      <div style={{...styles.cardStyle}}>
+        <div style={styles.wrapStyle}>
+          <div>
+            {getIconElm(props)}
+          </div>
+          <div style={{marginLeft: 'auto', textAlign: 'right'}}>
+            <div style={styles.countStyle}>{getCount(props)}</div>
+            <div style={styles.textStyle}>{props.title}</div>
+          </div>
+        </div>
 
-    <div style={styles.detailsStyle}>
-      <span>View Details</span>
-      <div style={styles.percentageStyle}>
-        <span>{getPercent(props.data)}</span>
-        {getArrowIcon(props.data)}
+        <div style={styles.detailsStyle}>
+          <span style={styles.clickThrough}
+            onClick={this.context.clickThrough}>
+            View Details
+          </span>
+
+          <div style={styles.percentageStyle}>
+            <span>{getPercent(props.data)}</span>
+            {getArrowIcon(props.data)}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-)
+    );
+  }
+}
+
+MetricsCard.contextTypes = {
+  clickThrough: React.PropTypes.func
+};
 
 export default MetricsCard;
