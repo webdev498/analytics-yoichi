@@ -21,11 +21,12 @@ const styles = {
     boxSizing: 'border-box',
     height: '100%'
   }
-}
+};
 
 class CoreLayout extends React.Component {
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    fetchUserData: PropTypes.object.isRequired,
+    logout: PropTypes.object.isRequired
   }
 
   componentDidMount() {
@@ -36,26 +37,26 @@ class CoreLayout extends React.Component {
     const {props} = this;
 
     // if user api returns error redirect to auth page.
-    if(nextProps.auth.isError) {
-      logout();
+    if (nextProps.auth.isError) {
+      props.logout();
     }
   }
 
-  render () {
+  render() {
     const {props} = this;
     return (
       <div>
         <Header title='RANK' />
-        <Sidebar style={styles.sidebar}></Sidebar>
+        <Sidebar style={styles.sidebar} />
         <div style={styles.base}>
           {
-            (props.auth.isLoading) ?
-              <Loader /> :
-              <PageContent location={props.location} />
+            (props.auth.isLoading)
+            ? <Loader />
+            : <PageContent location={props.location} />
           }
         </div>
       </div>
-    )
+    );
   }
 }
 

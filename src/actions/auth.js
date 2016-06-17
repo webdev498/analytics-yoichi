@@ -24,44 +24,35 @@ export function userDetailsError(json, errorData) {
   };
 }
 
-export function logout() {
-  return {
-    types: [LOGOUT],
-    promise: (client) => client.get('/logout')
-  };
-}
-
 export function fetchUserData() {
-  const accessToken = Cookies.get("access_token");
-  const tokenType = Cookies.get("token_type");
+  const accessToken = Cookies.get('access_token');
+  const tokenType = Cookies.get('token_type');
 
   const authorizationHeader = {
     'Authorization': `${tokenType} ${accessToken}`
   };
 
-  return function (dispatch) {
+  return function(dispatch) {
     dispatch(userDetailsLoading());
 
     return fetch(baseUrl + '/api/user/profile', {
       method: 'GET',
-      headers: {
-        'Authorization': `${tokenType} ${accessToken}`
-      }
+      headers: authorizationHeader
     })
     .then(response => response.json())
     .then(json => {
       dispatch(userDetailsLoaded(json));
     })
     .catch((ex) => {
-      dispatch(userDetailsError(ex))
+      dispatch(userDetailsError(ex));
     });
-  }
+  };
 }
 
 export function isLoggedIn(globalState, query, store) {
-  if((query && query["access_token"])) {
-    const accessToken = query["access_token"];
-    const tokenType = query["token_type"];
+  if((query && query['access_token'])) {
+    const accessToken = query['access_token'];
+    const tokenType = query['token_type'];
 
     Cookies.set('access_token', accessToken, { path: '/' });
     Cookies.set('token_type', tokenType, { path: '/' });
@@ -79,6 +70,6 @@ export function logout() {
     Cookies('token_type', undefined);
 
     // redirect to login page
-    dispatch(push("/"));
+    dispatch(push('/'));
   }
 }
