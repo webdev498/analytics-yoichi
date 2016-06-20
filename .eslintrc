@@ -24,6 +24,11 @@
     "flow-vars/define-flow-type": 1,
     "flow-vars/use-flow-type": 1,
     "space-before-function-paren": [2, "never"],
-    "brace-style": [2, "stroustrup", { "allowSingleLine": true }]
+    "brace-style": [2, "stroustrup", { "allowSingleLine": true }],
+    "one-var": [0, {
+      "var": "always", // Exactly one var declaration per function
+      "let": "never", // Exactly one let declaration per block
+      "const": "never" // Exactly one declarator per const declaration per block
+    }]
   }
 }
