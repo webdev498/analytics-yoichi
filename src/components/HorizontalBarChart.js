@@ -1,5 +1,6 @@
-import React from 'react';
-import {generateRawData, getColumnIndexArrayFromColumnName, getIndexFromColumnName, getIndexFromObjectName} from 'utils/utils';
+import React, {PropTypes} from 'react';
+import {generateRawData, getColumnIndexArrayFromColumnName, getIndexFromColumnName,
+  getIndexFromObjectName} from 'utils/utils';
 
 function generateDataArray(columnIndexArray, rowsArray) {
   let dataset = [];
@@ -8,10 +9,10 @@ function generateDataArray(columnIndexArray, rowsArray) {
       let obj1 = {};
       obj1.label = rowsArray[d][columnIndexArray[0]];
       if (obj1.label.length > 15) {
-        obj1.label = obj1.label.substring(0, 15) + " (...)";
+        obj1.label = obj1.label.substring(0, 15) + ' (...)';
       }
       obj1.value = rowsArray[d][columnIndexArray[1]];
-      obj1.toolText = rowsArray[d][columnIndexArray[0]] + ", " + rowsArray[d][columnIndexArray[1]];
+      obj1.toolText = rowsArray[d][columnIndexArray[0]] + ', ' + rowsArray[d][columnIndexArray[1]];
       dataset.push(obj1);
     }
   }
@@ -20,95 +21,53 @@ function generateDataArray(columnIndexArray, rowsArray) {
 
 function generateChartDataSource(rawData, props) {
   const chartOptions = props.chartOptions,
-        {fieldMapping, multipleReportIds, displayTopFive, showTrendLines, trendLines} = props.chartData,
-        dataSourceObject = {
-          chart: {
-            "bgColor": "#ffffff",
-            "showborder": "0",
-            "borderThickness":"0",
-            "showCanvasBorder": "0",
-            "usePlotGradientColor": "0",
-            "plotBorderAlpha": "10",
-            "placeValuesInside": "1",
-            "valueFontColor": "#111111",
-            "showAxisLines": "0",
-            "axisLineAlpha": "25",
-            "numDivLines":"0",
-            "divLineAlpha": "10",
-            "alignCaptionWithCanvas": "0",
-            "showAlternateVGridColor": "0",
-            "captionFontSize": "14",
-            "subcaptionFontSize": "12",
-            "subcaptionFontBold": "0",
-            "toolTipColor": "#ffffff",
-            "toolTipBorderThickness": "0",
-            "toolTipBgColor": "#000000",
-            "toolTipBgAlpha": "80",
-            "toolTipBorderRadius": "2",
-            "toolTipPadding": "5",
-            "showYAxisValues":"0",
-            'showValues':'1',
-            "paletteColors": "#ACF50F,#D93609,#FCFC0D, #05E9F5,#0505F5",
-            "xAxisNameFontSize":"14",
-            "yAxisNameFontSize":"14",
-            "labelFontSize": "13"
-          }
-        };
+    {fieldMapping, multipleReportIds, displayTopFive, showTrendLines, trendLines} = props.chartData;
 
   let countValue = 0,
-      totalValue = 0,
-      top10TotalValue = 0,
-      top10CountValue = 0,
-      averageValue = '',
-      dataset = [],
-      columnsArray = [];
+    totalValue = 0,
+    top10TotalValue = 0,
+    top10CountValue = 0,
+    averageValue = '',
+    dataset = [];
 
   for (let i = 0; i < fieldMapping.length; i++) {
     let currentChartData = fieldMapping[i],
-        currentDataRows = [],
-        columnIndexArray = [];
-
-    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
-      currentDataRows = rawData[currentChartData.reportId].rows;
-    }
-
-    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
-      columnsArray = rawData[currentChartData.reportId].columns;
-    }
+      {rows, columns} = rawData[currentChartData.reportId],
+      columnIndexArray = [];
 
     top10CountValue = 0;
     top10TotalValue = 0;
     averageValue = '';
 
-    //Calculate column index from API response
+    // Calculate column index from API response
     if (multipleReportIds) {
-      for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
+      for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
         if (currentChartData.reportId === 'taf_asset_count_time_shifted') {
           let fieldValue = '',
             fieldName = currentChartData.columns[0],
             fieldValueArray = [],
             inputArray = {
-                  fieldName: fieldName,
-                  fieldValueArray: fieldValueArray,
-                  fieldValue: fieldValue,
-                  dataArray: currentDataRows[d]
-                };
+              fieldName: fieldName,
+              fieldValueArray: fieldValueArray,
+              fieldValue: fieldValue,
+              dataArray: rows[d]
+            };
 
           countValue = getIndexFromObjectName(inputArray);
         }
 
         if (currentChartData.reportId === 'taf_total_usage') {
           let columnIndex = '';
-          columnIndex = getIndexFromColumnName(currentChartData.columns, columnsArray);
-          totalValue = currentDataRows[d][columnIndex];
+          columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
+          totalValue = rows[d][columnIndex];
         }
 
         if (currentChartData.reportId === 'taf_top_talkers_connections' ||
           currentChartData.reportId === 'taf_top_talkers_bandwidth') {
           let fieldValue = '',
-              columnIndex = '';
-          columnIndex = getIndexFromColumnName(currentChartData.columns, columnsArray);
-          fieldValue = currentDataRows[d][columnIndex];
+            columnIndex = '';
+          columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
+          fieldValue = rows[d][columnIndex];
           let value = Math.round(((fieldValue * 100) / totalValue), 2);
           if (value > 0) {
             top10CountValue = top10CountValue + 1;
@@ -118,25 +77,26 @@ function generateChartDataSource(rawData, props) {
       }
 
       const reportId = props.chartData.reportId;
-      currentDataRows = rawData[reportId].rows;
+      rows = rawData[reportId].rows;
       let average = top10TotalValue / parseInt(countValue),
-          newRawData = [];
+        newRawData = [];
       averageValue = Math.round(((average * 100) / totalValue), 2);
 
-      for (let d = 0, rowsLen = currentDataRows.length; d < rowsLen; d++) {
+      for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
         let obj = [];
-        obj[0] = currentDataRows[d][0];
-        let value = Math.round(((currentDataRows[d][1] * 100) / totalValue), 2);
+        obj[0] = rows[d][0];
+        let value = Math.round(((rows[d][1] * 100) / totalValue), 2);
         obj[1] = value;
         if (value > 0) {
           newRawData.push(obj);
         }
       }
-      columnIndexArray = [0,1];
+      columnIndexArray = [0, 1]; // Need to generate this index array dynamically. For now, kept it as hardcode
       dataset = generateDataArray(columnIndexArray, newRawData);
-    } else {
-      columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columnsArray);
-      dataset = generateDataArray(columnIndexArray, currentDataRows);
+    }
+    else {
+      columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
+      dataset = generateDataArray(columnIndexArray, rows);
 
       if (displayTopFive) {
         dataset.sort(function(a, b) {
@@ -147,15 +107,47 @@ function generateChartDataSource(rawData, props) {
     }
   }
 
-  let finalChartOptions = Object.assign(dataSourceObject.chart, chartOptions);
-  dataSourceObject.chart = finalChartOptions;
+  const dataSourceObject = {
+    chart: Object.assign({
+      'bgColor': '#ffffff',
+      'showborder': '0',
+      'borderThickness': '0',
+      'showCanvasBorder': '0',
+      'usePlotGradientColor': '0',
+      'plotBorderAlpha': '10',
+      'placeValuesInside': '1',
+      'valueFontColor': '#111111',
+      'showAxisLines': '0',
+      'axisLineAlpha': '25',
+      'numDivLines': '0',
+      'divLineAlpha': '10',
+      'alignCaptionWithCanvas': '0',
+      'showAlternateVGridColor': '0',
+      'captionFontSize': '14',
+      'subcaptionFontSize': '12',
+      'subcaptionFontBold': '0',
+      'toolTipColor': '#ffffff',
+      'toolTipBorderThickness': '0',
+      'toolTipBgColor': '#000000',
+      'toolTipBgAlpha': '80',
+      'toolTipBorderRadius': '2',
+      'toolTipPadding': '5',
+      'showYAxisValues': '0',
+      'showValues': '1',
+      'paletteColors': '#ACF50F,#D93609,#FCFC0D, #05E9F5,#0505F5',
+      'xAxisNameFontSize': '14',
+      'yAxisNameFontSize': '14',
+      'labelFontSize': '13'
+    }, chartOptions)
+  };
 
   if (dataset.length > 0) dataSourceObject.data = dataset;
 
   if (showTrendLines && averageValue !== undefined && averageValue !== '') {
     dataSourceObject.trendlines = trendLines;
     dataSourceObject.trendlines[0].line[0].startvalue = averageValue;
-    dataSourceObject.trendlines[0].line[0].displayvalue = averageValue + (chartOptions.numberSuffix ? chartOptions.numberSuffix : "");
+    dataSourceObject.trendlines[0].line[0].displayvalue = averageValue +
+    (chartOptions.numberSuffix ? chartOptions.numberSuffix : '');
   }
 
   return dataSourceObject;
@@ -167,30 +159,40 @@ const renderChart = (props) => {
   }
 
   const data = props.data,
-        fieldMapping = props.chartData.fieldMapping;
+    fieldMapping = props.chartData.fieldMapping;
 
   let rawData = {};
   rawData = generateRawData(fieldMapping, data);
 
-  FusionCharts.ready(function(){
-      const fusioncharts = new FusionCharts({
+  FusionCharts.ready(function() {
+    const fusioncharts = new FusionCharts({
       type: 'bar2d',
       renderAt: props.attributes.id,
       width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
       height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
       dataFormat: 'json',
-      containerBackgroundOpacity:'0',
+      containerBackgroundOpacity: '0',
       dataSource: generateChartDataSource(rawData, props)
     });
     fusioncharts.render();
   });
-}
+};
 
-const HorizontalBarChart = (props) => (
-  <div style={props.attributes.chartBorder}>
-    <div style={props.attributes.chartCaption}>{props.meta.title}</div>
-    <div id={props.attributes.id}>{renderChart(props)}</div>
-  </div>
-)
+class HorizontalBarChart extends React.Component {
+  static propTypes = {
+    attributes: PropTypes.object,
+    meta: PropTypes.object
+  }
+
+  render() {
+    const {props} = this;
+    return (
+      <div style={props.attributes.chartBorder}>
+        <div style={props.attributes.chartCaption}>{props.meta.title}</div>
+        <div id={props.attributes.id}>{renderChart(props)}</div>
+      </div>
+    );
+  }
+}
 
 export default HorizontalBarChart;

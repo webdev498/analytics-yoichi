@@ -11,7 +11,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         isLoading: true,
         isError: false
-      };
+      }
     }
     case USER_DETAILS_LOADED: {
       const {application, roles, user} = action.data.__authDetails;
@@ -28,9 +28,9 @@ export default function reducer(state = initialState, action = {}) {
         isLoading: false,
         isError: true,
         errorData: action.errorData
-      };
+      }
     }
     default:
       return state;
   }
-};
+}

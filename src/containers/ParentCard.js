@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Card from 'material-ui/Card/Card';
 import FontIcon from 'material-ui/FontIcon';
 
-import Loader from '../components/Loader';
+import Loader from '../components/Loader.component';
 
 import {fetchApiData} from 'actions/ParentCard';
 

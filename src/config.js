@@ -5,8 +5,5 @@ export const loginUrl = baseUrl + '/oauth/authorize';
 export const responseType = 'token';
 export const clientId = 'taf_dashboard';
 export const redirectUri = window.global.redirectUri || 'http://localhost:3000/#/dashboard?';
-export const openKibanaInIframe = (window.global.openKibanaInIframe !== undefined) ?
-                                    window.global.openKibanaInIframe :
-                                    true
 
 export const defaultRoute = window.global.defaultRoute || '/alert';

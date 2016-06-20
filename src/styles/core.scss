@@ -21,6 +21,12 @@
     box-sizing: inherit;
   }
 
+  #base {
+    padding-left: 72px;
+    padding-top: 64px;
+    box-sizing: border-box;
+  }
+
   /*** Following Style is Added for Table Component (START) ***/
   .threatTable table {
     border: 1px solid #373737;

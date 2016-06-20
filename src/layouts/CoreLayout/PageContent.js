@@ -2,21 +2,21 @@ import React, {PropTypes} from 'react';
 
 import FontIcon from 'material-ui/FontIcon';
 import ParentCard from 'containers/ParentCard';
-import Loader from 'components/Loader';
+import Loader from 'components/Loader.component';
 
 import {fetchLayoutData} from 'actions/core';
 
 import { connect } from 'react-redux';
-
-const styles = {
-  content: {
-    padding: '20px'
-  }
-};
+// import staticLayout from 'layout';
 
 class PageContent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {open: true};
+  }
+
   static propTypes = {
-    layout: PropTypes.array.isRequired,
+    layout: PropTypes.object.isRequired,
     isFetching: PropTypes.bool.isRequired
   }
 
@@ -35,6 +35,7 @@ class PageContent extends React.Component {
 
   renderChildren() {
     const {layout} = this.props;
+    // const layout = staticLayout.layout;
 
     const finalElmements = [];
 
@@ -88,11 +89,11 @@ class PageContent extends React.Component {
 
   render() {
     return (
-      <div style={styles.content}>
+      <div id='content' style={{padding: '20px'}}>
         {
           this.props.isFetching
-          ? <Loader />
-          : this.renderChildren()
+            ? <Loader />
+            : this.renderChildren()
         }
       </div>
     );

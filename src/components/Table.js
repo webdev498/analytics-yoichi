@@ -4,14 +4,13 @@ import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/DurationWidget';
 import moment from 'moment';
-import {generateChartDataSource, msToTime, generateRawData, getIndexFromObjectName} from 'utils/utils';
+import {generateRawData, getIndexFromObjectName, isUndefined} from 'utils/utils';
 
 const {Table, Tr, Td, unsafe} = Reactable;
 
-//Declaration of variables
+// Declaration of variables
 let tableProperties = {},
-    tableDataSource = [],
-    filterableObject = {true};
+  tableDataSource = [];
 
 function getColumnText(columnDetails) {
   let {currentColumnType, fieldValue, columnText, chartValue, timeValue} = columnDetails;
@@ -23,7 +22,7 @@ function getColumnText(columnDetails) {
     case 'durationWidget':
       timeValue = fieldValue;
       break;
-    case "text":
+    case 'text':
       columnText = generateColumnTextForColumnTypeAsText(columnDetails);
       break;
     default:
@@ -36,11 +35,11 @@ function getColumnText(columnDetails) {
 }
 
 function generateColumnTextForColumnTypeAsText(columnDetails) {
-  let {currentColumnType, fieldName, displayName, fieldValue, columnText, chartValue, timeValue} = columnDetails;
+  let {fieldName, displayName, fieldValue, columnText} = columnDetails;
 
   if (fieldValue !== undefined && fieldValue !== '' && fieldValue !== null) {
     if (columnText !== '') {
-      if (fieldName !== undefined) {
+      if (!isUndefined(fieldName)) {
         if (displayName === 'date') {
           fieldValue = generateColumnTextForDisplayingDate(fieldValue);
           columnText += fieldValue;
@@ -51,9 +50,11 @@ function generateColumnTextForColumnTypeAsText(columnDetails) {
         else if (displayName === 'countryFlag') {
           fieldValue = generateColumnTextForDisplayingCountryFlag(fieldValue);
           columnText += fieldValue;
-        } else if (displayName === undefined) {
+        }
+        else if (isUndefined(displayName)) {
           columnText += '<br/>' + fieldValue;
-        } else {
+        }
+        else {
           if (displayName !== '') {
             displayName = '<b>' + displayName + '</b>: ';
           }
@@ -65,14 +66,15 @@ function generateColumnTextForColumnTypeAsText(columnDetails) {
       }
     }
     else {
-      if (fieldName !== undefined) {
+      if (!isUndefined(fieldName)) {
         if (displayName === 'date') {
           fieldValue = generateColumnTextForDisplayingDate(fieldValue);
           columnText += fieldValue;
         }
-        else if (displayName === undefined) {
+        else if (isUndefined(displayName)) {
           columnText += '<br/>' + fieldValue;
-        } else {
+        }
+        else {
           if (displayName !== '') {
             displayName = '<b>' + displayName + '</b>: ';
           }
@@ -103,35 +105,35 @@ function generateColumnTextForDisplayingCountryFlag(fieldValue) {
 
 function generateRowObject(rowDetails, mainObject) {
   let {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue} = rowDetails,
-      rowObj = {
-        columnType: currentColumnType,
-        columnName: currentTableData.columnNameToDisplay,
-        columnStyle: currentTableData.style
-      };
-  switch(currentColumnType) {
+    rowObj = {
+      columnType: currentColumnType,
+      columnName: currentTableData.columnNameToDisplay,
+      columnStyle: currentTableData.style
+    };
+  switch (currentColumnType) {
     case 'chart':
       rowObj = Object.assign(rowObj, {
-                  chartValue: chartValue,
-                  chartId: currentTableData.chartId + rowNumber,
-                  chartType: currentTableData.chartType,
-                  chartWidth: currentTableData.chartWidth,
-                  chartHeight: currentTableData.chartHeight,
-                });
+        chartValue: chartValue,
+        chartId: currentTableData.attributes.id + rowNumber,
+        chartType: currentTableData.attributes.chartType,
+        chartWidth: currentTableData.attributes.chartWidth,
+        chartHeight: currentTableData.attributes.chartHeight
+      });
       chartValue = '';
       mainObject.columns.push(rowObj);
       break;
     case 'text':
       rowObj = Object.assign(rowObj, {
-                  columnText: unsafe(columnText)
-                });
+        columnText: unsafe(columnText)
+      });
       columnText = '';
       mainObject.columns.push(rowObj);
       break;
     case 'durationWidget':
       rowObj = Object.assign(rowObj, {
-                  columnText: unsafe(columnText),
-                  timeValue: timeValue
-                });
+        columnText: unsafe(columnText),
+        timeValue: timeValue
+      });
       columnText = '';
       mainObject.columns.push(rowObj);
       break;
@@ -142,17 +144,15 @@ function generateRowObject(rowDetails, mainObject) {
 }
 
 function loadChartComponentInTableRow(tableColumn, duration) {
-  switch(tableColumn.chartType) {
-    case "angulargauge":
+  switch (tableColumn.chartType) {
+    case 'angulargauge':
       return (
-        <AngularGaugeChart chartProperties={tableColumn}/>
-      )
-      break;
-   case "area2d":
+        <AngularGaugeChart chartProperties={tableColumn} />
+      );
+    case 'area2d':
       return (
-        <Area2DAsSparkLineChart chartProperties={tableColumn} duration={duration}/>
-      )
-      break;
+        <Area2DAsSparkLineChart chartProperties={tableColumn} duration={duration} />
+      );
     default:
       break;
   }
@@ -161,14 +161,14 @@ function loadChartComponentInTableRow(tableColumn, duration) {
 function getColumnDataWhenApiReturnsSingleColumn(currentColumnType, currentColumnDataArray, currentDataRows,
   columnText, chartValue, timeValue) {
   let fieldValue = '',
-      {fieldName, displayName} = currentColumnDataArray,
-      fieldValueArray = [],
-      inputArray = {
-        fieldName: fieldName,
-        fieldValueArray: fieldValueArray,
-        fieldValue: fieldValue,
-        dataArray: currentDataRows[0]
-      };
+    {fieldName, displayName} = currentColumnDataArray,
+    fieldValueArray = [],
+    inputArray = {
+      fieldName: fieldName,
+      fieldValueArray: fieldValueArray,
+      fieldValue: fieldValue,
+      dataArray: currentDataRows[0]
+    };
 
   fieldValue = getIndexFromObjectName(inputArray);
 
@@ -179,14 +179,15 @@ function getColumnDataWhenApiReturnsSingleColumn(currentColumnType, currentColum
 function getColumnDataWhenApiReturnsMultipleColumns(currentColumnType, currentColumnDataArray, currentDataRows,
   columnText, chartValue, timeValue, columnIndex, columnIndexLayoutJSON, nestedResult, emptyValueMessage) {
   let fieldValue = '',
-      {fieldName, displayName} = currentColumnDataArray;
-  if (currentDataRows[columnIndex] !== undefined) {
+    {fieldName, displayName} = currentColumnDataArray;
+  if (!isUndefined(currentDataRows[columnIndex])) {
     fieldValue = currentDataRows[columnIndex];
   }
 
-  //Following condition is for nested API response
+  // Following condition is for nested API response
   if (nestedResult) {
-    fieldValue = calculateFieldValueForNestedResult(currentDataRows, fieldValue, columnIndexLayoutJSON, emptyValueMessage);
+    fieldValue = calculateFieldValueForNestedResult(currentDataRows, fieldValue, columnIndexLayoutJSON,
+      emptyValueMessage);
   }
 
   return generateColumnDetailsObject(currentColumnType,
@@ -195,7 +196,7 @@ function getColumnDataWhenApiReturnsMultipleColumns(currentColumnType, currentCo
 
 function calculateFieldValueForNestedResult(currentDataRows, fieldValue, columnIndex, emptyValueMessage) {
   for (let key in currentDataRows) {
-    if (key !== undefined) {
+    if (!isUndefined(key)) {
       if (columnIndex === 0) {
         fieldValue = (key !== '') ? key : '<i>' + emptyValueMessage + '</i>';
       }
@@ -207,7 +208,7 @@ function calculateFieldValueForNestedResult(currentDataRows, fieldValue, columnI
   return fieldValue;
 }
 
-function generateColumnDetailsObject (currentColumnType, fieldName, displayName, fieldValue, columnText,
+function generateColumnDetailsObject(currentColumnType, fieldName, displayName, fieldValue, columnText,
   chartValue, timeValue) {
   const columnDetails = {
     currentColumnType: currentColumnType,
@@ -226,16 +227,17 @@ function generateIndividualRowData(currentColumnType, currentColumnDataArray, co
   columnText, chartValue, timeValue, nestedResult, emptyValueMessage, currentColumnIndex) {
   for (let cd = 0; cd < currentColumnDataArray.length; cd++) {
     if (columnsArray.length === 1 && columnsArray[0].name === 'json') {
-      //This condition is if API response returns a single column with one JSON object. e.g. recent alerts table
+      // This condition is if API response returns a single column with one JSON object. e.g. recent alerts table
       let columnTextObj = getColumnDataWhenApiReturnsSingleColumn(currentColumnType, currentColumnDataArray[cd],
                             currentDataRows, columnText, chartValue, timeValue);
 
       chartValue = columnTextObj.chartValue;
       columnText = columnTextObj.columnText;
       timeValue = columnTextObj.timeValue;
-    } else {
-      //This else condition is if API response returns multiple columns
-      //Calculate column index from API response
+    }
+    else {
+      // This else condition is if API response returns multiple columns
+      // Calculate column index from API response
       for (let columnIndex = 0; columnIndex < columnsArray.length; columnIndex++) {
         if (columnsArray[columnIndex].name === currentColumnDataArray[cd].fieldName) {
           let columnTextObj = getColumnDataWhenApiReturnsMultipleColumns(currentColumnType,
@@ -245,16 +247,15 @@ function generateIndividualRowData(currentColumnType, currentColumnDataArray, co
           chartValue = columnTextObj.chartValue;
           columnText = columnTextObj.columnText;
           timeValue = columnTextObj.timeValue;
-          //break;
         }
       }
     }
-  }//Column data loop ends
+  }// Column data loop ends
   return {
     chartValue: chartValue,
     columnText: columnText,
     timeValue: timeValue
-  }
+  };
 }
 
 const generateDataSource = (props) => {
@@ -263,10 +264,10 @@ const generateDataSource = (props) => {
   }
 
   const data = props.data,
-        {fieldMapping, nestedResult, emptyValueMessage} = props.tableData,
-        tableOptions = props.tableOptions;
+    {fieldMapping, nestedResult, emptyValueMessage} = props.tableData,
+    tableOptions = props.tableOptions;
 
-  //Initializing the variables
+  // Initializing the variables
   tableProperties = {};
   tableDataSource = [];
 
@@ -274,26 +275,16 @@ const generateDataSource = (props) => {
   rawData = generateRawData(fieldMapping, data);
   tableProperties = {...tableOptions};
 
-  let filterableArray = ["Date","Details","Source","Destination"];//tableOptions.filterable;//
-
-  filterableObject = {filterableArray};
-
-  // if (props.attributes.id == 'RecentAlerts') {
-  //   console.log(JSON.stringify(tableOptions.filterable));
-  //   console.log(JSON.stringify(filterableArray));
-  //   console.log(JSON.stringify(filterableObject));
-  // }
-
   for (let i = 0; i < fieldMapping.length; i++) {
     let currentTableData = fieldMapping[i],
-        currentDataRows = rawData[currentTableData.reportId].rows,
-        columnsArray = rawData[currentTableData.reportId].columns,
-        columnText = '',
-        chartValue = '',
-        timeValue = '';
+      currentDataRows = rawData[currentTableData.reportId].rows,
+      columnsArray = rawData[currentTableData.reportId].columns,
+      columnText = '',
+      chartValue = '',
+      timeValue = '';
 
     let currentDataRowsCount = 0;
-    if (currentDataRows !== undefined && currentDataRows.length !== undefined) {
+    if (!isUndefined(currentDataRows) && !isUndefined(currentDataRows.length)) {
       currentDataRowsCount = currentDataRows.length;
     }
 
@@ -301,55 +292,53 @@ const generateDataSource = (props) => {
       let mainObject = {};
       mainObject.columns = [];
 
-      //Calculate column index from API response
+      // Calculate column index from API response
       for (let a = 0; a < currentTableData.columns.length; a++) {
         let currentColumnType = currentTableData.columns[a].type,
-            currentColumnDataArray = currentTableData.columns[a].data;
+          currentColumnDataArray = currentTableData.columns[a].data;
 
         const individualRowData = generateIndividualRowData(currentColumnType, currentColumnDataArray,
           columnsArray, currentDataRows[d], columnText, chartValue, timeValue, nestedResult,
           emptyValueMessage, a);
 
-        let rowObj = {},
-            rowDetails = {
-              currentColumnType: currentColumnType,
-              currentTableData: currentTableData.columns[a],
-              chartValue: individualRowData.chartValue,
-              columnText: individualRowData.columnText,
-              rowNumber: d,
-              timeValue: individualRowData.timeValue
-            };
+        let rowDetails = {
+          currentColumnType: currentColumnType,
+          currentTableData: currentTableData.columns[a],
+          chartValue: individualRowData.chartValue,
+          columnText: individualRowData.columnText,
+          rowNumber: d,
+          timeValue: individualRowData.timeValue
+        };
         mainObject = generateRowObject(rowDetails, mainObject);
         columnText = '';
         chartValue = '';
       }
       tableDataSource.push(mainObject);
-    }//mainData loop end
+    }// mainData loop end
   }
-}
+};
 
 const tableCard = (props) => (
   <div style={props.attributes.style}>
     {generateDataSource(props)}
-    {(props.tableOptions !== undefined)?
-    <Table style={{width:'100%'}}
-           className="threatTable"
-           sortable={props.tableOptions.sortable}
-           filterable={props.tableOptions.filterable}
-           defaultSort={props.tableOptions.defaultSort}
-           itemsPerPage={5}
-           pageButtonLimit={5}
-           currentPage={0}>
+    <Table style={{width: '100%'}}
+      className='threatTable'
+      sortable={props.tableOptions.sortable}
+      filterable={props.tableOptions.filterable}
+      defaultSort={props.tableOptions.defaultSort}
+      itemsPerPage={5}
+      pageButtonLimit={5}
+      currentPage={0}>
       {
-        tableDataSource.map(function(tableRow, index){
+        tableDataSource.map(function(tableRow, index) {
           return (
             <Tr>
-              {tableRow.columns.map(function(tableColumn, indexCol){
+              {tableRow.columns.map(function(tableColumn, indexCol) {
                 if (tableColumn.columnType === 'chart') {
                   return (
                     <Td column={tableColumn.columnName}
-                        value={tableColumn.chartValue}
-                        style={tableColumn.columnStyle}>
+                      value={tableColumn.chartValue}
+                      style={tableColumn.columnStyle}>
                       {loadChartComponentInTableRow(tableColumn, props.duration)}
                     </Td>
                   );
@@ -357,16 +346,16 @@ const tableCard = (props) => (
                 if (tableColumn.columnType === 'durationWidget') {
                   return (
                     <Td column={tableColumn.columnName}
-                        value={tableColumn.timeValue}
-                        style={tableColumn.columnStyle}>
-                      <DurationWidget timeValue={tableColumn.timeValue}/>
+                      value={tableColumn.timeValue}
+                      style={tableColumn.columnStyle}>
+                      <DurationWidget timeValue={tableColumn.timeValue} />
                     </Td>
                   );
                 }
                 if (tableColumn.columnType === 'text') {
                   return (
                     <Td column={tableColumn.columnName}
-                        style={tableColumn.columnStyle}>{tableColumn.columnText}
+                      style={tableColumn.columnStyle}>{tableColumn.columnText}
                     </Td>
                   );
                 }
@@ -376,7 +365,6 @@ const tableCard = (props) => (
         })
       }
     </Table>
-    : <div></div>}
   </div>
 );
 

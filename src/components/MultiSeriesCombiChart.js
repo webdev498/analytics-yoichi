@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import moment from 'moment';
 import {calculateDateDisplayFormat, calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
 import {generateRawData, isUndefined} from 'utils/utils';
@@ -128,9 +128,8 @@ function generateChartDataSetForDynamicSeries(currentChartData, seriesNameArray,
   return dataset;
 }
 
-function generateChartDataSetForFixedSeries(currentChartData, rows, y, seriesCount) {
-  const tempObj = {},
-    dataset = [];
+function generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, seriesCount) {
+  const tempObj = {};
 
   tempObj.seriesname = currentChartData.seriesname;
   tempObj.renderas = currentChartData.renderas;
@@ -207,7 +206,7 @@ function generateChartDataSource(rawData, props) {
         dataset = generateChartDataSetForDynamicSeries(currentChartData, seriesNameArray, newRawData);
       }
       if (!isUndefined(currentChartData.seriesname)) {
-        dataset = generateChartDataSetForFixedSeries(currentChartData, rows, y, seriesCount);
+        dataset = generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, seriesCount);
       }
     }
   }
@@ -278,11 +277,21 @@ const renderChart = (props) => {
   });
 };
 
-const MultiSeriesCombiChart = (props) => (
-  <div style={props.attributes.chartBorder}>
-    <div style={props.attributes.chartCaption}>{props.meta.title}</div>
-    <div id={props.attributes.id}>{renderChart(props)}</div>
-  </div>
-);
+class MultiSeriesCombiChart extends React.Component {
+  static propTypes = {
+    attributes: PropTypes.object,
+    meta: PropTypes.object
+  }
+
+  render() {
+    const {props} = this;
+    return (
+      <div style={props.attributes.chartBorder}>
+        <div style={props.attributes.chartCaption}>{props.meta.title}</div>
+        <div id={props.attributes.id}>{renderChart(props)}</div>
+      </div>
+    );
+  }
+}
 
 export default MultiSeriesCombiChart;
