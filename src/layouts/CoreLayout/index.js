@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Header from './PageHeader';
 import Sidebar from './Sidebar';
 import PageContent from './PageContent';
+import Kibana from 'components/Kibana';
 
 import { fetchUserData, logout } from 'actions/auth';
 
@@ -12,6 +13,14 @@ import Loader from 'components/Loader';
 import 'styles/core.scss';
 
 const styles = {
+  kibana: {
+    padding: '5px 5px 0 5px',
+    position: 'fixed',
+    top: '64px',
+    left: '72px',
+    bottom: 0,
+    right: 0
+  },
   sidebar: {
     width: '72px'
   },
@@ -29,6 +38,32 @@ class CoreLayout extends React.Component {
     logout: PropTypes.object.isRequired
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {showKibana: false};
+  }
+
+  getChildContext() {
+    const that = this;
+    return {
+      clickThrough(data) {
+        that.setState({
+          data,
+          showKibana: true
+        });
+      }
+    };
+  }
+
+  hideKibana() {
+    const that = this;
+    return () => {
+      that.setState({
+        showKibana: false
+      });
+    };
+  }
+
   componentDidMount() {
     this.props.fetchUserData();
   }
@@ -43,16 +78,40 @@ class CoreLayout extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props} = this,
+      {showKibana} = this.state,
+      show = {display: 'block'},
+      hide = {display: 'none'};
+
+    let contentStyle = Object.assign({}, styles.content, show);
+
+    if (showKibana) {
+      contentStyle = Object.assign({}, styles.content, hide);
+    }
+
     return (
       <div>
-        <Header title='RANK' />
+        <Header
+          title='RANK'
+          showKibana={showKibana}
+          hideKibana={this.hideKibana()} />
+
         <Sidebar style={styles.sidebar} />
         <div style={styles.base}>
+          <div style={contentStyle}>
+            {
+              (props.auth.isLoading)
+              ? <Loader />
+              : <PageContent location={props.location} />
+            }
+          </div>
+
           {
-            (props.auth.isLoading)
-            ? <Loader />
-            : <PageContent location={props.location} />
+            showKibana
+            ? <div style={styles.kibana}>
+              <Kibana data={this.state.data} />
+            </div>
+            : null
           }
         </div>
       </div>
@@ -62,6 +121,10 @@ class CoreLayout extends React.Component {
 
 CoreLayout.propTypes = {
   children: PropTypes.element
+};
+
+CoreLayout.childContextTypes = {
+  clickThrough: React.PropTypes.func
 };
 
 function mapStateToProps(state, ownProps) {

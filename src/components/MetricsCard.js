@@ -33,23 +33,23 @@ const styles = {
   }
 };
 
-function getCount (data) {
+function getCount(data) {
   data = data.data;
   return (data && data.rows && data.rows[0]) ? data.rows[0][0][0] : 0;
 }
 
-function getPercent (data) {
+function getPercent(data) {
   return (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A')
           ? Math.abs(Math.round(data.rows[0][0][2]), 2) + '%'
           : '';
 }
 
-function getIconElm (props) {
+function getIconElm(props) {
   const elm = props.children[0];
   return React.cloneElement(elm, {style: {...styles.iconStyle}});
 }
 
-function getArrowIcon (data) {
+function getArrowIcon(data) {
   if (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A') {
     const percent = Math.round(data.rows[0][0][2]);
     if (percent > 0) {
@@ -68,7 +68,7 @@ function getArrowIcon (data) {
 }
 
 class MetricsCard extends React.Component {
-  render () {
+  render() {
     const { props } = this;
     return (
       <div style={{...styles.cardStyle}}>
@@ -84,7 +84,7 @@ class MetricsCard extends React.Component {
 
         <div style={styles.detailsStyle}>
           <span style={styles.clickThrough}
-            onClick={this.context.clickThrough}>
+            onClick={this.context.clickThrough.bind(null, props)}>
             View Details
           </span>
 
