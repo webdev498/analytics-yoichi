@@ -69,7 +69,7 @@ function getArrowIcon(data) {
 
 class MetricsCard extends React.Component {
   handleClick() {
-    // this.context.clickThrough('https://demo.ranksoftwareinc.com/api/kibana/query/alerts-score?from=2016-06-20T23:40:59.306&to=2016-06-21T18:10:59.306&lowScore=65&highScore=100')
+    this.context.clickThrough('https://demo.ranksoftwareinc.com/api/kibana/query/alerts-score?from=2016-06-20T23:40:59.306&to=2016-06-21T18:10:59.306&lowScore=65&highScore=100')
   }
 
   render() {
