@@ -9,52 +9,45 @@ function generateChartDataSource(rawData, props) {
     maxValue = '0',
     markerIdSuffix = 0;
 
-  for (let i = 0; i < chartData.length; i++) {
-    let currentChartData = chartData[i];
-    let currentDataRows = [];
-    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].rows !== undefined) {
-      currentDataRows = rawData[currentChartData.reportId].rows;
-    }
-    let columnIndexArray = [];
-    let columnsArray = [];
-    if (rawData[currentChartData.reportId] !== undefined && rawData[currentChartData.reportId].columns !== undefined) {
-      columnsArray = rawData[currentChartData.reportId].columns;
-    }
+  for (let i = 0; i < chartData.fieldMapping.length; i++) {
+    let currentChartData = chartData.fieldMapping[i],
+      {rows, columns} = rawData[currentChartData.reportId],
+      columnIndexArray = [];
 
     // Calculate column index from API response
-    for (let a = 0; a < currentChartData.columns.length; a++) {
-      for (let c = 0; c < columnsArray.length; c++) {
-        if (currentChartData.columns[a] === columnsArray[c].name) {
-          columnIndexArray[a] = c;
-          break;
-        }
-      }
-    }
+    // for (let a = 0; a < currentChartData.columns.length; a++) {
+    //   for (let c = 0; c < columns.length; c++) {
+    //     if (currentChartData.columns[a] === columns[c].name) {
+    //       columnIndexArray[a] = c;
+    //       break;
+    //     }
+    //   }
+    // }
 
     // Get column data for x-axis
     // if (columnIndexArray.length !== 0) {
-    for (let a = 0, rowsLen = currentDataRows.length; a < rowsLen; a++) {
+    for (let a = 0, rowsLen = rows.length; a < rowsLen; a++) {
       let obj1 = {};
-      if (currentDataRows[a][1] === 'N/A' || currentDataRows[a][2] === 'N/A') {
+      if (rows[a][1] === 'N/A' || rows[a][2] === 'N/A') {
         // continue;
       }
       else {
-        let countryCode = currentDataRows[a][0];
+        let countryCode = rows[a][0];
         obj1.shapeid = currentChartData.shapeid;
-        obj1.label = currentDataRows[a][3];
+        obj1.label = rows[a][3];
         obj1.id = getCountryIDByCountryCode(countryCode) + markerIdSuffix;
-        obj1.x = currentDataRows[a][1];
-        obj1.y = currentDataRows[a][2];
-        obj1.value = currentDataRows[a][4];
+        obj1.x = rows[a][1];
+        obj1.y = rows[a][2];
+        obj1.value = rows[a][4];
         obj1.alpha = currentChartData.alpha;
 
         markersItemsObject.push(obj1);
 
         if (a === 0) {
-          minValue = currentDataRows[a][4];
+          minValue = rows[a][4];
         }
-        if (a === (currentDataRows.length - 1)) {
-          maxValue = currentDataRows[a][4];
+        if (a === (rows.length - 1)) {
+          maxValue = rows[a][4];
         }
 
         markerIdSuffix = markerIdSuffix + 1;
@@ -99,7 +92,6 @@ function generateChartDataSource(rawData, props) {
     'shapes': shapesObject,
     'items': markersItemsObject
   };
-
   return dataSourceObject;
 }
 
