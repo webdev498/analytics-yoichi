@@ -8,13 +8,13 @@ const style = {
 
 class Kibana extends React.Component {
   static propTypes = {
-    data: PropTypes.object.isRequired
+    url: PropTypes.string.isRequired
   }
 
   getUrl() {
-    const data = this.props.data;
-    // console.log(data);
-    return '/';
+    const url = this.props.url;
+    console.log(url);
+    return url;
   }
 
   render() {

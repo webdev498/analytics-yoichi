@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
-import {getIndexFromColumnName} from 'utils/utils';
+import {getIndexFromColumnName, generateQueryParams, generateQueryParam, generateClickThroughUrl} from 'utils/utils';
+import {baseUrl} from 'config';
 
 function generateChartDataSource(data, props) {
   const {chartOptions, chartData} = props,
@@ -58,40 +59,60 @@ function generateChartDataSource(data, props) {
   };
 };
 
-const renderChart = (props) => {
-  if (!props.data) {
+
+function getDataPlotClickUrl(props, dataObj) {
+  if (!props.kibana) {
     return;
   }
-
-  const data = props.data;
-
-  FusionCharts.ready(function() {
-    const mapProps = props.attributes;
-
-    const fusioncharts = new FusionCharts({
-      type: 'pareto2d',
-      renderAt: mapProps.id,
-      width: mapProps.chartWidth ? mapProps.chartWidth : '100%',
-      height: mapProps.chartHeight ? mapProps.chartHeight : '400',
-      dataFormat: 'json',
-      containerBackgroundOpacity: '0',
-      dataSource: generateChartDataSource(data, props)
-    });
-    fusioncharts.render();
-  });
-};
+  let queryParams = generateQueryParams(props.kibana.queryParams);
+  return generateClickThroughUrl(props.kibana.pathParams.queryId, queryParams);
+}
 
 class ParetoChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object
   }
 
+  renderChart(props) {
+    if (!props.data) {
+      return;
+    }
+
+    const data = props.data,
+      {clickThrough} = this.context;
+
+    FusionCharts.ready(function() {
+      const mapProps = props.attributes;
+
+      const fusioncharts = new FusionCharts({
+        type: 'pareto2d',
+        renderAt: mapProps.id,
+        width: mapProps.chartWidth ? mapProps.chartWidth : '100%',
+        height: mapProps.chartHeight ? mapProps.chartHeight : '400',
+        dataFormat: 'json',
+        containerBackgroundOpacity: '0',
+        dataSource: generateChartDataSource(data, props),
+        events: {
+          dataplotClick: function(eventObj, dataObj) {
+            const url = getDataPlotClickUrl(props, dataObj);
+            clickThrough(url);
+          }
+        }
+      });
+      fusioncharts.render();
+    });
+  }
+
   render() {
     const {props} = this;
     return (
-      <div id={props.attributes.id}>{renderChart(props)}</div>
+      <div id={props.attributes.id}>{this.renderChart(props)}</div>
     );
   }
 }
+
+ParetoChart.contextTypes = {
+  clickThrough: React.PropTypes.func
+};
 
 export default ParetoChart;

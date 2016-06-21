@@ -5,6 +5,7 @@ import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/DurationWidget';
 import moment from 'moment';
 import {generateRawData, getIndexFromObjectName, isUndefined} from 'utils/utils';
+import {baseUrl} from 'config';
 
 const {Table, Tr, Td, unsafe} = Reactable;
 
@@ -310,6 +311,31 @@ const generateDataSource = (props) => {
           timeValue: individualRowData.timeValue
         };
         mainObject = generateRowObject(rowDetails, mainObject);
+        if (props.kibana) {
+          let queryParams = '';
+          if (props.kibana.queryParams) {
+            const queryParamsArray = props.kibana.queryParams;
+            for (let key in queryParamsArray) {
+              if (!isUndefined(key)) {
+                let columnIndex = '';
+                for (let c = 0; c < columnsArray.length; c++) {
+                  if (key === columnsArray[c].name) {
+                    columnIndex = c;
+                    break;
+                  }
+                }
+                if (queryParams === '') {
+                  queryParams = '?' + key + '=' + currentDataRows[d][columnIndex];
+                }
+                else {
+                  queryParams += '&' + key + '=' + currentDataRows[d][columnIndex];
+                }
+              }
+            }
+          }
+          const url = baseUrl + '/kibana/query/' + props.kibana.pathParams.queryId + queryParams;
+          mainObject.rowClickUrl = url;
+        }
         columnText = '';
         chartValue = '';
       }
@@ -317,6 +343,13 @@ const generateDataSource = (props) => {
     }// mainData loop end
   }
 };
+
+function rowClick(props, tableRow) {
+  if (!tableRow.rowClickUrl) {
+    return;
+  }
+  console.log(tableRow.rowClickUrl);
+}
 
 const tableCard = (props) => (
   <div style={props.attributes.style}>
@@ -332,7 +365,7 @@ const tableCard = (props) => (
       {
         tableDataSource.map(function(tableRow, index) {
           return (
-            <Tr>
+            <Tr onClick={() => rowClick(props, tableRow)} style={{'cursor': 'pointer'}}>
               {tableRow.columns.map(function(tableColumn, indexCol) {
                 if (tableColumn.columnType === 'chart') {
                   return (

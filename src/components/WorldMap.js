@@ -1,5 +1,6 @@
 import React from 'react';
-import {generateRawData, getCountryIDByCountryCode} from 'utils/utils';
+import {generateRawData, getCountryIDByCountryCode, getCountryCodeByCountryName, getTimePairFromWindow} from 'utils/utils';
+import {baseUrl} from 'config';
 
 function generateChartDataSource(rawData, props) {
   const {chartOptions, chartData} = props;
@@ -102,32 +103,50 @@ function generateChartDataSource(rawData, props) {
   return dataSourceObject;
 }
 
+function getMarkerClickUrl(props, dataObj) {
+  if (!props.kibana) {
+    return;
+  }
+
+  let label = dataObj.label,
+    countryName = label.split(','),
+    countryCode = getCountryCodeByCountryName[countryName[0]],
+    pair = getTimePairFromWindow(props.duration, ''),
+    dateTime1 = pair.fromDate,
+    dateTime2 = pair.toDate;
+
+  const url = baseUrl + '/kibana/query/' + props.kibana.pathParams.queryId + '?country=' + countryCode + '&from=' +
+    dateTime1 + '&to=' + dateTime2;
+  // this.context.clickThrough(url);
+  console.log(url);
+}
+
 const renderChart = (props) => {
   if (!props.data) {
     return;
   }
 
-  // const data = props.data,
-  //   fieldMapping = props.chartData.fieldMapping;
-
-  // let rawData = {};
-  // rawData = generateRawData(fieldMapping, data);
-  // console.log(JSON.stringify(rawData));
-  const mainData = props.data;
-  const chartData = props.chartData;
+  const data = props.data,
+    fieldMapping = props.chartData.fieldMapping;
 
   let rawData = {};
-  for (let i = 0; i < chartData.length; i++) {
-    let currentChartData = chartData[i];
-    if (props.multiData === null && mainData[currentChartData.reportId] === undefined) {
-      return;
-    }
-    else {
-      if (!rawData.hasOwnProperty(currentChartData.reportId)) {
-        rawData[currentChartData.reportId] = mainData[currentChartData.reportId];
-      }
-    }
-  }
+  rawData = generateRawData(fieldMapping, data);
+  // console.log(JSON.stringify(rawData));
+  // const mainData = props.data;
+  // const chartData = props.chartData;
+
+  // let rawData = {};
+  // for (let i = 0; i < chartData.length; i++) {
+  //   let currentChartData = chartData[i];
+  //   if (props.multiData === null && mainData[currentChartData.reportId] === undefined) {
+  //     return;
+  //   }
+  //   else {
+  //     if (!rawData.hasOwnProperty(currentChartData.reportId)) {
+  //       rawData[currentChartData.reportId] = mainData[currentChartData.reportId];
+  //     }
+  //   }
+  // }
 
   //const dataSourceObject = generateChartDataSource(rawData, props);
   // console.log(dataSourceObject);
@@ -140,7 +159,12 @@ const renderChart = (props) => {
       height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
       dataFormat: 'json',
       containerBackgroundOpacity: '0',
-      dataSource: generateChartDataSource(rawData, props)
+      dataSource: generateChartDataSource(rawData, props),
+      events: {
+        markerClick: function(eventObj, dataObj) {
+          getMarkerClickUrl(props, dataObj);
+        }
+      }
     });
     fusioncharts.render();
   });

@@ -83,7 +83,7 @@ export function fetchApiData(id, api, query) {
 
     dispatch(requestApiData(id));
 
-    const defaultHeaders = Object.assign ({
+    const defaultHeaders = Object.assign({
       'Authorization': `${tokenType} ${accessToken}`
     }, api.headers);
 
@@ -104,7 +104,7 @@ export function fetchApiData(id, api, query) {
 // Update api data for all the components that are visible on the page
 // when time range is changed.
 export function updateApiData(newDuration) {
-  return function(dispatch, getState){
+  return function(dispatch, getState) {
     const {apiData} = getState();
 
     const currentDuration = apiData.get('duration');

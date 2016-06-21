@@ -1,7 +1,8 @@
 import React, {PropTypes} from 'react';
 import moment from 'moment';
 import {calculateDateDisplayFormat, calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
-import {generateRawData, isUndefined} from 'utils/utils';
+import {generateRawData, isUndefined, getTimePairFromWindow} from 'utils/utils';
+import {baseUrl, lowScoreRange, mediumScoreRange, highScoreRange} from 'config';
 
 function getXindex(currentChartDataColumn, columns) {
   let x = '';
@@ -247,6 +248,37 @@ function generateChartDataSource(rawData, props) {
   return dataSourceObject;
 }
 
+function getDataPlotClickUrl(props, dataObj) {
+  if (!props.kibana) {
+    return;
+  }
+
+  let toolText = dataObj['toolText'],
+    dateStringArray = toolText.split(','),
+    dateString = dateStringArray[1];
+
+  dateString = dateString.trim();
+
+  let pair = getTimePairFromWindow(props.duration, dateString),
+    dateTime1 = pair.fromDate,
+    dateTime2 = pair.toDate,
+    otherParameters = '';
+
+  if ((dataObj.datasetName).toLowerCase() === 'low') {
+    otherParameters = 'lowScore=' + lowScoreRange[0] + '&highScore=' + lowScoreRange[1];
+  }
+  else if ((dataObj.datasetName).toLowerCase() === 'medium') {
+    otherParameters = 'lowScore=' + mediumScoreRange[0] + '&highScore=' + mediumScoreRange[1];
+  }
+  else if ((dataObj.datasetName).toLowerCase() === 'high') {
+    otherParameters = 'lowScore=' + highScoreRange[0] + '&highScore=' + highScoreRange[1];
+  }
+
+  const url = baseUrl + '/kibana/query/' + props.kibana.pathParams.queryId + '?' + otherParameters + '&from=' +
+    dateTime1 + '&to=' + dateTime2;
+  console.log(url);
+}
+
 const renderChart = (props) => {
   if (!props.duration) {
     return;
@@ -270,7 +302,12 @@ const renderChart = (props) => {
       height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
       dataFormat: 'json',
       containerBackgroundOpacity: '0',
-      dataSource: generateChartDataSource(rawData, props)
+      dataSource: generateChartDataSource(rawData, props),
+      events: {
+        dataplotClick: function(eventObj, dataObj) {
+          getDataPlotClickUrl(props, dataObj);
+        }
+      }
     });
 
     fusioncharts.render();

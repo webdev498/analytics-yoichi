@@ -2,7 +2,6 @@ import {
   REQUEST_API_DATA,
   RECEIVE_API_DATA,
   ERROR_API_DATA,
-  UPDATE_API_DATA,
   TIME_INTERVAL_UPDATE
 } from 'Constants';
 
@@ -16,11 +15,11 @@ export default function APIDataReducer(state = initialState, action) {
     case REQUEST_API_DATA: {
       const {id} = action;
 
-      if(state.hasIn(['components', id])) {
-        return  state.updateIn(['components', id], value => {
-                      return value.set('isFetching', true)
-                                  .set('isError', false);
-                });
+      if (state.hasIn(['components', id])) {
+        return state.updateIn(['components', id], value => {
+          return value.set('isFetching', true)
+                      .set('isError', false);
+        });
       }
       else {
         const dataMap = Map({
@@ -31,8 +30,6 @@ export default function APIDataReducer(state = initialState, action) {
 
         return state.updateIn(['components'], val => val.set(id, dataMap));
       }
-
-
     }
     case RECEIVE_API_DATA: {
       const {id, data} = action;
@@ -42,7 +39,7 @@ export default function APIDataReducer(state = initialState, action) {
                     .set('isError', false)
                     .set('data', data.json)
                     .set('api', data.api)
-                    .set('query', data.query) ;
+                    .set('query', data.query);
       });
 
       return newState;
