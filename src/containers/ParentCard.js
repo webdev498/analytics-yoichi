@@ -24,7 +24,9 @@ const styles = {
     fontSize: '18px'
   },
   iconWrap: {
-    marginLeft: 'auto'
+    width: '50px',
+    marginLeft: 'auto',
+    textAlign: 'right'
   },
   refreshIcon: {
     cursor: 'pointer',
@@ -32,10 +34,21 @@ const styles = {
   },
   crossIcon: {
     fontSize: '20px'
+  },
+  inputWrap: {
+    marginLeft: '20px',
+    width: '50%'
+  },
+  input: {
+    width: '100%'
   }
 };
 
 class ParentCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {search: ''};
+  }
 
   static propTypes = {
     meta: PropTypes.object.isRequired
@@ -77,24 +90,29 @@ class ParentCard extends React.Component {
   }
 
   refreshData() {
-    this.getData();
+    return () => {
+      this.getData();
+    };
   }
 
   componentWillUnmount() {
     this.unsubscribe();
   }
 
+  updateSearch() {
+    return (event) => {
+      this.setState({
+        search: event.target.value
+      });
+    };
+  }
+
   render() {
     const {props} = this;
 
-    if (!props) {
-      return;
-    }
-    if (!props.meta) {
-      return;
-    }
-
     if (props.meta.showHeader) {
+      let childProps = Object.assign({}, props, {search: this.state.search});
+
       return (
         <Card style={{...styles.wrap, ...props.attributes.style}}>
           {props.isFetching ? <Loader /> : null}
@@ -104,15 +122,26 @@ class ParentCard extends React.Component {
               <span style={styles.title}>{props.meta.title}</span>
             </div>
 
+            {
+              props.meta.showSearch
+              ? <div style={styles.inputWrap}>
+                <input
+                  type='text'
+                  style={styles.input}
+                  onChange={this.updateSearch()} />
+              </div>
+              : null
+            }
+
             <div style={styles.iconWrap}>
               <FontIcon className='material-icons'
                 style={styles.refreshIcon}
-                onClick={this.refreshData.bind(this)}>
-                        refresh
+                onClick={this.refreshData()}>
+                refresh
               </FontIcon>
             </div>
           </header>
-          <div> {React.cloneElement(props.children, {...props})} </div>
+          <div> {React.cloneElement(props.children, {...childProps})} </div>
         </Card>
       );
     }

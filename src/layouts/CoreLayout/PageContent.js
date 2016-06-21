@@ -7,7 +7,7 @@ import Loader from 'components/Loader.component';
 import {fetchLayoutData} from 'actions/core';
 
 import { connect } from 'react-redux';
-// import staticLayout from 'layout';
+import staticLayout from 'layout';
 
 class PageContent extends React.Component {
   constructor(props) {
@@ -34,8 +34,8 @@ class PageContent extends React.Component {
   }
 
   renderChildren() {
-    const {layout} = this.props;
-    // const layout = staticLayout.layout;
+    // const {layout} = this.props;
+    const layout = staticLayout.layout;
 
     const finalElmements = [];
 
