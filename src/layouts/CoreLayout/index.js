@@ -46,9 +46,9 @@ class CoreLayout extends React.Component {
   getChildContext() {
     const that = this;
     return {
-      clickThrough(data) {
+      clickThrough(url) {
         that.setState({
-          data,
+          url,
           showKibana: true
         });
       }
@@ -58,6 +58,7 @@ class CoreLayout extends React.Component {
   hideKibana() {
     const that = this;
     return () => {
+      console.log('here');
       that.setState({
         showKibana: false
       });
@@ -97,6 +98,7 @@ class CoreLayout extends React.Component {
           hideKibana={this.hideKibana()} />
 
         <Sidebar style={styles.sidebar} />
+
         <div style={styles.base}>
           <div style={contentStyle}>
             {
@@ -109,7 +111,7 @@ class CoreLayout extends React.Component {
           {
             showKibana
             ? <div style={styles.kibana}>
-              <Kibana data={this.state.data} />
+              <Kibana url={this.state.url} />
             </div>
             : null
           }
