@@ -5,7 +5,7 @@ import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/DurationWidget';
 import moment from 'moment';
 import {generateRawData, getIndexFromObjectName, isUndefined, generateQueryParams,
-  generateClickThroughUrl} from 'utils/utils';
+  generateClickThroughUrl, generatePathParams} from 'utils/utils';
 
 const {Table, Tr, Td, unsafe} = Reactable;
 
@@ -317,8 +317,9 @@ const generateDataSource = (props) => {
               queryParamsArray: props.kibana.queryParams,
               currentRowNumber: d
             },
-            queryParams = generateQueryParams(parameters);
-          mainObject.rowClickUrl = generateClickThroughUrl(props.kibana.pathParams.queryId, queryParams);// url;
+            queryParams = generateQueryParams(parameters),
+            pathParams = generatePathParams(props.kibana.pathParams);
+          mainObject.rowClickUrl = generateClickThroughUrl(pathParams, queryParams);
         }
         columnText = '';
         chartValue = '';

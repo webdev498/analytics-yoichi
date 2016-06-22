@@ -299,6 +299,19 @@ export const getCountryCodeByCountryName = {'Antigua and Barbuda': 'AG', 'Bahama
   'UnitedArabEmirates': 'AE', 'Yemen': 'YM', 'Puerto Rico': 'PR', 'Cayman Islands': 'KY', 'South Sudan': 'SS',
   'Kosovo': 'KO'};
 
+export function generatePathParams(pathParamArray) {
+  let pathParams = '';
+  for (let i = 0; i < pathParamArray.length; i++) {
+    if (pathParams === '') {
+      pathParams = pathParamArray[i];
+    }
+    else {
+      pathParams += '/' + pathParamArray[i];
+    }
+  }
+  return pathParams;
+}
+
 export function generateQueryParams(parameters) {
   let {props, dataObj, queryParamsArray, currentRowNumber} = parameters,
     queryParams = '';
@@ -378,6 +391,6 @@ export function generateQueryParam(props, dataObj, key, value, currentRowNumber)
   return queryParam;
 }
 
-export function generateClickThroughUrl(queryId, queryParams) {
-  return baseUrl + '/api/kibana/query/' + queryId + queryParams;
+export function generateClickThroughUrl(pathParams, queryParams) {
+  return baseUrl + '/api/kibana/query/' + pathParams + queryParams;
 }

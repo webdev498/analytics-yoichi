@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {generateRawData, getCountryIDByCountryCode, generateQueryParams, generateClickThroughUrl,
-  isUndefined} from 'utils/utils';
+  isUndefined, generatePathParams} from 'utils/utils';
 
 function generateChartDataSource(rawData, props) {
   const {chartOptions, chartData, shapes} = props;
@@ -88,8 +88,9 @@ function getMarkerClickUrl(props, dataObj) {
       dataObj: dataObj,
       queryParamsArray: props.kibana.queryParams
     },
-    queryParams = generateQueryParams(parameters);
-  return generateClickThroughUrl(props.kibana.pathParams.queryId, queryParams);
+    queryParams = generateQueryParams(parameters),
+    pathParams = generatePathParams(props.kibana.pathParams);
+  return generateClickThroughUrl(pathParams, queryParams);
 }
 
 class WorldMap extends React.Component {

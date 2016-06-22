@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import moment from 'moment';
 import {calculateDateDisplayFormat, calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
 import {generateRawData, isUndefined, getTimePairFromWindow, generateQueryParams,
-  generateClickThroughUrl} from 'utils/utils';
+  generateClickThroughUrl, generatePathParams} from 'utils/utils';
 import {baseUrl} from 'config';
 
 function getXindex(currentChartDataColumn, columns) {
@@ -258,9 +258,9 @@ function getDataPlotClickUrl(props, dataObj) {
       dataObj: dataObj,
       queryParamsArray: props.kibana.queryParams
     },
-    queryParams = generateQueryParams(parameters);
-
-  return generateClickThroughUrl(props.kibana.pathParams.queryId, queryParams);
+    queryParams = generateQueryParams(parameters),
+    pathParams = generatePathParams(props.kibana.pathParams);
+  return generateClickThroughUrl(pathParams, queryParams);
 }
 
 class MultiSeriesCombiChart extends React.Component {
