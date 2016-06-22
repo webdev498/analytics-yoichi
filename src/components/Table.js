@@ -329,11 +329,11 @@ const generateDataSource = (props) => {
   }
 };
 
-function rowClick(props, tableRow) {
+function rowClick(context, tableRow) {
   if (!tableRow.rowClickUrl) {
     return;
   }
-  console.log(tableRow.rowClickUrl);
+  context.clickThrough(tableRow.rowClickUrl);
 }
 
 class tableCard extends React.Component {
@@ -342,15 +342,8 @@ class tableCard extends React.Component {
     tableOptions: PropTypes.object
   }
 
-  rowClick(props, tableRow) {
-    if (!tableRow.rowClickUrl) {
-      return;
-    }
-    console.log(tableRow.rowClickUrl);
-  }
-
   render() {
-    const {props} = this;
+    const {props, context} = this;
     return (
       <div style={props.attributes.style}>
         {generateDataSource(props)}
@@ -365,7 +358,7 @@ class tableCard extends React.Component {
           {
             tableDataSource.map(function(tableRow, index) {
               return (
-                <Tr onClick={() => rowClick(props, tableRow)} style={{'cursor': 'pointer'}}>
+                <Tr onClick={() => rowClick(context, tableRow)} style={{'cursor': 'pointer'}}>
                   {tableRow.columns.map(function(tableColumn, indexCol) {
                     if (tableColumn.columnType === 'chart') {
                       return (
