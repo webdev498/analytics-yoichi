@@ -1,12 +1,10 @@
-import React from 'react';
-import {generateRawData, getCountryIDByCountryCode, getCountryCodeByCountryName, getTimePairFromWindow} from 'utils/utils';
-import {baseUrl} from 'config';
+import React, {PropTypes} from 'react';
+import {generateRawData, getCountryIDByCountryCode, generateQueryParams, generateClickThroughUrl,
+  isUndefined} from 'utils/utils';
 
 function generateChartDataSource(rawData, props) {
-  const {chartOptions, chartData} = props;
+  const {chartOptions, chartData, shapes} = props;
   let markersItemsObject = [],
-    minValue = '0',
-    maxValue = '0',
     markerIdSuffix = 0;
 
   for (let i = 0; i < chartData.fieldMapping.length; i++) {
@@ -42,14 +40,6 @@ function generateChartDataSource(rawData, props) {
         obj1.alpha = currentChartData.alpha;
 
         markersItemsObject.push(obj1);
-
-        if (a === 0) {
-          minValue = rows[a][4];
-        }
-        if (a === (rows.length - 1)) {
-          maxValue = rows[a][4];
-        }
-
         markerIdSuffix = markerIdSuffix + 1;
       }
     }
@@ -77,16 +67,10 @@ function generateChartDataSource(rawData, props) {
     'bgAlpha': '0'
   }, chartOptions);
 
-  var shapesObject = [
-    {
-      'id': 'maliciousIcon',
-      'type': 'image',
-      'url': '/img/biohazard.png',
-      'xscale': '30',
-      'yscale': '30',
-      'labelPadding': '15'
-    }
-  ];
+  let shapesObject = [];
+  if (!isUndefined(shapes)) {
+    shapesObject = shapes;
+  }
 
   dataSourceObject.markers = {
     'shapes': shapesObject,
@@ -99,78 +83,71 @@ function getMarkerClickUrl(props, dataObj) {
   if (!props.kibana) {
     return;
   }
-
-  let label = dataObj.label,
-    countryName = label.split(','),
-    countryCode = getCountryCodeByCountryName[countryName[0]],
-    pair = getTimePairFromWindow(props.duration, ''),
-    dateTime1 = pair.fromDate,
-    dateTime2 = pair.toDate;
-
-  const url = baseUrl + '/kibana/query/' + props.kibana.pathParams.queryId + '?country=' + countryCode + '&from=' +
-    dateTime1 + '&to=' + dateTime2;
-  // this.context.clickThrough(url);
-  console.log(url);
+  let parameters = {
+      props: props,
+      dataObj: dataObj,
+      queryParamsArray: props.kibana.queryParams
+    },
+    queryParams = generateQueryParams(parameters);
+  return generateClickThroughUrl(props.kibana.pathParams.queryId, queryParams);
 }
 
-const renderChart = (props) => {
-  if (!props.data) {
-    return;
+class WorldMap extends React.Component {
+  static propTypes = {
+    attributes: PropTypes.object
   }
 
-  const data = props.data,
-    fieldMapping = props.chartData.fieldMapping;
+  renderChart(props) {
+    if (!props.data) {
+      return;
+    }
 
-  let rawData = {};
-  rawData = generateRawData(fieldMapping, data);
-  // console.log(JSON.stringify(rawData));
-  // const mainData = props.data;
-  // const chartData = props.chartData;
+    const data = props.data,
+      fieldMapping = props.chartData.fieldMapping,
+      {clickThrough} = this.context;
 
-  // let rawData = {};
-  // for (let i = 0; i < chartData.length; i++) {
-  //   let currentChartData = chartData[i];
-  //   if (props.multiData === null && mainData[currentChartData.reportId] === undefined) {
-  //     return;
-  //   }
-  //   else {
-  //     if (!rawData.hasOwnProperty(currentChartData.reportId)) {
-  //       rawData[currentChartData.reportId] = mainData[currentChartData.reportId];
-  //     }
-  //   }
-  // }
+    let rawData = {};
+    rawData = generateRawData(fieldMapping, data);
 
-  //const dataSourceObject = generateChartDataSource(rawData, props);
-  // console.log(dataSourceObject);
-
-  FusionCharts.ready(function() {
-    const fusioncharts = new FusionCharts({
-      type: 'maps/worldwithcountries',
-      renderAt: props.attributes.id,
-      width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
-      height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
-      dataFormat: 'json',
-      containerBackgroundOpacity: '0',
-      dataSource: generateChartDataSource(rawData, props),
-      events: {
-        markerClick: function(eventObj, dataObj) {
-          getMarkerClickUrl(props, dataObj);
+    FusionCharts.ready(function() {
+      const fusioncharts = new FusionCharts({
+        type: 'maps/worldwithcountries',
+        renderAt: props.attributes.id,
+        width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
+        height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
+        dataFormat: 'json',
+        containerBackgroundOpacity: '0',
+        dataSource: generateChartDataSource(rawData, props),
+        events: {
+          markerClick: function(eventObj, dataObj) {
+            const url = getMarkerClickUrl(props, dataObj);
+            if (url !== '' && !isUndefined(url)) {
+              clickThrough(url);
+            }
+          }
         }
-      }
+      });
+      fusioncharts.render();
     });
-    fusioncharts.render();
-  });
-};
+  }
 
-const WorldMap = (props) => (
-  <div style={{width: '100%'}}>
-    <div className='chartCaption'>{props.meta.subTitle}</div>
-    <div style={{textAlign: 'center'}}><br />
-      <img src='/img/biohazard.png' width='20' height='20' />&nbsp;Malicious Connections
-    </div>
-    <div id={props.attributes.id}></div>
-    {renderChart(props)}
-  </div>
-);
+  render() {
+    const {props} = this;
+    return (
+      <div style={{width: '100%'}}>
+        <div className='chartCaption'>{props.meta.subTitle}</div>
+        <div style={{textAlign: 'center'}}><br />
+          <img src='/img/biohazard.png' width='20' height='20' />&nbsp;Malicious Connections
+        </div>
+        <div id={props.attributes.id}></div>
+        {this.renderChart(props)}
+      </div>
+    );
+  }
+}
+
+WorldMap.contextTypes = {
+  clickThrough: React.PropTypes.func
+};
 
 export default WorldMap;

@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react';
 import moment from 'moment';
 import {calculateDateDisplayFormat, calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
-import {generateRawData, isUndefined, getTimePairFromWindow} from 'utils/utils';
-import {baseUrl, lowScoreRange, mediumScoreRange, highScoreRange} from 'config';
+import {generateRawData, isUndefined, getTimePairFromWindow, generateQueryParams,
+  generateClickThroughUrl} from 'utils/utils';
+import {baseUrl} from 'config';
 
 function getXindex(currentChartDataColumn, columns) {
   let x = '';
@@ -252,67 +253,81 @@ function getDataPlotClickUrl(props, dataObj) {
   if (!props.kibana) {
     return;
   }
+  let parameters = {
+      props: props,
+      dataObj: dataObj,
+      queryParamsArray: props.kibana.queryParams
+    },
+    queryParams = generateQueryParams(parameters);
 
-  let toolText = dataObj['toolText'],
-    dateStringArray = toolText.split(','),
-    dateString = dateStringArray[1];
-
-  dateString = dateString.trim();
-
-  let pair = getTimePairFromWindow(props.duration, dateString),
-    dateTime1 = pair.fromDate,
-    dateTime2 = pair.toDate,
-    otherParameters = '';
-
-  if ((dataObj.datasetName).toLowerCase() === 'low') {
-    otherParameters = 'lowScore=' + lowScoreRange[0] + '&highScore=' + lowScoreRange[1];
-  }
-  else if ((dataObj.datasetName).toLowerCase() === 'medium') {
-    otherParameters = 'lowScore=' + mediumScoreRange[0] + '&highScore=' + mediumScoreRange[1];
-  }
-  else if ((dataObj.datasetName).toLowerCase() === 'high') {
-    otherParameters = 'lowScore=' + highScoreRange[0] + '&highScore=' + highScoreRange[1];
-  }
-
-  const url = baseUrl + '/kibana/query/' + props.kibana.pathParams.queryId + '?' + otherParameters + '&from=' +
-    dateTime1 + '&to=' + dateTime2;
-  console.log(url);
+  return generateClickThroughUrl(props.kibana.pathParams.queryId, queryParams);
 }
 
-const renderChart = (props) => {
-  if (!props.duration) {
-    return;
-  }
+// function getDataPlotClickUrl(props, dataObj) {
+//   if (!props.kibana) {
+//     return;
+//   }
 
-  if (!props.data) {
-    return;
-  }
+//   let toolText = dataObj['toolText'],
+//     dateStringArray = toolText.split(','),
+//     dateString = dateStringArray[1];
 
-  const data = props.data,
-    fieldMapping = props.chartData.fieldMapping;
+//   dateString = dateString.trim();
 
-  let rawData = {};
-  rawData = generateRawData(fieldMapping, data);
+//   let pair = getTimePairFromWindow(props.duration, dateString),
+//     dateTime1 = pair.fromDate,
+//     dateTime2 = pair.toDate,
+//     otherParameters = '';
 
-  FusionCharts.ready(function() {
-    const fusioncharts = new FusionCharts ({
-      type: 'mscombi2d',
-      renderAt: props.attributes.id,
-      width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
-      height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
-      dataFormat: 'json',
-      containerBackgroundOpacity: '0',
-      dataSource: generateChartDataSource(rawData, props),
-      events: {
-        dataplotClick: function(eventObj, dataObj) {
-          getDataPlotClickUrl(props, dataObj);
-        }
-      }
-    });
+//   // if ((dataObj.datasetName).toLowerCase() === 'low') {
+//   //   otherParameters = 'lowScore=' + lowScoreRange[0] + '&highScore=' + lowScoreRange[1];
+//   // }
+//   // else if ((dataObj.datasetName).toLowerCase() === 'medium') {
+//   //   otherParameters = 'lowScore=' + mediumScoreRange[0] + '&highScore=' + mediumScoreRange[1];
+//   // }
+//   // else if ((dataObj.datasetName).toLowerCase() === 'high') {
+//   //   otherParameters = 'lowScore=' + highScoreRange[0] + '&highScore=' + highScoreRange[1];
+//   // }
 
-    fusioncharts.render();
-  });
-};
+//   const url = baseUrl + '/kibana/query/' + props.kibana.pathParams.queryId + '?' + otherParameters + '&from=' +
+//     dateTime1 + '&to=' + dateTime2;
+//   console.log(url);
+// }
+
+// const renderChart = (props) => {
+//   if (!props.duration) {
+//     return;
+//   }
+
+//   if (!props.data) {
+//     return;
+//   }
+
+//   const data = props.data,
+//     fieldMapping = props.chartData.fieldMapping;
+
+//   let rawData = {};
+//   rawData = generateRawData(fieldMapping, data);
+
+//   FusionCharts.ready(function() {
+//     const fusioncharts = new FusionCharts ({
+//       type: 'mscombi2d',
+//       renderAt: props.attributes.id,
+//       width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
+//       height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
+//       dataFormat: 'json',
+//       containerBackgroundOpacity: '0',
+//       dataSource: generateChartDataSource(rawData, props),
+//       events: {
+//         dataplotClick: function(eventObj, dataObj) {
+//           getDataPlotClickUrl(props, dataObj);
+//         }
+//       }
+//     });
+
+//     fusioncharts.render();
+//   });
+// };
 
 class MultiSeriesCombiChart extends React.Component {
   static propTypes = {
@@ -320,15 +335,58 @@ class MultiSeriesCombiChart extends React.Component {
     meta: PropTypes.object
   }
 
+  renderChart(props) {
+    if (!props.duration) {
+      return;
+    }
+
+    if (!props.data) {
+      return;
+    }
+
+    const data = props.data,
+      fieldMapping = props.chartData.fieldMapping,
+      {clickThrough} = this.context;
+
+    let rawData = {};
+    rawData = generateRawData(fieldMapping, data);
+
+    FusionCharts.ready(function() {
+      const fusioncharts = new FusionCharts ({
+        type: 'mscombi2d',
+        renderAt: props.attributes.id,
+        width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
+        height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
+        dataFormat: 'json',
+        containerBackgroundOpacity: '0',
+        dataSource: generateChartDataSource(rawData, props),
+        events: {
+          dataplotClick: function(eventObj, dataObj) {
+            const url = getDataPlotClickUrl(props, dataObj);
+            if (url !== '' && !isUndefined(url)) {
+              clickThrough(url);
+            }
+          }
+        }
+      });
+
+      fusioncharts.render();
+    });
+  }
+
   render() {
     const {props} = this;
     return (
       <div style={props.attributes.chartBorder}>
         <div style={props.attributes.chartCaption}>{props.meta.title}</div>
-        <div id={props.attributes.id}>{renderChart(props)}</div>
+        <div id={props.attributes.id}>{this.renderChart(props)}</div>
       </div>
     );
   }
 }
+
+MultiSeriesCombiChart.contextTypes = {
+  clickThrough: React.PropTypes.func
+};
 
 export default MultiSeriesCombiChart;

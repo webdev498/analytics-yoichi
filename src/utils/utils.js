@@ -1,4 +1,5 @@
 import {baseUrl} from 'config';
+import {lowScoreRange, mediumScoreRange, highScoreRange} from 'constants';
 
 // Function to get Country ID by passing Country Code
 export function getCountryIDByCountryCode(countryCode) {
@@ -216,10 +217,18 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     dateString1 = formatDate(dateParameter);
 
     let timeDifference = 5;// default 5 minutes time difference
-    if (timeWindow === '1h') timeDifference = 5;// i.e. 5 minutes difference
-    if (timeWindow === '1d') timeDifference = 60;// i.e. 1 hour difference
-    if (timeWindow === '1w') timeDifference = 1440;// i.e. 1 day difference
-    if (timeWindow === '1mo') timeDifference = 10080;// i.e. 1 week difference
+    if (timeWindow === '1h') {
+      timeDifference = 5;// i.e. 5 minutes difference
+    }
+    if (timeWindow === '1d') {
+      timeDifference = 60;// i.e. 1 hour difference
+    }
+    if (timeWindow === '1w') {
+      timeDifference = 1440;// i.e. 1 day difference
+    }
+    if (timeWindow === '1mo') {
+      timeDifference = 10080;// i.e. 1 week difference
+    }
 
     let toDate = dateParameter;
     toDate.setMinutes(toDate.getMinutes() + timeDifference);
@@ -233,10 +242,18 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     dateString1 = formatDate(todayDate);
     let fromDate = new Date(dateString1);
 
-    if (timeWindow === '1h') fromDate.setHours(todayDate.getHours() - 1);
-    if (timeWindow === '1d') fromDate.setDate(todayDate.getDate() - 1);
-    if (timeWindow === '1w') fromDate.setDate(todayDate.getDate() - 7);
-    if (timeWindow === '1mo') fromDate.setMonth(todayDate.getMonth() - 1);
+    if (timeWindow === '1h') {
+      fromDate.setHours(todayDate.getHours() - 1);
+    }
+    if (timeWindow === '1d') {
+      fromDate.setDate(todayDate.getDate() - 1);
+    }
+    if (timeWindow === '1w') {
+      fromDate.setDate(todayDate.getDate() - 7);
+    }
+    if (timeWindow === '1mo') {
+      fromDate.setMonth(todayDate.getMonth() - 1);
+    }
     dateString2 = formatDate(fromDate);
 
     let dateTimePair = {fromDate: dateString2, toDate: dateString1};
@@ -244,14 +261,15 @@ export function getTimePairFromWindow(timeWindow, dateString) {
   }
 }
 
-export const getCountryCodeByCountryName = {'Antigua and Barbuda': 'AG', 'Bahamas': 'BS', 'Barbados': 'BB', 'Belize': 'BZ',
-  'Canada': 'CA', 'Costa Rica': 'CR', 'Cuba': 'CU', 'Dominica': 'DM', 'DominicanRep.': 'DO', 'El Salvador': 'SV',
-  'Grenada': 'GD', 'Guatemala': 'GT', 'Haiti': 'HT', 'Honduras': 'HN', 'Jamaica': 'JM', 'Mexico': 'MX',
-  'Nicaragua': 'NI', 'Panama': 'PA', 'St. Kitts &Nevis': 'KN', 'St. Lucia': 'LC', 'St. Vincent & the Grenadines': 'VC',
-  'Trinidad & Tobago': 'TT', 'United States': 'US', 'Greenland': 'GL', 'Argentina': 'AR', 'Bolivia': 'BO',
-  'Brazil': 'BR', 'Chile': 'CL', 'Colombia': 'CO', 'Ecuador': 'EC', 'Falkland Islands': 'FK', 'French Guiana': 'GF',
-  'Guyana': 'GY', 'Paraguay': 'PY', 'Peru': 'PE', 'Suriname': 'SR', 'Uruguay': 'UY', 'Venezuela': 'VE',
-  'Algeria': 'DZ', 'Angola': 'AO', 'Benin': 'BJ', 'Botswna': 'BW', 'Burkina Faso': 'BF', 'Burundi': 'BI',
+export const getCountryCodeByCountryName = {'Antigua and Barbuda': 'AG', 'Bahamas': 'BS', 'Barbados': 'BB',
+  'Belize': 'BZ', 'Canada': 'CA', 'Costa Rica': 'CR', 'Cuba': 'CU', 'Dominica': 'DM', 'DominicanRep.': 'DO',
+  'El Salvador': 'SV', 'Grenada': 'GD', 'Guatemala': 'GT', 'Haiti': 'HT', 'Honduras': 'HN', 'Jamaica': 'JM',
+  'Mexico': 'MX', 'Nicaragua': 'NI', 'Panama': 'PA', 'St. Kitts &Nevis': 'KN', 'St. Lucia': 'LC',
+  'St. Vincent & the Grenadines': 'VC', 'Trinidad & Tobago': 'TT', 'United States': 'US', 'Greenland': 'GL',
+  'Argentina': 'AR', 'Bolivia': 'BO', 'Brazil': 'BR', 'Chile': 'CL', 'Colombia': 'CO', 'Ecuador': 'EC',
+  'Falkland Islands': 'FK', 'French Guiana': 'GF', 'Guyana': 'GY', 'Paraguay': 'PY', 'Peru': 'PE',
+  'Suriname': 'SR', 'Uruguay': 'UY', 'Venezuela': 'VE', 'Algeria': 'DZ', 'Angola': 'AO', 'Benin': 'BJ',
+  'Botswna': 'BW', 'Burkina Faso': 'BF', 'Burundi': 'BI',
   'Cameroon': 'CM', 'Cape Verde': 'CV', 'Central African Republic': 'CP', 'Chad': 'TD', 'Comoros': 'KM',
   'Cote dIvoire': 'CI', 'Democratic Republic of the Congo': 'CD', 'Djibouti': 'DJ', 'Egypt': 'EG',
   'Equatorial Guinea': 'GQ', 'Eritrea': 'ER', 'Ethiopia': 'ET', 'Gabon': 'GA', 'Ghana': 'GH', 'Guinea': 'GN',
@@ -281,52 +299,85 @@ export const getCountryCodeByCountryName = {'Antigua and Barbuda': 'AG', 'Bahama
   'UnitedArabEmirates': 'AE', 'Yemen': 'YM', 'Puerto Rico': 'PR', 'Cayman Islands': 'KY', 'South Sudan': 'SS',
   'Kosovo': 'KO'};
 
-export function generateQueryParams(props, dataObj, key) {
-  let queryParam = '';
-  switch(key) {
-    case 'type':
-      const toolText = dataObj['toolText'],
-       sectionName = toolText.split(',');
-       queryParam = key + '=' + sectionName;
-      break;
-    case 'window':
-      queryParam = key + '=' + props.duration;
-      break;
-    default:
-      break;
-  }
-  return queryParam;
-}
-
-export function generateQueryParam(props, dataObj, key) {
-  let queryParam = '';
-  switch(key) {
-    case 'type':
-      const toolText = dataObj['toolText'],
-       sectionName = toolText.split(',');
-       queryParam = key + '=' + sectionName;
-      break;
-    case 'window':
-      queryParam = key + '=' + props.duration;
-      break;
-    default:
-      break;
-  }
-  return queryParam;
-}
-
-export function generateClickThroughUrl(queryId, queryParamsArray) {
-  let queryParams = '';
+export function generateQueryParams(parameters) {
+  let {props, dataObj, queryParamsArray, currentRowNumber} = parameters,
+    queryParams = '';
   for (let key in queryParamsArray) {
     if (!isUndefined(key)) {
       if (queryParams === '') {
-        queryParams = '?' + key + '=' + queryParamsArray[key];
+        queryParams = '?' + generateQueryParam(props, dataObj, key, queryParamsArray[key], currentRowNumber);
       }
       else {
-        queryParams += '&' + key + '=' + queryParamsArray[key];
+        queryParams += '&' + generateQueryParam(props, dataObj, key, queryParamsArray[key], currentRowNumber);
       }
     }
   }
+  return queryParams;
+}
 
+export function generateQueryParam(props, dataObj, key, value, currentRowNumber) {
+  let queryParam = '';
+  if (value !== '') {
+    const {rows, columns} = props.data;
+    let columnIndex = '';
+    for (let c = 0; c < columns.length; c++) {
+      if (key === columns[c].name) {
+        columnIndex = c;
+        break;
+      }
+    }
+    queryParam = key + '=' + rows[currentRowNumber][columnIndex];
+  }
+  else {
+    switch (key) {
+      case 'window':
+        queryParam = key + '=' + props.duration;
+        break;
+      case 'fromAndToBasedOnToday':
+        let pair = getTimePairFromWindow(props.duration, ''),
+          dateTime1 = pair.fromDate,
+          dateTime2 = pair.toDate;
+        queryParam = 'from=' + dateTime1 + '&to=' + dateTime2;
+        break;
+      case 'fromAndToBasedOnClickedDate':
+        let toolText = dataObj.toolText,
+          dateStringArray = toolText.split(','),
+          dateString = dateStringArray[1];
+        dateString = dateString.trim();
+        pair = getTimePairFromWindow(props.duration, dateString);
+        dateTime1 = pair.fromDate;
+        dateTime2 = pair.toDate;
+        queryParam = 'from=' + dateTime1 + '&to=' + dateTime2;
+        break;
+      case 'type':
+        toolText = dataObj.toolText;
+        const sectionName = toolText.split(',');
+        queryParam = key + '=' + (sectionName[0]).toLowerCase();
+        break;
+      case 'country':
+        let label = dataObj.label,
+          countryName = label.split(','),
+          countryCode = getCountryCodeByCountryName[countryName[0]];
+        queryParam = key + '=' + countryCode;
+        break;
+      case 'scoreRange':
+        if ((dataObj.datasetName).toLowerCase() === 'low') {
+          queryParam = 'lowScore=' + lowScoreRange[0] + '&highScore=' + lowScoreRange[1];
+        }
+        else if ((dataObj.datasetName).toLowerCase() === 'medium') {
+          queryParam = 'lowScore=' + mediumScoreRange[0] + '&highScore=' + mediumScoreRange[1];
+        }
+        else if ((dataObj.datasetName).toLowerCase() === 'high') {
+          queryParam = 'lowScore=' + highScoreRange[0] + '&highScore=' + highScoreRange[1];
+        }
+        break;
+      default:
+        break;
+    }
+  }
+  return queryParam;
+}
+
+export function generateClickThroughUrl(queryId, queryParams) {
   return baseUrl + '/api/kibana/query/' + queryId + queryParams;
 }

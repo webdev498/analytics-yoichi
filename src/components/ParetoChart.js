@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
-import {getIndexFromColumnName, generateQueryParams, generateQueryParam, generateClickThroughUrl} from 'utils/utils';
-import {baseUrl} from 'config';
+import {getIndexFromColumnName, generateQueryParams, generateClickThroughUrl, isUndefined} from 'utils/utils';
 
 function generateChartDataSource(data, props) {
   const {chartOptions, chartData} = props,
@@ -59,12 +58,17 @@ function generateChartDataSource(data, props) {
   };
 };
 
-
 function getDataPlotClickUrl(props, dataObj) {
   if (!props.kibana) {
     return;
   }
-  let queryParams = generateQueryParams(props.kibana.queryParams);
+
+  let parameters = {
+      props: props,
+      dataObj: dataObj,
+      queryParamsArray: props.kibana.queryParams
+    },
+    queryParams = generateQueryParams(parameters);
   return generateClickThroughUrl(props.kibana.pathParams.queryId, queryParams);
 }
 
@@ -95,7 +99,9 @@ class ParetoChart extends React.Component {
         events: {
           dataplotClick: function(eventObj, dataObj) {
             const url = getDataPlotClickUrl(props, dataObj);
-            clickThrough(url);
+            if (url !== '' && !isUndefined(url)) {
+              clickThrough(url);
+            }
           }
         }
       });

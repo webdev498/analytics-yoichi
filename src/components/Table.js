@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Reactable from 'reactable';
 import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/DurationWidget';
 import moment from 'moment';
-import {generateRawData, getIndexFromObjectName, isUndefined} from 'utils/utils';
-import {baseUrl} from 'config';
+import {generateRawData, getIndexFromObjectName, isUndefined, generateQueryParams,
+  generateClickThroughUrl} from 'utils/utils';
 
 const {Table, Tr, Td, unsafe} = Reactable;
 
@@ -312,29 +312,13 @@ const generateDataSource = (props) => {
         };
         mainObject = generateRowObject(rowDetails, mainObject);
         if (props.kibana) {
-          let queryParams = '';
-          if (props.kibana.queryParams) {
-            const queryParamsArray = props.kibana.queryParams;
-            for (let key in queryParamsArray) {
-              if (!isUndefined(key)) {
-                let columnIndex = '';
-                for (let c = 0; c < columnsArray.length; c++) {
-                  if (key === columnsArray[c].name) {
-                    columnIndex = c;
-                    break;
-                  }
-                }
-                if (queryParams === '') {
-                  queryParams = '?' + key + '=' + currentDataRows[d][columnIndex];
-                }
-                else {
-                  queryParams += '&' + key + '=' + currentDataRows[d][columnIndex];
-                }
-              }
-            }
-          }
-          const url = baseUrl + '/kibana/query/' + props.kibana.pathParams.queryId + queryParams;
-          mainObject.rowClickUrl = url;
+          let parameters = {
+              props: props,
+              queryParamsArray: props.kibana.queryParams,
+              currentRowNumber: d
+            },
+            queryParams = generateQueryParams(parameters);
+          mainObject.rowClickUrl = generateClickThroughUrl(props.kibana.pathParams.queryId, queryParams);// url;
         }
         columnText = '';
         chartValue = '';
@@ -351,54 +335,125 @@ function rowClick(props, tableRow) {
   console.log(tableRow.rowClickUrl);
 }
 
-const tableCard = (props) => (
-  <div style={props.attributes.style}>
-    {generateDataSource(props)}
-    <Table style={{width: '100%'}}
-      className='threatTable'
-      sortable={props.tableOptions.sortable}
-      filterable={props.tableOptions.filterable}
-      defaultSort={props.tableOptions.defaultSort}
-      itemsPerPage={5}
-      pageButtonLimit={5}
-      currentPage={0}>
-      {
-        tableDataSource.map(function(tableRow, index) {
-          return (
-            <Tr onClick={() => rowClick(props, tableRow)} style={{'cursor': 'pointer'}}>
-              {tableRow.columns.map(function(tableColumn, indexCol) {
-                if (tableColumn.columnType === 'chart') {
-                  return (
-                    <Td column={tableColumn.columnName}
-                      value={tableColumn.chartValue}
-                      style={tableColumn.columnStyle}>
-                      {loadChartComponentInTableRow(tableColumn, props.duration)}
-                    </Td>
-                  );
-                }
-                if (tableColumn.columnType === 'durationWidget') {
-                  return (
-                    <Td column={tableColumn.columnName}
-                      value={tableColumn.timeValue}
-                      style={tableColumn.columnStyle}>
-                      <DurationWidget timeValue={tableColumn.timeValue} />
-                    </Td>
-                  );
-                }
-                if (tableColumn.columnType === 'text') {
-                  return (
-                    <Td column={tableColumn.columnName}
-                      style={tableColumn.columnStyle}>{tableColumn.columnText}
-                    </Td>
-                  );
-                }
-              })}
-            </Tr>
-          );
-        })
-      }
-    </Table>
-  </div>
-);
+class tableCard extends React.Component {
+  static propTypes = {
+    attributes: PropTypes.object,
+    tableOptions: PropTypes.object
+  }
+
+  rowClick(props, tableRow) {
+    if (!tableRow.rowClickUrl) {
+      return;
+    }
+    console.log(tableRow.rowClickUrl);
+  }
+
+  render() {
+    const {props} = this;
+    return (
+      <div style={props.attributes.style}>
+        {generateDataSource(props)}
+        <Table style={{width: '100%'}}
+          className='threatTable'
+          sortable={props.tableOptions.sortable}
+          filterable={props.tableOptions.filterable}
+          defaultSort={props.tableOptions.defaultSort}
+          itemsPerPage={5}
+          pageButtonLimit={5}
+          currentPage={0}>
+          {
+            tableDataSource.map(function(tableRow, index) {
+              return (
+                <Tr onClick={() => rowClick(props, tableRow)} style={{'cursor': 'pointer'}}>
+                  {tableRow.columns.map(function(tableColumn, indexCol) {
+                    if (tableColumn.columnType === 'chart') {
+                      return (
+                        <Td column={tableColumn.columnName}
+                          value={tableColumn.chartValue}
+                          style={tableColumn.columnStyle}>
+                          {loadChartComponentInTableRow(tableColumn, props.duration)}
+                        </Td>
+                      );
+                    }
+                    if (tableColumn.columnType === 'durationWidget') {
+                      return (
+                        <Td column={tableColumn.columnName}
+                          value={tableColumn.timeValue}
+                          style={tableColumn.columnStyle}>
+                          <DurationWidget timeValue={tableColumn.timeValue} />
+                        </Td>
+                      );
+                    }
+                    if (tableColumn.columnType === 'text') {
+                      return (
+                        <Td column={tableColumn.columnName}
+                          style={tableColumn.columnStyle}>{tableColumn.columnText}
+                        </Td>
+                      );
+                    }
+                  })}
+                </Tr>
+              );
+            })
+          }
+        </Table>
+      </div>
+    );
+  }
+}
+
+// const tableCard = (props) => (
+//   <div style={props.attributes.style}>
+//     {generateDataSource(props)}
+//     <Table style={{width: '100%'}}
+//       className='threatTable'
+//       sortable={props.tableOptions.sortable}
+//       filterable={props.tableOptions.filterable}
+//       defaultSort={props.tableOptions.defaultSort}
+//       itemsPerPage={5}
+//       pageButtonLimit={5}
+//       currentPage={0}>
+//       {
+//         tableDataSource.map(function(tableRow, index) {
+//           return (
+//             <Tr onClick={() => rowClick(props, tableRow)} style={{'cursor': 'pointer'}}>
+//               {tableRow.columns.map(function(tableColumn, indexCol) {
+//                 if (tableColumn.columnType === 'chart') {
+//                   return (
+//                     <Td column={tableColumn.columnName}
+//                       value={tableColumn.chartValue}
+//                       style={tableColumn.columnStyle}>
+//                       {loadChartComponentInTableRow(tableColumn, props.duration)}
+//                     </Td>
+//                   );
+//                 }
+//                 if (tableColumn.columnType === 'durationWidget') {
+//                   return (
+//                     <Td column={tableColumn.columnName}
+//                       value={tableColumn.timeValue}
+//                       style={tableColumn.columnStyle}>
+//                       <DurationWidget timeValue={tableColumn.timeValue} />
+//                     </Td>
+//                   );
+//                 }
+//                 if (tableColumn.columnType === 'text') {
+//                   return (
+//                     <Td column={tableColumn.columnName}
+//                       style={tableColumn.columnStyle}>{tableColumn.columnText}
+//                     </Td>
+//                   );
+//                 }
+//               })}
+//             </Tr>
+//           );
+//         })
+//       }
+//     </Table>
+//   </div>
+// );
+
+tableCard.contextTypes = {
+  clickThrough: React.PropTypes.func
+};
 
 export default tableCard;
