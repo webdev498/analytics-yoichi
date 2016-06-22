@@ -1,5 +1,5 @@
 import {baseUrl} from 'config';
-import {lowScoreRange, mediumScoreRange, highScoreRange} from 'constants';
+import {LOW_SCORE_RANGE, MEDIUM_SCORE_RANGE, HIGH_SCORE_RANGE} from 'Constants';
 
 // Function to get Country ID by passing Country Code
 export function getCountryIDByCountryCode(countryCode) {
@@ -375,13 +375,13 @@ export function generateQueryParam(props, dataObj, key, value, currentRowNumber)
         break;
       case 'scoreRange':
         if ((dataObj.datasetName).toLowerCase() === 'low') {
-          queryParam = 'lowScore=' + lowScoreRange[0] + '&highScore=' + lowScoreRange[1];
+          queryParam = 'lowScore=' + LOW_SCORE_RANGE[0] + '&highScore=' + LOW_SCORE_RANGE[1];
         }
         else if ((dataObj.datasetName).toLowerCase() === 'medium') {
-          queryParam = 'lowScore=' + mediumScoreRange[0] + '&highScore=' + mediumScoreRange[1];
+          queryParam = 'lowScore=' + MEDIUM_SCORE_RANGE[0] + '&highScore=' + MEDIUM_SCORE_RANGE[1];
         }
         else if ((dataObj.datasetName).toLowerCase() === 'high') {
-          queryParam = 'lowScore=' + highScoreRange[0] + '&highScore=' + highScoreRange[1];
+          queryParam = 'lowScore=' + HIGH_SCORE_RANGE[0] + '&highScore=' + HIGH_SCORE_RANGE[1];
         }
         break;
       default:

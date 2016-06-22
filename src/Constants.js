@@ -13,6 +13,6 @@ export const REQUEST_LAYOUT_DATA = 'REQUEST_LAYOUT_DATA';
 export const RECEIVE_LAYOUT_DATA = 'RECEIVE_LAYOUT_DATA';
 export const ERROR_LAYOUT_DATA = 'ERROR_LAYOUT_DATA';
 
-export const lowScoreRange = [1, 34];
-export const mediumScoreRange = [35, 64];
-export const highScoreRange = [65, 100];
+export const LOW_SCORE_RANGE = [1, 34];
+export const MEDIUM_SCORE_RANGE = [35, 64];
+export const HIGH_SCORE_RANGE = [65, 100];
