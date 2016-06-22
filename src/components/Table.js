@@ -402,56 +402,6 @@ class tableCard extends React.Component {
   }
 }
 
-// const tableCard = (props) => (
-//   <div style={props.attributes.style}>
-//     {generateDataSource(props)}
-//     <Table style={{width: '100%'}}
-//       className='threatTable'
-//       sortable={props.tableOptions.sortable}
-//       filterable={props.tableOptions.filterable}
-//       defaultSort={props.tableOptions.defaultSort}
-//       itemsPerPage={5}
-//       pageButtonLimit={5}
-//       currentPage={0}>
-//       {
-//         tableDataSource.map(function(tableRow, index) {
-//           return (
-//             <Tr onClick={() => rowClick(props, tableRow)} style={{'cursor': 'pointer'}}>
-//               {tableRow.columns.map(function(tableColumn, indexCol) {
-//                 if (tableColumn.columnType === 'chart') {
-//                   return (
-//                     <Td column={tableColumn.columnName}
-//                       value={tableColumn.chartValue}
-//                       style={tableColumn.columnStyle}>
-//                       {loadChartComponentInTableRow(tableColumn, props.duration)}
-//                     </Td>
-//                   );
-//                 }
-//                 if (tableColumn.columnType === 'durationWidget') {
-//                   return (
-//                     <Td column={tableColumn.columnName}
-//                       value={tableColumn.timeValue}
-//                       style={tableColumn.columnStyle}>
-//                       <DurationWidget timeValue={tableColumn.timeValue} />
-//                     </Td>
-//                   );
-//                 }
-//                 if (tableColumn.columnType === 'text') {
-//                   return (
-//                     <Td column={tableColumn.columnName}
-//                       style={tableColumn.columnStyle}>{tableColumn.columnText}
-//                     </Td>
-//                   );
-//                 }
-//               })}
-//             </Tr>
-//           );
-//         })
-//       }
-//     </Table>
-//   </div>
-// );
-
 tableCard.contextTypes = {
   clickThrough: React.PropTypes.func
 };
