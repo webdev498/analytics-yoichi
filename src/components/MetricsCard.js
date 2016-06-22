@@ -1,5 +1,4 @@
 import React from 'react';
-
 import FontIcon from 'material-ui/FontIcon';
 
 const styles = {
@@ -69,7 +68,19 @@ function getArrowIcon(data) {
 
 class MetricsCard extends React.Component {
   handleClick() {
-    this.context.clickThrough('https://demo.ranksoftwareinc.com/api/kibana/query/alerts-score?from=2016-06-20T23:40:59.306&to=2016-06-21T18:10:59.306&lowScore=65&highScore=100')
+    // const {props} = this,
+    //   {kibana} = props;
+
+    // let url = `${baseUrl}/kibana/query/${kibana.pathParams.queryId}`;
+    //     url += `?from=${}&to=${}`;
+
+    // if (kibana.miscParams && kibana.miscParams.highpriority) {
+    //   url += '&lowScore=65&highScore=100';
+    // }
+
+    return () => {
+      this.context.clickThrough('/');
+    };
   }
 
   render() {

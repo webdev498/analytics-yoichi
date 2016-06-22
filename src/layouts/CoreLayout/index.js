@@ -58,7 +58,6 @@ class CoreLayout extends React.Component {
   hideKibana() {
     const that = this;
     return () => {
-      console.log('here');
       that.setState({
         showKibana: false
       });
