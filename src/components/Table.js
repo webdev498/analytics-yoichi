@@ -245,21 +245,6 @@ export function calculateFieldValueForNestedResult(columnDetails) {
   return fieldValue;
 }
 
-// function generateColumnDetailsObject(currentColumnType, fieldName, displayName, fieldValue, columnText,
-//   chartValue, timeValue) {
-//   const columnDetails = {
-//     currentColumnType: currentColumnType,
-//     fieldName: fieldName,
-//     displayName: displayName,
-//     fieldValue: fieldValue,
-//     columnText: columnText,
-//     chartValue: chartValue,
-//     timeValue: timeValue
-//   };
-
-//   return getColumnText(columnDetails);
-// }
-
 export function getColumnText(columnDetails) {
   let {currentColumnType, fieldValue, columnText, chartValue, timeValue} = columnDetails;
 
