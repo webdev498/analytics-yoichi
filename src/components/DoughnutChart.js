@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {generateRawData, getIndexFromObjectName, getIndexFromColumnName,
   checkForUndefinedChartOptionObject} from 'utils/utils';
 
@@ -19,7 +19,7 @@ let highlightedColor1 = '#5E2B78', // Purple (Default colors set)
   calculateTransform1 = 0,
   calculateTransform2 = 0;
 
-function generateDoughnutChart(inputArray) {
+export function generateDoughnutChart(inputArray) {
   doughnutAttributes = {}; // This initialization is required
   const doughnutInputArray1 = {
       countValue: inputArray.countValue,
@@ -50,12 +50,12 @@ function generateDoughnutChart(inputArray) {
     displayPercentage1: displayPercentage1,
     displayPercentage2: displayPercentage2
   };
+  return doughnutAttributes;
 }
 
-function calculateDoughnutAttributes(inputArray, chartId) {
+export function calculateDoughnutAttributes(inputArray, chartId) {
   let {countValue, totalValue} = inputArray,
-    percentage = Math.round((totalValue / parseInt(countValue)) * 100, 2),
-    percentage1 = percentage;
+    percentage = Math.round((totalValue / parseInt(countValue)) * 100, 2);
 
   background = '';
   background2 = '';
@@ -100,7 +100,7 @@ function calculateDoughnutAttributes(inputArray, chartId) {
   };
 }
 
-const renderChart = (props) => {
+export function renderChart(props) {
   if (!props.data) {
     return;
   }
@@ -166,34 +166,46 @@ const renderChart = (props) => {
     totalValue: totalValue.toPrecision()
   };
 
-  generateDoughnutChart(inputArray);
-};
+  doughnutAttributes = generateDoughnutChart(inputArray);
+}
 
-const DoughnutChart = (props) => (
-  <div style={props.attributes.chartBorder}>{renderChart(props)}
-    <div style={props.attributes.chartCaption}>{props.meta.title}</div>
-    <div>
-      <div className='card1 text-center'>
-        <div className='percentage1 chart2'>{doughnutAttributes.displayPercentage2}</div>
-        <div className='donut-chart chart2' style={doughnutAttributes.chart2Background}>
-          <div className='slice one' style={doughnutAttributes.chart2SliceOneStyle}></div>
-          <div className='slice two' style={doughnutAttributes.chart2SliceTwoStyle}></div>
-          <div className='chart-center'><span></span></div>
+class DoughnutChart extends React.Component {
+  static propTypes = {
+    attributes: PropTypes.object,
+    tableOptions: PropTypes.object
+  }
+
+  render() {
+    const {props} = this;
+    return (
+      <div style={props.attributes.chartBorder}>{renderChart(props)}
+        <div style={props.attributes.chartCaption}>{props.meta.title}</div>
+        <div>
+          <div className='card1 text-center'>
+            <div className='percentage1 chart2'>{doughnutAttributes.displayPercentage2}</div>
+            <div className='donut-chart chart2' style={doughnutAttributes.chart2Background}>
+              <div className='slice one' style={doughnutAttributes.chart2SliceOneStyle}></div>
+              <div className='slice two' style={doughnutAttributes.chart2SliceTwoStyle}></div>
+              <div className='chart-center'><span></span></div>
+            </div>
+          </div>
+          <div className='card2'>
+            <div className='donut-chart chart1' style={doughnutAttributes.chart1Background}>
+              <div className='slice one' style={doughnutAttributes.chart1SliceOneStyle}></div>
+              <div className='slice two' style={doughnutAttributes.chart1SliceTwoStyle}></div>
+              <div className='chart-center'><span>{doughnutAttributes.displayPercentage1}</span></div>
+            </div>
+          </div>
         </div>
+        <div className='text-center' id='connectionsPercentage'><br /><br />
+          <span style={doughnutAttributes.percentage2Color}>{doughnutAttributes.displayPercentage2}</span>
+            &nbsp;{props.meta.legend[0]}
+          <span style={doughnutAttributes.percentage1Color}> {doughnutAttributes.displayPercentage1}</span>
+            &nbsp;{props.meta.legend[1]}
+        </div><br /><br />
       </div>
-      <div className='card2'>
-        <div className='donut-chart chart1' style={doughnutAttributes.chart1Background}>
-          <div className='slice one' style={doughnutAttributes.chart1SliceOneStyle}></div>
-          <div className='slice two' style={doughnutAttributes.chart1SliceTwoStyle}></div>
-          <div className='chart-center'><span>{doughnutAttributes.displayPercentage1}</span></div>
-        </div>
-      </div>
-    </div>
-    <div className='text-center' id='connectionsPercentage'><br /><br />
-      <span style={doughnutAttributes.percentage2Color}>{doughnutAttributes.displayPercentage2}</span> {props.meta.legend[0]}
-      <span style={doughnutAttributes.percentage1Color}> {doughnutAttributes.displayPercentage1}</span> {props.meta.legend[1]}
-    </div><br /><br />
-  </div>
-);
+    );
+  }
+}
 
 export default DoughnutChart;
