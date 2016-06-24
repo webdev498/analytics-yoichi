@@ -38,7 +38,7 @@
                             <directory>node_modules</directory>
                         </fileset>
                         <fileset>
-                            <directory>src/static/other_components</directory>
+                            <directory>src/static/bower_components</directory>
                         </fileset>
                     </filesets>
                 </configuration>
@@ -80,7 +80,8 @@
                         <configuration>
                             <executable>npm</executable>
                             <arguments>
-                                <argument>run deploy:prod</argument>
+                                <argument>run</argument>
+                                <argument>deploy:prod</argument>
                             </arguments>
                         </configuration>
                         <goals>
