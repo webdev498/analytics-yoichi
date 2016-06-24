@@ -1,6 +1,11 @@
 import React, {PropTypes} from 'react';
-import {getIndexFromColumnName, generateQueryParams, generateClickThroughUrl, isUndefined,
-  generatePathParams} from 'utils/utils';
+import {
+  getIndexFromColumnName,
+  generateQueryParams,
+  generateClickThroughUrl,
+  isUndefined,
+  generatePathParams
+} from 'utils/utils';
 
 function generateChartDataSource(data, props) {
   const {chartOptions, chartData} = props,
@@ -34,7 +39,7 @@ function generateChartDataSource(data, props) {
     const xValue = rows[i][x],
       yValue = rows[i][y],
       barObject = {
-        label: xValue ? xValue : 'Other',
+        label: xValue || 'Other',
         value: yValue,
         color: chartColors[(colorIndex++) % numberOfColors]
       };
@@ -71,6 +76,7 @@ function getDataPlotClickUrl(props, dataObj) {
     },
     queryParams = generateQueryParams(parameters),
     pathParams = generatePathParams(props.kibana.pathParams);
+
   return generateClickThroughUrl(pathParams, queryParams);
 }
 
