@@ -198,7 +198,7 @@ export function getColumnDataWhenApiReturnsSingleColumn(columnDetails) {
     columnText: columnText, chartValue: chartValue, timeValue: timeValue
   };
 
-  return getColumnText(columnDetails);// generateColumnDetailsObject(columnDetails);
+  return getColumnText(columnDetails);
 }
 
 export function getColumnDataWhenApiReturnsMultipleColumns(columnDetails) {
@@ -226,8 +226,7 @@ export function getColumnDataWhenApiReturnsMultipleColumns(columnDetails) {
     columnText: columnText, chartValue: chartValue, timeValue: timeValue
   };
 
-  return getColumnText(columnDetails); // generateColumnDetailsObject(currentColumnType,
-        // fieldName, displayName, fieldValue, columnText, chartValue, timeValue);
+  return getColumnText(columnDetails);
 }
 
 export function calculateFieldValueForNestedResult(columnDetails) {
