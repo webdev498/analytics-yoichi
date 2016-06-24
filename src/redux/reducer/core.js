@@ -13,9 +13,9 @@ export default function PageDataReducer(state = initialState, action) {
   switch (actionType) {
     case REQUEST_LAYOUT_DATA: {
       const {id} = action;
-      if(state.has(id)) {
-        return  state.update(id, value => {
-          return  value.set('isFetching', true)
+      if (state.has(id)) {
+        return state.update(id, value => {
+          return value.set('isFetching', true)
                     .set('isError', false)
                     .set('layout', [])
                     .set('errorData', null);

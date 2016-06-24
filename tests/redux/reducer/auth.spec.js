@@ -30,7 +30,7 @@ describe('Redux Auth Reducer', function() {
     expect(state).to.deep.equal({isLoading: false, isError: true, errorData});
   });
 
-  it(`Should update the state with isLoading propery for "USER_DETAILS_LOADING" action.`, function() {
+  it('Should update the state with isLoading propery for "USER_DETAILS_LOADING" action.', function() {
     let state;
     state = authReducer(state, {
       type: USER_DETAILS_LOADING
@@ -38,7 +38,7 @@ describe('Redux Auth Reducer', function() {
     expect(state).to.deep.equal({isLoading: true, isError: false});
   });
 
-  it(`Should update the state with user info for "USER_DETAILS_LOADED" action.`, function() {
+  it('Should update the state with user info for "USER_DETAILS_LOADED" action.', function() {
     let state;
     const application = {},
       roles = {},
@@ -59,7 +59,7 @@ describe('Redux Auth Reducer', function() {
     });
   });
 
-  it(`Should update the state with error msg for "USER_DETAILS_ERROR" action.`, function() {
+  it('Should update the state with error msg for "USER_DETAILS_ERROR" action.', function() {
     let state;
 
     const errorData = {msg: 'error'};
