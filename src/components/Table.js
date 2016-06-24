@@ -1,11 +1,11 @@
 import React, {PropTypes} from 'react';
 import Reactable from 'reactable';
-import AngularGaugeChart from 'components/AngularGaugeChart';
-import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
-import DurationWidget from 'components/DurationWidget';
 import moment from 'moment';
 import {generateRawData, getIndexFromObjectName, isUndefined, generateQueryParams,
   generateClickThroughUrl, generatePathParams} from 'utils/utils';
+import AngularGaugeChart from 'components/AngularGaugeChart';
+import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
+import DurationWidget from 'components/DurationWidget';
 
 const {Table, Tr, Td, unsafe} = Reactable;
 
@@ -32,15 +32,14 @@ const generateDataSource = (props) => {
 
   for (let i = 0; i < fieldMapping.length; i++) {
     let currentTableData = fieldMapping[i],
-      currentDataRows = rawData[currentTableData.reportId].rows,
-      columnsArray = rawData[currentTableData.reportId].columns,
+      {rows, columns} = rawData[currentTableData.reportId],
       columnText = '',
       chartValue = '',
       timeValue = '';
 
     let currentDataRowsCount = 0;
-    if (!isUndefined(currentDataRows) && !isUndefined(currentDataRows.length)) {
-      currentDataRowsCount = currentDataRows.length;
+    if (!isUndefined(rows) && !isUndefined(rows.length)) {
+      currentDataRowsCount = rows.length;
     }
 
     for (let d = 0, rowsLen = currentDataRowsCount; d < rowsLen; d++) {
@@ -50,11 +49,16 @@ const generateDataSource = (props) => {
       // Calculate column index from API response
       for (let a = 0; a < currentTableData.columns.length; a++) {
         let currentColumnType = currentTableData.columns[a].type,
-          currentColumnDataArray = currentTableData.columns[a].data;
+          currentColumnDataArray = currentTableData.columns[a].data,
+          rowColumnDetails = {
+            currentColumnType: currentColumnType,
+            currentColumnDataArray: currentColumnDataArray,
+            columnsArray: columns, currentDataRows: rows[d],
+            columnText: columnText, chartValue: chartValue, timeValue: timeValue,
+            nestedResult: nestedResult, emptyValueMessage: emptyValueMessage, currentColumnIndex: a
+          };
 
-        const individualRowData = generateIndividualRowData(currentColumnType, currentColumnDataArray,
-          columnsArray, currentDataRows[d], columnText, chartValue, timeValue, nestedResult,
-          emptyValueMessage, a);
+        const individualRowData = generateIndividualRowData(rowColumnDetails);
 
         let rowDetails = {
           currentColumnType: currentColumnType,
@@ -83,13 +87,20 @@ const generateDataSource = (props) => {
   }
 };
 
-function generateIndividualRowData(currentColumnType, currentColumnDataArray, columnsArray, currentDataRows,
-  columnText, chartValue, timeValue, nestedResult, emptyValueMessage, currentColumnIndex) {
+export function generateIndividualRowData(rowColumnDetails) {
+  let {currentColumnType, currentColumnDataArray, columnsArray, currentDataRows,
+    columnText, chartValue, timeValue, nestedResult, emptyValueMessage, currentColumnIndex} = rowColumnDetails;
+
   for (let cd = 0; cd < currentColumnDataArray.length; cd++) {
     if (columnsArray.length === 1 && columnsArray[0].name === 'json') {
       // This condition is if API response returns a single column with one JSON object. e.g. recent alerts table
-      let columnTextObj = getColumnDataWhenApiReturnsSingleColumn(currentColumnType, currentColumnDataArray[cd],
-                            currentDataRows, columnText, chartValue, timeValue);
+      let columnDetails = {
+          currentColumnType: currentColumnType,
+          currentColumnDataArray: currentColumnDataArray[cd],
+          currentDataRows: currentDataRows,
+          columnText: columnText, chartValue: chartValue, timeValue: timeValue
+        },
+        columnTextObj = getColumnDataWhenApiReturnsSingleColumn(columnDetails);
 
       chartValue = columnTextObj.chartValue;
       columnText = columnTextObj.columnText;
@@ -100,9 +111,15 @@ function generateIndividualRowData(currentColumnType, currentColumnDataArray, co
       // Calculate column index from API response
       for (let columnIndex = 0; columnIndex < columnsArray.length; columnIndex++) {
         if (columnsArray[columnIndex].name === currentColumnDataArray[cd].fieldName) {
-          let columnTextObj = getColumnDataWhenApiReturnsMultipleColumns(currentColumnType,
-            currentColumnDataArray[cd], currentDataRows, columnText, chartValue, timeValue,
-            columnIndex, currentColumnIndex, nestedResult, emptyValueMessage);
+          let columnDetails = {
+              currentColumnType: currentColumnType,
+              currentColumnDataArray: currentColumnDataArray[cd],
+              currentDataRows: currentDataRows,
+              columnText: columnText, chartValue: chartValue, timeValue: timeValue,
+              columnIndex: columnIndex, columnIndexLayoutJSON: currentColumnIndex,
+              nestedResult: nestedResult, emptyValueMessage: emptyValueMessage
+            },
+            columnTextObj = getColumnDataWhenApiReturnsMultipleColumns(columnDetails);
 
           chartValue = columnTextObj.chartValue;
           columnText = columnTextObj.columnText;
@@ -111,6 +128,7 @@ function generateIndividualRowData(currentColumnType, currentColumnDataArray, co
       }
     }
   }// Column data loop ends
+
   return {
     chartValue: chartValue,
     columnText: columnText,
@@ -118,7 +136,7 @@ function generateIndividualRowData(currentColumnType, currentColumnDataArray, co
   };
 }
 
-function generateRowObject(rowDetails, mainObject) {
+export function generateRowObject(rowDetails, mainObject) {
   let {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue} = rowDetails,
     rowObj = {
       columnType: currentColumnType,
@@ -158,8 +176,10 @@ function generateRowObject(rowDetails, mainObject) {
   return mainObject;
 }
 
-function getColumnDataWhenApiReturnsSingleColumn(currentColumnType, currentColumnDataArray, currentDataRows,
-  columnText, chartValue, timeValue) {
+export function getColumnDataWhenApiReturnsSingleColumn(columnDetails) {
+  let {currentColumnType, currentColumnDataArray, currentDataRows, columnText, chartValue,
+    timeValue} = columnDetails;
+
   let fieldValue = '',
     {fieldName, displayName} = currentColumnDataArray,
     fieldValueArray = [],
@@ -172,13 +192,20 @@ function getColumnDataWhenApiReturnsSingleColumn(currentColumnType, currentColum
 
   fieldValue = getIndexFromObjectName(inputArray);
 
-  return generateColumnDetailsObject(currentColumnType,
-        fieldName, displayName, fieldValue, columnText, chartValue, timeValue);
+  columnDetails = {
+    currentColumnType: currentColumnType,
+    fieldName: fieldName, displayName: displayName, fieldValue: fieldValue,
+    columnText: columnText, chartValue: chartValue, timeValue: timeValue
+  };
+
+  return getColumnText(columnDetails);// generateColumnDetailsObject(columnDetails);
 }
 
-function getColumnDataWhenApiReturnsMultipleColumns(currentColumnType, currentColumnDataArray, currentDataRows,
-  columnText, chartValue, timeValue, columnIndex, columnIndexLayoutJSON, nestedResult, emptyValueMessage) {
-  let fieldValue = '',
+export function getColumnDataWhenApiReturnsMultipleColumns(columnDetails) {
+  let {currentColumnType, currentColumnDataArray, currentDataRows,
+    columnText, chartValue, timeValue, columnIndex, columnIndexLayoutJSON, nestedResult,
+    emptyValueMessage} = columnDetails,
+    fieldValue = '',
     {fieldName, displayName} = currentColumnDataArray;
   if (!isUndefined(currentDataRows[columnIndex])) {
     fieldValue = currentDataRows[columnIndex];
@@ -186,21 +213,31 @@ function getColumnDataWhenApiReturnsMultipleColumns(currentColumnType, currentCo
 
   // Following condition is for nested API response
   if (nestedResult) {
-    fieldValue = calculateFieldValueForNestedResult(currentDataRows, fieldValue, columnIndexLayoutJSON,
-      emptyValueMessage);
+    columnDetails = {
+      currentDataRows: currentDataRows, fieldValue: fieldValue,
+      columnIndexLayoutJSON: columnIndexLayoutJSON, emptyValueMessage: emptyValueMessage
+    };
+    fieldValue = calculateFieldValueForNestedResult(columnDetails);
   }
 
-  return generateColumnDetailsObject(currentColumnType,
-        fieldName, displayName, fieldValue, columnText, chartValue, timeValue);
+  columnDetails = {
+    currentColumnType: currentColumnType,
+    fieldName: fieldName, displayName: displayName, fieldValue: fieldValue,
+    columnText: columnText, chartValue: chartValue, timeValue: timeValue
+  };
+
+  return getColumnText(columnDetails); // generateColumnDetailsObject(currentColumnType,
+        // fieldName, displayName, fieldValue, columnText, chartValue, timeValue);
 }
 
-function calculateFieldValueForNestedResult(currentDataRows, fieldValue, columnIndex, emptyValueMessage) {
+export function calculateFieldValueForNestedResult(columnDetails) {
+  let {currentDataRows, fieldValue, columnIndexLayoutJSON, emptyValueMessage} = columnDetails;
   for (let key in currentDataRows) {
     if (!isUndefined(key)) {
-      if (columnIndex === 0) {
+      if (columnIndexLayoutJSON === 0) {
         fieldValue = (key !== '') ? key : '<i>' + emptyValueMessage + '</i>';
       }
-      if (columnIndex === 1) {
+      if (columnIndexLayoutJSON === 1) {
         fieldValue = currentDataRows[key];
       }
     }
@@ -208,22 +245,22 @@ function calculateFieldValueForNestedResult(currentDataRows, fieldValue, columnI
   return fieldValue;
 }
 
-function generateColumnDetailsObject(currentColumnType, fieldName, displayName, fieldValue, columnText,
-  chartValue, timeValue) {
-  const columnDetails = {
-    currentColumnType: currentColumnType,
-    fieldName: fieldName,
-    displayName: displayName,
-    fieldValue: fieldValue,
-    columnText: columnText,
-    chartValue: chartValue,
-    timeValue: timeValue
-  };
+// function generateColumnDetailsObject(currentColumnType, fieldName, displayName, fieldValue, columnText,
+//   chartValue, timeValue) {
+//   const columnDetails = {
+//     currentColumnType: currentColumnType,
+//     fieldName: fieldName,
+//     displayName: displayName,
+//     fieldValue: fieldValue,
+//     columnText: columnText,
+//     chartValue: chartValue,
+//     timeValue: timeValue
+//   };
 
-  return getColumnText(columnDetails);
-}
+//   return getColumnText(columnDetails);
+// }
 
-function getColumnText(columnDetails) {
+export function getColumnText(columnDetails) {
   let {currentColumnType, fieldValue, columnText, chartValue, timeValue} = columnDetails;
 
   switch (currentColumnType) {
@@ -248,7 +285,7 @@ function getColumnText(columnDetails) {
 function generateColumnTextForColumnTypeAsText(columnDetails) {
   let {fieldName, displayName, fieldValue, columnText} = columnDetails;
 
-  if (fieldValue !== undefined && fieldValue !== '' && fieldValue !== null) {
+  if (!isUndefined(fieldValue) && fieldValue !== '' && fieldValue !== null) {
     if (columnText !== '') {
       if (!isUndefined(fieldName)) {
         if (displayName === 'date') {
@@ -352,6 +389,7 @@ class tableCard extends React.Component {
           sortable={props.tableOptions.sortable}
           filterable={props.tableOptions.filterable}
           defaultSort={props.tableOptions.defaultSort}
+          filterBy={props.tableOptions.filterBy}
           itemsPerPage={5}
           pageButtonLimit={5}
           currentPage={0}>

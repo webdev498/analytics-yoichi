@@ -46,6 +46,15 @@ export function msToTime(duration) {
 
   milliseconds = (milliseconds > 0) ? ': ' + milliseconds : '';
 
+  // let time = duration / 1000,
+  //   seconds = parseInt(time % 60);
+  // time /= 60;
+  // let minutes = parseInt(time % 60);
+  // time /= 60;
+  // let hours = parseInt(time % 24);
+  // // time /= 24;
+  // // let days = time;
+
   return [hours, minutes, seconds];// + milliseconds;
 }
 

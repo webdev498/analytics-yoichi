@@ -2,7 +2,7 @@ import {getCountryIDByCountryCode, msToTime, generateRawData, getIndexFromColumn
   getXYIndexFromColumnNames, getIndexFromObjectName, translateTimeWindow, isUndefined, getTimePairFromWindow
   } from 'utils/utils';
 
-describe('Utility Function: ', function() {
+describe('Utility Function:', function() {
   it('getCountryIDByCountryCode should return country id.', function() {
     expect(getCountryIDByCountryCode('IN')).to.deep.equal('104');
   });
