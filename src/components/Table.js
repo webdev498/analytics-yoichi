@@ -225,7 +225,6 @@ export function getColumnDataWhenApiReturnsMultipleColumns(columnDetails) {
     fieldName: fieldName, displayName: displayName, fieldValue: fieldValue,
     columnText: columnText, chartValue: chartValue, timeValue: timeValue
   };
-
   return getColumnText(columnDetails);
 }
 
@@ -266,7 +265,7 @@ export function getColumnText(columnDetails) {
   };
 }
 
-function generateColumnTextForColumnTypeAsText(columnDetails) {
+export function generateColumnTextForColumnTypeAsText(columnDetails) {
   let {fieldName, displayName, fieldValue, columnText} = columnDetails;
 
   if (!isUndefined(fieldValue) && fieldValue !== '' && fieldValue !== null) {
@@ -321,14 +320,14 @@ function generateColumnTextForColumnTypeAsText(columnDetails) {
   return columnText;
 }
 
-function generateColumnTextForDisplayingDate(fieldValue) {
+export function generateColumnTextForDisplayingDate(fieldValue) {
   let fieldValueInLocalTime = moment.utc(fieldValue).toDate();
   fieldValueInLocalTime = moment(fieldValueInLocalTime).format('D MMM YYYY HH:mm:ss');
   fieldValue = fieldValueInLocalTime;
   return fieldValue;
 }
 
-function generateColumnTextForDisplayingCountryFlag(fieldValue) {
+export function generateColumnTextForDisplayingCountryFlag(fieldValue) {
   if (fieldValue !== '' && fieldValue !== null) {
     fieldValue = ' <span class="flag-icon flag-icon-' + fieldValue.toLowerCase() + '"></span>';
   }
