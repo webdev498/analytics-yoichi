@@ -34,7 +34,7 @@ export function getCountryIDByCountryCode(countryCode) {
 }
 
 // Function to convert milliseconds to time
-export function msToTime(duration) {
+export function msToTimeOld(duration) {
   let milliseconds = parseInt((duration % 1000) / 100),
     seconds = parseInt((duration / 1000) % 60),
     minutes = parseInt((duration / (1000 * 60)) % 60),
@@ -56,6 +56,21 @@ export function msToTime(duration) {
   // // let days = time;
 
   return [hours, minutes, seconds];// + milliseconds;
+}
+
+export function msToTime(ms) {
+  // 1- Convert to seconds:
+  let seconds = ms / 1000;
+  // 2- Extract hours:
+  let hours = parseInt(seconds / 3600); // 3,600 seconds in 1 hour
+  seconds = seconds % 3600; // seconds remaining after extracting hours
+  // 3- Extract minutes:
+  let minutes = parseInt(seconds / 60); // 60 seconds in 1 minute
+  // 4- Keep only seconds not extracted to minutes:
+  seconds = seconds % 60;
+  return [addZero(parseInt(hours), 2),
+    addZero(parseInt(minutes), 2),
+    addZero(parseInt(seconds), 2)];
 }
 
 // Function to generate row data
