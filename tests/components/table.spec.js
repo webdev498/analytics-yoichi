@@ -72,8 +72,8 @@ describe('Table Component: ', function() {
         null, null, null, '172.31.9.173', 50010, 'rank-slave3', '', null, null, null, 144548, 1155,
         ['CNTOKPNKVKNTMx1RQQOOx1NTOKPNKVKNTPx1RMMNM']], 'columnText': '', 'chartValue': '', 'timeValue': '',
         'columnIndex': 0, 'columnIndexLayoutJSON': 0};
-      expect(getColumnDataWhenApiReturnsMultipleColumns(columnDetails)).to.deep.equal({'columnText':
-        '24 Jun 2016 15:30:08', 'chartValue': '', 'timeValue': ''});
+      expect(getColumnDataWhenApiReturnsMultipleColumns(columnDetails)).to.deep.equal({
+        'columnText': '24 Jun 2016 15:30:08', 'chartValue': '', 'timeValue': ''});
     }
   );
 

@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {generateRawData, getColumnIndexArrayFromColumnName, getIndexFromColumnName,
   getIndexFromObjectName} from 'utils/utils';
 
-function generateDataArray(columnIndexArray, rowsArray) {
+export function generateDataArray(columnIndexArray, rowsArray) {
   let dataset = [];
   if (columnIndexArray.length !== 0) {
     for (let d = 0, rowsLen = rowsArray.length; d < rowsLen; d++) {
@@ -19,7 +19,7 @@ function generateDataArray(columnIndexArray, rowsArray) {
   return dataset;
 }
 
-function generateChartDataSource(rawData, props) {
+export function generateChartDataSource(rawData, props) {
   const chartOptions = props.chartOptions,
     {fieldMapping, multipleReportIds, displayTopFive, showTrendLines, trendLines} = props.chartData;
 
@@ -149,7 +149,6 @@ function generateChartDataSource(rawData, props) {
     dataSourceObject.trendlines[0].line[0].displayvalue = averageValue +
     (chartOptions.numberSuffix ? chartOptions.numberSuffix : '');
   }
-
   return dataSourceObject;
 }
 

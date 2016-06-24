@@ -170,7 +170,7 @@ export function getIndexFromObjectName(inputArray) {
 // Function to check for undefined chartOption object
 export function checkForUndefinedChartOptionObject(chartOptions, objectName, defaultValue) {
   let value = defaultValue;
-  if (chartOptions !== undefined && chartOptions[objectName] !== undefined) {
+  if (!isUndefined(chartOptions) && chartOptions[objectName] !== undefined) {
     value = chartOptions[objectName];
   }
   return value;

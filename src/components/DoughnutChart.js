@@ -100,7 +100,7 @@ export function calculateDoughnutAttributes(inputArray, chartId) {
   };
 }
 
-export function renderChart(props) {
+function renderChart(props) {
   if (!props.data) {
     return;
   }
