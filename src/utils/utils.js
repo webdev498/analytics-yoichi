@@ -240,6 +240,7 @@ export function getTimePairFromWindow(timeWindow, dateString) {
   else {
     let todayDate = new Date();
     dateString1 = formatDate(todayDate);
+    console.log(dateString1);
     let fromDate = new Date(dateString1);
 
     if (timeWindow === '1h') {
@@ -254,7 +255,9 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     if (timeWindow === '1mo') {
       fromDate.setMonth(todayDate.getMonth() - 1);
     }
+    console.log(timeWindow, fromDate);
     dateString2 = formatDate(fromDate);
+    console.log(dateString2);
 
     let dateTimePair = {fromDate: dateString2, toDate: dateString1};
     return dateTimePair;
