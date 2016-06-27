@@ -1,13 +1,12 @@
 import React, {PropTypes} from 'react';
 
-import FontIcon from 'material-ui/FontIcon';
 import ParentCard from 'containers/ParentCard';
 import Loader from 'components/Loader';
 
 import {fetchLayoutData} from 'actions/core';
 
 import { connect } from 'react-redux';
-// import staticLayout from 'layout';
+import staticLayout from 'layout';
 
 const styles = {
   content: {
@@ -35,8 +34,8 @@ class PageContent extends React.Component {
   }
 
   renderChildren() {
-    const {layout} = this.props;
-    // const {layout} = staticLayout;
+    // const {layout} = this.props;
+    const {layout} = staticLayout;
 
     const finalElmements = [];
 
@@ -56,10 +55,6 @@ class PageContent extends React.Component {
 
           for (let k = 0, grandChildrenLen = grandChildren.length; k < grandChildrenLen; k++) {
             const grandChildElm = grandChildren[k];
-            if (grandChildElm.type === 'FontIcon') {
-              grandChildrenArray.push(React.createElement(FontIcon,
-                           {className: 'material-icons'}, grandChildElm.content));
-            }
 
             if (componentDetails.name === 'Compound') {
               const elmSub = React.createFactory(require('components/' + grandChildElm.type).default);

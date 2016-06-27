@@ -1,6 +1,12 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
 
+import {
+  generateQueryParams,
+  generatePathParams,
+  generateClickThroughUrl
+} from 'utils/utils';
+
 const styles = {
   iconStyle: {
     fontSize: '50px',
@@ -43,11 +49,6 @@ function getPercent(data) {
           : '';
 }
 
-function getIconElm(props) {
-  const elm = props.children[0];
-  return React.cloneElement(elm, {style: {...styles.iconStyle}});
-}
-
 function getArrowIcon(data) {
   if (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A') {
     const percent = Math.round(data.rows[0][0][2]);
@@ -68,29 +69,35 @@ function getArrowIcon(data) {
 
 class MetricsCard extends React.Component {
   handleClick() {
-    // const {props} = this,
-    //   {kibana} = props;
+    const {props} = this,
+      {kibana} = props,
+      dataObj = {};
 
-    // let url = `${baseUrl}/kibana/query/${kibana.pathParams.queryId}`;
-    //     url += `?from=${}&to=${}`;
+    if (!kibana) return;
 
-    // if (kibana.miscParams && kibana.miscParams.highpriority) {
-    //   url += '&lowScore=65&highScore=100';
-    // }
+    if (props.kibana.queryParams) {
+      dataObj.datasetName = 'high';
+    }
+
+    let parameters = {
+        props,
+        dataObj,
+        queryParamsArray: props.kibana.queryParams
+      },
+      queryParams = generateQueryParams(parameters),
+      pathParams = generatePathParams(props.kibana.pathParams);
 
     return () => {
-      this.context.clickThrough('/');
+      this.context.clickThrough(generateClickThroughUrl(pathParams, queryParams));
     };
   }
 
   render() {
     const { props } = this;
+
     return (
       <div style={{...styles.cardStyle}}>
         <div style={styles.wrapStyle}>
-          <div>
-            {getIconElm(props)}
-          </div>
           <div style={{marginLeft: 'auto', textAlign: 'right'}}>
             <div style={styles.countStyle}>{getCount(props)}</div>
             <div style={styles.textStyle}>{props.title}</div>
