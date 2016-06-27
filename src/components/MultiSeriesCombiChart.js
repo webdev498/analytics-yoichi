@@ -1,8 +1,16 @@
 import React, {PropTypes} from 'react';
 import moment from 'moment';
-import {calculateDateDisplayFormat, calculateDateDisplayFormatForHistogram} from 'utils/dateUtils';
-import {generateRawData, isUndefined, generateQueryParams, generateClickThroughUrl,
-  generatePathParams} from 'utils/utils';
+import {
+  calculateDateDisplayFormat,
+  calculateDateDisplayFormatForHistogram
+} from 'utils/dateUtils';
+import {
+  generateRawData,
+  isUndefined,
+  generateQueryParams,
+  generateClickThroughUrl,
+  generatePathParams
+} from 'utils/utils';
 
 function getXindex(currentChartDataColumn, columns) {
   let x = '';

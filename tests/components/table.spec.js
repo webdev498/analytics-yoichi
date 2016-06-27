@@ -1,7 +1,14 @@
-import {generateIndividualRowData, generateRowObject, getColumnDataWhenApiReturnsSingleColumn,
-  getColumnText, getColumnDataWhenApiReturnsMultipleColumns, calculateFieldValueForNestedResult,
-  generateColumnTextForColumnTypeAsText, generateColumnTextForDisplayingDate,
-  generateColumnTextForDisplayingCountryFlag} from 'components/Table';
+import {
+  generateIndividualRowData,
+  generateRowObject,
+  getColumnDataWhenApiReturnsSingleColumn,
+  getColumnText,
+  getColumnDataWhenApiReturnsMultipleColumns,
+  calculateFieldValueForNestedResult,
+  generateColumnTextForColumnTypeAsText,
+  generateColumnTextForDisplayingDate,
+  generateColumnTextForDisplayingCountryFlag
+} from 'components/Table';
 
 describe('Table Component: ', function() {
   it('generateIndividualRowData should return individual row data.', function() {

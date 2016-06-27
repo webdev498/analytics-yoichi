@@ -1,6 +1,12 @@
 import React, {PropTypes} from 'react';
-import {generateRawData, getCountryIDByCountryCode, generateQueryParams, generateClickThroughUrl,
-  isUndefined, generatePathParams} from 'utils/utils';
+import {
+  generateRawData,
+  getCountryIDByCountryCode,
+  generateQueryParams,
+  generateClickThroughUrl,
+  isUndefined,
+  generatePathParams
+} from 'utils/utils';
 
 function generateChartDataSource(rawData, props) {
   const {chartOptions, chartData, shapes} = props;

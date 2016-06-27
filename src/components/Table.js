@@ -1,11 +1,17 @@
 import React, {PropTypes} from 'react';
 import Reactable from 'reactable';
 import moment from 'moment';
-import {generateRawData, getIndexFromObjectName, isUndefined, generateQueryParams,
-  generateClickThroughUrl, generatePathParams} from 'utils/utils';
 import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/DurationWidget';
+import {
+  generateRawData,
+  getIndexFromObjectName,
+  isUndefined,
+  generateQueryParams,
+  generateClickThroughUrl,
+  generatePathParams
+} from 'utils/utils';
 
 const {Table, Tr, Td, unsafe} = Reactable;
 
