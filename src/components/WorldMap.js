@@ -2,11 +2,13 @@ import React, {PropTypes} from 'react';
 import {
   generateRawData,
   getCountryIDByCountryCode,
+  isUndefined
+} from 'utils/utils';
+import {
   generateQueryParams,
   generateClickThroughUrl,
-  isUndefined,
   generatePathParams
-} from 'utils/utils';
+} from 'utils/kibanaUtils';
 
 function generateChartDataSource(rawData, props) {
   const {chartOptions, chartData, shapes} = props;

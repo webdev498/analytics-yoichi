@@ -6,11 +6,13 @@ import {
 } from 'utils/dateUtils';
 import {
   generateRawData,
-  isUndefined,
+  isUndefined
+} from 'utils/utils';
+import {
   generateQueryParams,
   generateClickThroughUrl,
   generatePathParams
-} from 'utils/utils';
+} from 'utils/kibanaUtils';
 
 function getXindex(currentChartDataColumn, columns) {
   let x = '';

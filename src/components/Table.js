@@ -8,10 +8,13 @@ import {
   generateRawData,
   getIndexFromObjectName,
   isUndefined,
+  msToTime
+} from 'utils/utils';
+import {
   generateQueryParams,
   generateClickThroughUrl,
   generatePathParams
-} from 'utils/utils';
+} from 'utils/kibanaUtils';
 
 const {Table, Tr, Td, unsafe} = Reactable;
 
@@ -43,14 +46,8 @@ const generateDataSource = (props) => {
       chartValue = '',
       timeValue = '';
 
-    let currentDataRowsCount = 0;
-    if (!isUndefined(rows) && !isUndefined(rows.length)) {
-      currentDataRowsCount = rows.length;
-    }
-
-    for (let d = 0, rowsLen = currentDataRowsCount; d < rowsLen; d++) {
-      let mainObject = {};
-      mainObject.columns = [];
+    for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
+      let mainObject = {columns: []};
 
       // Calculate column index from API response
       for (let a = 0; a < currentTableData.columns.length; a++) {
@@ -59,9 +56,14 @@ const generateDataSource = (props) => {
           rowColumnDetails = {
             currentColumnType: currentColumnType,
             currentColumnDataArray: currentColumnDataArray,
-            columnsArray: columns, currentDataRows: rows[d],
-            columnText: columnText, chartValue: chartValue, timeValue: timeValue,
-            nestedResult: nestedResult, emptyValueMessage: emptyValueMessage, currentColumnIndex: a
+            columnsArray: columns,
+            currentDataRows: rows[d],
+            columnText: columnText,
+            chartValue: chartValue,
+            timeValue: timeValue,
+            nestedResult: nestedResult,
+            emptyValueMessage: emptyValueMessage,
+            currentColumnIndex: a
           };
 
         const individualRowData = generateIndividualRowData(rowColumnDetails);
@@ -104,7 +106,9 @@ export function generateIndividualRowData(rowColumnDetails) {
           currentColumnType: currentColumnType,
           currentColumnDataArray: currentColumnDataArray[cd],
           currentDataRows: currentDataRows,
-          columnText: columnText, chartValue: chartValue, timeValue: timeValue
+          columnText: columnText,
+          chartValue: chartValue,
+          timeValue: timeValue
         },
         columnTextObj = getColumnDataWhenApiReturnsSingleColumn(columnDetails);
 
@@ -121,9 +125,13 @@ export function generateIndividualRowData(rowColumnDetails) {
               currentColumnType: currentColumnType,
               currentColumnDataArray: currentColumnDataArray[cd],
               currentDataRows: currentDataRows,
-              columnText: columnText, chartValue: chartValue, timeValue: timeValue,
-              columnIndex: columnIndex, columnIndexLayoutJSON: currentColumnIndex,
-              nestedResult: nestedResult, emptyValueMessage: emptyValueMessage
+              columnText: columnText,
+              chartValue: chartValue,
+              timeValue: timeValue,
+              columnIndex: columnIndex,
+              columnIndexLayoutJSON: currentColumnIndex,
+              nestedResult: nestedResult,
+              emptyValueMessage: emptyValueMessage
             },
             columnTextObj = getColumnDataWhenApiReturnsMultipleColumns(columnDetails);
 
@@ -169,9 +177,12 @@ export function generateRowObject(rowDetails, mainObject) {
       mainObject.columns.push(rowObj);
       break;
     case 'durationWidget':
+      let timeValueSort = msToTime(timeValue);
+      timeValueSort = timeValueSort.timeString;
       rowObj = Object.assign(rowObj, {
         columnText: unsafe(columnText),
-        timeValue: timeValue
+        timeValue: timeValue,
+        timeValueSort: timeValueSort
       });
       columnText = '';
       mainObject.columns.push(rowObj);
@@ -200,8 +211,12 @@ export function getColumnDataWhenApiReturnsSingleColumn(columnDetails) {
 
   columnDetails = {
     currentColumnType: currentColumnType,
-    fieldName: fieldName, displayName: displayName, fieldValue: fieldValue,
-    columnText: columnText, chartValue: chartValue, timeValue: timeValue
+    fieldName: fieldName,
+    displayName: displayName,
+    fieldValue: fieldValue,
+    columnText: columnText,
+    chartValue: chartValue,
+    timeValue: timeValue
   };
 
   return getColumnText(columnDetails);
@@ -220,16 +235,22 @@ export function getColumnDataWhenApiReturnsMultipleColumns(columnDetails) {
   // Following condition is for nested API response
   if (nestedResult) {
     columnDetails = {
-      currentDataRows: currentDataRows, fieldValue: fieldValue,
-      columnIndexLayoutJSON: columnIndexLayoutJSON, emptyValueMessage: emptyValueMessage
+      currentDataRows: currentDataRows,
+      fieldValue: fieldValue,
+      columnIndexLayoutJSON: columnIndexLayoutJSON,
+      emptyValueMessage: emptyValueMessage
     };
     fieldValue = calculateFieldValueForNestedResult(columnDetails);
   }
 
   columnDetails = {
     currentColumnType: currentColumnType,
-    fieldName: fieldName, displayName: displayName, fieldValue: fieldValue,
-    columnText: columnText, chartValue: chartValue, timeValue: timeValue
+    fieldName: fieldName,
+    displayName: displayName,
+    fieldValue: fieldValue,
+    columnText: columnText,
+    chartValue: chartValue,
+    timeValue: timeValue
   };
   return getColumnText(columnDetails);
 }
@@ -399,7 +420,7 @@ class tableCard extends React.Component {
                     if (tableColumn.columnType === 'durationWidget') {
                       return (
                         <Td column={tableColumn.columnName}
-                          value={tableColumn.timeValue}
+                          value={tableColumn.timeValueSort}
                           style={tableColumn.columnStyle}>
                           <DurationWidget timeValue={tableColumn.timeValue} />
                         </Td>
