@@ -138,7 +138,7 @@ class WorldMap extends React.Component {
       <div style={{width: '100%'}}>
         <div className='chartCaption'>{props.meta.subTitle}</div>
         <div style={{textAlign: 'center'}}><br />
-          <img src='/img/biohazard.png' width='20' height='20' />&nbsp;Malicious Connections
+          <img src='img/biohazard.png' width='20' height='20' />&nbsp;Malicious Connections
         </div>
         <div id={props.attributes.id}></div>
         {this.renderChart(props)}
