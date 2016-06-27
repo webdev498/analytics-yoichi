@@ -5,7 +5,6 @@ let timeValue = {};
 
 const convertTime = (props) => {
   timeValue = msToTime(props.timeValue);
-  console.log(timeValue);
 };
 
 const DurationWidget = (props) => (

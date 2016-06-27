@@ -27,14 +27,33 @@ function getXindex(currentChartDataColumn, columns) {
 
 function getYindex(currentChartData, columns, combinedResult) {
   let y = '',
-    seriesIndex = '';
+    seriesIndex = '',
+    y2 = '';
   for (let c = 0; c < columns.length; c++) {
-    if (!isUndefined(currentChartData.columns[0]) && currentChartData.columns[0] === columns[c].name) {
-      if (!combinedResult) {
-        seriesIndex = c;
+    if (!isUndefined(currentChartData.columns[0]) && currentChartData.columns[0].indexOf('[') > -1) {
+      let tempArray = currentChartData.columns[0].split('['),
+        columnName = tempArray[0],
+        indexName = tempArray[1];
+      indexName = indexName.replace(']', '');
+
+      if (columnName === columns[c].name) {
+        if (!combinedResult) {
+          seriesIndex = c;
+        }
+        else {
+          y = c;
+        }
+        y2 = indexName;
       }
-      else {
-        y = c;
+    }
+    else {
+      if (currentChartData.columns[0] === columns[c].name) {
+        if (!combinedResult) {
+          seriesIndex = c;
+        }
+        else {
+          y = c;
+        }
       }
     }
     if (!isUndefined(currentChartData.columns[1]) && currentChartData.columns[1] === columns[c].name) {
@@ -43,6 +62,7 @@ function getYindex(currentChartData, columns, combinedResult) {
   }
   return {
     y: y,
+    y2: y2,
     seriesIndex: seriesIndex
   };
 }
@@ -142,7 +162,7 @@ function generateChartDataSetForDynamicSeries(currentChartData, seriesNameArray,
   return dataset;
 }
 
-function generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, seriesCount) {
+function generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, y2) {
   const tempObj = {};
 
   tempObj.seriesname = currentChartData.seriesname;
@@ -151,8 +171,7 @@ function generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, 
 
   // Get column data for y-axis
   if (y !== '') {
-    tempObj.data = generateDataArray(tempObj, y, rows, seriesCount);
-    seriesCount += 1;
+    tempObj.data = generateDataArray(tempObj, y, rows, y2);
   }
   dataset.push(tempObj);
 
@@ -160,11 +179,11 @@ function generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, 
 }
 
 // Function to generate data array for chart data source
-function generateDataArray(tempObj, y, rows, seriesCount) {
+function generateDataArray(tempObj, y, rows, y2) {
   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
     let rowObj = {};
-    if (rows[d][y][seriesCount] !== 0 && rows[d][y][seriesCount] !== 'NaN') {
-      rowObj.value = rows[d][y][seriesCount];
+    if (rows[d][y][y2] !== 0 && rows[d][y][y2] !== 'NaN') {
+      rowObj.value = rows[d][y][y2];
     }
     tempObj.data.push(rowObj);
   }
@@ -179,8 +198,7 @@ function generateChartDataSource(rawData, props) {
       category: []
     }];
 
-  let seriesCount = 0,
-    dataset = [],
+  let dataset = [],
     timeWindow = duration,
     dateDisplayFormat = calculateDateDisplayFormat(timeWindow),
     x = '';
@@ -193,6 +211,7 @@ function generateChartDataSource(rawData, props) {
     let currentChartData = fieldMapping[i],
       {rows, columns} = rawData[currentChartData.reportId],
       y = '',
+      y2 = '',
       seriesIndex = '';
 
     // Check for x-axis chart data
@@ -207,6 +226,7 @@ function generateChartDataSource(rawData, props) {
     if (!isUndefined(currentChartData.axis) && currentChartData.axis === 'y') {
       let yIndex = getYindex(currentChartData, columns, combinedResult);
       y = yIndex.y;
+      y2 = yIndex.y2;
       seriesIndex = yIndex.seriesIndex;
 
       if (!isUndefined(currentChartData.seriesOptions)) {
@@ -217,7 +237,7 @@ function generateChartDataSource(rawData, props) {
         dataset = generateChartDataSetForDynamicSeries(currentChartData, seriesNameArray, newRawData);
       }
       if (!isUndefined(currentChartData.seriesname)) {
-        dataset = generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, seriesCount);
+        dataset = generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, y2);
       }
     }
   }
