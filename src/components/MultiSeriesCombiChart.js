@@ -73,11 +73,11 @@ function generateDataAndSeriesArrayForDynamicSeriesNames(rows, x, y, seriesIndex
     newRawDataRow = [],
     seriesValuesIndex = 0,
     seriesNameArray = [],
-    lookup = {};
+    lookup = {},
+    previousXAxisName = '';
   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
     let seriesName = rows[d][seriesIndex],
-      currentXAxisName = rows[d][x],
-      previousXAxisName = '';
+      currentXAxisName = rows[d][x];
 
     if (currentXAxisName !== '') {
       if (currentXAxisName !== previousXAxisName || d === 0) {
@@ -119,7 +119,7 @@ function generateChartDataSetForDynamicSeries(currentChartData, seriesNameArray,
     tempObj.data = [];
 
     for (let s in seriesOptions) {
-      if (s !== 'anchorBorderColor' || s !== 'anchorbgcolor') {
+      if (s !== 'anchorBorderColor' || s !== 'anchorbgcolor' || s !== 'anchorsides') {
         tempObj[s] = seriesOptions[s];
       }
     }
@@ -128,6 +128,9 @@ function generateChartDataSetForDynamicSeries(currentChartData, seriesNameArray,
     }
     if (!isUndefined(seriesOptions.anchorbgcolor)) {
       tempObj.anchorbgcolor = seriesOptions.anchorbgcolor[seriesCount];
+    }
+    if (!isUndefined(seriesOptions.anchorsides)) {
+      tempObj.anchorsides = seriesOptions.anchorsides[seriesCount];
     }
 
     // Get column data for y-axis
@@ -158,11 +161,8 @@ function generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, 
 function generateDataArray(tempObj, y, rows, seriesCount) {
   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
     let rowObj = {};
-    if (rows[d][y][seriesCount] !== 'NaN') {
+    if (rows[d][y][seriesCount] !== 0 && rows[d][y][seriesCount] !== 'NaN') {
       rowObj.value = rows[d][y][seriesCount];
-    }
-    else {
-      rowObj.value = '0';
     }
     tempObj.data.push(rowObj);
   }
