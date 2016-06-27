@@ -73,20 +73,7 @@ class ParentCard extends React.Component {
 
   getElement() {
     const {props} = this;
-
-    const {
-      isFetching,
-      isError,
-      errorData
-    } = props;
-
-    return React.cloneElement(props.children, {
-      isFetching,
-      isError,
-      errorData,
-      data: props.data,
-      duration: props.duration
-    });
+    return React.cloneElement(props.children, {...props});
   }
 
   refreshData() {

@@ -11,17 +11,11 @@ class Kibana extends React.Component {
     url: PropTypes.string.isRequired
   }
 
-  getUrl() {
-    const url = this.props.url;
-    console.log(url);
-    return url;
-  }
-
   render() {
     return (
       <iframe id='kibana-view'
         style={style}
-        src={this.getUrl()} />
+        src={this.props.url} />
     );
   }
 }
