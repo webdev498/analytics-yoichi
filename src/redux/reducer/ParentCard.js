@@ -10,50 +10,46 @@ import {Map, fromJS} from 'immutable';
 const initialState = fromJS({duration: '1h', components: {}});
 
 export default function APIDataReducer(state = initialState, action) {
-  const actionType = action.type;
-  switch (actionType) {
+  switch (action.type) {
     case REQUEST_API_DATA: {
       const {id} = action;
+      const dataMap = Map({
+        id,
+        isFetching: true,
+        isError: false
+      });
 
-      if (state.hasIn(['components', id])) {
-        return state.updateIn(['components', id], value => {
-          return value.set('isFetching', true)
-                      .set('isError', false);
-        });
-      }
-      else {
-        const dataMap = Map({
-          id,
-          isFetching: true,
-          isError: false
-        });
-
-        return state.updateIn(['components'], val => val.set(id, dataMap));
-      }
+      return state.updateIn(['components'], val => val.set(id, dataMap));
     }
     case RECEIVE_API_DATA: {
-      const {id, data} = action;
+      const {id, data} = action,
+        {json, api, query} = data;
 
-      const newState = state.updateIn(['components', id], value => {
-        return value.set('isFetching', false)
-                    .set('isError', false)
-                    .set('data', data.json)
-                    .set('api', data.api)
-                    .set('query', data.query);
+      let newState;
+      const dataMap = Map({
+        id,
+        isFetching: false,
+        isError: false,
+        data: json,
+        api,
+        query
       });
+
+      newState = state.updateIn(['components'], val => val.set(id, dataMap));
 
       return newState;
     }
     case ERROR_API_DATA: {
       const {id, errorData} = action;
 
-      const newState = state.updateIn(['components', id], value => {
-        return value.set('isFetching', false)
-                    .set('isError', true)
-                    .set('errorData', errorData);
+      const dataMap = Map({
+        id,
+        isFetching: false,
+        isError: true,
+        errorData
       });
 
-      return newState;
+      return state.updateIn(['components'], val => val.set(id, dataMap));
     }
     case TIME_INTERVAL_UPDATE: {
       const {data: duration} = action;
