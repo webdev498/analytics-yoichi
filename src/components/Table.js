@@ -394,15 +394,17 @@ class tableCard extends React.Component {
     return (
       <div style={props.attributes.style}>
         {generateDataSource(props)}
-        <Table style={{width: '100%'}}
+        <Table id={props.attributes.id}
+          style={{width: '100%'}}
           className='threatTable'
           sortable={props.tableOptions.sortable}
           filterable={props.tableOptions.filterable}
           defaultSort={props.tableOptions.defaultSort}
-          filterBy={props.tableOptions.filterBy}
-          itemsPerPage={5}
+          filterBy={props.search}
+          itemsPerPage={tableDataSource.length > props.tableOptions.itemsPerPage ? props.tableOptions.itemsPerPage : 0}
           pageButtonLimit={5}
-          currentPage={0}>
+          currentPage={0}
+          hideFilterInput>
           {
             tableDataSource.map(function(tableRow, index) {
               return (
