@@ -1,16 +1,24 @@
 import React from 'react';
+import Login from './login';
 
-import AppBar from 'material-ui/AppBar';
-import Login from 'login/login.view';
+import {pebbleColor} from 'theme/colors';
+
+const styles = {
+  wrap: {
+    height: '100%',
+    paddingTop: '50px',
+    display: 'flex',
+    alignItems: 'center'
+  }
+};
 
 class NonLoggedLayout extends React.Component {
   render() {
     return (
-      <div>
-        <AppBar title="RANK" showMenuIconButton={false} />
+      <div style={styles.wrap} data-test>
         <Login />
       </div>
-    )
+    );
   }
 }
 

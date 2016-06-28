@@ -13,7 +13,6 @@ import {logout} from 'actions/auth';
 import { connect } from 'react-redux';
 
 const getStyles = props => ({
-  backgroundColor: '#00bcd4',
   height: '64px',
   position: 'fixed',
   zIndex: 1101,
