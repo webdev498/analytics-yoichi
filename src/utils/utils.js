@@ -220,6 +220,12 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     if (timeWindow === '1h') {
       timeDifference = 5;// i.e. 5 minutes difference
     }
+    if (timeWindow === '6h') {
+      timeDifference = 15;// i.e. 15 minutes difference
+    }
+    if (timeWindow === '12h') {
+      timeDifference = 30;// i.e. 30 minutes difference
+    }
     if (timeWindow === '1d') {
       timeDifference = 60;// i.e. 1 hour difference
     }
@@ -240,11 +246,16 @@ export function getTimePairFromWindow(timeWindow, dateString) {
   else {
     let todayDate = new Date();
     dateString1 = formatDate(todayDate);
-    console.log(dateString1);
-    let fromDate = new Date(dateString1);
+    let fromDate = todayDate;
 
     if (timeWindow === '1h') {
       fromDate.setHours(todayDate.getHours() - 1);
+    }
+    if (timeWindow === '6h') {
+      fromDate.setHours(todayDate.getHours() - 6);
+    }
+    if (timeWindow === '12h') {
+      fromDate.setHours(todayDate.getHours() - 12);
     }
     if (timeWindow === '1d') {
       fromDate.setDate(todayDate.getDate() - 1);
@@ -255,9 +266,8 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     if (timeWindow === '1mo') {
       fromDate.setMonth(todayDate.getMonth() - 1);
     }
-    console.log(timeWindow, fromDate);
+
     dateString2 = formatDate(fromDate);
-    console.log(dateString2);
 
     let dateTimePair = {fromDate: dateString2, toDate: dateString1};
     return dateTimePair;

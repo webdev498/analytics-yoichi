@@ -102,6 +102,5 @@ export function generateQueryParam(props, dataObj, key, value, currentRowNumber)
 }
 
 export function generateClickThroughUrl(pathParams, queryParams) {
-  console.log(baseUrl + '/api/kibana/query/' + pathParams + queryParams);
   return baseUrl + '/api/kibana/query/' + pathParams + queryParams;
 }
