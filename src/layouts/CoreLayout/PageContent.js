@@ -6,11 +6,11 @@ import Loader from 'components/Loader';
 import {fetchLayoutData} from 'actions/core';
 
 import { connect } from 'react-redux';
-// import staticLayout from 'layout';
+import staticLayout from 'layout';
 
 const styles = {
   content: {
-    padding: '20px'
+    padding: '33px'
   }
 };
 
@@ -34,8 +34,8 @@ class PageContent extends React.Component {
   }
 
   renderChildren() {
-    const {layout} = this.props;
-    // const {layout} = staticLayout;
+    // const {layout} = this.props;
+    const {layout} = staticLayout;
 
     const finalElmements = [];
 
@@ -72,7 +72,7 @@ class PageContent extends React.Component {
 
       const currentSection = React.DOM.section(
         {
-          style: {display: 'flex', marginBottom: '20px', justifyContent: 'space-between'}
+          style: {display: 'flex', marginBottom: '33px', justifyContent: 'space-between'}
         },
         children
       );

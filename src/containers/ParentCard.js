@@ -3,25 +3,25 @@ import { connect } from 'react-redux';
 
 import Card from 'material-ui/Card/Card';
 import FontIcon from 'material-ui/FontIcon';
-
 import Loader from '../components/Loader';
 
 import {fetchApiData} from 'actions/ParentCard';
+import {Colors} from 'theme/colors';
 
 const styles = {
   wrap: {
-    position: 'relative'
+    position: 'relative',
+    borderTop: '6px solid ' + Colors.smoke,
+    padding: '33px'
   },
   header: {
-    padding: '10px 15px',
-    height: '48px',
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: '#cdcdcd'
+    paddingBottom: '60px'
   },
   title: {
     textTransform: 'capitalize',
-    fontSize: '18px'
+    fontSize: '21px'
   },
   iconWrap: {
     width: '50px',

@@ -7,7 +7,7 @@ export const ArcticColor = '#ffffff';
 export const TurquoiseColor = '#2bd8d0';
 
 export const CherryColor = '#24293d';
-export const CoralColor = '#444c63';
+export const CoralColor = '#F69275';
 export const MustardColor = '#6b7282';
 export const SeafoamColor = '#bdbdc6';
 

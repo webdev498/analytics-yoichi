@@ -9,11 +9,14 @@ const AppTheme = {
     accent1Color: Colors.grape,
     accent2Color: Colors.coral,
     accent3Color: Colors.coral,
-    textColor: Colors.pebble,
+    textColor: Colors.grape,
     alternateTextColor: Colors.arctic,
     canvasColor: Colors.arctic,
     borderColor: Colors.smoke,
     pickerHeaderColor: Colors.garnet
+  },
+  card: {
+    borderRadius: 0
   }
 };
 
