@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 
 const styles = {
   content: {
-    padding: '20px'
+    padding: '33px'
   }
 };
 
@@ -72,7 +72,7 @@ class PageContent extends React.Component {
 
       const currentSection = React.DOM.section(
         {
-          style: {display: 'flex', marginBottom: '20px', justifyContent: 'space-between'}
+          style: {display: 'flex', marginBottom: '33px', justifyContent: 'space-between'}
         },
         children
       );

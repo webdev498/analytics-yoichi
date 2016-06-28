@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
-import { createHashHistory } from 'history'
-import { useRouterHistory, hashHistory } from 'react-router';
+// import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { createHashHistory } from 'history';
+import { useRouterHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import makeRoutes from './routes';
 import Root from './containers/Root';
@@ -48,12 +48,12 @@ addLocaleData(it);
 addLocaleData(es);
 addLocaleData(fr);
 
-function start () {
+function start() {
   // Now that redux and react-router have been configured, we can render the
   // React application to the DOM!
 
   ReactDOM.render(
-    <Root history={browserHistory} routes={routes} store={store} />,
+    <Root history={history} routes={routes} store={store} />,
     document.getElementById('root')
   );
 }

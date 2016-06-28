@@ -1,5 +1,6 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
+import {Colors} from 'theme/colors';
 
 import {
   generateQueryParams,
@@ -8,10 +9,6 @@ import {
 } from 'utils/kibanaUtils';
 
 const styles = {
-  iconStyle: {
-    fontSize: '50px',
-    color: 'white'
-  },
   wrapStyle: {
     display: 'flex'
   },
@@ -19,22 +16,21 @@ const styles = {
     fontSize: '24px'
   },
   textStyle: {
-    fontSize: '17px',
-    fontWeight: 300
+    fontSize: '21px',
+    fontWeight: 400,
+    margin: 0
   },
   detailsStyle: {
     paddingTop: '10px',
     fontSize: '14px',
-    display: 'flex',
-    alignItems: 'center'
+    marginLeft: 'auto',
+    cursor: 'pointer',
+    color: Colors.smoke
   },
   percentageStyle: {
     marginLeft: 'auto',
     display: 'flex',
     alignItems: 'center'
-  },
-  clickThrough: {
-    cursor: 'pointer'
   }
 };
 
@@ -104,24 +100,20 @@ class MetricsCard extends React.Component {
     const { props } = this;
 
     return (
-      <div style={{...styles.cardStyle}}>
+      <div>
+        <h3 style={styles.textStyle}>{props.title}</h3>
+
         <div style={styles.wrapStyle}>
-          <div style={{marginLeft: 'auto', textAlign: 'right'}}>
-            <div style={styles.countStyle}>{getCount(props)}</div>
-            <div style={styles.textStyle}>{props.title}</div>
-          </div>
-        </div>
-
-        <div style={styles.detailsStyle}>
-          <span style={styles.clickThrough}
-            onClick={this.handleClick()}>
-            View Details
-          </span>
-
+          <div style={styles.countStyle}>{getCount(props)}</div>
           <div style={styles.percentageStyle}>
             <span>{getPercent(props.data)}</span>
             {getArrowIcon(props.data)}
           </div>
+        </div>
+
+        <div style={styles.detailsStyle}
+          onClick={this.handleClick()}>
+          View Details
         </div>
       </div>
     );

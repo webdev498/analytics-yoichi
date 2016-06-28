@@ -1,30 +1,37 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 
 import CardHeader from 'material-ui/Card/CardHeader';
 
-const getStyles = (props) => (
-  {
-    backgroundColor: '#00bcd4',
+const styles = {
+  title: {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 300
+  },
+  header: {
     height: '56px',
     display: 'flex',
     alignItems: 'center',
     zIndex: 1101,
     top: 0,
-    width: '100%',
-    ...props.style
+    width: '100%'
   }
-)
+};
 
-const getTitleStyle = props => (
-  {color: 'white', fontSize: '20px', fontWeight: 300, ...props.titleStyle}
-)
+class CustomCardHeader extends React.Component {
+  static propTypes = {
+    style: PropTypes.object,
+    titleStyle: PropTypes.object
+  }
 
-const CustomCardHeader = (props) => (
-  <CardHeader {...props}
-            style={getStyles(props)}
-            titleStyle={getTitleStyle(props)}>
-    {props.children}
-  </CardHeader>
-);
+  render() {
+    const {props} = this;
+    return (
+      <CardHeader {...props}
+        style={{...styles.header, ...props.style}}
+        titleStyle={{...styles.title, ...props.titleStyle}} />
+    );
+  }
+}
 
 export default CustomCardHeader;

@@ -59,8 +59,7 @@ function generateChartDataSource(data, props) {
       showYAxisValues: '1',
       theme: 'zune',
       xAxisNameFontSize: '14',
-      yAxisNameFontSize: '14',
-      baseFont: 'Roboto, sans-serif'
+      yAxisNameFontSize: '14'
     }, chartOptions),
     data: graphBars
   };
