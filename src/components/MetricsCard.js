@@ -1,6 +1,5 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
-import {setFilterText} from 'components/Table';
 
 import {
   generateQueryParams,
