@@ -1,5 +1,6 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
+import {setFilterText} from 'components/Table';
 
 import {
   generateQueryParams,
@@ -75,21 +76,29 @@ class MetricsCard extends React.Component {
 
     if (!kibana) return;
 
-    if (props.kibana.queryParams) {
-      dataObj.datasetName = 'high';
+    if (props.kibana.tableId && props.kibana.filterText) {
+      return () => {
+        // console.log(kibana.tableId, kibana.filterText);
+        // setFilterText(kibana.tableId, kibana.filterText);
+      };
     }
+    else {
+      if (props.kibana.queryParams) {
+        dataObj.datasetName = 'high';
+      }
 
-    let parameters = {
-        props,
-        dataObj,
-        queryParamsArray: props.kibana.queryParams
-      },
-      queryParams = generateQueryParams(parameters),
-      pathParams = generatePathParams(props.kibana.pathParams);
+      let parameters = {
+          props,
+          dataObj,
+          queryParamsArray: props.kibana.queryParams
+        },
+        queryParams = generateQueryParams(parameters),
+        pathParams = generatePathParams(props.kibana.pathParams);
 
-    return () => {
-      this.context.clickThrough(generateClickThroughUrl(pathParams, queryParams));
-    };
+      return () => {
+        this.context.clickThrough(generateClickThroughUrl(pathParams, queryParams));
+      };
+    }
   }
 
   render() {

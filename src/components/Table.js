@@ -21,6 +21,8 @@ const {Table, Tr, Td, unsafe} = Reactable;
 // Declaration of variables
 let tableProperties = {},
   tableDataSource = [];
+  // filterBy = '',
+  // id = '';
 
 const generateDataSource = (props) => {
   if (!props.data) {
@@ -383,6 +385,11 @@ function rowClick(context, tableRow) {
   context.clickThrough(tableRow.rowClickUrl);
 }
 
+// export function setFilterText(tableId, filterText) {
+//   id = tableId;
+//   filterBy = filterText;
+// }
+
 class tableCard extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
@@ -394,6 +401,8 @@ class tableCard extends React.Component {
     return (
       <div style={props.attributes.style}>
         {generateDataSource(props)}
+        {/*{console.log((id === props.attributes.id && filterBy !== '') ? filterBy : props.search)}
+        {console.log(id)}*/}
         <Table id={props.attributes.id}
           style={{width: '100%'}}
           className='threatTable'
