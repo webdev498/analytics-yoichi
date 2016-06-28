@@ -18,6 +18,83 @@ import {
 
 const {Table, Tr, Td, unsafe} = Reactable;
 
+// Declaration of variables
+let tableProperties = {},
+  tableDataSource = [];
+
+const generateDataSource = (props) => {
+  if (!props.data) {
+    return;
+  }
+
+  const data = props.data,
+    {fieldMapping, nestedResult, emptyValueMessage} = props.tableData,
+    tableOptions = props.tableOptions;
+
+  // Initializing the variables
+  tableProperties = {};
+  tableDataSource = [];
+
+  let rawData = {};
+  rawData = generateRawData(fieldMapping, data);
+  tableProperties = {...tableOptions};
+
+  for (let i = 0; i < fieldMapping.length; i++) {
+    let currentTableData = fieldMapping[i],
+      {rows, columns} = rawData[currentTableData.reportId],
+      columnText = '',
+      chartValue = '',
+      timeValue = '';
+
+    for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
+      let mainObject = {columns: []};
+
+      // Calculate column index from API response
+      for (let a = 0; a < currentTableData.columns.length; a++) {
+        let currentColumnType = currentTableData.columns[a].type,
+          currentColumnDataArray = currentTableData.columns[a].data,
+          rowColumnDetails = {
+            currentColumnType: currentColumnType,
+            currentColumnDataArray: currentColumnDataArray,
+            columnsArray: columns,
+            currentDataRows: rows[d],
+            columnText: columnText,
+            chartValue: chartValue,
+            timeValue: timeValue,
+            nestedResult: nestedResult,
+            emptyValueMessage: emptyValueMessage,
+            currentColumnIndex: a
+          };
+
+        const individualRowData = generateIndividualRowData(rowColumnDetails);
+
+        let rowDetails = {
+          currentColumnType: currentColumnType,
+          currentTableData: currentTableData.columns[a],
+          chartValue: individualRowData.chartValue,
+          columnText: individualRowData.columnText,
+          rowNumber: d,
+          timeValue: individualRowData.timeValue
+        };
+        mainObject = generateRowObject(rowDetails, mainObject);
+        if (props.kibana) {
+          let parameters = {
+              props: props,
+              queryParamsArray: props.kibana.queryParams,
+              currentRowNumber: d
+            },
+            queryParams = generateQueryParams(parameters),
+            pathParams = generatePathParams(props.kibana.pathParams);
+          mainObject.rowClickUrl = generateClickThroughUrl(pathParams, queryParams);
+        }
+        columnText = '';
+        chartValue = '';
+      }
+      tableDataSource.push(mainObject);
+    }// mainData loop end
+  }
+};
+
 export function generateIndividualRowData(rowColumnDetails) {
   let {currentColumnType, currentColumnDataArray, columnsArray, currentDataRows,
     columnText, chartValue, timeValue, nestedResult, emptyValueMessage, currentColumnIndex} = rowColumnDetails;
@@ -317,85 +394,9 @@ class tableCard extends React.Component {
     tableOptions: PropTypes.object
   }
 
-  let tableProperties = {},
-    tableDataSource = [];
-
-  generateDataSource() {
-    if (!props.data) {
-      return;
-    }
-
-    const data = props.data,
-      {fieldMapping, nestedResult, emptyValueMessage} = props.tableData,
-      tableOptions = props.tableOptions;
-
-    // Initializing the variables
-    tableProperties = {};
-    tableDataSource = [];
-
-    let rawData = {};
-    rawData = generateRawData(fieldMapping, data);
-    tableProperties = {...tableOptions};
-
-    for (let i = 0; i < fieldMapping.length; i++) {
-      let currentTableData = fieldMapping[i],
-        {rows, columns} = rawData[currentTableData.reportId],
-        columnText = '',
-        chartValue = '',
-        timeValue = '';
-
-      for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
-        let mainObject = {columns: []};
-
-        // Calculate column index from API response
-        for (let a = 0; a < currentTableData.columns.length; a++) {
-          let currentColumnType = currentTableData.columns[a].type,
-            currentColumnDataArray = currentTableData.columns[a].data,
-            rowColumnDetails = {
-              currentColumnType: currentColumnType,
-              currentColumnDataArray: currentColumnDataArray,
-              columnsArray: columns,
-              currentDataRows: rows[d],
-              columnText: columnText,
-              chartValue: chartValue,
-              timeValue: timeValue,
-              nestedResult: nestedResult,
-              emptyValueMessage: emptyValueMessage,
-              currentColumnIndex: a
-            };
-
-          const individualRowData = generateIndividualRowData(rowColumnDetails);
-
-          let rowDetails = {
-            currentColumnType: currentColumnType,
-            currentTableData: currentTableData.columns[a],
-            chartValue: individualRowData.chartValue,
-            columnText: individualRowData.columnText,
-            rowNumber: d,
-            timeValue: individualRowData.timeValue
-          };
-          mainObject = generateRowObject(rowDetails, mainObject);
-          if (props.kibana) {
-            let parameters = {
-                props: props,
-                queryParamsArray: props.kibana.queryParams,
-                currentRowNumber: d
-              },
-              queryParams = generateQueryParams(parameters),
-              pathParams = generatePathParams(props.kibana.pathParams);
-            mainObject.rowClickUrl = generateClickThroughUrl(pathParams, queryParams);
-          }
-          columnText = '';
-          chartValue = '';
-        }
-        tableDataSource.push(mainObject);
-      }// mainData loop end
-    }
-  };
-
   render() {
     const {props, context} = this;
-    this.generateDataSource(props);
+    generateDataSource(props);
     // console.log((id === props.attributes.id && filterBy !== '') ? filterBy : props.search);
     // console.log(id);
     return (
