@@ -1,6 +1,3 @@
-import {baseUrl} from 'config';
-import {LOW_SCORE_RANGE, MEDIUM_SCORE_RANGE, HIGH_SCORE_RANGE} from 'Constants';
-
 // Function to get Country ID by passing Country Code
 export function getCountryIDByCountryCode(countryCode) {
   const getCountryIDByCountryCode = {'AG': '01', 'BS': '02', 'BB': '03', 'BZ': '04', 'CA': '05', 'CR': '06',
@@ -34,7 +31,7 @@ export function getCountryIDByCountryCode(countryCode) {
 }
 
 // Function to convert milliseconds to time
-export function msToTimeOld(duration) {
+export function msToTime(duration) {
   let milliseconds = parseInt((duration % 1000) / 100),
     seconds = parseInt((duration / 1000) % 60),
     minutes = parseInt((duration / (1000 * 60)) % 60),
@@ -46,31 +43,10 @@ export function msToTimeOld(duration) {
 
   milliseconds = (milliseconds > 0) ? ': ' + milliseconds : '';
 
-  // let time = duration / 1000,
-  //   seconds = parseInt(time % 60);
-  // time /= 60;
-  // let minutes = parseInt(time % 60);
-  // time /= 60;
-  // let hours = parseInt(time % 24);
-  // // time /= 24;
-  // // let days = time;
-
-  return [hours, minutes, seconds];// + milliseconds;
-}
-
-export function msToTime(ms) {
-  // 1- Convert to seconds:
-  let seconds = ms / 1000;
-  // 2- Extract hours:
-  let hours = parseInt(seconds / 3600); // 3,600 seconds in 1 hour
-  seconds = seconds % 3600; // seconds remaining after extracting hours
-  // 3- Extract minutes:
-  let minutes = parseInt(seconds / 60); // 60 seconds in 1 minute
-  // 4- Keep only seconds not extracted to minutes:
-  seconds = seconds % 60;
-  return [addZero(parseInt(hours), 2),
-    addZero(parseInt(minutes), 2),
-    addZero(parseInt(seconds), 2)];
+  return {
+    'timeArray': [hours, minutes, seconds],
+    'timeString': hours + ':' + minutes + ':' + seconds
+  };
 }
 
 // Function to generate row data
@@ -244,6 +220,12 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     if (timeWindow === '1h') {
       timeDifference = 5;// i.e. 5 minutes difference
     }
+    if (timeWindow === '6h') {
+      timeDifference = 15;// i.e. 15 minutes difference
+    }
+    if (timeWindow === '12h') {
+      timeDifference = 30;// i.e. 30 minutes difference
+    }
     if (timeWindow === '1d') {
       timeDifference = 60;// i.e. 1 hour difference
     }
@@ -264,10 +246,16 @@ export function getTimePairFromWindow(timeWindow, dateString) {
   else {
     let todayDate = new Date();
     dateString1 = formatDate(todayDate);
-    let fromDate = new Date(dateString1);
+    let fromDate = todayDate;
 
     if (timeWindow === '1h') {
       fromDate.setHours(todayDate.getHours() - 1);
+    }
+    if (timeWindow === '6h') {
+      fromDate.setHours(todayDate.getHours() - 6);
+    }
+    if (timeWindow === '12h') {
+      fromDate.setHours(todayDate.getHours() - 12);
     }
     if (timeWindow === '1d') {
       fromDate.setDate(todayDate.getDate() - 1);
@@ -278,6 +266,7 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     if (timeWindow === '1mo') {
       fromDate.setMonth(todayDate.getMonth() - 1);
     }
+
     dateString2 = formatDate(fromDate);
 
     let dateTimePair = {fromDate: dateString2, toDate: dateString1};
@@ -322,99 +311,3 @@ export const getCountryCodeByCountryName = {'Antigua and Barbuda': 'AG', 'Bahama
   'Jordan': 'JO', 'Kuwait': 'KU', 'Lebanon': 'LB', 'Oman': 'OM', 'Qatar': 'QA', 'Saudi Arabia': 'SA', 'Syria': 'SY',
   'UnitedArabEmirates': 'AE', 'Yemen': 'YM', 'Puerto Rico': 'PR', 'Cayman Islands': 'KY', 'South Sudan': 'SS',
   'Kosovo': 'KO'};
-
-export function generatePathParams(pathParamArray) {
-  let pathParams = '';
-  for (let i = 0; i < pathParamArray.length; i++) {
-    if (pathParams === '') {
-      pathParams = pathParamArray[i];
-    }
-    else {
-      pathParams += '/' + pathParamArray[i];
-    }
-  }
-  return pathParams;
-}
-
-export function generateQueryParams(parameters) {
-  let {props, dataObj, queryParamsArray, currentRowNumber} = parameters,
-    queryParams = '';
-  for (let key in queryParamsArray) {
-    if (!isUndefined(key)) {
-      if (queryParams === '') {
-        queryParams = '?' + generateQueryParam(props, dataObj, key, queryParamsArray[key], currentRowNumber);
-      }
-      else {
-        queryParams += '&' + generateQueryParam(props, dataObj, key, queryParamsArray[key], currentRowNumber);
-      }
-    }
-  }
-  return queryParams;
-}
-
-export function generateQueryParam(props, dataObj, key, value, currentRowNumber) {
-  let queryParam = '';
-  if (value !== '') {
-    const {rows, columns} = props.data;
-    let columnIndex = '';
-    for (let c = 0; c < columns.length; c++) {
-      if (key === columns[c].name) {
-        columnIndex = c;
-        break;
-      }
-    }
-    queryParam = key + '=' + rows[currentRowNumber][columnIndex];
-  }
-  else {
-    switch (key) {
-      case 'window':
-        queryParam = key + '=' + props.duration;
-        break;
-      case 'fromAndToBasedOnToday':
-        let pair = getTimePairFromWindow(props.duration, ''),
-          dateTime1 = pair.fromDate,
-          dateTime2 = pair.toDate;
-        queryParam = 'from=' + dateTime1 + '&to=' + dateTime2;
-        break;
-      case 'fromAndToBasedOnClickedDate':
-        let toolText = dataObj.toolText,
-          dateStringArray = toolText.split(','),
-          dateString = dateStringArray[1];
-        dateString = dateString.trim();
-        pair = getTimePairFromWindow(props.duration, dateString);
-        dateTime1 = pair.fromDate;
-        dateTime2 = pair.toDate;
-        queryParam = 'from=' + dateTime1 + '&to=' + dateTime2;
-        break;
-      case 'type':
-        toolText = dataObj.toolText;
-        const sectionName = toolText.split(',');
-        queryParam = key + '=' + (sectionName[0]).toLowerCase();
-        break;
-      case 'country':
-        let label = dataObj.label,
-          countryName = label.split(','),
-          countryCode = getCountryCodeByCountryName[countryName[0]];
-        queryParam = key + '=' + countryCode;
-        break;
-      case 'scoreRange':
-        if ((dataObj.datasetName).toLowerCase() === 'low') {
-          queryParam = 'lowScore=' + LOW_SCORE_RANGE[0] + '&highScore=' + LOW_SCORE_RANGE[1];
-        }
-        else if ((dataObj.datasetName).toLowerCase() === 'medium') {
-          queryParam = 'lowScore=' + MEDIUM_SCORE_RANGE[0] + '&highScore=' + MEDIUM_SCORE_RANGE[1];
-        }
-        else if ((dataObj.datasetName).toLowerCase() === 'high') {
-          queryParam = 'lowScore=' + HIGH_SCORE_RANGE[0] + '&highScore=' + HIGH_SCORE_RANGE[1];
-        }
-        break;
-      default:
-        break;
-    }
-  }
-  return queryParam;
-}
-
-export function generateClickThroughUrl(pathParams, queryParams) {
-  return baseUrl + '/api/kibana/query/' + pathParams + queryParams;
-}

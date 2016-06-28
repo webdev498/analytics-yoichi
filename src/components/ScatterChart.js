@@ -1,5 +1,8 @@
 import React, {PropTypes} from 'react';
-import {generateRawData, getXYIndexFromColumnNames} from 'utils/utils';
+import {
+  generateRawData,
+  getXYIndexFromColumnNames
+} from 'utils/utils';
 
 function generateChartDataSource(rawData, props) {
   const {chartOptions, chartData} = props,

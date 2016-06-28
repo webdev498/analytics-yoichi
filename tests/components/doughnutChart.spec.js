@@ -1,4 +1,7 @@
-import {generateDoughnutChart, calculateDoughnutAttributes} from 'components/DoughnutChart';
+import {
+  generateDoughnutChart,
+  calculateDoughnutAttributes
+} from 'components/DoughnutChart';
 
 describe('DoughnutChart Component: ', function() {
   it('generateDoughnutChart should return doughnut chart attributes.', function() {

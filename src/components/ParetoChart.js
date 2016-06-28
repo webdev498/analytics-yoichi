@@ -1,11 +1,13 @@
 import React, {PropTypes} from 'react';
 import {
   getIndexFromColumnName,
+  isUndefined
+} from 'utils/utils';
+import {
   generateQueryParams,
   generateClickThroughUrl,
-  isUndefined,
   generatePathParams
-} from 'utils/utils';
+} from 'utils/kibanaUtils';
 
 function generateChartDataSource(data, props) {
   const {chartOptions, chartData} = props,

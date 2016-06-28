@@ -1,6 +1,10 @@
 import React, {PropTypes} from 'react';
-import {generateRawData, getColumnIndexArrayFromColumnName, getIndexFromColumnName,
-  getIndexFromObjectName} from 'utils/utils';
+import {
+  generateRawData,
+  getColumnIndexArrayFromColumnName,
+  getIndexFromColumnName,
+  getIndexFromObjectName
+} from 'utils/utils';
 
 export function generateDataArray(columnIndexArray, rowsArray) {
   let dataset = [];

@@ -1,4 +1,7 @@
-import {generateDataArray, generateChartDataSource} from 'components/HorizontalBarChart';
+import {
+  generateDataArray,
+  generateChartDataSource
+} from 'components/HorizontalBarChart';
 
 describe('HorizontalBarChart Component: ', function() {
   it('generateDataArray should return data array.', function() {

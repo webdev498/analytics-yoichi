@@ -1,6 +1,10 @@
 import React, {PropTypes} from 'react';
-import {generateRawData, getIndexFromObjectName, getIndexFromColumnName,
-  checkForUndefinedChartOptionObject} from 'utils/utils';
+import {
+  generateRawData,
+  getIndexFromObjectName,
+  getIndexFromColumnName,
+  checkForUndefinedChartOptionObject
+} from 'utils/utils';
 
 let highlightedColor1 = '#5E2B78', // Purple (Default colors set)
   highlightedColor2 = '#8ABB24', // Green (Default colors set)

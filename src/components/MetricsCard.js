@@ -3,9 +3,9 @@ import FontIcon from 'material-ui/FontIcon';
 
 import {
   generateQueryParams,
-  generatePathParams,
-  generateClickThroughUrl
-} from 'utils/utils';
+  generateClickThroughUrl,
+  generatePathParams
+} from 'utils/kibanaUtils';
 
 const styles = {
   iconStyle: {
