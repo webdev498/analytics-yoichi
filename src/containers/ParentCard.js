@@ -12,7 +12,10 @@ const styles = {
   wrap: {
     position: 'relative',
     borderTop: '6px solid ' + Colors.smoke,
-    padding: '33px'
+    padding: '33px',
+    borderRadius: 0,
+    // boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px'
+    boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 1px'
   },
   header: {
     display: 'flex',
@@ -21,7 +24,8 @@ const styles = {
   },
   title: {
     textTransform: 'capitalize',
-    fontSize: '21px'
+    fontSize: '21px',
+    fontWeight: 300
   },
   iconWrap: {
     width: '50px',

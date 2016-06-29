@@ -15,8 +15,9 @@ const AppTheme = {
     borderColor: Colors.smoke,
     pickerHeaderColor: Colors.garnet
   },
-  card: {
-    borderRadius: 0
+  paper: {
+    zDepthShadows: 0,
+    rounded: false
   }
 };
 
