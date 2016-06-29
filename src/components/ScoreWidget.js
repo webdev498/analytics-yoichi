@@ -6,11 +6,11 @@ class ScoreWidget extends React.Component {
     const style = {
       color: 'white',
       borderRadius: '50px',
-      width: '50px',
-      height: '50px',
+      width: '60px',
+      height: '60px',
       textAlign: 'center',
-      padding: '6px',
-      fontSize: '20pt',
+      padding: '7px',
+      fontSize: '24pt',
       fontFamily: 'Open Sans'
     };
     return (
