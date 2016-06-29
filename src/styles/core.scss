@@ -36,11 +36,11 @@
    }
 
   .threatTable th {
-    font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding: 10px;
+    padding-bottom: 16px;
     font-size: 14px;
-    background: #00bcd4;
-    color: #fff;
+    background: rgb(255, 255, 255);
+    color: rgb(68, 76, 99);
     text-align: left;
     cursor: pointer;
    }
@@ -110,19 +110,19 @@
   }
 
   .threatTable th.reactable-header-sort-desc, .threatTable th.reactable-header-sort-asc {
-    background-color: #00bcd4;
+    background: rgb(255, 255, 255);
   }
 
   .threatTable th.reactable-header-sort-desc:after {
     content: '\25B2';
-    font-size: 10px;
+    font-size: 14px;
     padding-left: 10px;
     padding-bottom: 5px;
   }
 
   .threatTable th.reactable-header-sort-asc:after {
     content: '\25BC';
-    font-size: 10px;
+    font-size: 14px;
     padding-left: 10px;
     padding-bottom: 5px;
   }
@@ -136,7 +136,10 @@
   }
 
   .threatTable tr:nth-child(even) {background: #fff}
-  .threatTable tr:nth-child(odd) {background: #F0F0F0}
+  .threatTable tr:nth-child(odd) {background: #F7F7F9}
+
+  .threatTable tr:nth-child(even) td div.scoreWidget {background: #F7A48B}
+  .threatTable tr:nth-child(odd) td div.scoreWidget {background: #F69275}
 
   .reactable-filter-input {
     width: 95%;

@@ -4,6 +4,7 @@ import moment from 'moment';
 import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/DurationWidget';
+import ScoreWidget from 'components/ScoreWidget';
 import {
   generateRawData,
   getIndexFromObjectName,
@@ -187,6 +188,14 @@ export function generateRowObject(rowDetails, mainObject) {
       columnText = '';
       mainObject.columns.push(rowObj);
       break;
+    case 'scoreWidget':
+      rowObj = Object.assign(rowObj, {
+        columnText: unsafe(columnText),
+        chartValue: chartValue
+      });
+      columnText = '';
+      mainObject.columns.push(rowObj);
+      break;
     default:
       break;
   }
@@ -279,6 +288,9 @@ export function getColumnText(columnDetails) {
       break;
     case 'durationWidget':
       timeValue = fieldValue;
+      break;
+    case 'scoreWidget':
+      chartValue = fieldValue;
       break;
     case 'text':
       columnText = generateColumnTextForColumnTypeAsText(columnDetails);
@@ -432,6 +444,15 @@ class tableCard extends React.Component {
                           value={tableColumn.timeValueSort}
                           style={tableColumn.columnStyle}>
                           <DurationWidget timeValue={tableColumn.timeValue} />
+                        </Td>
+                      );
+                    }
+                    if (tableColumn.columnType === 'scoreWidget') {
+                      return (
+                        <Td column={tableColumn.columnName}
+                          value={tableColumn.chartValue}
+                          style={tableColumn.columnStyle}>
+                          <ScoreWidget scoreValue={tableColumn.chartValue} />
                         </Td>
                       );
                     }
