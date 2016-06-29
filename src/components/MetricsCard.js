@@ -17,20 +17,28 @@ const styles = {
   },
   textStyle: {
     fontSize: '21px',
-    fontWeight: 400,
+    fontWeight: 300,
     margin: 0
   },
   detailsStyle: {
     paddingTop: '10px',
-    fontSize: '14px',
+    fontSize: '11px',
     marginLeft: 'auto',
     cursor: 'pointer',
-    color: Colors.smoke
+    color: Colors.smoke,
+    textAlign: 'right'
   },
-  percentageStyle: {
+  percentageWrap: {
     marginLeft: 'auto',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    fontSize: '11px'
+  },
+  percentageStyle: {
+    fontSize: '13px'
+  },
+  iconStyle: {
+    marginTop: 'auto'
   }
 };
 
@@ -96,16 +104,22 @@ class MetricsCard extends React.Component {
         <h3 style={styles.textStyle}>{props.title}</h3>
 
         <div style={styles.wrapStyle}>
-          <div style={styles.countStyle}>{getCount(props)}</div>
-          <div style={styles.percentageStyle}>
-            <span>{getPercent(props.data)}</span>
-            {getArrowIcon(props.data)}
+          <div style={{...styles.countStyle, ...props.countStyle}}>
+            {getCount(props)}
+          </div>
+          <div style={styles.percentageWrap}>
+            <span style={styles.percentageStyle}>
+              {getPercent(props.data)}
+            </span>
+            <span style={styles.iconStyle}>
+              {getArrowIcon(props.data)}
+            </span>
           </div>
         </div>
 
         <div style={styles.detailsStyle}
           onClick={this.handleClick()}>
-          View Details
+          View details
         </div>
       </div>
     );

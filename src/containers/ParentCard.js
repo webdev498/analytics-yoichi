@@ -21,7 +21,8 @@ const styles = {
   },
   title: {
     textTransform: 'capitalize',
-    fontSize: '21px'
+    fontSize: '21px',
+    fontWeight: 300
   },
   iconWrap: {
     width: '50px',
