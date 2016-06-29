@@ -378,7 +378,7 @@ export function generateColumnTextForDisplayingDate(fieldValue) {
   let fieldValueInLocalTime = moment.utc(fieldValue).toDate(),
     fieldValueInLocalTime1 = moment(fieldValueInLocalTime).format('D MMM YYYY'),
     fieldValueInLocalTime2 = moment(fieldValueInLocalTime).format('HH:mm:ss');
-  fieldValue = '<span style="font-size: 16px; font-weight: bold;">' + fieldValueInLocalTime1 + '</span>';
+  fieldValue = '<span style="font-size: 14pt; font-weight: bold;">' + fieldValueInLocalTime1 + '</span>';
   fieldValue += '<br/>' + fieldValueInLocalTime2;
   return fieldValue;
 }

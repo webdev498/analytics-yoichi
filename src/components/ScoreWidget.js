@@ -9,8 +9,9 @@ class ScoreWidget extends React.Component {
       width: '50px',
       height: '50px',
       textAlign: 'center',
-      padding: '7px',
-      fontSize: 'x-large'
+      padding: '6px',
+      fontSize: '20pt',
+      fontFamily: 'Open Sans'
     };
     return (
       <div style={style} className='scoreWidget'>
