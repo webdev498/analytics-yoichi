@@ -11,6 +11,8 @@ export const CoralColor = '#F69275';
 export const MustardColor = '#6b7282';
 export const SeafoamColor = '#bdbdc6';
 
+export const NavigationColor = 'rgba(255, 255, 255, 0.54)';
+
 export const Colors = {
   garnet: GarnetColor,
   grape: GrapeColor,
@@ -22,7 +24,8 @@ export const Colors = {
   cherry: CherryColor,
   coral: CoralColor,
   mustard: MustardColor,
-  seafoam: SeafoamColor
+  seafoam: SeafoamColor,
+  navigation: NavigationColor
 };
 
 export const PrimaryPalette = {

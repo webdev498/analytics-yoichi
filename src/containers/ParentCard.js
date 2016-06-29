@@ -14,8 +14,7 @@ const styles = {
     borderTop: '6px solid ' + Colors.smoke,
     padding: '33px',
     borderRadius: 0,
-    // boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px'
-    boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 1px'
+    boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
   },
   header: {
     display: 'flex',
@@ -128,7 +127,7 @@ class ParentCard extends React.Component {
               <FontIcon className='material-icons'
                 style={styles.refreshIcon}
                 onClick={this.refreshData()}>
-                refresh
+                replay
               </FontIcon>
             </div>
           </header>
