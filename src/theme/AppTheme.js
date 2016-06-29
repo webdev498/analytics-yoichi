@@ -16,7 +16,8 @@ const AppTheme = {
     pickerHeaderColor: Colors.garnet
   },
   card: {
-    borderRadius: 0
+    borderRadius: 0,
+    zDepth: 1
   }
 };
 
