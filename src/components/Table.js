@@ -321,6 +321,10 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
           fieldValue = generateColumnTextForDisplayingCountryFlag(fieldValue);
           columnText += fieldValue;
         }
+        else if (displayName === 'description') {
+          fieldValue = '<span class="description">' + fieldValue + '</span>';
+          columnText += fieldValue;
+        }
         else if (isUndefined(displayName)) {
           columnText += '<br/>' + fieldValue;
         }
@@ -339,6 +343,10 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
       if (!isUndefined(fieldName)) {
         if (displayName === 'date') {
           fieldValue = generateColumnTextForDisplayingDate(fieldValue);
+          columnText += fieldValue;
+        }
+        else if (displayName === 'description') {
+          fieldValue = '<span class="description">' + fieldValue + '</span>';
           columnText += fieldValue;
         }
         else if (isUndefined(displayName)) {
