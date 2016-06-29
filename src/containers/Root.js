@@ -50,4 +50,3 @@ function mapStateToProps(state) {
   return { locale: state.locale };
 }
 export default connect(mapStateToProps)(Root);
-
