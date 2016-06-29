@@ -16,3 +16,16 @@ export const ERROR_LAYOUT_DATA = 'ERROR_LAYOUT_DATA';
 export const LOW_SCORE_RANGE = [1, 34];
 export const MEDIUM_SCORE_RANGE = [35, 64];
 export const HIGH_SCORE_RANGE = [65, 100];
+
+export const CHART_COLORS = [
+  '2BD8D0',
+  '6CD3B4',
+  'B6CD94',
+  'FCC875',
+  '05E9F5',
+  '003300',
+  'FF66FF',
+  '999999',
+  '009999',
+  '66CDAA'
+];

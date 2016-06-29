@@ -4,6 +4,7 @@ import moment from 'moment';
 import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/DurationWidget';
+import ScoreWidget from 'components/ScoreWidget';
 import {
   generateRawData,
   getIndexFromObjectName,
@@ -187,6 +188,14 @@ export function generateRowObject(rowDetails, mainObject) {
       columnText = '';
       mainObject.columns.push(rowObj);
       break;
+    case 'scoreWidget':
+      rowObj = Object.assign(rowObj, {
+        columnText: unsafe(columnText),
+        chartValue: chartValue
+      });
+      columnText = '';
+      mainObject.columns.push(rowObj);
+      break;
     default:
       break;
   }
@@ -280,6 +289,9 @@ export function getColumnText(columnDetails) {
     case 'durationWidget':
       timeValue = fieldValue;
       break;
+    case 'scoreWidget':
+      chartValue = fieldValue;
+      break;
     case 'text':
       columnText = generateColumnTextForColumnTypeAsText(columnDetails);
       break;
@@ -298,16 +310,24 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
   if (!isUndefined(fieldValue) && fieldValue !== '' && fieldValue !== null) {
     if (columnText !== '') {
       if (!isUndefined(fieldName)) {
-        if (displayName === 'date') {
+        if (!isUndefined(displayName) && displayName.toLowerCase() === 'date') {
           fieldValue = generateColumnTextForDisplayingDate(fieldValue);
           columnText += fieldValue;
         }
-        else if (displayName === 'port') {
-          columnText += ':' + fieldValue;
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'port') {
+          fieldValue = '<span class="firstRowInColumn">' + ':' + fieldValue + '</span>';
+          columnText += fieldValue;
         }
-        else if (displayName === 'countryFlag') {
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'countryflag') {
           fieldValue = generateColumnTextForDisplayingCountryFlag(fieldValue);
           columnText += fieldValue;
+        }
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'description') {
+          fieldValue = '<span class="description">' + fieldValue + '</span>';
+          columnText += fieldValue;
+        }
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'ip') {
+          columnText += '<span class="firstRowInColumn">' + displayName + ': ' + fieldValue + '</span>';
         }
         else if (isUndefined(displayName)) {
           columnText += '<br/>' + fieldValue;
@@ -325,9 +345,16 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
     }
     else {
       if (!isUndefined(fieldName)) {
-        if (displayName === 'date') {
+        if (!isUndefined(displayName) && displayName.toLowerCase() === 'date') {
           fieldValue = generateColumnTextForDisplayingDate(fieldValue);
           columnText += fieldValue;
+        }
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'description') {
+          fieldValue = '<span class="description">' + fieldValue + '</span>';
+          columnText += fieldValue;
+        }
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'ip') {
+          columnText += '<span class="firstRowInColumn">' + displayName + ': ' + fieldValue + '</span>';
         }
         else if (isUndefined(displayName)) {
           columnText += '<br/>' + fieldValue;
@@ -348,9 +375,11 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
 }
 
 export function generateColumnTextForDisplayingDate(fieldValue) {
-  let fieldValueInLocalTime = moment.utc(fieldValue).toDate();
-  fieldValueInLocalTime = moment(fieldValueInLocalTime).format('D MMM YYYY HH:mm:ss');
-  fieldValue = fieldValueInLocalTime;
+  let fieldValueInLocalTime = moment.utc(fieldValue).toDate(),
+    fieldValueInLocalTime1 = moment(fieldValueInLocalTime).format('D MMM YYYY'),
+    fieldValueInLocalTime2 = moment(fieldValueInLocalTime).format('HH:mm:ss');
+  fieldValue = '<span style="font-size: 14pt; font-weight: bold;">' + fieldValueInLocalTime1 + '</span>';
+  fieldValue += '<br/>' + fieldValueInLocalTime2;
   return fieldValue;
 }
 
@@ -432,6 +461,15 @@ class tableCard extends React.Component {
                           value={tableColumn.timeValueSort}
                           style={tableColumn.columnStyle}>
                           <DurationWidget timeValue={tableColumn.timeValue} />
+                        </Td>
+                      );
+                    }
+                    if (tableColumn.columnType === 'scoreWidget') {
+                      return (
+                        <Td column={tableColumn.columnName}
+                          value={tableColumn.chartValue}
+                          style={tableColumn.columnStyle}>
+                          <ScoreWidget scoreValue={tableColumn.chartValue} />
                         </Td>
                       );
                     }

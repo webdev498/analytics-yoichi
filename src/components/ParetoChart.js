@@ -8,12 +8,13 @@ import {
   generateClickThroughUrl,
   generatePathParams
 } from 'utils/kibanaUtils';
+import {CHART_COLORS} from 'Constants';
 
 function generateChartDataSource(data, props) {
   const {chartOptions, chartData} = props,
     fieldMapping = chartData.fieldMapping,
     graphBars = [],
-    chartColors = ['D93609', '0505F5', 'ACF50F', 'FCFC0D', '05E9F5', '003300', 'FF66FF', '999999', '009999', '66CDAA'];
+    chartColors = CHART_COLORS;
 
   let colorIndex = 0,
     numberOfColors = chartColors.length,
