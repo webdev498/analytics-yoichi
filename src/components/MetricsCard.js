@@ -13,16 +13,19 @@ const styles = {
     display: 'flex'
   },
   countStyle: {
-    fontSize: '24px'
+    fontSize: '35px',
+    lineHeight: '35px'
   },
   textStyle: {
     fontSize: '21px',
+    lineHeight: '21px',
     fontWeight: 300,
-    margin: 0
+    margin: 0,
+    marginBottom: '22px'
   },
   detailsStyle: {
     paddingTop: '10px',
-    fontSize: '11px',
+    fontSize: '13px',
     marginLeft: 'auto',
     cursor: 'pointer',
     color: Colors.smoke,
@@ -31,14 +34,14 @@ const styles = {
   percentageWrap: {
     marginLeft: 'auto',
     display: 'flex',
-    alignItems: 'center',
-    fontSize: '11px'
+    alignItems: 'flex-end',
+    fontSize: '13px'
   },
   percentageStyle: {
     fontSize: '13px'
   },
   iconStyle: {
-    marginTop: 'auto'
+    lineHeight: '10px'
   }
 };
 
@@ -57,13 +60,14 @@ function getArrowIcon(data) {
   if (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A') {
     const percent = Math.round(data.rows[0][0][2]);
     if (percent > 0) {
-      return <FontIcon className='material-icons'>arrow_drop_up</FontIcon>;
+      return <FontIcon style={styles.iconStyle} className='material-icons'>arrow_drop_up</FontIcon>;
     }
     else if (percent === 0) {
-      return <FontIcon className='material-icons'>trending_flat</FontIcon>;
+      // return <FontIcon style={styles.iconStyle} className='material-icons'>trending_flat</FontIcon>;
+      return null;
     }
     else {
-      return <FontIcon className='material-icons'>arrow_drop_down</FontIcon>;
+      return <FontIcon style={styles.iconStyle} className='material-icons'>arrow_drop_down</FontIcon>;
     }
   }
   else {
@@ -119,9 +123,7 @@ class MetricsCard extends React.Component {
             <span style={styles.percentageStyle}>
               {getPercent(props.data)}
             </span>
-            <span style={styles.iconStyle}>
-              {getArrowIcon(props.data)}
-            </span>
+            {getArrowIcon(props.data)}
           </div>
         </div>
 
