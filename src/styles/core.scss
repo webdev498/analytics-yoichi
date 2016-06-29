@@ -140,8 +140,10 @@
 
   .threatTable tr:nth-child(even) td div.scoreWidget {background: #F7A48B}
   .threatTable tr:nth-child(odd) td div.scoreWidget {background: #F69275}
-  .threatTable tr:nth-child(even) td span.description {color: #F7A48B; font-weight: bold;}
-  .threatTable tr:nth-child(odd) td span.description {color: #F69275; font-weight: bold;}
+  .threatTable tr:nth-child(even) td span.description {color: #F7A48B; font-weight: bold; font-size: 16px;}
+  .threatTable tr:nth-child(odd) td span.description {color: #F69275; font-weight: bold; font-size: 16px;}
+
+  .threatTable tr td span.firstRowInColumn {color: rgb(68, 76, 99); font-weight: bold; font-size: 16px;}
 
   .reactable-filter-input {
     width: 95%;

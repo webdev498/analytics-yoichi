@@ -310,20 +310,24 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
   if (!isUndefined(fieldValue) && fieldValue !== '' && fieldValue !== null) {
     if (columnText !== '') {
       if (!isUndefined(fieldName)) {
-        if (displayName === 'date') {
+        if (!isUndefined(displayName) && displayName.toLowerCase() === 'date') {
           fieldValue = generateColumnTextForDisplayingDate(fieldValue);
           columnText += fieldValue;
         }
-        else if (displayName === 'port') {
-          columnText += ':' + fieldValue;
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'port') {
+          fieldValue = '<span class="firstRowInColumn">' + ':' + fieldValue + '</span>';
+          columnText += fieldValue;
         }
-        else if (displayName === 'countryFlag') {
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'countryflag') {
           fieldValue = generateColumnTextForDisplayingCountryFlag(fieldValue);
           columnText += fieldValue;
         }
-        else if (displayName === 'description') {
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'description') {
           fieldValue = '<span class="description">' + fieldValue + '</span>';
           columnText += fieldValue;
+        }
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'ip') {
+          columnText += '<span class="firstRowInColumn">' + displayName + ': ' + fieldValue + '</span>';
         }
         else if (isUndefined(displayName)) {
           columnText += '<br/>' + fieldValue;
@@ -341,13 +345,16 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
     }
     else {
       if (!isUndefined(fieldName)) {
-        if (displayName === 'date') {
+        if (!isUndefined(displayName) && displayName.toLowerCase() === 'date') {
           fieldValue = generateColumnTextForDisplayingDate(fieldValue);
           columnText += fieldValue;
         }
-        else if (displayName === 'description') {
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'description') {
           fieldValue = '<span class="description">' + fieldValue + '</span>';
           columnText += fieldValue;
+        }
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'ip') {
+          columnText += '<span class="firstRowInColumn">' + displayName + ': ' + fieldValue + '</span>';
         }
         else if (isUndefined(displayName)) {
           columnText += '<br/>' + fieldValue;
@@ -368,9 +375,11 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
 }
 
 export function generateColumnTextForDisplayingDate(fieldValue) {
-  let fieldValueInLocalTime = moment.utc(fieldValue).toDate();
-  fieldValueInLocalTime = moment(fieldValueInLocalTime).format('D MMM YYYY HH:mm:ss');
-  fieldValue = fieldValueInLocalTime;
+  let fieldValueInLocalTime = moment.utc(fieldValue).toDate(),
+    fieldValueInLocalTime1 = moment(fieldValueInLocalTime).format('D MMM YYYY'),
+    fieldValueInLocalTime2 = moment(fieldValueInLocalTime).format('HH:mm:ss');
+  fieldValue = '<span style="font-size: 16px; font-weight: bold;">' + fieldValueInLocalTime1 + '</span>';
+  fieldValue += '<br/>' + fieldValueInLocalTime2;
   return fieldValue;
 }
 
