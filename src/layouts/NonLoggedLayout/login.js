@@ -10,18 +10,19 @@ import RaisedButton from 'material-ui/RaisedButton';
 import CustomCardHeader from 'components/CustomCardHeader';
 import {loginUrl, responseType, clientId, redirectUri, defaultRoute} from 'config';
 
-// import './login.scss';
-import {garnetColor, grapeColor} from 'theme/colors';
+import {Colors} from 'theme/colors';
 
 const styles = {
   card: {
-    width: '400px',
+    width: '350px',
     margin: '0 auto',
     height: '400px',
-    backgroundColor: garnetColor
+    backgroundColor: Colors.garnet
+  },
+  container: {
   },
   header: {
-    backgroundColor: garnetColor
+    backgroundColor: Colors.garnet
   },
   inputWrap: {
     padding: '0 20px'
@@ -29,13 +30,30 @@ const styles = {
   textField: {
     width: '100%'
   },
+  input: {
+    color: Colors.navigation,
+    borderColor: Colors.turquoise
+  },
+  floatingLabel: {
+    color: Colors.navigation,
+    fontWeight: '300'
+  },
+  floatingLabelFocus: {
+    color: Colors.turquoise
+  },
+  underlineFocus: {
+    borderColor: Colors.turquoise
+  },
   buttonWrap: {
     textAlign: 'right',
     marginTop: '25px',
     marginRight: '20px'
   },
   button: {
-    backgroundColor: grapeColor
+    fontWeight: 300
+  },
+  form: {
+    marginTop: '100px'
   }
 };
 
@@ -53,21 +71,30 @@ class LoginView extends React.Component {
 
   render() {
     return (
-      <Card style={styles.card} >
+      <Card style={styles.card}
+        containerStyle={styles.container} >
         <CustomCardHeader title='Rank'
           style={styles.header} />
 
-        <form action={loginUrl} method='post'>
+        <form action={loginUrl} method='post' style={styles.form}>
           <div style={styles.inputWrap}>
             <TextField
+              floatingLabelStyle={styles.floatingLabel}
+              floatingLabelFocusStyle={styles.floatingLabelFocus}
               style={styles.textField}
+              underlineFocusStyle={styles.underlineFocus}
+              inputStyle={styles.input}
               floatingLabelText='Username'
               name='username' />
           </div>
 
           <div style={styles.inputWrap}>
             <TextField
+              floatingLabelStyle={styles.floatingLabel}
+              floatingLabelFocusStyle={styles.floatingLabelFocus}
               style={styles.textField}
+              underlineFocusStyle={styles.underlineFocus}
+              inputStyle={styles.input}
               floatingLabelText='Password'
               type='password'
               name='password' />
@@ -75,10 +102,11 @@ class LoginView extends React.Component {
 
           <div style={styles.buttonWrap}>
             <RaisedButton
-              primary
               style={styles.button}
-              backgroundColor='#444c63'
-              label='Login'
+              backgroundColor={Colors.pebble}
+              labelColor={Colors.navigation}
+              labelStyle={styles.button}
+              label='Sign In'
               type='submit' />
           </div>
 

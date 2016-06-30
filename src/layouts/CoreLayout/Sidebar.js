@@ -30,7 +30,8 @@ const styles = {
     color: Colors.arctic
   },
   text: {
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
+    fontSize: '13px'
   },
   active: {
     color: Colors.turquoise,
