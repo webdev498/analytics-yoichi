@@ -252,18 +252,21 @@ function generateChartDataSource(rawData, props) {
       'showborder': '0',
       'theme': 'zune',
       'numDivLines': '2',
-      'divLineThickness': '0',
-      'divLineAlpha': '0',
       'showAxisLines': '1',
       'showYAxisValues': '1',
       'labelDisplay': 'wrap',
       'rotateLabels': '1',
-      'xAxisName': 'Time',
+      'xAxisName': 'TIME',
       'scrollHeight': '4',
-      'xAxisNameFontSize': '14',
-      'yAxisNameFontSize': '14',
+      'xAxisNameFontSize': '13',
+      'yAxisNameFontSize': '13',
       'slantLabels': '1',
-      'labelFontSize': '13'
+      'labelFontSize': '11',
+      'xAxisNamePadding': '20',
+      'yAxisNamePadding': '20',
+      'showXAxisLine': '1',
+      'showYAxisLine': '0',
+      'divLineIsDashed': '1'
     }, chartOptions)
   };
 

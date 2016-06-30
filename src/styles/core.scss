@@ -1,6 +1,7 @@
 :global {
   @import 'base';
   @import 'vendor/normalize';
+  @import 'color';
   @import 'table';
 
   // Some best-practice CSS that's useful for most apps
@@ -27,4 +28,11 @@
     padding-top: 64px;
     box-sizing: border-box;
   }
+
+  /*.refreshIcon {
+    cursor: 'pointer';
+    font-size: '20px';
+    color: 'red';
+    font-weight: 600;
+  }*/
 }

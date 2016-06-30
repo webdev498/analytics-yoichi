@@ -1,6 +1,6 @@
 .threatTable table {
-  border: 1px solid #373737;
-  margin-bottom: 20px;
+  /*border: 1px solid #373737;*/
+  /*margin-bottom: 20px;*/
   text-align: left;
   width:100% !important;
  }
@@ -9,9 +9,8 @@
   padding: 10px;
   padding-bottom: 16px;
   font-size: 13px;
-  background: rgb(255, 255, 255);
-  /*color: map-get($Colors, red);*//*#444c63;*/
-  color: #444c63;
+  background: $WhiteColor;
+  color: $GrapeColor;
   text-align: left;
   cursor: pointer;
   font-weight: normal;
@@ -20,7 +19,7 @@
 .threatTable td {
   font-size: 13px;
   padding: 10px;
-  color: #6b7282;
+  color: $MustardColor;
   vertical-align: top;
  }
 
@@ -32,7 +31,7 @@
   width: 30px;
   float: left;
   cursor: pointer;
-  color: #000;
+  color: $BlackColor;
   border: 1px solid #AAA;
   background-color: #EEE;
   text-align: center;
@@ -47,7 +46,7 @@
   width: 55px;
   float: left;
   cursor: pointer;
-  color: #000;
+  color: $BlackColor;
   border: 1px solid #AAA;
   background-color: #EEE;
   text-align: center;
@@ -62,7 +61,7 @@
   width: 75px;
   float: left;
   cursor: pointer;
-  color: #000;
+  color: $BlackColor;
   border: 1px solid #AAA;
   background-color: #EEE;
   text-align: center;
@@ -81,7 +80,7 @@
 }
 
 .threatTable th.reactable-header-sort-desc, .threatTable th.reactable-header-sort-asc {
-  background: rgb(255, 255, 255);
+  background: $WhiteColor;
 }
 
 .threatTable th.reactable-header-sort-desc:after {
@@ -89,7 +88,7 @@
   font-size: 13px;
   padding-left: 10px;
   padding-bottom: 5px;
-  font-weight: Semibold;
+  font-weight: semibold;
 }
 
 .threatTable th.reactable-header-sort-asc:after {
@@ -97,7 +96,7 @@
   font-size: 13px;
   padding-left: 10px;
   padding-bottom: 5px;
-  font-weight: Semibold;
+  font-weight: semibold;
 }
 
 tr.reactable-filterer {
@@ -108,15 +107,15 @@ tr.reactable-filterer td {
   width: 100%;
 }
 
-.threatTable tr:nth-child(even) {background: #fff}
-.threatTable tr:nth-child(odd) {background: #F7F7F9;}
+.threatTable tr:nth-child(even) {background: $WhiteColor}
+.threatTable tr:nth-child(odd) {background: $CloudColorShade2;}
 
-.threatTable tr:nth-child(even) td div.scoreWidget {background: #F7A48B}
-.threatTable tr:nth-child(odd) td div.scoreWidget {background: #F69275}
-.threatTable tr:nth-child(even) td span.description {color: #F7A48B; font-weight: 600; font-size: 14px;}
-.threatTable tr:nth-child(odd) td span.description {color: #F69275; font-weight: 600; font-size: 14px;}
+.threatTable tr:nth-child(even) td div.scoreWidget {background: $CoralColorShade1}
+.threatTable tr:nth-child(odd) td div.scoreWidget {background: $CoralColorShade2}
+.threatTable tr:nth-child(even) td span.description {color: $CoralColorShade1; font-weight: 600; font-size: 14px;}
+.threatTable tr:nth-child(odd) td span.description {color: $CoralColorShade2; font-weight: 600; font-size: 14px;}
 
-.threatTable tr td span.firstRowInColumn {color: rgb(68, 76, 99); font-weight: bold; font-size: 14px;}
+.threatTable tr td span.firstRowInColumn {color: $CloudColorShade1; font-weight: 600; font-size: 14px;}
 
 .reactable-filter-input {
   width: 95%;
@@ -125,6 +124,16 @@ tr.reactable-filterer td {
   margin-bottom: 7px;
   margin-right: 20px;
   padding: 5px;
+}
+
+.searchText {
+  width: 50%;
+  background: $CloudColorShade2;
+  border: 0px;
+  height:35px;
+  padding-left:53px;
+  padding-right: 40px;
+  font-size:13px;
 }
 
 .chartCaption {
