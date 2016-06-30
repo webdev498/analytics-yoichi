@@ -9,6 +9,9 @@ import {
 } from 'utils/kibanaUtils';
 
 const styles = {
+  card: {
+    padding: '33px 33px 20px 33px'
+  },
   wrapStyle: {
     display: 'flex'
   },
@@ -16,15 +19,15 @@ const styles = {
     fontSize: '35px',
     lineHeight: '35px'
   },
-  textStyle: {
+  text: {
     fontSize: '21px',
     lineHeight: '21px',
     fontWeight: 300,
     margin: 0,
-    marginBottom: '22px'
+    marginBottom: '13px'
   },
-  detailsStyle: {
-    paddingTop: '10px',
+  details: {
+    paddingTop: '5px',
     fontSize: '13px',
     marginLeft: 'auto',
     cursor: 'pointer',
@@ -37,10 +40,10 @@ const styles = {
     alignItems: 'flex-end',
     fontSize: '13px'
   },
-  percentageStyle: {
+  percentage: {
     fontSize: '13px'
   },
-  iconStyle: {
+  icon: {
     lineHeight: '10px'
   }
 };
@@ -60,14 +63,14 @@ function getArrowIcon(data) {
   if (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A') {
     const percent = Math.round(data.rows[0][0][2]);
     if (percent > 0) {
-      return <FontIcon style={styles.iconStyle} className='material-icons'>arrow_drop_up</FontIcon>;
+      return <FontIcon style={styles.icon} className='material-icons'>arrow_drop_up</FontIcon>;
     }
     else if (percent === 0) {
-      // return <FontIcon style={styles.iconStyle} className='material-icons'>trending_flat</FontIcon>;
+      // return <FontIcon style={styles.icon} className='material-icons'>trending_flat</FontIcon>;
       return null;
     }
     else {
-      return <FontIcon style={styles.iconStyle} className='material-icons'>arrow_drop_down</FontIcon>;
+      return <FontIcon style={styles.icon} className='material-icons'>arrow_drop_down</FontIcon>;
     }
   }
   else {
@@ -112,22 +115,22 @@ class MetricsCard extends React.Component {
     const { props } = this;
 
     return (
-      <div>
-        <h3 style={styles.textStyle}>{props.title}</h3>
+      <div style={styles.card}>
+        <h3 style={styles.text}>{props.title}</h3>
 
         <div style={styles.wrapStyle}>
           <div style={{...styles.countStyle, ...props.countStyle}}>
             {getCount(props)}
           </div>
           <div style={styles.percentageWrap}>
-            <span style={styles.percentageStyle}>
+            <span style={styles.percentage}>
               {getPercent(props.data)}
             </span>
             {getArrowIcon(props.data)}
           </div>
         </div>
 
-        <div style={styles.detailsStyle}
+        <div style={styles.details}
           onClick={this.handleClick()}>
           View details
         </div>
