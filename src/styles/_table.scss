@@ -8,7 +8,7 @@
 .threatTable th {
   padding: 10px;
   padding-bottom: 16px;
-  font-size: 13pt;
+  font-size: 13px;
   background: rgb(255, 255, 255);
   /*color: map-get($Colors, red);*//*#444c63;*/
   color: #444c63;
@@ -18,7 +18,7 @@
  }
 
 .threatTable td {
-  font-size: 13pt;
+  font-size: 13px;
   padding: 10px;
   color: #6b7282;
   vertical-align: top;
@@ -86,7 +86,7 @@
 
 .threatTable th.reactable-header-sort-desc:after {
   content: '\25B2';
-  font-size: 13pt;
+  font-size: 13px;
   padding-left: 10px;
   padding-bottom: 5px;
   font-weight: Semibold;
@@ -94,7 +94,7 @@
 
 .threatTable th.reactable-header-sort-asc:after {
   content: '\25BC';
-  font-size: 13pt;
+  font-size: 13px;
   padding-left: 10px;
   padding-bottom: 5px;
   font-weight: Semibold;
@@ -113,10 +113,10 @@ tr.reactable-filterer td {
 
 .threatTable tr:nth-child(even) td div.scoreWidget {background: #F7A48B}
 .threatTable tr:nth-child(odd) td div.scoreWidget {background: #F69275}
-.threatTable tr:nth-child(even) td span.description {color: #F7A48B; font-weight: bold; font-size: 14pt;}
-.threatTable tr:nth-child(odd) td span.description {color: #F69275; font-weight: bold; font-size: 14pt;}
+.threatTable tr:nth-child(even) td span.description {color: #F7A48B; font-weight: 600; font-size: 14px;}
+.threatTable tr:nth-child(odd) td span.description {color: #F69275; font-weight: 600; font-size: 14px;}
 
-.threatTable tr td span.firstRowInColumn {color: rgb(68, 76, 99); font-weight: bold; font-size: 14pt;}
+.threatTable tr td span.firstRowInColumn {color: rgb(68, 76, 99); font-weight: bold; font-size: 14px;}
 
 .reactable-filter-input {
   width: 95%;

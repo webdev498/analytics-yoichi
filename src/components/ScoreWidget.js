@@ -5,12 +5,12 @@ class ScoreWidget extends React.Component {
     const {props} = this;
     const style = {
       color: 'white',
-      borderRadius: '50px',
-      width: '60px',
-      height: '60px',
+      borderRadius: '50%',
+      width: '50px',
+      height: '50px',
+      lineHeight: '50px',
       textAlign: 'center',
-      padding: '7px',
-      fontSize: '24pt',
+      fontSize: '24px',
       fontFamily: 'Open Sans'
     };
     return (

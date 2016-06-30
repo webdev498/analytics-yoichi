@@ -16,7 +16,6 @@ const AppTheme = {
     pickerHeaderColor: Colors.garnet
   },
   paper: {
-    zDepthShadows: 0,
     rounded: false
   }
 };
