@@ -52,15 +52,22 @@ function generateChartDataSource(data, props) {
 
   return {
     chart: Object.assign({
-      labelFontSize: '10',
-      showAxisLines: '1',
-      showLabels: '1',
-      showPercentInTooltip: '1',
-      showValues: '1',
-      showYAxisValues: '1',
-      theme: 'zune',
-      xAxisNameFontSize: '14',
-      yAxisNameFontSize: '14'
+      'labelFontSize': '11',
+      'showAxisLines': '1',
+      'showLabels': '1',
+      'showPercentInTooltip': '1',
+      'showValues': '1',
+      'showYAxisValues': '1',
+      'theme': 'zune',
+      'xAxisNameFontSize': '14',
+      'yAxisNameFontSize': '14',
+      'xAxisNamePadding': '20',
+      'yAxisNamePadding': '20',
+      'lineColor': '#f69275',
+      'showXAxisLine': '1',
+      'showYAxisLine': '0',
+      'divLineIsDashed': '1',
+      'showsYAxisLine': '0'
     }, chartOptions),
     data: graphBars
   };

@@ -252,8 +252,6 @@ function generateChartDataSource(rawData, props) {
       'showborder': '0',
       'theme': 'zune',
       'numDivLines': '2',
-      'divLineThickness': '0',
-      'divLineAlpha': '0',
       'showAxisLines': '1',
       'showYAxisValues': '1',
       'labelDisplay': 'wrap',
@@ -265,7 +263,10 @@ function generateChartDataSource(rawData, props) {
       'slantLabels': '1',
       'labelFontSize': '11',
       'xAxisNamePadding': '20',
-      'yAxisNamePadding': '20'
+      'yAxisNamePadding': '20',
+      'showXAxisLine': '1',
+      'showYAxisLine': '0',
+      'divLineIsDashed': '1'
     }, chartOptions)
   };
 
