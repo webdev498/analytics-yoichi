@@ -12,7 +12,6 @@ const styles = {
   wrap: {
     position: 'relative',
     borderTop: '6px solid ' + Colors.smoke,
-    padding: '33px',
     borderRadius: 0,
     boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
   },
@@ -146,10 +145,11 @@ class ParentCard extends React.Component {
     const {props} = this;
 
     if (props.meta.showHeader) {
-      let childProps = Object.assign({}, props, {search: this.state.search});
+      const childProps = Object.assign({}, props, {search: this.state.search}),
+        cardStyle = {...styles.wrap, ...props.attributes.style, padding: '33px'};
 
       return (
-        <Card style={{...styles.wrap, ...props.attributes.style}}>
+        <Card style={cardStyle}>
           {props.isFetching ? <Loader /> : null}
 
           <header style={styles.header}>

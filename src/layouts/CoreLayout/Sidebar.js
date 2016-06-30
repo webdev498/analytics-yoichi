@@ -2,13 +2,7 @@ import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
 
 import LeftNav from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
-
-import AlertIcon from 'material-ui/svg-icons/alert/warning';
-import CountryIcon from 'material-ui/svg-icons/social/public';
-import TrafficIcon from 'material-ui/svg-icons/action/swap-vert';
-import AssetsIcon from 'material-ui/svg-icons/hardware/desktop-mac';
-import UserAgentIcon from 'material-ui/svg-icons/device/dvr';
+import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
 
 const styles = {
@@ -19,48 +13,88 @@ const styles = {
     color: Colors.arctic
   },
   icon: {
-    fill: Colors.navigation
+    color: Colors.navigation,
+    width: '72px',
+    textAlign: 'center'
   },
   link: {
-    height: '56px',
-    lineHeight: '56px'
+    height: '80px',
+    lineHeight: '80px'
+  },
+  wrap: {
+    height: '80px',
+    width: '200px',
+    textDecoration: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    color: Colors.arctic
+  },
+  text: {
+    textTransform: 'capitalize'
+  },
+  active: {
+    color: Colors.turquoise,
+    backgroundColor: Colors.grape
   }
 };
 
+const links = [
+  {
+    to: '/alert',
+    icon: 'warning',
+    text: 'alert'
+  },
+  {
+    to: '/country',
+    icon: 'public',
+    text: 'country'
+  },
+  {
+    to: '/traffic',
+    icon: 'swap_vert',
+    text: 'traffic'
+  },
+  {
+    to: '/asset',
+    icon: 'desktop_mac',
+    text: 'asset'
+  },
+  {
+    to: '/user-agent',
+    icon: 'dvr',
+    text: 'user-agent'
+  }
+];
+
 class Sidebar extends React.Component {
   static propTypes = {
-    style: PropTypes.object
+    style: PropTypes.object,
+    location: PropTypes.object.isRequired
+  }
+
+  getLinks(path) {
+    return links.map((link, index) => {
+      let style = {};
+      if (link.to === path) {
+        style = styles.active;
+      }
+
+      return (
+        <Link to={link.to} style={{...styles.wrap, ...style}} key={index}>
+          <FontIcon style={{...styles.icon, ...style}} className='material-icons'>
+            {link.icon}
+          </FontIcon>
+          <span style={styles.text}>{link.text}</span>
+        </Link>
+      );
+    });
   }
 
   render() {
     const {props} = this;
     return (
       <LeftNav open containerStyle={{...styles.leftNav, ...props.style}}>
-        <Link to='/alert'>
-          <MenuItem style={styles.link} leftIcon={<AlertIcon style={styles.icon} />}>
-            Alert Details
-          </MenuItem>
-        </Link>
-        <Link to='/country'>
-          <MenuItem style={styles.link} leftIcon={<CountryIcon style={styles.icon} />}>
-            Country Details
-          </MenuItem>
-        </Link>
-        <Link to='/traffic'>
-          <MenuItem style={styles.link} leftIcon={<TrafficIcon style={styles.icon} />}>
-            Traffic Details
-          </MenuItem>
-        </Link>
-        <Link to='/asset'>
-          <MenuItem style={styles.link} leftIcon={<AssetsIcon style={styles.icon} />}>
-            Asset Details
-          </MenuItem>
-        </Link>
-        <Link to='/user-agent'>
-          <MenuItem style={styles.link} leftIcon={<UserAgentIcon style={styles.icon} />}>
-            User-Agent Details
-          </MenuItem>
-        </Link>
+        {this.getLinks(props.location.pathname)}
       </LeftNav>
     );
   }
