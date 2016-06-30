@@ -27,23 +27,51 @@ const styles = {
     fontWeight: 300
   },
   iconWrap: {
-    width: '50px',
     marginLeft: 'auto',
     textAlign: 'right'
   },
   refreshIcon: {
     cursor: 'pointer',
-    fontSize: '20px'
+    fontSize: '20px',
+    color: '#CBCBD1',
+    fontWeight: 600
   },
   crossIcon: {
     fontSize: '20px'
   },
   inputWrap: {
     marginLeft: '20px',
-    width: '50%'
+    width: '85%',
+    textAlign: 'right',
+    display: 'inline-block',
+    position: 'relative',
+    verticalAlign: 'middle'
   },
-  input: {
-    width: '100%'
+  searchIcon: {
+    bottom: '5px',
+    color: '#CBCBD1',
+    cursor: 'pointer',
+    fontSize: '21px',
+    height: '14px',
+    margin: 'auto',
+    position: 'absolute',
+    right: '12px',
+    top: '0',
+    fontWeight: 600
+  },
+  clearIcon: {
+    color: '#fff',
+    cursor: 'pointer',
+    fontSize: '21px',
+    height: '35px',
+    margin: 'auto',
+    position: 'absolute',
+    top: '0',
+    background: '#CBCBD1',
+    lineHeight: '35px',
+    width: '45px',
+    textAlign: 'center',
+    fontWeight: 600
   }
 };
 
@@ -97,6 +125,23 @@ class ParentCard extends React.Component {
     };
   }
 
+  clearSearchText() {
+    return (event) => {
+      if (this.myTextInput !== null) {
+        this.myTextInput.value = '';
+      }
+      this.setState({
+        search: event.target.value
+      });
+    };
+  }
+
+  focusSearchText() {
+    if (this.myTextInput !== null) {
+      this.myTextInput.focus();
+    }
+  }
+
   render() {
     const {props} = this;
 
@@ -115,10 +160,22 @@ class ParentCard extends React.Component {
             {
               props.meta.showSearch
               ? <div style={styles.inputWrap}>
+                <FontIcon className='material-icons'
+                  style={styles.clearIcon}
+                  onClick={this.clearSearchText()}>
+                  close
+                </FontIcon>
                 <input
+                  id='searchText'
                   type='text'
-                  style={styles.input}
-                  onChange={this.updateSearch()} />
+                  className='searchText'
+                  onChange={this.updateSearch()}
+                  ref={(ref) => this.myTextInput = ref} />
+                <FontIcon className='material-icons'
+                  style={styles.searchIcon}
+                  onClick={() => this.focusSearchText()}>
+                  search
+                </FontIcon>
               </div>
               : null
             }
