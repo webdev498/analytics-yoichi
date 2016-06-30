@@ -12,6 +12,7 @@ export const MustardColor = '#6b7282';
 export const SeafoamColor = '#bdbdc6';
 
 export const NavigationColor = 'rgba(255, 255, 255, 0.54)';
+export const SliderColor = 'rgba(36,41,61, 0.25)';
 
 export const Colors = {
   garnet: GarnetColor,
@@ -25,7 +26,8 @@ export const Colors = {
   coral: CoralColor,
   mustard: MustardColor,
   seafoam: SeafoamColor,
-  navigation: NavigationColor
+  navigation: NavigationColor,
+  slider: SliderColor
 };
 
 export const PrimaryPalette = {

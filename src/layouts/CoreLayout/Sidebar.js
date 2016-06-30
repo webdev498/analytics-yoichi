@@ -2,22 +2,13 @@ import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
 
 import LeftNav from 'material-ui/Drawer';
-// import MenuItem from 'material-ui/MenuItem';
-
 import FontIcon from 'material-ui/FontIcon';
-
-// import AlertIcon from 'material-ui/svg-icons/alert/warning';
-// import CountryIcon from 'material-ui/svg-icons/social/public';
-// import TrafficIcon from 'material-ui/svg-icons/action/swap-vert';
-// import AssetsIcon from 'material-ui/svg-icons/hardware/desktop-mac';
-// import UserAgentIcon from 'material-ui/svg-icons/device/dvr';
 import {Colors} from 'theme/colors';
 
 const styles = {
   leftNav: {
     position: 'fixed',
     top: '64px',
-    paddingTop: '20px',
     backgroundColor: Colors.pebble,
     color: Colors.arctic
   },
@@ -27,19 +18,19 @@ const styles = {
     textAlign: 'center'
   },
   link: {
-    height: '56px',
-    lineHeight: '56px'
+    height: '80px',
+    lineHeight: '80px'
   },
   wrap: {
-    height: '56px',
-    width: '190px',
+    height: '80px',
+    width: '200px',
     textDecoration: 'none',
     display: 'flex',
     alignItems: 'center',
     color: Colors.arctic
   },
   text: {
-    textTransform: 'uppercase'
+    textTransform: 'capitalize'
   },
   active: {
     color: Colors.turquoise,
@@ -82,15 +73,15 @@ class Sidebar extends React.Component {
   }
 
   getLinks(path) {
-    return links.map((link) => {
+    return links.map((link, index) => {
       let style = {};
       if (link.to === path) {
         style = styles.active;
       }
 
       return (
-        <Link to={link.to} style={{...styles.wrap, ...style}}>
-          <FontIcon style={styles.icon} className='material-icons'>
+        <Link to={link.to} style={{...styles.wrap, ...style}} key={index}>
+          <FontIcon style={{...styles.icon, ...style}} className='material-icons'>
             {link.icon}
           </FontIcon>
           <span style={styles.text}>{link.text}</span>

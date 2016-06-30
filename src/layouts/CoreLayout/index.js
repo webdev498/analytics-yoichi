@@ -9,7 +9,8 @@ import Kibana from 'components/Kibana';
 import { fetchUserData, logout } from 'actions/auth';
 
 import Loader from 'components/Loader';
-
+import FontIcon from 'material-ui/FontIcon';
+import {Colors} from 'theme/colors';
 import 'styles/core.scss';
 
 const styles = {
@@ -29,6 +30,27 @@ const styles = {
     paddingTop: '64px',
     boxSizing: 'border-box',
     height: '100%'
+  },
+  nav: {
+    position: 'relative',
+    width: '72px'
+  },
+  handle: {
+    position: 'absolute',
+    right: '-20px',
+    top: '64px',
+    backgroundColor: Colors.slider,
+    height: '80px',
+    lineHeight: '80px',
+    width: '20px',
+    borderRadius: '0 10px 10px 0',
+    textAlign: 'center',
+    cursor: 'pointer',
+    zIndex: 1300
+  },
+  icon: {
+    fontSize: '16px',
+    color: Colors.arctic
   }
 };
 
@@ -40,7 +62,13 @@ class CoreLayout extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {showKibana: false};
+    this.state = {
+      showKibana: false,
+      showFullSidebar: false
+    };
+
+    this.toggleSidebar = this.toggleSidebar.bind(this);
+    this.hideKibana = this.hideKibana.bind(this);
   }
 
   getChildContext() {
@@ -55,13 +83,16 @@ class CoreLayout extends React.Component {
     };
   }
 
+  toggleSidebar() {
+    this.setState({
+      showFullSidebar: !this.state.showFullSidebar
+    });
+  }
+
   hideKibana() {
-    const that = this;
-    return () => {
-      that.setState({
-        showKibana: false
-      });
-    };
+    this.setState({
+      showKibana: false
+    });
   }
 
   componentDidMount() {
@@ -78,10 +109,17 @@ class CoreLayout extends React.Component {
   }
 
   render() {
-    const {props} = this,
+    const {props, state} = this,
       {showKibana} = this.state,
       show = {display: 'block'},
-      hide = {display: 'none'};
+      hide = {display: 'none'},
+      sidebarWidth = {width: '72px'};
+
+    let icon = 'keyboard_arrow_right';
+    if (state.showFullSidebar) {
+      sidebarWidth.width = '200px';
+      icon = 'keyboard_arrow_left';
+    }
 
     let contentStyle = Object.assign({}, styles.content, show);
 
@@ -94,9 +132,18 @@ class CoreLayout extends React.Component {
         <Header
           title='RANK'
           showKibana={showKibana}
-          hideKibana={this.hideKibana()} />
+          hideKibana={this.hideKibana} />
 
-        <Sidebar style={styles.sidebar} location={props.location} />
+        <nav style={{...styles.nav, ...sidebarWidth}}>
+          <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
+            location={props.location} />
+          <div style={styles.handle}
+            onClick={this.toggleSidebar}>
+            <FontIcon className='material-icons' style={styles.icon}>
+              {icon}
+            </FontIcon>
+          </div>
+        </nav>
 
         <div style={styles.base}>
           <div style={contentStyle}>
