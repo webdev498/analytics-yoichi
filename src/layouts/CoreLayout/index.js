@@ -96,7 +96,7 @@ class CoreLayout extends React.Component {
           showKibana={showKibana}
           hideKibana={this.hideKibana()} />
 
-        <Sidebar style={styles.sidebar} />
+        <Sidebar style={styles.sidebar} location={props.location} />
 
         <div style={styles.base}>
           <div style={contentStyle}>
