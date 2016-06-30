@@ -258,12 +258,14 @@ function generateChartDataSource(rawData, props) {
       'showYAxisValues': '1',
       'labelDisplay': 'wrap',
       'rotateLabels': '1',
-      'xAxisName': 'Time',
+      'xAxisName': 'TIME',
       'scrollHeight': '4',
-      'xAxisNameFontSize': '14',
-      'yAxisNameFontSize': '14',
+      'xAxisNameFontSize': '13',
+      'yAxisNameFontSize': '13',
       'slantLabels': '1',
-      'labelFontSize': '13'
+      'labelFontSize': '11',
+      'xAxisNamePadding': '20',
+      'yAxisNamePadding': '20'
     }, chartOptions)
   };
 
