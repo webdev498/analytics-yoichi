@@ -1,21 +1,22 @@
 import React from 'react';
 import Login from './login';
 
-import {pebbleColor} from 'theme/colors';
+import {Colors} from 'theme/colors';
 
 const styles = {
   wrap: {
     height: '100%',
     paddingTop: '50px',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: Colors.pebble
   }
 };
 
 class NonLoggedLayout extends React.Component {
   render() {
     return (
-      <div style={styles.wrap} data-test>
+      <div style={styles.wrap}>
         <Login />
       </div>
     );
