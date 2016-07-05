@@ -41,9 +41,9 @@ const styles = {
 
 const links = [
   {
-    to: '/alert',
+    to: '/alerts',
     icon: 'warning',
-    text: 'alert'
+    text: 'alerts'
   },
   {
     to: '/country',

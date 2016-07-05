@@ -35,7 +35,7 @@ function getUrl(id) {
   return `${baseUrl}/api/store/dashboard${id}`;
 }
 
-export function fetchLayoutData(id) {
+export function fetchLayoutData(id, params) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
 
@@ -46,7 +46,9 @@ export function fetchLayoutData(id) {
   return function(dispatch, getState) {
     dispatch(requestPageData(id));
 
-    return fetch(getUrl(id), {
+    let urlId = id.indexOf('/', 1) > -1 ? id.slice(0, id.indexOf('/', 1)) : id;
+
+    return fetch(getUrl(urlId), {
       method: 'GET',
       headers: {
         'Authorization': `${tokenType} ${accessToken}`
