@@ -138,7 +138,7 @@ export function generateChartDataSource(rawData, props) {
       'toolTipPadding': '5',
       'showYAxisValues': '0',
       'showValues': '1',
-      'paletteColors': '#ACF50F,#D93609,#FCFC0D, #05E9F5,#0505F5',
+      'paletteColors': '#2BD8D0,#51DFD8,#71E5DF, #97ECE8,#BAF2F0, #DBF8F7',
       'xAxisNameFontSize': '14',
       'yAxisNameFontSize': '14',
       'labelFontSize': '13'

@@ -11,10 +11,8 @@ import {
 } from 'utils/kibanaUtils';
 
 function generateChartDataSource(rawData, props) {
-  const {chartOptions, chartData, shapes} = props;
-  let markersItemsObject = [],
-    markerIdSuffix = 0,
-    dataObject = [],
+  const {chartOptions, chartData} = props;
+  let dataObject = [],
     connectionsValues = [];
 
   for (let i = 0; i < chartData.fieldMapping.length; i++) {
@@ -42,18 +40,7 @@ function generateChartDataSource(rawData, props) {
       }
       else {
         let countryCode = rows[a][0];
-        if (currentChartData.shapeid !== 'circle') {
-          // obj1.shapeid = currentChartData.shapeid;
-          // obj1.label = rows[a][3];
-          // obj1.id = getCountryIDByCountryCode(countryCode) + markerIdSuffix;
-          // obj1.x = rows[a][1];
-          // obj1.y = rows[a][2];
-          // obj1.value = rows[a][4];
-          // obj1.alpha = currentChartData.alpha;
-
-          // markersItemsObject.push(obj1);
-          // markerIdSuffix = markerIdSuffix + 1;
-
+        if (currentChartData.connection !== 'secure') {
           obj1.id = getCountryIDByCountryCode(countryCode);
           obj1.value = rows[a][4].toString();
           if (rows[a][4] !== null) {
@@ -62,7 +49,7 @@ function generateChartDataSource(rawData, props) {
           }
           dataObject.push(obj1);
         }
-        if (currentChartData.shapeid === 'circle') {
+        if (currentChartData.connection === 'secure') {
           obj1.id = getCountryIDByCountryCode(countryCode);
           obj1.value = rows[a][4].toString();
           if (rows[a][4] !== null) {
@@ -97,19 +84,6 @@ function generateChartDataSource(rawData, props) {
     'bgAlpha': '0'
   }, chartOptions);
 
-  let shapesObject = [];
-  if (!isUndefined(shapes)) {
-    shapesObject = shapes;
-  }
-
-  // dataSourceObject.markers = {
-  //   'shapes': shapesObject,
-  //   'items': markersItemsObject
-  // };
-
-  // let colorRanges = [];
-  // for ()
-
   dataSourceObject.colorrange = {
     'minvalue': '0',
     'startlabel': 'Less',
@@ -117,10 +91,6 @@ function generateChartDataSource(rawData, props) {
     'code': 'DBF8F7',
     'gradient': '1',
     'color': [
-      // {
-      //   'maxvalue': 50,
-      //   'code': 'f8bd19'
-      // },
       {
         'maxvalue': Math.max.apply(Math, connectionsValues),
         'code': '2BD8D0'
@@ -129,38 +99,8 @@ function generateChartDataSource(rawData, props) {
     'maxvalue': 0
   };
 
-   // "colorrange": {
-   //      "color": [
-   //          {
-   //              "minvalue": "0",
-   //              "maxvalue": "100",
-   //              "code": "#D0DFA3",
-   //              "displayValue": "< 100M"
-   //          },
-   //          {
-   //              "minvalue": "100",
-   //              "maxvalue": "500",
-   //              "code": "#B0BF92",
-   //              "displayValue": "100-500M"
-   //          },
-   //          {
-   //              "minvalue": "500",
-   //              "maxvalue": "1000",
-   //              "code": "#91AF64",
-   //              "displayValue": "500M-1B"
-   //          },
-   //          {
-   //              "minvalue": "1000",
-   //              "maxvalue": "5000",
-   //              "code": "#A9FF8D",
-   //              "displayValue": "> 1B"
-   //          }
-   //      ]
-   //  },
-
   dataSourceObject.data = [{data: dataObject}];
 
-  // console.log(JSON.stringify(dataSourceObject));
   return dataSourceObject;
 }
 

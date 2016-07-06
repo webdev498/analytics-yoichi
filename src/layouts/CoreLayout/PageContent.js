@@ -6,7 +6,8 @@ import Loader from 'components/Loader';
 import {fetchLayoutData} from 'actions/core';
 
 import { connect } from 'react-redux';
-// import staticLayout from 'layout';
+import staticLayout from 'layout';
+import {isUndefined} from 'utils/utils';
 
 const styles = {
   content: {
@@ -34,8 +35,8 @@ class PageContent extends React.Component {
   }
 
   renderChildren() {
-    const {layout} = this.props;
-    // const {layout} = staticLayout;
+    // const {layout} = this.props;
+    const {layout} = staticLayout;
 
     const finalElmements = [];
 
@@ -51,6 +52,7 @@ class PageContent extends React.Component {
         const grandChildrenArray = [];
 
         if (componentDetails.children) {
+          // console.log(componentDetails);
           const grandChildren = componentDetails.children;
 
           for (let k = 0, grandChildrenLen = grandChildren.length; k < grandChildrenLen; k++) {
@@ -60,16 +62,32 @@ class PageContent extends React.Component {
               const elmSub = React.createFactory(require('components/' + grandChildElm.type).default);
               const componentElmSub = elmSub({...grandChildElm}, []);
               grandChildrenArray.push(componentElmSub);
+
+              if (componentDetails.children.childCompound && componentDetails.children.children) {
+                // console.log(componentDetails);
+                const grandChildren = componentDetails.children.children;
+
+                for (let k = 0, grandChildrenLen = grandChildren.length; k < grandChildrenLen; k++) {
+                  const grandChildElm = grandChildren[k];
+
+                  if (componentDetails.children.name === 'Compound') {
+                    const elmSub = React.createFactory(require('components/' + grandChildElm.type).default);
+                    const componentElmSub = elmSub({...grandChildElm}, []);
+                    grandChildrenArray.push(componentElmSub);
+                  }
+                }
+              }
             }
           }
         }
 
         const componentElm = elm({...componentDetails.attributes}, grandChildrenArray);
+        console.log(componentElm);
         const ParentCardElement = React.createElement(ParentCard, {...componentDetails}, componentElm);
 
         children.push(ParentCardElement);
       }
-
+      // console.log(children.length);
       const currentSection = React.DOM.section(
         {
           style: {display: 'flex', marginBottom: '33px', justifyContent: 'space-between'}

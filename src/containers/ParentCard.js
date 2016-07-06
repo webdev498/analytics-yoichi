@@ -109,7 +109,10 @@ class ParentCard extends React.Component {
 
   getElement() {
     const {props} = this;
-    return React.cloneElement(props.children, {...props});
+    // console.log(props);
+    return (
+      <div style={{border: '1px solid red'}}> {React.cloneElement(props.children, {...props})} </div>
+    );
   }
 
   refreshData() {
@@ -149,6 +152,7 @@ class ParentCard extends React.Component {
 
   render() {
     const {props} = this;
+    // console.log(props);
 
     if (props.meta.showHeader) {
       const childProps = Object.assign({}, props, {search: this.state.search}),
@@ -194,7 +198,7 @@ class ParentCard extends React.Component {
               </FontIcon>
             </div>
           </header>
-          <div> {React.cloneElement(props.children, {...childProps})} </div>
+          <div style={{border: '1px solid blue'}}> {React.cloneElement(props.children, {...childProps})} </div>
         </Card>
       );
     }
