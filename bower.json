@@ -5,7 +5,7 @@
   "homepage": "https://gitlab.ranksoftwareinc.com/rank/yoichi",
   "private": true,
   "dependencies": {
-    "fusioncharts": "3.10.1",
+    "fusioncharts": "3.11.0",
     "flag-icon-css" : "0.8.2"
   }
 }

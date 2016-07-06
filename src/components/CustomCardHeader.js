@@ -1,10 +1,11 @@
 import React, {PropTypes} from 'react';
 
+import {Colors} from 'theme/colors';
 import CardHeader from 'material-ui/Card/CardHeader';
 
 const styles = {
   title: {
-    color: 'white',
+    color: Colors.navigation,
     fontSize: '20px',
     fontWeight: 300
   },

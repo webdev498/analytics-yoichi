@@ -18,11 +18,11 @@ const styles = {
     textAlign: 'center'
   },
   link: {
-    height: '80px',
-    lineHeight: '80px'
+    height: '72px',
+    lineHeight: '72px'
   },
   wrap: {
-    height: '80px',
+    height: '72px',
     width: '200px',
     textDecoration: 'none',
     display: 'flex',
@@ -30,7 +30,8 @@ const styles = {
     color: Colors.arctic
   },
   text: {
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
+    fontSize: '13px'
   },
   active: {
     color: Colors.turquoise,
@@ -40,9 +41,9 @@ const styles = {
 
 const links = [
   {
-    to: '/alert',
+    to: '/alerts',
     icon: 'warning',
-    text: 'alert'
+    text: 'alerts'
   },
   {
     to: '/country',
