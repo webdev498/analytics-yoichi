@@ -105,7 +105,7 @@
   overflow: hidden;
 }
 .pieCard {
-  padding: 25px 50px 20px;
+  /*padding: 60px 50px 20px;*/
 }
 .pie-chart .slice {
   position: absolute;
@@ -126,8 +126,9 @@
 .pie-chart.chart {
   width: 230px;
   height: 230px;
-  margin-left: 20px;
-  margin-top: 30px;
+  /*margin-left: 20px;
+  margin-top: 30px;*/
+  /*padding: 25px 50px 20px;*/
 }
 .pie-chart.chart .slice.one {
   clip: rect(0 230px 115px 0);

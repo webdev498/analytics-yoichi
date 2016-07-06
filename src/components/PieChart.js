@@ -222,7 +222,18 @@ class DoughnutChart extends React.Component {
     return (
       <div style={props.attributes.chartBorder}>{renderChart(props)}
         <div style={props.attributes.chartCaption}>{props.meta.title}</div>
-        <div style={{width: '100%', display: 'flex', flexWrap: 'wrap'}}>
+        <div
+          style={
+            {
+              width: '100%',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              margin: '0',
+              justifyContent: 'center',
+              height: '400'
+            }
+          }>
           <div className='pieCard'>
             <div className='pie-chart chart' style={doughnutAttributes.chart2Background}>
               <div className='slice one' style={doughnutAttributes.chart2SliceOneStyle}></div>
@@ -230,11 +241,10 @@ class DoughnutChart extends React.Component {
               <div className='chart-center'><span>{doughnutAttributes.displayPercentage2}</span></div>
             </div>
           </div>
-          <div style={{marginTop: '30px', marginRight: '60px'}}>
+          <div style={{paddingLeft: '50px', paddingRight: '50px'}}>
             <PercentageWidget iconName='desktop_mac' percentage={doughnutAttributes.percentage1} />
           </div>
-          <div>
-            <br /><br /><br />
+          <div style={{}}>
             <span style={{fontSize: '35px', color: '#2BD8D0'}}>{doughnutAttributes.displayPercentage2}</span>
             <br />
             <span style={{fontSize: '13px', color: '#6b7282'}}>{props.meta.legend[0]}</span>
