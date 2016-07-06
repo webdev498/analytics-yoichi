@@ -1,11 +1,11 @@
 import React, {PropTypes} from 'react';
-import FontIcon from 'material-ui/FontIcon';
 import {
   generateRawData,
   getIndexFromObjectName,
   getIndexFromColumnName,
   checkForUndefinedChartOptionObject
 } from 'utils/utils';
+import PercentageWidget from 'components/PercentageWidget';
 
 let highlightedColor1 = '#2BD8D0', // Blue (Default colors set)
   highlightedColor2 = '#8ABB24', // Green (Default colors set)
@@ -211,23 +211,6 @@ function renderChart(props) {
   // generatePieChart(inputArray);
 }
 
-// function loadAssetIcons() {
-//   let icon;
-//   for (let a = 0; a < 10; a++) {
-//     icon += loadAssetIcon();
-//   }
-//   return icon;
-// }
-
-function loadAssetIcon() {
-  return (
-    <FontIcon className='material-icons'
-      style={{color: '#2BD8D0'}}>
-      desktop_mac
-    </FontIcon>
-  );
-}
-
 class DoughnutChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
@@ -240,38 +223,26 @@ class DoughnutChart extends React.Component {
         <div style={props.attributes.chartCaption}>{props.meta.title}</div>
         <div style={{width: '100%', display: 'flex', flexWrap: 'wrap'}}>
           <div className='pieCard'>
-            { /* <div className='percentage1 chart'>{doughnutAttributes.displayPercentage2}</div> */ }
             <div className='pie-chart chart' style={doughnutAttributes.chart2Background}>
               <div className='slice one' style={doughnutAttributes.chart2SliceOneStyle}></div>
               <div className='slice two' style={doughnutAttributes.chart2SliceTwoStyle}></div>
               <div className='chart-center'><span>{doughnutAttributes.displayPercentage2}</span></div>
             </div>
           </div>
-          { /* <div className='card2'>
-            <div className='donut-chart chart1' style={doughnutAttributes.chart1Background}>
-              <div className='slice one' style={doughnutAttributes.chart1SliceOneStyle}></div>
-              <div className='slice two' style={doughnutAttributes.chart1SliceTwoStyle}></div>
-              <div className='chart-center'><span>{doughnutAttributes.displayPercentage1}</span></div>
-            </div>
-          </div> */ }
           <div style={{marginTop: '30px', marginRight: '60px'}}>
-            {loadAssetIcon()}<br />
-            {loadAssetIcon()}<br />
-            {loadAssetIcon()}<br />
-            {loadAssetIcon()}<br />
-            {loadAssetIcon()}<br />
-            {loadAssetIcon()}<br />
-            {loadAssetIcon()}<br />
-            {loadAssetIcon()}<br />
-            {loadAssetIcon()}<br />
-            {loadAssetIcon()}
+            <PercentageWidget iconName='desktop_mac' percentage={doughnutAttributes.displayPercentage1} />
           </div>
-          <div id='connectionsPercentage'><br /><br />
+          <div>
+            <br /><br /><br />
             <span style={{fontSize: '35px', color: '#2BD8D0'}}>{doughnutAttributes.displayPercentage2}</span>
-            <br /><span style={{fontSize: '13px', color: '#6b7282'}}>{props.meta.legend[0]}</span>
-            <br /><span style={{fontSize: '13px', color: '#cbcbd1'}}>{props.meta.legend[1]}</span>
-            <br /><span style={{fontSize: '35px', color: '#2BD8D0'}}>{doughnutAttributes.displayPercentage1}</span>
-            <br /><span style={{fontSize: '13px', color: '#6b7282'}}>{props.meta.legend[2]}</span>
+            <br />
+            <span style={{fontSize: '13px', color: '#6b7282'}}>{props.meta.legend[0]}</span>
+            <br /><br />
+            <span style={{fontSize: '13px', color: '#cbcbd1'}}>{props.meta.legend[1]}</span>
+            <br /><br />
+            <span style={{fontSize: '35px', color: '#2BD8D0'}}>{doughnutAttributes.displayPercentage1}</span>
+            <br />
+            <span style={{fontSize: '13px', color: '#6b7282'}}>{props.meta.legend[2]}</span>
           </div>
         </div>
       </div>

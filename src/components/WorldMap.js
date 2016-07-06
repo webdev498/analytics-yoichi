@@ -43,16 +43,24 @@ function generateChartDataSource(rawData, props) {
       else {
         let countryCode = rows[a][0];
         if (currentChartData.shapeid !== 'circle') {
-          obj1.shapeid = currentChartData.shapeid;
-          obj1.label = rows[a][3];
-          obj1.id = getCountryIDByCountryCode(countryCode) + markerIdSuffix;
-          obj1.x = rows[a][1];
-          obj1.y = rows[a][2];
-          obj1.value = rows[a][4];
-          obj1.alpha = currentChartData.alpha;
+          // obj1.shapeid = currentChartData.shapeid;
+          // obj1.label = rows[a][3];
+          // obj1.id = getCountryIDByCountryCode(countryCode) + markerIdSuffix;
+          // obj1.x = rows[a][1];
+          // obj1.y = rows[a][2];
+          // obj1.value = rows[a][4];
+          // obj1.alpha = currentChartData.alpha;
 
-          markersItemsObject.push(obj1);
-          markerIdSuffix = markerIdSuffix + 1;
+          // markersItemsObject.push(obj1);
+          // markerIdSuffix = markerIdSuffix + 1;
+
+          obj1.id = getCountryIDByCountryCode(countryCode);
+          obj1.value = rows[a][4].toString();
+          if (rows[a][4] !== null) {
+            connectionsValues[valueIndex] = rows[a][4];
+            valueIndex++;
+          }
+          dataObject.push(obj1);
         }
         if (currentChartData.shapeid === 'circle') {
           obj1.id = getCountryIDByCountryCode(countryCode);
