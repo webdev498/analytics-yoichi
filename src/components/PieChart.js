@@ -89,7 +89,8 @@ export function generateDoughnutChart(inputArray) {
     percentage1Color: percentage1Color,
     percentage2Color: percentage2Color,
     displayPercentage1: displayPercentage1,
-    displayPercentage2: displayPercentage2
+    displayPercentage2: displayPercentage2,
+    percentage1: percentage1.toString()
   };
   return doughnutAttributes;
 }
@@ -230,7 +231,7 @@ class DoughnutChart extends React.Component {
             </div>
           </div>
           <div style={{marginTop: '30px', marginRight: '60px'}}>
-            <PercentageWidget iconName='desktop_mac' percentage={doughnutAttributes.displayPercentage1} />
+            <PercentageWidget iconName='desktop_mac' percentage={doughnutAttributes.percentage1} />
           </div>
           <div>
             <br /><br /><br />

@@ -2,7 +2,7 @@ export const PebbleColor = '#6b7282';
 export const GarnetColor = '#24293d';
 export const GrapeColor = '#444c63';
 export const SmokeColor = '#cbcbd1';
-export const CloudColor = '#f0f0f2';
+export const CloudColor = '#e5e5ea';// f0f0f2
 export const ArcticColor = '#ffffff';
 export const TurquoiseColor = '#2bd8d0';
 
