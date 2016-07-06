@@ -6,4 +6,4 @@ export const responseType = 'token';
 export const clientId = 'taf_dashboard';
 export const redirectUri = window.global.redirectUri || 'http://localhost:3000/#/dashboard?';
 
-export const defaultRoute = window.global.defaultRoute || '/alert';
+export const defaultRoute = window.global.defaultRoute || '/alerts';

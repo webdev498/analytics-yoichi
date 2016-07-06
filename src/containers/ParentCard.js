@@ -86,9 +86,15 @@ class ParentCard extends React.Component {
 
   getData() {
     const { props } = this;
-    const {api, query} = props.meta;
+    const {api} = props.meta;
 
-    props.fetchApiData(props.id, api, query);
+    // TODO find a non hacky way to do this.
+    if (props.type === 'AlertDetails') {
+      api.queryParams.date = props.params.date;
+      api.pathParams = Object.assign({}, api.pathParams, props.params);
+    }
+
+    props.fetchApiData(props.id, api);
   }
 
   componentDidMount() {

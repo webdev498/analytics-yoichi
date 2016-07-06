@@ -63,13 +63,17 @@ export function isLoggedIn(globalState, query, store) {
   return Cookies.get('access_token') && Cookies.get('token_type');
 }
 
+export function logoutUtil(dispatch) {
+  // delete the auth cookies
+  Cookies('access_token', undefined);
+  Cookies('token_type', undefined);
+
+  // redirect to login page
+  dispatch(push('/'));
+}
+
 export function logout() {
   return function(dispatch) {
-    // delete the auth cookies
-    Cookies('access_token', undefined);
-    Cookies('token_type', undefined);
-
-    // redirect to login page
-    dispatch(push('/'));
+    logoutUtil(dispatch);
   };
 }

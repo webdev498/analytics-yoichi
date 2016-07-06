@@ -56,7 +56,7 @@ function getUrl(api, duration) {
     queryString += '?';
 
     keys.forEach((key) => {
-      if (key === 'window' || key === 'timeShift') {
+      if ((key === 'window' || key === 'timeShift') && (query[key] === '')) {
         queryString += key + '=' + duration + '&';
       }
       else {
@@ -70,7 +70,7 @@ function getUrl(api, duration) {
   return baseUrl + url + queryString;
 }
 
-export function fetchApiData(id, api, query) {
+export function fetchApiData(id, api) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
 

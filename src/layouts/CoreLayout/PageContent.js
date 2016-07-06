@@ -34,6 +34,7 @@ class PageContent extends React.Component {
   }
 
   renderChildren() {
+    const {props} = this;
     const {layout} = this.props;
     // const {layout} = staticLayout;
 
@@ -65,6 +66,11 @@ class PageContent extends React.Component {
         }
 
         const componentElm = elm({...componentDetails.attributes}, grandChildrenArray);
+
+        // if the url of the page has dynamic parameters, pass this to parent card for api requests.
+        if (props.params) {
+          componentDetails.params = props.params;
+        }
         const ParentCardElement = React.createElement(ParentCard, {...componentDetails}, componentElm);
 
         children.push(ParentCardElement);
