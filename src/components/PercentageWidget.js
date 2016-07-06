@@ -15,7 +15,7 @@ class PercentageWidget extends React.Component {
     const style = {
       'overlayDiv': {
         height: '14px',
-        width: '22px',
+        width: '23px',
         position: 'absolute',
         zIndex: '10',
         backgroundColor: Colors.cloud,
