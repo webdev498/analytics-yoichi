@@ -41,7 +41,7 @@ function generateChartDataSource(rawData, props) {
         else {
           let countryCode = rows[a][columnIndexArray[0]],
             value = rows[a][columnIndexArray[3]];
-          if (currentChartData.connection !== 'secure') {
+          if (currentChartData.connection === 'malicious') {
             obj1.id = getCountryIDByCountryCode(countryCode);
             obj1.value = value.toString();
             if (value !== null) {

@@ -82,7 +82,7 @@ class PageContent extends React.Component {
         }
 
         const componentElm = elm({...componentDetails.attributes}, grandChildrenArray);
-        console.log(componentElm);
+        // console.log(componentElm);
         const ParentCardElement = React.createElement(ParentCard, {...componentDetails}, componentElm);
 
         children.push(ParentCardElement);

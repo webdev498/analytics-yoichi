@@ -7,7 +7,8 @@ import {
 } from 'utils/utils';
 
 export function generateDataArray(columnIndexArray, rowsArray) {
-  let dataset = [];
+  let dataset = [],
+    annotationItems = [];
   if (columnIndexArray.length !== 0) {
     for (let d = 0, rowsLen = rowsArray.length; d < rowsLen; d++) {
       let obj1 = {};
@@ -18,9 +19,46 @@ export function generateDataArray(columnIndexArray, rowsArray) {
       obj1.value = rowsArray[d][columnIndexArray[1]];
       obj1.toolText = rowsArray[d][columnIndexArray[0]] + ', ' + rowsArray[d][columnIndexArray[1]];
       dataset.push(obj1);
+
+      annotationItems = annotationItems.concat([
+        {
+          'id': 'datasetline' + d + '-1',
+          'type': 'line',
+          'x': '$dataset.0.set.' + d + '.STARTX',
+          'y': '$dataset.0.set.' + d + '.STARTY',
+          'toX': '$canvasEndX',
+          'toY': '$dataset.0.set.' + d + '.STARTY',
+          'thickness': '1',
+          'color': '#E5E5EA'
+        },
+        {
+          'id': 'datasetline' + d + '-2',
+          'type': 'line',
+          'x': '$dataset.0.set.' + d + '.ENDX',
+          'y': '$dataset.0.set.' + d + '.ENDY',
+          'toX': '$canvasEndX',
+          'toY': '$dataset.0.set.' + d + '.ENDY',
+          'thickness': '1',
+          'color': '#E5E5EA'
+        },
+        {
+          'id': 'datasetlabel' + d,
+          'type': 'text',
+          'text': obj1.label,
+          'align': 'left',
+          'x': '$chartEndX - 146',
+          'y': '$dataset.0.set.' + d + '.CenterY',
+          'fontSize': '11',
+          'color': '#6B7282',
+          'font': 'Open Sans, sans-serif'
+        }
+      ]);
     }
   }
-  return dataset;
+  return {
+    dataset: dataset,
+    annotationItems: annotationItems
+  };
 }
 
 export function generateChartDataSource(rawData, props) {
@@ -32,7 +70,9 @@ export function generateChartDataSource(rawData, props) {
     top10TotalValue = 0,
     top10CountValue = 0,
     averageValue = '',
-    dataset = [];
+    dataset = [],
+    annotationItems = [],
+    dataArray = [];
 
   for (let i = 0; i < fieldMapping.length; i++) {
     let currentChartData = fieldMapping[i],
@@ -96,11 +136,15 @@ export function generateChartDataSource(rawData, props) {
         }
       }
       columnIndexArray = [0, 1]; // Need to generate this index array dynamically. For now, kept it as hardcode
-      dataset = generateDataArray(columnIndexArray, newRawData);
+      dataArray = generateDataArray(columnIndexArray, newRawData);
+      dataset = dataArray.dataset;
+      annotationItems = dataArray.annotationItems;
     }
     else {
       columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
-      dataset = generateDataArray(columnIndexArray, rows);
+      dataArray = generateDataArray(columnIndexArray, rows);
+      dataset = dataArray.dataset;
+      annotationItems = dataArray.annotationItems;
 
       if (displayTopFive) {
         dataset.sort(function(a, b) {
@@ -113,23 +157,28 @@ export function generateChartDataSource(rawData, props) {
 
   const dataSourceObject = {
     chart: Object.assign({
+      'paletteColors': '#2BD8D0,#51DFD8,#71E5DF, #97ECE8,#BAF2F0, #DBF8F7',
       'bgColor': '#ffffff',
-      'showborder': '0',
-      'borderThickness': '0',
+      'showBorder': '0',
       'showCanvasBorder': '0',
       'usePlotGradientColor': '0',
-      'plotBorderAlpha': '10',
       'placeValuesInside': '1',
-      'valueFontColor': '#111111',
-      'showAxisLines': '0',
-      'axisLineAlpha': '25',
-      'numDivLines': '9',
-      // 'divLineAlpha': '10',
+      'valueFontColor': '#444C63',
+      'showAxisLines': '1',
+      'axisLineAlpha': '15',
       'alignCaptionWithCanvas': '0',
       'showAlternateVGridColor': '0',
       'captionFontSize': '14',
-      'subcaptionFontSize': '12',
+      'subcaptionFontSize': '14',
       'subcaptionFontBold': '0',
+      'showLabels': '0',
+      'divLineAlpha': '50',
+      'divLineColor': '#E5E5EA',
+      'plotSpacePercent': '40',
+      'divLineThickness': '1',
+      'plotBorderAlpha': '0',
+      'chartRightMargin': '150',
+      'animation': '0',
       'toolTipColor': '#ffffff',
       'toolTipBorderThickness': '0',
       'toolTipBgColor': '#000000',
@@ -138,11 +187,11 @@ export function generateChartDataSource(rawData, props) {
       'toolTipPadding': '5',
       'showYAxisValues': '0',
       'showValues': '1',
-      'paletteColors': '#2BD8D0,#51DFD8,#71E5DF, #97ECE8,#BAF2F0, #DBF8F7',
       'xAxisNameFontSize': '14',
       'yAxisNameFontSize': '14',
       'labelFontSize': '13'
-    }, chartOptions)
+    }, chartOptions),
+    'annotations': {'groups': [{'items': annotationItems}]}
   };
 
   if (dataset.length > 0) dataSourceObject.data = dataset;
@@ -193,6 +242,7 @@ class HorizontalBarChart extends React.Component {
       <div style={props.attributes.chartBorder}>
         <div style={props.attributes.chartCaption}>{props.meta.title}</div>
         <div id={props.attributes.id}>{renderChart(props)}</div>
+        <div id={props.attributes.id1}></div>
       </div>
     );
   }
