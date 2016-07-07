@@ -23,8 +23,7 @@ const styles = {
   title: {
     textTransform: 'capitalize',
     fontSize: '21px',
-    fontWeight: 300,
-    whiteSpace: 'nowrap'
+    fontWeight: 300
   },
   iconWrap: {
     marginLeft: 'auto',
@@ -60,7 +59,7 @@ const styles = {
     fontWeight: 600
   },
   clearIcon: {
-    color: '#F7F7F9',
+    color: '#fff',
     cursor: 'pointer',
     fontSize: '21px',
     height: '35px',
@@ -110,9 +109,8 @@ class ParentCard extends React.Component {
 
   getElement() {
     const {props} = this;
-    console.log(props);
     return (
-      <div style={{border: '1px solid red'}}> {React.cloneElement(props.children, {...props})} </div>
+      <div> {React.cloneElement(props.children, {...props})} </div>
     );
   }
 
@@ -199,7 +197,7 @@ class ParentCard extends React.Component {
               </FontIcon>
             </div>
           </header>
-          <div style={{border: '1px solid blue'}}> {React.cloneElement(props.children, {...childProps})} </div>
+          <div> {React.cloneElement(props.children, {...childProps})} </div>
         </Card>
       );
     }

@@ -7,7 +7,6 @@ import {fetchLayoutData} from 'actions/core';
 
 import { connect } from 'react-redux';
 import staticLayout from 'layout';
-import {isUndefined} from 'utils/utils';
 
 const styles = {
   content: {
@@ -34,6 +33,32 @@ class PageContent extends React.Component {
     }
   }
 
+  renderComponent(componentDetails) {
+    const elm = React.createFactory(require('components/' + componentDetails.type).default, null);
+
+    const childrenArray = [];
+
+    if (componentDetails.children) {
+      const children = componentDetails.children;
+
+      for (let k = 0, childrenLen = children.length; k < childrenLen; k++) {
+        const childDetails = children[k];
+
+        childrenArray.push(this.renderComponent(childDetails));
+      }
+    }
+
+    const componentElm = elm({...componentDetails}, childrenArray);
+
+    if (componentDetails.meta.parentWrap === false) {
+      return componentElm;
+    }
+    else {
+      const ParentCardElement = React.createElement(ParentCard, {...componentDetails}, componentElm);
+      return ParentCardElement;
+    }
+  }
+
   renderChildren() {
     // const {layout} = this.props;
     const {layout} = staticLayout;
@@ -47,47 +72,11 @@ class PageContent extends React.Component {
       for (let j = 0, numberOfColumns = section.length; j < numberOfColumns; j++) {
         let componentDetails = section[j];
 
-        const elm = React.createFactory(require('components/' + componentDetails.type).default, null);
-
-        const grandChildrenArray = [];
-
-        if (componentDetails.children) {
-          // console.log(componentDetails);
-          const grandChildren = componentDetails.children;
-
-          for (let k = 0, grandChildrenLen = grandChildren.length; k < grandChildrenLen; k++) {
-            const grandChildElm = grandChildren[k];
-
-            if (componentDetails.name === 'Compound') {
-              const elmSub = React.createFactory(require('components/' + grandChildElm.type).default);
-              const componentElmSub = elmSub({...grandChildElm}, []);
-              grandChildrenArray.push(componentElmSub);
-
-              if (componentDetails.children.childCompound && componentDetails.children.children) {
-                // console.log(componentDetails);
-                const grandChildren = componentDetails.children.children;
-
-                for (let k = 0, grandChildrenLen = grandChildren.length; k < grandChildrenLen; k++) {
-                  const grandChildElm = grandChildren[k];
-
-                  if (componentDetails.children.name === 'Compound') {
-                    const elmSub = React.createFactory(require('components/' + grandChildElm.type).default);
-                    const componentElmSub = elmSub({...grandChildElm}, []);
-                    grandChildrenArray.push(componentElmSub);
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        const componentElm = elm({...componentDetails.attributes}, grandChildrenArray);
-        // console.log(componentElm);
-        const ParentCardElement = React.createElement(ParentCard, {...componentDetails}, componentElm);
+        const ParentCardElement = this.renderComponent(componentDetails);
 
         children.push(ParentCardElement);
       }
-      // console.log(children.length);
+
       const currentSection = React.DOM.section(
         {
           style: {display: 'flex', marginBottom: '33px', justifyContent: 'space-between'}

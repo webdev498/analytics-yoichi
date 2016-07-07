@@ -11,7 +11,8 @@ import {baseUrl} from 'config';
 export function requestApiData(id, api) {
   return {
     type: REQUEST_API_DATA,
-    id
+    id,
+    api
   };
 }
 
@@ -81,7 +82,8 @@ export function fetchApiData(id, api) {
   return function(dispatch, getState) {
     const currentDuration = getState().apiData.get('duration');
 
-    dispatch(requestApiData(id));
+    console.log('api', api);
+    dispatch(requestApiData(id, api));
 
     const defaultHeaders = Object.assign({
       'Authorization': `${tokenType} ${accessToken}`
