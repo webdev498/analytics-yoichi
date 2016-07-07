@@ -23,7 +23,8 @@ const styles = {
   title: {
     textTransform: 'capitalize',
     fontSize: '21px',
-    fontWeight: 300
+    fontWeight: 300,
+    whiteSpace: 'nowrap'
   },
   iconWrap: {
     marginLeft: 'auto',
@@ -59,7 +60,7 @@ const styles = {
     fontWeight: 600
   },
   clearIcon: {
-    color: '#fff',
+    color: '#F7F7F9',
     cursor: 'pointer',
     fontSize: '21px',
     height: '35px',
