@@ -162,7 +162,7 @@ class WorldMap extends React.Component {
   render() {
     const {props} = this;
     return (
-      <div style={{width: '70%'}}>
+      <div>
         <div style={{fontSize: '14px', color: '#6b7282', fontWeight: '600', position: 'absolute'}}>
           {props.meta.subTitle}
         </div>
