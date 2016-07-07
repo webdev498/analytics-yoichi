@@ -26,7 +26,7 @@ function getChildCompoundChildren(child, props) {
 class CompoundCard extends React.Component {
   render() {
     const {props} = this;
-    console.log(props);
+    // console.log(props);
     return (
       <div style={{width: '100%', display: 'flex', flexWrap: 'nowrap'}}>
         {

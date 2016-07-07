@@ -21,42 +21,44 @@ function generateChartDataSource(rawData, props) {
       columnIndexArray = [];
 
     // Calculate column index from API response
-    // for (let a = 0; a < currentChartData.columns.length; a++) {
-    //   for (let c = 0; c < columns.length; c++) {
-    //     if (currentChartData.columns[a] === columns[c].name) {
-    //       columnIndexArray[a] = c;
-    //       break;
-    //     }
-    //   }
-    // }
+    for (let a = 0; a < currentChartData.columns.length; a++) {
+      for (let c = 0; c < columns.length; c++) {
+        if (currentChartData.columns[a] === columns[c].name) {
+          columnIndexArray[a] = c;
+          break;
+        }
+      }
+    }
 
     // Get column data for x-axis
-    // if (columnIndexArray.length !== 0) {
-    let valueIndex = 0;
-    for (let a = 0, rowsLen = rows.length; a < rowsLen; a++) {
-      let obj1 = {};
-      if (rows[a][1] === 'N/A' || rows[a][2] === 'N/A') {
-        // continue;
-      }
-      else {
-        let countryCode = rows[a][0];
-        if (currentChartData.connection !== 'secure') {
-          obj1.id = getCountryIDByCountryCode(countryCode);
-          obj1.value = rows[a][4].toString();
-          if (rows[a][4] !== null) {
-            connectionsValues[valueIndex] = rows[a][4];
-            valueIndex++;
-          }
-          dataObject.push(obj1);
+    if (columnIndexArray.length !== 0) {
+      let valueIndex = 0;
+      for (let a = 0, rowsLen = rows.length; a < rowsLen; a++) {
+        let obj1 = {};
+        if (rows[a][columnIndexArray[1]] === 'N/A' || rows[a][columnIndexArray[2]] === 'N/A') {
+          // continue;
         }
-        if (currentChartData.connection === 'secure') {
-          obj1.id = getCountryIDByCountryCode(countryCode);
-          obj1.value = rows[a][4].toString();
-          if (rows[a][4] !== null) {
-            connectionsValues[valueIndex] = rows[a][4];
-            valueIndex++;
+        else {
+          let countryCode = rows[a][columnIndexArray[0]],
+            value = rows[a][columnIndexArray[3]];
+          if (currentChartData.connection !== 'secure') {
+            obj1.id = getCountryIDByCountryCode(countryCode);
+            obj1.value = value.toString();
+            if (value !== null) {
+              connectionsValues[valueIndex] = value;
+              valueIndex++;
+            }
+            dataObject.push(obj1);
           }
-          dataObject.push(obj1);
+          if (currentChartData.connection === 'secure') {
+            obj1.id = getCountryIDByCountryCode(countryCode);
+            obj1.value = value.toString();
+            if (value !== null) {
+              connectionsValues[valueIndex] = value;
+              valueIndex++;
+            }
+            dataObject.push(obj1);
+          }
         }
       }
     }
