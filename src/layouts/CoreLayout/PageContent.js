@@ -6,7 +6,7 @@ import Loader from 'components/Loader';
 import {fetchLayoutData} from 'actions/core';
 
 import { connect } from 'react-redux';
-// import staticLayout from 'layout';
+import staticLayout from 'layout';
 
 const styles = {
   content: {
@@ -68,9 +68,9 @@ class PageContent extends React.Component {
         const componentElm = elm({...componentDetails.attributes}, grandChildrenArray);
 
         // if the url of the page has dynamic parameters, pass this to parent card for api requests.
-        if (props.params) {
-          componentDetails.params = props.params;
-        }
+        componentDetails.params = props.params;
+        componentDetails.location = props.location;
+
         const ParentCardElement = React.createElement(ParentCard, {...componentDetails}, componentElm);
 
         children.push(ParentCardElement);
