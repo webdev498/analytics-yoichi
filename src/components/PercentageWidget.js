@@ -34,10 +34,49 @@ class PercentageWidget extends React.Component {
 
     let percentage = props.percentage;
 
-    let firstDigit = parseInt(percentage.charAt(0)),
-      secondDigit = parseInt(percentage.charAt(1));
+    if (percentage.length === 2) {
+      let firstDigit = parseInt(percentage.charAt(0)),
+        secondDigit = parseInt(percentage.charAt(1));
 
-    if (parseInt(iconIndex) <= firstDigit) {
+      if (parseInt(iconIndex) <= firstDigit) {
+        style.overlayDiv = Object.assign(style.overlayDiv,
+          {
+            backgroundColor: Colors.turquoise
+          }
+        );
+      }
+
+      if (parseInt(iconIndex) > firstDigit) {
+        style.overlayDiv = Object.assign(style.overlayDiv,
+          {
+            borderTop: '2px solid ' + Colors.cloud,
+            borderLeft: '2px solid ' + Colors.cloud,
+            borderRight: '2px solid ' + Colors.cloud,
+            backgroundColor: Colors.cloud
+          }
+        );
+        style.icon = Object.assign(style.icon,
+          {
+            color: Colors.cloud
+          }
+        );
+      }
+
+      if ((parseInt(percentage) % 10) !== 0 && parseInt(iconIndex) === (firstDigit + 1)) {
+        style.overlayDiv = Object.assign(style.overlayDiv,
+          {
+            borderBottom: (secondDigit + 1) + 'px solid ' + Colors.turquoise
+          }
+        );
+        style.icon = Object.assign(style.icon,
+          {
+            color: Colors.turquoise
+          }
+        );
+      }
+    }
+
+    if (parseInt(percentage) >= 100) {
       style.overlayDiv = Object.assign(style.overlayDiv,
         {
           backgroundColor: Colors.turquoise
@@ -45,33 +84,34 @@ class PercentageWidget extends React.Component {
       );
     }
 
-    if (parseInt(iconIndex) > firstDigit) {
-      style.overlayDiv = Object.assign(style.overlayDiv,
-        {
-          borderTop: '2px solid ' + Colors.cloud,
-          borderLeft: '2px solid ' + Colors.cloud,
-          borderRight: '2px solid ' + Colors.cloud,
-          backgroundColor: Colors.cloud
-        }
-      );
-      style.icon = Object.assign(style.icon,
-        {
-          color: Colors.cloud
-        }
-      );
-    }
-
-    if (parseInt(iconIndex) === (firstDigit + 1)) {
-      style.overlayDiv = Object.assign(style.overlayDiv,
-        {
-          borderBottom: (secondDigit + 1) + 'px solid ' + Colors.turquoise
-        }
-      );
-      style.icon = Object.assign(style.icon,
-        {
-          color: Colors.turquoise
-        }
-      );
+    if (percentage.length === 1) {
+      if (parseInt(iconIndex) > 1) {
+        style.overlayDiv = Object.assign(style.overlayDiv,
+          {
+            borderTop: '2px solid ' + Colors.cloud,
+            borderLeft: '2px solid ' + Colors.cloud,
+            borderRight: '2px solid ' + Colors.cloud,
+            backgroundColor: Colors.cloud
+          }
+        );
+        style.icon = Object.assign(style.icon,
+          {
+            color: Colors.cloud
+          }
+        );
+      }
+      if (parseInt(iconIndex) === 1) {
+        style.overlayDiv = Object.assign(style.overlayDiv,
+          {
+            borderBottom: (parseInt(percentage) + 1) + 'px solid ' + Colors.turquoise
+          }
+        );
+        style.icon = Object.assign(style.icon,
+          {
+            color: Colors.turquoise
+          }
+        );
+      }
     }
 
     return (
