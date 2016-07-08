@@ -259,7 +259,11 @@ class WorldMap extends React.Component {
               <div style={{backgroundColor: '#DBF8F7', width: '20px', height: '12px'}}></div>
             </div>
           </div>
-          <div style={{marginLeft: '40px'}}>
+          <div style={{marginTop: '30px', 'marginLeft': '-120px'}}>
+            <span style={{fontSize: '11px', color: '#6b7282'}}>More</span>
+            <span style={{fontSize: '11px', color: '#6b7282', marginLeft: '70px'}}>Less</span>
+          </div>
+          <div style={{marginLeft: '30px'}}>
             <span style={{fontSize: '11px', color: '#6b7282'}}>Malicious Connections</span><br />
             <div style={{display: 'flex', flexWrap: 'wrap'}}>
               <div style={{backgroundColor: '#F69275', width: '20px', height: '12px'}}></div>
@@ -269,6 +273,10 @@ class WorldMap extends React.Component {
               <div style={{backgroundColor: '#FCDBD2', width: '20px', height: '12px'}}></div>
               <div style={{backgroundColor: '#FEEDE8', width: '20px', height: '12px'}}></div>
             </div>
+          </div>
+          <div style={{marginTop: '30px', 'marginLeft': '-120px'}}>
+            <span style={{fontSize: '11px', color: '#6b7282'}}>More</span>
+            <span style={{fontSize: '11px', color: '#6b7282', marginLeft: '70px'}}>Less</span>
           </div>
         </div>
       </div>
