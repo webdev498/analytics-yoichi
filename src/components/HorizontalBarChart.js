@@ -194,7 +194,8 @@ export function generateChartDataSource(rawData, props) {
       'showValues': '1',
       'xAxisNameFontSize': '14',
       'yAxisNameFontSize': '14',
-      'labelFontSize': '13'
+      'labelFontSize': '13',
+      'chartLeftMargin': '0'
     }, chartOptions),
     'annotations': {'groups': [{'items': annotationItems}]}
   };
