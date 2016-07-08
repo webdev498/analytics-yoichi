@@ -146,17 +146,22 @@ export function generateChartDataSource(rawData, props) {
       annotationItems = dataArray.annotationItems;
     }
     else {
-      columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
-      dataArray = generateDataArray(columnIndexArray, rows, displayTopFive);
-      dataset = dataArray.dataset;
-      annotationItems = dataArray.annotationItems;
+      // if (currentChartData.reportId === 'taf_dest_countries,taf_dest_bad_reputation_countries' ||
+      //  currentChartData.reportId === 'taf_source_countries,taf_source_bad_reputation_countries') {
+      // }
+      // else {
+        columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
+        dataArray = generateDataArray(columnIndexArray, rows, displayTopFive);
+        dataset = dataArray.dataset;
+        annotationItems = dataArray.annotationItems;
 
-      if (displayTopFive) {
-        dataset.sort(function(a, b) {
-          return b.value - a.value;
-        });
-        dataset = dataset.slice(0, 5);
-      }
+        if (displayTopFive) {
+          dataset.sort(function(a, b) {
+            return b.value - a.value;
+          });
+          dataset = dataset.slice(0, 5);
+        }
+      // }
     }
   }
 
