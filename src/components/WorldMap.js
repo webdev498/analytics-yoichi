@@ -242,10 +242,10 @@ class WorldMap extends React.Component {
       ];
     return (
       <div>
-        <div style={{fontSize: '14px', color: '#6b7282', fontWeight: '600', position: 'absolute'}}>
+        <div style={{fontSize: '14px', color: '#6b7282', fontWeight: '600', position: 'absolute', marginTop: '30px'}}>
           {props.meta.subTitle}
         </div>
-        <div id={props.attributes.id} style={{marginTop: '-40px'}}></div>
+        <div id={props.attributes.id} style={{'marginTop': '-65px'}}></div>
         {this.renderChart(props, secureColors, maliciousColors)}
         <div style={{display: 'flex', flexWrap: 'wrap', marginTop: '-40px'}}>
           <div>

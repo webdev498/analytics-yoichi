@@ -3,10 +3,11 @@ import {
   generateRawData,
   getColumnIndexArrayFromColumnName,
   getIndexFromColumnName,
-  getIndexFromObjectName
+  getIndexFromObjectName,
+  isUndefined
 } from 'utils/utils';
 
-export function generateDataArray(columnIndexArray, rowsArray) {
+export function generateDataArray(columnIndexArray, rowsArray, displayTopFive) {
   let dataset = [],
     annotationItems = [];
   if (columnIndexArray.length !== 0) {
@@ -53,6 +54,10 @@ export function generateDataArray(columnIndexArray, rowsArray) {
           'font': 'Open Sans, sans-serif'
         }
       ]);
+
+      if (!isUndefined(displayTopFive) && displayTopFive && d === 4) {
+        break;
+      }
     }
   }
   return {
@@ -136,13 +141,13 @@ export function generateChartDataSource(rawData, props) {
         }
       }
       columnIndexArray = [0, 1]; // Need to generate this index array dynamically. For now, kept it as hardcode
-      dataArray = generateDataArray(columnIndexArray, newRawData);
+      dataArray = generateDataArray(columnIndexArray, newRawData, displayTopFive);
       dataset = dataArray.dataset;
       annotationItems = dataArray.annotationItems;
     }
     else {
       columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
-      dataArray = generateDataArray(columnIndexArray, rows);
+      dataArray = generateDataArray(columnIndexArray, rows, displayTopFive);
       dataset = dataArray.dataset;
       annotationItems = dataArray.annotationItems;
 
@@ -238,7 +243,7 @@ class HorizontalBarChart extends React.Component {
 
   render() {
     const {props} = this;
-    console.log(props);
+    // console.log(props);
     return (
       <div style={props.attributes.chartBorder}>
         <div style={props.attributes.chartCaption}>{props.meta.title}</div>
