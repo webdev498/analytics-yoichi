@@ -25,9 +25,9 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    margin: '0',
+    margin: '0px',
     justifyContent: 'center',
-    height: '400'
+    height: '400px'
   }
 };
 
