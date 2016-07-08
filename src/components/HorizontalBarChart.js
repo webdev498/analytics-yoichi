@@ -199,7 +199,13 @@ export function generateChartDataSource(rawData, props) {
     'annotations': {'groups': [{'items': annotationItems}]}
   };
 
-  if (dataset.length > 0) dataSourceObject.data = dataset;
+  if (dataset.length < 5) {
+    dataSourceObject.chart = Object.assign(dataSourceObject.chart, {'Plotspacepercent': '100'});
+  }
+
+  if (dataset.length > 0) {
+    dataSourceObject.data = dataset;
+  }
 
   if (showTrendLines && averageValue !== undefined && averageValue !== '') {
     dataSourceObject.trendlines = trendLines;
