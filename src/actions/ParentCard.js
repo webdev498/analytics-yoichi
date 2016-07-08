@@ -82,7 +82,6 @@ export function fetchApiData(id, api) {
   return function(dispatch, getState) {
     const currentDuration = getState().apiData.get('duration');
 
-    console.log('api', api);
     dispatch(requestApiData(id, api));
 
     const defaultHeaders = Object.assign({
