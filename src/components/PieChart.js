@@ -30,54 +30,25 @@ export function generatePieChart(inputArray) {
       countValue: inputArray.countValue,
       totalValue: inputArray.top10CountValue
     },
-    // doughnutAttributes1 = calculateDoughnutAttributes(doughnutInputArray1, 1),
+    doughnutAttributes1 = calculatePieChartAttributes(doughnutInputArray1, 1),
     doughnutInputArray2 = {
       countValue: inputArray.totalValue,
       totalValue: inputArray.top10TotalValue
     },
-    // doughnutAttributes2 = calculateDoughnutAttributes(doughnutInputArray2, 2),
+    doughnutAttributes2 = calculatePieChartAttributes(doughnutInputArray2, 2),
     percentage1 = Math.round((inputArray.top10CountValue / parseInt(inputArray.countValue)) * 100, 2),
     percentage2 = Math.round((inputArray.top10TotalValue / parseInt(inputArray.totalValue)) * 100, 2),
     displayPercentage1 = percentage1.toString() + '%',
     displayPercentage2 = percentage2.toString() + '%',
     percentage2Color = {fontWeight: 'bold', color: highlightedColor1},
-    percentage1Color = {fontWeight: 'bold', color: highlightedColor2};
+    percentage1Color = {fontWeight: 'bold', color: highlightedColor2},
+    style = {percentageText: {}};
 
-    console.log(displayPercentage1, displayPercentage2);
-
-  // doughnutAttributes = {
-  //   chart1Background: doughnutAttributes1.chartBackground,
-  //   chart1SliceOneStyle: doughnutAttributes1.chartSliceOneStyle,
-  //   chart1SliceTwoStyle: doughnutAttributes1.chartSliceTwoStyle,
-  //   chart2Background: doughnutAttributes2.chartBackground,
-  //   chart2SliceOneStyle: doughnutAttributes2.chartSliceOneStyle,
-  //   chart2SliceTwoStyle: doughnutAttributes2.chartSliceTwoStyle,
-  //   percentage1Color: percentage1Color,
-  //   percentage2Color: percentage2Color,
-  //   displayPercentage1: displayPercentage1,
-  //   displayPercentage2: displayPercentage2
-  // };
-  return doughnutAttributes;
-}
-
-export function generateDoughnutChart(inputArray) {
-  doughnutAttributes = {}; // This initialization is required
-  const doughnutInputArray1 = {
-      countValue: inputArray.countValue,
-      totalValue: inputArray.top10CountValue
-    },
-    doughnutAttributes1 = calculateDoughnutAttributes(doughnutInputArray1, 1),
-    doughnutInputArray2 = {
-      countValue: inputArray.totalValue,
-      totalValue: inputArray.top10TotalValue
-    },
-    doughnutAttributes2 = calculateDoughnutAttributes(doughnutInputArray2, 2),
-    percentage1 = Math.round((inputArray.top10CountValue / parseInt(inputArray.countValue)) * 100, 2),
-    percentage2 = Math.round((inputArray.top10TotalValue / parseInt(inputArray.totalValue)) * 100, 2),
-    displayPercentage1 = percentage1.toString() + '%',
-    displayPercentage2 = percentage2.toString() + '%',
-    percentage2Color = {fontWeight: 'bold', color: highlightedColor1},
-    percentage1Color = {fontWeight: 'bold', color: highlightedColor2};
+  if (percentage2 === 100) {
+    style.percentageText = {
+      paddingLeft: '0px'
+    };
+  }
 
   doughnutAttributes = {
     chart1Background: doughnutAttributes1.chartBackground,
@@ -90,12 +61,13 @@ export function generateDoughnutChart(inputArray) {
     percentage2Color: percentage2Color,
     displayPercentage1: displayPercentage1,
     displayPercentage2: displayPercentage2,
-    percentage1: percentage1.toString()
+    percentage1: percentage1.toString(),
+    percentageTextStyle: style.percentageText
   };
   return doughnutAttributes;
 }
 
-export function calculateDoughnutAttributes(inputArray, chartId) {
+export function calculatePieChartAttributes(inputArray, chartId) {
   let {countValue, totalValue} = inputArray,
     percentage = Math.round((totalValue / parseInt(countValue)) * 100, 2);
 
@@ -208,11 +180,10 @@ function renderChart(props) {
     totalValue: totalValue.toPrecision()
   };
 
-  doughnutAttributes = generateDoughnutChart(inputArray);
-  // generatePieChart(inputArray);
+  doughnutAttributes = generatePieChart(inputArray);
 }
 
-class DoughnutChart extends React.Component {
+class PieChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
     tableOptions: PropTypes.object
@@ -238,7 +209,11 @@ class DoughnutChart extends React.Component {
             <div className='pie-chart chart' style={doughnutAttributes.chart2Background}>
               <div className='slice one' style={doughnutAttributes.chart2SliceOneStyle}></div>
               <div className='slice two' style={doughnutAttributes.chart2SliceTwoStyle}></div>
-              <div className='chart-center'><span>{doughnutAttributes.displayPercentage2}</span></div>
+              <div className='chart-center'>
+                <span style={doughnutAttributes.percentageTextStyle}>
+                  {doughnutAttributes.displayPercentage2}
+                </span>
+              </div>
             </div>
           </div>
           <div style={{paddingLeft: '50px', paddingRight: '50px'}}>
@@ -261,4 +236,4 @@ class DoughnutChart extends React.Component {
   }
 }
 
-export default DoughnutChart;
+export default PieChart;

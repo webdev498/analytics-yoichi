@@ -41,7 +41,7 @@ function generateChartDataSource(rawData, props) {
         else {
           let countryCode = rows[a][columnIndexArray[0]],
             value = rows[a][columnIndexArray[3]];
-          if (currentChartData.connection !== 'secure') {
+          if (currentChartData.connection === 'malicious') {
             obj1.id = getCountryIDByCountryCode(countryCode);
             obj1.value = value.toString();
             if (value !== null) {
@@ -106,7 +106,7 @@ function generateChartDataSource(rawData, props) {
   return dataSourceObject;
 }
 
-function getMarkerClickUrl(props, dataObj) {
+function getEntityClickUrl(props, dataObj) {
   if (!props.kibana) {
     return;
   }
@@ -148,7 +148,7 @@ class WorldMap extends React.Component {
         dataSource: generateChartDataSource(rawData, props),
         events: {
           entityClick: function(eventObj, dataObj) {
-            const url = getMarkerClickUrl(props, dataObj);
+            const url = getEntityClickUrl(props, dataObj);
             if (url !== '' && !isUndefined(url)) {
               clickThrough(url);
             }

@@ -64,10 +64,14 @@ function generateChartDataSource(data, props) {
       'xAxisNamePadding': '20',
       'yAxisNamePadding': '20',
       'lineColor': '#f69275',
-      'showXAxisLine': '1',
+      'showXAxisLine': '0',
       'showYAxisLine': '0',
-      'divLineIsDashed': '1',
-      'showsYAxisLine': '0'
+      'divLineIsDashed': '0',
+      'showsYAxisLine': '0',
+      'divLineAlpha': '20',
+      'chartLeftMargin': '0',
+      'chartRightMargin': '0',
+      'chartBottomMargin': '0'
     }, chartOptions),
     data: graphBars
   };

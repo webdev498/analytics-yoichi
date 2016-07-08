@@ -266,7 +266,11 @@ function generateChartDataSource(rawData, props) {
       'yAxisNamePadding': '20',
       'showXAxisLine': '1',
       'showYAxisLine': '0',
-      'divLineIsDashed': '1'
+      'divLineIsDashed': '0',
+      'divLineAlpha': '20',
+      'chartLeftMargin': '0',
+      'chartRightMargin': '0',
+      'chartBottomMargin': '0'
     }, chartOptions)
   };
 

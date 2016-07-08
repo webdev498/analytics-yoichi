@@ -61,7 +61,7 @@ class PercentageWidget extends React.Component {
       );
     }
 
-    if (parseInt(iconIndex) === (parseInt(percentage[0]) + 1)) {
+    if (parseInt(iconIndex) === (firstDigit + 1)) {
       style.overlayDiv = Object.assign(style.overlayDiv,
         {
           borderBottom: (secondDigit + 1) + 'px solid ' + Colors.turquoise
