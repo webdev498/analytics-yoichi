@@ -5,7 +5,31 @@ import {
   getIndexFromColumnName,
   checkForUndefinedChartOptionObject
 } from 'utils/utils';
+
 import PercentageWidget from 'components/PercentageWidget';
+
+const styles = {
+  'chartCaption': {
+    'width': '100%',
+    'color': '#444C63',
+    'fontFamily': 'Open Sans, sans-serif',
+    'fontSize': '14px',
+    'fontWeight': 'bold',
+    'lineHeight': '60px',
+    'height': '60px',
+    'paddingLeft': '20px',
+    'backgroundColor': 'lightgray'
+  },
+  'pieWrap': {
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    margin: '0',
+    justifyContent: 'center',
+    height: '400'
+  }
+};
 
 let highlightedColor1 = '#2BD8D0', // Blue (Default colors set)
   highlightedColor2 = '#8ABB24', // Green (Default colors set)
@@ -190,21 +214,14 @@ class PieChart extends React.Component {
   }
   render() {
     const {props} = this;
+
+    renderChart(props);
     return (
-      <div style={props.attributes.chartBorder}>{renderChart(props)}
-        <div style={props.attributes.chartCaption}>{props.meta.title}</div>
-        <div
-          style={
-            {
-              width: '100%',
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              margin: '0',
-              justifyContent: 'center',
-              height: '400'
-            }
-          }>
+      <div style={props.attributes.chartBorder}>
+        <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>
+          {props.meta.title}
+        </div>
+        <div style={styles.pieWrap}>
           <div className='pieCard'>
             <div className='pie-chart chart' style={doughnutAttributes.chart2Background}>
               <div className='slice one' style={doughnutAttributes.chart2SliceOneStyle}></div>
