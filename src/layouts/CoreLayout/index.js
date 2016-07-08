@@ -57,7 +57,8 @@ const styles = {
 class CoreLayout extends React.Component {
   static propTypes = {
     fetchUserData: PropTypes.object.isRequired,
-    logout: PropTypes.object.isRequired
+    logout: PropTypes.object.isRequired,
+    history: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -97,6 +98,10 @@ class CoreLayout extends React.Component {
 
   componentDidMount() {
     this.props.fetchUserData();
+
+    this.props.history.listen(() => {
+      this.hideKibana();
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -136,7 +141,8 @@ class CoreLayout extends React.Component {
 
         <nav style={{...styles.nav, ...sidebarWidth}}>
           <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
-            location={props.location} />
+            location={props.location}
+            hideKibana={this.hideKibana} />
           <div style={styles.handle}
             onClick={this.toggleSidebar}>
             <FontIcon className='material-icons' style={styles.icon}>
