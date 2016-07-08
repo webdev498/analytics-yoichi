@@ -43,7 +43,6 @@ class PageContent extends React.Component {
 
       for (let k = 0, childrenLen = children.length; k < childrenLen; k++) {
         const childDetails = children[k];
-
         childrenArray.push(this.renderComponent(childDetails));
       }
     }

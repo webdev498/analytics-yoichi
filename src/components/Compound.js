@@ -2,25 +2,29 @@ import React from 'react';
 
 const styles = {
   wrap: {
-    width: '100%',
     display: 'flex'
   }
 };
 
 function getChild(child, props) {
-  return React.cloneElement(child, {...child.props, data: props.data, duration: props.duration});
+  const data = child.props.data || props.data;
+  return React.cloneElement(child, {...child.props, data, duration: props.duration});
 }
 
 class CompoundCard extends React.Component {
   render() {
     const {props} = this;
     let children = props.children;
+    let compoundCardStyle;
+
     if (props.meta.parentWrap !== false) {
       children = children.props.children;
     }
 
+    compoundCardStyle = Object.assign({}, styles.wrap, props.innerStyle);
+
     return (
-      <div style={{...styles.wrap, ...props.attributes.style}}>
+      <div style={compoundCardStyle}>
         {
           children.map((child, index) => {
             return getChild(child, props);

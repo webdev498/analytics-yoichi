@@ -88,6 +88,8 @@ class ParentCard extends React.Component {
     const { props } = this;
     const {api} = props.meta;
 
+    if (!api) return;
+
     // TODO find a non hacky way to do this.
     if (props.type === 'AlertDetails') {
       api.queryParams.date = props.params.date;
@@ -220,7 +222,7 @@ function mapStateToProps(state, ownProps) {
   const {apiData} = state;
 
   let data = null,
-    isFetching = true,
+    isFetching = false,
     isError = false,
     errorData = null;
 
