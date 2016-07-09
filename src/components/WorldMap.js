@@ -10,10 +10,11 @@ import {
   generatePathParams
 } from 'utils/kibanaUtils';
 
-function generateChartDataSource(rawData, props) {
+function generateChartDataSource(rawData, props, secureColors, maliciousColors) {
   const {chartOptions, chartData} = props;
   let dataObject = [],
-    connectionsValues = [];
+    secureConnectionsValues = [],
+    maliciousConnectionsValues = [];
 
   for (let i = 0; i < chartData.fieldMapping.length; i++) {
     let currentChartData = chartData.fieldMapping[i],
@@ -21,10 +22,10 @@ function generateChartDataSource(rawData, props) {
       columnIndexArray = [];
 
     // Calculate column index from API response
-    for (let a = 0; a < currentChartData.columns.length; a++) {
-      for (let c = 0; c < columns.length; c++) {
-        if (currentChartData.columns[a] === columns[c].name) {
-          columnIndexArray[a] = c;
+    for (let j = 0; j < currentChartData.columns.length; j++) {
+      for (let k = 0; k < columns.length; k++) {
+        if (currentChartData.columns[j] === columns[k].name) {
+          columnIndexArray[j] = k;
           break;
         }
       }
@@ -33,31 +34,68 @@ function generateChartDataSource(rawData, props) {
     // Get column data for x-axis
     if (columnIndexArray.length !== 0) {
       let valueIndex = 0;
-      for (let a = 0, rowsLen = rows.length; a < rowsLen; a++) {
-        let obj1 = {};
-        if (rows[a][columnIndexArray[1]] === 'N/A' || rows[a][columnIndexArray[2]] === 'N/A') {
+      // Calculate max connections values and create color ranges for both secure and malicious connections
+      for (let l = 0, rowsLen = rows.length; l < rowsLen; l++) {
+        if (rows[l][columnIndexArray[1]] === 'N/A' || rows[l][columnIndexArray[2]] === 'N/A') {
           // continue;
         }
         else {
-          let countryCode = rows[a][columnIndexArray[0]],
-            value = rows[a][columnIndexArray[3]];
-          if (currentChartData.connection === 'malicious') {
-            obj1.id = getCountryIDByCountryCode(countryCode);
-            obj1.value = value.toString();
-            if (value !== null) {
-              connectionsValues[valueIndex] = value;
+          let value = rows[l][columnIndexArray[3]];
+          if (currentChartData.connection === 'secure' || currentChartData.connection === 'malicious') {
+            if (value !== null && parseInt(value) !== 0) {
+              if (currentChartData.connection === 'secure') {
+                secureConnectionsValues[valueIndex] = value;
+              }
+              if (currentChartData.connection === 'malicious') {
+                maliciousConnectionsValues[valueIndex] = value;
+              }
               valueIndex++;
             }
-            dataObject.push(obj1);
           }
-          if (currentChartData.connection === 'secure') {
+        }
+      }
+
+      let colorRanges = getColorRanges(secureConnectionsValues, maliciousConnectionsValues,
+        secureColors, maliciousColors),
+        secureColorRanges = colorRanges.secure,
+        maliciousColorRanges = colorRanges.malicious;
+
+      for (let n = 0, rowsLen = rows.length; n < rowsLen; n++) {
+        let obj1 = {};
+        if (rows[n][columnIndexArray[1]] === 'N/A' || rows[n][columnIndexArray[2]] === 'N/A') {
+          // continue;
+        }
+        else {
+          let countryCode = rows[n][columnIndexArray[0]],
+            value = rows[n][columnIndexArray[3]];
+          if (currentChartData.connection === 'secure' || currentChartData.connection === 'malicious') {
             obj1.id = getCountryIDByCountryCode(countryCode);
+            obj1.countryCode = countryCode;
             obj1.value = value.toString();
-            if (value !== null) {
-              connectionsValues[valueIndex] = value;
+            if (value !== null && parseInt(value) !== 0) {
+              if (currentChartData.connection === 'malicious') {
+                for (let p = 0; p < maliciousColorRanges.length; p++) {
+                  if (maliciousColorRanges[p].min <= parseInt(value) &&
+                    maliciousColorRanges[p].max >= parseInt(value)) {
+                    obj1.color = maliciousColorRanges[p].color;
+                    obj1.connection = 'malicious';
+                    break;
+                  }
+                }
+              }
+              if (currentChartData.connection === 'secure') {
+                for (let p = 0; p < secureColorRanges.length; p++) {
+                  if (secureColorRanges[p].min <= parseInt(value) &&
+                    secureColorRanges[p].max >= parseInt(value)) {
+                    obj1.color = secureColorRanges[p].color;
+                    obj1.connection = 'secure';
+                    break;
+                  }
+                }
+              }
               valueIndex++;
+              dataObject.push(obj1);
             }
-            dataObject.push(obj1);
           }
         }
       }
@@ -70,40 +108,65 @@ function generateChartDataSource(rawData, props) {
     'nullEntityColor': 'aaaaaa',
     'showLabels': '0',
     'theme': 'zune',
-    'useValuesForMarkers': '1',
-    'showMarkerLabels': '0',
     'showvalue': '0',
-    'autoScaleMarkers': '0',
     'showLegend': '0',
     'chartLeftMargin': '0',
     'chartRightMargin': '0',
     'chartTopMargin': '0',
     'chartBottomMargin': '0',
-    'markerBgColor': '#00AFF0',
-    'alignCaptionWithCanvas': '0',
-    'captionFontSize': '14',
-    'captionFontColor': '#555555',
     'bgAlpha': '0'
   }, chartOptions);
-
-  dataSourceObject.colorrange = {
-    'minvalue': '0',
-    'startlabel': 'Less',
-    'endlabel': 'More',
-    'code': 'DBF8F7',
-    'gradient': '1',
-    'color': [
-      {
-        'maxvalue': Math.max.apply(Math, connectionsValues),
-        'code': '2BD8D0'
-      }
-    ],
-    'maxvalue': 0
-  };
 
   dataSourceObject.data = [{data: dataObject}];
 
   return dataSourceObject;
+}
+
+function getColorRanges(secureConnectionsValues,
+  maliciousConnectionsValues,
+  secureColors,
+  maliciousColors) {
+  let secureMaxValue = Math.max.apply(Math, secureConnectionsValues),
+    maliciousMaxValue = Math.max.apply(Math, maliciousConnectionsValues),
+    secureMidValue = parseInt(secureMaxValue / 6) + 1,
+    maliciousMidValue = parseInt(maliciousMaxValue / 6) + 1,
+    minSecureRange = 1,
+    minMaliciousRange = 1,
+    colorIndex = 5,
+    secureColorRanges = [],
+    maliciousColorRanges = [];
+
+  for (let m = 0; m < 6; m++) {
+    let tempColorObj = {};
+    if (m === 0) {
+      tempColorObj.min = minSecureRange;
+    }
+    else {
+      tempColorObj.min = minSecureRange + 1;
+    }
+    tempColorObj.max = minSecureRange + secureMidValue;
+    minSecureRange = tempColorObj.max;
+    tempColorObj.color = secureColors[colorIndex];
+    secureColorRanges.push(tempColorObj);
+
+    tempColorObj = {};
+    if (m === 0) {
+      tempColorObj.min = minMaliciousRange;
+    }
+    else {
+      tempColorObj.min = minMaliciousRange + 1;
+    }
+    tempColorObj.max = minMaliciousRange + maliciousMidValue;
+    minMaliciousRange = tempColorObj.max;
+    tempColorObj.color = maliciousColors[colorIndex];
+    maliciousColorRanges.push(tempColorObj);
+
+    colorIndex--;
+  }
+  return {
+    secure: secureColorRanges,
+    malicious: maliciousColorRanges
+  }
 }
 
 function getEntityClickUrl(props, dataObj) {
@@ -125,7 +188,7 @@ class WorldMap extends React.Component {
     attributes: PropTypes.object
   }
 
-  renderChart(props) {
+  renderChart(props, secureColors, maliciousColors) {
     if (!props.data) {
       return;
     }
@@ -145,7 +208,7 @@ class WorldMap extends React.Component {
         height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
-        dataSource: generateChartDataSource(rawData, props),
+        dataSource: generateChartDataSource(rawData, props, secureColors, maliciousColors),
         events: {
           entityClick: function(eventObj, dataObj) {
             const url = getEntityClickUrl(props, dataObj);
@@ -160,14 +223,30 @@ class WorldMap extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props} = this,
+      secureColors = [
+        '#2BD8D0',
+        '#51DFD8',
+        '#71E5DF',
+        '#97ECE8',
+        '#BAF2F0',
+        '#DBF8F7'
+      ],
+      maliciousColors = [
+        '#F69275',
+        '#F7A48B',
+        '#F9B6A2',
+        '#F8CABB',
+        '#FCDBD2',
+        '#FEEDE8'
+      ];
     return (
       <div>
-        <div style={{fontSize: '14px', color: '#6b7282', fontWeight: '600', position: 'absolute'}}>
+        <div style={{fontSize: '14px', color: '#6b7282', fontWeight: '600', position: 'absolute', marginTop: '30px'}}>
           {props.meta.subTitle}
         </div>
-        <div id={props.attributes.id} style={{marginTop: '-40px'}}></div>
-        {this.renderChart(props)}
+        <div id={props.attributes.id} style={{'marginTop': '-65px'}}></div>
+        {this.renderChart(props, secureColors, maliciousColors)}
         <div style={{display: 'flex', flexWrap: 'wrap', marginTop: '-40px'}}>
           <div>
             <span style={{fontSize: '11px', color: '#6b7282'}}>Secure Connections</span><br />
@@ -180,7 +259,11 @@ class WorldMap extends React.Component {
               <div style={{backgroundColor: '#DBF8F7', width: '20px', height: '12px'}}></div>
             </div>
           </div>
-          <div style={{marginLeft: '40px'}}>
+          <div style={{marginTop: '30px', 'marginLeft': '-120px'}}>
+            <span style={{fontSize: '11px', color: '#6b7282'}}>More</span>
+            <span style={{fontSize: '11px', color: '#6b7282', marginLeft: '70px'}}>Less</span>
+          </div>
+          <div style={{marginLeft: '30px'}}>
             <span style={{fontSize: '11px', color: '#6b7282'}}>Malicious Connections</span><br />
             <div style={{display: 'flex', flexWrap: 'wrap'}}>
               <div style={{backgroundColor: '#F69275', width: '20px', height: '12px'}}></div>
@@ -190,6 +273,10 @@ class WorldMap extends React.Component {
               <div style={{backgroundColor: '#FCDBD2', width: '20px', height: '12px'}}></div>
               <div style={{backgroundColor: '#FEEDE8', width: '20px', height: '12px'}}></div>
             </div>
+          </div>
+          <div style={{marginTop: '30px', 'marginLeft': '-120px'}}>
+            <span style={{fontSize: '11px', color: '#6b7282'}}>More</span>
+            <span style={{fontSize: '11px', color: '#6b7282', marginLeft: '70px'}}>Less</span>
           </div>
         </div>
       </div>

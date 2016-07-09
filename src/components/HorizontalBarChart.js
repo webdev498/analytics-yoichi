@@ -3,10 +3,11 @@ import {
   generateRawData,
   getColumnIndexArrayFromColumnName,
   getIndexFromColumnName,
-  getIndexFromObjectName
+  getIndexFromObjectName,
+  isUndefined
 } from 'utils/utils';
 
-export function generateDataArray(columnIndexArray, rowsArray) {
+export function generateDataArray(columnIndexArray, rowsArray, displayTopFive) {
   let dataset = [],
     annotationItems = [];
   if (columnIndexArray.length !== 0) {
@@ -53,6 +54,10 @@ export function generateDataArray(columnIndexArray, rowsArray) {
           'font': 'Open Sans, sans-serif'
         }
       ]);
+
+      if (!isUndefined(displayTopFive) && displayTopFive && d === 4) {
+        break;
+      }
     }
   }
   return {
@@ -136,22 +141,27 @@ export function generateChartDataSource(rawData, props) {
         }
       }
       columnIndexArray = [0, 1]; // Need to generate this index array dynamically. For now, kept it as hardcode
-      dataArray = generateDataArray(columnIndexArray, newRawData);
+      dataArray = generateDataArray(columnIndexArray, newRawData, displayTopFive);
       dataset = dataArray.dataset;
       annotationItems = dataArray.annotationItems;
     }
     else {
-      columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
-      dataArray = generateDataArray(columnIndexArray, rows);
-      dataset = dataArray.dataset;
-      annotationItems = dataArray.annotationItems;
+      // if (currentChartData.reportId === 'taf_dest_countries,taf_dest_bad_reputation_countries' ||
+      //  currentChartData.reportId === 'taf_source_countries,taf_source_bad_reputation_countries') {
+      // }
+      // else {
+        columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
+        dataArray = generateDataArray(columnIndexArray, rows, displayTopFive);
+        dataset = dataArray.dataset;
+        annotationItems = dataArray.annotationItems;
 
-      if (displayTopFive) {
-        dataset.sort(function(a, b) {
-          return b.value - a.value;
-        });
-        dataset = dataset.slice(0, 5);
-      }
+        if (displayTopFive) {
+          dataset.sort(function(a, b) {
+            return b.value - a.value;
+          });
+          dataset = dataset.slice(0, 5);
+        }
+      // }
     }
   }
 
@@ -189,12 +199,19 @@ export function generateChartDataSource(rawData, props) {
       'showValues': '1',
       'xAxisNameFontSize': '14',
       'yAxisNameFontSize': '14',
-      'labelFontSize': '13'
+      'labelFontSize': '13',
+      'chartLeftMargin': '0'
     }, chartOptions),
     'annotations': {'groups': [{'items': annotationItems}]}
   };
 
-  if (dataset.length > 0) dataSourceObject.data = dataset;
+  if (dataset.length < 5) {
+    dataSourceObject.chart = Object.assign(dataSourceObject.chart, {'Plotspacepercent': '100'});
+  }
+
+  if (dataset.length > 0) {
+    dataSourceObject.data = dataset;
+  }
 
   if (showTrendLines && averageValue !== undefined && averageValue !== '') {
     dataSourceObject.trendlines = trendLines;

@@ -15,6 +15,12 @@ const styles = {
     borderRadius: 0,
     boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
   },
+  childwrap: {
+    position: 'relative',
+    borderRadius: 0,
+    boxShadow: '#fff 0px 0px 0px',
+    border: '0px'
+  },
   header: {
     display: 'flex',
     alignItems: 'center',
@@ -205,7 +211,7 @@ class ParentCard extends React.Component {
     }
     else {
       return (
-        <Card style={{...styles.wrap, ...props.attributes.style}}>
+        <Card style={{...styles.childwrap, ...props.attributes.style}}>
           {props.isFetching ? <Loader /> : null}
           {this.getElement()}
         </Card>
