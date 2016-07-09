@@ -70,9 +70,7 @@ class PageContent extends React.Component {
       let children = [];
       for (let j = 0, numberOfColumns = section.length; j < numberOfColumns; j++) {
         let componentDetails = section[j];
-
         const ParentCardElement = this.renderComponent(componentDetails);
-
         children.push(ParentCardElement);
       }
 

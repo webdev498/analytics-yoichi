@@ -1,6 +1,10 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 
+import { connect } from 'react-redux';
+import {fetchApiData} from 'actions/ParentCard';
+import {getTimePairFromWindow} from 'utils/utils';
+
 const styles = {
   card: {
     display: 'flex'
@@ -66,12 +70,23 @@ class AlertDetails extends React.Component {
     return str;
   }
 
+  getTrafficDetails() {
+    const data = this.props.data.data.rank_alert;
+    const {props} = this;
+    const {id, api} = props.meta.fetchDataFor;
+    api.queryParams.filter = encodeURI(data.trafficFilter);
+    api.queryParams.date = data.triggered || props.params.date;
+    props.fetchApiData(id, api);
+  }
+
   render() {
     if (!this.props.data) return null;
 
     const data = this.props.data.data.rank_alert;
 
     const {source, destination} = this.props.data;
+
+    this.getTrafficDetails();
 
     return (
       <div style={styles.card}>
@@ -118,4 +133,7 @@ class AlertDetails extends React.Component {
   }
 }
 
-export default AlertDetails;
+export default connect(null, {
+  fetchApiData
+})(AlertDetails);
+

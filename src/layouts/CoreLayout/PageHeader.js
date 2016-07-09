@@ -112,12 +112,10 @@ class PageHeader extends React.Component {
     const {props} = this,
       name = props.auth.user ? props.auth.user.name : '';
 
-    let kibanaStyle = {display: 'none'},
-      menuStyle = Object.assign({}, styles.menuStyle);
+    let kibanaStyle = {display: 'none'};
 
     if (props.showKibana) {
-      kibanaStyle = {};
-      menuStyle = {display: 'none'};
+      kibanaStyle = {...styles.menuStyle, color: Colors.navigation};
     }
 
     return (
@@ -126,9 +124,8 @@ class PageHeader extends React.Component {
         showMenuIconButton={false}
         titleStyle={styles.label}>
         <MenuItem
-          style={kibanaStyle}
-          onClick={this.props.hideKibana}
-          menuStyle={menuStyle} >
+          style={{...kibanaStyle}}
+          onClick={this.props.hideKibana}>
           Back to Summary
         </MenuItem>
 
