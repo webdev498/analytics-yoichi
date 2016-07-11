@@ -116,7 +116,7 @@ class MetricsCard extends React.Component {
 
     return (
       <div style={styles.card}>
-        <h3 style={styles.text}>{props.attributes.title}</h3>
+        <h3 style={styles.text}>{props.title}</h3>
 
         <div style={styles.wrapStyle}>
           <div style={{...styles.countStyle, ...props.countStyle}}>

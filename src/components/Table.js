@@ -419,16 +419,40 @@ function rowClick(context, tableRow) {
 // }
 
 class tableCard extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleRowClick = this.handleRowClick.bind(this);
+  }
+
   static propTypes = {
     attributes: PropTypes.object,
-    tableOptions: PropTypes.object
+    tableOptions: PropTypes.object,
+    data: PropTypes.object
+  }
+
+  handleRowClick(tableRow, index) {
+    const {context, props} = this;
+
+    return () => {
+      if (props.openAlertDetails) {
+        const {rows} = props.data;
+        const currentRow = rows[index][0];
+        const url = `/alert/${currentRow.id}/${currentRow.date}`;
+        props.updateRoute(url);
+      }
+      else {
+        rowClick(context, tableRow);
+      }
+    };
   }
 
   render() {
-    const {props, context} = this;
+    const {props} = this;
     generateDataSource(props);
-    // console.log((id === props.attributes.id && filterBy !== '') ? filterBy : props.search);
-    // console.log(id);
+
+    const that = this;
+
     return (
       <div style={props.attributes.style}>
         <Table id={props.attributes.id}
@@ -445,7 +469,7 @@ class tableCard extends React.Component {
           {
             tableDataSource.map(function(tableRow, index) {
               return (
-                <Tr onClick={() => rowClick(context, tableRow)} style={{'cursor': 'pointer'}}>
+                <Tr onClick={that.handleRowClick(tableRow, index)} style={{'cursor': 'pointer'}}>
                   {tableRow.columns.map(function(tableColumn, indexCol) {
                     if (tableColumn.columnType === 'chart') {
                       return (

@@ -7,6 +7,7 @@ import {
 import Cookies from 'cookies-js';
 import {baseUrl} from 'config';
 import {logoutUtil} from './auth';
+import { push } from 'react-router-redux';
 
 export function requestPageData(id, api) {
   return {
@@ -69,3 +70,9 @@ export function fetchLayoutData(id, params) {
     });
   };
 };
+
+export function updateRoute(url) {
+  return function(dispatch, getState) {
+    dispatch(push(url));
+  };
+}
