@@ -54,55 +54,58 @@ class PercentageWidget extends React.Component {
       }
     };
 
-    let percentage = props.percentage;
+    let percentage = props.percentage,
+      percentageValue = parseInt(percentage);
+    iconIndex = parseInt(iconIndex);
 
-    if (percentage.length === 2) {
-      let firstDigit = parseInt(percentage.charAt(0)),
-        secondDigit = parseInt(percentage.charAt(1));
-
-      if (parseInt(iconIndex) <= firstDigit) {
-        setOverlayDivBackground(style, Colors.turquoise);
-      }
-
-      if (parseInt(iconIndex) > firstDigit) {
-        setOverlayDivBackground(style, Colors.cloud);
-        setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
-        setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
-        setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
-        setIconColor(style, Colors.cloud);
-      }
-
-      if ((parseInt(percentage) % 10) !== 0 && parseInt(iconIndex) === (firstDigit + 1)) {
-        setOverlayDivBorder(style, 'Bottom', (secondDigit + 1) + 'px', Colors.turquoise);
-        setIconColor(style, Colors.turquoise);
-      }
-    }
-
-    if (parseInt(percentage) >= 100) {
+    if (percentageValue >= 100) {
       setOverlayDivBackground(style, Colors.turquoise);
     }
 
-    if (parseInt(percentage) === 0) {
+    if (percentageValue === 0) {
       setOverlayDivBackground(style, Colors.cloud);
       setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
       setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
       setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
       setIconColor(style, Colors.cloud);
     }
+    else {
+      if (percentage.length === 1) {
+        if (iconIndex > 1) {
+          setOverlayDivBackground(style, Colors.cloud);
+          setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
+          setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
+          setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
+          setIconColor(style, Colors.cloud);
+        }
+        if (iconIndex === 1) {
+          setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
+          setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
+          setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
+          setOverlayDivBorder(style, 'Bottom', (percentageValue + 1) + 'px', Colors.turquoise);
+          setIconColor(style, Colors.turquoise);
+        }
+      }
+    }
 
-    if (percentage.length === 1 && parseInt(percentage) !== 0) {
-      if (parseInt(iconIndex) > 1) {
+    if (percentage.length === 2) {
+      let firstDigit = parseInt(percentage.charAt(0)),
+        secondDigit = parseInt(percentage.charAt(1));
+
+      if (iconIndex <= firstDigit) {
+        setOverlayDivBackground(style, Colors.turquoise);
+      }
+
+      if (iconIndex > firstDigit) {
         setOverlayDivBackground(style, Colors.cloud);
         setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
         setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
         setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
         setIconColor(style, Colors.cloud);
       }
-      if (parseInt(iconIndex) === 1) {
-        setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
-        setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
-        setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
-        setOverlayDivBorder(style, 'Bottom', (parseInt(percentage) + 1) + 'px', Colors.turquoise);
+
+      if ((percentageValue % 10) !== 0 && iconIndex === (firstDigit + 1)) {
+        setOverlayDivBorder(style, 'Bottom', (secondDigit + 1) + 'px', Colors.turquoise);
         setIconColor(style, Colors.turquoise);
       }
     }
