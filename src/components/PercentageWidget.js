@@ -84,7 +84,23 @@ class PercentageWidget extends React.Component {
       );
     }
 
-    if (percentage.length === 1) {
+    if (parseInt(percentage) === 0) {
+      style.overlayDiv = Object.assign(style.overlayDiv,
+        {
+          borderTop: '2px solid ' + Colors.cloud,
+          borderLeft: '2px solid ' + Colors.cloud,
+          borderRight: '2px solid ' + Colors.cloud,
+          backgroundColor: Colors.cloud
+        }
+      );
+      style.icon = Object.assign(style.icon,
+        {
+          color: Colors.cloud
+        }
+      );
+    }
+
+    if (percentage.length === 1 && parseInt(percentage) !== 0) {
       if (parseInt(iconIndex) > 1) {
         style.overlayDiv = Object.assign(style.overlayDiv,
           {
@@ -103,6 +119,9 @@ class PercentageWidget extends React.Component {
       if (parseInt(iconIndex) === 1) {
         style.overlayDiv = Object.assign(style.overlayDiv,
           {
+            borderTop: '2px solid ' + Colors.cloud,
+            borderLeft: '2px solid ' + Colors.cloud,
+            borderRight: '2px solid ' + Colors.cloud,
             borderBottom: (parseInt(percentage) + 1) + 'px solid ' + Colors.turquoise
           }
         );
