@@ -251,7 +251,7 @@ function generateChartDataSource(rawData, props) {
       'setadaptivesymin': '1',
       'showborder': '0',
       'theme': 'zune',
-      'numDivLines': '2',
+      // 'numDivLines': '2',
       'showAxisLines': '1',
       'showYAxisValues': '1',
       'labelDisplay': 'wrap',
@@ -270,7 +270,9 @@ function generateChartDataSource(rawData, props) {
       'divLineAlpha': '20',
       'chartLeftMargin': '0',
       'chartRightMargin': '0',
-      'chartBottomMargin': '0'
+      'chartBottomMargin': '0',
+      'baseFont': 'Open Sans, sans-serif',
+      'baseFontColor': '#6B7282'
     }, chartOptions)
   };
 

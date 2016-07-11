@@ -23,6 +23,8 @@ class CompoundCard extends React.Component {
 
     compoundCardStyle = Object.assign({}, styles.wrap, props.innerStyle);
 
+    console.log(compoundCardStyle, props.innerStyle);
+
     return (
       <div style={compoundCardStyle}>
         {

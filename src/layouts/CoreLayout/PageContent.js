@@ -47,10 +47,6 @@ class PageContent extends React.Component {
       }
     }
 
-    const {props} = this;
-    componentDetails.location = props.location;
-    componentDetails.params = props.params;
-
     const componentElm = elm({...componentDetails}, childrenArray);
 
     if (componentDetails.meta.parentWrap === false) {
@@ -74,7 +70,9 @@ class PageContent extends React.Component {
       let children = [];
       for (let j = 0, numberOfColumns = section.length; j < numberOfColumns; j++) {
         let componentDetails = section[j];
+
         const ParentCardElement = this.renderComponent(componentDetails);
+
         children.push(ParentCardElement);
       }
 
@@ -103,6 +101,10 @@ class PageContent extends React.Component {
     );
   }
 }
+
+PageContent.contextTypes = {
+  location: PropTypes.object
+};
 
 function mapStateToProps(state, ownProps) {
   const {layout: layouts} = state;
