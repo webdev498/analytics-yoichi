@@ -1,7 +1,28 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
-import {isUndefined} from 'utils/utils';
+
+function setOverlayDivBackground(style, color) {
+  style.overlayDiv = Object.assign(style.overlayDiv,
+    {
+      backgroundColor: color
+    }
+  );
+}
+
+function setOverlayDivBorder(style, borderSide, borderWidth, color) {
+  let border = {};
+  border['border' + borderSide] = borderWidth + ' solid ' + color;
+  style.overlayDiv = Object.assign(style.overlayDiv, border);
+}
+
+function setIconColor(style, color) {
+  style.icon = Object.assign(style.icon,
+    {
+      color: color
+    }
+  );
+}
 
 class PercentageWidget extends React.Component {
   displayIcon(iconIndex) {
@@ -12,6 +33,7 @@ class PercentageWidget extends React.Component {
     if (!props.percentage) {
       return;
     }
+
     const style = {
       'overlayDiv': {
         height: '14px',
@@ -39,97 +61,49 @@ class PercentageWidget extends React.Component {
         secondDigit = parseInt(percentage.charAt(1));
 
       if (parseInt(iconIndex) <= firstDigit) {
-        style.overlayDiv = Object.assign(style.overlayDiv,
-          {
-            backgroundColor: Colors.turquoise
-          }
-        );
+        setOverlayDivBackground(style, Colors.turquoise);
       }
 
       if (parseInt(iconIndex) > firstDigit) {
-        style.overlayDiv = Object.assign(style.overlayDiv,
-          {
-            borderTop: '2px solid ' + Colors.cloud,
-            borderLeft: '2px solid ' + Colors.cloud,
-            borderRight: '2px solid ' + Colors.cloud,
-            backgroundColor: Colors.cloud
-          }
-        );
-        style.icon = Object.assign(style.icon,
-          {
-            color: Colors.cloud
-          }
-        );
+        setOverlayDivBackground(style, Colors.cloud);
+        setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
+        setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
+        setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
+        setIconColor(style, Colors.cloud);
       }
 
       if ((parseInt(percentage) % 10) !== 0 && parseInt(iconIndex) === (firstDigit + 1)) {
-        style.overlayDiv = Object.assign(style.overlayDiv,
-          {
-            borderBottom: (secondDigit + 1) + 'px solid ' + Colors.turquoise
-          }
-        );
-        style.icon = Object.assign(style.icon,
-          {
-            color: Colors.turquoise
-          }
-        );
+        setOverlayDivBorder(style, 'Bottom', (secondDigit + 1) + 'px', Colors.turquoise);
+        setIconColor(style, Colors.turquoise);
       }
     }
 
     if (parseInt(percentage) >= 100) {
-      style.overlayDiv = Object.assign(style.overlayDiv,
-        {
-          backgroundColor: Colors.turquoise
-        }
-      );
+      setOverlayDivBackground(style, Colors.turquoise);
     }
 
     if (parseInt(percentage) === 0) {
-      style.overlayDiv = Object.assign(style.overlayDiv,
-        {
-          borderTop: '2px solid ' + Colors.cloud,
-          borderLeft: '2px solid ' + Colors.cloud,
-          borderRight: '2px solid ' + Colors.cloud,
-          backgroundColor: Colors.cloud
-        }
-      );
-      style.icon = Object.assign(style.icon,
-        {
-          color: Colors.cloud
-        }
-      );
+      setOverlayDivBackground(style, Colors.cloud);
+      setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
+      setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
+      setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
+      setIconColor(style, Colors.cloud);
     }
 
     if (percentage.length === 1 && parseInt(percentage) !== 0) {
       if (parseInt(iconIndex) > 1) {
-        style.overlayDiv = Object.assign(style.overlayDiv,
-          {
-            borderTop: '2px solid ' + Colors.cloud,
-            borderLeft: '2px solid ' + Colors.cloud,
-            borderRight: '2px solid ' + Colors.cloud,
-            backgroundColor: Colors.cloud
-          }
-        );
-        style.icon = Object.assign(style.icon,
-          {
-            color: Colors.cloud
-          }
-        );
+        setOverlayDivBackground(style, Colors.cloud);
+        setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
+        setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
+        setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
+        setIconColor(style, Colors.cloud);
       }
       if (parseInt(iconIndex) === 1) {
-        style.overlayDiv = Object.assign(style.overlayDiv,
-          {
-            borderTop: '2px solid ' + Colors.cloud,
-            borderLeft: '2px solid ' + Colors.cloud,
-            borderRight: '2px solid ' + Colors.cloud,
-            borderBottom: (parseInt(percentage) + 1) + 'px solid ' + Colors.turquoise
-          }
-        );
-        style.icon = Object.assign(style.icon,
-          {
-            color: Colors.turquoise
-          }
-        );
+        setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
+        setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
+        setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
+        setOverlayDivBorder(style, 'Bottom', (parseInt(percentage) + 1) + 'px', Colors.turquoise);
+        setIconColor(style, Colors.turquoise);
       }
     }
 
