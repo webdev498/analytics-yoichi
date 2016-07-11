@@ -7,6 +7,7 @@ import Loader from '../components/Loader';
 
 import {fetchApiData} from 'actions/ParentCard';
 import {Colors} from 'theme/colors';
+import {updateRoute} from 'actions/core';
 
 const styles = {
   wrap: {
@@ -87,7 +88,8 @@ class ParentCard extends React.Component {
   }
 
   static propTypes = {
-    meta: PropTypes.object.isRequired
+    meta: PropTypes.object.isRequired,
+    updateRoute: PropTypes.func.isRequired
   }
 
   getData() {
@@ -117,9 +119,7 @@ class ParentCard extends React.Component {
 
   getElement() {
     const {props} = this;
-    return (
-      <div> {React.cloneElement(props.children, {...props})} </div>
-    );
+    return React.cloneElement(props.children, {...props, updateRoute: this.props.updateRoute});
   }
 
   refreshData() {
@@ -205,7 +205,7 @@ class ParentCard extends React.Component {
               </FontIcon>
             </div>
           </header>
-          <div> {React.cloneElement(props.children, {...childProps})} </div>
+          <div> {React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})} </div>
         </Card>
       );
     }
@@ -253,5 +253,5 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  fetchApiData
+  fetchApiData, updateRoute
 })(ParentCard);

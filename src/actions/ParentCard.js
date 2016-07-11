@@ -2,7 +2,8 @@ import {
   REQUEST_API_DATA,
   RECEIVE_API_DATA,
   ERROR_API_DATA,
-  TIME_INTERVAL_UPDATE
+  TIME_INTERVAL_UPDATE,
+  PARENT_CARD_EVENT
 } from 'Constants';
 
 import Cookies from 'cookies-js';
@@ -36,6 +37,14 @@ export function changeTimeRange(timeRange) {
   return {
     type: TIME_INTERVAL_UPDATE,
     data: timeRange
+  };
+}
+
+export function parentCardEvent(id, callback) {
+  return {
+    type: PARENT_CARD_EVENT,
+    id,
+    callback
   };
 }
 
@@ -122,6 +131,23 @@ export function updateApiData(newDuration) {
           fetchApiData(id, api)(dispatch, getState);
         });
       }
+    }
+  };
+}
+
+export function action(id, callback) {
+  return function(dispatch, getState) {
+    const {apiData} = getState();
+
+    if (apiData && apiData.has('components')) {
+      const components = apiData.get('components');
+
+      components.forEach((component, index) => {
+        const componentId = component.get('id');
+        if (componentId === id) {
+          dispatch(id, callback);
+        }
+      });
     }
   };
 }
