@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import WorldMapLegends from 'components/WorldMapLegends';
 import {
   generateRawData,
   getCountryIDByCountryCode,
@@ -166,7 +167,7 @@ function getColorRanges(secureConnectionsValues,
   return {
     secure: secureColorRanges,
     malicious: maliciousColorRanges
-  }
+  };
 }
 
 function getEntityClickUrl(props, dataObj) {
@@ -242,43 +243,16 @@ class WorldMap extends React.Component {
       ];
     return (
       <div>
-        <div style={{fontSize: '14px', color: '#6b7282', fontWeight: '600', position: 'absolute', marginTop: '30px'}}>
+        <div style={{fontSize: '14px', color: '#6b7282', fontWeight: '600', position: 'absolute', marginTop: '-30px'}}>
           {props.meta.subTitle}
         </div>
-        <div id={props.attributes.id} style={{'marginTop': '-65px'}}></div>
+
+        <div id={props.attributes.id} style={{}}></div>{/*marginTop: '-65px'*/}
+
         {this.renderChart(props, secureColors, maliciousColors)}
-        <div style={{display: 'flex', flexWrap: 'wrap', marginTop: '-40px'}}>
-          <div>
-            <span style={{fontSize: '11px', color: '#6b7282'}}>Secure Connections</span><br />
-            <div style={{display: 'flex', flexWrap: 'wrap'}}>
-              <div style={{backgroundColor: '#2BD8D0', width: '20px', height: '12px'}}></div>
-              <div style={{backgroundColor: '#51DFD8', width: '20px', height: '12px'}}></div>
-              <div style={{backgroundColor: '#71E5DF', width: '20px', height: '12px'}}></div>
-              <div style={{backgroundColor: '#97ECE8', width: '20px', height: '12px'}}></div>
-              <div style={{backgroundColor: '#BAF2F0', width: '20px', height: '12px'}}></div>
-              <div style={{backgroundColor: '#DBF8F7', width: '20px', height: '12px'}}></div>
-            </div>
-          </div>
-          <div style={{marginTop: '30px', 'marginLeft': '-120px'}}>
-            <span style={{fontSize: '11px', color: '#6b7282'}}>More</span>
-            <span style={{fontSize: '11px', color: '#6b7282', marginLeft: '70px'}}>Less</span>
-          </div>
-          <div style={{marginLeft: '30px'}}>
-            <span style={{fontSize: '11px', color: '#6b7282'}}>Malicious Connections</span><br />
-            <div style={{display: 'flex', flexWrap: 'wrap'}}>
-              <div style={{backgroundColor: '#F69275', width: '20px', height: '12px'}}></div>
-              <div style={{backgroundColor: '#F7A48B', width: '20px', height: '12px'}}></div>
-              <div style={{backgroundColor: '#F9B6A2', width: '20px', height: '12px'}}></div>
-              <div style={{backgroundColor: '#F8CABB', width: '20px', height: '12px'}}></div>
-              <div style={{backgroundColor: '#FCDBD2', width: '20px', height: '12px'}}></div>
-              <div style={{backgroundColor: '#FEEDE8', width: '20px', height: '12px'}}></div>
-            </div>
-          </div>
-          <div style={{marginTop: '30px', 'marginLeft': '-120px'}}>
-            <span style={{fontSize: '11px', color: '#6b7282'}}>More</span>
-            <span style={{fontSize: '11px', color: '#6b7282', marginLeft: '70px'}}>Less</span>
-          </div>
-        </div>
+
+        <WorldMapLegends />
+
       </div>
     );
   }
