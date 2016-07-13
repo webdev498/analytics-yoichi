@@ -3,7 +3,8 @@ import {
   RECEIVE_API_DATA,
   ERROR_API_DATA,
   TIME_INTERVAL_UPDATE,
-  PARENT_CARD_EVENT
+  PARENT_CARD_EVENT,
+  REMOVE_COMPONENT
 } from 'Constants';
 
 import Cookies from 'cookies-js';
@@ -45,6 +46,13 @@ export function parentCardEvent(id, callback) {
     type: PARENT_CARD_EVENT,
     id,
     callback
+  };
+}
+
+export function removeComponentWithId(id) {
+  return {
+    type: REMOVE_COMPONENT,
+    id
   };
 }
 
@@ -124,7 +132,6 @@ export function updateApiData(newDuration) {
 
       if (apiData && apiData.has('components')) {
         const components = apiData.get('components');
-
         components.forEach((component, index) => {
           const id = component.get('id');
           const api = component.get('api');
@@ -149,5 +156,11 @@ export function action(id, callback) {
         }
       });
     }
+  };
+}
+
+export function removeComponent(id) {
+  return function(dispatch) {
+    dispatch(removeComponentWithId(id));
   };
 }

@@ -5,7 +5,7 @@ import Card from 'material-ui/Card/Card';
 import FontIcon from 'material-ui/FontIcon';
 import Loader from '../components/Loader';
 
-import {fetchApiData} from 'actions/ParentCard';
+import {fetchApiData, removeComponent} from 'actions/ParentCard';
 import {Colors} from 'theme/colors';
 import {updateRoute} from 'actions/core';
 
@@ -117,6 +117,12 @@ class ParentCard extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.unsubscribe();
+    const {props} = this;
+    props.removeComponent(props.id);
+  }
+
   getElement() {
     const {props} = this;
     return React.cloneElement(props.children, {...props, updateRoute: this.props.updateRoute});
@@ -126,11 +132,7 @@ class ParentCard extends React.Component {
     return () => {
       this.getData();
     };
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
+  };
 
   updateSearch() {
     return (event) => {
@@ -159,7 +161,6 @@ class ParentCard extends React.Component {
 
   render() {
     const {props} = this;
-    // console.log(props);
 
     if (props.meta.showHeader) {
       const childProps = Object.assign({}, props, {search: this.state.search}),
@@ -253,5 +254,5 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  fetchApiData, updateRoute
+  fetchApiData, updateRoute, removeComponent
 })(ParentCard);

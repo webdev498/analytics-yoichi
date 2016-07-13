@@ -4,53 +4,72 @@ import {
   ERROR_LAYOUT_DATA
 } from 'Constants';
 
-import {Map, fromJS} from 'immutable';
+import {Map} from 'immutable';
 
-const initialState = fromJS({});
+const initialState = Map();
+
+function addLayout(state, layout) {
+  return state.set(layout.id, layout);
+}
+
+function deleteLayout(state, id) {
+  return state.delete(id, state.get(id));
+}
+
+function removeOtherLayouts(state, payload) {
+  const id = payload.pathname;
+
+  let newState = state;
+  state.forEach(component => {
+    if (component.id !== id) {
+      newState = deleteLayout(state, component.id);
+    }
+  });
+
+  return newState;
+}
 
 export default function PageDataReducer(state = initialState, action) {
   const actionType = action.type;
   switch (actionType) {
     case REQUEST_LAYOUT_DATA: {
       const {id} = action;
-      if (state.has(id)) {
-        return state.update(id, value => {
-          return value.set('isFetching', true)
-                    .set('isError', false)
-                    .set('layout', [])
-                    .set('errorData', null);
-        });
-      }
-      else {
-        const dataMap = Map({
-          id,
-          isFetching: true,
-          isError: false
-        });
 
-        return state.set(id, dataMap);
-      }
+      const dataMap = {
+        id,
+        isFetching: true,
+        isError: false
+      };
+
+      return addLayout(state, dataMap);
     }
     case RECEIVE_LAYOUT_DATA: {
       const {id, data} = action;
+      const dataMap = {
+        id,
+        isFetching: false,
+        isError: false,
+        layout: data.json.layout,
+        errorData: null
+      };
 
-      return state.update(id, value => {
-        return value.set('isFetching', false)
-                    .set('isError', false)
-                    .set('layout', data.json.layout)
-                    .set('errorData', null);
-      });
+      return addLayout(state, dataMap);
     }
     case ERROR_LAYOUT_DATA: {
       const {id, errorData} = action;
 
-      const newState = state.update(id, value => {
-        return value.set('isFetching', false)
-                    .set('isError', true)
-                    .set('errorData', errorData);
-      });
+      const dataMap = {
+        id,
+        isFetching: false,
+        isError: true,
+        errorData: errorData
+      };
 
-      return newState;
+      return addLayout(state, dataMap);
+    }
+    // remove other layouts when route changes
+    case '@@router/LOCATION_CHANGE': {
+      return removeOtherLayouts(state, action.payload);
     }
     default: {
       return state;
