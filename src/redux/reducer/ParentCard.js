@@ -3,7 +3,8 @@ import {
   RECEIVE_API_DATA,
   ERROR_API_DATA,
   TIME_INTERVAL_UPDATE,
-  PARENT_CARD_EVENT
+  PARENT_CARD_EVENT,
+  REMOVE_COMPONENT
 } from 'Constants';
 
 import {Map, fromJS} from 'immutable';
@@ -55,6 +56,11 @@ export default function APIDataReducer(state = initialState, action) {
     case TIME_INTERVAL_UPDATE: {
       const {data: duration} = action;
       return state.set('duration', duration);
+    }
+    case REMOVE_COMPONENT: {
+      const {id} = action;
+      const newState = state.deleteIn(['components', id]);
+      return newState;
     }
     case PARENT_CARD_EVENT: {
       const {id, callback} = action;

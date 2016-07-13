@@ -88,7 +88,6 @@ class MetricsCard extends React.Component {
 
     if (props.kibana.tableId && props.kibana.filterText) {
       return () => {
-        // console.log(kibana.tableId, kibana.filterText);
         // setFilterText(kibana.tableId, kibana.filterText);
       };
     }

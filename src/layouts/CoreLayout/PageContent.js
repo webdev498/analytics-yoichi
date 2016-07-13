@@ -114,7 +114,7 @@ function mapStateToProps(state, ownProps) {
           isFetching = true,
           isError = false,
           errorData = null
-        } = layouts.get(id) ? layouts.get(id).toObject() : {};
+        } = layouts.get(id) ? layouts.get(id) : {};
 
   return {
     layout,
