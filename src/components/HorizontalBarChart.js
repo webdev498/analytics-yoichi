@@ -184,7 +184,6 @@ export function generateChartDataSource(rawData, props) {
       'showLabels': '0',
       'divLineAlpha': '50',
       'divLineColor': '#E5E5EA',
-      'plotSpacePercent': '40',
       'divLineThickness': '1',
       'plotBorderAlpha': '0',
       'chartRightMargin': '150',
@@ -200,7 +199,9 @@ export function generateChartDataSource(rawData, props) {
       'xAxisNameFontSize': '14',
       'yAxisNameFontSize': '14',
       'labelFontSize': '13',
-      'chartLeftMargin': '0'
+      'chartLeftMargin': '0',
+      'numDivLines': '4'
+      // 'canvasBgColor': '#ff0000'
     }, chartOptions),
     'annotations': {'groups': [{'items': annotationItems}]}
   };

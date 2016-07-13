@@ -115,7 +115,9 @@ function generateChartDataSource(rawData, props, secureColors, maliciousColors) 
     'chartRightMargin': '0',
     'chartTopMargin': '0',
     'chartBottomMargin': '0',
-    'bgAlpha': '0'
+    'bgAlpha': '0',
+    'canvasTopMargin': '0',
+    'canvasBottomMargin': '0'
   }, chartOptions);
 
   dataSourceObject.data = [{data: dataObject}];

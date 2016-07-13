@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import {Colors} from 'theme/colors';
 import {
   generateRawData,
   getXYIndexFromColumnNames
@@ -16,7 +17,14 @@ function generateChartDataSource(rawData, props) {
   for (let i = 0; i < fieldMapping.length; i++) {
     let currentChartData = fieldMapping[i],
       {rows, columns} = rawData[currentChartData.reportId],
-      dataSeries = currentChartData;
+      dataSeries = Object.assign({
+        'drawline': '0',
+        'anchorsides': '0',
+        'anchorradius': '5',
+        'color': Colors.turquoise,
+        'anchorbgcolor': Colors.turquoise,
+        'anchorbordercolor': Colors.turquoise
+      }, currentChartData);
 
     let columnIndexes = getXYIndexFromColumnNames(currentChartData.columns, columns);
     x = columnIndexes[0];
@@ -38,10 +46,6 @@ function generateChartDataSource(rawData, props) {
   dataSourceObject.chart = Object.assign({
     'showvalues': '0',
     'theme': 'zune',
-    'numDivLines': '2',
-    'lineThickness': '5',
-    'divLineThickness': '0',
-    'divLineAlpha': '0',
     'showAxisLines': '1',
     'showYAxisValues': '1',
     'labelDisplay': 'wrap',
@@ -49,9 +53,28 @@ function generateChartDataSource(rawData, props) {
     'showlegend': '0',
     'bgAlpha': '0',
     'canvasBgAlpha': '0',
-    'xAxisNameFontSize': '14',
-    'yAxisNameFontSize': '14',
-    'labelFontSize': '13'
+    'labelFontSize': '10',
+    'baseFont': 'Open Sans, sans-serif',
+    'baseFontColor': '#6B7282',
+    'xAxisNameFontSize': '13',
+    'yAxisNameFontSize': '13',
+    'xAxisNamePadding': '20',
+    'yAxisNamePadding': '20',
+    'lineColor': '#f69275',
+    // 'showXAxisLine': '0',
+    // 'showYAxisLine': '0',
+    'divLineIsDashed': '0',
+    'showsYAxisLine': '0',
+    'divLineAlpha': '20',
+    'chartLeftMargin': '0',
+    'chartRightMargin': '0',
+    'chartBottomMargin': '0',
+    'numVDivLines': '12',
+    'canvasBgColor': '#EBFBFB,#ffffff', // F6FDFD
+    // "canvasbgColor": "#eeeeee,#b3b3b3",
+    "canvasbgAlpha": "100",
+    "canvasBgRatio": "30,70",
+    "canvasBgAngle": "280"
   }, chartOptions);
 
   if (dataSet.length > 0) {
