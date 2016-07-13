@@ -22,7 +22,7 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive) {
       dataset.push(obj1);
 
       annotationItems = annotationItems.concat([
-        {
+        /*{
           'id': 'datasetline' + d + '-1',
           'type': 'line',
           'x': '$dataset.0.set.' + d + '.STARTX',
@@ -41,7 +41,7 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive) {
           'toY': '$dataset.0.set.' + d + '.ENDY',
           'thickness': '1',
           'color': '#E5E5EA'
-        },
+        },*/
         {
           'id': 'datasetlabel' + d,
           'type': 'text',
@@ -164,6 +164,19 @@ export function generateChartDataSource(rawData, props) {
       // }
     }
   }
+
+  annotationItems.push(
+    {
+      'id': 'canvas-bg',
+      'type': 'image',
+      'alpha': '20',
+      'url': 'http://upload.wikimedia.org/wikipedia/commons/7/79/Misc_fruit.jpg',
+      'x': '$CanvasStartX',
+      'tox': '$canvasEndX',
+      'y': '$CanvasStartY',
+      'toy': '$canvasEndY'
+    }
+  );
 
   const dataSourceObject = {
     chart: Object.assign({

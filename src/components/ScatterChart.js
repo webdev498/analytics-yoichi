@@ -69,7 +69,7 @@ function generateChartDataSource(rawData, props) {
     'chartLeftMargin': '0',
     'chartRightMargin': '0',
     'chartBottomMargin': '0',
-    'numVDivLines': '12',
+    'numVDivLines': '10',
     'canvasBgColor': '#EBFBFB,#ffffff', // F6FDFD
     // "canvasbgColor": "#eeeeee,#b3b3b3",
     "canvasbgAlpha": "100",
