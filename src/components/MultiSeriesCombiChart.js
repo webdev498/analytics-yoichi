@@ -254,7 +254,7 @@ function generateChartDataSource(rawData, props) {
       'setadaptivesymin': '1',
       'showborder': '0',
       'theme': 'zune',
-      // 'numDivLines': '2',
+      'numDivLines': '6',
       'showAxisLines': '1',
       'showYAxisValues': '1',
       'labelDisplay': 'wrap',

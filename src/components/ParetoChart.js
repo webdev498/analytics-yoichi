@@ -71,7 +71,8 @@ function generateChartDataSource(data, props) {
       'divLineAlpha': '20',
       'chartLeftMargin': '0',
       'chartRightMargin': '0',
-      'chartBottomMargin': '0'
+      'chartBottomMargin': '0',
+      'numDivLines': '6'
     }, chartOptions),
     data: graphBars
   };
