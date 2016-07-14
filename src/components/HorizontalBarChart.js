@@ -170,7 +170,7 @@ export function generateChartDataSource(rawData, props) {
       'id': 'canvas-bg',
       'type': 'image',
       'alpha': '20',
-      'url': 'http://upload.wikimedia.org/wikipedia/commons/7/79/Misc_fruit.jpg',
+      'url': 'img/canvas-grid-bg.png',
       'x': '$CanvasStartX',
       'tox': '$canvasEndX',
       'y': '$CanvasStartY',

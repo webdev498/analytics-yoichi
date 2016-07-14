@@ -115,7 +115,8 @@ tr.reactable-filterer td {
 .threatTable tr:nth-child(even) td span.description {color: $CoralColorShade1; font-weight: 600; font-size: 14px;}
 .threatTable tr:nth-child(odd) td span.description {color: $CoralColorShade2; font-weight: 600; font-size: 14px;}
 
-.threatTable tr td span.firstRowInColumn {color: $CloudColorShade1; font-weight: 600; font-size: 14px;}
+.threatTable tr td span.title {color: $CloudColorShade1; font-weight: 600; font-size: 14px;}
+.threatTable tr td span.heading {color: $CloudColorShade1; font-weight: 600; font-size: 13px;}
 
 .reactable-filter-input {
   width: 95%;
@@ -151,12 +152,12 @@ tr.reactable-filterer td {
 }
 
 .duration {
-  padding:16px;background-color:#cdcdcd;float:left;font-size:16px;
+  padding:8px;float:left;font-size:13px;
 }
 
 .durationSeparator {
-    padding:16px 5px 5px;background-color:transparent;float:left;font-size:16px;
+    padding:8px 5px 5px;background-color:transparent;float:left;font-size:13px;
 }
 .durationLabel {
-    padding: 1px 14px 0;background-color:transparent;float:left;font-size:12px;
+    padding: 1px 7px 0px;background-color:transparent;float:left;font-size:12px;
 }

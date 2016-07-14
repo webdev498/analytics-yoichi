@@ -20,7 +20,7 @@ function generateChartDataSource(rawData, props) {
       dataSeries = Object.assign({
         'drawline': '0',
         'anchorsides': '0',
-        'anchorradius': '5',
+        'anchorradius': '4',
         'color': Colors.turquoise,
         'anchorbgcolor': Colors.turquoise,
         'anchorbordercolor': Colors.turquoise
