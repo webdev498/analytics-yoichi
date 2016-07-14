@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import {Colors} from 'theme/colors';
 import {
   generateRawData,
   getColumnIndexArrayFromColumnName,
@@ -268,11 +269,19 @@ class HorizontalBarChart extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props} = this,
+      style = {
+        heading: {
+          fontSize: '14px',
+          color: Colors.grape,
+          fontWeight: '600',
+          position: 'absolute'
+        }
+      };
     return (
       <div style={props.attributes.chartBorder}>
-        <div style={props.attributes.chartCaption}>{props.meta.title}</div>
-        <div id={props.attributes.id}>{renderChart(props)}</div>
+        <div style={Object.assign({}, style.heading, props.attributes.chartCaption)}>{props.meta.title}</div>
+        <div id={props.attributes.id} style={props.attributes.style}>{renderChart(props)}</div>
         <div id={props.attributes.id1}></div>
       </div>
     );

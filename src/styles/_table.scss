@@ -31,11 +31,11 @@
   width: 30px;
   float: left;
   cursor: pointer;
-  color: $BlackColor;
-  border: 1px solid #AAA;
-  background-color: #EEE;
+  color: $CloudColorShade1;
+  /*border: 1px solid #AAA;*/
+  /*background-color: #EEE;*/
   text-align: center;
-  border-radius: 5px;
+  /*border-radius: 5px;*/
   text-decoration: none;
 }
 .reactable-next-page {
@@ -46,12 +46,14 @@
   width: 55px;
   float: left;
   cursor: pointer;
-  color: $BlackColor;
-  border: 1px solid #AAA;
-  background-color: #EEE;
+  color: $CloudColorShade1;
+  /*border: 1px solid #AAA;*/
+  /*background-color: #EEE;*/
   text-align: center;
-  border-radius: 5px;
+  /*border-radius: 5px;*/
   text-decoration: none;
+  content: '\25B2';
+  font-size: 13px;
 }
 .reactable-previous-page {
   margin-left: 5px;
@@ -61,21 +63,21 @@
   width: 75px;
   float: left;
   cursor: pointer;
-  color: $BlackColor;
-  border: 1px solid #AAA;
-  background-color: #EEE;
+  color: $CloudColorShade1;
+  /*border: 1px solid #AAA;*/
+  /*background-color: #EEE;*/
   text-align: center;
-  border-radius: 5px;
+  /*border-radius: 5px;*/
   text-decoration: none;
 }
 .reactable-page-button:hover, .reactable-previous-page:hover, .reactable-next-page:hover {
   text-decoration: none;
-  color: #333;
-  background-color: #DDD;
+  color: $CloudColorShade1;
+  /*background-color: $CloudColorShade2;*/
 }
 
 .reactable-current-page, .reactable-current-page:hover {
-  background-color: #00bcd4;
+  background-color: $CloudColorShade2;
   cursor: default;
 }
 
@@ -117,6 +119,10 @@ tr.reactable-filterer td {
 
 .threatTable tr td span.title {color: $CloudColorShade1; font-weight: 600; font-size: 14px;}
 .threatTable tr td span.heading {color: $CloudColorShade1; font-weight: 600; font-size: 13px;}
+
+.reactable-pagination tr {
+background-color: $WhiteColor !important;
+}
 
 .reactable-filter-input {
   width: 95%;

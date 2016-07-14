@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import WorldMapLegends from 'components/WorldMapLegends';
+import {Colors} from 'theme/colors';
 import {
   generateRawData,
   getCountryIDByCountryCode,
@@ -242,14 +243,23 @@ class WorldMap extends React.Component {
         '#F8CABB',
         '#FCDBD2',
         '#FEEDE8'
-      ];
+      ],
+      style = {
+        heading: {
+          fontSize: '14px',
+          color: Colors.grape,
+          fontWeight: '600',
+          position: 'absolute',
+          marginTop: '-30px'
+        }
+      };
     return (
       <div>
-        <div style={{fontSize: '14px', color: '#6b7282', fontWeight: '600', position: 'absolute', marginTop: '-30px'}}>
+        <div style={style.heading}>
           {props.meta.subTitle}
         </div>
 
-        <div id={props.attributes.id} style={{}}></div>{/*marginTop: '-65px'*/}
+        <div id={props.attributes.id}></div>{/*marginTop: '-65px'*/}
 
         {this.renderChart(props, secureColors, maliciousColors)}
 
