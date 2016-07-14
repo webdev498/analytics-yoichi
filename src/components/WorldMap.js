@@ -259,7 +259,7 @@ class WorldMap extends React.Component {
           {props.meta.subTitle}
         </div>
 
-        <div id={props.attributes.id}></div>{/*marginTop: '-65px'*/}
+        <div id={props.attributes.id}></div>
 
         {this.renderChart(props, secureColors, maliciousColors)}
 
