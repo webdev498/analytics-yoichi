@@ -4,7 +4,8 @@ import {Colors} from 'theme/colors';
 import {
   generateRawData,
   getCountryIDByCountryCode,
-  isUndefined
+  isUndefined,
+  getColorRanges
 } from 'utils/utils';
 import {
   generateQueryParams,
@@ -126,53 +127,6 @@ function generateChartDataSource(rawData, props, secureColors, maliciousColors) 
   return dataSourceObject;
 }
 
-function getColorRanges(secureConnectionsValues,
-  maliciousConnectionsValues,
-  secureColors,
-  maliciousColors) {
-  let secureMaxValue = Math.max.apply(Math, secureConnectionsValues),
-    maliciousMaxValue = Math.max.apply(Math, maliciousConnectionsValues),
-    secureMidValue = parseInt(secureMaxValue / 6) + 1,
-    maliciousMidValue = parseInt(maliciousMaxValue / 6) + 1,
-    minSecureRange = 1,
-    minMaliciousRange = 1,
-    colorIndex = 5,
-    secureColorRanges = [],
-    maliciousColorRanges = [];
-
-  for (let m = 0; m < 6; m++) {
-    let tempColorObj = {};
-    if (m === 0) {
-      tempColorObj.min = minSecureRange;
-    }
-    else {
-      tempColorObj.min = minSecureRange + 1;
-    }
-    tempColorObj.max = minSecureRange + secureMidValue;
-    minSecureRange = tempColorObj.max;
-    tempColorObj.color = secureColors[colorIndex];
-    secureColorRanges.push(tempColorObj);
-
-    tempColorObj = {};
-    if (m === 0) {
-      tempColorObj.min = minMaliciousRange;
-    }
-    else {
-      tempColorObj.min = minMaliciousRange + 1;
-    }
-    tempColorObj.max = minMaliciousRange + maliciousMidValue;
-    minMaliciousRange = tempColorObj.max;
-    tempColorObj.color = maliciousColors[colorIndex];
-    maliciousColorRanges.push(tempColorObj);
-
-    colorIndex--;
-  }
-  return {
-    secure: secureColorRanges,
-    malicious: maliciousColorRanges
-  };
-}
-
 function getEntityClickUrl(props, dataObj) {
   if (!props.kibana) {
     return;
@@ -228,22 +182,6 @@ class WorldMap extends React.Component {
 
   render() {
     const {props} = this,
-      secureColors = [
-        '#2BD8D0',
-        '#51DFD8',
-        '#71E5DF',
-        '#97ECE8',
-        '#BAF2F0',
-        '#DBF8F7'
-      ],
-      maliciousColors = [
-        '#F69275',
-        '#F7A48B',
-        '#F9B6A2',
-        '#F8CABB',
-        '#FCDBD2',
-        '#FEEDE8'
-      ],
       style = {
         heading: {
           fontSize: '14px',
@@ -261,7 +199,7 @@ class WorldMap extends React.Component {
 
         <div id={props.attributes.id}></div>
 
-        {this.renderChart(props, secureColors, maliciousColors)}
+        {this.renderChart(props)}
 
         <WorldMapLegends />
 

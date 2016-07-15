@@ -311,3 +311,63 @@ export const getCountryCodeByCountryName = {'Antigua and Barbuda': 'AG', 'Bahama
   'Jordan': 'JO', 'Kuwait': 'KU', 'Lebanon': 'LB', 'Oman': 'OM', 'Qatar': 'QA', 'Saudi Arabia': 'SA', 'Syria': 'SY',
   'UnitedArabEmirates': 'AE', 'Yemen': 'YM', 'Puerto Rico': 'PR', 'Cayman Islands': 'KY', 'South Sudan': 'SS',
   'Kosovo': 'KO'};
+
+function getColorRanges(secureConnectionsValues, maliciousConnectionsValues) {
+  const secureColors = [
+      '#2BD8D0',
+      '#51DFD8',
+      '#71E5DF',
+      '#97ECE8',
+      '#BAF2F0',
+      '#DBF8F7'
+    ],
+    maliciousColors = [
+      '#F69275',
+      '#F7A48B',
+      '#F9B6A2',
+      '#F8CABB',
+      '#FCDBD2',
+      '#FEEDE8'
+    ];
+  let secureMaxValue = Math.max.apply(Math, secureConnectionsValues),
+    maliciousMaxValue = Math.max.apply(Math, maliciousConnectionsValues),
+    secureMidValue = parseInt(secureMaxValue / 6) + 1,
+    maliciousMidValue = parseInt(maliciousMaxValue / 6) + 1,
+    minSecureRange = 1,
+    minMaliciousRange = 1,
+    colorIndex = 5,
+    secureColorRanges = [],
+    maliciousColorRanges = [];
+
+  for (let m = 0; m < 6; m++) {
+    let tempColorObj = {};
+    if (m === 0) {
+      tempColorObj.min = minSecureRange;
+    }
+    else {
+      tempColorObj.min = minSecureRange + 1;
+    }
+    tempColorObj.max = minSecureRange + secureMidValue;
+    minSecureRange = tempColorObj.max;
+    tempColorObj.color = secureColors[colorIndex];
+    secureColorRanges.push(tempColorObj);
+
+    tempColorObj = {};
+    if (m === 0) {
+      tempColorObj.min = minMaliciousRange;
+    }
+    else {
+      tempColorObj.min = minMaliciousRange + 1;
+    }
+    tempColorObj.max = minMaliciousRange + maliciousMidValue;
+    minMaliciousRange = tempColorObj.max;
+    tempColorObj.color = maliciousColors[colorIndex];
+    maliciousColorRanges.push(tempColorObj);
+
+    colorIndex--;
+  }
+  return {
+    secure: secureColorRanges,
+    malicious: maliciousColorRanges
+  };
+}
