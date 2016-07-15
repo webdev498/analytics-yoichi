@@ -370,7 +370,7 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
           columnText += '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
         }
         else if (isUndefined(displayName)) {
-          columnText += '<br/>' + fieldValue;
+          columnText += fieldValue;
         }
         else {
           if (displayName !== '') {

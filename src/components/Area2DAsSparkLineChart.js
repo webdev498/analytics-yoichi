@@ -23,7 +23,7 @@ function generateChartDataSource(chartProperties, duration) {
   dataSet.push(dataSeries);
 
   dataSourceObject.chart = Object.assign({
-    'paletteColors': '#D9E6FD',
+    'paletteColors': '#BFEFEE',
     'showBorder': '0',
     'showCanvasBorder': '0',
     'usePlotGradientColor': '0',
@@ -34,15 +34,18 @@ function generateChartDataSource(chartProperties, duration) {
     'showYAxisValues': '0',
     'showAlternateHGridColor': '0',
     'showPlotBorder': '1',
-    'plotBorderColor': '#4183FD',
-    'plotBorderThickness': '2',
+    'plotBorderColor': '#59DED9',
+    'plotBorderThickness': '1',
     'bgAlpha': '0',
     'canvasBgAlpha': '0',
-    'xAxisNameFontColor': '#B4B4B4',
+    'xAxisNameFontColor': '#6B7282',
     'xAxisNameFontSize': '11px',
     'xAxisNameFontBold': '0',
     'chartTopMargin': '0',
-    'chartBottomMargin': '5'
+    'chartBottomMargin': '0',
+    'chartLeftMargin': '0',
+    'chartRightMargin': '0',
+    'anchorradius': '0'
   }, chartOptions);
   dataSourceObject.chart.xAxisName = 'Past ' + translateTimeWindow(duration);
 
@@ -55,6 +58,8 @@ function generateChartDataSource(chartProperties, duration) {
 
 const renderChart = (props) => {
   const chartProperties = props.chartProperties;
+
+  console.log(JSON.stringify(generateChartDataSource(chartProperties, props.duration)));
 
   FusionCharts.ready(function() {
     let fusioncharts = new FusionCharts({

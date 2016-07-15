@@ -166,18 +166,18 @@ export function generateChartDataSource(rawData, props) {
     }
   }
 
-  annotationItems.push(
-    {
-      'id': 'canvas-bg',
-      'type': 'image',
-      'alpha': '20',
-      'url': 'img/canvas-grid-bg.png',
-      'x': '$CanvasStartX',
-      'tox': '$canvasEndX',
-      'y': '$CanvasStartY',
-      'toy': '$canvasEndY'
-    }
-  );
+  // annotationItems.push(
+  //   {
+  //     'id': 'canvas-bg',
+  //     'type': 'image',
+  //     'alpha': '20',
+  //     'url': 'img/canvas-grid-bg.png',
+  //     'x': '$CanvasStartX',
+  //     'tox': '$canvasEndX',
+  //     'y': '$CanvasStartY',
+  //     'toy': '$canvasEndY'
+  //   }
+  // );
 
   const dataSourceObject = {
     chart: Object.assign({
@@ -274,8 +274,7 @@ class HorizontalBarChart extends React.Component {
         heading: {
           fontSize: '14px',
           color: Colors.grape,
-          fontWeight: '600',
-          position: 'absolute'
+          fontWeight: '600'
         }
       };
     return (
