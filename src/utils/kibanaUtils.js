@@ -1,4 +1,5 @@
 import {baseUrl} from 'config';
+import moment from 'moment';
 import {
   LOW_SCORE_RANGE,
   MEDIUM_SCORE_RANGE,
@@ -67,7 +68,12 @@ export function generateQueryParam(props, dataObj, key, value, currentRowNumber)
           dateStringArray = toolText.split(','),
           dateString = dateStringArray[1];
         dateString = dateString.trim();
-        pair = getTimePairFromWindow(props.duration, dateString);
+
+        let localTime = moment.utc(dateString).format('YYYY-MM-DD HH:mm:ss'),
+          d = new Date(localTime),
+          dateInUTCFormat = moment.utc(d.toUTCString()).format('YYYY-MM-DD HH:mm:ss');
+
+        pair = getTimePairFromWindow(props.duration, dateInUTCFormat);
         dateTime1 = pair.fromDate;
         dateTime2 = pair.toDate;
         queryParam = 'from=' + dateTime1 + '&to=' + dateTime2;

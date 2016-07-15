@@ -71,7 +71,8 @@ function generateCategoryArray(rows, index, dateDisplayFormat) {
   let category = [],
     lookup = {};
   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
-    let localTime = moment.utc(rows[d][index]).toDate();
+    let utcTime = moment.utc(rows[d][index]).format('YYYY-MM-DD HH:mm:ss.SSS'),
+      localTime = moment.utc(utcTime).toDate();
     localTime = moment(localTime).format('D MMM YYYY HH:mm');
 
     let localTimeNew = moment.utc(rows[d][index]).toDate();

@@ -35,7 +35,7 @@ function generateChartDataSource(chartProperties, duration) {
     'showAlternateHGridColor': '0',
     'showPlotBorder': '1',
     'plotBorderColor': '#59DED9',
-    'plotBorderThickness': '1',
+    'plotBorderThickness': '2',
     'bgAlpha': '0',
     'canvasBgAlpha': '0',
     'xAxisNameFontColor': '#6B7282',
@@ -45,7 +45,8 @@ function generateChartDataSource(chartProperties, duration) {
     'chartBottomMargin': '0',
     'chartLeftMargin': '0',
     'chartRightMargin': '0',
-    'anchorradius': '0'
+    'anchorradius': '0',
+    'minimizetendency': '1'
   }, chartOptions);
   dataSourceObject.chart.xAxisName = 'Past ' + translateTimeWindow(duration);
 
@@ -58,8 +59,6 @@ function generateChartDataSource(chartProperties, duration) {
 
 const renderChart = (props) => {
   const chartProperties = props.chartProperties;
-
-  console.log(JSON.stringify(generateChartDataSource(chartProperties, props.duration)));
 
   FusionCharts.ready(function() {
     let fusioncharts = new FusionCharts({

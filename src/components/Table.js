@@ -388,11 +388,13 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
 }
 
 export function generateColumnTextForDisplayingDate(fieldValue) {
-  let fieldValueInLocalTime = moment.utc(fieldValue).toDate(),
-    fieldValueInLocalTime1 = moment(fieldValueInLocalTime).format('D MMM YYYY'),
-    fieldValueInLocalTime2 = moment(fieldValueInLocalTime).format('HH:mm:ss');
-  fieldValue = '<span style="font-size: 14px; font-weight: 600;">' + fieldValueInLocalTime1 + '</span>';
-  fieldValue += '<br/>' + fieldValueInLocalTime2;
+  let fieldValue1 = moment.utc(fieldValue).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    localDateTime = moment.utc(fieldValue1).toDate(),
+    localDate = moment(localDateTime).format('DD MMM YYYY'),
+    localTime = moment(localDateTime).format('HH:mm:ss.SSS');
+
+  fieldValue = '<span style="font-size: 14px; font-weight: 600;">' + localDate + '</span>';
+  fieldValue += '<br/>' + localTime;
   return fieldValue;
 }
 
