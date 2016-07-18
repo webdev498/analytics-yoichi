@@ -14,6 +14,17 @@ export const SeafoamColor = '#bdbdc6';
 export const NavigationColor = 'rgba(255, 255, 255, 0.54)';
 export const SliderColor = 'rgba(36,41,61, 0.25)';
 
+export const AreaSparkLineChartColor = {
+  'area': '#BFEFEE',
+  'border': '#59DED9'
+};
+
+export const DurationWidgetColor = {
+  'hour': '#9BE9E7',
+  'min': '#B9EEED',
+  'sec': '#D9F2F3'
+};
+
 export const Colors = {
   garnet: GarnetColor,
   grape: GrapeColor,
@@ -27,7 +38,9 @@ export const Colors = {
   mustard: MustardColor,
   seafoam: SeafoamColor,
   navigation: NavigationColor,
-  slider: SliderColor
+  slider: SliderColor,
+  areaSparkLineChartColor: AreaSparkLineChartColor,
+  durationWidgetColor: DurationWidgetColor
 };
 
 export const PrimaryPalette = {

@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {translateTimeWindow} from 'utils/utils';
+import {Colors} from 'theme/colors';
 
 function generateChartDataSource(chartProperties, duration) {
   let dataSourceObject = {},
@@ -23,7 +23,7 @@ function generateChartDataSource(chartProperties, duration) {
   dataSet.push(dataSeries);
 
   dataSourceObject.chart = Object.assign({
-    'paletteColors': '#BFEFEE',
+    'paletteColors': Colors.areaSparkLineChartColor.area,
     'showBorder': '0',
     'showCanvasBorder': '0',
     'usePlotGradientColor': '0',
@@ -34,15 +34,11 @@ function generateChartDataSource(chartProperties, duration) {
     'showYAxisValues': '0',
     'showAlternateHGridColor': '0',
     'showPlotBorder': '1',
-    'plotBorderColor': '#59DED9',
+    'plotBorderColor': Colors.areaSparkLineChartColor.border,
     'plotBorderThickness': '1',
     'anchorradius': '0',
     'bgAlpha': '0',
     'canvasBgAlpha': '0',
-    // 'xAxisName': 'Past ' + translateTimeWindow(duration),
-    // 'xAxisNameFontColor': '#6B7282',
-    // 'xAxisNameFontSize': '11px',
-    // 'xAxisNameFontBold': '0',
     'chartTopMargin': '0',
     'chartBottomMargin': '0',
     'chartLeftMargin': '0',
