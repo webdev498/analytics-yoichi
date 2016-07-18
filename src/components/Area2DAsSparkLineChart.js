@@ -35,25 +35,24 @@ function generateChartDataSource(chartProperties, duration) {
     'showAlternateHGridColor': '0',
     'showPlotBorder': '1',
     'plotBorderColor': '#59DED9',
-    'plotBorderThickness': '2',
+    'plotBorderThickness': '1',
+    'anchorradius': '0',
     'bgAlpha': '0',
     'canvasBgAlpha': '0',
-    'xAxisNameFontColor': '#6B7282',
-    'xAxisNameFontSize': '11px',
-    'xAxisNameFontBold': '0',
+    // 'xAxisName': 'Past ' + translateTimeWindow(duration),
+    // 'xAxisNameFontColor': '#6B7282',
+    // 'xAxisNameFontSize': '11px',
+    // 'xAxisNameFontBold': '0',
     'chartTopMargin': '0',
     'chartBottomMargin': '0',
     'chartLeftMargin': '0',
     'chartRightMargin': '0',
-    'anchorradius': '0',
     'minimizetendency': '1'
   }, chartOptions);
-  dataSourceObject.chart.xAxisName = 'Past ' + translateTimeWindow(duration);
 
   if (dataSet.length > 0) {
     dataSourceObject.dataset = dataSet;
   }
-
   return dataSourceObject;
 }
 

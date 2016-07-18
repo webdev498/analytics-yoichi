@@ -61,8 +61,6 @@ function generateChartDataSource(rawData, props) {
     'xAxisNamePadding': '20',
     'yAxisNamePadding': '20',
     'lineColor': '#f69275',
-    // 'showXAxisLine': '0',
-    // 'showYAxisLine': '0',
     'divLineIsDashed': '0',
     'showsYAxisLine': '0',
     'divLineAlpha': '20',
@@ -70,11 +68,10 @@ function generateChartDataSource(rawData, props) {
     'chartRightMargin': '0',
     'chartBottomMargin': '0',
     'numVDivLines': '10',
-    'canvasBgColor': '#EBFBFB,#ffffff', // F6FDFD
-    // "canvasbgColor": "#eeeeee,#b3b3b3",
-    "canvasbgAlpha": "100",
-    "canvasBgRatio": "30,70",
-    "canvasBgAngle": "280"
+    'canvasBgColor': '#EBFBFB,#ffffff',
+    'canvasbgAlpha': '100',
+    'canvasBgRatio': '30,70',
+    'canvasBgAngle': '280'
   }, chartOptions);
 
   if (dataSet.length > 0) {

@@ -270,7 +270,7 @@ export function calculateFieldValueForNestedResult(columnDetails) {
   for (let key in currentDataRows) {
     if (!isUndefined(key)) {
       if (columnIndexLayoutJSON === 0) {
-        fieldValue = (key !== '') ? key : '<i>' + emptyValueMessage + '</i>';
+        fieldValue = (key !== '') ? key : emptyValueMessage;
       }
       if (columnIndexLayoutJSON === 1) {
         fieldValue = currentDataRows[key];
