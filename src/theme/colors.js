@@ -11,6 +11,9 @@ export const CoralColor = '#F69275';
 export const MustardColor = '#6b7282';
 export const SeafoamColor = '#bdbdc6';
 
+export const WhiteColor = '#ffffff';
+export const BlackColor = '#000000';
+
 export const NavigationColor = 'rgba(255, 255, 255, 0.54)';
 export const SliderColor = 'rgba(36,41,61, 0.25)';
 
@@ -24,6 +27,8 @@ export const DurationWidgetColor = {
   'min': '#B9EEED',
   'sec': '#D9F2F3'
 };
+
+export const SubHeadingBGColor = '#F7F7F9';
 
 export const Colors = {
   garnet: GarnetColor,
@@ -39,8 +44,11 @@ export const Colors = {
   seafoam: SeafoamColor,
   navigation: NavigationColor,
   slider: SliderColor,
+  white: WhiteColor,
+  black: BlackColor,
   areaSparkLineChartColor: AreaSparkLineChartColor,
-  durationWidgetColor: DurationWidgetColor
+  durationWidgetColor: DurationWidgetColor,
+  subHeadingBGColor: SubHeadingBGColor
 };
 
 export const PrimaryPalette = {

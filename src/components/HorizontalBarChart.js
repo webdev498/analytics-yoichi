@@ -64,7 +64,7 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, o
               'x': '$chartEndX - 146',
               'y': '$dataset.0.set.' + d + '.CenterY',
               'fontSize': '11',
-              'color': '#6B7282',
+              'color': Colors.pebble,
               'font': 'Open Sans, sans-serif'
             }
           ]);
@@ -205,10 +205,6 @@ export function generateChartDataSource(rawData, props) {
           });
           dataset = dataset.slice(0, 5);
 
-          if (props.attributes.id === 'IncomingTopCountries') {
-            console.log(JSON.stringify(dataset));
-          }
-
           for (let j = 0; j < dataset.length; j++) {
             annotationItems = annotationItems.concat([
               {
@@ -219,7 +215,7 @@ export function generateChartDataSource(rawData, props) {
                 'x': '$chartEndX - 146',
                 'y': '$dataset.0.set.' + j + '.CenterY',
                 'fontSize': '11',
-                'color': '#6B7282',
+                'color': Colors.pebble,
                 'font': 'Open Sans, sans-serif'
               }
             ]);
@@ -267,12 +263,12 @@ export function generateChartDataSource(rawData, props) {
   const dataSourceObject = {
     chart: Object.assign({
       'paletteColors': '#2BD8D0,#51DFD8,#71E5DF, #97ECE8,#BAF2F0, #DBF8F7',
-      'bgColor': '#ffffff',
+      'bgColor': Colors.white,
       'showBorder': '0',
       'showCanvasBorder': '0',
       'usePlotGradientColor': '0',
       'placeValuesInside': '1',
-      'valueFontColor': '#444C63',
+      'valueFontColor': Colors.grape,
       'showAxisLines': '1',
       'axisLineAlpha': '15',
       'alignCaptionWithCanvas': '0',
@@ -282,14 +278,14 @@ export function generateChartDataSource(rawData, props) {
       'subcaptionFontBold': '0',
       'showLabels': '0',
       'divLineAlpha': '50',
-      'divLineColor': '#E5E5EA',
+      'divLineColor': Colors.cloud,
       'divLineThickness': '1',
       'plotBorderAlpha': '0',
       'chartRightMargin': '150',
       'animation': '0',
-      'toolTipColor': '#ffffff',
+      'toolTipColor': Colors.white,
       'toolTipBorderThickness': '0',
-      'toolTipBgColor': '#000000',
+      'toolTipBgColor': Colors.black,
       'toolTipBgAlpha': '80',
       'toolTipBorderRadius': '2',
       'toolTipPadding': '5',
@@ -299,8 +295,9 @@ export function generateChartDataSource(rawData, props) {
       'yAxisNameFontSize': '14',
       'labelFontSize': '13',
       'chartLeftMargin': '0',
-      'numDivLines': '4'
-      // 'canvasBgColor': '#ff0000'
+      'numDivLines': '4',
+      'baseFont': 'Open Sans, sans-serif',
+      'baseFontColor': Colors.pebble
     }, chartOptions),
     'annotations': {'groups': [{'items': annotationItems}]}
   };
@@ -323,9 +320,7 @@ export function generateChartDataSource(rawData, props) {
     dataSourceObject.trendlines[0].line[0].displayvalue = averageValue +
     (chartOptions.numberSuffix ? chartOptions.numberSuffix : '');
   }
-  if (props.attributes.id === 'IncomingTopBandwidth') {
-    console.log(JSON.stringify(dataSourceObject));
-  }
+
   return dataSourceObject;
 }
 
@@ -339,10 +334,6 @@ const renderChart = (props) => {
 
   let rawData = {};
   rawData = generateRawData(fieldMapping, data);
-
-  if (props.attributes.id === 'IncomingTopBandwidth') {
-    console.log(JSON.stringify(rawData));
-  }
 
   FusionCharts.ready(function() {
     const fusioncharts = new FusionCharts({
@@ -370,7 +361,8 @@ class HorizontalBarChart extends React.Component {
         heading: {
           fontSize: '14px',
           color: Colors.grape,
-          fontWeight: '600'
+          fontWeight: '600',
+          backgroundColor: Colors.subHeadingBGColor
         }
       };
     return (
