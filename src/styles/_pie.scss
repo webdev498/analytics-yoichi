@@ -1,0 +1,48 @@
+.pie-chart {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.pieCard {
+  /*padding: 60px 50px 20px;*/
+}
+.pie-chart .slice {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.pie-chart .chart-center {
+  position: absolute;
+  border-radius: 50%;
+}
+.pie-chart .chart-center span {
+  display: block;
+  text-align: center;
+}
+
+.pie-chart.chart {
+  width: 230px;
+  height: 230px;
+}
+.pie-chart.chart .slice.one {
+  clip: rect(0 230px 115px 0);
+}
+.pie-chart.chart .slice.two {
+  clip: rect(0 115px 230px 0);
+}
+.pie-chart.chart .chart-center {
+  top: 55px;
+  left: 55px;
+  width: 120px;
+  height: 120px;
+  background: $WhiteColor;
+}
+.pie-chart.chart .chart-center span {
+  font-size: 12px;
+  line-height: 35px;
+  color: $WhiteColor;
+  margin-top: -43px;
+  padding-left: 40px;
+}

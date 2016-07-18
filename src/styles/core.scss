@@ -3,6 +3,8 @@
   @import 'vendor/normalize';
   @import 'color';
   @import 'table';
+  @import 'doughnut';
+  @import 'pie';
 
   // Some best-practice CSS that's useful for most apps
   // Just remove them if they're not what you want
@@ -28,11 +30,4 @@
     padding-top: 64px;
     box-sizing: border-box;
   }
-
-  /*.refreshIcon {
-    cursor: 'pointer';
-    font-size: '20px';
-    color: 'red';
-    font-weight: 600;
-  }*/
 }

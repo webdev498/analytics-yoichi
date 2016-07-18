@@ -1,6 +1,4 @@
 .threatTable table {
-  /*border: 1px solid #373737;*/
-  /*margin-bottom: 20px;*/
   text-align: left;
   width:100% !important;
  }
@@ -23,7 +21,7 @@
   vertical-align: top;
  }
 
-.reactable-page-button, .reactable-previous-page, .reactable-next-page {
+.threatTable .reactable-page-button, .reactable-previous-page, .reactable-next-page {
   margin-left: 5px;
   margin-right: 2px;
   margin-bottom: 6px;
@@ -32,13 +30,10 @@
   float: left;
   cursor: pointer;
   color: $CloudColorShade1;
-  /*border: 1px solid #AAA;*/
-  /*background-color: #EEE;*/
   text-align: center;
-  /*border-radius: 5px;*/
   text-decoration: none;
 }
-.reactable-next-page {
+.threatTable .reactable-next-page {
   margin-left: 5px;
   margin-right: 2px;
   margin-bottom: 6px;
@@ -46,16 +41,13 @@
   width: 55px;
   float: left;
   cursor: pointer;
-  color: $CloudColorShade1;
-  /*border: 1px solid #AAA;*/
-  /*background-color: #EEE;*/
+  color: $SmokeColor;
   text-align: center;
-  /*border-radius: 5px;*/
   text-decoration: none;
-  content: '\25B2';
   font-size: 13px;
 }
-.reactable-previous-page {
+
+.threatTable .reactable-previous-page {
   margin-left: 5px;
   margin-right: 2px;
   margin-bottom: 6px;
@@ -63,21 +55,18 @@
   width: 75px;
   float: left;
   cursor: pointer;
-  color: $CloudColorShade1;
-  /*border: 1px solid #AAA;*/
-  /*background-color: #EEE;*/
+  color: $SmokeColor;
   text-align: center;
-  /*border-radius: 5px;*/
   text-decoration: none;
 }
-.reactable-page-button:hover, .reactable-previous-page:hover, .reactable-next-page:hover {
+.threatTable .reactable-page-button:hover, .reactable-previous-page:hover, .reactable-next-page:hover {
   text-decoration: none;
-  color: $CloudColorShade1;
-  /*background-color: $CloudColorShade2;*/
+  color: $PebbleColor;
 }
 
-.reactable-current-page, .reactable-current-page:hover {
+.threatTable .reactable-current-page, .reactable-current-page:hover {
   background-color: $CloudColorShade2;
+  color: $PebbleColor;
   cursor: default;
 }
 
@@ -141,16 +130,6 @@ background-color: $WhiteColor !important;
   padding-left:53px;
   padding-right: 40px;
   font-size:13px;
-}
-
-.chartCaption {
-  color: #555555;
-  font-family: Verdana,sans;
-  font-size: 14px;
-  font-weight: bold;
-  padding-top: 10px;
-  text-align: center;
-  width: 100%;
 }
 
 .text-center {
