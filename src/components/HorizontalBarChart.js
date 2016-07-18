@@ -5,65 +5,78 @@ import {
   getColumnIndexArrayFromColumnName,
   getIndexFromColumnName,
   getIndexFromObjectName,
-  isUndefined
+  getColorRanges
 } from 'utils/utils';
 
-export function generateDataArray(columnIndexArray, rowsArray, displayTopFive) {
+export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, orgDataset, connection) {
   let dataset = [],
-    annotationItems = [];
+    annotationItems = [],
+    valueIndex = 0,
+    secureConnectionsValues = [],
+    maliciousConnectionsValues = [];
   if (columnIndexArray.length !== 0) {
     for (let d = 0, rowsLen = rowsArray.length; d < rowsLen; d++) {
-      let obj1 = {};
-      obj1.label = rowsArray[d][columnIndexArray[0]];
-      if (obj1.label.length > 15) {
-        obj1.label = obj1.label.substring(0, 15) + ' (...)';
-      }
-      obj1.value = rowsArray[d][columnIndexArray[1]];
-      obj1.toolText = rowsArray[d][columnIndexArray[0]] + ', ' + rowsArray[d][columnIndexArray[1]];
-      dataset.push(obj1);
+      let labelExists = 0,
+        label1 = rowsArray[d][columnIndexArray[0]];
 
-      annotationItems = annotationItems.concat([
-        /*{
-          'id': 'datasetline' + d + '-1',
-          'type': 'line',
-          'x': '$dataset.0.set.' + d + '.STARTX',
-          'y': '$dataset.0.set.' + d + '.STARTY',
-          'toX': '$canvasEndX',
-          'toY': '$dataset.0.set.' + d + '.STARTY',
-          'thickness': '1',
-          'color': '#E5E5EA'
-        },
-        {
-          'id': 'datasetline' + d + '-2',
-          'type': 'line',
-          'x': '$dataset.0.set.' + d + '.ENDX',
-          'y': '$dataset.0.set.' + d + '.ENDY',
-          'toX': '$canvasEndX',
-          'toY': '$dataset.0.set.' + d + '.ENDY',
-          'thickness': '1',
-          'color': '#E5E5EA'
-        },*/
-        {
-          'id': 'datasetlabel' + d,
-          'type': 'text',
-          'text': obj1.label,
-          'align': 'left',
-          'x': '$chartEndX - 146',
-          'y': '$dataset.0.set.' + d + '.CenterY',
-          'fontSize': '11',
-          'color': '#6B7282',
-          'font': 'Open Sans, sans-serif'
+      if (displayTopFive) {
+        for (let j = 0; j < orgDataset.length; j++) {
+          let label2 = orgDataset[j].label;
+          if (label1 === label2) {
+            labelExists = 1;
+            break;
+          }
         }
-      ]);
+      }
 
-      if (!isUndefined(displayTopFive) && displayTopFive && d === 4) {
-        break;
+      if (!labelExists && label1 !== 'N/A') {
+        let obj1 = {};
+        obj1.label = label1;
+        if (obj1.label.length > 15) {
+          obj1.label = obj1.label.substring(0, 15) + ' (...)';
+        }
+        obj1.value = rowsArray[d][columnIndexArray[1]];
+        obj1.connection = connection;
+        obj1.toolText = rowsArray[d][columnIndexArray[0]] + ', ' + rowsArray[d][columnIndexArray[1]];
+        dataset.push(obj1);
+
+        if (displayTopFive) {
+          let value = obj1.value;
+          if (connection === 'secure' || connection === 'malicious') {
+            if (value !== null && parseInt(value) !== 0) {
+              if (connection === 'secure') {
+                secureConnectionsValues[valueIndex] = value;
+              }
+              if (connection === 'malicious') {
+                maliciousConnectionsValues[valueIndex] = value;
+              }
+              valueIndex++;
+            }
+          }
+        }
+        else {
+          annotationItems = annotationItems.concat([
+            {
+              'id': 'datasetlabel' + d,
+              'type': 'text',
+              'text': obj1.label,
+              'align': 'left',
+              'x': '$chartEndX - 146',
+              'y': '$dataset.0.set.' + d + '.CenterY',
+              'fontSize': '11',
+              'color': '#6B7282',
+              'font': 'Open Sans, sans-serif'
+            }
+          ]);
+        }
       }
     }
   }
   return {
     dataset: dataset,
-    annotationItems: annotationItems
+    annotationItems: annotationItems,
+    secureConnectionsValues: secureConnectionsValues,
+    maliciousConnectionsValues: maliciousConnectionsValues
   };
 }
 
@@ -78,7 +91,10 @@ export function generateChartDataSource(rawData, props) {
     averageValue = '',
     dataset = [],
     annotationItems = [],
-    dataArray = [];
+    dataArray = [],
+    paletteColors = '',
+    secureConnectionsValues = [],
+    maliciousConnectionsValues = [];
 
   for (let i = 0; i < fieldMapping.length; i++) {
     let currentChartData = fieldMapping[i],
@@ -142,42 +158,111 @@ export function generateChartDataSource(rawData, props) {
         }
       }
       columnIndexArray = [0, 1]; // Need to generate this index array dynamically. For now, kept it as hardcode
-      dataArray = generateDataArray(columnIndexArray, newRawData, displayTopFive);
+      dataArray = generateDataArray(columnIndexArray, newRawData, displayTopFive, dataset, '');
       dataset = dataArray.dataset;
       annotationItems = dataArray.annotationItems;
     }
     else {
-      // if (currentChartData.reportId === 'taf_dest_countries,taf_dest_bad_reputation_countries' ||
-      //  currentChartData.reportId === 'taf_source_countries,taf_source_bad_reputation_countries') {
-      // }
-      // else {
+      if (currentChartData.connection === 'secure' || currentChartData.connection === 'malicious') {
         columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
-        dataArray = generateDataArray(columnIndexArray, rows, displayTopFive);
-        dataset = dataArray.dataset;
-        annotationItems = dataArray.annotationItems;
 
-        if (displayTopFive) {
+        let valueIndex = 0;
+        // Calculate max connections values and create color ranges for both secure and malicious connections
+        for (let l = 0, rowsLen = rows.length; l < rowsLen; l++) {
+          if (rows[l][columnIndexArray[0]] === 'N/A') {
+            // continue;
+          }
+          else {
+            let value = rows[l][columnIndexArray[1]];
+            if (currentChartData.connection === 'secure' || currentChartData.connection === 'malicious') {
+              if (value !== null && parseInt(value) !== 0) {
+                if (currentChartData.connection === 'secure') {
+                  secureConnectionsValues[valueIndex] = value;
+                }
+                if (currentChartData.connection === 'malicious') {
+                  maliciousConnectionsValues[valueIndex] = value;
+                }
+                valueIndex++;
+              }
+            }
+          }
+        }
+
+        let colorRanges = getColorRanges(secureConnectionsValues, maliciousConnectionsValues),
+          secureColorRanges = colorRanges.secure,
+          maliciousColorRanges = colorRanges.malicious;
+
+        dataArray = generateDataArray(columnIndexArray, rows, displayTopFive, dataset, currentChartData.connection);
+        dataset = dataset.concat(dataArray.dataset);
+
+        if (currentChartData.connection === 'malicious') {
+          maliciousConnectionsValues = dataArray.maliciousConnectionsValues;
+        }
+
+        if (displayTopFive && currentChartData.connection === 'secure') {
           dataset.sort(function(a, b) {
             return b.value - a.value;
           });
           dataset = dataset.slice(0, 5);
+
+          if (props.attributes.id === 'IncomingTopCountries') {
+            console.log(JSON.stringify(dataset));
+          }
+
+          for (let j = 0; j < dataset.length; j++) {
+            annotationItems = annotationItems.concat([
+              {
+                'id': 'datasetlabel' + j,
+                'type': 'text',
+                'text': dataset[j].label,
+                'align': 'left',
+                'x': '$chartEndX - 146',
+                'y': '$dataset.0.set.' + j + '.CenterY',
+                'fontSize': '11',
+                'color': '#6B7282',
+                'font': 'Open Sans, sans-serif'
+              }
+            ]);
+
+            if (dataset[j].connection === 'malicious') {
+              for (let p = 0; p < maliciousColorRanges.length; p++) {
+                if (maliciousColorRanges[p].min <= parseInt(dataset[j].value) &&
+                  maliciousColorRanges[p].max >= parseInt(dataset[j].value)) {
+                  if (paletteColors !== '') {
+                    paletteColors = paletteColors + ',' + maliciousColorRanges[p].color;
+                  }
+                  else {
+                    paletteColors = maliciousColorRanges[p].color;
+                  }
+                  break;
+                }
+              }
+            }
+            if (dataset[j].connection === 'secure') {
+              for (let p = 0; p < secureColorRanges.length; p++) {
+                if (secureColorRanges[p].min <= parseInt(dataset[j].value) &&
+                  secureColorRanges[p].max >= parseInt(dataset[j].value)) {
+                  if (paletteColors !== '') {
+                    paletteColors = paletteColors + ',' + secureColorRanges[p].color;
+                  }
+                  else {
+                    paletteColors = secureColorRanges[p].color;
+                  }
+                  break;
+                }
+              }
+            }
+          }
         }
-      // }
+      }
+      else {
+        columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
+        dataArray = generateDataArray(columnIndexArray, rows, displayTopFive, dataset, '');
+        dataset = dataArray.dataset;
+        annotationItems = dataArray.annotationItems;
+      }
     }
   }
-
-  // annotationItems.push(
-  //   {
-  //     'id': 'canvas-bg',
-  //     'type': 'image',
-  //     'alpha': '20',
-  //     'url': 'img/canvas-grid-bg.png',
-  //     'x': '$CanvasStartX',
-  //     'tox': '$canvasEndX',
-  //     'y': '$CanvasStartY',
-  //     'toy': '$canvasEndY'
-  //   }
-  // );
 
   const dataSourceObject = {
     chart: Object.assign({
@@ -220,6 +305,10 @@ export function generateChartDataSource(rawData, props) {
     'annotations': {'groups': [{'items': annotationItems}]}
   };
 
+  if (paletteColors !== '') {
+    dataSourceObject.chart.paletteColors = paletteColors;
+  }
+
   if (dataset.length < 5) {
     dataSourceObject.chart = Object.assign(dataSourceObject.chart, {'Plotspacepercent': '100'});
   }
@@ -234,6 +323,9 @@ export function generateChartDataSource(rawData, props) {
     dataSourceObject.trendlines[0].line[0].displayvalue = averageValue +
     (chartOptions.numberSuffix ? chartOptions.numberSuffix : '');
   }
+  if (props.attributes.id === 'IncomingTopBandwidth') {
+    console.log(JSON.stringify(dataSourceObject));
+  }
   return dataSourceObject;
 }
 
@@ -247,6 +339,10 @@ const renderChart = (props) => {
 
   let rawData = {};
   rawData = generateRawData(fieldMapping, data);
+
+  if (props.attributes.id === 'IncomingTopBandwidth') {
+    console.log(JSON.stringify(rawData));
+  }
 
   FusionCharts.ready(function() {
     const fusioncharts = new FusionCharts({

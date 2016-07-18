@@ -13,7 +13,7 @@ import {
   generatePathParams
 } from 'utils/kibanaUtils';
 
-function generateChartDataSource(rawData, props, secureColors, maliciousColors) {
+function generateChartDataSource(rawData, props) {
   const {chartOptions, chartData} = props;
   let dataObject = [],
     secureConnectionsValues = [],
@@ -58,8 +58,7 @@ function generateChartDataSource(rawData, props, secureColors, maliciousColors) 
         }
       }
 
-      let colorRanges = getColorRanges(secureConnectionsValues, maliciousConnectionsValues,
-        secureColors, maliciousColors),
+      let colorRanges = getColorRanges(secureConnectionsValues, maliciousConnectionsValues),
         secureColorRanges = colorRanges.secure,
         maliciousColorRanges = colorRanges.malicious;
 
@@ -146,7 +145,7 @@ class WorldMap extends React.Component {
     attributes: PropTypes.object
   }
 
-  renderChart(props, secureColors, maliciousColors) {
+  renderChart(props) {
     if (!props.data) {
       return;
     }
@@ -166,7 +165,7 @@ class WorldMap extends React.Component {
         height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
-        dataSource: generateChartDataSource(rawData, props, secureColors, maliciousColors),
+        dataSource: generateChartDataSource(rawData, props),
         events: {
           entityClick: function(eventObj, dataObj) {
             const url = getEntityClickUrl(props, dataObj);

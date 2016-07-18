@@ -312,7 +312,7 @@ export const getCountryCodeByCountryName = {'Antigua and Barbuda': 'AG', 'Bahama
   'UnitedArabEmirates': 'AE', 'Yemen': 'YM', 'Puerto Rico': 'PR', 'Cayman Islands': 'KY', 'South Sudan': 'SS',
   'Kosovo': 'KO'};
 
-function getColorRanges(secureConnectionsValues, maliciousConnectionsValues) {
+export function getColorRanges(secureConnectionsValues, maliciousConnectionsValues) {
   const secureColors = [
       '#2BD8D0',
       '#51DFD8',
