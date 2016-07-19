@@ -6,9 +6,10 @@ const styles = {
   }
 };
 
-function getChild(child, props) {
+function getChild(child, props, index) {
   const data = child.props.data || props.data;
-  return React.cloneElement(child, {...child.props, data, duration: props.duration});
+  const id = child.props.id || props.id;
+  return React.cloneElement(child, {...child.props, data, duration: props.duration, key: id + '' + index});
 }
 
 class CompoundCard extends React.Component {
@@ -27,7 +28,7 @@ class CompoundCard extends React.Component {
       <div style={compoundCardStyle}>
         {
           children.map((child, index) => {
-            return getChild(child, props);
+            return getChild(child, props, index);
           })
         }
       </div>
