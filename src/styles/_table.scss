@@ -127,9 +127,14 @@ background-color: $WhiteColor !important;
   background: $CloudColorShade2;
   border: 0px;
   height:35px;
-  padding-left:53px;
+  padding-left:12px;
   padding-right: 40px;
   font-size:13px;
+  margin-left:46px;
+}
+
+.searchText:focus {
+  outline: none;
 }
 
 .text-center {
@@ -146,3 +151,4 @@ background-color: $WhiteColor !important;
 .durationLabel {
     padding: 1px 7px 0px;background-color:transparent;float:left;font-size:12px;
 }
+

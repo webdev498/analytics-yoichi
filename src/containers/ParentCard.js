@@ -19,7 +19,7 @@ const styles = {
   childwrap: {
     position: 'relative',
     borderRadius: 0,
-    boxShadow: '#fff 0px 0px 0px',
+    boxShadow: Colors.white + ' 0px 0px 0px',
     border: '0px'
   },
   header: {
@@ -39,7 +39,7 @@ const styles = {
   refreshIcon: {
     cursor: 'pointer',
     fontSize: '20px',
-    color: '#CBCBD1',
+    color: Colors.smoke,
     fontWeight: 600
   },
   crossIcon: {
@@ -55,7 +55,7 @@ const styles = {
   },
   searchIcon: {
     bottom: '5px',
-    color: '#CBCBD1',
+    color: Colors.smoke,
     cursor: 'pointer',
     fontSize: '21px',
     height: '14px',
@@ -66,25 +66,49 @@ const styles = {
     fontWeight: 600
   },
   clearIcon: {
-    color: '#fff',
-    cursor: 'pointer',
+    color: Colors.white,
+    cursor: 'initial',
     fontSize: '21px',
     height: '35px',
     margin: 'auto',
     position: 'absolute',
     top: '0',
-    background: '#CBCBD1',
+    background: Colors.smoke,
     lineHeight: '35px',
     width: '45px',
     textAlign: 'center',
     fontWeight: 600
+  },
+  clearDiv: {
+    color: 'transparent',
+    cursor: 'initial',
+    fontSize: '21px',
+    height: '35px',
+    margin: 'auto',
+    position: 'absolute',
+    top: '0',
+    background: 'transparent',
+    lineHeight: '35px',
+    width: '45px',
+    textAlign: 'center',
+    fontWeight: 600,
+    display: 'inline'
   }
 };
 
 class ParentCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {search: ''};
+    this.state = {
+      search: '',
+      clearIconStyle: {
+        color: 'transparent',
+        background: 'transparent'
+      },
+      searchTextStyle: {
+        paddingLeft: '12px'
+      }
+    };
   }
 
   static propTypes = {
@@ -154,9 +178,38 @@ class ParentCard extends React.Component {
   }
 
   focusSearchText() {
-    if (this.myTextInput !== null) {
-      this.myTextInput.focus();
-    }
+    return (event) => {
+      if (this.myTextInput !== null) {
+        this.myTextInput.focus();
+      }
+    };
+  }
+
+  displayClearIcon(display) {
+    return (event) => {
+      if (display) {
+        this.setState({
+          clearIconStyle: {
+            color: Colors.white,
+            background: Colors.smoke
+          },
+          searchTextStyle: {
+            paddingLeft: '53px'
+          }
+        });
+      }
+      else {
+        this.setState({
+          clearIconStyle: {
+            color: 'transparent',
+            background: 'transparent'
+          },
+          searchTextStyle: {
+            paddingLeft: '12px'
+          }
+        });
+      }
+    };
   }
 
   render() {
@@ -179,19 +232,25 @@ class ParentCard extends React.Component {
               props.meta.showSearch
               ? <div style={styles.inputWrap}>
                 <FontIcon className='material-icons'
-                  style={styles.clearIcon}
-                  onClick={this.clearSearchText()}>
+                  style={{...styles.clearIcon, ...this.state.clearIconStyle}}
+                  ref={(ref) => this.clearIcon = ref}>
                   close
                 </FontIcon>
+                <div style={{...styles.clearDiv}}
+                  onClick={this.clearSearchText()}
+                ></div>
                 <input
                   id='searchText'
                   type='text'
                   className='searchText'
+                  // style={{...this.state.searchTextStyle}}
                   onChange={this.updateSearch()}
+                  onFocus={this.displayClearIcon(true)}
+                  onBlur={this.displayClearIcon(false)}
                   ref={(ref) => this.myTextInput = ref} />
                 <FontIcon className='material-icons'
                   style={styles.searchIcon}
-                  onClick={() => this.focusSearchText()}>
+                  onClick={this.focusSearchText()}>
                   search
                 </FontIcon>
               </div>
