@@ -316,7 +316,7 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
           columnText += fieldValue;
         }
         else if (!isUndefined(displayName) && displayName.toLowerCase() === 'port') {
-          fieldValue = '<span class="firstRowInColumn">' + ':' + fieldValue + '</span>';
+          fieldValue = ':' + fieldValue;
           columnText += fieldValue;
         }
         else if (!isUndefined(displayName) && displayName.toLowerCase() === 'countryflag') {
@@ -327,15 +327,21 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
           fieldValue = '<span class="description">' + fieldValue + '</span>';
           columnText += fieldValue;
         }
-        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'ip') {
-          columnText += '<span class="firstRowInColumn">' + displayName + ': ' + fieldValue + '</span>';
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'title') {
+          fieldValue = '<span class="title">' + fieldValue + '</span>';
+          columnText += fieldValue;
+        }
+        else if (!isUndefined(displayName) && (displayName.toLowerCase() === 'ip' ||
+          displayName.toLowerCase() === 'user' || displayName.toLowerCase() === 'machine' ||
+          displayName.toLowerCase() === 'asn' || displayName.toLowerCase() === 'owner')) {
+          columnText += '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
         }
         else if (isUndefined(displayName)) {
           columnText += '<br/>' + fieldValue;
         }
         else {
           if (displayName !== '') {
-            displayName = '<b>' + displayName + '</b>: ';
+            displayName = '<span class="heading">' + displayName + ': </span>';
           }
           columnText += '<br/>' + displayName + fieldValue;
         }
@@ -354,15 +360,21 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
           fieldValue = '<span class="description">' + fieldValue + '</span>';
           columnText += fieldValue;
         }
-        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'ip') {
-          columnText += '<span class="firstRowInColumn">' + displayName + ': ' + fieldValue + '</span>';
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'title') {
+          fieldValue = '<span class="title">' + fieldValue + '</span>';
+          columnText += fieldValue;
+        }
+        else if (!isUndefined(displayName) && (displayName.toLowerCase() === 'ip' ||
+          displayName.toLowerCase() === 'user' || displayName.toLowerCase() === 'machine' ||
+          displayName.toLowerCase() === 'asn' || displayName.toLowerCase() === 'owner')) {
+          columnText += '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
         }
         else if (isUndefined(displayName)) {
-          columnText += '<br/>' + fieldValue;
+          columnText += fieldValue;
         }
         else {
           if (displayName !== '') {
-            displayName = '<b>' + displayName + '</b>: ';
+            displayName = '<span class="heading">' + displayName + ': </span>';
           }
           columnText += displayName + fieldValue;
         }
@@ -376,11 +388,13 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
 }
 
 export function generateColumnTextForDisplayingDate(fieldValue) {
-  let fieldValueInLocalTime = moment.utc(fieldValue).toDate(),
-    fieldValueInLocalTime1 = moment(fieldValueInLocalTime).format('D MMM YYYY'),
-    fieldValueInLocalTime2 = moment(fieldValueInLocalTime).format('HH:mm:ss');
-  fieldValue = '<span style="font-size: 14px; font-weight: 600;">' + fieldValueInLocalTime1 + '</span>';
-  fieldValue += '<br/>' + fieldValueInLocalTime2;
+  let fieldValue1 = moment.utc(fieldValue).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    localDateTime = moment.utc(fieldValue1).toDate(),
+    localDate = moment(localDateTime).format('DD MMM YYYY'),
+    localTime = moment(localDateTime).format('HH:mm:ss.SSS');
+
+  fieldValue = '<span style="font-size: 14px; font-weight: 600;">' + localDate + '</span>';
+  fieldValue += '<br/>' + localTime;
   return fieldValue;
 }
 
@@ -413,15 +427,9 @@ function rowClick(context, tableRow) {
   context.clickThrough(tableRow.rowClickUrl);
 }
 
-// export function setFilterText(tableId, filterText) {
-//   id = tableId;
-//   filterBy = filterText;
-// }
-
 class tableCard extends React.Component {
   constructor(props) {
     super(props);
-
     this.handleRowClick = this.handleRowClick.bind(this);
   }
 
