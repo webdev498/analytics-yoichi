@@ -32,6 +32,8 @@ export const SubHeadingBGColor = '#F7F7F9';
 
 export const DefaultGraphPaletteColors = '#2BD8D0,#51DFD8,#71E5DF,#97ECE8,#BAF2F0,#DBF8F7';
 
+export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
+
 export const Colors = {
   garnet: GarnetColor,
   grape: GrapeColor,
@@ -51,7 +53,8 @@ export const Colors = {
   areaSparkLineChartColor: AreaSparkLineChartColor,
   durationWidgetColor: DurationWidgetColor,
   subHeadingBGColor: SubHeadingBGColor,
-  defaultGraphPaletteColors: DefaultGraphPaletteColors
+  defaultGraphPaletteColors: DefaultGraphPaletteColors,
+  defaultCanvasBGColors: DefaultCanvasBGColors
 };
 
 export const PrimaryPalette = {
