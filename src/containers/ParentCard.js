@@ -62,7 +62,7 @@ const styles = {
     margin: 'auto',
     position: 'absolute',
     right: '12px',
-    top: '0',
+    top: 0,
     fontWeight: 600
   },
   clearIcon: {
@@ -72,7 +72,7 @@ const styles = {
     height: '35px',
     margin: 'auto',
     position: 'absolute',
-    top: '0',
+    top: 0,
     background: '#CBCBD1',
     lineHeight: '35px',
     width: '45px',
