@@ -3,7 +3,6 @@ import {Colors} from 'theme/colors';
 
 import { connect } from 'react-redux';
 import {fetchApiData} from 'actions/ParentCard';
-import {getTimePairFromWindow} from 'utils/utils';
 
 const styles = {
   card: {
@@ -38,38 +37,6 @@ class AlertDetails extends React.Component {
     data: PropTypes.object
   }
 
-  getSource(source) {
-    let str = '';
-    if (source) {
-      str += source.ip ? `From IP ${source.ip} ` : '';
-      str += source.port ? `:${source.port} ` : '';
-      str += source.country ? `(${source.country}) ` : '';
-
-      if (source.additionalInfo) {
-        str += source.additionalInfo.user ? `initiated by ${source.additionalInfo.user} ` : '';
-        str += source.additionalInfo.machine ? `on machine ${source.additionalInfo.machine} ` : '';
-      }
-    }
-    return str;
-  }
-
-  getDestination(destination) {
-    let str = '';
-
-    if (destination) {
-      str += destination.ip ? `to IP ${destination.ip} ` : '';
-      str += destination.port ? `:${destination.port} ` : '';
-      str += destination.country ? `(${destination.country}) ` : '';
-
-      if (destination.additionalInfo) {
-        str += destination.additionalInfo.user ? `user ${destination.additionalInfo.user} ` : '';
-        str += destination.additionalInfo.machine ? `on machine ${destination.additionalInfo.machine} ` : '';
-      }
-    }
-
-    return str;
-  }
-
   getTrafficDetails() {
     const data = this.props.data.data.rank_alert;
     const {props} = this;
@@ -79,13 +46,63 @@ class AlertDetails extends React.Component {
     props.fetchApiData(id, api);
   }
 
+  _getAlertParams() {
+    const alertDetails = this.props.data;
+    const params = [];
+    const source = alertDetails.source;
+    if (source) {
+      source.ip && params.push({text: 'From IP ' + source.ip});
+      source.port && params.push({text: ' : ' + source.port});
+      source.country && params.push({text: source.country, flag: source.country.toLowerCase()});
+      // source.country && params.push({text: ':' + source.country});
+
+      const additionalInfo = source.additionalInfo;
+      if (additionalInfo) {
+        additionalInfo.user && params.push({text: ' initiated by ' + additionalInfo.user});
+        additionalInfo.machine && params.push({text: ' initiated by ' + additionalInfo.machine});
+      }
+    }
+
+    if (alertDetails.destination) {
+      const dest = alertDetails.destination;
+
+      dest.ip && params.push({text: ' to IP ' + dest.ip});
+      dest.port && params.push({text: ' : ' + dest.port});
+      dest.country && params.push({text: dest.county, flat: dest.country.toLowerCase()});
+      // dest.reputation &&
+      const additionalInfo = dest.additionalInfo;
+      if (additionalInfo) {
+        additionalInfo.user && params.push({text: ' initiated by ' + additionalInfo.user});
+        additionalInfo.machine && params.push({text: ' initiated by ' + additionalInfo.machine});
+      }
+    }
+
+    return params;
+  }
+
+  getAlertDetails() {
+    return this._getAlertParams().map((item) => {
+      if (item.flag) {
+        (
+          <span>
+            <span>{item.text}</span>
+            <span className={'flag-icon flag-icon-' + item.country}></span>
+          </span>
+        );
+      }
+      else {
+        return (<span>{item.text}</span>);
+      }
+    });
+  }
+
   render() {
     if (!this.props.data) return null;
 
     const data = this.props.data.data.rank_alert;
 
-    const {source, destination} = this.props.data;
-
+    // should be called when the main page data is loaded,
+    // or get the api updated.
     this.getTrafficDetails();
 
     return (
@@ -117,13 +134,8 @@ class AlertDetails extends React.Component {
               <b style={styles.itemTitle}>
                 Details
               </b>
-
               <span>
-                {this.getSource(source)}
-              </span>
-
-              <span>
-                {this.getDestination(destination)}
+                {this.getAlertDetails()}
               </span>
             </li>
           </ul>

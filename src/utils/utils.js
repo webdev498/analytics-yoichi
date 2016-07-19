@@ -371,3 +371,31 @@ export function getColorRanges(secureConnectionsValues, maliciousConnectionsValu
     malicious: maliciousColorRanges
   };
 }
+
+export function formatBytes(bytes, decimals) {
+  if (bytes === '' || bytes === undefined) return '-';
+  if (bytes === 0) return '0 Byte';
+
+  const k = 1000,
+    dm = decimals + 1 || 3,
+    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[i];
+};
+
+export function formatMicroseconds(miliseconds) {
+  var seconds = Math.floor(miliseconds / 1000);
+  var days = Math.floor(seconds / 86400);
+  var hours = Math.floor((seconds % 86400) / 3600);
+  var minutes = Math.floor(((seconds % 86400) % 3600) / 60);
+  var timeString = '';
+  if (days > 0) timeString += (days > 1) ? (days + ' days ') : (days + ' day ');
+  if (hours > 0) timeString += (hours > 1) ? (hours + ' hours ') : (hours + ' hour ');
+  if (minutes > 0) timeString += (minutes > 1) ? (minutes + ' minutes ') : (minutes + ' minute ');
+  if (seconds > 0) timeString += (seconds > 1) ? (seconds + ' seconds ') : (seconds + ' second ');
+  var ms = miliseconds % 1000;
+  if (ms >= 0) timeString += (ms + ' ms');
+
+  return Math.floor(timeString / 1000);
+}
