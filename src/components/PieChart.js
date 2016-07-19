@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import {Colors} from 'theme/colors';
 import {
   generateRawData,
   getIndexFromObjectName,
@@ -11,14 +12,15 @@ import PercentageWidget from 'components/PercentageWidget';
 const styles = {
   'chartCaption': {
     'width': '100%',
-    'color': '#444C63',
+    'color': Colors.grape,
     'fontFamily': 'Open Sans, sans-serif',
     'fontSize': '14px',
-    'fontWeight': 'bold',
-    'lineHeight': '60px',
-    'height': '60px',
+    'fontWeight': '600',
+    'paddingBottom': '30px',
     'paddingLeft': '20px',
-    'backgroundColor': 'lightgray'
+    'backgroundColor': Colors.subHeadingBGColor,
+    'lineHeight': '60px',
+    'height': '60px'
   },
   'pieWrap': {
     width: '100%',
@@ -31,9 +33,9 @@ const styles = {
   }
 };
 
-let highlightedColor1 = '#2BD8D0', // Blue (Default colors set)
-  highlightedColor2 = '#8ABB24', // Green (Default colors set)
-  nonHighlightedColor = '#E5E5EA', // Gray (Default colors set)
+let highlightedColor1 = Colors.turquoise,
+  highlightedColor2 = Colors.coral,
+  nonHighlightedColor = Colors.cloud,
   doughnutAttributes = {},
   countValue = 0,
   totalValue = 0,
@@ -213,7 +215,21 @@ class PieChart extends React.Component {
     tableOptions: PropTypes.object
   }
   render() {
-    const {props} = this;
+    const {props} = this,
+      style = {
+        'percentageDisplay': {
+          fontSize: '35px',
+          color: Colors.turquoise
+        },
+        'legend1': {
+          fontSize: '13px',
+          color: Colors.pebble
+        },
+        'legend2': {
+          fontSize: '13px',
+          color: Colors.smoke
+        }
+      };
 
     renderChart(props);
     return (
@@ -237,15 +253,15 @@ class PieChart extends React.Component {
             <PercentageWidget iconName='desktop_mac' percentage={doughnutAttributes.percentage1} />
           </div>
           <div style={{}}>
-            <span style={{fontSize: '35px', color: '#2BD8D0'}}>{doughnutAttributes.displayPercentage2}</span>
+            <span style={style.percentageDisplay}>{doughnutAttributes.displayPercentage2}</span>
             <br />
-            <span style={{fontSize: '13px', color: '#6b7282'}}>{props.meta.legend[0]}</span>
+            <span style={style.legend1}>{props.meta.legend[0]}</span>
             <br /><br />
-            <span style={{fontSize: '13px', color: '#cbcbd1'}}>{props.meta.legend[1]}</span>
+            <span style={style.legend2}>{props.meta.legend[1]}</span>
             <br /><br />
-            <span style={{fontSize: '35px', color: '#2BD8D0'}}>{doughnutAttributes.displayPercentage1}</span>
+            <span style={style.percentageDisplay}>{doughnutAttributes.displayPercentage1}</span>
             <br />
-            <span style={{fontSize: '13px', color: '#6b7282'}}>{props.meta.legend[2]}</span>
+            <span style={style.legend1}>{props.meta.legend[2]}</span>
           </div>
         </div>
       </div>
