@@ -262,7 +262,7 @@ export function generateChartDataSource(rawData, props) {
 
   const dataSourceObject = {
     chart: Object.assign({
-      'paletteColors': '#2BD8D0,#51DFD8,#71E5DF, #97ECE8,#BAF2F0, #DBF8F7',
+      'paletteColors': Colors.defaultGraphPaletteColors,
       'bgColor': Colors.white,
       'showBorder': '0',
       'showCanvasBorder': '0',

@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import {Colors} from 'theme/colors';
 import {
   getIndexFromColumnName,
   isUndefined
@@ -63,7 +64,7 @@ function generateChartDataSource(data, props) {
       'yAxisNameFontSize': '13',
       'xAxisNamePadding': '20',
       'yAxisNamePadding': '20',
-      'lineColor': '#f69275',
+      'lineColor': Colors.coral,
       'showXAxisLine': '0',
       'showYAxisLine': '0',
       'divLineIsDashed': '0',
@@ -72,7 +73,10 @@ function generateChartDataSource(data, props) {
       'chartLeftMargin': '0',
       'chartRightMargin': '0',
       'chartBottomMargin': '0',
-      'numDivLines': '6'
+      'numDivLines': '6',
+      'baseFont': 'Open Sans, sans-serif',
+      'baseFontColor': Colors.pebble,
+      'paletteColors': Colors.defaultGraphPaletteColors
     }, chartOptions),
     data: graphBars
   };

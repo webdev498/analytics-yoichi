@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import {Colors} from 'theme/colors';
 import moment from 'moment';
 import {
   calculateDateDisplayFormat,
@@ -276,7 +277,8 @@ function generateChartDataSource(rawData, props) {
       'chartRightMargin': '0',
       'chartBottomMargin': '0',
       'baseFont': 'Open Sans, sans-serif',
-      'baseFontColor': '#6B7282'
+      'baseFontColor': Colors.pebble,
+      'paletteColors': Colors.defaultGraphPaletteColors
     }, chartOptions)
   };
 
