@@ -267,7 +267,7 @@ class ParentCard extends React.Component {
             <div style={styles.iconWrap}>
               <FontIcon className='material-icons'
                 style={styles.refreshIcon}
-                onClick={this.refreshData()}>
+                onClick={this.refreshData}>
                 replay
               </FontIcon>
             </div>
