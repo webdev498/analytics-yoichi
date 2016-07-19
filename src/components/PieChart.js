@@ -30,6 +30,18 @@ const styles = {
     margin: '0px',
     justifyContent: 'center',
     height: '400px'
+  },
+  'percentageDisplay': {
+    fontSize: '35px',
+    color: Colors.turquoise
+  },
+  'legend1': {
+    fontSize: '13px',
+    color: Colors.pebble
+  },
+  'legend2': {
+    fontSize: '13px',
+    color: Colors.smoke
   }
 };
 
@@ -215,21 +227,7 @@ class PieChart extends React.Component {
     tableOptions: PropTypes.object
   }
   render() {
-    const {props} = this,
-      style = {
-        'percentageDisplay': {
-          fontSize: '35px',
-          color: Colors.turquoise
-        },
-        'legend1': {
-          fontSize: '13px',
-          color: Colors.pebble
-        },
-        'legend2': {
-          fontSize: '13px',
-          color: Colors.smoke
-        }
-      };
+    const {props} = this;
 
     renderChart(props);
     return (
@@ -253,15 +251,15 @@ class PieChart extends React.Component {
             <PercentageWidget iconName='desktop_mac' percentage={doughnutAttributes.percentage1} />
           </div>
           <div style={{}}>
-            <span style={style.percentageDisplay}>{doughnutAttributes.displayPercentage2}</span>
+            <span style={styles.percentageDisplay}>{doughnutAttributes.displayPercentage2}</span>
             <br />
-            <span style={style.legend1}>{props.meta.legend[0]}</span>
+            <span style={styles.legend1}>{props.meta.legend[0]}</span>
             <br /><br />
-            <span style={style.legend2}>{props.meta.legend[1]}</span>
+            <span style={styles.legend2}>{props.meta.legend[1]}</span>
             <br /><br />
-            <span style={style.percentageDisplay}>{doughnutAttributes.displayPercentage1}</span>
+            <span style={styles.percentageDisplay}>{doughnutAttributes.displayPercentage1}</span>
             <br />
-            <span style={style.legend1}>{props.meta.legend[2]}</span>
+            <span style={styles.legend1}>{props.meta.legend[2]}</span>
           </div>
         </div>
       </div>

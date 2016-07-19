@@ -8,6 +8,21 @@ import {
   getColorRanges
 } from 'utils/utils';
 
+const styles = {
+  chartCaption: {
+    width: '100%',
+    fontFamily: 'Open Sans, sans-serif',
+    fontSize: '14px',
+    fontWeight: '600',
+    color: Colors.grape,
+    backgroundColor: Colors.subHeadingBGColor,
+    paddingBottom: '30px',
+    paddingLeft: '20px',
+    height: '60px',
+    lineHeight: '60px'
+  }
+};
+
 export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, orgDataset, connection) {
   let dataset = [],
     annotationItems = [],
@@ -356,20 +371,11 @@ class HorizontalBarChart extends React.Component {
   }
 
   render() {
-    const {props} = this,
-      style = {
-        heading: {
-          fontSize: '14px',
-          color: Colors.grape,
-          fontWeight: '600',
-          backgroundColor: Colors.subHeadingBGColor
-        }
-      };
+    const {props} = this;
     return (
       <div style={props.attributes.chartBorder}>
-        <div style={Object.assign({}, style.heading, props.attributes.chartCaption)}>{props.meta.title}</div>
+        <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>{props.meta.title}</div>
         <div id={props.attributes.id} style={props.attributes.style}>{renderChart(props)}</div>
-        <div id={props.attributes.id1}></div>
       </div>
     );
   }
