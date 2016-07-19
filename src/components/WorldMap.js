@@ -13,6 +13,16 @@ import {
   generatePathParams
 } from 'utils/kibanaUtils';
 
+const styles = {
+  chartCaption: {
+    fontSize: '14px',
+    color: Colors.grape,
+    fontWeight: '600',
+    position: 'absolute',
+    marginTop: '-30px'
+  }
+};
+
 function generateChartDataSource(rawData, props) {
   const {chartOptions, chartData} = props;
   let dataObject = [],
@@ -106,8 +116,8 @@ function generateChartDataSource(rawData, props) {
 
   let dataSourceObject = {};
   dataSourceObject.chart = Object.assign({
-    'entityFillHoverColor': '#cccccc',
-    'nullEntityColor': 'aaaaaa',
+    'entityFillHoverColor': Colors.smoke,
+    'nullEntityColor': Colors.smoke,
     'showLabels': '0',
     'theme': 'zune',
     'showvalue': '0',
@@ -180,19 +190,11 @@ class WorldMap extends React.Component {
   }
 
   render() {
-    const {props} = this,
-      style = {
-        heading: {
-          fontSize: '14px',
-          color: Colors.grape,
-          fontWeight: '600',
-          position: 'absolute',
-          marginTop: '-30px'
-        }
-      };
+    const {props} = this;
+
     return (
       <div>
-        <div style={style.heading}>
+        <div style={styles.chartCaption}>
           {props.meta.subTitle}
         </div>
 

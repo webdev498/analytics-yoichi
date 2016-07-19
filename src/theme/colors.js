@@ -28,9 +28,28 @@ export const DurationWidgetColor = {
   'sec': '#D9F2F3'
 };
 
+export const WorldmapLegendsColor = {
+  'secure': [
+    TurquoiseColor,
+    '#51DFD8',
+    '#71E5DF',
+    '#97ECE8',
+    '#BAF2F0',
+    '#DBF8F7'
+  ],
+  'malicious': [
+    CoralColor,
+    '#F7A48B',
+    '#F9B6A2',
+    '#F8CABB',
+    '#FCDBD2',
+    '#FEEDE8'
+  ]
+};
+
 export const SubHeadingBGColor = '#F7F7F9';
 
-export const DefaultGraphPaletteColors = '#2BD8D0,#51DFD8,#71E5DF,#97ECE8,#BAF2F0,#DBF8F7';
+export const DefaultGraphPaletteColors = TurquoiseColor + ',#51DFD8,#71E5DF,#97ECE8,#BAF2F0,#DBF8F7';
 
 export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
 
@@ -54,7 +73,8 @@ export const Colors = {
   durationWidgetColor: DurationWidgetColor,
   subHeadingBGColor: SubHeadingBGColor,
   defaultGraphPaletteColors: DefaultGraphPaletteColors,
-  defaultCanvasBGColors: DefaultCanvasBGColors
+  defaultCanvasBGColors: DefaultCanvasBGColors,
+  worldmapLegendsColor: WorldmapLegendsColor
 };
 
 export const PrimaryPalette = {

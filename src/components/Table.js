@@ -427,15 +427,9 @@ function rowClick(context, tableRow) {
   context.clickThrough(tableRow.rowClickUrl);
 }
 
-// export function setFilterText(tableId, filterText) {
-//   id = tableId;
-//   filterBy = filterText;
-// }
-
 class tableCard extends React.Component {
   constructor(props) {
     super(props);
-
     this.handleRowClick = this.handleRowClick.bind(this);
   }
 
