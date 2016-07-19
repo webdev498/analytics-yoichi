@@ -316,7 +316,7 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
           columnText += fieldValue;
         }
         else if (!isUndefined(displayName) && displayName.toLowerCase() === 'port') {
-          fieldValue = ':' + fieldValue;
+          fieldValue = '<span class="firstRowInColumn">' + ':' + fieldValue + '</span>';
           columnText += fieldValue;
         }
         else if (!isUndefined(displayName) && displayName.toLowerCase() === 'countryflag') {
@@ -327,21 +327,15 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
           fieldValue = '<span class="description">' + fieldValue + '</span>';
           columnText += fieldValue;
         }
-        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'title') {
-          fieldValue = '<span class="title">' + fieldValue + '</span>';
-          columnText += fieldValue;
-        }
-        else if (!isUndefined(displayName) && (displayName.toLowerCase() === 'ip' ||
-          displayName.toLowerCase() === 'user' || displayName.toLowerCase() === 'machine' ||
-          displayName.toLowerCase() === 'asn' || displayName.toLowerCase() === 'owner')) {
-          columnText += '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'ip') {
+          columnText += '<span class="firstRowInColumn">' + displayName + ': ' + fieldValue + '</span>';
         }
         else if (isUndefined(displayName)) {
           columnText += '<br/>' + fieldValue;
         }
         else {
           if (displayName !== '') {
-            displayName = '<span class="heading">' + displayName + ': </span>';
+            displayName = '<b>' + displayName + '</b>: ';
           }
           columnText += '<br/>' + displayName + fieldValue;
         }
@@ -360,21 +354,15 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
           fieldValue = '<span class="description">' + fieldValue + '</span>';
           columnText += fieldValue;
         }
-        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'title') {
-          fieldValue = '<span class="title">' + fieldValue + '</span>';
-          columnText += fieldValue;
-        }
-        else if (!isUndefined(displayName) && (displayName.toLowerCase() === 'ip' ||
-          displayName.toLowerCase() === 'user' || displayName.toLowerCase() === 'machine' ||
-          displayName.toLowerCase() === 'asn' || displayName.toLowerCase() === 'owner')) {
-          columnText += '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
+        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'ip') {
+          columnText += '<span class="firstRowInColumn">' + displayName + ': ' + fieldValue + '</span>';
         }
         else if (isUndefined(displayName)) {
-          columnText += fieldValue;
+          columnText += '<br/>' + fieldValue;
         }
         else {
           if (displayName !== '') {
-            displayName = '<span class="heading">' + displayName + ': </span>';
+            displayName = '<b>' + displayName + '</b>: ';
           }
           columnText += displayName + fieldValue;
         }
@@ -388,13 +376,11 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
 }
 
 export function generateColumnTextForDisplayingDate(fieldValue) {
-  let fieldValue1 = moment.utc(fieldValue).format('YYYY-MM-DD HH:mm:ss.SSS'),
-    localDateTime = moment.utc(fieldValue1).toDate(),
-    localDate = moment(localDateTime).format('DD MMM YYYY'),
-    localTime = moment(localDateTime).format('HH:mm:ss.SSS');
-
-  fieldValue = '<span style="font-size: 14px; font-weight: 600;">' + localDate + '</span>';
-  fieldValue += '<br/>' + localTime;
+  let fieldValueInLocalTime = moment.utc(fieldValue).toDate(),
+    fieldValueInLocalTime1 = moment(fieldValueInLocalTime).format('D MMM YYYY'),
+    fieldValueInLocalTime2 = moment(fieldValueInLocalTime).format('HH:mm:ss');
+  fieldValue = '<span style="font-size: 14px; font-weight: 600;">' + fieldValueInLocalTime1 + '</span>';
+  fieldValue += '<br/>' + fieldValueInLocalTime2;
   return fieldValue;
 }
 
