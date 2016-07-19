@@ -50,7 +50,7 @@ const styles = {
 
 function getCount(data) {
   data = data.data;
-  return (data && data.rows && data.rows[0]) ? data.rows[0][0][0] : 0;
+  return (data && data.rows && data.rows[0]) ? data.rows[0][0][0].toLocaleString() : 0;
 }
 
 function getPercent(data) {
