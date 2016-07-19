@@ -120,7 +120,17 @@ class ParentCard extends React.Component {
     const { props } = this;
     const {api} = props.meta;
 
-    if (!api) return;
+    if (!api) {
+      console.log(props);
+      const children = props.children.props.children;
+
+      children.forEach((child) => {
+        const {props: childProps} = child;
+        props.fetchApiData(childProps.id, childProps.meta.api);
+      });
+
+      return;
+    }
 
     // TODO find a non hacky way to do this.
     if (props.type === 'AlertDetails') {
@@ -142,7 +152,7 @@ class ParentCard extends React.Component {
   }
 
   componentWillUnmount() {
-    this.unsubscribe();
+    this.unsubscribe && this.unsubscribe();
     const {props} = this;
     props.removeComponent(props.id);
   }
@@ -153,9 +163,7 @@ class ParentCard extends React.Component {
   }
 
   refreshData() {
-    return () => {
-      this.getData();
-    };
+    this.getData();
   };
 
   updateSearch() {
@@ -243,7 +251,6 @@ class ParentCard extends React.Component {
                   id='searchText'
                   type='text'
                   className='searchText'
-                  // style={{...this.state.searchTextStyle}}
                   onChange={this.updateSearch()}
                   onFocus={this.displayClearIcon(true)}
                   onBlur={this.displayClearIcon(false)}
