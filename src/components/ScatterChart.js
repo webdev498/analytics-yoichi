@@ -5,10 +5,7 @@ import {
   getXYIndexFromColumnNames
 } from 'utils/utils';
 
-function generateChartDataSource(rawData, props) {
-  const {chartOptions, chartData} = props,
-    fieldMapping = chartData.fieldMapping;
-
+export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
   let dataSourceObject = {},
     dataSet = [],
     x = '',
@@ -87,7 +84,8 @@ const renderChart = (props) => {
   }
 
   const data = props.data,
-    fieldMapping = props.chartData.fieldMapping;
+    fieldMapping = props.chartData.fieldMapping,
+    chartOptions = props.chartOptions;
   let rawData = {};
 
   rawData = generateRawData(fieldMapping, data);
@@ -100,7 +98,7 @@ const renderChart = (props) => {
       height: props.attributes.chartHeight ? props.attributes.chartHeight : '200',
       dataFormat: 'json',
       containerBackgroundOpacity: '0',
-      dataSource: generateChartDataSource(rawData, props)
+      dataSource: generateChartDataSource(rawData, chartOptions, fieldMapping)
     });
     fusioncharts.render();
   });

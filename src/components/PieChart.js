@@ -48,7 +48,7 @@ const styles = {
 let highlightedColor1 = Colors.turquoise,
   highlightedColor2 = Colors.coral,
   nonHighlightedColor = Colors.cloud,
-  doughnutAttributes = {},
+  pieChartAttributes = {},
   countValue = 0,
   totalValue = 0,
   top10TotalValue = 0,
@@ -63,17 +63,17 @@ let highlightedColor1 = Colors.turquoise,
   calculateTransform2 = 0;
 
 export function generatePieChart(inputArray) {
-  doughnutAttributes = {}; // This initialization is required
+  pieChartAttributes = {}; // This initialization is required
   const doughnutInputArray1 = {
       countValue: inputArray.countValue,
       totalValue: inputArray.top10CountValue
     },
-    doughnutAttributes1 = calculatePieChartAttributes(doughnutInputArray1, 1),
+    pieChartAttributes1 = calculatePieChartAttributes(doughnutInputArray1, 1),
     doughnutInputArray2 = {
       countValue: inputArray.totalValue,
       totalValue: inputArray.top10TotalValue
     },
-    doughnutAttributes2 = calculatePieChartAttributes(doughnutInputArray2, 2),
+    pieChartAttributes2 = calculatePieChartAttributes(doughnutInputArray2, 2),
     percentage1 = Math.round((inputArray.top10CountValue / parseInt(inputArray.countValue)) * 100, 2),
     percentage2 = Math.round((inputArray.top10TotalValue / parseInt(inputArray.totalValue)) * 100, 2),
     displayPercentage1 = percentage1.toString() + '%',
@@ -88,13 +88,13 @@ export function generatePieChart(inputArray) {
     };
   }
 
-  doughnutAttributes = {
-    chart1Background: doughnutAttributes1.chartBackground,
-    chart1SliceOneStyle: doughnutAttributes1.chartSliceOneStyle,
-    chart1SliceTwoStyle: doughnutAttributes1.chartSliceTwoStyle,
-    chart2Background: doughnutAttributes2.chartBackground,
-    chart2SliceOneStyle: doughnutAttributes2.chartSliceOneStyle,
-    chart2SliceTwoStyle: doughnutAttributes2.chartSliceTwoStyle,
+  pieChartAttributes = {
+    chart1Background: pieChartAttributes1.chartBackground,
+    chart1SliceOneStyle: pieChartAttributes1.chartSliceOneStyle,
+    chart1SliceTwoStyle: pieChartAttributes1.chartSliceTwoStyle,
+    chart2Background: pieChartAttributes2.chartBackground,
+    chart2SliceOneStyle: pieChartAttributes2.chartSliceOneStyle,
+    chart2SliceTwoStyle: pieChartAttributes2.chartSliceTwoStyle,
     percentage1Color: percentage1Color,
     percentage2Color: percentage2Color,
     displayPercentage1: displayPercentage1,
@@ -102,7 +102,7 @@ export function generatePieChart(inputArray) {
     percentage1: percentage1.toString(),
     percentageTextStyle: style.percentageText
   };
-  return doughnutAttributes;
+  return pieChartAttributes;
 }
 
 export function calculatePieChartAttributes(inputArray, chartId) {
@@ -218,7 +218,7 @@ function renderChart(props) {
     totalValue: totalValue.toPrecision()
   };
 
-  doughnutAttributes = generatePieChart(inputArray);
+  pieChartAttributes = generatePieChart(inputArray);
 }
 
 class PieChart extends React.Component {
@@ -237,27 +237,27 @@ class PieChart extends React.Component {
         </div>
         <div style={styles.pieWrap}>
           <div className='pieCard'>
-            <div className='pie-chart chart' style={doughnutAttributes.chart2Background}>
-              <div className='slice one' style={doughnutAttributes.chart2SliceOneStyle}></div>
-              <div className='slice two' style={doughnutAttributes.chart2SliceTwoStyle}></div>
+            <div className='pie-chart chart' style={pieChartAttributes.chart2Background}>
+              <div className='slice one' style={pieChartAttributes.chart2SliceOneStyle}></div>
+              <div className='slice two' style={pieChartAttributes.chart2SliceTwoStyle}></div>
               <div className='chart-center'>
-                <span style={doughnutAttributes.percentageTextStyle}>
-                  {doughnutAttributes.displayPercentage2}
+                <span style={pieChartAttributes.percentageTextStyle}>
+                  {pieChartAttributes.displayPercentage2}
                 </span>
               </div>
             </div>
           </div>
           <div style={{paddingLeft: '50px', paddingRight: '50px'}}>
-            <PercentageWidget iconName='desktop_mac' percentage={doughnutAttributes.percentage1} />
+            <PercentageWidget iconName='desktop_mac' percentage={pieChartAttributes.percentage1} />
           </div>
           <div style={{}}>
-            <span style={styles.percentageDisplay}>{doughnutAttributes.displayPercentage2}</span>
+            <span style={styles.percentageDisplay}>{pieChartAttributes.displayPercentage2}</span>
             <br />
             <span style={styles.legend1}>{props.meta.legend[0]}</span>
             <br /><br />
             <span style={styles.legend2}>{props.meta.legend[1]}</span>
             <br /><br />
-            <span style={styles.percentageDisplay}>{doughnutAttributes.displayPercentage1}</span>
+            <span style={styles.percentageDisplay}>{pieChartAttributes.displayPercentage1}</span>
             <br />
             <span style={styles.legend1}>{props.meta.legend[2]}</span>
           </div>
