@@ -1,32 +1,229 @@
 import {
-  generateDoughnutChart,
-  calculateDoughnutAttributes
-} from 'components/DoughnutChart';
+  generateChartDataSource
+} from 'components/Area2DAsSparkLineChart';
 
-describe('DoughnutChart Component: ', function() {
-  it('generateDoughnutChart should return doughnut chart attributes.', function() {
-    const inputArray = {'countValue': 6, 'top10CountValue': 4, 'top10TotalValue': 21581, 'totalValue': '21722'},
-      doughnutChartAttributes = {'chart1Background': {'background': '#CCCCCC'},
-      'chart1SliceOneStyle': {'transform': 'rotate(90deg)', 'WebkitTransform': 'rotate(90deg)',
-      'background': '#8ABB24'}, 'chart1SliceTwoStyle': {'transform': 'rotate(241.20000000000002deg)',
-      'WebkitTransform': 'rotate(241.20000000000002deg)', 'background': '#8ABB24'},
-      'chart2Background': {'background': '#CCCCCC'},
-      'chart2SliceOneStyle': {'transform': 'rotate(90deg)', 'WebkitTransform': 'rotate(90deg)',
-      'background': '#5E2B78'}, 'chart2SliceTwoStyle': {'transform': 'rotate(356.4deg)',
-      'WebkitTransform': 'rotate(356.4deg)', 'background': '#5E2B78'},
-      'percentage1Color': {'fontWeight': 'bold', 'color': '#8ABB24'},
-      'percentage2Color': {'fontWeight': 'bold', 'color': '#5E2B78'}, 'displayPercentage1': '67%',
-      'displayPercentage2': '99%'};
-    expect(generateDoughnutChart(inputArray)).to.deep.equal(doughnutChartAttributes);
-  });
-
-  it('calculateDoughnutAttributes should compute doughnut chart attributes.', function() {
-    const inputArray = {'countValue': 6, 'totalValue': 4},
-      chartId = 1,
-      doughnutChartAttributes = {'chartBackground': {'background': '#CCCCCC'},
-      'chartSliceOneStyle': {'transform': 'rotate(90deg)', 'WebkitTransform': 'rotate(90deg)',
-      'background': '#8ABB24'}, 'chartSliceTwoStyle': {'transform': 'rotate(241.20000000000002deg)',
-      'WebkitTransform': 'rotate(241.20000000000002deg)', 'background': '#8ABB24'}};
-    expect(calculateDoughnutAttributes(inputArray, chartId)).to.deep.equal(doughnutChartAttributes);
+describe('Area2DAsSparkLineChart Component: ', function() {
+  it('generateChartDataSource should return data source object which is required for FusionCharts.', function() {
+    const inputArray = {
+        'columnType': 'chart',
+        'columnName': 'CONNECTIONS',
+        'columnStyle': {
+          'width': '30%'
+        },
+        'chartValue': {
+          '2016-07-19T18:00:00.000': [
+            0
+          ],
+          '2016-07-20T01:00:00.000': [
+            0
+          ],
+          '2016-07-20T00:00:00.000': [
+            0
+          ],
+          '2016-07-19T10:00:00.000': [
+            0
+          ],
+          '2016-07-19T17:00:00.000': [
+            0
+          ],
+          '2016-07-19T12:00:00.000': [
+            136
+          ],
+          '2016-07-19T19:00:00.000': [
+            0
+          ],
+          '2016-07-20T02:00:00.000': [
+            0
+          ],
+          '2016-07-19T11:00:00.000': [
+            0
+          ],
+          '2016-07-19T07:00:00.000': [
+            0
+          ],
+          '2016-07-19T14:00:00.000': [
+            0
+          ],
+          '2016-07-19T21:00:00.000': [
+            0
+          ],
+          '2016-07-20T04:00:00.000': [
+            0
+          ],
+          '2016-07-19T20:00:00.000': [
+            0
+          ],
+          '2016-07-20T03:00:00.000': [
+            0
+          ],
+          '2016-07-19T06:00:00.000': [
+            0
+          ],
+          '2016-07-19T13:00:00.000': [
+            0
+          ],
+          '2016-07-19T09:00:00.000': [
+            0
+          ],
+          '2016-07-19T16:00:00.000': [
+            0
+          ],
+          '2016-07-19T23:00:00.000': [
+            0
+          ],
+          '2016-07-20T06:00:00.000': [
+            0
+          ],
+          '2016-07-19T22:00:00.000': [
+            0
+          ],
+          '2016-07-20T05:00:00.000': [
+            0
+          ],
+          '2016-07-19T08:00:00.000': [
+            0
+          ],
+          '2016-07-19T15:00:00.000': [
+            0
+          ]
+        },
+        'chartId': 'connection0',
+        'chartType': 'area2d',
+        'chartWidth': '100%',
+        'chartHeight': '75'
+      },
+      duration = '1h',
+      dataSourceObject = {
+        'chart': {
+          'paletteColors': '#BFEFEE',
+          'showBorder': '0',
+          'showCanvasBorder': '0',
+          'usePlotGradientColor': '0',
+          'showXAxisLine': '1',
+          'axisLineAlpha': '25',
+          'divLineAlpha': '0',
+          'showValues': '0',
+          'showYAxisValues': '0',
+          'showAlternateHGridColor': '0',
+          'showPlotBorder': '1',
+          'plotBorderColor': '#59DED9',
+          'plotBorderThickness': '1',
+          'anchorradius': '0',
+          'bgAlpha': '0',
+          'canvasBgAlpha': '0',
+          'chartTopMargin': '0',
+          'chartBottomMargin': '0',
+          'chartLeftMargin': '0',
+          'chartRightMargin': '0',
+          'minimizetendency': '1'
+        },
+        'dataset': [
+          {
+            'data': [
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': 136
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              },
+              {
+                'label': '',
+                'value': '0'
+              }
+            ]
+          }
+        ]
+      };
+    expect(generateChartDataSource(inputArray, duration)).to.deep.equal(dataSourceObject);
   });
 });

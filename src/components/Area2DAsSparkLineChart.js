@@ -1,9 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 
-function generateChartDataSource(chartProperties, duration) {
-  console.log(JSON.stringify(chartProperties));
-  console.log(JSON.stringify(duration));
+export function generateChartDataSource(chartProperties, duration) {
   let dataSourceObject = {},
     dataSet = [],
     dataObject = [],
@@ -51,7 +49,7 @@ function generateChartDataSource(chartProperties, duration) {
   if (dataSet.length > 0) {
     dataSourceObject.dataset = dataSet;
   }
-  console.log(JSON.stringify(dataSourceObject));
+
   return dataSourceObject;
 }
 
