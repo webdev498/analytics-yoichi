@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 
-function generateChartDataSource(chartProperties, duration) {
+export function generateChartDataSource(chartProperties, duration) {
   let dataSourceObject = {},
     dataSet = [],
     dataObject = [],
@@ -49,6 +49,7 @@ function generateChartDataSource(chartProperties, duration) {
   if (dataSet.length > 0) {
     dataSourceObject.dataset = dataSet;
   }
+
   return dataSourceObject;
 }
 
