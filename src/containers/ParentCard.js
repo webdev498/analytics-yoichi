@@ -231,7 +231,7 @@ class ParentCard extends React.Component {
         cardStyle = {...styles.wrap, ...props.attributes.style, padding: '33px'};
 
       return (
-        <Card style={cardStyle}>
+        <Card style={cardStyle} id={props.attributes.id}>
           {props.isFetching ? <Loader /> : null}
 
           <header style={styles.header}>
