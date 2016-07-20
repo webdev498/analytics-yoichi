@@ -23,14 +23,13 @@ const styles = {
   }
 };
 
-function generateChartDataSource(rawData, props) {
-  const {chartOptions, chartData} = props;
+export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
   let dataObject = [],
     secureConnectionsValues = [],
     maliciousConnectionsValues = [];
 
-  for (let i = 0; i < chartData.fieldMapping.length; i++) {
-    let currentChartData = chartData.fieldMapping[i],
+  for (let i = 0; i < fieldMapping.length; i++) {
+    let currentChartData = fieldMapping[i],
       {rows, columns} = rawData[currentChartData.reportId],
       columnIndexArray = [];
 
@@ -162,6 +161,7 @@ class WorldMap extends React.Component {
 
     const data = props.data,
       fieldMapping = props.chartData.fieldMapping,
+      chartOptions = props.chartOptions,
       {clickThrough} = this.context;
 
     let rawData = {};
@@ -175,7 +175,7 @@ class WorldMap extends React.Component {
         height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
-        dataSource: generateChartDataSource(rawData, props),
+        dataSource: generateChartDataSource(rawData, chartOptions, fieldMapping),
         events: {
           entityClick: function(eventObj, dataObj) {
             const url = getEntityClickUrl(props, dataObj);
