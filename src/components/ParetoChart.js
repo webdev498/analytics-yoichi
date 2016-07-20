@@ -11,10 +11,8 @@ import {
 } from 'utils/kibanaUtils';
 import {CHART_COLORS} from 'Constants';
 
-function generateChartDataSource(data, props) {
-  const {chartOptions, chartData} = props,
-    fieldMapping = chartData.fieldMapping,
-    graphBars = [],
+export function generateChartDataSource(data, chartOptions, fieldMapping) {
+  const graphBars = [],
     chartColors = CHART_COLORS;
 
   let colorIndex = 0,
@@ -109,6 +107,8 @@ class ParetoChart extends React.Component {
     }
 
     const data = props.data,
+      chartOptions = props.chartOptions,
+      fieldMapping = props.chartData.fieldMapping,
       {clickThrough} = this.context;
 
     FusionCharts.ready(function() {
@@ -121,7 +121,7 @@ class ParetoChart extends React.Component {
         height: mapProps.chartHeight ? mapProps.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
-        dataSource: generateChartDataSource(data, props),
+        dataSource: generateChartDataSource(data, chartOptions, fieldMapping),
         events: {
           dataplotClick: function(eventObj, dataObj) {
             const url = getDataPlotClickUrl(props, dataObj);
