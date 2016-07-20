@@ -184,12 +184,12 @@ function generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, 
 function generateDataArray(tempObj, y, rows, y2) {
   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
     let rowObj = {};
-    if (rows[d][y][y2] !== 'NaN') { // rows[d][y][y2] !== 0 &&
+    if (rows[d][y][y2] !== 0 && rows[d][y][y2] !== 'NaN') {
       rowObj.value = rows[d][y][y2];
     }
-    else {
-      rowObj.value = 0;
-    }
+    // else {
+    //   rowObj.value = 0;
+    // }
     tempObj.data.push(rowObj);
   }
   return tempObj.data;
