@@ -15,7 +15,7 @@ import {
   generatePathParams
 } from 'utils/kibanaUtils';
 
-function getXindex(currentChartDataColumn, columns) {
+export function getXindex(currentChartDataColumn, columns) {
   let x = '';
   for (let c = 0; c < columns.length; c++) {
     if (currentChartDataColumn === columns[c].name) {
@@ -26,7 +26,7 @@ function getXindex(currentChartDataColumn, columns) {
   return x;
 }
 
-function getYindex(currentChartData, columns, combinedResult) {
+export function getYindex(currentChartData, columns, combinedResult) {
   let y = '',
     seriesIndex = '',
     y2 = '';
@@ -61,6 +61,7 @@ function getYindex(currentChartData, columns, combinedResult) {
       y = c;
     }
   }
+
   return {
     y: y,
     y2: y2,
@@ -68,7 +69,7 @@ function getYindex(currentChartData, columns, combinedResult) {
   };
 }
 
-function generateCategoryArray(rows, index, dateDisplayFormat) {
+export function generateCategoryArray(rows, index, dateDisplayFormat) {
   let category = [],
     lookup = {};
   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
@@ -89,10 +90,11 @@ function generateCategoryArray(rows, index, dateDisplayFormat) {
       category.push(obj1);
     }
   }
+
   return category;
 }
 
-function generateDataAndSeriesArrayForDynamicSeriesNames(rows, x, y, seriesIndex) {
+export function generateDataAndSeriesArrayForDynamicSeriesNames(rows, x, y, seriesIndex) {
   let newRawData = [],
     newRawDataRow = [],
     seriesValuesIndex = 0,
@@ -134,7 +136,7 @@ function generateDataAndSeriesArrayForDynamicSeriesNames(rows, x, y, seriesIndex
   };
 }
 
-function generateChartDataSetForDynamicSeries(currentChartData, seriesNameArray, newRawData) {
+export function generateChartDataSetForDynamicSeries(currentChartData, seriesNameArray, newRawData) {
   let dataset = [];
   for (let seriesCount = 0, rowsLen = seriesNameArray.length; seriesCount < rowsLen; seriesCount++) {
     const seriesOptions = currentChartData.seriesOptions,
@@ -164,7 +166,7 @@ function generateChartDataSetForDynamicSeries(currentChartData, seriesNameArray,
   return dataset;
 }
 
-function generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, y2) {
+export function generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, y2) {
   const tempObj = {};
 
   tempObj.seriesname = currentChartData.seriesname;
@@ -176,12 +178,11 @@ function generateChartDataSetForFixedSeries(dataset, currentChartData, rows, y, 
     tempObj.data = generateDataArray(tempObj, y, rows, y2);
   }
   dataset.push(tempObj);
-
   return dataset;
 }
 
 // Function to generate data array for chart data source
-function generateDataArray(tempObj, y, rows, y2) {
+export function generateDataArray(tempObj, y, rows, y2) {
   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
     let rowObj = {};
     if (rows[d][y][y2] !== 0 && rows[d][y][y2] !== 'NaN') {
@@ -195,7 +196,7 @@ function generateDataArray(tempObj, y, rows, y2) {
   return tempObj.data;
 }
 
-function generateChartDataSource(rawData, props) {
+export function generateChartDataSource(rawData, props) {
   const {duration, chartOptions, chartData} = props,
     fieldMapping = chartData.fieldMapping,
     combinedResult = chartData.combinedResult,
@@ -293,7 +294,7 @@ function generateChartDataSource(rawData, props) {
   return dataSourceObject;
 }
 
-function getDataPlotClickUrl(props, dataObj) {
+export function getDataPlotClickUrl(props, dataObj) {
   if (!props.kibana) {
     return;
   }
