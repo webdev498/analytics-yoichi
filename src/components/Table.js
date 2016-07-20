@@ -262,6 +262,7 @@ export function getColumnDataWhenApiReturnsMultipleColumns(columnDetails) {
     chartValue: chartValue,
     timeValue: timeValue
   };
+
   return getColumnText(columnDetails);
 }
 
@@ -384,6 +385,7 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
       }
     }
   }
+
   return columnText;
 }
 
