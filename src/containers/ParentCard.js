@@ -109,6 +109,9 @@ class ParentCard extends React.Component {
         paddingLeft: '12px'
       }
     };
+
+    this.getData = this.getData.bind(this);
+    this.refreshData = this.refreshData.bind(this);
   }
 
   static propTypes = {

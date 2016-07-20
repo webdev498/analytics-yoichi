@@ -6,10 +6,10 @@ export const CloudColor = '#e5e5ea';// f0f0f2
 export const ArcticColor = '#ffffff';
 export const TurquoiseColor = '#2bd8d0';
 
-export const CherryColor = '#24293d';
+export const CherryColor = '#ef5976';
 export const CoralColor = '#F69275';
-export const MustardColor = '#6b7282';
-export const SeafoamColor = '#bdbdc6';
+export const MustardColor = '#fcc875';
+export const SeafoamColor = '#90d0a4';
 
 export const WhiteColor = '#ffffff';
 export const BlackColor = '#000000';
