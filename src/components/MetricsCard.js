@@ -118,7 +118,7 @@ class MetricsCard extends React.Component {
         <h3 style={styles.text}>{props.title}</h3>
 
         <div style={styles.wrapStyle}>
-          <div style={{...styles.countStyle, ...props.countStyle}}>
+          <div style={{...styles.countStyle, ...props.attributes.countStyle}}>
             {getCount(props)}
           </div>
           <div style={styles.percentageWrap}>

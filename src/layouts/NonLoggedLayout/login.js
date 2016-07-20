@@ -1,5 +1,5 @@
 /* @flow */
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Cookies from 'cookies-js';
 import { push } from 'react-router-redux';
 
@@ -14,18 +14,20 @@ import {Colors} from 'theme/colors';
 
 const styles = {
   card: {
-    width: '350px',
+    width: '300px',
     margin: '0 auto',
     height: '400px',
-    backgroundColor: Colors.garnet
+    backgroundColor: Colors.garnet,
+    position: 'relative'
   },
   container: {
   },
   header: {
-    backgroundColor: Colors.garnet
+    backgroundColor: Colors.garnet,
+    padding: '0 35px'
   },
   inputWrap: {
-    padding: '0 20px'
+    padding: '0 35px'
   },
   textField: {
     width: '100%'
@@ -54,6 +56,15 @@ const styles = {
   },
   form: {
     marginTop: '100px'
+  },
+  error: {
+    position: 'absolute',
+    right: '35px',
+    left: '35px',
+    top: '100px',
+    color: Colors.cherry,
+    textAlign: 'center',
+    fontSize: '11px'
   }
 };
 
@@ -69,12 +80,23 @@ class LoginView extends React.Component {
     }
   }
 
+  getErrorState() {
+    const search = window.location.search;
+    if (search.includes('loginError')) {
+      return <div style={styles.error}>Incorrect username or password.<br />Please try again</div>;
+    }
+
+    return null;
+  }
+
   render() {
     return (
       <Card style={styles.card}
         containerStyle={styles.container} >
         <CustomCardHeader title='Rank'
           style={styles.header} />
+
+        {this.getErrorState()}
 
         <form action={loginUrl} method='post' style={styles.form}>
           <div style={styles.inputWrap}>
@@ -85,6 +107,7 @@ class LoginView extends React.Component {
               underlineFocusStyle={styles.underlineFocus}
               inputStyle={styles.input}
               floatingLabelText='Username'
+              required
               name='username' />
           </div>
 
@@ -97,6 +120,7 @@ class LoginView extends React.Component {
               inputStyle={styles.input}
               floatingLabelText='Password'
               type='password'
+              required
               name='password' />
           </div>
 
