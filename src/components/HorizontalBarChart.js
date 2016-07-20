@@ -372,11 +372,14 @@ class HorizontalBarChart extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props} = this,
+      minHeight = {minHeight: '200px'};
     return (
       <div style={props.attributes.chartBorder}>
         <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>{props.meta.title}</div>
-        <div id={props.attributes.id} style={props.attributes.style}>{renderChart(props)}</div>
+        <div id={props.attributes.id} style={{...props.attributes.style, ...minHeight}}>
+          {renderChart(props)}
+        </div>
       </div>
     );
   }
