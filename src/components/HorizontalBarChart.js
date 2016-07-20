@@ -87,6 +87,7 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, o
       }
     }
   }
+
   return {
     dataset: dataset,
     annotationItems: annotationItems,
