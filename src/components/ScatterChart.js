@@ -17,7 +17,7 @@ export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
       dataSeries = Object.assign({
         'drawline': '0',
         'anchorsides': '0',
-        'anchorradius': '4',
+        'anchorradius': '6',
         'color': Colors.turquoise,
         'anchorbgcolor': Colors.turquoise,
         'anchorbordercolor': Colors.turquoise
