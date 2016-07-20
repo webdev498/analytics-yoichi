@@ -8,7 +8,7 @@ describe('Utility Function:', function() {
   });
 
   it('msToTime should convert milliseconds to time.', function() {
-    expect(msToTime('3263358313')).to.deep.equal([906, 29, 18]);
+    expect(msToTime('815319468')).to.deep.equal({"timeArray":[10,28,39],"timeString":"10:28:39"});
   });
 
   it('generateRawData should generate raw data object.', function() {
