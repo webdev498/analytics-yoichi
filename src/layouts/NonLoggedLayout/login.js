@@ -1,5 +1,5 @@
 /* @flow */
-import React, {PropTypes} from 'react';
+import React from 'react';
 import Cookies from 'cookies-js';
 import { push } from 'react-router-redux';
 

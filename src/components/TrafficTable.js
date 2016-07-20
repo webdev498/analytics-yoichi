@@ -18,7 +18,7 @@ const styles = {
 
 class TrafficTable extends React.Component {
   static propTypes = {
-    data: PropTypes.object.isRequired
+    data: PropTypes.object
   }
 
   getSource(source) {

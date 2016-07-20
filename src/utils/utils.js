@@ -385,6 +385,8 @@ export function formatBytes(bytes, decimals) {
 };
 
 export function formatMicroseconds(miliseconds) {
+  if (miliseconds === 0) return 0;
+
   var seconds = Math.floor(miliseconds / 1000);
   var days = Math.floor(seconds / 86400);
   var hours = Math.floor((seconds % 86400) / 3600);
