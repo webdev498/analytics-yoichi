@@ -55,7 +55,7 @@ const styles = {
   },
   searchIcon: {
     bottom: '5px',
-    color: Colors.smoke,
+    color: Colors.pebble,
     cursor: 'pointer',
     fontSize: '21px',
     height: '14px',
@@ -63,7 +63,7 @@ const styles = {
     position: 'absolute',
     right: '12px',
     top: 0,
-    fontWeight: 600
+    fontWeight: 500
   },
   clearIcon: {
     color: Colors.white,
