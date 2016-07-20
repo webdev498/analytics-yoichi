@@ -259,7 +259,7 @@ class TrafficTable extends React.Component {
   showMalwareDetails(data) {
     if (data.rows[0][0] && data.rows[0][0].data && data.rows[0][0].data.report) {
       // TODO crazy hack remove this
-      document.getElementById('malware-details').style.display = 'block';
+      document.getElementById('malware-traffic-details').style.display = 'block';
     }
   }
 
