@@ -190,15 +190,16 @@ class WorldMap extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props} = this,
+      minHeight = {minHeight: props.attributes.chartHeight + 'px'};
 
     return (
       <div>
-        <div style={styles.chartCaption}>
+        <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>
           {props.meta.subTitle}
         </div>
 
-        <div id={props.attributes.id} style={{minHeight: '450px'}}></div>
+        <div id={props.attributes.id} style={{...minHeight}}></div>
 
         {this.renderChart(props)}
 

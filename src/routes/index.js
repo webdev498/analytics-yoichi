@@ -29,6 +29,7 @@ export default (store) => {
         <Route path='traffic' />
         <Route path='asset' />
         <Route path='user-agent' />
+        <Route path='new-summary-page' />
       </Route>
 
       { /* Catch all route */ }
