@@ -11,7 +11,8 @@ import {
   getIndexFromObjectName,
   isUndefined,
   msToTime,
-  getCountryNameByCountryCode
+  getCountryNameByCountryCode,
+  formatBytes
 } from 'utils/utils';
 import {
   generateQueryParams,
@@ -328,6 +329,10 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText,
     }
     else if (!isUndefined(displayName) && displayName.toLowerCase() === 'title') {
       fieldValue = '<span class="title">' + fieldValue + '</span>';
+      columnText += newLine + fieldValue;
+    }
+    else if (!isUndefined(displayName) && displayName.indexOf('bytes') > -1) {
+      fieldValue = '<span class="heading">' + displayName + ': </span>' + formatBytes(fieldValue, 2);
       columnText += newLine + fieldValue;
     }
     else if (!isUndefined(displayName) && (displayName.toLowerCase() === 'ip' ||
