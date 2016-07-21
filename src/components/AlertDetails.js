@@ -29,6 +29,10 @@ const styles = {
   itemTitle: {
     width: '100px',
     display: 'inline-block'
+  },
+  error: {
+    textAlign: 'center',
+    marginBottom: '33px'
   }
 };
 
@@ -97,9 +101,14 @@ class AlertDetails extends React.Component {
   }
 
   render() {
-    if (!this.props.data) return null;
+    let {data} = this.props;
+    if (!data) return null;
 
-    const data = this.props.data.data.rank_alert;
+    if (data.errorCode) {
+      return <div style={styles.error}><b>Error:</b> &nbsp; {data.errorMessage}</div>;
+    }
+
+    data = data.data.rank_alert;
 
     // should be called when the main page data is loaded,
     // or get the api updated.
