@@ -10,7 +10,8 @@ import {
   generateRawData,
   getIndexFromObjectName,
   isUndefined,
-  msToTime
+  msToTime,
+  getCountryNameByCountryCode
 } from 'utils/utils';
 import {
   generateQueryParams,
@@ -317,8 +318,9 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText,
       columnText += fieldValue;
     }
     else if (!isUndefined(displayName) && displayName.toLowerCase() === 'countryflag') {
-      fieldValue = generateColumnTextForDisplayingCountryFlag(fieldValue);
-      columnText += newLine + fieldValue;
+      let fieldValueToDisplay = fieldValue.toUpperCase();
+      columnText += newLine + '<span class="heading">Country: </span>' +
+      getCountryNameByCountryCode[fieldValueToDisplay] + ' ' + generateColumnTextForDisplayingCountryFlag(fieldValue);
     }
     else if (!isUndefined(displayName) && displayName.toLowerCase() === 'description') {
       fieldValue = '<span class="description">' + fieldValue + '</span>';
@@ -333,11 +335,18 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText,
       displayName.toLowerCase() === 'owner')) {
       columnText += newLine + '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
     }
-    else if (!isUndefined(displayName) && displayName.toLowerCase() === 'assets') {
-      columnText += newLine + '<span class="heading">' + displayName + ': </span>';
-      for (let i = 0; i < fieldValue.length; i++) {
-        columnText += '<br/><span class="heading">' + fieldValue[i].type +
-        ': </span><span>' + fieldValue[i].info.displayName + '</span>';
+    else if (!isUndefined(displayName) && displayName.toLowerCase() === 'users') {
+      if (!isUndefined(fieldValue.length)) {
+        if (fieldValue.length === 1) {
+          displayName = 'User';
+        }
+        columnText += newLine + '<span class="heading">' + displayName + ': </span>';
+        for (let i = 0; i < fieldValue.length; i++) {
+          if (i > 0) {
+            columnText += ', ';
+          }
+          columnText += '<span>' + fieldValue[i].info.displayName + '</span>';
+        }
       }
     }
     else if (isUndefined(displayName)) {
