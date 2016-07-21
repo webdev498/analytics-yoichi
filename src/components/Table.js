@@ -310,7 +310,7 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText,
   if (!isUndefined(fieldName)) {
     if (!isUndefined(displayName) && displayName.toLowerCase() === 'date') {
       fieldValue = generateColumnTextForDisplayingDate(fieldValue);
-      columnText += fieldValue;
+      columnText += newLine + fieldValue;
     }
     else if (!isUndefined(displayName) && displayName.toLowerCase() === 'port') {
       fieldValue = ':' + fieldValue;
@@ -318,20 +318,27 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText,
     }
     else if (!isUndefined(displayName) && displayName.toLowerCase() === 'countryflag') {
       fieldValue = generateColumnTextForDisplayingCountryFlag(fieldValue);
-      columnText += fieldValue;
+      columnText += newLine + fieldValue;
     }
     else if (!isUndefined(displayName) && displayName.toLowerCase() === 'description') {
       fieldValue = '<span class="description">' + fieldValue + '</span>';
-      columnText += fieldValue;
+      columnText += newLine + fieldValue;
     }
     else if (!isUndefined(displayName) && displayName.toLowerCase() === 'title') {
       fieldValue = '<span class="title">' + fieldValue + '</span>';
-      columnText += fieldValue;
+      columnText += newLine + fieldValue;
     }
     else if (!isUndefined(displayName) && (displayName.toLowerCase() === 'ip' ||
-      displayName.toLowerCase() === 'user' || displayName.toLowerCase() === 'machine' ||
-      displayName.toLowerCase() === 'asn' || displayName.toLowerCase() === 'owner')) {
-      columnText += '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
+      displayName.toLowerCase() === 'name' || displayName.toLowerCase() === 'asn' ||
+      displayName.toLowerCase() === 'owner')) {
+      columnText += newLine + '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
+    }
+    else if (!isUndefined(displayName) && displayName.toLowerCase() === 'assets') {
+      columnText += newLine + '<span class="heading">' + displayName + ': </span>';
+      for (let i = 0; i < fieldValue.length; i++) {
+        columnText += '<br/><span class="heading">' + fieldValue[i].type +
+        ': </span><span>' + fieldValue[i].info.displayName + '</span>';
+      }
     }
     else if (isUndefined(displayName)) {
       columnText += newLine + fieldValue;
