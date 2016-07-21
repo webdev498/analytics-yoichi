@@ -203,7 +203,7 @@ class WorldMap extends React.Component {
 
         {this.renderChart(props)}
 
-        <WorldMapLegends />
+        <WorldMapLegends style={props.attributes.legendStyle} />
 
       </div>
     );
