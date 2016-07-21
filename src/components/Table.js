@@ -306,83 +306,59 @@ export function getColumnText(columnDetails) {
   };
 }
 
+export function appendColumnText(fieldName, displayName, fieldValue, columnText, newLine) {
+  if (!isUndefined(fieldName)) {
+    if (!isUndefined(displayName) && displayName.toLowerCase() === 'date') {
+      fieldValue = generateColumnTextForDisplayingDate(fieldValue);
+      columnText += fieldValue;
+    }
+    else if (!isUndefined(displayName) && displayName.toLowerCase() === 'port') {
+      fieldValue = ':' + fieldValue;
+      columnText += fieldValue;
+    }
+    else if (!isUndefined(displayName) && displayName.toLowerCase() === 'countryflag') {
+      fieldValue = generateColumnTextForDisplayingCountryFlag(fieldValue);
+      columnText += fieldValue;
+    }
+    else if (!isUndefined(displayName) && displayName.toLowerCase() === 'description') {
+      fieldValue = '<span class="description">' + fieldValue + '</span>';
+      columnText += fieldValue;
+    }
+    else if (!isUndefined(displayName) && displayName.toLowerCase() === 'title') {
+      fieldValue = '<span class="title">' + fieldValue + '</span>';
+      columnText += fieldValue;
+    }
+    else if (!isUndefined(displayName) && (displayName.toLowerCase() === 'ip' ||
+      displayName.toLowerCase() === 'user' || displayName.toLowerCase() === 'machine' ||
+      displayName.toLowerCase() === 'asn' || displayName.toLowerCase() === 'owner')) {
+      columnText += '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
+    }
+    else if (isUndefined(displayName)) {
+      columnText += newLine + fieldValue;
+    }
+    else {
+      if (displayName !== '') {
+        displayName = '<span class="heading">' + displayName + ': </span>';
+      }
+      columnText += newLine + displayName + fieldValue;
+    }
+  }
+  else {
+    columnText += newLine + fieldValue;
+  }
+
+  return columnText;
+}
+
 export function generateColumnTextForColumnTypeAsText(columnDetails) {
   let {fieldName, displayName, fieldValue, columnText} = columnDetails;
 
   if (!isUndefined(fieldValue) && fieldValue !== '' && fieldValue !== null) {
     if (columnText !== '') {
-      if (!isUndefined(fieldName)) {
-        if (!isUndefined(displayName) && displayName.toLowerCase() === 'date') {
-          fieldValue = generateColumnTextForDisplayingDate(fieldValue);
-          columnText += fieldValue;
-        }
-        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'port') {
-          fieldValue = ':' + fieldValue;
-          columnText += fieldValue;
-        }
-        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'countryflag') {
-          fieldValue = generateColumnTextForDisplayingCountryFlag(fieldValue);
-          columnText += fieldValue;
-        }
-        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'description') {
-          fieldValue = '<span class="description">' + fieldValue + '</span>';
-          columnText += fieldValue;
-        }
-        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'title') {
-          fieldValue = '<span class="title">' + fieldValue + '</span>';
-          columnText += fieldValue;
-        }
-        else if (!isUndefined(displayName) && (displayName.toLowerCase() === 'ip' ||
-          displayName.toLowerCase() === 'user' || displayName.toLowerCase() === 'machine' ||
-          displayName.toLowerCase() === 'asn' || displayName.toLowerCase() === 'owner')) {
-          columnText += '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
-        }
-        else if (isUndefined(displayName)) {
-          columnText += '<br/>' + fieldValue;
-        }
-        else {
-          if (displayName !== '') {
-            displayName = '<span class="heading">' + displayName + ': </span>';
-          }
-          columnText += '<br/>' + displayName + fieldValue;
-        }
-      }
-      else {
-        columnText += '<br/>' + fieldValue;
-      }
+      columnText = appendColumnText(fieldName, displayName, fieldValue, columnText, '<br/>');
     }
     else {
-      if (!isUndefined(fieldName)) {
-        if (!isUndefined(displayName) && displayName.toLowerCase() === 'date') {
-          fieldValue = generateColumnTextForDisplayingDate(fieldValue);
-          columnText += fieldValue;
-        }
-        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'description') {
-          fieldValue = '<span class="description">' + fieldValue + '</span>';
-          columnText += fieldValue;
-        }
-        else if (!isUndefined(displayName) && displayName.toLowerCase() === 'title') {
-          fieldValue = '<span class="title">' + fieldValue + '</span>';
-          columnText += fieldValue;
-        }
-        else if (!isUndefined(displayName) && (displayName.toLowerCase() === 'ip' ||
-          displayName.toLowerCase() === 'user' || displayName.toLowerCase() === 'machine' ||
-          displayName.toLowerCase() === 'asn' || displayName.toLowerCase() === 'owner')) {
-          columnText += '<span class="heading">' + displayName + ': </span><span>' + fieldValue + '</span>';
-        }
-        else if (isUndefined(displayName)) {
-          columnText += fieldValue;
-        }
-        else {
-          if (displayName !== '') {
-            displayName = '<span class="heading">' + displayName + ': </span>';
-          }
-          columnText += displayName + fieldValue;
-        }
-      }
-      else {
-        columnText += fieldValue;
-      }
+      columnText = appendColumnText(fieldName, displayName, fieldValue, columnText, '');
     }
   }
 
