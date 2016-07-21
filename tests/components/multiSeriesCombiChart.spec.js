@@ -2205,6 +2205,6 @@ describe('MultiSeriesCombiChart Component: ', function() {
         },
         {}
       ];
-    expect(generateDataArray(tempObj, y, rows, y2)).to.deep.equal(tempObjData);
+    expect(generateDataArray(tempObj, y, rows, y2, 'fixed')).to.deep.equal(tempObjData);
   });
 });

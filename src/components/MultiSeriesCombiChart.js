@@ -160,7 +160,7 @@ export function generateChartDataSetForDynamicSeries(currentChartData, seriesNam
     }
 
     // Get column data for y-axis
-    tempObj.data = generateDataArray(tempObj, 1, newRawData, seriesCount);
+    tempObj.data = generateDataArray(tempObj, 1, newRawData, seriesCount, 'dynamic');
     dataset.push(tempObj);
   }
   return dataset;
@@ -175,22 +175,33 @@ export function generateChartDataSetForFixedSeries(dataset, currentChartData, ro
 
   // Get column data for y-axis
   if (y !== '') {
-    tempObj.data = generateDataArray(tempObj, y, rows, y2);
+    tempObj.data = generateDataArray(tempObj, y, rows, y2, 'fixed');
   }
   dataset.push(tempObj);
   return dataset;
 }
 
 // Function to generate data array for chart data source
-export function generateDataArray(tempObj, y, rows, y2) {
+export function generateDataArray(tempObj, y, rows, y2, seriesType) {
   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
     let rowObj = {};
-    if (rows[d][y][y2] !== 0 && rows[d][y][y2] !== 'NaN') {
-      rowObj.value = rows[d][y][y2];
+    switch (seriesType) {
+      case 'dynamic':
+        if (rows[d][y][y2] !== 0 && rows[d][y][y2] !== 'NaN') {
+          rowObj.value = rows[d][y][y2];
+        }
+        break;
+      case 'fixed':
+        if (rows[d][y][y2] !== 'NaN') {
+          rowObj.value = rows[d][y][y2];
+        }
+        else {
+          rowObj.value = 0;
+        }
+        break;
+      default:
+        break;
     }
-    // else {
-    //   rowObj.value = 0;
-    // }
     tempObj.data.push(rowObj);
   }
   return tempObj.data;
