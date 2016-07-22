@@ -49,7 +49,8 @@ export const WorldmapLegendsColor = {
 
 export const SubHeadingBGColor = '#F7F7F9';
 
-export const DefaultGraphPaletteColors = TurquoiseColor + ',#51DFD8,#71E5DF,#97ECE8,#BAF2F0,#DBF8F7';
+export const DefaultGraphPaletteColors =
+  '#2bd8d0,#3ad7c9,#46d6c4,#57d5bd,#67d3b6,#79d2ae,#8ad1a7,#9acfa0,#a8ce9a,#b2cd96';
 
 export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
 
