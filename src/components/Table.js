@@ -27,6 +27,10 @@ let tableProperties = {},
   tableDataSource = [];
 
 const generateDataSource = (props) => {
+  // Initializing the variables
+  tableProperties = {};
+  tableDataSource = [];
+
   if (!props.data) {
     return;
   }
@@ -34,10 +38,6 @@ const generateDataSource = (props) => {
   const data = props.data,
     {fieldMapping, nestedResult, emptyValueMessage} = props.tableData,
     tableOptions = props.tableOptions;
-
-  // Initializing the variables
-  tableProperties = {};
-  tableDataSource = [];
 
   let rawData = {};
   rawData = generateRawData(fieldMapping, data);
