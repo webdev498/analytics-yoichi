@@ -124,6 +124,7 @@ class ParentCard extends React.Component {
     const {api} = props.meta;
 
     if (!api) {
+      console.log(props);
       const children = props.children.props.children;
 
       children.forEach((child) => {
@@ -232,6 +233,7 @@ class ParentCard extends React.Component {
       return (
         <Card style={cardStyle} id={props.id}>
           {props.isFetching ? <Loader /> : null}
+
           <header style={styles.header}>
             <div>
               <span style={styles.title}>{props.meta.title}</span>
@@ -273,9 +275,7 @@ class ParentCard extends React.Component {
               </FontIcon>
             </div>
           </header>
-          <div>
-            {React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})}
-          </div>
+          <div> {React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})} </div>
         </Card>
       );
     }
