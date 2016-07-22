@@ -275,7 +275,9 @@ class ParentCard extends React.Component {
               </FontIcon>
             </div>
           </header>
-          <div> {React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})} </div>
+          <div> {React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})}
+            {((props.data && props.data.rows && props.data.rows.length === 0)) ? 'No Data Found.' : null}
+          </div>
         </Card>
       );
     }
@@ -283,6 +285,7 @@ class ParentCard extends React.Component {
       return (
         <Card style={{...styles.childwrap, ...props.attributes.style}}>
           {props.isFetching ? <Loader style={props.attributes.loaderStyle} /> : null}
+          {((props.data && props.data.rows && props.data.rows.length === 0)) ? 'No Data Found.' : null}
           {this.getElement()}
         </Card>
       );
