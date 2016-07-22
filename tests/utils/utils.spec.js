@@ -1,5 +1,15 @@
-import {getCountryIDByCountryCode, msToTime, generateRawData, getIndexFromColumnName, getColumnIndexArrayFromColumnName,
-  getXYIndexFromColumnNames, getIndexFromObjectName, translateTimeWindow, isUndefined, getTimePairFromWindow
+import {
+  getCountryIDByCountryCode,
+  msToTime,
+  generateRawData,
+  getIndexFromColumnName,
+  getColumnIndexArrayFromColumnName,
+  getXYIndexFromColumnNames,
+  getIndexFromObjectName,
+  translateTimeWindow,
+  isUndefined,
+  getTimePairFromWindow,
+  getColorRanges
   } from 'utils/utils';
 
 describe('Utility Function:', function() {
@@ -8,7 +18,7 @@ describe('Utility Function:', function() {
   });
 
   it('msToTime should convert milliseconds to time.', function() {
-    expect(msToTime('815319468')).to.deep.equal({"timeArray":[10,28,39],"timeString":"10:28:39"});
+    expect(msToTime('605168257')).to.deep.equal({"timeArray":["00","06","08"],"timeString":"00: 06: 08"});
   });
 
   it('generateRawData should generate raw data object.', function() {
@@ -71,7 +81,12 @@ describe('Utility Function:', function() {
   });
 
   it('getTimePairFromWindow should return from and to dates for the specific time window.', function() {
-    const timePair = {'fromDate': '2016-06-23T17:45:00.000', 'toDate': '2016-06-23T17:50:00.000'};
-    expect(getTimePairFromWindow('1h', '23 Jun 2016 17:45')).to.deep.equal(timePair);
+    const timePair = {"fromDate":"2016-07-21T17: 00: 00.000","toDate":"2016-07-21T18: 00: 00.000"};
+    expect(getTimePairFromWindow('1d', '2016-07-21 17:00:00')).to.deep.equal(timePair);
+  });
+
+  it('getColorRanges should return from and to dates for the specific time window.', function() {
+    const colorRanges = {"secure":[{"min":1,"max":23,"color":"#DBF8F7"},{"min":24,"max":45,"color":"#BAF2F0"},{"min":46,"max":67,"color":"#97ECE8"},{"min":68,"max":89,"color":"#71E5DF"},{"min":90,"max":111,"color":"#51DFD8"},{"min":112,"max":133,"color":"#2BD8D0"}],"malicious":[{"min":1,"max":2,"color":"#FEEDE8"},{"min":3,"max":3,"color":"#FCDBD2"},{"min":4,"max":4,"color":"#F8CABB"},{"min":5,"max":5,"color":"#F9B6A2"},{"min":6,"max":6,"color":"#F7A48B"},{"min":7,"max":7,"color":"#F69275"}]};
+    expect(getColorRanges([126,42,35,5,2,1,1], [4])).to.deep.equal(colorRanges);
   });
 });
