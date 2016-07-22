@@ -282,7 +282,7 @@ class ParentCard extends React.Component {
     else {
       return (
         <Card style={{...styles.childwrap, ...props.attributes.style}}>
-          {props.isFetching ? <Loader /> : null}
+          {props.isFetching ? <Loader style={props.attributes.loaderStyle} /> : null}
           {this.getElement()}
         </Card>
       );
