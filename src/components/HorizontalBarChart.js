@@ -227,6 +227,16 @@ export function generateChartDataSource(rawData, props) {
           });
           dataset = dataset.slice(0, 5);
 
+          if (dataset.length < 5) {
+            let len = 5 - parseInt(dataset.length);
+            for (let n = 0; n < len; n++) {
+              let obj1 = {};
+              obj1.label = '';
+              obj1.value = '';
+              dataset.push(obj1);
+            }
+          }
+
           for (let j = 0; j < dataset.length; j++) {
             annotationItems = annotationItems.concat([
               {
