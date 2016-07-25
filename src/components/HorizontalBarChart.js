@@ -5,8 +5,14 @@ import {
   getColumnIndexArrayFromColumnName,
   getIndexFromColumnName,
   getIndexFromObjectName,
-  getColorRanges
+  getColorRanges,
+  isUndefined
 } from 'utils/utils';
+import {
+  generateQueryParams,
+  generateClickThroughUrl,
+  generatePathParams
+} from 'utils/kibanaUtils';
 
 const styles = {
   chartCaption: {
@@ -340,13 +346,30 @@ export function generateChartDataSource(rawData, props) {
   return dataSourceObject;
 }
 
+function getDataPlotClickUrl(props, dataObj) {
+  if (!props.kibana) {
+    return;
+  }
+
+  let parameters = {
+      props: props,
+      dataObj: dataObj,
+      queryParamsArray: props.kibana.queryParams
+    },
+    queryParams = generateQueryParams(parameters),
+    pathParams = generatePathParams(props.kibana.pathParams);
+
+  return generateClickThroughUrl(pathParams, queryParams);
+}
+
 const renderChart = (props) => {
   if (!props.data) {
     return;
   }
 
   const data = props.data,
-    fieldMapping = props.chartData.fieldMapping;
+    fieldMapping = props.chartData.fieldMapping,
+    {clickThrough} = this.context;
 
   let rawData = {};
   rawData = generateRawData(fieldMapping, data);
@@ -359,7 +382,15 @@ const renderChart = (props) => {
       height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
       dataFormat: 'json',
       containerBackgroundOpacity: '0',
-      dataSource: generateChartDataSource(rawData, props)
+      dataSource: generateChartDataSource(rawData, props),
+      events: {
+        dataplotClick: function(eventObj, dataObj) {
+          const url = getDataPlotClickUrl(props, dataObj);
+          if (url !== '' && !isUndefined(url)) {
+            clickThrough(url);
+          }
+        }
+      }
     });
     fusioncharts.render();
   });
@@ -371,6 +402,40 @@ class HorizontalBarChart extends React.Component {
     meta: PropTypes.object
   }
 
+  renderChart(props) {
+    if (!props.data) {
+      return;
+    }
+
+    const data = props.data,
+      fieldMapping = props.chartData.fieldMapping,
+      {clickThrough} = this.context;
+
+    let rawData = {};
+    rawData = generateRawData(fieldMapping, data);
+
+    FusionCharts.ready(function() {
+      const fusioncharts = new FusionCharts({
+        type: 'bar2d',
+        renderAt: props.attributes.id,
+        width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
+        height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
+        dataFormat: 'json',
+        containerBackgroundOpacity: '0',
+        dataSource: generateChartDataSource(rawData, props),
+        events: {
+          dataplotClick: function(eventObj, dataObj) {
+            const url = getDataPlotClickUrl(props, dataObj);
+            if (url !== '' && !isUndefined(url)) {
+              clickThrough(url);
+            }
+          }
+        }
+      });
+      fusioncharts.render();
+    });
+  };
+
   render() {
     const {props} = this,
       minHeight = {minHeight: '200px'};
@@ -378,11 +443,15 @@ class HorizontalBarChart extends React.Component {
       <div style={props.attributes.chartBorder}>
         <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>{props.meta.title}</div>
         <div id={props.attributes.id} style={{...props.attributes.style, ...minHeight}}>
-          {renderChart(props)}
+          {this.renderChart(props)}
         </div>
       </div>
     );
   }
 }
+
+HorizontalBarChart.contextTypes = {
+  clickThrough: React.PropTypes.func
+};
 
 export default HorizontalBarChart;

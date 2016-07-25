@@ -203,7 +203,8 @@ function formatDate(date) {
   let milisec = addZero(date.getMilliseconds(), 3);
   if (milisec !== '' || milisec !== 0 || milisec !== '0') milisec = '.' + milisec;
 
-  let formattedDateString = yyyy + '-' + mm + '-' + dd + 'T' + hh + ': ' + min + ': ' + ss + milisec;
+  let formattedDateString = yyyy + '-' + mm + '-' + dd + 'T' + hh + ':' + min + ':' + ss + milisec;
+
   return formattedDateString;
 }
 

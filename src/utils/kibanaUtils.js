@@ -83,6 +83,11 @@ export function generateQueryParam(props, dataObj, key, value, currentRowNumber)
         const sectionName = toolText.split(',');
         queryParam = key + '=' + (sectionName[0]).toLowerCase();
         break;
+      case 'ip':
+        toolText = dataObj.toolText;
+        const IP = toolText.split(',');
+        queryParam = key + '=' + IP[0];
+        break;
       case 'country':
         let label = dataObj.label,
           countryName = label.split(','),
