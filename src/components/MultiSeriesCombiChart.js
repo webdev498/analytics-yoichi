@@ -290,7 +290,8 @@ export function generateChartDataSource(rawData, props) {
       'chartBottomMargin': '0',
       'baseFont': 'Open Sans, sans-serif',
       'baseFontColor': Colors.pebble,
-      'paletteColors': Colors.defaultGraphPaletteColors
+      'paletteColors': Colors.defaultGraphPaletteColors,
+      'xAxisLineColor': Colors.axisColor
     }, chartOptions)
   };
 

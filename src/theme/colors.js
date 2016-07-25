@@ -49,6 +49,8 @@ export const WorldmapLegendsColor = {
 
 export const SubHeadingBGColor = '#F7F7F9';
 
+export const AxisColor = '#DADADA';
+
 export const DefaultGraphPaletteColors =
   '#2bd8d0,#3ad7c9,#46d6c4,#57d5bd,#67d3b6,#79d2ae,#8ad1a7,#9acfa0,#a8ce9a,#b2cd96';
 
@@ -75,7 +77,8 @@ export const Colors = {
   subHeadingBGColor: SubHeadingBGColor,
   defaultGraphPaletteColors: DefaultGraphPaletteColors,
   defaultCanvasBGColors: DefaultCanvasBGColors,
-  worldmapLegendsColor: WorldmapLegendsColor
+  worldmapLegendsColor: WorldmapLegendsColor,
+  axisColor: AxisColor
 };
 
 export const PrimaryPalette = {

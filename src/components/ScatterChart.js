@@ -68,7 +68,9 @@ export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
     'canvasBgColor': Colors.defaultCanvasBGColors,
     'canvasbgAlpha': '100',
     'canvasBgRatio': '30,70',
-    'canvasBgAngle': '280'
+    'canvasBgAngle': '280',
+    'xAxisLineColor': Colors.axisColor,
+    'yaxislinecolor': Colors.axisColor
   }, chartOptions);
 
   if (dataSet.length > 0) {
