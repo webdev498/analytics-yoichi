@@ -448,3 +448,7 @@ export function formatMicroseconds(miliseconds) {
 
   return Math.floor(timeString / 1000);
 }
+
+export function kFormatter(num) {
+  return num > 999 ? (num / 1000).toFixed(2) + 'k' : num;
+}

@@ -6,7 +6,8 @@ import {
   getIndexFromColumnName,
   getIndexFromObjectName,
   getColorRanges,
-  isUndefined
+  isUndefined,
+  kFormatter
 } from 'utils/utils';
 import {
   generateQueryParams,
@@ -21,15 +22,10 @@ const styles = {
     fontSize: '14px',
     fontWeight: '600',
     color: Colors.grape
-    // backgroundColor: Colors.subHeadingBGColor,
-    // paddingBottom: '30px',
-    // paddingLeft: '20px',
-    // height: '60px',
-    // lineHeight: '60px'
   }
 };
 
-export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, orgDataset, connection) {
+export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, orgDataset, connection, numberSuffix) {
   let dataset = [],
     annotationItems = [],
     valueIndex = 0,
@@ -80,7 +76,7 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, o
             {
               'id': 'datasetlabel' + d,
               'type': 'text',
-              'text': obj1.label,
+              'text': kFormatter(obj1.value) + numberSuffix + ' ',
               'align': 'left',
               'x': '$chartEndX - 146',
               'y': '$dataset.0.set.' + d + '.CenterY',
@@ -104,7 +100,8 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, o
 
 export function generateChartDataSource(rawData, props) {
   const chartOptions = props.chartOptions,
-    {fieldMapping, multipleReportIds, displayTopFive, showTrendLines, trendLines} = props.chartData;
+    {fieldMapping, multipleReportIds, displayTopFive, showTrendLines, trendLines} = props.chartData,
+    numberSuffix = (!isUndefined(chartOptions.numberSuffix)) ? chartOptions.numberSuffix : '';
 
   let countValue = 0,
     totalValue = 0,
@@ -180,7 +177,8 @@ export function generateChartDataSource(rawData, props) {
         }
       }
       columnIndexArray = [0, 1]; // Need to generate this index array dynamically. For now, kept it as hardcode
-      dataArray = generateDataArray(columnIndexArray, newRawData, displayTopFive, dataset, '');
+      dataArray = generateDataArray(columnIndexArray, newRawData, displayTopFive, dataset, '',
+        numberSuffix);
       dataset = dataArray.dataset;
       annotationItems = dataArray.annotationItems;
     }
@@ -214,7 +212,8 @@ export function generateChartDataSource(rawData, props) {
           secureColorRanges = colorRanges.secure,
           maliciousColorRanges = colorRanges.malicious;
 
-        dataArray = generateDataArray(columnIndexArray, rows, displayTopFive, dataset, currentChartData.connection);
+        dataArray = generateDataArray(columnIndexArray, rows, displayTopFive, dataset, currentChartData.connection,
+          numberSuffix);
         dataset = dataset.concat(dataArray.dataset);
 
         if (currentChartData.connection === 'malicious') {
@@ -226,16 +225,6 @@ export function generateChartDataSource(rawData, props) {
             return b.value - a.value;
           });
           dataset = dataset.slice(0, 5);
-
-          if (dataset.length < 5) {
-            let len = 5 - parseInt(dataset.length);
-            for (let n = 0; n < len; n++) {
-              let obj1 = {};
-              obj1.label = '';
-              obj1.value = '';
-              dataset.push(obj1);
-            }
-          }
 
           for (let j = 0; j < dataset.length; j++) {
             annotationItems = annotationItems.concat([
@@ -285,10 +274,22 @@ export function generateChartDataSource(rawData, props) {
       }
       else {
         columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
-        dataArray = generateDataArray(columnIndexArray, rows, displayTopFive, dataset, '');
+        dataArray = generateDataArray(columnIndexArray, rows, displayTopFive, dataset, '',
+          numberSuffix);
         dataset = dataArray.dataset;
         annotationItems = dataArray.annotationItems;
       }
+    }
+  }
+
+  if (dataset.length < 5) {
+    let len = 5 - parseInt(dataset.length);
+    for (let n = 0; n < len; n++) {
+      let obj1 = {};
+      obj1.label = '';
+      obj1.value = '';
+      obj1.connection = '';
+      dataset.push(obj1);
     }
   }
 
@@ -325,7 +326,7 @@ export function generateChartDataSource(rawData, props) {
       'showValues': '1',
       'xAxisNameFontSize': '14',
       'yAxisNameFontSize': '14',
-      'labelFontSize': '13',
+      'labelFontSize': '11',
       'chartLeftMargin': '0',
       'numDivLines': '4',
       'baseFont': 'Open Sans, sans-serif',

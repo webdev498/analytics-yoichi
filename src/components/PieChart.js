@@ -10,18 +10,6 @@ import {
 import PercentageWidget from 'components/PercentageWidget';
 
 const styles = {
-  'chartCaption': {
-    'width': '100%',
-    'color': Colors.grape,
-    'fontFamily': 'Open Sans, sans-serif',
-    'fontSize': '14px',
-    'fontWeight': '600',
-    'paddingBottom': '30px',
-    'paddingLeft': '20px',
-    'backgroundColor': Colors.subHeadingBGColor,
-    'lineHeight': '60px',
-    'height': '60px'
-  },
   'pieWrap': {
     width: '100%',
     display: 'flex',
@@ -29,7 +17,8 @@ const styles = {
     alignItems: 'center',
     margin: '0px',
     justifyContent: 'center',
-    height: '400px'
+    height: '400px',
+    marginTop: '-30px'
   },
   'percentageDisplay': {
     fontSize: '35px',
@@ -231,10 +220,7 @@ class PieChart extends React.Component {
 
     renderChart(props);
     return (
-      <div style={props.attributes.chartBorder}>
-        <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>
-          {props.meta.title}
-        </div>
+      <div>
         <div style={styles.pieWrap}>
           <div className='pieCard'>
             <div className='pie-chart chart' style={pieChartAttributes.chart2Background}>
