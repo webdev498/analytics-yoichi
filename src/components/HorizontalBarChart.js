@@ -20,12 +20,12 @@ const styles = {
     fontFamily: 'Open Sans, sans-serif',
     fontSize: '14px',
     fontWeight: '600',
-    color: Colors.grape,
-    backgroundColor: Colors.subHeadingBGColor,
-    paddingBottom: '30px',
-    paddingLeft: '20px',
-    height: '60px',
-    lineHeight: '60px'
+    color: Colors.grape
+    // backgroundColor: Colors.subHeadingBGColor,
+    // paddingBottom: '30px',
+    // paddingLeft: '20px',
+    // height: '60px',
+    // lineHeight: '60px'
   }
 };
 
