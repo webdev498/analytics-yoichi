@@ -9,7 +9,7 @@ import {isLoggedIn} from 'actions/auth';
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
     if (!isLoggedIn(store.getState(), nextState.location.query, store)) {
-      replace('/');
+      replace('/login');
     }
 
     cb();
@@ -17,12 +17,12 @@ export default (store) => {
 
   return (
     <Route path='/' >
-      <IndexRoute component={NonLoggedLayout} />
+      <Route path='login' component={NonLoggedLayout} />
 
       { /* Routes requiring login */ }
       <Route onEnter={requireLogin} component={CoreLayout}>
-        <Redirect from='dashboard' to='alerts' />
-
+        <Redirect from='dashboard' to='/' />
+        <IndexRoute />
         <Route path='alerts' />
         <Route path='alert/:alertId/:date' />
         <Route path='country' />
@@ -33,7 +33,7 @@ export default (store) => {
       </Route>
 
       { /* Catch all route */ }
-      <Route path='*' component={NonLoggedLayout} />
+      <Redirect path='*' to='/' component={NonLoggedLayout} />
     </Route>
   );
 };

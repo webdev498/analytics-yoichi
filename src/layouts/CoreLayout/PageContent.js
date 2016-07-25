@@ -106,7 +106,9 @@ class PageContent extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   const {layout: layouts} = state;
-  const id = ownProps.location.pathname;
+  let id = ownProps.location.pathname;
+
+  id = (id === '/') ? '/new-summary-page' : id;
 
   const { layout = [],
           isFetching = true,
