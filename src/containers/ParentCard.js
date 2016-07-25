@@ -120,11 +120,10 @@ class ParentCard extends React.Component {
   }
 
   getData() {
-    const { props } = this;
-    const {api} = props.meta;
+    const { props } = this,
+      {api} = props.meta;
 
     if (!api) {
-      console.log(props);
       const children = props.children.props.children;
 
       children.forEach((child) => {

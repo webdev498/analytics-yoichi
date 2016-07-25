@@ -69,7 +69,7 @@ export function logoutUtil(dispatch) {
   Cookies('token_type', undefined);
 
   // redirect to login page
-  dispatch(push('/'));
+  dispatch(push('/login'));
 }
 
 export function logout() {

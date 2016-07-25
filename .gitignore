@@ -13,3 +13,5 @@ target
 src/static/bower_components
 src/static/env.js
 src/layout.js
+
+*.json.gzip

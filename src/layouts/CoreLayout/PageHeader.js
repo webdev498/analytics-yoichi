@@ -13,6 +13,7 @@ import {logout} from 'actions/auth';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import {Colors} from 'theme/colors';
+import { Link } from 'react-router';
 
 const TimeRanges = [
   {
@@ -70,7 +71,9 @@ const styles = {
     marginLeft: '10px'
   },
   label: {
-    opacity: 0.54
+    opacity: 0.54,
+    textDecoration: 'none',
+    color: Colors.arctic
   },
   dropicon: {
     top: 0,
@@ -118,11 +121,17 @@ class PageHeader extends React.Component {
       kibanaStyle = {...styles.menuStyle, color: Colors.navigation};
     }
 
+    const title = (
+      <Link to='/' style={styles.label}>
+        {props.title}
+      </Link>
+    );
+
     return (
-      <AppBar {...props}
+      <AppBar title={title}
         style={{...styles.appBar, ...props.style}}
-        showMenuIconButton={false}
-        titleStyle={styles.label}>
+        showMenuIconButton={false}>
+
         <MenuItem
           style={{...kibanaStyle}}
           onClick={this.props.hideKibana}>
