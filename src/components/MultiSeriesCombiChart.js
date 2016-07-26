@@ -259,6 +259,27 @@ export function generateChartDataSource(rawData, props) {
     }
   }
 
+  let annotationItems = [];
+  if (!isUndefined(props.meta.subTitle)) {
+    let yPadding = '370';
+    if (props.duration === '1w' || props.duration === '1mo') {
+      yPadding = '378';
+    }
+    annotationItems = annotationItems.concat([
+      {
+        'id': 'unit',
+        'type': 'text',
+        'text': props.meta.subTitle,
+        'x': '$chartEndX - 633',
+        'y': '$chartEndY - ' + yPadding,
+        'fontSize': '11',
+        'color': Colors.pebble,
+        'font': 'Open Sans, sans-serif',
+        'rotateText': 'left'
+      }
+    ]);
+  }
+
   const dataSourceObject = {
     chart: Object.assign({
       'showvalues': '0',
@@ -292,7 +313,8 @@ export function generateChartDataSource(rawData, props) {
       'baseFontColor': Colors.pebble,
       'paletteColors': Colors.defaultGraphPaletteColors,
       'xAxisLineColor': Colors.axisColor
-    }, chartOptions)
+    }, chartOptions),
+    'annotations': {'groups': [{'items': annotationItems}]}
   };
 
   if (categories.length > 0) {

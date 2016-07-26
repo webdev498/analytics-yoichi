@@ -25,6 +25,12 @@ export function calculateDateDisplayFormatForHistogram(timeWindow) {
     case "1h":
       dateDisplayFormat = "ddd, D HH:mm";
       break;
+    case "6h":
+      dateDisplayFormat = "ddd, D HH:mm";
+      break;
+    case "12h":
+      dateDisplayFormat = "ddd, D HH:mm";
+      break;
     case "1d":
       dateDisplayFormat = "ddd, D HH:mm";
       break;
