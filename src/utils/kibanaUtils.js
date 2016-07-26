@@ -24,33 +24,64 @@ export function generatePathParams(pathParamArray) {
 }
 
 export function generateQueryParams(parameters) {
-  let {props, dataObj, queryParamsArray, currentRowNumber} = parameters,
+  let {props, dataObj, queryParamsArray, currentRowNumber, nestedResult} = parameters,
     queryParams = '';
   for (let key in queryParamsArray) {
     if (!isUndefined(key)) {
       if (queryParams === '') {
-        queryParams = '?' + generateQueryParam(props, dataObj, key, queryParamsArray[key], currentRowNumber);
+        queryParams = '?' + generateQueryParam(props, dataObj, key, queryParamsArray[key], currentRowNumber,
+          nestedResult);
       }
       else {
-        queryParams += '&' + generateQueryParam(props, dataObj, key, queryParamsArray[key], currentRowNumber);
+        queryParams += '&' + generateQueryParam(props, dataObj, key, queryParamsArray[key], currentRowNumber,
+          nestedResult);
       }
     }
   }
   return queryParams;
 }
 
-export function generateQueryParam(props, dataObj, key, value, currentRowNumber) {
-  let queryParam = '';
-  if (value !== '') {
+export function generateQueryParam(props, dataObj, key, value, currentRowNumber, nestedResult) {
+  let queryParam = '',
+    fromAPIResponse = true;
+
+  if (value === 'success' || value === 'fail') {
+    fromAPIResponse = false;
+  }
+
+  if (value !== '' && fromAPIResponse) {
     const {rows, columns} = props.data;
-    let columnIndex = '';
-    for (let c = 0; c < columns.length; c++) {
-      if (key === columns[c].name) {
-        columnIndex = c;
-        break;
+
+    if (nestedResult) {
+      let columnIndex = '',
+        fieldValue = '';
+      for (let c = 0; c < columns.length; c++) {
+        if (value === columns[c].name) {
+          columnIndex = c;
+          break;
+        }
       }
+
+      for (let nestedKey in rows[currentRowNumber]) {
+        if (!isUndefined(nestedKey)) {
+          if (columnIndex === 0) {
+            fieldValue = (nestedKey !== '') ? nestedKey : '';
+            break;
+          }
+        }
+      }
+      queryParam = key + '=' + fieldValue;
     }
-    queryParam = key + '=' + rows[currentRowNumber][columnIndex];
+    else {
+      let columnIndex = '';
+      for (let c = 0; c < columns.length; c++) {
+        if (key === columns[c].name) {
+          columnIndex = c;
+          break;
+        }
+      }
+      queryParam = key + '=' + rows[currentRowNumber][columnIndex];
+    }
   }
   else {
     switch (key) {
@@ -104,6 +135,9 @@ export function generateQueryParam(props, dataObj, key, value, currentRowNumber)
         else if ((dataObj.datasetName).toLowerCase() === 'high') {
           queryParam = 'lowScore=' + HIGH_SCORE_RANGE[0] + '&highScore=' + HIGH_SCORE_RANGE[1];
         }
+        break;
+      case 'status':
+        queryParam = key + '=' + value;
         break;
       default:
         break;

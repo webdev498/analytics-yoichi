@@ -85,7 +85,8 @@ const generateDataSource = (props) => {
           let parameters = {
               props: props,
               queryParamsArray: props.kibana.queryParams,
-              currentRowNumber: d
+              currentRowNumber: d,
+              nestedResult: nestedResult
             },
             queryParams = generateQueryParams(parameters),
             pathParams = generatePathParams(props.kibana.pathParams);
