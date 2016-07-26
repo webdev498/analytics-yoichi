@@ -98,9 +98,8 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, o
   };
 }
 
-export function generateChartDataSource(rawData, props) {
-  const chartOptions = props.chartOptions,
-    {fieldMapping, multipleReportIds, displayTopFive, showTrendLines, trendLines} = props.chartData,
+export function generateChartDataSource(rawData, chartOptions, chartData) {
+  const {fieldMapping, multipleReportIds, displayTopFive, showTrendLines, trendLines} = chartData,
     numberSuffix = (!isUndefined(chartOptions.numberSuffix)) ? chartOptions.numberSuffix : '';
 
   let countValue = 0,
@@ -161,7 +160,7 @@ export function generateChartDataSource(rawData, props) {
         }
       }
 
-      const reportId = props.chartData.reportId;
+      const reportId = chartData.reportId;
       rows = rawData[reportId].rows;
       let average = top10TotalValue / parseInt(countValue),
         newRawData = [];
@@ -373,40 +372,6 @@ function getDataPlotClickUrl(props, dataObj) {
   return generateClickThroughUrl(pathParams, queryParams);
 }
 
-const renderChart = (props) => {
-  if (!props.data) {
-    return;
-  }
-
-  const data = props.data,
-    fieldMapping = props.chartData.fieldMapping,
-    {clickThrough} = this.context;
-
-  let rawData = {};
-  rawData = generateRawData(fieldMapping, data);
-
-  FusionCharts.ready(function() {
-    const fusioncharts = new FusionCharts({
-      type: 'bar2d',
-      renderAt: props.attributes.id,
-      width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
-      height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
-      dataFormat: 'json',
-      containerBackgroundOpacity: '0',
-      dataSource: generateChartDataSource(rawData, props),
-      events: {
-        dataplotClick: function(eventObj, dataObj) {
-          const url = getDataPlotClickUrl(props, dataObj);
-          if (url !== '' && !isUndefined(url)) {
-            clickThrough(url);
-          }
-        }
-      }
-    });
-    fusioncharts.render();
-  });
-};
-
 class HorizontalBarChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
@@ -420,6 +385,7 @@ class HorizontalBarChart extends React.Component {
 
     const data = props.data,
       fieldMapping = props.chartData.fieldMapping,
+      {chartOptions, chartData} = props,
       {clickThrough} = this.context;
 
     let rawData = {};
@@ -433,7 +399,7 @@ class HorizontalBarChart extends React.Component {
         height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
-        dataSource: generateChartDataSource(rawData, props),
+        dataSource: generateChartDataSource(rawData, chartOptions, chartData),
         events: {
           dataplotClick: function(eventObj, dataObj) {
             const url = getDataPlotClickUrl(props, dataObj);
