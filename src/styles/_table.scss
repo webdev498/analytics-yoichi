@@ -75,19 +75,25 @@
 }
 
 .threatTable th.reactable-header-sort-desc:after {
-  content: '\25B2';
+  content: '';
+  background: url('/img/Up-arrow.png') no-repeat 0 0;
+  display:inline-block;
   font-size: 13px;
   padding-left: 10px;
   padding-bottom: 5px;
   font-weight: semibold;
+  margin-left: 10px;
 }
 
 .threatTable th.reactable-header-sort-asc:after {
-  content: '\25BC';
+  content: '';
+  background: url('/img/Down-arrow.png') no-repeat 0 0;
+  display:inline-block;
   font-size: 13px;
   padding-left: 10px;
   padding-bottom: 5px;
   font-weight: semibold;
+  margin-left: 10px;
 }
 
 tr.reactable-filterer {
