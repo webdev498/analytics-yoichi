@@ -83,7 +83,8 @@ const generateDataSource = (props) => {
         mainObject = generateRowObject(rowDetails, mainObject);
         if (props.kibana) {
           let parameters = {
-              props: props,
+              data: props.data,
+              duration: props.duration,
               queryParamsArray: props.kibana.queryParams,
               currentRowNumber: d,
               nestedResult: nestedResult

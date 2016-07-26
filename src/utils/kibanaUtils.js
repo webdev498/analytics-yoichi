@@ -24,16 +24,16 @@ export function generatePathParams(pathParamArray) {
 }
 
 export function generateQueryParams(parameters) {
-  let {props, dataObj, queryParamsArray, currentRowNumber, nestedResult} = parameters,
+  let {data, duration, dataObj, queryParamsArray, currentRowNumber, nestedResult} = parameters,
     queryParams = '';
   for (let key in queryParamsArray) {
     if (!isUndefined(key)) {
       if (queryParams === '') {
-        queryParams = '?' + generateQueryParam(props, dataObj, key, queryParamsArray[key], currentRowNumber,
+        queryParams = '?' + generateQueryParam(data, duration, dataObj, key, queryParamsArray[key], currentRowNumber,
           nestedResult);
       }
       else {
-        queryParams += '&' + generateQueryParam(props, dataObj, key, queryParamsArray[key], currentRowNumber,
+        queryParams += '&' + generateQueryParam(data, duration, dataObj, key, queryParamsArray[key], currentRowNumber,
           nestedResult);
       }
     }
@@ -41,7 +41,7 @@ export function generateQueryParams(parameters) {
   return queryParams;
 }
 
-export function generateQueryParam(props, dataObj, key, value, currentRowNumber, nestedResult) {
+export function generateQueryParam(data, duration, dataObj, key, value, currentRowNumber, nestedResult) {
   let queryParam = '',
     fromAPIResponse = true;
 
@@ -50,7 +50,7 @@ export function generateQueryParam(props, dataObj, key, value, currentRowNumber,
   }
 
   if (value !== '' && fromAPIResponse) {
-    const {rows, columns} = props.data;
+    const {rows, columns} = data;
 
     if (nestedResult) {
       let columnIndex = '',
@@ -86,10 +86,10 @@ export function generateQueryParam(props, dataObj, key, value, currentRowNumber,
   else {
     switch (key) {
       case 'window':
-        queryParam = key + '=' + props.duration;
+        queryParam = key + '=' + duration;
         break;
       case 'fromAndToBasedOnToday':
-        let pair = getTimePairFromWindow(props.duration, ''),
+        let pair = getTimePairFromWindow(duration, ''),
           dateTime1 = pair.fromDate,
           dateTime2 = pair.toDate;
         queryParam = 'from=' + dateTime1 + '&to=' + dateTime2;
@@ -104,7 +104,7 @@ export function generateQueryParam(props, dataObj, key, value, currentRowNumber,
           d = new Date(localTime),
           dateInUTCFormat = moment.utc(d.toUTCString()).format('YYYY-MM-DD HH:mm:ss');
 
-        pair = getTimePairFromWindow(props.duration, dateInUTCFormat);
+        pair = getTimePairFromWindow(duration, dateInUTCFormat);
         dateTime1 = pair.fromDate;
         dateTime2 = pair.toDate;
         queryParam = 'from=' + dateTime1 + '&to=' + dateTime2;

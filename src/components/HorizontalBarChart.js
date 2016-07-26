@@ -362,7 +362,8 @@ function getDataPlotClickUrl(props, dataObj) {
   }
 
   let parameters = {
-      props: props,
+      data: props.data,
+      duration: props.duration,
       dataObj: dataObj,
       queryParamsArray: props.kibana.queryParams
     },

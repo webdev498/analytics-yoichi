@@ -97,7 +97,8 @@ class MetricsCard extends React.Component {
       }
 
       let parameters = {
-          props,
+          data: props.data,
+          duration: props.duration,
           dataObj,
           queryParamsArray: props.kibana.queryParams
         },
