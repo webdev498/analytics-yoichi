@@ -13,12 +13,12 @@ class ScoreWidget extends React.Component {
         lineHeight: '50px',
         textAlign: 'center',
         fontSize: '24px',
-        fontFamily: 'Open Sans, sans-serif' // ,
-        // background: (scoreValue >= 60 && scoreValue <= 100) ? linear-gradient('to right', '#f69275','#f79c81','#f8a58d','#f8ae99') :
-          // linear-gradient('to right','#fcc875','#fccd80','#fcd18b','#fdd698')
-      };
+        fontFamily: 'Open Sans, sans-serif'
+      },
+      className = (scoreValue >= 60 && scoreValue <= 100) ? 'scoreWidgetBG1' : 'scoreWidgetBG2';
+
     return (
-      <div style={style} className='scoreWidget'>
+      <div style={style} className={className}>
         {props.scoreValue}
       </div>
     );
