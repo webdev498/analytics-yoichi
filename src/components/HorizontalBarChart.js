@@ -25,7 +25,8 @@ const styles = {
   }
 };
 
-export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, orgDataset, connection, numberSuffix) {
+export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, orgDataset, connection, numberSuffix,
+  singleLineCharacters) {
   let dataset = [],
     annotationItems = [],
     valueIndex = 0,
@@ -47,10 +48,25 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, o
       }
 
       if (!labelExists && label1 !== 'N/A') {
-        let obj1 = {};
-        obj1.label = label1;
-        if (obj1.label.length > 15) {
-          obj1.label = obj1.label.substring(0, 15) + ' (...)';
+        let obj1 = {},
+          newLine = '',
+          singleLineChar = parseInt(singleLineCharacters),
+          lastIndex = singleLineChar;
+        obj1.label = '';
+        if (label1.length > singleLineChar) {
+          let k = 0;
+          while (k < label1.length) {
+            if (label1.length < (k + singleLineChar)) {
+              lastIndex = label1.length;
+            }
+            obj1.label = obj1.label + newLine + label1.substring(k, lastIndex);
+            newLine = '{br}';
+            k = k + singleLineChar;
+            lastIndex = k + singleLineChar;
+          }
+        }
+        else {
+          obj1.label = label1;
         }
         obj1.value = rowsArray[d][columnIndexArray[1]];
         obj1.connection = connection;
@@ -100,7 +116,9 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, o
 
 export function generateChartDataSource(rawData, chartOptions, chartData) {
   const {fieldMapping, multipleReportIds, displayTopFive, showTrendLines, trendLines} = chartData,
-    numberSuffix = (!isUndefined(chartOptions.numberSuffix)) ? chartOptions.numberSuffix : '';
+    numberSuffix = (!isUndefined(chartOptions.numberSuffix)) ? chartOptions.numberSuffix : '',
+    singleLineCharacters =
+      (!isUndefined(chartOptions.singleLineCharacters)) ? chartOptions.singleLineCharacters : '15';
 
   let countValue = 0,
     totalValue = 0,
@@ -177,7 +195,7 @@ export function generateChartDataSource(rawData, chartOptions, chartData) {
       }
       columnIndexArray = [0, 1]; // Need to generate this index array dynamically. For now, kept it as hardcode
       dataArray = generateDataArray(columnIndexArray, newRawData, displayTopFive, dataset, '',
-        numberSuffix);
+        numberSuffix, singleLineCharacters);
       dataset = dataArray.dataset;
       annotationItems = dataArray.annotationItems;
     }
@@ -212,7 +230,7 @@ export function generateChartDataSource(rawData, chartOptions, chartData) {
           maliciousColorRanges = colorRanges.malicious;
 
         dataArray = generateDataArray(columnIndexArray, rows, displayTopFive, dataset, currentChartData.connection,
-          numberSuffix);
+          numberSuffix, singleLineCharacters);
         dataset = dataset.concat(dataArray.dataset);
 
         if (currentChartData.connection === 'malicious') {
@@ -274,7 +292,7 @@ export function generateChartDataSource(rawData, chartOptions, chartData) {
       else {
         columnIndexArray = getColumnIndexArrayFromColumnName(currentChartData.columns, columns);
         dataArray = generateDataArray(columnIndexArray, rows, displayTopFive, dataset, '',
-          numberSuffix);
+          numberSuffix, singleLineCharacters);
         dataset = dataArray.dataset;
         annotationItems = dataArray.annotationItems;
       }
