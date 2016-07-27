@@ -74,7 +74,8 @@ export function generateChartDataSource(data, chartOptions, fieldMapping) {
       'numDivLines': '6',
       'baseFont': 'Open Sans, sans-serif',
       'baseFontColor': Colors.pebble,
-      'paletteColors': Colors.defaultGraphPaletteColors
+      'paletteColors': Colors.defaultGraphPaletteColors,
+      'decimals': '0'
     }, chartOptions),
     data: graphBars
   };
