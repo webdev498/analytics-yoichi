@@ -16,7 +16,7 @@ const styles = {
   card: {
     width: '300px',
     margin: '0 auto',
-    height: '400px',
+    height: '300px',
     backgroundColor: Colors.garnet,
     position: 'relative'
   },
@@ -55,7 +55,7 @@ const styles = {
     fontWeight: 300
   },
   form: {
-    marginTop: '100px'
+    /*marginTop: '100px'*/
   },
   error: {
     position: 'absolute',
@@ -127,7 +127,7 @@ class LoginView extends React.Component {
           <div style={styles.buttonWrap}>
             <RaisedButton
               style={styles.button}
-              backgroundColor={Colors.pebble}
+              backgroundColor={Colors.grape}
               labelColor={Colors.navigation}
               labelStyle={styles.button}
               label='Sign In'
