@@ -192,7 +192,6 @@ class TrafficTable extends React.Component {
   }
 
   getDetails(row) {
-    console.log(row);
     if (row.type === 'CONN' || row.type === 'conn') {
       return this.getConn(row);
     }
