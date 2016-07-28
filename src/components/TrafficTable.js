@@ -118,7 +118,9 @@ class TrafficTable extends React.Component {
 
     return (
       <div>
+        {this.getSourceDestination(row)}
         <span><b>User Agent:</b> {data.http.userAgent} </span>
+        <br />
         <span><b>Referrer:</b> {data.http.referrer} </span>
       </div>
     );
@@ -190,25 +192,26 @@ class TrafficTable extends React.Component {
   }
 
   getDetails(row) {
-    if (row.type === 'conn') {
+    console.log(row);
+    if (row.type === 'CONN' || row.type === 'conn') {
       return this.getConn(row);
     }
-    else if (row.type === 'SSH') {
+    else if (row.type === 'SSH' || row.type === 'ssh') {
       return this.getSSH(row);
     }
-    else if (row.type === 'DNS') {
+    else if (row.type === 'DNS' || row.type === 'dns') {
       return this.getDNS(row);
     }
-    else if (row.type === 'HTTP') {
+    else if (row.type === 'HTTP' || row.type === 'http') {
       return this.getHTTP(row);
     }
-    else if (row.type === 'SSL') {
+    else if (row.type === 'SSL' || row.type === 'ssl') {
       return this.getSSL(row);
     }
-    else if (row.type === 'File') {
+    else if (row.type === 'File' || row.type === 'file') {
       return this.getFile(row);
     }
-    else if (row.type === 'report') {
+    else if (row.type === 'REPORT' || row.type === 'report') {
       return null;
     }
     else {
@@ -266,7 +269,6 @@ class TrafficTable extends React.Component {
   render() {
     const {data} = this.props;
     if (!data) return null;
-
     this.showMalwareDetails(data);
     return (
       <div style={styles.card}>
