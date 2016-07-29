@@ -522,4 +522,69 @@ describe('Reactable', function() {
       expect($('td.name-1').attr('style')).to.have.match(/width/);
     });
   });
+
+  describe('specifying an array of columns', function() {
+    describe('as strings', function() {
+      before(function() {
+        ReactDOM.render(
+          <Reactable.Table className='table' id='table' data={[
+            {Name: 'Griffin Smith', Age: '18', HideThis: 'one'},
+            {Age: '23', Name: 'Lee Salminen', HideThis: 'two'},
+            {Age: '28', Position: 'Developer'}
+          ]} columns={['Name', 'Age']} />,
+          ReactableTestUtils.testNode()
+        );
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('omits columns not in the list', function() {
+        var columns = $('tr.reactable-column-header th');
+        expect(columns.length).to.equal(2);
+        expect($(columns[0]).text()).to.have.equal('Name');
+        expect($(columns[1]).text()).to.have.equal('Age');
+      });
+
+      it('adds class name for each column base on its label', function() {
+        var columns = $('tr.reactable-column-header th');
+        expect($(columns[0]).attr('class')).to.have.equal('reactable-th-name');
+        expect($(columns[1]).attr('class')).to.have.equal('reactable-th-age');
+      });
+    });
+
+    describe('as objects', function() {
+      before(function() {
+        ReactDOM.render(
+          <Reactable.Table className='table' id='table' data={[
+            {name: 'Griffin Smith', age: '18', HideThis: 'one'},
+            {age: '23', name: 'Lee Salminen', HideThis: 'two'},
+            {age: '28', Position: 'Developer'}
+          ]} columns={[
+            { key: 'name', label: 'Name' },
+            { key: 'age', label: 'Age' }
+          ]} />,
+          ReactableTestUtils.testNode()
+        );
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('omits columns not in the list', function() {
+        var columns = $('tr.reactable-column-header th');
+        expect(columns.length).to.equal(2);
+      });
+
+      it('allows changing the labels of the columns', function() {
+        var columns = $('tr.reactable-column-header th');
+        expect($(columns[0]).text()).to.have.equal('Name');
+        expect($(columns[1]).text()).to.have.equal('Age');
+      });
+
+      it('adds class name for each column base on its key', function() {
+        var columns = $('tr.reactable-column-header th');
+        expect($(columns[0]).attr('class')).to.have.equal('reactable-th-name');
+        expect($(columns[1]).attr('class')).to.have.equal('reactable-th-age');
+      });
+    });
+  });
 });
