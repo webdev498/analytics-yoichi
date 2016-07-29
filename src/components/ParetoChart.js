@@ -11,7 +11,7 @@ import {
 } from 'utils/kibanaUtils';
 import {CHART_COLORS} from 'Constants';
 
-export function generateChartDataSource(data, chartOptions, fieldMapping) {
+export function generateDataSource(data, chartOptions, fieldMapping) {
   const graphBars = [],
     chartColors = CHART_COLORS;
 
@@ -123,7 +123,7 @@ class ParetoChart extends React.Component {
         height: mapProps.chartHeight ? mapProps.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
-        dataSource: generateChartDataSource(data, chartOptions, fieldMapping),
+        dataSource: generateDataSource(data, chartOptions, fieldMapping),
         events: {
           dataplotClick: function(eventObj, dataObj) {
             const url = getDataPlotClickUrl(props, dataObj);
