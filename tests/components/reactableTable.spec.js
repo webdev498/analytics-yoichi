@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import Reactable from 'reactable';
 import $ from 'jquery';
 import TestUtils from 'react-addons-test-utils';
+
 // var ReactTestUtils = React.addons.TestUtils;
 // var expect = chai.expect;
 
@@ -584,6 +585,114 @@ describe('Reactable', function() {
         var columns = $('tr.reactable-column-header th');
         expect($(columns[0]).attr('class')).to.have.equal('reactable-th-name');
         expect($(columns[1]).attr('class')).to.have.equal('reactable-th-age');
+      });
+    });
+  });
+
+  describe('specifying columns using a <Thead>', function() {
+    describe('and an element for the column title', function() {
+      before(function() {
+        ReactDOM.render(
+          <Reactable.Table id='table' data={[
+          {Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+          {Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
+          {Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}
+          ]}>
+            <Reactable.Thead>
+              <Reactable.Th column='Name' id='my-name'>
+                <strong>name</strong>
+              </Reactable.Th>
+            </Reactable.Thead>
+          </Reactable.Table>,
+          ReactableTestUtils.testNode()
+        );
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('renders only the columns in the Thead', function() {
+        expect($('#table tbody tr:first td').length).to.be.above(0);
+        expect($('#table thead tr:first th').length).to.be.above(0);
+      });
+
+      it('renders the contents of the Th', function() {
+        expect($('#table>thead>tr>th>strong').length).to.be.above(0);
+      });
+
+      it('passes through the properties of the Th', function() {
+        expect($('#table>thead>tr>th').attr('id')).to.have.equal('my-name');
+      });
+    });
+
+    describe('and a string for the column title', function() {
+      before(function() {
+        ReactDOM.render(
+          <Reactable.Table id='table' data={[
+          {Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+          {Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
+          {Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}
+          ]}>
+            <Reactable.Thead>
+              <Reactable.Th column='Name' id='my-name'>
+                name
+              </Reactable.Th>
+            </Reactable.Thead>
+          </Reactable.Table>,
+          ReactableTestUtils.testNode()
+        );
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('renders only the columns in the Thead', function() {
+        expect($('#table tbody tr:first td').length).to.be.above(0);
+        expect($('#table thead tr:first th').length).to.be.above(0);
+      });
+
+      it('renders the contents of the Th', function() {
+        expect($('#table>thead>tr>th').length).to.be.above(0);
+      });
+
+      it('passes through the properties of the Th', function() {
+        expect($('#table>thead>tr>th').attr('id')).to.have.equal('my-name');
+      });
+    });
+  });
+
+  describe('table headers', function() {
+    describe('with hideTableHeader prop on <Table>', function() {
+      before(function() {
+        ReactDOM.render(
+          <Reactable.Table className='table' id='table' data={[
+          {Name: 'Griffin Smith', Age: '18'},
+          {Age: '23', Name: 'Lee Salminen'},
+          {Age: '28', Position: 'Developer'},
+          {Name: 'Leonor Hyatt', Position: null}
+          ]} hideTableHeader />,
+            ReactableTestUtils.testNode()
+        );
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('renders the table', function() {
+        expect($('table#table.table').length).to.be.above(0);
+      });
+
+      it('renders the first row with the correct data', function() {
+        ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', '']);
+      });
+
+      it('renders the second row with the correct data', function() {
+        ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', '']);
+      });
+
+      it('renders the third row with the correct data', function() {
+        ReactableTestUtils.expectRowText(2, ['', '28', 'Developer']);
+      });
+
+      it('does not show a <Thead>', function() {
+        expect($('#table thead').length).to.be.above(0);
       });
     });
   });
