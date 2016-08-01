@@ -14,7 +14,7 @@ const styles = {
   }
 };
 
-class PageContent extends React.Component {
+export class PageContent extends React.Component {
   static propTypes = {
     layout: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired

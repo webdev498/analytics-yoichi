@@ -54,11 +54,13 @@ const styles = {
   }
 };
 
-class CoreLayout extends React.Component {
+export class CoreLayout extends React.Component {
   static propTypes = {
     fetchUserData: PropTypes.object.isRequired,
     logout: PropTypes.object.isRequired,
-    history: PropTypes.func.isRequired
+    history: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired
   }
 
   constructor(props) {

@@ -87,7 +87,7 @@ function getTimeRangeItems() {
   });
 }
 
-class PageHeader extends React.Component {
+export class PageHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {value: 1, showMenu: false};
