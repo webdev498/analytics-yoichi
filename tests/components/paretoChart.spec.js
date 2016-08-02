@@ -39,6 +39,7 @@ function shallowRender(component) {
 }
 
 function shallowRenderWithProps(props = {}) {
+  console.log(shallowRender(<ParetoChart {...props} />));
   return shallowRender(<ParetoChart {...props} />);
 }
 

@@ -1,4 +1,6 @@
-import {
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import tableCard, {
   generateIndividualRowData,
   generateRowObject,
   getColumnDataWhenApiReturnsSingleColumn,
@@ -10,7 +12,32 @@ import {
   generateColumnTextForDisplayingCountryFlag
 } from 'components/Table';
 
+function shallowRender(component) {
+  const renderer = TestUtils.createRenderer();
+
+  renderer.render(component);
+  return renderer.getRenderOutput();
+}
+
+function shallowRenderWithProps(props = {}) {
+  return shallowRender(<tableCard {...props} />);
+}
+
 describe('Table Component: ', function() {
+  it('Should render as <div>', function() {
+    const props = {
+      attributes: {id: 'recent-alerts'},
+      data: null
+    };
+
+    const component = shallowRenderWithProps(props);
+    console.log(component);
+
+    expect(component.type).to.equal('div');
+    expect(component.props.id).to.equal(props.attributes.id);
+    // expect('test').to.equal('test');
+  });
+
   it('generateIndividualRowData should return individual row data.', function() {
     const rowColumnDetails = {
       'currentColumnType': 'chart',

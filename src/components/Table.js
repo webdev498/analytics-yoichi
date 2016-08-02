@@ -458,12 +458,10 @@ class tableCard extends React.Component {
 
   render() {
     const {props} = this;
-    generateDataSource(props);
-
     const that = this;
 
     return (
-      <div style={props.attributes.style}>
+      <div style={props.attributes.style}>{generateDataSource(props)}
         <Table id={props.attributes.id}
           style={{width: '100%'}}
           className='threatTable'

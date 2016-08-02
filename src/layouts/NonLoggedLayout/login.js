@@ -41,7 +41,7 @@ const styles = {
     fontWeight: '300'
   },
   floatingLabelFocus: {
-    color: Colors.turquoise
+    color: Colors.navigation
   },
   underlineFocus: {
     borderColor: Colors.turquoise
@@ -69,6 +69,19 @@ const styles = {
 };
 
 class LoginView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      floatingLabel: {
+        color: Colors.navigation,
+        fontWeight: '300'
+      },
+      floatingLabelFocus: {
+        color: Colors.navigation
+      }
+    };
+  }
+
   componentDidMount() {
     const accessToken = Cookies.get('access_token');
     const tokenType = Cookies.get('token_type');
@@ -89,6 +102,23 @@ class LoginView extends React.Component {
     return null;
   }
 
+  focusInputText() {
+    // return (event) => {
+      // if (this.myUsername !== null || this.myPassword !== null) {
+      console.log('test');
+      this.state = {
+        floatingLabel: {
+          color: Colors.turquoise,
+          fontWeight: '300'
+        },
+        floatingLabelFocus: {
+          color: Colors.turquoise
+        }
+      };
+      // }
+    // };
+  }
+
   render() {
     return (
       <Card style={styles.card}
@@ -97,31 +127,37 @@ class LoginView extends React.Component {
           style={styles.header} />
 
         {this.getErrorState()}
+        {console.log(this.state.floatingLabelFocus)}
 
         <form action={loginUrl} method='post' style={styles.form}>
           <div style={styles.inputWrap}>
             <TextField
-              floatingLabelStyle={styles.floatingLabel}
-              floatingLabelFocusStyle={styles.floatingLabelFocus}
               style={styles.textField}
               underlineFocusStyle={styles.underlineFocus}
               inputStyle={styles.input}
               floatingLabelText='Username'
+              floatingLabelStyle={styles.floatingLabel}
+              // floatingLabelFocusStyle={this.state.floatingLabelFocus}
+              floatingLabelFocusStyle={styles.floatingLabelFocus}
               required
-              name='username' />
+              name='username'
+              // onFocus={this.focusInputText.bind(this)}
+              ref={(ref) => this.myUsername = ref} />
           </div>
 
           <div style={styles.inputWrap}>
             <TextField
-              floatingLabelStyle={styles.floatingLabel}
-              floatingLabelFocusStyle={styles.floatingLabelFocus}
               style={styles.textField}
               underlineFocusStyle={styles.underlineFocus}
               inputStyle={styles.input}
               floatingLabelText='Password'
+              floatingLabelStyle={styles.floatingLabel}
+              floatingLabelFocusStyle={styles.floatingLabelFocus}
               type='password'
               required
-              name='password' />
+              name='password'
+              // onFocus={this.focusInputText.bind(this)}
+              ref={(ref) => this.myPassword = ref} />
           </div>
 
           <div style={styles.buttonWrap}>
