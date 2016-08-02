@@ -8,15 +8,15 @@ let ReactableTestUtils = {
   resetTestEnvironment: function() {
     window.renderApp = function(id) {
       ReactDOM.unmountComponentAtNode($('div#test-node')[0]);
-   };
+    };
     $('div#test-node').remove();
- },
+  },
 
   // Expect the row specified to have the specified class
   expectRowClass: function(rowIndex, className) {
     let row = $($('#table tbody.reactable-data tr')[rowIndex]);
     expect(row.attr('class')).to.have.equal(className);
- },
+  },
 
   // Expect the columns of a the data row specified to have the values in the array as their text values
   expectRowText: function(rowIndex, textArray) {
@@ -26,15 +26,15 @@ let ReactableTestUtils = {
 
     for (let i = 0; i < row.length; i++) {
       expect($(row[i]).text()).to.have.equal(textArray[i]);
-   }
- },
+    }
+  },
 
   testNode: function() {
     let testNode = $('<div>').attr('id', 'test-node');
     $('body').append(testNode);
     testNode.empty();
     return testNode[0];
- }
+  }
 };
 
 describe('Reactable', function() {
@@ -590,9 +590,9 @@ describe('Reactable', function() {
       before(function() {
         ReactDOM.render(
           <Reactable.Table id='table' data={[
-          {Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
-          {Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
-          {Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}
+          {Name: Reactable.unsafe('<span id='griffins-name'>Griffin Smith</span>'), Age: '18'},
+          {Age: '28', Position: Reactable.unsafe('<span id='who-knows-job'>Developer</span>')},
+          {Age: '23', Name: Reactable.unsafe('<span id='lees-name'>Lee Salminen</span>')}
           ]}>
             <Reactable.Thead>
               <Reactable.Th column='Name' id='my-name'>
@@ -624,9 +624,9 @@ describe('Reactable', function() {
       before(function() {
         ReactDOM.render(
           <Reactable.Table id='table' data={[
-          {Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
-          {Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
-          {Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}
+          {Name: Reactable.unsafe('<span id='griffins-name'>Griffin Smith</span>'), Age: '18'},
+          {Age: '28', Position: Reactable.unsafe('<span id='who-knows-job'>Developer</span>')},
+          {Age: '23', Name: Reactable.unsafe('<span id='lees-name'>Lee Salminen</span>')}
           ]}>
             <Reactable.Thead>
               <Reactable.Th column='Name' id='my-name'>
@@ -697,10 +697,10 @@ describe('Reactable', function() {
     context('in the <Table> directly', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
-            {Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
-            {Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
-            {Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}
+          <Reactable.Table className='table' id='table' data={[
+            {Name: Reactable.unsafe('<span id='griffins-name'>Griffin Smith</span>'), Age: '18'},
+            {Age: '28', Position: Reactable.unsafe('<span id='who-knows-job'>Developer</span>')},
+            {Age: '23', Name: Reactable.unsafe('<span id='lees-name'>Lee Salminen</span>')}
           ]} sortable={['Name']} />,
           ReactableTestUtils.testNode()
         );
@@ -735,7 +735,7 @@ describe('Reactable', function() {
     context('in column labels', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {Name: 'Griffin Smith', Age: '18'},
             {Age: '23', Name: 'Lee Salminen'},
             {Age: '28', Position: 'Developer'}
@@ -753,24 +753,24 @@ describe('Reactable', function() {
       it('renders the HTML in the column headers', function() {
         let headers = [];
         $('thead th').each(function() {
-            headers.push($(this).html());
+          headers.push($(this).html());
         });
 
         expect(headers).to.eql([
           '<strong>Name</strong>',
           '<em>Age</em>',
           '<small>Position</small>'
-       ]);
+        ]);
       });
     });
 
     context('in the <Tr>s', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table">
-            <Reactable.Tr data={{Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}} />
-            <Reactable.Tr data={{Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}} />
-            <Reactable.Tr data={{Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')}} />
+          <Reactable.Table className='table' id='table'>
+            <Reactable.Tr data={{Name: Reactable.unsafe('<span id='griffins-name'>Griffin Smith</span>'), Age: '18'}} />
+            <Reactable.Tr data={{Age: '23', Name: Reactable.unsafe('<span id='lees-name'>Lee Salminen</span>')}} />
+            <Reactable.Tr data={{Age: '28', Position: Reactable.unsafe('<span id='who-knows-job'>Developer</span>')}} />
           </Reactable.Table>,
           ReactableTestUtils.testNode()
         );
@@ -796,18 +796,18 @@ describe('Reactable', function() {
     context('in the <Td>s', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table">
+          <Reactable.Table className='table' id='table'>
             <Reactable.Tr>
-              <Reactable.Td column="Name">{Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>')}</Reactable.Td>
-              <Reactable.Td column="Age">18</Reactable.Td>
+              <Reactable.Td column='Name'>{Reactable.unsafe('<span id='griffins-name'>Griffin Smith</span>')}</Reactable.Td>
+              <Reactable.Td column='Age'>18</Reactable.Td>
             </Reactable.Tr>
             <Reactable.Tr>
-              <Reactable.Td column="Name">{Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}</Reactable.Td>
-              <Reactable.Td column="Age">23</Reactable.Td>
+              <Reactable.Td column='Name'>{Reactable.unsafe('<span id='lees-name'>Lee Salminen</span>')}</Reactable.Td>
+              <Reactable.Td column='Age'>23</Reactable.Td>
             </Reactable.Tr>
             <Reactable.Tr>
-              <Reactable.Td column="Position">{Reactable.unsafe('<span id="who-knows-job">Developer</span>')}</Reactable.Td>
-              <Reactable.Td column="Age">28</Reactable.Td>
+              <Reactable.Td column='Position'>{Reactable.unsafe('<span id='who-knows-job'>Developer</span>')}</Reactable.Td>
+              <Reactable.Td column='Age'>28</Reactable.Td>
             </Reactable.Tr>
           </Reactable.Table>,
           ReactableTestUtils.testNode()
@@ -836,7 +836,7 @@ describe('Reactable', function() {
     describe('specifying pageButtonLimit', function() {
       before(function() {
         ReactDOM.render(
-            <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {'Name': 'Griffin Smith', 'Age': '18'},
             {'Age': '23', 'Name': 'Lee Salminen'},
             {'Age': '28', 'Position': 'Developer'},
@@ -880,7 +880,7 @@ describe('Reactable', function() {
     describe('specifying itemsPerPage', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {'Name': 'Griffin Smith', 'Age': '18'},
             {'Age': '23', 'Name': 'Lee Salminen'},
             {'Age': '28', 'Position': 'Developer'},
@@ -889,8 +889,8 @@ describe('Reactable', function() {
             {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
             {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
             {'Age': '23', 'Name': 'Lee Salminen'},
-            {'Age': '28', 'Position': 'Developer'},
-          ]} itemsPerPage={4} previousPageLabel={'<<'} nextPageLabel={'>>'}/>,
+            {'Age': '28', 'Position': 'Developer'}
+          ]} itemsPerPage={4} previousPageLabel={'<<'} nextPageLabel={'>>'} />,
           ReactableTestUtils.testNode()
         );
       });
@@ -915,12 +915,12 @@ describe('Reactable', function() {
         expect(activePage.text()).to.have.equal('1');
       });
 
-      it('does not show previous button', function(){
+      it('does not show previous button', function() {
         let previousButton = $('#table tbody.reactable-pagination a.reactable-previous-page');
         expect(previousButton.length).to.equal(0);
       });
 
-      it('shows next button', function(){
+      it('shows next button', function() {
         let nextButton = $('#table tbody.reactable-pagination a.reactable-next-page');
         expect(nextButton.length).to.equal(1);
         expect(nextButton[0].text).to.equal('>>');
@@ -968,7 +968,7 @@ describe('Reactable', function() {
     describe('specifying more itemsPerPage than items', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {'Name': 'Griffin Smith', 'Age': '18'},
             {'Age': '23', 'Name': 'Lee Salminen'},
             {'Age': '28', 'Position': 'Developer'},
@@ -1005,7 +1005,7 @@ describe('Reactable', function() {
     describe('not specifying itemsPerPage', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {'Name': 'Griffin Smith', 'Age': '18'},
             {'Age': '23', 'Name': 'Lee Salminen'},
             {'Age': '28', 'Position': 'Developer'},
@@ -1022,7 +1022,7 @@ describe('Reactable', function() {
 
       after(ReactableTestUtils.resetTestEnvironment);
 
-      it('renders all rows', function(){
+      it('renders all rows', function() {
         expect($('#table tbody.reactable-data tr').length).to.equal(9);
       });
     });
@@ -1030,7 +1030,7 @@ describe('Reactable', function() {
     describe('specifying 0 itemsPerPage', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {'Name': 'Griffin Smith', 'Age': '18'},
             {'Age': '23', 'Name': 'Lee Salminen'},
             {'Age': '28', 'Position': 'Developer'},
@@ -1059,7 +1059,7 @@ describe('Reactable', function() {
            }
             before( () => {
                 ReactDOM.render(
-                    <Reactable.Table className="table" id="table" data={[
+                    <Reactable.Table className='table' id='table' data={[
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
@@ -1099,7 +1099,7 @@ describe('Reactable', function() {
 
                 render () {
                   return (
-                    <Reactable.Table className="table" id="table" data={[
+                    <Reactable.Table className='table' id='table' data={[
                         {'Name': 'Griffin Smith', 'Age': '18'},
                         {'Age': '23', 'Name': 'Lee Salminen'},
                         {'Age': '28', 'Position': 'Developer'},
@@ -1139,7 +1139,7 @@ describe('Reactable', function() {
     describe('no default sort', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
             {Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
             {Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -1258,7 +1258,7 @@ describe('Reactable', function() {
       before(function() {
         this.render = () => {
           ReactDOM.render(
-            <Reactable.Table className="table" id="table" data={[
+            <Reactable.Table className='table' id='table' data={[
                 {Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
                 {Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
                 {Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -1357,7 +1357,7 @@ describe('Reactable', function() {
     describe('default sort', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
             {Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
             {Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -1365,7 +1365,7 @@ describe('Reactable', function() {
           sortable={[
             {
               column: 'Name',
-              sortFunction: function(a, b){
+              sortFunction: function(a, b) {
                   // Sort by last name
                   let nameA = a.split(' ');
                   let nameB = b.split(' ');
@@ -1382,7 +1382,7 @@ describe('Reactable', function() {
 
       after(ReactableTestUtils.resetTestEnvironment);
 
-      it('renders all rows sorted by default column age descending', function(){
+      it('renders all rows sorted by default column age descending', function() {
         ReactableTestUtils.expectRowText(0, ['Ian Zhang', '28', 'Developer']);
         ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', 'Programmer']);
         ReactableTestUtils.expectRowText(2, ['Griffin Smith', '18', 'Engineer']);
@@ -1408,8 +1408,8 @@ describe('Reactable', function() {
           render: function() {
             return (
               <Reactable.Table
-                className="table"
-                id="table"
+                className='table'
+                id='table'
                 data={this.state.data}
                 sortable={this.state.sortable}
                 defaultSort={this.state.defaultSort}
@@ -1427,7 +1427,7 @@ describe('Reactable', function() {
     describe('sort descending by default flag', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
             {Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
             {Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -1475,7 +1475,7 @@ describe('Reactable', function() {
     describe('default sort no direction specified', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
             {Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
             {Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -1500,7 +1500,7 @@ describe('Reactable', function() {
 
       after(ReactableTestUtils.resetTestEnvironment);
 
-      it('renders all rows sorted by default column age ascending', function(){
+      it('renders all rows sorted by default column age ascending', function() {
         ReactableTestUtils.expectRowText(0, ['Griffin Smith', '18', 'Engineer']);
         ReactableTestUtils.expectRowText(1, ['Lee Salminen', '23', 'Programmer']);
         ReactableTestUtils.expectRowText(2, ['Ian Zhang', '28', 'Developer']);
@@ -1510,7 +1510,7 @@ describe('Reactable', function() {
     describe('unsortable column', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {Name: 'Lee Salminen', Age: '23', Position: 'Programmer'},
             {Name: 'Griffin Smith', Age: '18', Position: 'Engineer'},
             {Name: 'Ian Zhang', Age: '28', Position: 'Developer'}
@@ -1544,7 +1544,7 @@ describe('Reactable', function() {
       describe('numeric sort', function() {
         before(function() {
           ReactDOM.render(
-              <Reactable.Table className="table" id="table" data={[
+              <Reactable.Table className='table' id='table' data={[
                   {Count: '23'},
                   {Count: '18'},
                   {Count: '28'},
@@ -1581,8 +1581,8 @@ describe('Reactable', function() {
       before(function() {
         ReactDOM.render(
           <Reactable.Table
-            className="table"
-            id="table"
+            className='table'
+            id='table'
             columns={[{key: 'Count', sortable: Reactable.Sort.Numeric}]}>
             <Reactable.Tr>
               <Reactable.Td column='Count'>23</Reactable.Td>
@@ -1632,8 +1632,8 @@ describe('Reactable', function() {
       before(function() {
         ReactDOM.render(
           <Reactable.Table
-            className="table"
-            id="table"
+            className='table'
+            id='table'
             columns={[{key: 'Count', sortable: Reactable.Sort.Numeric}]}>
             <Reactable.Tr>
               <Reactable.Td column='Count' value={23}>twenty-three</Reactable.Td>
@@ -1682,7 +1682,7 @@ describe('Reactable', function() {
     describe('currency sort', function() {
       before(function() {
         ReactDOM.render(
-          <Reactable.Table className="table" id="table" data={[
+          <Reactable.Table className='table' id='table' data={[
             {Price: '1.25'},
             {Price: '$1.01'},
             {Price: '1'},
@@ -1709,7 +1709,7 @@ describe('Reactable', function() {
     describe('date sort', function() {
         before(function() {
             ReactDOM.render(
-                <Reactable.Table className="table" id="table" data={[
+                <Reactable.Table className='table' id='table' data={[
                     {'Date': '1/1/2014 11:00 AM'},
                     {'Date': '1/1/2013 11:00 AM'},
                     {'Date': '1/1/2014 4:30 PM'},
@@ -1726,7 +1726,7 @@ describe('Reactable', function() {
             ReactableTestUtils.resetTestEnvironment();
        });
 
-        it('sorts columns by date', function(){
+        it('sorts columns by date', function() {
             let sortHeader = $('#table thead tr.reactable-column-header th')[0];
             TestUtils.Simulate.click(sortHeader);
 
@@ -1742,10 +1742,10 @@ describe('Reactable', function() {
     describe('custom sort with React Components', function() {
         before(function() {
             ReactDOM.render(
-                <Reactable.Table className="table" id="table" data={[
-                    {'Rank': <span className="3">Third</span>},
-                    {'Rank': <span className="1">First</span>},
-                    {'Rank': <span className="2">Second</span>},
+                <Reactable.Table className='table' id='table' data={[
+                    {'Rank': <span className='3'>Third</span>},
+                    {'Rank': <span className='1'>First</span>},
+                    {'Rank': <span className='2'>Second</span>},
                 ]}
                     columns={[{
                         key: 'Rank', sortable: function (a, b) {
@@ -1761,7 +1761,7 @@ describe('Reactable', function() {
             ReactableTestUtils.resetTestEnvironment();
        });
 
-        it('sorts columns by value', function(){
+        it('sorts columns by value', function() {
             let sortHeader = $('#table thead tr.reactable-column-header th')[0];
             TestUtils.Simulate.click(sortHeader);
 
@@ -1774,16 +1774,16 @@ describe('Reactable', function() {
     describe('sorts and calls onSort callback via props', function() {
         let sortColumn = null;
 
-        let callback = function(sortObject){
+        let callback = function(sortObject) {
             sortColumn = sortObject.column;
        }
 
         before(function() {
             ReactDOM.render(
-                <Reactable.Table className="table" id="table" data={[
-                    {'Rank': <span className="3">Third</span>},
-                    {'Rank': <span className="1">First</span>},
-                    {'Rank': <span className="2">Second</span>},
+                <Reactable.Table className='table' id='table' data={[
+                    {'Rank': <span className='3'>Third</span>},
+                    {'Rank': <span className='1'>First</span>},
+                    {'Rank': <span className='2'>Second</span>},
                     ]}
                     columns={[{
                         key: 'Rank', sortable: function (a, b) {
@@ -1800,7 +1800,7 @@ describe('Reactable', function() {
             ReactableTestUtils.resetTestEnvironment();
        });
 
-        it('returns currentSort object to callback for utilization', function(){
+        it('returns currentSort object to callback for utilization', function() {
             let sortHeader = $('#table thead tr.reactable-column-header th')[0];
             TestUtils.Simulate.click(sortHeader);
 
@@ -1810,7 +1810,7 @@ describe('Reactable', function() {
  });
 
     describe('filtering', function() {
-        describe('filtering with javascript objects for data', function(){
+        describe('filtering with javascript objects for data', function() {
             let data = [{name:"Lee SomeoneElse", age:18},{name:"Lee Salminen", age:23},{name:"No Age", age:null}]
             let filterBy
             let onFilter = function (filter) {
@@ -1818,20 +1818,20 @@ describe('Reactable', function() {
            }
             before(function () {
                 ReactDOM.render(
-                    <Reactable.Table className="table" id="table"
+                    <Reactable.Table className='table' id='table'
                         filterable={['Name', 'Age']}
                         onFilter={onFilter}>
                         <Reactable.Tr>
-                            <Reactable.Td column="Name" data={data[0].name}/>
-                            <Reactable.Td column="Age" data={data[0].age}/>
+                            <Reactable.Td column='Name' data={data[0].name}/>
+                            <Reactable.Td column='Age' data={data[0].age}/>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column="Name" data={data[1].name}/>
-                            <Reactable.Td column="Age" data={data[1].age}/>
+                            <Reactable.Td column='Name' data={data[1].name}/>
+                            <Reactable.Td column='Age' data={data[1].age}/>
                         </Reactable.Tr>
                         <Reactable.Tr>
-                            <Reactable.Td column="Name" data={data[2].name}/>
-                            <Reactable.Td column="Age" data={data[2].age}/>
+                            <Reactable.Td column='Name' data={data[2].name}/>
+                            <Reactable.Td column='Age' data={data[2].age}/>
                         </Reactable.Tr>
                     </Reactable.Table>,
                     ReactableTestUtils.testNode()
@@ -1860,12 +1860,12 @@ describe('Reactable', function() {
            });
        });
 
-        describe('basic case-insensitive filtering', function(){
+        describe('basic case-insensitive filtering', function() {
             before(function() {
                 this.component = ReactDOM.render(
-                    <Reactable.Table className="table" id="table"
+                    <Reactable.Table className='table' id='table'
                         filterable={['State', 'Tag']}
-                        filterPlaceholder="Filter Results"
+                        filterPlaceholder='Filter Results'
                         columns={['State', 'Description', 'Tag']}>
                         <Reactable.Tr>
                             <Reactable.Td column='State'>New York</Reactable.Td>
@@ -1908,7 +1908,7 @@ describe('Reactable', function() {
                     ReactableTestUtils.expectRowText(2, ['Alaska', 'bacon', 'renewed']);
                });
 
-                it('filter placeholder is set', function(){
+                it('filter placeholder is set', function() {
                     var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
                     expect($filter.attr("placeholder")).to.equal('Filter Results');
                })
@@ -1945,10 +1945,10 @@ describe('Reactable', function() {
                 render: function() {
                   return (
                     <div>
-                      <input type="text" ref="customFilterInput" id="customFilterInput" value={this.state.customFilterText} onChange={this.handleChange}/>
-                      <Reactable.Table className="table" id="table"
+                      <input type='text' ref='customFilterInput' id='customFilterInput' value={this.state.customFilterText} onChange={this.handleChange}/>
+                      <Reactable.Table className='table' id='table'
                         filterable={['State', 'Tag']}
-                        filterPlaceholder="Filter Results"
+                        filterPlaceholder='Filter Results'
                         filterBy={this.state.customFilterText}
                         columns={['State', 'Description', 'Tag']}>
                         <Reactable.Tr>
@@ -2003,10 +2003,10 @@ describe('Reactable', function() {
         context('filtering with prop and hiding filter input', function() {
           before(function() {
             this.component = ReactDOM.render(
-              <Reactable.Table className="table" id="table"
+              <Reactable.Table className='table' id='table'
                 filterable={['State', 'Tag']}
-                filterPlaceholder="Filter Results"
-                filterBy="new"
+                filterPlaceholder='Filter Results'
+                filterBy='new'
                 hideFilterInput
                 columns={['State', 'Description', 'Tag']}>
                 <Reactable.Tr>
@@ -2031,10 +2031,10 @@ describe('Reactable', function() {
           });
         });
 
-        context('filtering and pagination together', function(){
+        context('filtering and pagination together', function() {
           before(function() {
             ReactDOM.render(
-              <Reactable.Table className="table" id="table" data={[
+              <Reactable.Table className='table' id='table' data={[
                 {'State': 'New York', 'Description': 'this is some text', 'Tag': 'new'},
                 {'State': 'New Mexico', 'Description': 'lorem ipsum', 'Tag': 'old'},
                 {'State': 'Colorado', 'Description': 'new description that shouldn\'t match filter',
@@ -2093,7 +2093,7 @@ describe('Reactable', function() {
         context('with custom filter', function() {
             before(function() {
                 this.component = ReactDOM.render(
-                    <Reactable.Table className="table" id="table"
+                    <Reactable.Table className='table' id='table'
                         filterable={[
                             {
                                 column: 'Tag',
@@ -2107,7 +2107,7 @@ describe('Reactable', function() {
                            },
                             'State'
                         ]}
-                        filterPlaceholder="Filter Results"
+                        filterPlaceholder='Filter Results'
                         columns={['State', 'Description', 'Tag']}>
                         <Reactable.Tr>
                             <Reactable.Td column='State'>New York</Reactable.Td>
@@ -2148,7 +2148,7 @@ describe('Reactable', function() {
                     ReactableTestUtils.expectRowText(2, ['Alaska', 'bacon', 'new']);
                });
 
-                it('filter placeholder is set', function(){
+                it('filter placeholder is set', function() {
                     var $filter = $('#table thead tr.reactable-filterer input.reactable-filter-input');
                     expect($filter.attr("placeholder")).to.equal('Filter Results');
                })
@@ -2187,8 +2187,8 @@ describe('Reactable', function() {
                     render: function() {
                       return (
                         <div>
-                          <input type="text" ref="customFilterInput" id="customFilterInput" value={this.state.customFilterText} onChange={this.handleChange}/>
-                          <Reactable.Table className="table" id="table"
+                          <input type='text' ref='customFilterInput' id='customFilterInput' value={this.state.customFilterText} onChange={this.handleChange}/>
+                          <Reactable.Table className='table' id='table'
                               filterable={[
                                   {
                                       column: 'Tag',
@@ -2202,7 +2202,7 @@ describe('Reactable', function() {
                                  },
                                   'State'
                               ]}
-                              filterPlaceholder="Filter Results"
+                              filterPlaceholder='Filter Results'
                               filterBy={this.state.customFilterText}
                               columns={['State', 'Description', 'Tag']}>
                               <Reactable.Tr>
@@ -2256,7 +2256,7 @@ describe('Reactable', function() {
     describe('directly passing a data array with non-string data', function() {
         before(function() {
             ReactDOM.render(
-                <Reactable.Table className="table" id="table" data={[
+                <Reactable.Table className='table' id='table' data={[
                     {Name: 'Griffin Smith', Age: 18},
                     {Age: 23, Name: {toString: function() {return 'Lee Salminen'}}},
                     {Age: 28.45, Position: 'Developer'}
@@ -2300,7 +2300,7 @@ describe('Reactable', function() {
             this.testNode2 = $('<div>').attr('id', 'test-node-2');
 
             ReactDOM.render(
-                <Reactable.Table className="table" id="table1" data={[
+                <Reactable.Table className='table' id='table1' data={[
                     {Name: 'Griffin Smith', Age: '18'},
                     {Age: '23', Name: 'Lee Salminen'},
                     {Age: '28', Position: 'Developer'}
@@ -2309,7 +2309,7 @@ describe('Reactable', function() {
             );
 
             ReactDOM.render(
-                <Reactable.Table className="table" id="table2" data={[
+                <Reactable.Table className='table' id='table2' data={[
                     {Moniker: 'Griffin Smith', Elderliness: '18'},
                     {Elderliness: '23', Moniker: 'Lee Salminen'},
                     {Elderliness: '28', Title: 'Developer'}
@@ -2341,14 +2341,14 @@ describe('Reactable', function() {
        });
    });
 
-    describe('handleClick callbacks', function(){
+    describe('handleClick callbacks', function() {
         before(function() {
             this.clicked = false;
 
             ReactDOM.render(
-                <Reactable.Table className="table" id="table">
+                <Reactable.Table className='table' id='table'>
                     <Reactable.Tr>
-                        <Reactable.Td column="Name" handleClick={function() {
+                        <Reactable.Td column='Name' handleClick={function() {
                             this.clicked = true;
                        }.bind(this)}>
                             <b>Griffin Smith</b>
@@ -2367,14 +2367,14 @@ describe('Reactable', function() {
        });
    });
 
-  describe('onContextMenu callbacks on <Td> elements', function(){
+  describe('onContextMenu callbacks on <Td> elements', function() {
     before(function() {
       this.rightClicked = false
 
       ReactDOM.render(
-        <Reactable.Table className="table" id="table">
+        <Reactable.Table className='table' id='table'>
           <Reactable.Tr>
-            <Reactable.Td column="Name" onContextMenu={function() {
+            <Reactable.Td column='Name' onContextMenu={function() {
               this.rightClicked = true;
            }.bind(this)}>
               <b>Griffin Smith</b>
@@ -2412,8 +2412,8 @@ describe('Reactable', function() {
     context('when initialized without <Tr>s', () => {
       before(function() {
         this.component = ReactDOM.render(
-          <Reactable.Table className="table" id="table" columns={['State', 'Description', 'Tag']}
-            noDataText="No matching records found."></Reactable.Table>,
+          <Reactable.Table className='table' id='table' columns={['State', 'Description', 'Tag']}
+            noDataText='No matching records found.'></Reactable.Table>,
             ReactableTestUtils.testNode()
         );
      });
@@ -2429,11 +2429,11 @@ describe('Reactable', function() {
     context('when filtered without any matches', () => {
       before(function() {
         this.component = ReactDOM.render(
-          <Reactable.Table className="table" id="table"
+          <Reactable.Table className='table' id='table'
             filterable={['State', 'Tag']}
-            filterPlaceholder="Filter Results"
+            filterPlaceholder='Filter Results'
             filterBy='xxxxx'
-            noDataText="No matching records found."
+            noDataText='No matching records found.'
             columns={['State', 'Description', 'Tag']}>
             <Reactable.Tr>
               <Reactable.Td column='State'>New York</Reactable.Td>
@@ -2473,8 +2473,8 @@ describe('Reactable', function() {
     context('when initialized with an empty array for `data` prop', () => {
       before(function() {
         this.component = ReactDOM.render(
-          <Reactable.Table data={[]} className="table" id="table" columns={['State', 'Description', 'Tag']}
-            noDataText="No matching records found."></Reactable.Table>,
+          <Reactable.Table data={[]} className='table' id='table' columns={['State', 'Description', 'Tag']}
+            noDataText='No matching records found.'></Reactable.Table>,
             ReactableTestUtils.testNode()
         );
      });
