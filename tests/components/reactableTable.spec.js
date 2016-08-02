@@ -590,9 +590,9 @@ describe('Reactable', function() {
       before(function() {
         ReactDOM.render(
           <Reactable.Table id='table' data={[
-          {Name: Reactable.unsafe('<span id='griffins-name'>Griffin Smith</span>'), Age: '18'},
-          {Age: '28', Position: Reactable.unsafe('<span id='who-knows-job'>Developer</span>')},
-          {Age: '23', Name: Reactable.unsafe('<span id='lees-name'>Lee Salminen</span>')}
+          {Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+          {Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
+          {Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}
           ]}>
             <Reactable.Thead>
               <Reactable.Th column='Name' id='my-name'>
@@ -624,9 +624,9 @@ describe('Reactable', function() {
       before(function() {
         ReactDOM.render(
           <Reactable.Table id='table' data={[
-          {Name: Reactable.unsafe('<span id='griffins-name'>Griffin Smith</span>'), Age: '18'},
-          {Age: '28', Position: Reactable.unsafe('<span id='who-knows-job'>Developer</span>')},
-          {Age: '23', Name: Reactable.unsafe('<span id='lees-name'>Lee Salminen</span>')}
+          {Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+          {Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
+          {Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}
           ]}>
             <Reactable.Thead>
               <Reactable.Th column='Name' id='my-name'>
@@ -698,9 +698,9 @@ describe('Reactable', function() {
       before(function() {
         ReactDOM.render(
           <Reactable.Table className='table' id='table' data={[
-            {Name: Reactable.unsafe('<span id='griffins-name'>Griffin Smith</span>'), Age: '18'},
-            {Age: '28', Position: Reactable.unsafe('<span id='who-knows-job'>Developer</span>')},
-            {Age: '23', Name: Reactable.unsafe('<span id='lees-name'>Lee Salminen</span>')}
+            {Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'},
+            {Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')},
+            {Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}
           ]} sortable={['Name']} />,
           ReactableTestUtils.testNode()
         );
@@ -768,9 +768,9 @@ describe('Reactable', function() {
       before(function() {
         ReactDOM.render(
           <Reactable.Table className='table' id='table'>
-            <Reactable.Tr data={{Name: Reactable.unsafe('<span id='griffins-name'>Griffin Smith</span>'), Age: '18'}} />
-            <Reactable.Tr data={{Age: '23', Name: Reactable.unsafe('<span id='lees-name'>Lee Salminen</span>')}} />
-            <Reactable.Tr data={{Age: '28', Position: Reactable.unsafe('<span id='who-knows-job'>Developer</span>')}} />
+            <Reactable.Tr data={{Name: Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>'), Age: '18'}} />
+            <Reactable.Tr data={{Age: '23', Name: Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}} />
+            <Reactable.Tr data={{Age: '28', Position: Reactable.unsafe('<span id="who-knows-job">Developer</span>')}} />
           </Reactable.Table>,
           ReactableTestUtils.testNode()
         );
@@ -798,15 +798,15 @@ describe('Reactable', function() {
         ReactDOM.render(
           <Reactable.Table className='table' id='table'>
             <Reactable.Tr>
-              <Reactable.Td column='Name'>{Reactable.unsafe('<span id='griffins-name'>Griffin Smith</span>')}</Reactable.Td>
+              <Reactable.Td column='Name'>{Reactable.unsafe('<span id="griffins-name">Griffin Smith</span>')}</Reactable.Td>
               <Reactable.Td column='Age'>18</Reactable.Td>
             </Reactable.Tr>
             <Reactable.Tr>
-              <Reactable.Td column='Name'>{Reactable.unsafe('<span id='lees-name'>Lee Salminen</span>')}</Reactable.Td>
+              <Reactable.Td column='Name'>{Reactable.unsafe('<span id="lees-name">Lee Salminen</span>')}</Reactable.Td>
               <Reactable.Td column='Age'>23</Reactable.Td>
             </Reactable.Tr>
             <Reactable.Tr>
-              <Reactable.Td column='Position'>{Reactable.unsafe('<span id='who-knows-job'>Developer</span>')}</Reactable.Td>
+              <Reactable.Td column='Position'>{Reactable.unsafe('<span id="who-knows-job">Developer</span>')}</Reactable.Td>
               <Reactable.Td column='Age'>28</Reactable.Td>
             </Reactable.Tr>
           </Reactable.Table>,
