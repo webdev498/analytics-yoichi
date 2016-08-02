@@ -398,7 +398,7 @@ describe('Reactable', function() {
         </Reactable.Table>,
         ReactableTestUtils.testNode()
       );
-   });
+    });
 
     after(ReactableTestUtils.resetTestEnvironment);
 
@@ -495,7 +495,7 @@ describe('Reactable', function() {
 
       it('renders the third column with the correct class name', function() {
         expect($('td.position').text()).to.have.equal('Developer');
-     });
+      });
     });
   });
 
@@ -1089,51 +1089,51 @@ describe('Reactable', function() {
       });
     });
 
-        describe('updating the currentPage via a prop passed to the table', function() {
-            before(function() {
+    describe('updating the currentPage via a prop passed to the table', function() {
+        before(function() {
 
-              let ParentComponent = React.createClass({
-                getInitialState: function() {
-                  return {currentPage: 4}
-               },
+          let ParentComponent = React.createClass({
+            getInitialState: function() {
+              return {currentPage: 4}
+           },
 
-                render () {
-                  return (
-                    <Reactable.Table className='table' id='table' data={[
-                        {'Name': 'Griffin Smith', 'Age': '18'},
-                        {'Age': '23', 'Name': 'Lee Salminen'},
-                        {'Age': '28', 'Position': 'Developer'},
-                        {'Name': 'Griffin Smith', 'Age': '18'},
-                        {'Age': '23', 'Name': 'Test Person'},
-                        {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
-                        {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
-                        {'Age': '23', 'Name': 'Lee Salminen'},
-                        {'Age': '28', 'Position': 'Developer'},
-                    ]} itemsPerPage={2} currentPage={this.state.currentPage} />
-                  );
-               }
-             })
-              this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
-           });
-
-            after(ReactableTestUtils.resetTestEnvironment);
-
-            it('allows setting the default currentPage', function() {
-                let activePage = $('#table tbody.reactable-pagination ' +
-                    'a.reactable-page-button.reactable-current-page');
-                expect(activePage.length).to.equal(1);
-                expect(activePage.text()).to.have.equal('5');
-           });
-
-            it('allows updating currentPage using props', function() {
-                this.component.setState({currentPage: 2})
-                let activePage = $('#table tbody.reactable-pagination ' +
-                    'a.reactable-page-button.reactable-current-page')
-                expect(activePage.length).to.equal(1);
-                expect(activePage.text()).to.have.equal('3');
-           });
+            render () {
+              return (
+                <Reactable.Table className='table' id='table' data={[
+                    {'Name': 'Griffin Smith', 'Age': '18'},
+                    {'Age': '23', 'Name': 'Lee Salminen'},
+                    {'Age': '28', 'Position': 'Developer'},
+                    {'Name': 'Griffin Smith', 'Age': '18'},
+                    {'Age': '23', 'Name': 'Test Person'},
+                    {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+                    {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+                    {'Age': '23', 'Name': 'Lee Salminen'},
+                    {'Age': '28', 'Position': 'Developer'},
+                ]} itemsPerPage={2} currentPage={this.state.currentPage} />
+              );
+           }
+         })
+          this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
        });
-   });
+
+        after(ReactableTestUtils.resetTestEnvironment);
+
+        it('allows setting the default currentPage', function() {
+            let activePage = $('#table tbody.reactable-pagination ' +
+                'a.reactable-page-button.reactable-current-page');
+            expect(activePage.length).to.equal(1);
+            expect(activePage.text()).to.have.equal('5');
+       });
+
+        it('allows updating currentPage using props', function() {
+            this.component.setState({currentPage: 2})
+            let activePage = $('#table tbody.reactable-pagination ' +
+                'a.reactable-page-button.reactable-current-page')
+            expect(activePage.length).to.equal(1);
+            expect(activePage.text()).to.have.equal('3');
+       });
+    });
+  });
 
   describe('sorting', function() {
     describe('no default sort', function() {

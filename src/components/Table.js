@@ -472,7 +472,8 @@ class tableCard extends React.Component {
           itemsPerPage={tableDataSource.length > props.tableOptions.itemsPerPage ? props.tableOptions.itemsPerPage : 0}
           pageButtonLimit={5}
           currentPage={0}
-          hideFilterInput>
+          hideFilterInput
+          previousPageLabel={'<<'} nextPageLabel={'>>'}>
           {
             tableDataSource.map(function(tableRow, index) {
               return (
