@@ -82,7 +82,7 @@ describe('Utility Function:', function() {
 
   it('getTimePairFromWindow should return from and to dates for the specific time window.', function() {
     const timePair = {"fromDate":"2016-07-21T17:00:00.000","toDate":"2016-07-21T18:00:00.000"};
-    expect(getTimePairFromWindow('1d', '2016-07-21 17:00:00')).to.deep.equal(timePair);
+    expect(getTimePairFromWindow('1d', '2016-07-21 17:00:00')).to.equal(timePair);
   });
 
   it('getColorRanges should return from and to dates for the specific time window.', function() {
