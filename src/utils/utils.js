@@ -186,7 +186,7 @@ function addZero(x, n) {
 }
 
 // Format Date in YYYY-MM-DDThh:mm:ss format
-function formatDate(date) {
+export function formatDate(date) {
   let dd = date.getDate();
   let mm = date.getMonth() + 1;// January is 0!
   let yyyy = (date.getFullYear());
@@ -214,6 +214,7 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     dateString2 = '';
 
   if (dateString !== '') {
+    dateString = dateString.replace(/-/g, '/');
     let dateParameter = new Date(Date.parse((dateString).toString()));
     dateString1 = formatDate(dateParameter);
 
