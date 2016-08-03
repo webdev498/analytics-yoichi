@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import Header from './PageHeader';
 import Sidebar from './Sidebar';
@@ -162,17 +162,19 @@ class CoreLayout extends React.Component {
           showKibana={showKibana}
           hideKibana={this.hideKibana} />
 
-        <nav style={{...styles.nav, ...sidebarWidth}} onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
-          <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
-            location={props.location}
-            hideKibana={this.hideKibana} />
-          {/*<div style={styles.handle}
-            onClick={this.toggleSidebar}>
-            <FontIcon className='material-icons' style={styles.icon}>
-              {icon}
-            </FontIcon>
-          </div>*/}
-        </nav>
+        <ReactCSSTransitionGroup transitionName='example' transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+          <nav style={{...styles.nav, ...sidebarWidth}} onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
+            <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
+              location={props.location}
+              hideKibana={this.hideKibana} />
+            {/*<div style={styles.handle}
+              onClick={this.toggleSidebar}>
+              <FontIcon className='material-icons' style={styles.icon}>
+                {icon}
+              </FontIcon>
+            </div>*/}
+          </nav>
+        </ReactCSSTransitionGroup>
 
         <div style={styles.base}>
           <div style={contentStyle}>
