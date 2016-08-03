@@ -9,7 +9,7 @@ import Kibana from 'components/Kibana';
 import { fetchUserData, logout } from 'actions/auth';
 
 import Loader from 'components/Loader';
-import FontIcon from 'material-ui/FontIcon';
+// import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
 import 'styles/core.scss';
 
@@ -67,11 +67,22 @@ export class CoreLayout extends React.Component {
     super(props);
     this.state = {
       showKibana: false,
-      showFullSidebar: false
+      showFullSidebar: false,
+      sidebarWidth: {width: '72px'}
     };
 
     this.toggleSidebar = this.toggleSidebar.bind(this);
     this.hideKibana = this.hideKibana.bind(this);
+    this.mouseOver = this.mouseOver.bind(this);
+    this.mouseOut = this.mouseOut.bind(this);
+  }
+
+  getInitialState() {
+    return {
+      showKibana: false,
+      showFullSidebar: false,
+      sidebarWidth: {width: '72px'}
+    };
   }
 
   getChildContext() {
@@ -98,6 +109,18 @@ export class CoreLayout extends React.Component {
     });
   }
 
+  mouseOver() {
+    this.setState({
+      sidebarWidth: {width: '172px'}
+    });
+  }
+
+  mouseOut() {
+    this.setState({
+      sidebarWidth: {width: '72px'}
+    });
+  }
+
   componentDidMount() {
     this.props.fetchUserData();
 
@@ -120,13 +143,13 @@ export class CoreLayout extends React.Component {
       {showKibana} = this.state,
       show = {display: 'block'},
       hide = {display: 'none'},
-      sidebarWidth = {width: '72px'};
+      sidebarWidth = state.sidebarWidth;
 
-    let icon = 'keyboard_arrow_right';
-    if (state.showFullSidebar) {
-      sidebarWidth.width = '200px';
-      icon = 'keyboard_arrow_left';
-    }
+    // let icon = 'keyboard_arrow_right';
+    // if (state.showFullSidebar) {
+    //   sidebarWidth.width = '200px';
+    //   icon = 'keyboard_arrow_left';
+    // }
 
     let contentStyle = Object.assign({}, styles.content, show);
 
@@ -141,16 +164,16 @@ export class CoreLayout extends React.Component {
           showKibana={showKibana}
           hideKibana={this.hideKibana} />
 
-        <nav style={{...styles.nav, ...sidebarWidth}}>
+        <nav style={{...styles.nav, ...sidebarWidth}} onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
           <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
             location={props.location}
             hideKibana={this.hideKibana} />
-          <div style={styles.handle}
+          {/*<div style={styles.handle}
             onClick={this.toggleSidebar}>
             <FontIcon className='material-icons' style={styles.icon}>
               {icon}
             </FontIcon>
-          </div>
+          </div>*/}
         </nav>
 
         <div style={styles.base}>
