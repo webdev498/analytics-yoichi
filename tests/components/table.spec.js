@@ -1,4 +1,9 @@
-import {
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Reactable from 'reactable';
+import $ from 'jquery';
+import TestUtils from 'react-addons-test-utils';
+import tableCard, {
   generateIndividualRowData,
   generateRowObject,
   getColumnDataWhenApiReturnsSingleColumn,
@@ -10,7 +15,65 @@ import {
   generateColumnTextForDisplayingCountryFlag
 } from 'components/Table';
 
+let ReactableTestUtils = {
+  resetTestEnvironment: function() {
+    window.renderApp = function(id) {
+      ReactDOM.unmountComponentAtNode($('div#threatTable')[0]);
+    };
+    $('div#threatTable').remove();
+  },
+
+  // Expect the row specified to have the specified class
+  expectRowClass: function(rowIndex, className) {
+    let row = $($('#table tbody.reactable-data tr')[rowIndex]);
+    expect(row.attr('class')).to.have.equal(className);
+  },
+
+  // Expect the columns of a the data row specified to have the values in the array as their text values
+  expectRowText: function(rowIndex, textArray) {
+    let row = $($('#table tbody.reactable-data tr')[rowIndex]).find('td');
+
+    expect(row.length).to.equal(textArray.length);
+
+    for (let i = 0; i < row.length; i++) {
+      expect($(row[i]).text()).to.have.equal(textArray[i]);
+    }
+  },
+
+  testNode: function() {
+    let testNode = $('<div>').attr('id', 'threatTable');
+    $('body').append(testNode);
+    testNode.empty();
+    return testNode[0];
+  }
+};
+
+// function shallowRender(component) {
+//   const renderer = TestUtils.createRenderer();
+
+//   renderer.render(component);
+//   return renderer.getRenderOutput();
+// }
+
+// function shallowRenderWithProps(props = {}) {
+//   return shallowRender(<tableCard {...props} />);
+// }
+
 describe('Table Component: ', function() {
+  // it('Should render as <div>', function() {
+  //   const props = {
+  //     attributes: {id: 'recent-alerts'},
+  //     data: null
+  //   };
+
+  //   const component = shallowRenderWithProps(props);
+  //   console.log(component);
+
+  //   expect(component.type).to.equal('div');
+  //   expect(component.props.id).to.equal(props.attributes.id);
+  //   // expect('test').to.equal('test');
+  // });
+
   it('generateIndividualRowData should return individual row data.', function() {
     const rowColumnDetails = {
       'currentColumnType': 'chart',
@@ -330,5 +393,270 @@ describe('Table Component: ', function() {
     const value = 'CA';
     expect(generateColumnTextForDisplayingCountryFlag(value)).to.deep.equal(
       ' <span class="flag-icon flag-icon-ca"></span>');
+  });
+
+  describe('pagination', function() {
+    describe('specifying pageButtonLimit', function() {
+      before(function() {
+        ReactDOM.render(
+          <Reactable.Table className='table' id='table' data={[
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Test Person'},
+            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Test Person'},
+            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Test Person'},
+            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'}
+          ]} itemsPerPage={5} pageButtonLimit={5} />,
+          ReactableTestUtils.testNode()
+        );
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('shows no more page buttons than the pageButtonLimit', function() {
+        let pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
+        expect(pageButtons.length).to.equal(5);
+      });
+    });
+
+    describe('specifying itemsPerPage', function() {
+      before(function() {
+        ReactDOM.render(
+          <Reactable.Table className='table' id='table' data={[
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Test Person'},
+            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'}
+          ]} itemsPerPage={4} previousPageLabel={'<<'} nextPageLabel={'>>'} />,
+          ReactableTestUtils.testNode()
+        );
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('provides buttons for each page', function() {
+        let pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
+        expect(pageButtons.length).to.equal(3);
+        expect($(pageButtons[0]).text()).to.have.equal('1');
+        expect($(pageButtons[1]).text()).to.have.equal('2');
+        expect($(pageButtons[2]).text()).to.have.equal('3');
+      });
+
+      it('displays only the first n rows', function() {
+        expect($('#table tbody.reactable-data tr').length).to.equal(4);
+      });
+
+      it('specifies a class on the currently active page', function() {
+        let activePage = $('#table tbody.reactable-pagination a.reactable-page-button.reactable-current-page');
+        expect(activePage.length).to.equal(1);
+        expect(activePage.text()).to.have.equal('1');
+      });
+
+      it('does not show previous button', function() {
+        let previousButton = $('#table tbody.reactable-pagination a.reactable-previous-page');
+        expect(previousButton.length).to.equal(0);
+      });
+
+      it('shows next button', function() {
+        let nextButton = $('#table tbody.reactable-pagination a.reactable-next-page');
+        expect(nextButton.length).to.equal(1);
+        expect(nextButton[0].text).to.equal('>>');
+      });
+
+      describe('clicking page buttons', function() {
+        beforeEach(function() {
+          let page2 = $('#table tbody.reactable-pagination a.reactable-page-button')[1];
+          TestUtils.Simulate.click(page2);
+        });
+
+        it('loads the next n rows', function() {
+          let rows = $('#table tbody.reactable-data tr');
+          expect($($(rows[0]).find('td')[0]).text()).to.have.equal('Test Person');
+          expect($($(rows[1]).find('td')[0]).text()).to.have.equal('Ian Zhang');
+          expect($($(rows[2]).find('td')[0]).text()).to.have.equal('Griffin Smith');
+          expect($($(rows[3]).find('td')[0]).text()).to.have.equal('Lee Salminen');
+        });
+
+        it('puts an active class on the new active page', function() {
+          let activePage = $('#table tbody.reactable-pagination a.reactable-page-button.reactable-current-page');
+          expect(activePage.length).to.equal(1);
+          expect(activePage.text()).to.have.equal('2');
+        });
+
+        it('can go back to the original page', function() {
+          let page1 = $('#table tbody.reactable-pagination a.reactable-page-button')[0];
+          TestUtils.Simulate.click(page1);
+
+          let rows = $('#table tbody.reactable-data tr');
+          expect($($(rows[0]).find('td')[0]).text()).to.have.equal('Griffin Smith');
+          expect($($(rows[1]).find('td')[0]).text()).to.have.equal('Lee Salminen');
+          expect($($(rows[2]).find('td')[0]).text()).to.have.equal('');
+          expect($($(rows[3]).find('td')[0]).text()).to.have.equal('Griffin Smith');
+        });
+
+        it('shows previous button', function() {
+          let previousButton = $('#table tbody.reactable-pagination a.reactable-previous-page');
+          expect(previousButton.length).to.equal(1);
+          expect(previousButton[0].text).to.equal('<<');
+        });
+      });
+    });
+
+    describe('specifying more itemsPerPage than items', function() {
+      before(function() {
+        ReactDOM.render(
+          <Reactable.Table className='table' id='table' data={[
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Test Person'},
+            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'}
+          ]} itemsPerPage={20} />,
+          ReactableTestUtils.testNode()
+        );
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('renders all rows', function() {
+        expect($('#table tbody.reactable-data tr').length).to.equal(9);
+      });
+
+      it('provides buttons for 1 page', function() {
+        let pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
+        expect(pageButtons.length).to.equal(1);
+        expect($(pageButtons[0]).text()).to.have.equal('1');
+      });
+
+      it('does not show previous and next buttons', function() {
+        let previousButton = $('#table tbody.reactable-pagination a.reactable-previous-page');
+        let nextButton = $('#table tbody.reactable-pagination a.reactable-next-page');
+        expect(previousButton.length + nextButton.length).to.equal(0);
+      });
+    });
+
+    describe('not specifying itemsPerPage', function() {
+      before(function() {
+        ReactDOM.render(
+          <Reactable.Table className='table' id='table' data={[
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Test Person'},
+            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'},
+          ]} />,
+          ReactableTestUtils.testNode()
+        );
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('renders all rows', function() {
+        expect($('#table tbody.reactable-data tr').length).to.equal(9);
+      });
+    });
+
+    describe('specifying 0 itemsPerPage', function() {
+      before(function() {
+        ReactDOM.render(
+          <Reactable.Table className='table' id='table' data={[
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18'},
+            {'Age': '23', 'Name': 'Test Person'},
+            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+            {'Age': '23', 'Name': 'Lee Salminen'},
+            {'Age': '28', 'Position': 'Developer'}
+          ]} itemsPerPage={0} />,
+          ReactableTestUtils.testNode()
+        );
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('renders all rows', function() {
+        expect($('#table tbody.reactable-data tr').length).to.equal(9);
+      });
+    });
+
+    describe('updating the currentPage via a prop passed to the table', function() {
+      before(function() {
+        let ParentComponent = React.createClass({
+          getInitialState: function() {
+            return {currentPage: 4};
+          },
+
+          render() {
+            return (
+              <Reactable.Table className='table' id='table' data={[
+                  {'Name': 'Griffin Smith', 'Age': '18'},
+                  {'Age': '23', 'Name': 'Lee Salminen'},
+                  {'Age': '28', 'Position': 'Developer'},
+                  {'Name': 'Griffin Smith', 'Age': '18'},
+                  {'Age': '23', 'Name': 'Test Person'},
+                  {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+                  {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+                  {'Age': '23', 'Name': 'Lee Salminen'},
+                  {'Age': '28', 'Position': 'Developer'}
+              ]} itemsPerPage={2} currentPage={this.state.currentPage} />
+            );
+          }
+        });
+        this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
+      });
+
+      after(ReactableTestUtils.resetTestEnvironment);
+
+      it('allows setting the default currentPage', function() {
+        let activePage = $('#table tbody.reactable-pagination ' +
+            'a.reactable-page-button.reactable-current-page');
+        expect(activePage.length).to.equal(1);
+        expect(activePage.text()).to.have.equal('5');
+      });
+
+      it('allows updating currentPage using props', function() {
+        this.component.setState({currentPage: 2});
+        let activePage = $('#table tbody.reactable-pagination ' +
+            'a.reactable-page-button.reactable-current-page');
+        expect(activePage.length).to.equal(1);
+        expect(activePage.text()).to.have.equal('3');
+      });
+    });
   });
 });

@@ -108,6 +108,10 @@ class ParetoChart extends React.Component {
       return;
     }
 
+    if (props.data.rows && props.data.rows.length === 0) {
+      return;
+    }
+
     const data = props.data,
       chartOptions = props.chartOptions,
       fieldMapping = props.chartData.fieldMapping,

@@ -160,6 +160,10 @@ class WorldMap extends React.Component {
       return;
     }
 
+    if (props.data.rows && props.data.rows.length === 0) {
+      return;
+    }
+
     const data = props.data,
       fieldMapping = props.chartData.fieldMapping,
       chartOptions = props.chartOptions,

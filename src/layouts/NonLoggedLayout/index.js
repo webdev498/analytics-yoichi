@@ -24,4 +24,3 @@ class NonLoggedLayout extends React.Component {
 }
 
 export default NonLoggedLayout;
-
