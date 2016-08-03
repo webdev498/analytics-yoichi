@@ -3,12 +3,20 @@ import {
   createRenderer
 } from 'react-addons-test-utils';
 
+import { shallow } from 'enzyme';
+
 import {CoreLayout} from 'layouts/CoreLayout';
-import PageHeader from 'layouts/CoreLayout/PageHeader';
+import PageHeaderWrapped, {PageHeader} from 'layouts/CoreLayout/PageHeader';
 import {PageContent} from 'layouts/CoreLayout/PageContent';
 import Loader from 'components/Loader';
 import ParentCard from 'containers/ParentCard';
 import MetricsCard from 'components/MetricsCard';
+import AppBar from 'material-ui/AppBar';
+
+import DropDownMenu from 'material-ui/DropDownMenu';
+import Menu from 'material-ui/Menu/Menu';
+import MenuItem from 'material-ui/MenuItem/MenuItem';
+import Paper from 'material-ui/Paper';
 
 function getLayout() {
   const layout = [
@@ -63,11 +71,11 @@ function setup(isLoading = false) {
 }
 
 function setupPageContent(isFetching = false, layout = []) {
-  let component, props;
-  props = {
-    isFetching,
-    layout
-  };
+  let component,
+    props = {
+      isFetching,
+      layout
+    };
 
   let renderer = createRenderer();
   renderer.render(<PageContent {...props} />);
@@ -79,6 +87,32 @@ function setupPageContent(isFetching = false, layout = []) {
   };
 }
 
+function setupPageHeader(auth = {user: null}, showKibana = false, enzymeFlag = false) {
+  const props = {
+    auth,
+    showKibana,
+    hideKibana: sinon.spy(),
+    logout: sinon.spy(),
+    updateApiData: sinon.spy()
+  };
+
+  let component;
+
+  if (enzymeFlag) {
+    component = shallow(<PageHeader {...props} />);
+  }
+  else {
+    const renderer = createRenderer();
+    renderer.render(<PageHeader {...props} />);
+    component = renderer.getRenderOutput();
+  }
+
+  return {
+    props,
+    component
+  };
+}
+
 describe('CoreLayout', () => {
   describe('index File', () => {
     it('should render correctly', () => {
@@ -86,11 +120,11 @@ describe('CoreLayout', () => {
       let [ header, nav, contentWrap ] = component.props.children;
 
       expect(nav.type).to.equal('nav');
-      expect(header.type).to.equal(PageHeader);
+      expect(header.type).to.equal(PageHeaderWrapped);
       expect(contentWrap.type).to.equal('div');
     });
 
-    it('should show loader if isLoading flag is true', function() {
+    it('should show loader if isLoading flag is true', () => {
       const { component } = setup(true);
 
       const content = component.props.children[2],
@@ -99,17 +133,21 @@ describe('CoreLayout', () => {
 
       expect(loader.type).to.equal(Loader);
     });
+
+    it('should show kibana', () => {
+
+    });
   });
 
-  describe('PageContent file', function() {
-    const {component} = setupPageContent(true);
+  describe('PageContent file', () => {
+    it('should show loader if isFetching flag is true', () => {
+      const {component} = setupPageContent(true),
+        loader = component.props.children;
 
-    it('should show loader if isFetching flag is true', function() {
-      const loader = component.props.children;
       expect(loader.type).to.equal(Loader);
     });
 
-    it('should layout components based on layout json passed to it.', function() {
+    it('should layout components based on layout json passed to it.', () => {
       const layout = getLayout();
       const {component, props} = setupPageContent(false, layout);
 
@@ -133,5 +171,55 @@ describe('CoreLayout', () => {
       expect(firstMetricCard.type).to.equal(MetricsCard);
       expect(secondMetricCard.type).to.equal(MetricsCard);
     });
+  });
+
+  describe('PageHeader component', () => {
+    it('should layout Material UI\'s AppBar', () => {
+      const {component} = setupPageHeader();
+      expect(component.type).to.equal(AppBar);
+
+      const children = component.props.children;
+      expect(children.length).to.equal(3);
+
+      const [menu, dropDown] = children;
+      expect(menu.type).to.equal(MenuItem);
+      expect(dropDown.type).to.equal(DropDownMenu);
+    });
+
+    it('should toggle menu', () => {
+      let {component} = setupPageHeader({user: {id: 'random', name: 'John Snow'}}, undefined, true);
+      let headerComponent = component.node;
+
+      const [, , menuWrap] = headerComponent.props.children,
+        [user, userMenu] = menuWrap.props.children;
+
+      console.log(component, 1);
+
+      expect(user.type).to.equal('div');
+      expect(userMenu).to.be.null;
+
+      // Simulate.click(menuWrap);
+      component.ref('menuToggleDiv').simulate('click');
+
+      // expect(userMenu).to.not.be.null;
+      // expect(userMenu.type).to.equal(Paper);
+
+    });
+
+    it('should hide kibana', () => {
+
+    });
+
+    it('should time range', () => {
+
+    });
+
+    it('should logout', () => {
+
+    });
+  });
+
+  describe('Sidebar component', () => {
+
   });
 });
