@@ -615,86 +615,48 @@ describe('Table Component: ', function() {
       });
     });
 
-    describe('onPageChange hook', () => {
-      let currentPage
-      const callback = page => {
-          currentPage = page
-      };
-      before(() => {
-        ReactDOM.render(
-          <Reactable.Table className='table' id='table' data={[
-            {'Name': 'Griffin Smith', 'Age': '18'},
-            {'Age': '23', 'Name': 'Lee Salminen'},
-            {'Age': '28', 'Position': 'Developer'},
-            {'Name': 'Griffin Smith', 'Age': '18'},
-            {'Age': '23', 'Name': 'Test Person'},
-            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
-            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
-            {'Age': '23', 'Name': 'Lee Salminen'},
-            {'Age': '28', 'Position': 'Developer'}
-          ]} itemsPerPage={4} onPageChange={callback} />,
-          ReactableTestUtils.testNode()
-        );
+    describe('updating the currentPage via a prop passed to the table', function() {
+      before(function() {
+        let ParentComponent = React.createClass({
+          getInitialState: function() {
+            return {currentPage: 4};
+          },
+
+          render() {
+            return (
+              <Reactable.Table className='table' id='table' data={[
+                  {'Name': 'Griffin Smith', 'Age': '18'},
+                  {'Age': '23', 'Name': 'Lee Salminen'},
+                  {'Age': '28', 'Position': 'Developer'},
+                  {'Name': 'Griffin Smith', 'Age': '18'},
+                  {'Age': '23', 'Name': 'Test Person'},
+                  {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
+                  {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
+                  {'Age': '23', 'Name': 'Lee Salminen'},
+                  {'Age': '28', 'Position': 'Developer'}
+              ]} itemsPerPage={2} currentPage={this.state.currentPage} />
+            );
+          }
+        });
+        this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
       });
 
       after(ReactableTestUtils.resetTestEnvironment);
 
-      it('emits the number of the currently selected page (zero based) when onPageChange event is triggered', () => {
-        const page1 = $('#table tbody.reactable-pagination a.reactable-page-button')[0];
-        const page2 = $('#table tbody.reactable-pagination a.reactable-page-button')[1];
-        const page3 = $('#table tbody.reactable-pagination a.reactable-page-button')[2];
-        TestUtils.Simulate.click(page2);
-        expect(currentPage).to.equal(1);
-        TestUtils.Simulate.click(page1);
-        expect(currentPage).to.equal(0);
-        TestUtils.Simulate.click(page3);
-        expect(currentPage).to.equal(2);
+      it('allows setting the default currentPage', function() {
+        let activePage = $('#table tbody.reactable-pagination ' +
+            'a.reactable-page-button.reactable-current-page');
+        expect(activePage.length).to.equal(1);
+        expect(activePage.text()).to.have.equal('5');
       });
-    });
 
-    describe('updating the currentPage via a prop passed to the table', function() {
-        before(function() {
-
-          let ParentComponent = React.createClass({
-            getInitialState: function() {
-              return {currentPage: 4}
-           },
-
-            render () {
-              return (
-                <Reactable.Table className='table' id='table' data={[
-                    {'Name': 'Griffin Smith', 'Age': '18'},
-                    {'Age': '23', 'Name': 'Lee Salminen'},
-                    {'Age': '28', 'Position': 'Developer'},
-                    {'Name': 'Griffin Smith', 'Age': '18'},
-                    {'Age': '23', 'Name': 'Test Person'},
-                    {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
-                    {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
-                    {'Age': '23', 'Name': 'Lee Salminen'},
-                    {'Age': '28', 'Position': 'Developer'},
-                ]} itemsPerPage={2} currentPage={this.state.currentPage} />
-              );
-           }
-         })
-          this.component = ReactDOM.render(React.createElement(ParentComponent), ReactableTestUtils.testNode());
-       });
-
-        after(ReactableTestUtils.resetTestEnvironment);
-
-        it('allows setting the default currentPage', function() {
-            let activePage = $('#table tbody.reactable-pagination ' +
-                'a.reactable-page-button.reactable-current-page');
-            expect(activePage.length).to.equal(1);
-            expect(activePage.text()).to.have.equal('5');
-       });
-
-        it('allows updating currentPage using props', function() {
-            this.component.setState({currentPage: 2})
-            let activePage = $('#table tbody.reactable-pagination ' +
-                'a.reactable-page-button.reactable-current-page')
-            expect(activePage.length).to.equal(1);
-            expect(activePage.text()).to.have.equal('3');
-       });
+      it('allows updating currentPage using props', function() {
+        this.component.setState({currentPage: 2});
+        let activePage = $('#table tbody.reactable-pagination ' +
+            'a.reactable-page-button.reactable-current-page');
+        expect(activePage.length).to.equal(1);
+        expect(activePage.text()).to.have.equal('3');
+      });
     });
   });
 });
