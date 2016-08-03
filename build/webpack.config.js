@@ -18,7 +18,10 @@ const webpackConfig = {
     root: paths.base(config.dir_client),
     extensions: ['', '.js', '.jsx', '.json']
   },
-  module: {}
+  module: {},
+  externals: {
+    'react/addons': true
+  }
 };
 // ------------------------------------
 // Entry Points

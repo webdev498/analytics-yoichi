@@ -400,33 +400,18 @@ describe('Table Component: ', function() {
       before(function() {
         ReactDOM.render(
           <Reactable.Table className='table' id='table' data={[
-            {'Name': 'Griffin Smith', 'Age': '18'},
-            {'Age': '23', 'Name': 'Lee Salminen'},
-            {'Age': '28', 'Position': 'Developer'},
-            {'Name': 'Griffin Smith', 'Age': '18'},
-            {'Age': '23', 'Name': 'Test Person'},
-            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
-            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
-            {'Age': '23', 'Name': 'Lee Salminen'},
-            {'Age': '28', 'Position': 'Developer'},
-            {'Name': 'Griffin Smith', 'Age': '18'},
-            {'Age': '23', 'Name': 'Lee Salminen'},
-            {'Age': '28', 'Position': 'Developer'},
-            {'Name': 'Griffin Smith', 'Age': '18'},
-            {'Age': '23', 'Name': 'Test Person'},
-            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
-            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
-            {'Age': '23', 'Name': 'Lee Salminen'},
-            {'Age': '28', 'Position': 'Developer'},
-            {'Name': 'Griffin Smith', 'Age': '18'},
-            {'Age': '23', 'Name': 'Lee Salminen'},
-            {'Age': '28', 'Position': 'Developer'},
-            {'Name': 'Griffin Smith', 'Age': '18'},
-            {'Age': '23', 'Name': 'Test Person'},
-            {'Name': 'Ian Zhang', 'Age': '28', 'Position': 'Developer'},
-            {'Name': 'Griffin Smith', 'Age': '18', 'Position': 'Software Developer'},
-            {'Age': '23', 'Name': 'Lee Salminen'},
-            {'Age': '28', 'Position': 'Developer'}
+            {'Date': '03 Aug 2016 19:55:15.869', 'Details': 'Potential Pass-the-hash activity detected on host'},
+            {'Details': 'Potential Pass-the-hash activity detected on host', 'Source': 'IP 36.66.195.182'},
+            {'Date': '03 Aug 2016 19:55:15.869', 'Details': 'Potential Pass-the-hash activity detected on host'},
+            {'Details': 'Potential Pass-the-hash activity detected on host', 'Source': 'IP 36.66.195.182'},
+            {'Date': '03 Aug 2016 19:55:15.869', 'Details': 'Potential Pass-the-hash activity detected on host'},
+            {'Details': 'Potential Pass-the-hash activity detected on host', 'Source': 'IP 36.66.195.182'},
+            {'Date': '03 Aug 2016 19:55:15.869', 'Details': 'Potential Pass-the-hash activity detected on host'},
+            {'Details': 'Potential Pass-the-hash activity detected on host', 'Source': 'IP 36.66.195.182'},
+            {'Date': '03 Aug 2016 19:55:15.869', 'Details': 'Potential Pass-the-hash activity detected on host'},
+            {'Details': 'Potential Pass-the-hash activity detected on host', 'Source': 'IP 36.66.195.182'},
+            {'Date': '03 Aug 2016 19:55:15.869', 'Details': 'Potential Pass-the-hash activity detected on host'},
+            {'Details': 'Potential Pass-the-hash activity detected on host', 'Source': 'IP 36.66.195.182'}
           ]} itemsPerPage={5} pageButtonLimit={5} />,
           ReactableTestUtils.testNode()
         );
@@ -436,7 +421,7 @@ describe('Table Component: ', function() {
 
       it('shows no more page buttons than the pageButtonLimit', function() {
         let pageButtons = $('#table tbody.reactable-pagination a.reactable-page-button');
-        expect(pageButtons.length).to.equal(5);
+        expect(pageButtons.length).to.equal(3);
       });
     });
 
