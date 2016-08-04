@@ -3,7 +3,8 @@ import {
   createRenderer
 } from 'react-addons-test-utils';
 
-import { shallow } from 'enzyme';
+// import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 import {CoreLayout} from 'layouts/CoreLayout';
 import PageHeaderWrapped, {PageHeader} from 'layouts/CoreLayout/PageHeader';
@@ -89,6 +90,7 @@ function setupPageContent(isFetching = false, layout = []) {
 
 function setupPageHeader(auth = {user: null}, showKibana = false, enzymeFlag = false) {
   const props = {
+    title: 'rank',
     auth,
     showKibana,
     hideKibana: sinon.spy(),
@@ -99,7 +101,8 @@ function setupPageHeader(auth = {user: null}, showKibana = false, enzymeFlag = f
   let component;
 
   if (enzymeFlag) {
-    component = shallow(<PageHeader {...props} />);
+    component = mount(<PageHeader {...props} />);
+    console.log(component);
   }
   else {
     const renderer = createRenderer();
@@ -187,23 +190,21 @@ describe('CoreLayout', () => {
     });
 
     it('should toggle menu', () => {
-      let {component} = setupPageHeader({user: {id: 'random', name: 'John Snow'}}, undefined, true);
-      let headerComponent = component.node;
+      const auth = {user: {id: 'random', name: 'John Snow'}};
+      let {component} = setupPageHeader(auth, undefined, true);
 
-      const [, , menuWrap] = headerComponent.props.children,
-        [user, userMenu] = menuWrap.props.children;
+      expect(component.props().title).to.equal('rank');
+      expect(component.props().showKibana).to.be.false;
+      expect(component.props().auth).to.deep.equal(auth);
 
-      console.log(component, 1);
+      let toggleMenu = component.ref('menuToggleDiv');
+      expect(toggleMenu.childAt(0).type()).to.equal('div');
+      expect(toggleMenu.childAt(1).type()).to.be.null;
 
-      expect(user.type).to.equal('div');
-      expect(userMenu).to.be.null;
+      toggleMenu.simulate('click');
 
-      // Simulate.click(menuWrap);
-      component.ref('menuToggleDiv').simulate('click');
-
-      // expect(userMenu).to.not.be.null;
-      // expect(userMenu.type).to.equal(Paper);
-
+      expect(toggleMenu.childAt(1).type()).to.not.be.null;
+      expect(toggleMenu.childAt(1).type()).to.equal(Paper);
     });
 
     it('should hide kibana', () => {

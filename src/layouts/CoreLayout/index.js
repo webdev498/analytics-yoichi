@@ -77,14 +77,6 @@ export class CoreLayout extends React.Component {
     this.mouseOut = this.mouseOut.bind(this);
   }
 
-  getInitialState() {
-    return {
-      showKibana: false,
-      showFullSidebar: false,
-      sidebarWidth: {width: '72px'}
-    };
-  }
-
   getChildContext() {
     const that = this;
     return {

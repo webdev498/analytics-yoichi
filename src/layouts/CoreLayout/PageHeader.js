@@ -15,6 +15,10 @@ import Paper from 'material-ui/Paper';
 import {Colors} from 'theme/colors';
 import { Link } from 'react-router';
 
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import AppTheme from 'theme/AppTheme';
+const muiTheme = getMuiTheme(AppTheme);
+
 const TimeRanges = [
   {
     text: '1 Hour',
@@ -96,8 +100,15 @@ export class PageHeader extends React.Component {
   }
 
   static propTypes = {
+    title: PropTypes.string.isRequired,
     updateApiData: PropTypes.func.isRequired,
-    hideKibana: PropTypes.func.isRequired
+    hideKibana: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+    showKibana: PropTypes.bool.isRequired
+  }
+
+  getChildContext() {
+    return {muiTheme: getMuiTheme(muiTheme)};
   }
 
   handleTimeChange(event, index, value) {
@@ -151,7 +162,7 @@ export class PageHeader extends React.Component {
         {
           name
           ? (
-            <div onClick={this.toggleMenu}>
+            <div onClick={this.toggleMenu} ref='menuToggleDiv'>
               <div style={styles.userWrap}>
                 <span style={styles.label}>{name}</span>
                 <FontIcon style={styles.usericon} className='material-icons'>
@@ -183,6 +194,10 @@ export class PageHeader extends React.Component {
     );
   }
 }
+
+PageHeader.childContextTypes = {
+  muiTheme: React.PropTypes.object.isRequired
+};
 
 function mapStateToProps(state) {
   return { auth: state.auth };
