@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 
-export function generateChartDataSource(chartProperties, duration) {
+export function generateDataSource(chartProperties, duration) {
   let dataSourceObject = {},
     dataSet = [],
     dataObject = [],
@@ -64,7 +64,7 @@ const renderChart = (props) => {
       height: chartProperties.chartHeight,
       dataFormat: 'json',
       containerBackgroundOpacity: '0',
-      dataSource: generateChartDataSource(chartProperties, props.duration)
+      dataSource: generateDataSource(chartProperties, props.duration)
     }
   );
     fusioncharts.render();
