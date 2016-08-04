@@ -114,7 +114,7 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, o
   };
 }
 
-export function generateChartDataSource(rawData, chartOptions, chartData) {
+export function generateDataSource(rawData, chartOptions, chartData) {
   const {fieldMapping, multipleReportIds, displayTopFive, showTrendLines, trendLines} = chartData,
     numberSuffix = (!isUndefined(chartOptions.numberSuffix)) ? chartOptions.numberSuffix : '',
     singleLineCharacters =
@@ -422,7 +422,7 @@ class HorizontalBarChart extends React.Component {
         height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
-        dataSource: generateChartDataSource(rawData, chartOptions, chartData),
+        dataSource: generateDataSource(rawData, chartOptions, chartData),
         events: {
           dataplotClick: function(eventObj, dataObj) {
             const url = getDataPlotClickUrl(props, dataObj);

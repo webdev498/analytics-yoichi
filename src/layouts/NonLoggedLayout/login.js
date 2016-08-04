@@ -61,7 +61,7 @@ const styles = {
     position: 'absolute',
     right: '35px',
     left: '35px',
-    top: '100px',
+    // top: '100px',
     color: Colors.cherry,
     textAlign: 'center',
     fontSize: '11px'
@@ -76,7 +76,30 @@ class LoginView extends React.Component {
         color: Colors.navigation,
         fontWeight: '300'
       },
-      floatingLabelFocus: {
+      floatingLabelFocus1: {
+        color: Colors.navigation
+      },
+      floatingLabelFocus2: {
+        color: Colors.navigation
+      }
+    };
+
+    this.focusInputText1 = this.focusInputText1.bind(this);
+    this.blurInputText1 = this.blurInputText1.bind(this);
+    this.focusInputText2 = this.focusInputText2.bind(this);
+    this.blurInputText2 = this.blurInputText2.bind(this);
+  }
+
+  getInitialState() {
+    return {
+      floatingLabel: {
+        color: Colors.navigation,
+        fontWeight: '300'
+      },
+      floatingLabelFocus1: {
+        color: Colors.navigation
+      },
+      floatingLabelFocus2: {
         color: Colors.navigation
       }
     };
@@ -102,21 +125,52 @@ class LoginView extends React.Component {
     return null;
   }
 
-  focusInputText() {
-    // return (event) => {
-      // if (this.myUsername !== null || this.myPassword !== null) {
-      console.log('test');
-      this.state = {
-        floatingLabel: {
-          color: Colors.turquoise,
-          fontWeight: '300'
-        },
-        floatingLabelFocus: {
-          color: Colors.turquoise
-        }
-      };
-      // }
-    // };
+  focusInputText1() {
+    this.setState({
+      floatingLabel: {
+        color: Colors.turquoise,
+        fontWeight: '300'
+      },
+      floatingLabelFocus1: {
+        color: Colors.turquoise
+      }
+    });
+  }
+
+  blurInputText1() {
+    this.setState({
+      floatingLabel: {
+        color: Colors.turquoise,
+        fontWeight: '300'
+      },
+      floatingLabelFocus1: {
+        color: Colors.navigation
+      }
+    });
+  }
+
+  focusInputText2() {
+    this.setState({
+      floatingLabel: {
+        color: Colors.turquoise,
+        fontWeight: '300'
+      },
+      floatingLabelFocus2: {
+        color: Colors.turquoise
+      }
+    });
+  }
+
+  blurInputText2() {
+    this.setState({
+      floatingLabel: {
+        color: Colors.turquoise,
+        fontWeight: '300'
+      },
+      floatingLabelFocus2: {
+        color: Colors.navigation
+      }
+    });
   }
 
   render() {
@@ -127,7 +181,6 @@ class LoginView extends React.Component {
           style={styles.header} />
 
         {this.getErrorState()}
-        {console.log(this.state.floatingLabelFocus)}
 
         <form action={loginUrl} method='post' style={styles.form}>
           <div style={styles.inputWrap}>
@@ -137,11 +190,11 @@ class LoginView extends React.Component {
               inputStyle={styles.input}
               floatingLabelText='Username'
               floatingLabelStyle={styles.floatingLabel}
-              // floatingLabelFocusStyle={this.state.floatingLabelFocus}
-              floatingLabelFocusStyle={styles.floatingLabelFocus}
+              floatingLabelFocusStyle={this.state.floatingLabelFocus1}
               required
               name='username'
-              // onFocus={this.focusInputText.bind(this)}
+              onFocus={this.focusInputText1}
+              onBlur={this.blurInputText1}
               ref={(ref) => this.myUsername = ref} />
           </div>
 
@@ -152,11 +205,12 @@ class LoginView extends React.Component {
               inputStyle={styles.input}
               floatingLabelText='Password'
               floatingLabelStyle={styles.floatingLabel}
-              floatingLabelFocusStyle={styles.floatingLabelFocus}
+              floatingLabelFocusStyle={this.state.floatingLabelFocus2}
               type='password'
               required
               name='password'
-              // onFocus={this.focusInputText.bind(this)}
+              onFocus={this.focusInputText2}
+              onBlur={this.blurInputText2}
               ref={(ref) => this.myPassword = ref} />
           </div>
 

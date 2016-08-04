@@ -1,9 +1,9 @@
 import {
-  generateChartDataSource
+  generateDataSource
 } from 'components/Area2DAsSparkLineChart';
 
 describe('Area2DAsSparkLineChart Component: ', function() {
-  it('generateChartDataSource should return data source object which is required for FusionCharts.', function() {
+  it('generateDataSource should return data source object which is required for FusionCharts.', function() {
     const inputArray = {
         'columnType': 'chart',
         'columnName': 'CONNECTIONS',
@@ -224,6 +224,6 @@ describe('Area2DAsSparkLineChart Component: ', function() {
           }
         ]
       };
-    expect(generateChartDataSource(inputArray, duration)).to.deep.equal(dataSourceObject);
+    expect(generateDataSource(inputArray, duration)).to.deep.equal(dataSourceObject);
   });
 });

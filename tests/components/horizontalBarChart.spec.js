@@ -1,6 +1,6 @@
 import {
   generateDataArray,
-  generateChartDataSource
+  generateDataSource
 } from 'components/HorizontalBarChart';
 
 describe('HorizontalBarChart Component: ', function() {
@@ -391,11 +391,306 @@ describe('HorizontalBarChart Component: ', function() {
     ).to.deep.equal(dataArray);
   });
 
-  it('generateChartDataSource should return chart datasource object.', function() {
-    const rawData = {"taf_connections_by_protocol":{"total":-1,"next":-1,"columns":[{"name":"protocol.service","displayName":"protocol","columnType":"DIMENSION","dataType":"TEXT","sortable":true},{"name":"date","displayName":"connections using this protocol","columnType":"MEASURE","dataType":"NUMBER","sortable":true}],"rows":[["http",8537],["Elasticsearch",2843],["Kafka or H2 (DBMS) Database Server",494],["Hadoop NameNode or 360Works SuperContainer ",433],["ssl",198],["dns",118],["ssh",45],["Network Time Protocol (NTP)",36],["dhcp",15],["Syslog or Remote Shell, used to execute non-interactive commands on a remote system (Remote Shell, rsh, remsh)",14]]}},
-      chartOptions = {"showValues":"0","showLabels":"1","singleLineCharacters":"27"},
-      chartData = {"showTrendLines":false,"fieldMapping":[{"reportId":"taf_connections_by_protocol","columns":["protocol.service","date"]}],"multipleReportIds":false},
-      dataSourceObject = {"chart":{"paletteColors":"#2bd8d0,#3ad7c9,#46d6c4,#57d5bd,#67d3b6,#79d2ae,#8ad1a7,#9acfa0,#a8ce9a,#b2cd96","bgColor":"#ffffff","showBorder":"0","showCanvasBorder":"0","usePlotGradientColor":"0","placeValuesInside":"1","valueFontColor":"#444c63","showAxisLines":"1","axisLineAlpha":"15","alignCaptionWithCanvas":"0","showAlternateVGridColor":"0","captionFontSize":"14","subcaptionFontSize":"14","subcaptionFontBold":"0","showLabels":"1","divLineAlpha":"50","divLineColor":"#e5e5ea","divLineThickness":"1","plotBorderAlpha":"0","chartRightMargin":"150","animation":"0","toolTipColor":"#ffffff","toolTipBorderThickness":"0","toolTipBgColor":"#000000","toolTipBgAlpha":"80","toolTipBorderRadius":"2","toolTipPadding":"5","showYAxisValues":"0","showValues":"0","xAxisNameFontSize":"14","yAxisNameFontSize":"14","labelFontSize":"11","chartLeftMargin":"0","numDivLines":"4","baseFont":"Open Sans, sans-serif","baseFontColor":"#6b7282","singleLineCharacters":"27"},"annotations":{"groups":[{"items":[{"id":"datasetlabel0","type":"text","text":"8.54k ","align":"left","x":"$chartEndX - 146","y":"$dataset.0.set.0.CenterY","fontSize":"11","color":"#6b7282","font":"Open Sans, sans-serif"},{"id":"datasetlabel1","type":"text","text":"2.84k ","align":"left","x":"$chartEndX - 146","y":"$dataset.0.set.1.CenterY","fontSize":"11","color":"#6b7282","font":"Open Sans, sans-serif"},{"id":"datasetlabel2","type":"text","text":"494 ","align":"left","x":"$chartEndX - 146","y":"$dataset.0.set.2.CenterY","fontSize":"11","color":"#6b7282","font":"Open Sans, sans-serif"},{"id":"datasetlabel3","type":"text","text":"433 ","align":"left","x":"$chartEndX - 146","y":"$dataset.0.set.3.CenterY","fontSize":"11","color":"#6b7282","font":"Open Sans, sans-serif"},{"id":"datasetlabel4","type":"text","text":"198 ","align":"left","x":"$chartEndX - 146","y":"$dataset.0.set.4.CenterY","fontSize":"11","color":"#6b7282","font":"Open Sans, sans-serif"},{"id":"datasetlabel5","type":"text","text":"118 ","align":"left","x":"$chartEndX - 146","y":"$dataset.0.set.5.CenterY","fontSize":"11","color":"#6b7282","font":"Open Sans, sans-serif"},{"id":"datasetlabel6","type":"text","text":"45 ","align":"left","x":"$chartEndX - 146","y":"$dataset.0.set.6.CenterY","fontSize":"11","color":"#6b7282","font":"Open Sans, sans-serif"},{"id":"datasetlabel7","type":"text","text":"36 ","align":"left","x":"$chartEndX - 146","y":"$dataset.0.set.7.CenterY","fontSize":"11","color":"#6b7282","font":"Open Sans, sans-serif"},{"id":"datasetlabel8","type":"text","text":"15 ","align":"left","x":"$chartEndX - 146","y":"$dataset.0.set.8.CenterY","fontSize":"11","color":"#6b7282","font":"Open Sans, sans-serif"},{"id":"datasetlabel9","type":"text","text":"14 ","align":"left","x":"$chartEndX - 146","y":"$dataset.0.set.9.CenterY","fontSize":"11","color":"#6b7282","font":"Open Sans, sans-serif"}]}]},"data":[{"label":"http","value":8537,"connection":"","toolText":"http, 8537"},{"label":"Elasticsearch","value":2843,"connection":"","toolText":"Elasticsearch, 2843"},{"label":"Kafka or H2 (DBMS) Database{br} Server","value":494,"connection":"","toolText":"Kafka or H2 (DBMS) Database Server, 494"},{"label":"Hadoop NameNode or 360Works{br} SuperContainer ","value":433,"connection":"","toolText":"Hadoop NameNode or 360Works SuperContainer , 433"},{"label":"ssl","value":198,"connection":"","toolText":"ssl, 198"},{"label":"dns","value":118,"connection":"","toolText":"dns, 118"},{"label":"ssh","value":45,"connection":"","toolText":"ssh, 45"},{"label":"Network Time Protocol (NTP)","value":36,"connection":"","toolText":"Network Time Protocol (NTP), 36"},{"label":"dhcp","value":15,"connection":"","toolText":"dhcp, 15"},{"label":"Syslog or Remote Shell, use{br}d to execute non-interactiv{br}e commands on a remote syst{br}em (Remote Shell, rsh, rems{br}h)","value":14,"connection":"","toolText":"Syslog or Remote Shell, used to execute non-interactive commands on a remote system (Remote Shell, rsh, remsh), 14"}]};
-    expect(generateChartDataSource(rawData, chartOptions, chartData)).to.deep.equal(dataSourceObject);
+  it('generateDataSource should return chart datasource object.', function() {
+    const rawData = {
+        'taf_connections_by_protocol': {
+          'total': -1,
+          'next': -1,
+          'columns': [
+            {
+              'name': 'protocol.service',
+              'displayName': 'protocol',
+              'columnType': 'DIMENSION',
+              'dataType': 'TEXT',
+              'sortable': true
+            },
+            {
+              'name': 'date',
+              'displayName': 'connections using this protocol',
+              'columnType': 'MEASURE',
+              'dataType': 'NUMBER',
+              'sortable': true
+            }
+          ],
+          'rows': [
+            [
+              'http',
+              8537
+            ],
+            [
+              'Elasticsearch',
+              2843
+            ],
+            [
+              'Kafka or H2 (DBMS) Database Server',
+              494
+            ],
+            [
+              'Hadoop NameNode or 360Works SuperContainer ',
+              433
+            ],
+            [
+              'ssl',
+              198
+            ],
+            [
+              'dns',
+              118
+            ],
+            [
+              'ssh',
+              45
+            ],
+            [
+              'Network Time Protocol (NTP)',
+              36
+            ],
+            [
+              'dhcp',
+              15
+            ],
+            [
+              'Syslog or Remote Shell, used to execute non-interactive commands on a remote system (Remote Shell, rsh, remsh)',
+              14
+            ]
+          ]
+        }
+      },
+      chartOptions = {'showValues': '0', 'showLabels': '1', 'singleLineCharacters': '27'},
+      chartData = {
+        'showTrendLines': false,
+        'fieldMapping': [
+          {
+            'reportId': 'taf_connections_by_protocol',
+            'columns': [
+              'protocol.service',
+              'date'
+            ]
+          }
+        ],
+        'multipleReportIds': false
+      },
+      dataSourceObject = {
+        'chart': {
+          'paletteColors': '#2bd8d0,#3ad7c9,#46d6c4,#57d5bd,#67d3b6,#79d2ae,#8ad1a7,#9acfa0,#a8ce9a,#b2cd96',
+          'bgColor': '#ffffff',
+          'showBorder': '0',
+          'showCanvasBorder': '0',
+          'usePlotGradientColor': '0',
+          'placeValuesInside': '1',
+          'valueFontColor': '#444c63',
+          'showAxisLines': '1',
+          'axisLineAlpha': '15',
+          'alignCaptionWithCanvas': '0',
+          'showAlternateVGridColor': '0',
+          'captionFontSize': '14',
+          'subcaptionFontSize': '14',
+          'subcaptionFontBold': '0',
+          'showLabels': '1',
+          'divLineAlpha': '50',
+          'divLineColor': '#e5e5ea',
+          'divLineThickness': '1',
+          'plotBorderAlpha': '0',
+          'chartRightMargin': '150',
+          'animation': '0',
+          'toolTipColor': '#ffffff',
+          'toolTipBorderThickness': '0',
+          'toolTipBgColor': '#000000',
+          'toolTipBgAlpha': '80',
+          'toolTipBorderRadius': '2',
+          'toolTipPadding': '5',
+          'showYAxisValues': '0',
+          'showValues': '0',
+          'xAxisNameFontSize': '14',
+          'yAxisNameFontSize': '14',
+          'labelFontSize': '11',
+          'chartLeftMargin': '0',
+          'numDivLines': '4',
+          'baseFont': 'Open Sans, sans-serif',
+          'baseFontColor': '#6b7282',
+          'singleLineCharacters': '27'
+        },
+        'annotations': {
+          'groups': [
+            {
+              'items': [
+                {
+                  'id': 'datasetlabel0',
+                  'type': 'text',
+                  'text': '8.54k ',
+                  'align': 'left',
+                  'x': '$chartEndX - 146',
+                  'y': '$dataset.0.set.0.CenterY',
+                  'fontSize': '11',
+                  'color': '#6b7282',
+                  'font': 'Open Sans, sans-serif'
+                },
+                {
+                  'id': 'datasetlabel1',
+                  'type': 'text',
+                  'text': '2.84k ',
+                  'align': 'left',
+                  'x': '$chartEndX - 146',
+                  'y': '$dataset.0.set.1.CenterY',
+                  'fontSize': '11',
+                  'color': '#6b7282',
+                  'font': 'Open Sans, sans-serif'
+                },
+                {
+                  'id': 'datasetlabel2',
+                  'type': 'text',
+                  'text': '494 ',
+                  'align': 'left',
+                  'x': '$chartEndX - 146',
+                  'y': '$dataset.0.set.2.CenterY',
+                  'fontSize': '11',
+                  'color': '#6b7282',
+                  'font': 'Open Sans, sans-serif'
+                },
+                {
+                  'id': 'datasetlabel3',
+                  'type': 'text',
+                  'text': '433 ',
+                  'align': 'left',
+                  'x': '$chartEndX - 146',
+                  'y': '$dataset.0.set.3.CenterY',
+                  'fontSize': '11',
+                  'color': '#6b7282',
+                  'font': 'Open Sans, sans-serif'
+                },
+                {
+                  'id': 'datasetlabel4',
+                  'type': 'text',
+                  'text': '198 ',
+                  'align': 'left',
+                  'x': '$chartEndX - 146',
+                  'y': '$dataset.0.set.4.CenterY',
+                  'fontSize': '11',
+                  'color': '#6b7282',
+                  'font': 'Open Sans, sans-serif'
+                },
+                {
+                  'id': 'datasetlabel5',
+                  'type': 'text',
+                  'text': '118 ',
+                  'align': 'left',
+                  'x': '$chartEndX - 146',
+                  'y': '$dataset.0.set.5.CenterY',
+                  'fontSize': '11',
+                  'color': '#6b7282',
+                  'font': 'Open Sans, sans-serif'
+                },
+                {
+                  'id': 'datasetlabel6',
+                  'type': 'text',
+                  'text': '45 ',
+                  'align': 'left',
+                  'x': '$chartEndX - 146',
+                  'y': '$dataset.0.set.6.CenterY',
+                  'fontSize': '11',
+                  'color': '#6b7282',
+                  'font': 'Open Sans, sans-serif'
+                },
+                {
+                  'id': 'datasetlabel7',
+                  'type': 'text',
+                  'text': '36 ',
+                  'align': 'left',
+                  'x': '$chartEndX - 146',
+                  'y': '$dataset.0.set.7.CenterY',
+                  'fontSize': '11',
+                  'color': '#6b7282',
+                  'font': 'Open Sans, sans-serif'
+                },
+                {
+                  'id': 'datasetlabel8',
+                  'type': 'text',
+                  'text': '15 ',
+                  'align': 'left',
+                  'x': '$chartEndX - 146',
+                  'y': '$dataset.0.set.8.CenterY',
+                  'fontSize': '11',
+                  'color': '#6b7282',
+                  'font': 'Open Sans, sans-serif'
+                },
+                {
+                  'id': 'datasetlabel9',
+                  'type': 'text',
+                  'text': '14 ',
+                  'align': 'left',
+                  'x': '$chartEndX - 146',
+                  'y': '$dataset.0.set.9.CenterY',
+                  'fontSize': '11',
+                  'color': '#6b7282',
+                  'font': 'Open Sans, sans-serif'
+                }
+              ]
+            }
+          ]
+        },
+        'data': [
+          {
+            'label': 'http',
+            'value': 8537,
+            'connection': '',
+            'toolText': 'http, 8537'
+          },
+          {
+            'label': 'Elasticsearch',
+            'value': 2843,
+            'connection': '',
+            'toolText': 'Elasticsearch, 2843'
+          },
+          {
+            'label': 'Kafka or H2 (DBMS) Database{br} Server',
+            'value': 494,
+            'connection': '',
+            'toolText': 'Kafka or H2 (DBMS) Database Server, 494'
+          },
+          {
+            'label': 'Hadoop NameNode or 360Works{br} SuperContainer ',
+            'value': 433,
+            'connection': '',
+            'toolText': 'Hadoop NameNode or 360Works SuperContainer , 433'
+          },
+          {
+            'label': 'ssl',
+            'value': 198,
+            'connection': '',
+            'toolText': 'ssl, 198'
+          },
+          {
+            'label': 'dns',
+            'value': 118,
+            'connection': '',
+            'toolText': 'dns, 118'
+          },
+          {
+            'label': 'ssh',
+            'value': 45,
+            'connection': '',
+            'toolText': 'ssh, 45'
+          },
+          {
+            'label': 'Network Time Protocol (NTP)',
+            'value': 36,
+            'connection': '',
+            'toolText': 'Network Time Protocol (NTP), 36'
+          },
+          {
+            'label': 'dhcp',
+            'value': 15,
+            'connection': '',
+            'toolText': 'dhcp, 15'
+          },
+          {
+            'label': 'Syslog or Remote Shell, use{br}d to execute non-interactiv{br}e commands on a remote syst{br}em (Remote Shell, rsh, rems{br}h)',
+            'value': 14,
+            'connection': '',
+            'toolText': 'Syslog or Remote Shell, used to execute non-interactive commands on a remote system (Remote Shell, rsh, remsh), 14'
+          }
+        ]
+      };
+    expect(generateDataSource(rawData, chartOptions, chartData)).to.deep.equal(dataSourceObject);
   });
 });
