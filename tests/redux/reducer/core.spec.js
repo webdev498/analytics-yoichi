@@ -28,6 +28,7 @@ function setLayoutData(id, data) {
     data
   });
 
+  console.log('state1', state.toObject());
   return state;
 }
 
@@ -54,13 +55,13 @@ describe('Redux Core Reducer', function() {
     const id = '1';
     state = initState(id);
     expect(state).to.have.key(id);
-    expect(state).to.have.deep.property([id, 'isFetching'], true);
-    expect(state).to.have.deep.property([id, 'isError'], false);
+    expect(state.get(id)).to.have.property('isFetching', true);
+    expect(state.get(id)).to.have.property('isError', false);
 
     state = coreReducer(state, {type: '@@@@@@@'});
     expect(state).to.have.key(id);
-    expect(state).to.have.deep.property([id, 'isFetching'], true);
-    expect(state).to.have.deep.property([id, 'isError'], false);
+    expect(state.get(id)).to.have.property('isFetching', true);
+    expect(state.get(id)).to.have.property('isError', false);
   });
 
   it('Should update the state with isFetching for "REQUEST_LAYOUT_DATA" action.', function() {
@@ -68,8 +69,8 @@ describe('Redux Core Reducer', function() {
       state = initState(id);
 
     expect(state).to.have.key(id);
-    expect(state).to.have.deep.property([id, 'isFetching'], true);
-    expect(state).to.have.deep.property([id, 'isError'], false);
+    expect(state.get(id)).to.have.property('isFetching', true);
+    expect(state.get(id)).to.have.property('isError', false);
   });
 
   it('Should reset the layout to empty array for "REQUEST_LAYOUT_DATA" action, if already there', function() {
@@ -81,10 +82,10 @@ describe('Redux Core Reducer', function() {
     state = initState(id, state);
 
     expect(state).to.have.key(id);
-    expect(state).to.have.deep.property([id, 'isFetching'], true);
-    expect(state).to.have.deep.property([id, 'isError'], false);
-    expect(state.get(id).get('layout')).to.be.empty;
-    expect(state).to.have.deep.property([id, 'errorData'], null);
+    expect(state.get(id)).to.have.property('isFetching', true);
+    expect(state.get(id)).to.have.property('isError', false);
+    expect(state.get(id)['layout']).to.be.empty;
+    expect(state.get(id)['errorData']).to.be.empty;
   });
 
   it('Should update the state with layout info for "RECEIVE_LAYOUT_DATA" action.', function() {
@@ -94,10 +95,10 @@ describe('Redux Core Reducer', function() {
     let state = setLayoutData(id, data);
 
     expect(state).to.have.key(id);
-    expect(state).to.have.deep.property([id, 'isFetching'], false);
-    expect(state).to.have.deep.property([id, 'isError'], false);
-    expect(state.get(id).get('layout')).to.eql([[{dummy: 'data'}]]);
-    expect(state).to.have.deep.property([id, 'errorData'], null);
+    expect(state.get(id)).to.have.property('isFetching', false);
+    expect(state.get(id)).to.have.property('isError', false);
+    expect(state.get(id)['layout']).to.eql([[{dummy: 'data'}]]);
+    expect(state.get(id)).to.have.property('errorData', null);
   });
 
   it('Should update the state with error msg for "ERROR_LAYOUT_DATA" action.', function() {
