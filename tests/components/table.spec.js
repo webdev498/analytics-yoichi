@@ -144,12 +144,7 @@ describe('Table Component: ', function() {
               'category': 'suspicious-login'
             }
           },
-          'origin': 'live',
-          'correlationIds': [
-          ],
-          'id':
-            'OikKAfhyT2lrS0FmaERiR2wyWlZsWFNVNHRUa3hLVlRKS1JGRTVVa1l1Y21GdWF5NXNiMk5oYlBrQ2xpdmVTd2luZXZlbnQucGFzc3RoZWhhc2j5',
-          'type': 'rank_alert'
+          'origin': 'live'
         }
       ],
       'columnText': '',
@@ -253,12 +248,7 @@ describe('Table Component: ', function() {
               'category': 'suspicious-login'
             }
           },
-          'origin': 'live',
-          'correlationIds': [
-          ],
-          'id':
-            'OikKAfhyT2lrS0FmaERiR2wyWlZsWFNVNHRUa3hLVlRKS1JGRTVVa1l1Y21GdWF5NXNiMk5oYlBrQ2xpdmVTd2luZXZlbnQucGFzc3RoZWhhc2j5',
-          'type': 'rank_alert'
+          'origin': 'live'
         }
       ],
       'columnText': '',
