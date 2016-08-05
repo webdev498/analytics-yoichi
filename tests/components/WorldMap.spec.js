@@ -1,8 +1,34 @@
-import {
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import WorldMap, {
   generateChartDataSource
 } from 'components/WorldMap';
 
+function shallowRender(component) {
+  const renderer = TestUtils.createRenderer();
+
+  renderer.render(component);
+  return renderer.getRenderOutput();
+}
+
+function shallowRenderWithProps(props = {}) {
+  return shallowRender(<WorldMap {...props} />);
+}
+
 describe('WorldMap Component: ', function() {
+  it('Should render as <div>', function() {
+    const props = {
+      'attributes': {'id': 'OutgoingTrafficWorldMap'},
+      'meta': {
+        'title': 'Outgoing Traffic Heatmap'
+      },
+      'data': null
+    };
+
+    const component = shallowRenderWithProps(props);
+    expect(component.type).to.equal('div');
+  });
+
   it('generateChartDataSource should return chart data source object.', function() {
     const rawData = {
         'taf_source_bad_reputation_countries': {

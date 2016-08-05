@@ -1,8 +1,35 @@
-import {
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import ScatterChart, {
   generateChartDataSource
 } from 'components/ScatterChart';
 
+function shallowRender(component) {
+  const renderer = TestUtils.createRenderer();
+
+  renderer.render(component);
+  return renderer.getRenderOutput();
+}
+
+function shallowRenderWithProps(props = {}) {
+  return shallowRender(<ScatterChart {...props} />);
+}
+
 describe('ScatterChart Component: ', function() {
+  it('Should render as <div>', function() {
+    const props = {
+      'attributes': {'id': 'UserAgentLength'},
+      'meta': {
+        'title': 'User Agent Details'
+      },
+      'data': null
+    };
+
+    const component = shallowRenderWithProps(props);
+    expect(component.type).to.equal('div');
+    expect(component.props.id).to.equal(props.attributes.id);
+  });
+
   it('generateChartDataSource should return chart data source object.', function() {
     const rawData = {
         'taf_user_agent_unique': {

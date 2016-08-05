@@ -56,6 +56,10 @@ export function generateDataSource(chartProperties, duration) {
 const renderChart = (props) => {
   const chartProperties = props.chartProperties;
 
+  if (!chartProperties.chartType) {
+    return;
+  }
+
   FusionCharts.ready(function() {
     let fusioncharts = new FusionCharts({
       type: chartProperties.chartType,

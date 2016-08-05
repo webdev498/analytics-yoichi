@@ -1,4 +1,6 @@
-import {
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import MultiSeriesCombiChart, {
   getXindex,
   getYindex,
   generateCategoryArray,
@@ -8,7 +10,31 @@ import {
   generateDataArray
 } from 'components/MultiSeriesCombiChart';
 
+function shallowRender(component) {
+  const renderer = TestUtils.createRenderer();
+
+  renderer.render(component);
+  return renderer.getRenderOutput();
+}
+
+function shallowRenderWithProps(props = {}) {
+  return shallowRender(<MultiSeriesCombiChart {...props} />);
+}
+
 describe('MultiSeriesCombiChart Component: ', function() {
+  it('Should render as <div>', function() {
+    const props = {
+      'attributes': {'id': 'AlertPriorityChart'},
+      'meta': {
+        'title': 'Alert priority'
+      },
+      'data': null
+    };
+
+    const component = shallowRenderWithProps(props);
+    expect(component.type).to.equal('div');
+  });
+
   it('getXindex should return x index.', function() {
     const chartDataColumn = 'date',
       columns = [

@@ -1,8 +1,32 @@
-import {
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+
+import Area2DAsSparkLineChart, {
   generateDataSource
 } from 'components/Area2DAsSparkLineChart';
 
+function shallowRender(component) {
+  const renderer = TestUtils.createRenderer();
+
+  renderer.render(component);
+  return renderer.getRenderOutput();
+}
+
+function shallowRenderWithProps(props = {}) {
+  return shallowRender(<Area2DAsSparkLineChart {...props} />);
+}
+
 describe('Area2DAsSparkLineChart Component: ', function() {
+  it('Should render as <div>', function() {
+    const props = {
+      chartProperties: {chartId: 'connection0'}
+    };
+
+    const component = shallowRenderWithProps(props);
+    expect(component.type).to.equal('div');
+    expect(component.props.id).to.equal(props.chartProperties.chartId);
+  });
+
   it('generateDataSource should return data source object which is required for FusionCharts.', function() {
     const inputArray = {
         'columnType': 'chart',

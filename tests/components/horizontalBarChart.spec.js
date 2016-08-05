@@ -1,9 +1,35 @@
-import {
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import HorizontalBarChart, {
   generateDataArray,
   generateDataSource
 } from 'components/HorizontalBarChart';
 
+function shallowRender(component) {
+  const renderer = TestUtils.createRenderer();
+
+  renderer.render(component);
+  return renderer.getRenderOutput();
+}
+
+function shallowRenderWithProps(props = {}) {
+  return shallowRender(<HorizontalBarChart {...props} />);
+}
+
 describe('HorizontalBarChart Component: ', function() {
+  it('Should render as <div>', function() {
+    const props = {
+      'attributes': {'id': 'TopConnectionsByProtocol'},
+      'meta': {
+        'title': 'Top Connections By Protocol'
+      },
+      'data': null
+    };
+
+    const component = shallowRenderWithProps(props);
+    expect(component.type).to.equal('div');
+  });
+
   it('generateDataArray should return data array.', function() {
     const columnIndexArray = [3, 5],
       rowsArray = [
