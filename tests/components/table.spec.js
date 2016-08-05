@@ -1,9 +1,10 @@
 import React from 'react';
+import TestUtils from 'react-addons-test-utils';
+import { shallow } from 'enzyme';
 import ReactDOM from 'react-dom';
 import Reactable from 'reactable';
 import $ from 'jquery';
-import TestUtils from 'react-addons-test-utils';
-import tableCard, {
+import TableCard, {
   generateIndividualRowData,
   generateRowObject,
   getColumnDataWhenApiReturnsSingleColumn,
@@ -14,6 +15,7 @@ import tableCard, {
   generateColumnTextForDisplayingDate,
   generateColumnTextForDisplayingCountryFlag
 } from 'components/Table';
+const {Table} = Reactable;
 
 let ReactableTestUtils = {
   resetTestEnvironment: function() {
@@ -48,31 +50,47 @@ let ReactableTestUtils = {
   }
 };
 
-// function shallowRender(component) {
-//   const renderer = TestUtils.createRenderer();
-
-//   renderer.render(component);
-//   return renderer.getRenderOutput();
-// }
-
-// function shallowRenderWithProps(props = {}) {
-//   return shallowRender(<tableCard {...props} />);
-// }
+const props = {
+  attributes: {id: 'recent-alerts'},
+  data: null,
+  'tableOptions': {
+    'sortable': [
+      'RANK SCORE',
+      'DATE',
+      'DETAILS',
+      'SOURCE',
+      'DESTINATION'
+    ],
+    'defaultSort': {
+      'column': 'RANK SCORE',
+      'direction': 'desc'
+    },
+    'filterable': [
+      'DATE',
+      'DETAILS',
+      'SOURCE',
+      'DESTINATION'
+    ],
+    'itemsPerPage': 5
+  }
+};
 
 describe('Table Component: ', function() {
-  // it('Should render as <div>', function() {
-  //   const props = {
-  //     attributes: {id: 'recent-alerts'},
-  //     data: null
-  //   };
+  it('Should component exists', function() {
+    let component = shallow(<TableCard {...props} />);
+    expect(component).to.exist;
+  });
 
-  //   const component = shallowRenderWithProps(props);
-  //   console.log(component);
+  it('Should render as <div>', function() {
+    let component = shallow(<TableCard {...props} />);
+    expect(component.type()).to.equal('div');
+  });
 
-  //   expect(component.type).to.equal('div');
-  //   expect(component.props.id).to.equal(props.attributes.id);
-  //   // expect('test').to.equal('test');
-  // });
+  it('Should render as <table>', function() {
+    let component = shallow(<TableCard {...props} />);
+    let tableTag = component.childAt(0);
+    expect(tableTag.type()).to.equal(Table);
+  });
 
   it('generateIndividualRowData should return individual row data.', function() {
     const rowColumnDetails = {

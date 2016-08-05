@@ -428,7 +428,7 @@ function rowClick(context, tableRow) {
   context.clickThrough(tableRow.rowClickUrl);
 }
 
-class tableCard extends React.Component {
+export class TableCard extends React.Component {
   constructor(props) {
     super(props);
     this.handleRowClick = this.handleRowClick.bind(this);
@@ -459,9 +459,10 @@ class tableCard extends React.Component {
   render() {
     const {props} = this;
     const that = this;
+    generateDataSource(props);
 
     return (
-      <div style={props.attributes.style}>{generateDataSource(props)}
+      <div style={props.attributes.style}>
         <Table id={props.attributes.id}
           style={{width: '100%'}}
           className='threatTable'
@@ -524,8 +525,8 @@ class tableCard extends React.Component {
   }
 }
 
-tableCard.contextTypes = {
+TableCard.contextTypes = {
   clickThrough: React.PropTypes.func
 };
 
-export default tableCard;
+export default TableCard;
