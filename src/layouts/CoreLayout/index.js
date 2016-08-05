@@ -200,10 +200,6 @@ CoreLayout.childContextTypes = {
   clickThrough: React.PropTypes.func
 };
 
-CoreLayout.contextTypes = {
-  router: React.PropTypes.object.isRequired
-};
-
 function mapStateToProps(state, ownProps) {
   const {auth} = state;
   return {
