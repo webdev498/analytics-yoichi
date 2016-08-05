@@ -102,7 +102,6 @@ function setupPageHeader(auth = {user: null}, showKibana = false, enzymeFlag = f
 
   if (enzymeFlag) {
     component = mount(<PageHeader {...props} />);
-    // console.log(component);
   }
   else {
     const renderer = createRenderer();
