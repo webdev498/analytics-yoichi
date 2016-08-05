@@ -46,6 +46,10 @@ class Root extends React.Component {
   }
 }
 
+Root.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
+
 function mapStateToProps(state) {
   return { locale: state.locale };
 }

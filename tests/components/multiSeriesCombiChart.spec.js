@@ -955,19 +955,18 @@ describe('MultiSeriesCombiChart Component: ', function() {
 
   it('generateChartDataSetForFixedSeries should return chart data set for fixed series.', function() {
     const dataset = [
-        {
-          'seriesname': 'Historical Incoming Bandwidth',
-          'renderas': 'Area',
-          'data': [
-            {
-              'value': 0
-            },
-            {
-              'value': 0
-            }
-          ]
-        }
-      ],
+      {
+        'seriesname': 'Historical Incoming Bandwidth',
+        'renderas': 'Area',
+        'data': [
+          {
+            'value': 0
+          },
+          {
+            'value': 0
+          }
+        ]
+      }],
       chartData = {
         'axis': 'y',
         'seriesname': 'Current Incoming Bandwidth',
