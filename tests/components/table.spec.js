@@ -92,6 +92,12 @@ describe('Table Component: ', function() {
     expect(tableTag.type()).to.equal(Table);
   });
 
+  // it('Should shows only 5 rows per page for itemsPerPage as 5', () => {});
+
+  // it('Should call generateDataSource once', () => {});
+
+  // it('Should call generateIndividualRowData specific number of times', () => {});
+
   it('generateIndividualRowData should return individual row data.', function() {
     const rowColumnDetails = {
       'currentColumnType': 'chart',
