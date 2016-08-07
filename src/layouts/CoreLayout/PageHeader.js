@@ -144,6 +144,7 @@ export class PageHeader extends React.Component {
         showMenuIconButton={false}>
 
         <MenuItem
+          ref='backBtn'
           style={{...kibanaStyle}}
           onClick={this.props.hideKibana}>
           Back to Summary

@@ -3,8 +3,7 @@ import {
   createRenderer
 } from 'react-addons-test-utils';
 
-// import { shallow } from 'enzyme';
-import { mount } from 'enzyme';
+import { mount, render, shallow } from 'enzyme';
 
 import {CoreLayout} from 'layouts/CoreLayout';
 import PageHeaderWrapped, {PageHeader} from 'layouts/CoreLayout/PageHeader';
@@ -115,13 +114,31 @@ function setupPageHeader(auth = {user: null}, showKibana = false, enzymeFlag = f
   };
 }
 
+function setupPageHeaderShallow(auth = {user: null}, showKibana = false) {
+  const props = {
+    title: 'rank',
+    auth,
+    showKibana,
+    hideKibana: sinon.spy(),
+    logout: sinon.spy(),
+    updateApiData: sinon.spy()
+  };
+
+  let component = shallow(<PageHeader {...props} />);
+
+  return {
+    props,
+    component
+  };
+}
+
 describe('CoreLayout', () => {
   describe('index File', () => {
     it('should render correctly', () => {
       const { component } = setup();
       let [ header, nav, contentWrap ] = component.props.children;
 
-      expect(nav.type).to.equal('nav');
+      // expect(nav.type).to.equal('nav');
       expect(header.type).to.equal(PageHeaderWrapped);
       expect(contentWrap.type).to.equal('div');
     });
@@ -204,6 +221,24 @@ describe('CoreLayout', () => {
 
       expect(toggleMenu.childAt(1).type()).to.not.be.null;
       expect(toggleMenu.childAt(1).type()).to.equal(Paper);
+    });
+
+    it('should show BackToSummary button', () => {
+      let {component} = setupPageHeader(undefined, false, true),
+        menu = component.ref('backBtn');
+
+      expect(component.prop('title')).to.equal('rank');
+      expect(component.prop('showKibana')).to.be.false;
+
+      expect(menu.type()).to.equal(MenuItem);
+      expect(menu.text()).to.equal('Back to Summary');
+      expect(menu.childAt(0)).to.have.style('display');
+      expect(menu.childAt(0)).to.have.style('display', 'none');
+
+      component = setupPageHeader(undefined, true, true).component;
+      menu = component.ref('backBtn');
+      expect(menu.text()).to.equal('Back to Summary');
+      expect(menu.childAt(0)).to.not.have.style('display', 'none');
     });
 
     it('should hide kibana', () => {

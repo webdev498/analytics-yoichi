@@ -28,7 +28,6 @@ function setLayoutData(id, data) {
     data
   });
 
-  console.log('state1', state.toObject());
   return state;
 }
 
