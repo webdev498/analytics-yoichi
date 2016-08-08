@@ -1,9 +1,13 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
-import {formatBytes, formatMicroseconds} from 'utils/utils';
+import {
+  formatBytes,
+  formatMicroseconds,
+  formatDateInLocalTimeZone
+} from 'utils/utils';
 
 import Reactable from 'reactable';
-const {Table, Thead, Th, Tr, Td} = Reactable;
+const {Table, Thead, Th, Tr, Td, unsafe} = Reactable;
 
 const styles = {
   list: {
@@ -225,13 +229,17 @@ class TrafficTable extends React.Component {
   getTableRows(rows) {
     return rows.map((row) => {
       const r = row[0];
+      let dateTime = formatDateInLocalTimeZone(this.getDate(r.date)),
+        dateFormatted = '<span style="font-size: 14px; font-weight: 600;">' + dateTime.date + '</span>';
+      dateFormatted += '<br/>' + dateTime.time;
+
       return (
         <Tr>
           <Td column='type'>
             {r.type}
           </Td>
           <Td column='date'>
-            {this.getDate(r.date)}
+            {unsafe(dateFormatted)}
           </Td>
           <Td column='details'>
             {this.getDetails(r)}
