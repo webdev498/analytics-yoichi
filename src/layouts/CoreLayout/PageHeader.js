@@ -151,6 +151,7 @@ export class PageHeader extends React.Component {
         </MenuItem>
 
         <DropDownMenu
+          ref='dropDown'
           style={styles.menuStyle}
           labelStyle={{...styles.menuStyle, ...styles.label}}
           iconStyle={{...styles.menuStyle, ...styles.dropicon}}
