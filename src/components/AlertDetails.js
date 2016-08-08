@@ -1,9 +1,12 @@
 import React, {PropTypes} from 'react';
-import moment from 'moment';
 import {Colors} from 'theme/colors';
 
 import { connect } from 'react-redux';
 import {fetchApiData} from 'actions/ParentCard';
+
+import {
+  formatDateInLocalTimeZone
+} from 'utils/utils';
 
 const styles = {
   card: {
@@ -36,14 +39,6 @@ const styles = {
     marginBottom: '33px'
   }
 };
-
-function formatDate(value) {
-  let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
-    localDateTime = moment.utc(value1).toDate(),
-    localDate = moment(localDateTime).format('DD MMM YYYY'),
-    localTime = moment(localDateTime).format('HH:mm:ss.SSS');
-  return localDate + ' ' + localTime;
-}
 
 class AlertDetails extends React.Component {
   static propTypes = {
@@ -123,6 +118,9 @@ class AlertDetails extends React.Component {
     // or get the api updated.
     this.getTrafficDetails();
 
+    let dateTime = formatDateInLocalTimeZone(data.created),
+      dateFormatted = dateTime.date + ' ' + dateTime.time;
+
     return (
       <div style={styles.card}>
         <div style={styles.rankScore}>
@@ -134,7 +132,7 @@ class AlertDetails extends React.Component {
               <b style={styles.itemTitle}>
                 Date
               </b>
-              <span>{formatDate(data.created)}</span>
+              <span>{dateFormatted}</span>
             </li>
             <li style={styles.item}>
               <b style={styles.itemTitle}>

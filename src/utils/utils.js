@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 // Function to get Country ID by passing Country Code
 export function getCountryIDByCountryCode(countryCode) {
   const getCountryIDByCountryCode = {'AG': '01', 'BS': '02', 'BB': '03', 'BZ': '04', 'CA': '05', 'CR': '06',
@@ -206,6 +208,18 @@ export function formatDate(date) {
   let formattedDateString = yyyy + '-' + mm + '-' + dd + 'T' + hh + ':' + min + ':' + ss + milisec;
 
   return formattedDateString;
+}
+
+// function to format Date In Local TimeZone
+export function formatDateInLocalTimeZone(value) {
+  let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    localDateTime = moment.utc(value1).toDate(),
+    localDate = moment(localDateTime).format('DD MMM YYYY'),
+    localTime = moment(localDateTime).format('HH:mm:ss.SSS');
+  return {
+    date: localDate,
+    time: localTime
+  };
 }
 
 // Function to get from and to dates for the specific time window
