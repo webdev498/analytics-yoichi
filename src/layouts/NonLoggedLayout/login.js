@@ -16,7 +16,7 @@ const styles = {
   card: {
     width: '300px',
     margin: '0 auto',
-    height: '300px',
+    height: '400px',
     backgroundColor: Colors.garnet,
     position: 'relative'
   },
@@ -55,13 +55,13 @@ const styles = {
     fontWeight: 300
   },
   form: {
-    /*marginTop: '100px'*/
+    marginTop: '100px'
   },
   error: {
     position: 'absolute',
     right: '35px',
     left: '35px',
-    // top: '100px',
+    top: '100px',
     color: Colors.cherry,
     textAlign: 'center',
     fontSize: '11px'

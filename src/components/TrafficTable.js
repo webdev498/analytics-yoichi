@@ -250,12 +250,17 @@ class TrafficTable extends React.Component {
   }
 
   getTable(rows) {
+    const callback = page => {
+      console.log(page);
+    };
+
     return (
       <Table style={{width: '100%'}}
         className='threatTable'
         pageButtonLimit={5}
         currentPage={0}
-        itemsPerPage={10}>
+        itemsPerPage={10}
+        onPageChange={callback}>
         <Thead>
           <Th style={{backgroundColor: Colors.smoke, width: '100px'}} column='type'><b>Type</b></Th>
           <Th style={{backgroundColor: Colors.smoke, width: '200px'}} column='date'><b>Date</b></Th>
