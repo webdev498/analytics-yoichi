@@ -5,7 +5,8 @@
     "standard-react"
   ],
   "plugins" : [
-    "flow-vars"
+    "flow-vars",
+    "babel"
   ],
   "env"     : {
     "browser" : true
@@ -20,6 +21,8 @@
     "FusionCharts": false
   },
   "rules": {
+    "babel/generator-star-spacing": 1,
+    "babel/arrow-parens": 1,
     "semi" : [2, "always"],
     "max-len": [2, 120, 2],
     "flow-vars/define-flow-type": 1,

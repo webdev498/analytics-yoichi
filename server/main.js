@@ -1,4 +1,5 @@
 import Koa from 'koa';
+import https from 'https';
 import convert from 'koa-convert';
 import webpack from 'webpack';
 import webpackConfig from '../build/webpack.config';
@@ -9,21 +10,47 @@ import _debug from 'debug';
 import config from '../config';
 import webpackDevMiddleware from './middleware/webpack-dev';
 import webpackHMRMiddleware from './middleware/webpack-hmr';
+import fetch from 'node-fetch';
 
 const debug = _debug('app:server');
 const paths = config.utils_paths;
 const app = new Koa();
+
+const agentOptions = {
+  rejectUnauthorized: false
+};
+
+const agent = new https.Agent(agentOptions);
 
 // Enable koa-proxy if it has been enabled in the config.
 if (config.proxy && config.proxy.enabled) {
   app.use(convert(proxy(config.proxy.options)));
 }
 
+app.use(async function(ctx, next) {
+  const url = ctx.request.url;
+  if (url.indexOf('/api') > -1) {
+    const res = await fetch('https://demo.ranksoftwareinc.com' + ctx.url,
+      {
+        method: 'GET',
+        headers: ctx.headers,
+        agent
+      }
+    );
+
+    ctx.set('content-type', res.headers.get('content-type'));
+    ctx.body = res.body;
+  }
+  else {
+    await next();
+  }
+});
+
 // This rewrites all routes requests to the root /index.html file
 // (ignoring file requests). If you want to implement isomorphic
 // rendering, you'll want to remove this middleware.
 app.use(convert(historyApiFallback({
-  verbose: false
+  verbose: true
 })));
 
 // ------------------------------------
@@ -43,7 +70,8 @@ if (config.env === 'development') {
   // of development since this directory will be copied into ~/dist
   // when the application is compiled.
   app.use(convert(serve(paths.client('static'))));
-} else {
+}
+else {
   debug(
     'Server is being run outside of live development mode. This starter kit ' +
     'does not provide any production-ready server functionality. To learn ' +
