@@ -9,6 +9,22 @@ import {baseUrl} from 'config';
 import {logoutUtil} from './auth';
 import { push } from 'react-router-redux';
 
+import alerts from 'json/alerts';
+import alert from 'json/alert';
+import traffic from 'json/traffic';
+import asset from 'json/asset';
+import userAgent from 'json/user-agent';
+import newSummaryPage from 'json/new-summary-page';
+
+const layouts = {
+  alerts,
+  alert,
+  traffic,
+  asset,
+  userAgent,
+  newSummaryPage
+};
+
 export function requestPageData(id, api) {
   return {
     type: REQUEST_LAYOUT_DATA,
@@ -36,6 +52,28 @@ function getUrl(id) {
   return `${baseUrl}/api/store/dashboard${id}`;
 }
 
+function getLayout(urlId) {
+  let temp = urlId.slice(1, urlId.length);
+  if (temp === 'new-summary-page') {
+    return newSummaryPage;
+  }
+  else if (temp === 'alerts') {
+    return alerts;
+  }
+  else if (temp === 'alert') {
+    return alert;
+  }
+  else if (temp === 'traffic') {
+    return traffic;
+  }
+  else if (temp === 'asset') {
+    return asset;
+  }
+  else if (temp === 'user-agent') {
+    return userAgent;
+  }
+}
+
 export function fetchLayoutData(id, params) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
@@ -45,11 +83,10 @@ export function fetchLayoutData(id, params) {
   // thus making it able to dispatch actions itself.
 
   return function(dispatch, getState) {
-    // if path id / then layout id is new-summary-page.
-    id = (id === '/') ? '/new-summary-page' : id;
-
     dispatch(requestPageData(id));
 
+    // if path id is / then layout id is new-summary-page.
+    id = (id === '/') ? '/new-summary-page' : id;
     // if id has path params, then first part of the url is used to fetch layout json.
     let urlId = id.indexOf('/', 1) > -1 ? id.slice(0, id.indexOf('/', 1)) : id;
 
@@ -63,6 +100,9 @@ export function fetchLayoutData(id, params) {
       // if auth token expires, logout.
       if (response.status === 401) {
         logoutUtil(dispatch);
+      }
+      else if (response.status === 400) {
+        dispatch(receivePageData(id, {json: getLayout(urlId)}));
       }
       return response.json();
     })
