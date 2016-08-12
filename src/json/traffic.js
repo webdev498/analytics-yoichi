@@ -1,374 +1,561 @@
 const traffic = {
-  'layout': [
+  "layout": [
     [
       {
-        'id': '1',
-        'type': 'MetricsCard',
-        'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'queryParams': {
-              'window': '1h'
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_alert_count_time_shifted"
             },
-            'pathParams': {
-              'reportId': 'taf_alert_count_time_shifted'
+            "queryParams": {
+              "window": ""
             }
-          },
-          'query': {
-            'window': '1h',
-            'timeShift': '1h'
           }
         },
-        'name': 'MetricsCard',
-        'attributes': {
-          'style': {
-            'backgroundColor': '#d9534f',
-            'width': '24%',
-            'padding': '10px'
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#F69275"
           },
-          'title': 'High Priority Alerts'
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #F69275"
+          }
         },
-        'children': [{
-          'type': 'FontIcon',
-          'content': 'add_alert'
-        }]
+        "id": "1",
+        "type": "MetricsCard",
+        "title": "High Priority Alerts",
+        "kibana": {
+          "pathParams": [
+            "alerts-score"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "scoreRange": ""
+          }
+        }
       },
       {
-        'id': '2',
-        'type': 'MetricsCard',
-        'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'queryParams': {
-              'window': '1h'
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_malware_count_time_shifted"
             },
-            'pathParams': {
-              'reportId': 'taf_malware_count_time_shifted'
+            "queryParams": {
+              "window": ""
             }
-          },
-          'query': {
-            'window': '1h',
-            'timeShift': '1h'
           }
         },
-        'name': 'MetricsCard',
-        'attributes': {
-          'style': {
-            'backgroundColor': '#f0ad4e',
-            'width': '24%',
-            'padding': '10px'
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#F69275"
           },
-          'title': 'High Priority Malware'
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #F69275"
+          }
         },
-        'children': [{
-          'type': 'FontIcon',
-          'content': 'bug_report'
-        }]
+        "id": "2",
+        "type": "MetricsCard",
+        "title": "High Priority Malware"
       },
       {
-        'id': '3',
-        'type': 'MetricsCard',
-        'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'queryParams': {
-              'window': '1h'
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_event_count_time_shifted"
             },
-            'pathParams': {
-              'reportId': 'taf_event_count_time_shifted'
+            "queryParams": {
+              "window": ""
             }
-          },
-          'query': {
-            'window': '1h',
-            'timeShift': '1h'
           }
         },
-        'name': 'MetricsCard',
-        'attributes': {
-          'style': {
-            'backgroundColor': '#337ab7',
-            'width': '24%',
-            'padding': '10px'
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#2bd8d0"
           },
-          'title': 'Events Processed'
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #2bd8d0"
+          }
         },
-        'children': [{
-          'type': 'FontIcon',
-          'content': 'bug_report'
-        }]
+        "id": "3",
+        "type": "MetricsCard",
+        "title": "Events Processed",
+        "kibana": {
+          "pathParams": [
+            "traffic-details"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": ""
+          }
+        }
       },
       {
-        'id': '4',
-        'type': 'MetricsCard',
-        'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'queryParams': {
-              'window': '1h'
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_asset_count_time_shifted"
             },
-            'pathParams': {
-              'reportId': 'taf_asset_count_time_shifted'
+            "queryParams": {
+              "window": ""
             }
-          },
-          'query': {
-            'window': '1h',
-            'timeShift': '1h'
           }
         },
-        'name': 'MetricsCard',
-        'attributes': {
-          'style': {
-            'backgroundColor': '#5cb85c',
-            'width': '24%',
-            'padding': '10px'
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#2bd8d0"
           },
-          'title': 'Assets Monitored'
-        },
-        'children': [{
-          'type': 'FontIcon',
-          'content': 'devices_other'
-        }]
-      }
-    ],
-    [
-      {
-        'id': '56',
-        'type': 'Table',
-        'name': 'Table',
-        'meta': {
-          'showHeader': true,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'queryParams': {
-              'window': '1h',
-              'count': 200
-            },
-            'pathParams': {
-              'reportId': 'taf_alert_highpriority'
-            }
-          },
-          'title': 'Recent Alerts'
-        },
-        'attributes': {
-          'style': {'width': '100%'},
-          'id': 'RecentAlerts'
-        },
-        'tableData': [
-          {
-            'reportId': 'taf_alert_highpriority',
-            'columns': [
-              {
-                'type': 'chart',
-                'columnNameToDisplay': 'Rank Score',
-                'chartType': 'angulargauge',
-                'chartId': 'recentAlert',
-                'chartWidth': '70',
-                'chartHeight': '60',
-                'data': [
-                  {
-                    'fieldName': 'data.rank_alert.score'
-                  }
-                ],
-                'style': {'width': '10%'}
-              },
-              {
-                'type': 'text',
-                'columnNameToDisplay': 'Date',
-                'data': [
-                  {
-                    'fieldName': 'date',
-                    'displayName': 'date'
-                  }
-                ],
-                'style': {'width': '15%'}
-              },
-              {
-                'type': 'text',
-                'columnNameToDisplay': 'Details',
-                'data': [
-                  {
-                    'fieldName': 'data.rank_alert.description',
-                    'displayName': ''
-                  },
-                  {
-                    'fieldName': 'data.rank_alert.message',
-                    'displayName': ''
-                  }
-                ],
-                'style': {'width': '30%'}
-              },
-              {
-                'type': 'text',
-                'columnNameToDisplay': 'Source',
-                'data': [
-                  {
-                    'fieldName': 'source.ip',
-                    'displayName': 'IP'
-                  },
-                  {
-                    'fieldName': 'source.port',
-                    'displayName': 'port'
-                  },
-                  {
-                    'fieldName': 'source.country',
-                    'displayName': 'countryFlag'
-                  },
-                  {
-                    'fieldName': 'source.additionalInfo.user',
-                    'displayName': 'User'
-                  },
-                  {
-                    'fieldName': 'source.additionalInfo.machine',
-                    'displayName': 'Machine'
-                  }
-                ],
-                'style': {'width': '20%'}
-              },
-              {
-                'type': 'text',
-                'columnNameToDisplay': 'Destination',
-                'data': [
-                  {
-                    'fieldName': 'destination.ip',
-                    'displayName': 'IP'
-                  },
-                  {
-                    'fieldName': 'destination.port',
-                    'displayName': 'port'
-                  },
-                  {
-                    'fieldName': 'destination.country',
-                    'displayName': 'countryFlag'
-                  },
-                  {
-                    'fieldName': 'destination.additionalInfo.user',
-                    'displayName': 'User'
-                  },
-                  {
-                    'fieldName': 'destination.additionalInfo.machine',
-                    'displayName': 'Machine'
-                  }
-                ],
-                'style': {'width': '20%'}
-              }
-            ]
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #2bd8d0"
           }
-        ],
-        'tableOptions': {
-          'sortable': ['Rank Score', 'Date', 'Details', 'Source', 'Destination'],
-          'defaultSort': {'column': 'Rank Score', 'direction': 'desc'},
-          'filterable': ['Date', 'Details', 'Source', 'Destination'],
-          'filterBy': 'connection'
+        },
+        "id": "4",
+        "type": "MetricsCard",
+        "title": "Assets Monitored",
+        "kibana": {
+          "pathParams": [
+            "assets-all"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": ""
+          }
         }
       }
     ],
     [
       {
-        'id': '6',
-        'type': 'ParetoChart',
-        'meta': {
-          'showHeader': true,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'queryParams': {
-              'window': '1h'
+        "chartOptions": {
+          "paletteColors": "#C9EDDF, #60E2DC",
+          "yAxisName": "INCOMING BANDWIDTH",
+          "xAxisName": "TIME",
+          "lineThickness": "2",
+          "drawAnchors": "0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_stats_histogram",
+              "columns": [
+                "date"
+              ],
+              "axis": "x"
             },
-            'pathParams': {
-              'reportId': 'taf_threat_trend'
+            {
+              "seriesname": "Historical Incoming Bandwidth",
+              "reportId": "taf_stats_histogram",
+              "columns": [
+                "bytes_in[1]"
+              ],
+              "renderas": "Area",
+              "axis": "y"
+            },
+            {
+              "seriesname": "Current Incoming Bandwidth",
+              "reportId": "taf_stats_histogram",
+              "columns": [
+                "bytes_in[0]"
+              ],
+              "renderas": "Line",
+              "axis": "y"
+            }
+          ],
+          "combinedResult": true
+        },
+        "meta": {
+          "subTitle": "(in bytes)",
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+            },
+            "queryParams": {
+              "window": ""
             }
           },
-          'title': 'Alert by type'
+          "title": "Incoming Bandwidth"
         },
-        'attributes': {
-          'style': {'width': '50%', 'marginRight': '20px'},
-          'id': 'AlertByType',
-          'width': '100%',
-          'height': '400'
+        "attributes": {
+          "chartCaption": {
+            "display": "none"
+          },
+          "style": {
+            "marginRight": "33px",
+            "width": "50%"
+          },
+          "id": "HistogramChart1"
         },
-        'chartOptions': {
-          'pYAxisname': 'Connections',
-          'xAxisname': 'Alert Types'
-        },
-        'chartData': {
-          'fieldMapping': [
-            {
-              'axis': 'x',
-              'reportId': 'taf_threat_trend',
-              'columns': [
-                'data.rank_alert.category'
-              ]
-            },
-            {
-              'axis': 'y',
-              'reportId': 'taf_threat_trend',
-              'columns': [
-                'date'
-              ]
-            }
-          ]
-        }
+        "id": "histogram-chart1",
+        "type": "MultiSeriesCombiChart"
       },
       {
-        'id': '71',
-        'type': 'MultiSeriesCombiChart',
-        'meta': {
-          'showHeader': true,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'queryParams': {
-              'window': '1h'
+        "chartOptions": {
+          "paletteColors": "#C9EDDF, #60E2DC",
+          "yAxisName": "OUTGOING BANDWIDTH",
+          "xAxisName": "TIME",
+          "lineThickness": "2",
+          "drawAnchors": "0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_stats_histogram",
+              "columns": [
+                "date"
+              ],
+              "axis": "x"
             },
-            'pathParams': {
-              'reportId': 'taf_alert_priority_time'
+            {
+              "seriesname": "Historical Outgoing Bandwidth",
+              "reportId": "taf_stats_histogram",
+              "columns": [
+                "bytes_out[1]"
+              ],
+              "renderas": "Area",
+              "axis": "y"
+            },
+            {
+              "seriesname": "Current Outgoing Bandwidth",
+              "reportId": "taf_stats_histogram",
+              "columns": [
+                "bytes_out[0]"
+              ],
+              "renderas": "Line",
+              "axis": "y"
+            }
+          ],
+          "combinedResult": true
+        },
+        "meta": {
+          "subTitle": "(in bytes)",
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+            },
+            "queryParams": {
+              "window": ""
             }
           },
-          'title': 'Alert priority'
+          "title": "Outgoing Bandwidth"
         },
-        'attributes': {
-          'style': {'width': '50%'},
-          'id': 'AlertPriorityChart',
-          'chartBorder': {},
-          'chartCaption': {'display': 'none'}
+        "attributes": {
+          "chartCaption": {
+            "display": "none"
+          },
+          "style": {
+            "width": "50%"
+          },
+          "id": "HistogramChart2"
         },
-        'chartOptions': {
-          'yAxisName': 'Alert Count',
-          'drawAnchors': '1',
-          'legendPosition': 'right',
-          'linealpha': '0',
-          'paletteColors': '#0505F5, #D93609, #ACF50F,#FCFC0D, #05E9F5'
+        "id": "histogram-chart2",
+        "type": "MultiSeriesCombiChart"
+      }
+    ],
+    [
+      {
+        "chartOptions": {
+          "paletteColors": "#C9EDDF, #60E2DC",
+          "yAxisName": "NO. OF CONNECTIONS",
+          "xAxisName": "TIME",
+          "lineThickness": "2",
+          "drawAnchors": "0"
         },
-        'chartData': {
-          'combinedResult': false,
-          'fieldMapping': [
+        "chartData": {
+          "fieldMapping": [
             {
-              'axis': 'x',
-              'reportId': 'taf_alert_priority_time',
-              'columns': [
-                'date'
-              ]
+              "reportId": "taf_stats_histogram",
+              "columns": [
+                "date"
+              ],
+              "axis": "x"
             },
             {
-              'axis': 'y',
-              'seriesOptions': {
-                'renderas': 'Line',
-                'lineThickness': '0',
-                'drawanchors': '1',
-                'anchorradius': '10',
-                'anchorsides': '0',
-                'anchorBorderColor': ['#ff0000', '#0F4D1F', '#0000ff'],
-                'anchorbgcolor': ['#ff0000', '#0F4D1F', '#0000ff']
-              },
-              'reportId': 'taf_alert_priority_time',
-              'columns': [
-                'data.rank_alert.score',
-                'count'
+              "seriesname": "Historical Connections",
+              "reportId": "taf_stats_histogram",
+              "columns": [
+                "conn[1]"
+              ],
+              "renderas": "Area",
+              "axis": "y"
+            },
+            {
+              "seriesname": "Current Connections",
+              "reportId": "taf_stats_histogram",
+              "columns": [
+                "conn[0]"
+              ],
+              "renderas": "Line",
+              "axis": "y"
+            }
+          ],
+          "combinedResult": true
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "No. of Connections"
+        },
+        "attributes": {
+          "chartCaption": {
+            "display": "none"
+          },
+          "style": {
+            "marginRight": "33px",
+            "width": "100%"
+          },
+          "id": "HistogramChart3"
+        },
+        "id": "histogram-chart3",
+        "type": "MultiSeriesCombiChart"
+      },
+      {
+        "chartOptions": {
+          "showValues": "0",
+          "showLabels": "1",
+          "singleLineCharacters": "27"
+        },
+        "chartData": {
+          "showTrendLines": false,
+          "fieldMapping": [
+            {
+              "reportId": "taf_connections_by_protocol",
+              "columns": [
+                "protocol.service",
+                "date"
+              ]
+            }
+          ],
+          "multipleReportIds": false
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Top Connections By Protocol"
+        },
+        "attributes": {
+          "chartCaption": {
+            "display": "none"
+          },
+          "style": {
+            "width": "100%"
+          },
+          "id": "TopConnectionsByProtocol"
+        },
+        "id": "top-connections-by-protocol",
+        "type": "HorizontalBarChart"
+      }
+    ],
+    [
+      {
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_top_longest_connections"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Longest Connections"
+        },
+        "name": "Table",
+        "tableOptions": {
+          "filterable": [],
+          "itemsPerPage": 5,
+          "sortable": [
+            "END DATE",
+            "DURATION",
+            "DETAILS",
+            "SOURCE",
+            "DESTINATION"
+          ],
+          "defaultSort": {
+            "column": "DURATION",
+            "direction": "asc"
+          }
+        },
+        "attributes": {
+          "style": {
+            "width": "100%"
+          },
+          "id": "LongestConnections"
+        },
+        "tableData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_top_longest_connections",
+              "columns": [
+                {
+                  "data": [
+                    {
+                      "fieldName": "date",
+                      "displayName": "date"
+                    }
+                  ],
+                  "style": {
+                    "width": "10%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "END DATE"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "data.conn.duration",
+                      "displayName": "duration"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "durationWidget",
+                  "columnNameToDisplay": "DURATION"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "protocol.service",
+                      "displayName": "title"
+                    },
+                    {
+                      "fieldName": "data.conn.reqBytes",
+                      "displayName": "Incoming bytes"
+                    },
+                    {
+                      "fieldName": "data.conn.respBytes",
+                      "displayName": "Outcoming bytes"
+                    }
+                  ],
+                  "style": {
+                    "width": "35%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "DETAILS"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "source.ip",
+                      "displayName": "IP"
+                    },
+                    {
+                      "fieldName": "source.port",
+                      "displayName": "port"
+                    },
+                    {
+                      "fieldName": "source.country",
+                      "displayName": "countryFlag"
+                    },
+                    {
+                      "fieldName": "source.name",
+                      "displayName": "Machine"
+                    },
+                    {
+                      "fieldName": "source.owner",
+                      "displayName": "Owner"
+                    },
+                    {
+                      "fieldName": "source.asn",
+                      "displayName": "ASN"
+                    },
+                    {
+                      "fieldName": "source.assets",
+                      "displayName": "Users"
+                    }
+                  ],
+                  "style": {
+                    "width": "20%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "SOURCE"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "destination.ip",
+                      "displayName": "IP"
+                    },
+                    {
+                      "fieldName": "destination.port",
+                      "displayName": "port"
+                    },
+                    {
+                      "fieldName": "destination.country",
+                      "displayName": "countryFlag"
+                    },
+                    {
+                      "fieldName": "destination.name",
+                      "displayName": "Machine"
+                    },
+                    {
+                      "fieldName": "destination.owner",
+                      "displayName": "Owner"
+                    },
+                    {
+                      "fieldName": "destination.asn",
+                      "displayName": "ASN"
+                    },
+                    {
+                      "fieldName": "destination.assets",
+                      "displayName": "Users"
+                    }
+                  ],
+                  "style": {
+                    "width": "20%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "DESTINATION"
+                }
               ]
             }
           ]
+        },
+        "id": "longest-connections",
+        "type": "Table",
+        "kibana": {
+          "pathParams": [
+            "connection-details"
+          ],
+          "queryParams": {
+            "correlationIds": "correlationIds[0]"
+          }
         }
       }
     ]

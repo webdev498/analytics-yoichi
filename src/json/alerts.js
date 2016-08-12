@@ -1,457 +1,457 @@
 const alerts = {
-  'layout': [
+  "layout": [
     [
       {
-        'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_alert_count_time_shifted'
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_alert_count_time_shifted"
             },
-            'queryParams': {
-              'window': ''
+            "queryParams": {
+              "window": ""
             }
           }
         },
-        'name': 'MetricsCard',
-        'attributes': {
-          'countStyle': {
-            'color': '#F69275'
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#F69275"
           },
-          'style': {
-            'marginRight': '3px',
-            'width': '25%',
-            'borderTop': '6px solid #F69275'
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #F69275"
           }
         },
-        'id': '1',
-        'type': 'MetricsCard',
-        'title': 'High Priority Alerts',
-        'kibana': {
-          'pathParams': [
-            'alerts-score'
+        "id": "1",
+        "type": "MetricsCard",
+        "title": "High Priority Alerts",
+        "kibana": {
+          "pathParams": [
+            "alerts-score"
           ],
-          'queryParams': {
-            'fromAndToBasedOnToday': '',
-            'scoreRange': ''
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "scoreRange": ""
           }
         }
       },
       {
-        'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_malware_count_time_shifted'
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_malware_count_time_shifted"
             },
-            'queryParams': {
-              'window': ''
+            "queryParams": {
+              "window": ""
             }
           }
         },
-        'name': 'MetricsCard',
-        'attributes': {
-          'countStyle': {
-            'color': '#F69275'
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#F69275"
           },
-          'style': {
-            'marginRight': '3px',
-            'width': '25%',
-            'borderTop': '6px solid #F69275'
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #F69275"
           }
         },
-        'id': '2',
-        'type': 'MetricsCard',
-        'title': 'High Priority Malware'
+        "id": "2",
+        "type": "MetricsCard",
+        "title": "High Priority Malware"
       },
       {
-        'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_event_count_time_shifted'
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_event_count_time_shifted"
             },
-            'queryParams': {
-              'window': ''
+            "queryParams": {
+              "window": ""
             }
           }
         },
-        'name': 'MetricsCard',
-        'attributes': {
-          'countStyle': {
-            'color': '#2bd8d0'
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#2bd8d0"
           },
-          'style': {
-            'marginRight': '3px',
-            'width': '25%',
-            'borderTop': '6px solid #2bd8d0'
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #2bd8d0"
           }
         },
-        'id': '3',
-        'type': 'MetricsCard',
-        'title': 'Events Processed',
-        'kibana': {
-          'pathParams': [
-            'traffic-details'
+        "id": "3",
+        "type": "MetricsCard",
+        "title": "Events Processed",
+        "kibana": {
+          "pathParams": [
+            "traffic-details"
           ],
-          'queryParams': {
-            'fromAndToBasedOnToday': ''
+          "queryParams": {
+            "fromAndToBasedOnToday": ""
           }
         }
       },
       {
-        'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_asset_count_time_shifted'
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_asset_count_time_shifted"
             },
-            'queryParams': {
-              'window': ''
+            "queryParams": {
+              "window": ""
             }
           }
         },
-        'name': 'MetricsCard',
-        'attributes': {
-          'countStyle': {
-            'color': '#2bd8d0'
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#2bd8d0"
           },
-          'style': {
-            'marginRight': '3px',
-            'width': '25%',
-            'borderTop': '6px solid #2bd8d0'
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #2bd8d0"
           }
         },
-        'id': '4',
-        'type': 'MetricsCard',
-        'title': 'Assets Monitored',
-        'kibana': {
-          'pathParams': [
-            'assets-all'
+        "id": "4",
+        "type": "MetricsCard",
+        "title": "Assets Monitored",
+        "kibana": {
+          "pathParams": [
+            "assets-all"
           ],
-          'queryParams': {
-            'fromAndToBasedOnToday': ''
+          "queryParams": {
+            "fromAndToBasedOnToday": ""
           }
         }
       }
     ],
     [
       {
-        'meta': {
-          'showHeader': true,
-          'showSearch': true,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_alert_highpriority'
+        "meta": {
+          "showHeader": true,
+          "showSearch": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_alert_highpriority"
             },
-            'queryParams': {
-              'count': 200,
-              'window': ''
+            "queryParams": {
+              "count": 200,
+              "window": ""
             }
           },
-          'title': 'Recent Alerts'
+          "title": "Recent Alerts"
         },
-        'name': 'Table',
-        'tableOptions': {
-          'filterable': [
-            'DATE',
-            'DETAILS',
-            'SOURCE',
-            'DESTINATION'
+        "name": "Table",
+        "tableOptions": {
+          "filterable": [
+            "DATE",
+            "DETAILS",
+            "SOURCE",
+            "DESTINATION"
           ],
-          'itemsPerPage': 5,
-          'sortable': [
-            'RANK SCORE',
-            'DATE',
-            'DETAILS',
-            'SOURCE',
-            'DESTINATION'
+          "itemsPerPage": 5,
+          "sortable": [
+            "RANK SCORE",
+            "DATE",
+            "DETAILS",
+            "SOURCE",
+            "DESTINATION"
           ],
-          'defaultSort': {
-            'column': 'RANK SCORE',
-            'direction': 'desc'
+          "defaultSort": {
+            "column": "RANK SCORE",
+            "direction": "desc"
           }
         },
-        'attributes': {
-          'style': {
-            'width': '100%'
+        "attributes": {
+          "style": {
+            "width": "100%"
           },
-          'id': 'RecentAlerts'
+          "id": "RecentAlerts"
         },
-        'tableData': {
-          'fieldMapping': [
+        "tableData": {
+          "fieldMapping": [
             {
-              'reportId': 'taf_alert_highpriority',
-              'columns': [
+              "reportId": "taf_alert_highpriority",
+              "columns": [
                 {
-                  'data': [
+                  "data": [
                     {
-                      'fieldName': 'data.rank_alert.score'
+                      "fieldName": "data.rank_alert.score"
                     }
                   ],
-                  'style': {
-                    'width': '12%'
+                  "style": {
+                    "width": "12%"
                   },
-                  'type': 'scoreWidget',
-                  'columnNameToDisplay': 'RANK SCORE'
+                  "type": "scoreWidget",
+                  "columnNameToDisplay": "RANK SCORE"
                 },
                 {
-                  'data': [
+                  "data": [
                     {
-                      'fieldName': 'date',
-                      'displayName': 'date'
+                      "fieldName": "date",
+                      "displayName": "date"
                     }
                   ],
-                  'style': {
-                    'width': '10%'
+                  "style": {
+                    "width": "10%"
                   },
-                  'type': 'text',
-                  'columnNameToDisplay': 'DATE'
+                  "type": "text",
+                  "columnNameToDisplay": "DATE"
                 },
                 {
-                  'data': [
+                  "data": [
                     {
-                      'fieldName': 'data.rank_alert.description',
-                      'displayName': 'description'
+                      "fieldName": "data.rank_alert.description",
+                      "displayName": "description"
                     },
                     {
-                      'fieldName': 'data.rank_alert.message',
-                      'displayName': ''
+                      "fieldName": "data.rank_alert.message",
+                      "displayName": ""
                     }
                   ],
-                  'style': {
-                    'width': '38%'
+                  "style": {
+                    "width": "38%"
                   },
-                  'type': 'text',
-                  'columnNameToDisplay': 'DETAILS'
+                  "type": "text",
+                  "columnNameToDisplay": "DETAILS"
                 },
                 {
-                  'data': [
+                  "data": [
                     {
-                      'fieldName': 'source.ip',
-                      'displayName': 'IP'
+                      "fieldName": "source.ip",
+                      "displayName": "IP"
                     },
                     {
-                      'fieldName': 'source.port',
-                      'displayName': 'port'
+                      "fieldName": "source.port",
+                      "displayName": "port"
                     },
                     {
-                      'fieldName': 'source.country',
-                      'displayName': 'countryFlag'
+                      "fieldName": "source.country",
+                      "displayName": "countryFlag"
                     },
                     {
-                      'fieldName': 'source.name',
-                      'displayName': 'Machine'
+                      "fieldName": "source.name",
+                      "displayName": "Machine"
                     },
                     {
-                      'fieldName': 'source.owner',
-                      'displayName': 'Owner'
+                      "fieldName": "source.owner",
+                      "displayName": "Owner"
                     },
                     {
-                      'fieldName': 'source.asn',
-                      'displayName': 'ASN'
+                      "fieldName": "source.asn",
+                      "displayName": "ASN"
                     },
                     {
-                      'fieldName': 'source.assets',
-                      'displayName': 'Users'
+                      "fieldName": "source.assets",
+                      "displayName": "Users"
                     }
                   ],
-                  'style': {
-                    'width': '20%'
+                  "style": {
+                    "width": "20%"
                   },
-                  'type': 'text',
-                  'columnNameToDisplay': 'SOURCE'
+                  "type": "text",
+                  "columnNameToDisplay": "SOURCE"
                 },
                 {
-                  'data': [
+                  "data": [
                     {
-                      'fieldName': 'destination.ip',
-                      'displayName': 'IP'
+                      "fieldName": "destination.ip",
+                      "displayName": "IP"
                     },
                     {
-                      'fieldName': 'destination.port',
-                      'displayName': 'port'
+                      "fieldName": "destination.port",
+                      "displayName": "port"
                     },
                     {
-                      'fieldName': 'destination.country',
-                      'displayName': 'countryFlag'
+                      "fieldName": "destination.country",
+                      "displayName": "countryFlag"
                     },
                     {
-                      'fieldName': 'destination.name',
-                      'displayName': 'Name'
+                      "fieldName": "destination.name",
+                      "displayName": "Name"
                     },
                     {
-                      'fieldName': 'destination.owner',
-                      'displayName': 'Owner'
+                      "fieldName": "destination.owner",
+                      "displayName": "Owner"
                     },
                     {
-                      'fieldName': 'destination.asn',
-                      'displayName': 'ASN'
+                      "fieldName": "destination.asn",
+                      "displayName": "ASN"
                     },
                     {
-                      'fieldName': 'destination.assets',
-                      'displayName': 'Users'
+                      "fieldName": "destination.assets",
+                      "displayName": "Users"
                     }
                   ],
-                  'style': {
-                    'width': '20%'
+                  "style": {
+                    "width": "20%"
                   },
-                  'type': 'text',
-                  'columnNameToDisplay': 'DESTINATION'
+                  "type": "text",
+                  "columnNameToDisplay": "DESTINATION"
                 }
               ]
             }
           ]
         },
-        'id': 'recent-alerts',
-        'type': 'Table',
-        'openAlertDetails': true
+        "id": "recent-alerts",
+        "type": "Table",
+        "openAlertDetails": true
       }
     ],
     [
       {
-        'chartOptions': {
-          'xAxisname': 'ALERT TYPES',
-          'pYAxisname': 'ALERT COUNT'
+        "chartOptions": {
+          "xAxisname": "ALERT TYPES",
+          "pYAxisname": "ALERT COUNT"
         },
-        'chartData': {
-          'fieldMapping': [
+        "chartData": {
+          "fieldMapping": [
             {
-              'reportId': 'taf_threat_trend',
-              'columns': [
-                'data.rank_alert.category'
+              "reportId": "taf_threat_trend",
+              "columns": [
+                "data.rank_alert.category"
               ],
-              'axis': 'x'
+              "axis": "x"
             },
             {
-              'reportId': 'taf_threat_trend',
-              'columns': [
-                'date'
+              "reportId": "taf_threat_trend",
+              "columns": [
+                "date"
               ],
-              'axis': 'y'
+              "axis": "y"
             }
           ]
         },
-        'meta': {
-          'showHeader': true,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_threat_trend'
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_threat_trend"
             },
-            'queryParams': {
-              'window': ''
+            "queryParams": {
+              "window": ""
             }
           },
-          'title': 'Alert by type'
+          "title": "Alert by type"
         },
-        'attributes': {
-          'chartWidth': '100%',
-          'style': {
-            'marginRight': '33px',
-            'width': '50%'
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "marginRight": "33px",
+            "width": "50%"
           },
-          'id': 'AlertByType',
-          'chartHeight': '350'
+          "id": "AlertByType",
+          "chartHeight": "350"
         },
-        'id': 'alert-by-type',
-        'type': 'ParetoChart',
-        'kibana': {
-          'pathParams': [
-            'alerts-type'
+        "id": "alert-by-type",
+        "type": "ParetoChart",
+        "kibana": {
+          "pathParams": [
+            "alerts-type"
           ],
-          'queryParams': {
-            'window': '',
-            'type': ''
+          "queryParams": {
+            "window": "",
+            "type": ""
           }
         }
       },
       {
-        'chartOptions': {
-          'linealpha': '0',
-          'yAxisName': 'ALERT COUNT',
-          'drawAnchors': '1',
-          'legendPosition': 'right'
+        "chartOptions": {
+          "linealpha": "0",
+          "yAxisName": "ALERT COUNT",
+          "drawAnchors": "1",
+          "legendPosition": "right"
         },
-        'chartData': {
-          'fieldMapping': [
+        "chartData": {
+          "fieldMapping": [
             {
-              'reportId': 'taf_alert_priority_time',
-              'columns': [
-                'date'
+              "reportId": "taf_alert_priority_time",
+              "columns": [
+                "date"
               ],
-              'axis': 'x'
+              "axis": "x"
             },
             {
-              'reportId': 'taf_alert_priority_time',
-              'columns': [
-                'data.rank_alert.score',
-                'count'
+              "reportId": "taf_alert_priority_time",
+              "columns": [
+                "data.rank_alert.score",
+                "count"
               ],
-              'seriesOptions': {
-                'drawanchors': '1',
-                'lineThickness': '0',
-                'anchorradius': '5',
-                'renderas': 'Line',
-                'anchorbgcolor': [
-                  '#90d0a4',
-                  '#fcc875',
-                  '#f69275'
+              "seriesOptions": {
+                "drawanchors": "1",
+                "lineThickness": "0",
+                "anchorradius": "5",
+                "renderas": "Line",
+                "anchorbgcolor": [
+                  "#90d0a4",
+                  "#fcc875",
+                  "#f69275"
                 ],
-                'anchorBorderColor': [
-                  '#90d0a4',
-                  '#fcc875',
-                  '#f69275'
+                "anchorBorderColor": [
+                  "#90d0a4",
+                  "#fcc875",
+                  "#f69275"
                 ],
-                'anchorsides': [
-                  '0',
-                  '0',
-                  '0'
+                "anchorsides": [
+                  "0",
+                  "0",
+                  "0"
                 ]
               },
-              'axis': 'y'
+              "axis": "y"
             }
           ],
-          'combinedResult': false
+          "combinedResult": false
         },
-        'meta': {
-          'showHeader': true,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_alert_priority_time'
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_alert_priority_time"
             },
-            'queryParams': {
-              'window': ''
+            "queryParams": {
+              "window": ""
             }
           },
-          'title': 'Alert priority'
+          "title": "Alert priority"
         },
-        'attributes': {
-          'chartWidth': '100%',
-          'chartCaption': {
-            'display': 'none'
+        "attributes": {
+          "chartWidth": "100%",
+          "chartCaption": {
+            "display": "none"
           },
-          'style': {
-            'width': '50%'
+          "style": {
+            "width": "50%"
           },
-          'id': 'AlertPriorityChart',
-          'chartHeight': '350'
+          "id": "AlertPriorityChart",
+          "chartHeight": "350"
         },
-        'id': 'alert-priority-chart',
-        'type': 'MultiSeriesCombiChart',
-        'kibana': {
-          'pathParams': [
-            'alerts-score'
+        "id": "alert-priority-chart",
+        "type": "MultiSeriesCombiChart",
+        "kibana": {
+          "pathParams": [
+            "alerts-score"
           ],
-          'queryParams': {
-            'scoreRange': '',
-            'fromAndToBasedOnClickedDate': ''
+          "queryParams": {
+            "scoreRange": "",
+            "fromAndToBasedOnClickedDate": ""
           }
         }
       }
