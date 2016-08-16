@@ -19,7 +19,12 @@ const karmaConfig = {
   ],
   singleRun: !argv.watch,
   frameworks: ['mocha', 'intl-shim'],
-  reporters: ['mocha'],
+  // to report unit test success/failures in Jenkins, we need the junit report
+  reporters: ['mocha', 'junit'],
+  junitReporter: {
+    outputDir: 'target',
+    outputFile: 'test-results.xml'
+  },
   preprocessors: {
     [`${config.dir_test}/test-bundler.js`]: ['webpack']
   },
