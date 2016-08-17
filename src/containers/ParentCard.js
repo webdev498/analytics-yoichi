@@ -276,7 +276,6 @@ class ParentCard extends React.Component {
             </div>
           </header>
           <div> {React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})}
-            {console.log(props)}
             {(!props.data && !props.isFetching) ? 'No Data Found.' : null}
             {((props.data && props.data.rows && props.data.rows.length === 0)) ? 'No Data Found.' : null}
             {(props.data && props.chartData &&
