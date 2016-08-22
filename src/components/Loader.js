@@ -18,7 +18,7 @@ const Loader = (props) => (
       width={props.width || '30px'}
       height={props.height || '30px'}
       viewBox='0 0 40 40'
-      enable-background='new 0 0 40 40'>
+      enableBackground='new 0 0 40 40'>
       <path
         opacity='0.5'
         fill='#000'
