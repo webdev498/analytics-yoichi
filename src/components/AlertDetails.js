@@ -2,7 +2,11 @@ import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 
 import { connect } from 'react-redux';
-import {fetchApiData} from 'actions/ParentCard';
+import {fetchTrafficDetailsApiData} from 'actions/ParentCard';
+
+import {
+  formatDateInLocalTimeZone
+} from 'utils/utils';
 
 const styles = {
   card: {
@@ -41,13 +45,22 @@ class AlertDetails extends React.Component {
     data: PropTypes.object
   }
 
+  // constructor(props) {
+  //   super(props);
+
+  //   this.getTrafficDetails = this.getTrafficDetails.bind(this);
+  //   this._getAlertParams = this._getAlertParams.bind(this);
+  //   this.getAlertDetails = this.getAlertDetails.bind(this);
+  // }
+
   getTrafficDetails() {
     const data = this.props.data.data.rank_alert;
     const {props} = this;
+    console.log('from alert details:', props);
     const {id, api} = props.meta.fetchDataFor;
     api.queryParams.filter = encodeURI(data.trafficFilter);
     api.queryParams.date = data.triggered || props.params.date;
-    props.fetchApiData(id, api);
+    props.fetchTrafficDetailsApiData(id, api, data.trafficFilter, api.queryParams.date);
   }
 
   _getAlertParams() {
@@ -114,6 +127,9 @@ class AlertDetails extends React.Component {
     // or get the api updated.
     this.getTrafficDetails();
 
+    let dateTime = formatDateInLocalTimeZone(data.created),
+      dateFormatted = dateTime.date + ' ' + dateTime.time;
+
     return (
       <div style={styles.card}>
         <div style={styles.rankScore}>
@@ -125,7 +141,7 @@ class AlertDetails extends React.Component {
               <b style={styles.itemTitle}>
                 Date
               </b>
-              <span>{data.created}</span>
+              <span>{dateFormatted}</span>
             </li>
             <li style={styles.item}>
               <b style={styles.itemTitle}>
@@ -155,5 +171,5 @@ class AlertDetails extends React.Component {
 }
 
 export default connect(null, {
-  fetchApiData
+  fetchTrafficDetailsApiData
 })(AlertDetails);

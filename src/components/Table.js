@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
 import Reactable from 'reactable';
-import moment from 'moment';
 import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/DurationWidget';
@@ -12,7 +11,8 @@ import {
   isUndefined,
   msToTime,
   getCountryNameByCountryCode,
-  formatBytes
+  formatBytes,
+  formatDateInLocalTimeZone
 } from 'utils/utils';
 import {
   generateQueryParams,
@@ -389,13 +389,10 @@ export function generateColumnTextForColumnTypeAsText(columnDetails) {
 }
 
 export function generateColumnTextForDisplayingDate(fieldValue) {
-  let fieldValue1 = moment.utc(fieldValue).format('YYYY-MM-DD HH:mm:ss.SSS'),
-    localDateTime = moment.utc(fieldValue1).toDate(),
-    localDate = moment(localDateTime).format('DD MMM YYYY'),
-    localTime = moment(localDateTime).format('HH:mm:ss.SSS');
+  let dateTime = formatDateInLocalTimeZone(fieldValue);
 
-  fieldValue = '<span style="font-size: 14px; font-weight: 600;">' + localDate + '</span>';
-  fieldValue += '<br/>' + localTime;
+  fieldValue = '<span style="font-size: 14px; font-weight: 600;">' + dateTime.date + '</span>';
+  fieldValue += '<br/>' + dateTime.time;
   return fieldValue;
 }
 
@@ -460,6 +457,8 @@ export class TableCard extends React.Component {
     const {props} = this;
     const that = this;
     generateDataSource(props);
+
+    console.log(props);
 
     return (
       <div style={props.attributes.style}>

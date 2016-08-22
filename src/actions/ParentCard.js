@@ -164,3 +164,34 @@ export function removeComponent(id) {
     dispatch(removeComponentWithId(id));
   };
 }
+
+export function fetchTrafficDetailsApiData(id, api, trafficFilter, alertDate) {
+  const accessToken = Cookies.get('access_token');
+  const tokenType = Cookies.get('token_type');
+
+  // Thunk middleware knows how to handle functions.
+  // It passes the dispatch method as an argument to the function,
+  // thus making it able to dispatch actions itself.
+
+  return function(dispatch, getState) {
+    const currentDuration = getState().apiData.get('duration');
+
+    dispatch(requestApiData(id, api));
+
+    const defaultHeaders = Object.assign({
+      'Authorization': `${tokenType} ${accessToken}`
+    }, api.headers);
+
+    return fetch(getUrl(api, currentDuration), {
+      method: 'GET',
+      headers: defaultHeaders
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(receiveApiData(id, {json, api, trafficFilter, alertDate}));
+    })
+    .catch((ex) => {
+      dispatch(errorApiData(id, ex));
+    });
+  };
+}

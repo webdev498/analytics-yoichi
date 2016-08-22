@@ -36,6 +36,12 @@ function getUrl(id) {
   return `${baseUrl}/api/store/dashboard${id}`;
 }
 
+function getLayout(urlId) {
+  const temp = urlId.slice(1, urlId.length),
+    layout = require('json/' + temp).default;
+  return layout;
+}
+
 export function fetchLayoutData(id, params) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
@@ -45,11 +51,10 @@ export function fetchLayoutData(id, params) {
   // thus making it able to dispatch actions itself.
 
   return function(dispatch, getState) {
-    // if path id / then layout id is new-summary-page.
-    id = (id === '/') ? '/new-summary-page' : id;
-
     dispatch(requestPageData(id));
 
+    // if path id is / then layout id is new-summary-page.
+    id = (id === '/') ? '/new-summary-page' : id;
     // if id has path params, then first part of the url is used to fetch layout json.
     let urlId = id.indexOf('/', 1) > -1 ? id.slice(0, id.indexOf('/', 1)) : id;
 
@@ -64,10 +69,17 @@ export function fetchLayoutData(id, params) {
       if (response.status === 401) {
         logoutUtil(dispatch);
       }
-      return response.json();
+      else if (response.status === 404) {
+        dispatch(receivePageData(id, {json: getLayout(urlId)}));
+      }
+      else {
+        return response.json();
+      }
     })
     .then(json => {
-      dispatch(receivePageData(id, {json}));
+      if (json) {
+        dispatch(receivePageData(id, {json}));
+      }
     })
     .catch((ex) => {
       dispatch(errorPageData(id, ex));
