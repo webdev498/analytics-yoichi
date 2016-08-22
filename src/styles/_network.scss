@@ -1,0 +1,26 @@
+div.contextMenu {
+  position:absolute;
+  top:0px;
+  left:0px;
+  background-color: $WhiteColor;
+  border: 1px solid $GrapeColor;
+  border-bottom: 0px;
+}
+
+div.contextMenu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.contextMenu ul li {
+  /*display: block;*/
+  border-bottom: 1px solid gray;
+  padding: 5px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+div.contextMenu ul li:hover {
+  background-color: $CoralColorShade1;
+}

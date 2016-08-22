@@ -1,6 +1,6 @@
 import React from 'react';
 import {Colors} from 'theme/colors';
-// import vis from 'vis';
+import $ from 'jquery';
 
 const style = {
   'height': '600px',
@@ -10,7 +10,28 @@ const style = {
 let paddingSpace1 = '\n           ',
   paddingSpace2 = '           ',
   x = -10,
-  y = 100;
+  y = 100,
+  contextMenu = undefined,
+  contextMenuOptions = ['First Option', 'Second Option', 'Third Option'];
+
+function makeUL(array) {
+  // Create the list element:
+  var list = document.createElement('ul');
+
+  for (var i = 0; i < array.length; i++) {
+    // Create the list item:
+    var item = document.createElement('li');
+
+    // Set its contents:
+    item.appendChild(document.createTextNode(array[i]));
+
+    // Add it to the list:
+    list.appendChild(item);
+  }
+
+  // Finally, return the constructed list:
+  return list;
+}
 
 class NetworkGraph extends React.Component {
   constructor(props) {
@@ -33,6 +54,7 @@ class NetworkGraph extends React.Component {
           color: '#F2F2F4',
           image: 'img/asset.png',
           orgImage: 'img/asset.png',
+          actions: ['Outgoing Connections', 'Incoming Connections', 'Outgoing Connections', 'Users Logged in'],
           // fixed: true,
           x: 0,
           y: 0
@@ -53,6 +75,7 @@ class NetworkGraph extends React.Component {
           color: '#F2F2F4',
           image: 'img/asset.png',
           orgImage: 'img/asset.png',
+          actions: ['Outgoing Connections1', 'Incoming Connections2', 'Outgoing Connections3', 'Users Logged in4'],
           x: 350,
           y: -100
         },
@@ -344,6 +367,61 @@ class NetworkGraph extends React.Component {
     }*/
   }
 
+  loadContextMenu(network) {
+    return (event) => {
+      console.log('test');
+      if (contextMenu !== undefined) {
+        contextMenu.parentNode.removeChild(contextMenu);
+        contextMenu = undefined;
+        contextMenuOptions = [];
+      }
+
+      let networkGraphContainer = document.getElementById('networkGraph');
+
+      if (network.getSelection().nodes.length > 0) {
+        let offsetLeft = networkGraphContainer.offsetLeft;
+        let offsetTop = networkGraphContainer.offsetTop;
+
+        this.displayContextMenu(network);
+
+        contextMenu = document.createElement('div');
+        contextMenu.id = 'contextMenu';
+        contextMenu.className = 'contextMenu';
+        // contextMenu.style.left = network.clientX - offsetLeft + 'px';
+        // contextMenu.style.top = network.clientY - offsetTop + 10 + 'px';
+        contextMenu.style.left = 650 - offsetLeft + 'px';
+        contextMenu.style.top = 400 - offsetTop + 10 + 'px';
+        networkGraphContainer.appendChild(contextMenu);
+        document.getElementById('contextMenu').appendChild(makeUL(contextMenuOptions));
+        // console.log(network.clientX, network.clientY);
+      }
+      // network.preventDefault();
+    };
+  }
+
+  displayContextMenu(network) {
+    return (event) => {
+      let SelectedNodeIDs = network.getSelection();
+      console.log(SelectedNodeIDs.nodes[0]);
+      if (SelectedNodeIDs.nodes[0] !== undefined) {
+        for (let i = 0; i < this.state.nodes.length; i++) {
+          if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
+            // this.state.nodes[i].image = (this.state.nodes[i].orgImage).replace('.png', '_select.png');
+            if (this.state.nodes[i].actions !== undefined) {
+              contextMenuOptions = this.state.nodes[i].actions;
+              break;
+            }
+          }
+          // else {
+          //   this.state.nodes[i].image = this.state.nodes[i].orgImage;
+          // }
+        }
+        // this.loadNetworkGraph();
+      }
+      console.log(JSON.stringify(this.state.nodes));
+    };
+  }
+
   selectNode(network) {
     return (event) => {
       let SelectedNodeIDs = network.getSelection();
@@ -397,45 +475,105 @@ class NetworkGraph extends React.Component {
         edges: this.state.edges
       };
 
-      let network = new vis.Network(this.networkGraph, data, options);
-      network.on('selectNode', this.selectNode(network));
-      network.on('deselectNode', this.deselectNode(network));
+      let network = new vis.Network(this.networkGraph, data, options),
+        networkGraphContainer = document.getElementById('networkGraph');
+      // network.on('selectNode', this.selectNode(network));
+      // network.on('deselectNode', this.deselectNode(network));
 
-      // network.on('selectNode', function(params) {
-      //   console.log(JSON.stringify(params));
-      //   // testFunction();
-      //   // alert("clicked");
-      //   let SelectedNodeIDs = network.getSelection();
-      //   console.log(SelectedNodeIDs.nodes[0]);
-      //   if (SelectedNodeIDs.nodes[0] !== undefined) {
-      //     for (let i = 0; i < this.state.nodes.length; i++) {
-      //       if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
-      //         this.state.nodes[i].image = 'img/asset_select.png';
-      //       }
-      //     }
-      //   }
-      // });
+      /* Following code is for left click context menu */
+      network.on('select', function(e) {
+        if (contextMenu !== undefined) {
+          contextMenu.parentNode.removeChild(contextMenu);
+          contextMenu = undefined;
+          contextMenuOptions = [];
+        }
 
-      // network.on('deselectNode', function(params) {
-      //   console.log(JSON.stringify(params));
-      //   // alert("clicked");
-      //   let SelectedNodeIDs = network.getSelection();
-      //   console.log(SelectedNodeIDs.nodes[0]);
-      //   if (SelectedNodeIDs.nodes[0] !== undefined) {
-      //     for (let i = 0; i < this.state.nodes.length; i++) {
-      //       if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
-      //         this.state.nodes[i].image = 'img/asset.png';
-      //       }
-      //     }
-      //   }
-      // });
+        if (network.getSelection().nodes.length > 0) {
+          // let offsetLeft = networkGraphContainer.offsetLeft;
+          // let offsetTop = networkGraphContainer.offsetTop;
+
+          let SelectedNodeIDs = network.getSelection(),
+            selectedNodeIndex = 0;
+          // let nodeAt = network.getBoundingBox(SelectedNodeIDs.nodes[0]);
+          // console.log('Selected Node Id:', SelectedNodeIDs.nodes[0], ' node at: ', nodeAt);
+          if (SelectedNodeIDs.nodes[0] !== undefined) {
+            for (let i = 0; i < data.nodes.length; i++) {
+              if (data.nodes[i].id === SelectedNodeIDs.nodes[0]) {
+                if (data.nodes[i].actions !== undefined) {
+                  contextMenuOptions = data.nodes[i].actions;
+                  selectedNodeIndex = i;
+                  break;
+                }
+              }
+            }
+            // this.loadNetworkGraph();
+          }
+
+          if (contextMenuOptions.length > 0) {
+            let nodeAtDOM = network.canvasToDOM({x: data.nodes[selectedNodeIndex].x,
+              y: data.nodes[selectedNodeIndex].y});
+            contextMenu = document.createElement('div');
+            contextMenu.id = 'contextMenu';
+            contextMenu.className = 'contextMenu';
+            // contextMenu.style.left = nodeAt.left + 680 + 'px';
+            // contextMenu.style.top = nodeAt.top + 300 + 'px';
+            contextMenu.style.left = nodeAtDOM.x + 50 + 'px';
+            contextMenu.style.top = nodeAtDOM.y + 100 + 'px';
+            networkGraphContainer.appendChild(contextMenu);
+            document.getElementById('contextMenu').appendChild(makeUL(contextMenuOptions));
+            // console.log(data.nodes[selectedNodeIndex].x, offsetLeft, data.nodes[selectedNodeIndex].y, offsetTop);
+          }
+        }
+        // e.preventDefault();
+      });
+
+      // this.networkGraph.addEventListener('contextmenu', this.loadContextMenu(network), false);
+
+      /* Following code is for right click context menu
+      this.networkGraph.addEventListener('contextmenu', function(e) {
+        if (contextMenu !== undefined) {
+          contextMenu.parentNode.removeChild(contextMenu);
+          contextMenu = undefined;
+        }
+
+        if (network.getSelection().nodes.length > 0) {
+          let offsetLeft = networkGraphContainer.offsetLeft;
+          let offsetTop = networkGraphContainer.offsetTop;
+
+          let SelectedNodeIDs = network.getSelection();
+          console.log('Selected Node Id:', SelectedNodeIDs.nodes[0]);
+          if (SelectedNodeIDs.nodes[0] !== undefined) {
+            for (let i = 0; i < data.nodes.length; i++) {
+              if (data.nodes[i].id === SelectedNodeIDs.nodes[0]) {
+                if (data.nodes[i].actions !== undefined) {
+                  contextMenuOptions = data.nodes[i].actions;
+                  break;
+                }
+              }
+            }
+            // this.loadNetworkGraph();
+          }
+
+          if (contextMenuOptions.length > 0) {
+            contextMenu = document.createElement('div');
+            contextMenu.id = 'contextMenu';
+            contextMenu.className = 'contextMenu';
+            contextMenu.style.left = e.clientX - offsetLeft - 50 + 'px';
+            contextMenu.style.top = e.clientY - offsetTop + 20 + 'px';
+            networkGraphContainer.appendChild(contextMenu);
+            document.getElementById('contextMenu').appendChild(makeUL(contextMenuOptions));
+            console.log(e.clientX, offsetLeft, e.clientY, offsetTop);
+          }
+        }
+        e.preventDefault();
+      }, false);*/
     }
   }
 
   render() {
     return (
       <div>
-        <div ref={(ref) => this.networkGraph = ref} style={style}></div>
+        <div ref={(ref) => this.networkGraph = ref} style={style} id='networkGraph'></div>
         {this.loadNetworkGraph()}
       </div>
     );
