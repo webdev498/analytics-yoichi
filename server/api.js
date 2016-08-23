@@ -4,6 +4,8 @@ import fetch from 'node-fetch';
 import app from './main.js';
 import koaRouter from 'koa-router';
 
+import {getData} from './abstraction/paretoChart'
+
 const router = new koaRouter({
   prefix: '/api'
 });
@@ -17,18 +19,25 @@ const agent = new https.Agent(agentOptions);
 router
 .get('/analytics/reporting/execute/taf_threat_trend', async function(ctx, next) {
   const url = ctx.request.url;
-  console.log(url);
+
   const res = await fetch('https://demo.ranksoftwareinc.com' + ctx.url,
     {
       method: 'GET',
       headers: ctx.headers,
       agent
     }
-  );
+  )
+  .then((response) => {
+    return response.json().then((json) => {
+      ctx.set('content-type', response.headers.get('content-type'));
+      json.graphBars = getData(json);
+      ctx.body = json;
+      return next();
+    });
+  })
 
-  ctx.set('content-type', res.headers.get('content-type'));
-  ctx.body = res.body;
-})
+  return res;
+}, async function(ctx, next) {})
 .get('*', async function (ctx, next) {
   const url = ctx.request.url;
   const res = await fetch('https://demo.ranksoftwareinc.com' + ctx.url,
