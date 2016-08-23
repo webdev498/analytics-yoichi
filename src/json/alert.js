@@ -1,215 +1,215 @@
 const alert = {
-  "layout": [
+  'layout': [
     [
       {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_alert_count_time_shifted"
+        'meta': {
+          'showHeader': false,
+          'api': {
+            'path': '/api/analytics/reporting/execute/{reportId}',
+            'pathParams': {
+              'reportId': 'taf_alert_count_time_shifted'
             },
-            "queryParams": {
-              "window": ""
+            'queryParams': {
+              'window': ''
             }
           }
         },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#F69275"
+        'name': 'MetricsCard',
+        'attributes': {
+          'countStyle': {
+            'color': '#F69275'
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
+          'style': {
+            'marginRight': '3px',
+            'width': '25%',
+            'borderTop': '6px solid #F69275'
           }
         },
-        "id": "1",
-        "type": "MetricsCard",
-        "title": "High Priority Alerts",
-        "kibana": {
-          "pathParams": [
-            "alerts-score"
+        'id': '1',
+        'type': 'MetricsCard',
+        'title': 'High Priority Alerts',
+        'kibana': {
+          'pathParams': [
+            'alerts-score'
           ],
-          "queryParams": {
-            "fromAndToBasedOnToday": "",
-            "scoreRange": ""
+          'queryParams': {
+            'fromAndToBasedOnToday': '',
+            'scoreRange': ''
           }
         }
       },
       {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_malware_count_time_shifted"
+        'meta': {
+          'showHeader': false,
+          'api': {
+            'path': '/api/analytics/reporting/execute/{reportId}',
+            'pathParams': {
+              'reportId': 'taf_malware_count_time_shifted'
             },
-            "queryParams": {
-              "window": ""
+            'queryParams': {
+              'window': ''
             }
           }
         },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#F69275"
+        'name': 'MetricsCard',
+        'attributes': {
+          'countStyle': {
+            'color': '#F69275'
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
+          'style': {
+            'marginRight': '3px',
+            'width': '25%',
+            'borderTop': '6px solid #F69275'
           }
         },
-        "id": "2",
-        "type": "MetricsCard",
-        "title": "High Priority Malware"
+        'id': '2',
+        'type': 'MetricsCard',
+        'title': 'High Priority Malware'
       },
       {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_event_count_time_shifted"
+        'meta': {
+          'showHeader': false,
+          'api': {
+            'path': '/api/analytics/reporting/execute/{reportId}',
+            'pathParams': {
+              'reportId': 'taf_event_count_time_shifted'
             },
-            "queryParams": {
-              "window": ""
+            'queryParams': {
+              'window': ''
             }
           }
         },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
+        'name': 'MetricsCard',
+        'attributes': {
+          'countStyle': {
+            'color': '#2bd8d0'
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+          'style': {
+            'marginRight': '3px',
+            'width': '25%',
+            'borderTop': '6px solid #2bd8d0'
           }
         },
-        "id": "3",
-        "type": "MetricsCard",
-        "title": "Events Processed",
-        "kibana": {
-          "pathParams": [
-            "traffic-details"
+        'id': '3',
+        'type': 'MetricsCard',
+        'title': 'Events Processed',
+        'kibana': {
+          'pathParams': [
+            'traffic-details'
           ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
+          'queryParams': {
+            'fromAndToBasedOnToday': ''
           }
         }
       },
       {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_asset_count_time_shifted"
+        'meta': {
+          'showHeader': false,
+          'api': {
+            'path': '/api/analytics/reporting/execute/{reportId}',
+            'pathParams': {
+              'reportId': 'taf_asset_count_time_shifted'
             },
-            "queryParams": {
-              "window": ""
+            'queryParams': {
+              'window': ''
             }
           }
         },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
+        'name': 'MetricsCard',
+        'attributes': {
+          'countStyle': {
+            'color': '#2bd8d0'
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+          'style': {
+            'marginRight': '3px',
+            'width': '25%',
+            'borderTop': '6px solid #2bd8d0'
           }
         },
-        "id": "4",
-        "type": "MetricsCard",
-        "title": "Assets Monitored",
-        "kibana": {
-          "pathParams": [
-            "assets-all"
+        'id': '4',
+        'type': 'MetricsCard',
+        'title': 'Assets Monitored',
+        'kibana': {
+          'pathParams': [
+            'assets-all'
           ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
+          'queryParams': {
+            'fromAndToBasedOnToday': ''
           }
         }
       }
     ],
     [
       {
-        "meta": {
-          "showHeader": true,
-          "showRefresh": false,
-          "api": {
-            "path": "/api/alert/{alertId}",
-            "queryParams": {
-              "window": ""
+        'meta': {
+          'showHeader': true,
+          'showRefresh': false,
+          'api': {
+            'path': '/api/alert/{alertId}',
+            'queryParams': {
+              'window': ''
             }
           },
-          "title": "Alert Details",
-          "fetchDataFor": {
-            "id": "malware-traffic-details",
-            "api": {
-              "path": "/api/alert/traffic",
-              "pathParams": {},
-              "queryParams": {
-                "count": 25,
-                "from": 0,
-                "window": "1w"
+          'title': 'Alert Details',
+          'fetchDataFor': {
+            'id': 'malware-traffic-details',
+            'api': {
+              'path': '/api/alert/traffic',
+              'pathParams': {},
+              'queryParams': {
+                'count': 25,
+                'from': 0,
+                'window': '1w'
               }
             }
           }
         },
-        "name": "AlertDetails",
-        "attributes": {
-          "style": {
-            "width": "100%"
+        'name': 'AlertDetails',
+        'attributes': {
+          'style': {
+            'width': '100%'
           }
         },
-        "id": "alert-details",
-        "type": "AlertDetails"
+        'id': 'alert-details',
+        'type': 'AlertDetails'
       }
     ],
     [
       {
-        "meta": {
-          "showHeader": true,
-          "showRefresh": false,
-          "api": null,
-          "title": "Malware Details"
+        'meta': {
+          'showHeader': true,
+          'showRefresh': false,
+          'api': null,
+          'title': 'Malware Details'
         },
-        "attributes": {
-          "style": {
-            "display": "none",
-            "width": "100%"
+        'attributes': {
+          'style': {
+            'display': 'none',
+            'width': '100%'
           },
-          "id": "malware-details"
+          'id': 'malware-details'
         },
-        "id": "malware-traffic-details",
-        "type": "MalwareDetails"
+        'id': 'malware-traffic-details',
+        'type': 'MalwareDetails'
       }
     ],
     [
       {
-        "meta": {
-          "showHeader": true,
-          "showRefresh": false,
-          "api": null,
-          "title": "Traffic Details"
+        'meta': {
+          'showHeader': true,
+          'showRefresh': false,
+          'api': null,
+          'title': 'Traffic Details'
         },
-        "name": "Table",
-        "attributes": {
-          "style": {
-            "width": "100%"
+        'name': 'Table',
+        'attributes': {
+          'style': {
+            'width': '100%'
           },
-          "id": "malware-traffic-details"
+          'id': 'malware-traffic-details'
         },
-        "id": "malware-traffic-details",
-        "type": "TrafficTable"
+        'id': 'malware-traffic-details',
+        'type': 'TrafficTable'
       }
     ]
   ]

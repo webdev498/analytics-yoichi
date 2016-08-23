@@ -1,56 +1,32 @@
 import Koa from 'koa';
-import https from 'https';
 import convert from 'koa-convert';
 import webpack from 'webpack';
 import webpackConfig from '../build/webpack.config';
 import historyApiFallback from 'koa-connect-history-api-fallback';
 import serve from 'koa-static';
-import proxy from 'koa-proxy';
 import _debug from 'debug';
 import config from '../config';
 import webpackDevMiddleware from './middleware/webpack-dev';
 import webpackHMRMiddleware from './middleware/webpack-hmr';
-import fetch from 'node-fetch';
+
+import apiMiddleware from './api';
 
 const debug = _debug('app:server');
 const paths = config.utils_paths;
 const app = new Koa();
 
-const agentOptions = {
-  rejectUnauthorized: false
-};
+// use koa routing
+// app.use(routing(app));
 
-const agent = new https.Agent(agentOptions);
-
-// Enable koa-proxy if it has been enabled in the config.
-if (config.proxy && config.proxy.enabled) {
-  app.use(convert(proxy(config.proxy.options)));
-}
-
-app.use(async function(ctx, next) {
-  const url = ctx.request.url;
-  if (url.indexOf('/api') > -1) {
-    const res = await fetch('https://demo.ranksoftwareinc.com' + ctx.url,
-      {
-        method: 'GET',
-        headers: ctx.headers,
-        agent
-      }
-    );
-
-    ctx.set('content-type', res.headers.get('content-type'));
-    ctx.body = res.body;
-  }
-  else {
-    await next();
-  }
-});
+// use api Middleware for api proxy.
+// app.use(apiMiddleware);
+app.use(apiMiddleware.routes());
 
 // This rewrites all routes requests to the root /index.html file
 // (ignoring file requests). If you want to implement isomorphic
 // rendering, you'll want to remove this middleware.
 app.use(convert(historyApiFallback({
-  verbose: true
+  verbose: false
 })));
 
 // ------------------------------------
