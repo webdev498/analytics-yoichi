@@ -31,6 +31,7 @@ export default (store) => {
         <Route path='user-agent' />
         <Route path='new-summary-page' />
         <Route path='network-graph' />
+        <Route path='timeline-graph' />
       </Route>
 
       { /* Catch all route */ }

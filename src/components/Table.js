@@ -458,8 +458,6 @@ export class TableCard extends React.Component {
     const that = this;
     generateDataSource(props);
 
-    console.log(props);
-
     return (
       <div style={props.attributes.style}>
         <Table id={props.attributes.id}
