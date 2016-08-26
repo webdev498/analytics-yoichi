@@ -115,10 +115,11 @@ tr.reactable-filterer td {
 .threatTable tr td span.title {color: $CloudColorShade1; font-weight: 600; font-size: 14px;}
 .threatTable tr td span.heading {color: $CloudColorShade1; font-weight: 600; font-size: 13px;}
 
-.threatTable div.scoreWidgetBG1 {
+.sw-high-priority {
   background: linear-gradient(to bottom, #f69275,#f79c81,#f8a58d,#f8ae99);
 }
-.threatTable div.scoreWidgetBG2 {
+
+.sw-low-priority {
   background: linear-gradient(to bottom,#fcc875,#fccd80,#fcd18b,#fdd698);
 }
 
