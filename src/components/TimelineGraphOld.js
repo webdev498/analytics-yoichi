@@ -12589,7 +12589,7 @@ let style = {
     'width': '50px',
     'position': 'absolute',
     'marginLeft': '5px',
-    'background': Colors.pebble
+    'background': '#B4B7C0'
   }
 };
 
@@ -12641,7 +12641,7 @@ class TimelineGraph extends React.Component {
           'width': '50px',
           'position': 'absolute',
           'marginLeft': '5px',
-          'background': Colors.pebble
+          'background': '#B4B7C0'
         }
       },
       'selectedMin': '',
@@ -12660,6 +12660,8 @@ class TimelineGraph extends React.Component {
           sliderValue + 3
         ];
 
+      $('#amount').val(sliderValue + ' ' + selectedRange[0] + ' - ' + selectedRange[1]);
+
       this.setState({
         'style': {
           'selectedArea': {
@@ -12668,7 +12670,7 @@ class TimelineGraph extends React.Component {
             'width': timelineBarWidth + 'px',
             'position': 'absolute',
             'marginLeft': '5px',
-            'background': Colors.pebble,
+            'background': '#B4B7C0',
             'zIndex': 1000,
             'opacity': 0.7
           }
@@ -12708,15 +12710,13 @@ class TimelineGraph extends React.Component {
         let top = topPositions.y - 215;
         if (selectedMin !== '' && selectedMax !== '') {
           if (selectedMin <= top && selectedMax >= top) {
-            document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
+            console.log('event1', selectedMin, selectedMax, top, dateString);
           }
           else {
-            document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
             dateString = '';
           }
         }
         else {
-          document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
           dateString = '';
         }
       }
@@ -12757,7 +12757,7 @@ class TimelineGraph extends React.Component {
                 height: timelineBarHeight + 'px',
                 width: timelineBarWidth + 'px',
                 fontSize: '11px',
-                backgroundColor: Colors.timelineBarColors[1], // getTimelineColor((event[0].type).toLowerCase()),
+                backgroundColor: Colors.turquoise, // getTimelineColor((event[0].type).toLowerCase()),
                 marginTop: (index === 0) ? 0 : ((prevTimestamp - currentTimestamp) === prevMarginTop
                   ? 2 : ((prevTimestamp - currentTimestamp) / 100))
               };
@@ -12773,6 +12773,9 @@ class TimelineGraph extends React.Component {
         </div>
         <div style={{'marginLeft': '250px', 'position': 'absolute'}}>
           {this.displayEvents(this.state.selectedMin, this.state.selectedMax)}
+        </div>
+        <div style={{position: 'absolute', marginTop: '1530px'}}>
+          <input type='text' id='amount' readonly style={{border: '0px', color: '#f6931f', fontWeight: 'bold'}} />
         </div>
       </div>
     );
