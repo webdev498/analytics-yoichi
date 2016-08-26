@@ -54,6 +54,8 @@ export const AxisColor = '#DADADA';
 export const DefaultGraphPaletteColors =
   '#2bd8d0,#3ad7c9,#46d6c4,#57d5bd,#67d3b6,#79d2ae,#8ad1a7,#9acfa0,#a8ce9a,#b2cd96';
 
+export const DefaultTimelineGraphPaletteColors = ['#F16B76', '#fcc875', '#ef5976'];
+
 export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
 
 export const Colors = {
@@ -78,7 +80,8 @@ export const Colors = {
   defaultGraphPaletteColors: DefaultGraphPaletteColors,
   defaultCanvasBGColors: DefaultCanvasBGColors,
   worldmapLegendsColor: WorldmapLegendsColor,
-  axisColor: AxisColor
+  axisColor: AxisColor,
+  defaultTimelineGraphPaletteColors: DefaultTimelineGraphPaletteColors
 };
 
 export const PrimaryPalette = {

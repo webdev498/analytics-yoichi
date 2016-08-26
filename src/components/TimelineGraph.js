@@ -84,7 +84,7 @@ const data = {
 
           ]
         },
-        'type': 'conn'
+        'type': 'file'
       }
     ],
     [
@@ -277,7 +277,7 @@ const data = {
 
           ]
         },
-        'type': 'conn'
+        'type': 'ssh'
       }
     ],
     [
@@ -405,7 +405,7 @@ const data = {
 
           ]
         },
-        'type': 'conn'
+        'type': 'ssh'
       }
     ],
     [
@@ -531,7 +531,7 @@ const data = {
 
           ]
         },
-        'type': 'conn'
+        'type': 'ip'
       }
     ],
     [
@@ -659,7 +659,7 @@ const data = {
 
           ]
         },
-        'type': 'conn'
+        'type': 'ip'
       }
     ],
     [
@@ -785,7 +785,7 @@ const data = {
 
           ]
         },
-        'type': 'conn'
+        'type': 'ssl'
       }
     ],
     [
@@ -848,7 +848,7 @@ const data = {
 
           ]
         },
-        'type': 'conn'
+        'type': 'http'
       }
     ],
     [
@@ -974,7 +974,7 @@ const data = {
 
           ]
         },
-        'type': 'conn'
+        'type': 'ssh'
       }
     ],
     [
@@ -1100,7 +1100,7 @@ const data = {
 
           ]
         },
-        'type': 'conn'
+        'type': 'dns'
       }
     ],
     [
@@ -1223,7 +1223,7 @@ const data = {
 
           ]
         },
-        'type': 'conn'
+        'type': 'dns'
       }
     ],
     [
@@ -12578,7 +12578,21 @@ const data = {
 };
 
 const rows = data.rows;
-let timelineBars = '';
+let timelineBars = '',
+  baseHeight = 1500,
+  timelineBarHeight = '12', // 2',
+  timelineBarWidth = '200'; // '50';
+
+let style = {
+  'selectedArea': {
+    'marginTop': '5px',
+    'height': '0px',
+    'width': '50px',
+    'position': 'absolute',
+    'marginLeft': '5px',
+    'background': '#B4B7C0'
+  }
+};
 
 function displayTimelineBars() {
   let top = (100 * rows.length / 500) * 100;
@@ -12592,13 +12606,13 @@ function getTimelineColor(eventType) {
   let color = '';
   switch (eventType) {
     case 'conn':
-      color = Colors.mustard;
+      color = Colors.defaultTimelineGraphPaletteColors[0];
       break;
     case 'ip':
-      color = Colors.pebble;
+      color = Colors.defaultTimelineGraphPaletteColors[1];
       break;
     case 'ssh':
-      color = Colors.smoke;
+      color = Colors.defaultTimelineGraphPaletteColors[2];
       break;
     case 'dns':
       color = Colors.turquoise;
@@ -12616,23 +12630,180 @@ function getTimelineColor(eventType) {
   return color;
 }
 
+function getPos(el) {
+  // yay readability
+  let lx = 0, ly = 0;
+  for (lx = 0, ly = 0;
+     el != null;
+     lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
+  return {x: lx, y: ly};
+}
+
 class TimelineGraph extends React.Component {
   // displayTimeline() {
   //   for(let i = 0; i < 24; i++) {
   //   }
   // }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      'style': {
+        'selectedArea': {
+          'marginTop': '0px',
+          'height': '0px',
+          'width': '50px',
+          'position': 'absolute',
+          'marginLeft': '5px',
+          'background': '#B4B7C0'
+          // 'zIndex': '1000'
+        }
+      },
+      'selectedMin': '',
+      'selectedMax': ''
+    };
+
+    this.updateSelectedArea = this.updateSelectedArea.bind(this);
+    this.displayEvents = this.displayEvents.bind(this);
+  }
+
+  updateSelectedArea() {
+    return (event) => {
+      let sliderValue = $('#slider-range').slider('value'),
+        selectedRange = [
+          sliderValue - 3,
+          sliderValue + 3
+        ];
+        console.log('sliderValue ', sliderValue);
+      // let selectedRange = [
+      //   $('#slider-range').slider('values', 0),
+      //   $('#slider-range').slider('values', 1)
+      // ];
+
+      $('#amount').val(sliderValue + ' ' + selectedRange[0] + ' - ' + selectedRange[1]);
+
+      this.setState({
+        'style': {
+          'selectedArea': {
+            'marginTop': ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8) + 'px',
+            'height': (baseHeight * (selectedRange[1] - selectedRange[0]) / 100) + 'px',
+            'width': timelineBarWidth + 'px',
+            'position': 'absolute',
+            'marginLeft': '5px',
+            'background': '#B4B7C0',
+            'zIndex': 1000,
+            'opacity': 0.7
+          }
+        },
+        'selectedMin': ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8),
+        'selectedMax': ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8) +
+          (baseHeight * (selectedRange[1] - selectedRange[0]) / 100)
+      });
+      // console.log('test ', selectedRange[1], selectedRange[0]);
+    };
+  }
+
   componentDidMount() {
     $('#slider-range').slider({
       orientation: 'vertical',
-      range: true,
-      values: [ 17, 67 ],
-      slide: function(event, ui) {
-        $('#amount').val('$' + ui.values[ 0 ] + ' - $' + ui.values[ 1 ]);
-      }
+      range: 'min',
+      min: 0,
+      max: 100,
+      slide: this.updateSelectedArea()
     });
-    $('#amount').val('$' + $('#slider-range').slider('values', 0) +
-      ' - $' + $('#slider-range').slider('values', 1));
+    // $('#amount').val($('#slider-range').slider('values', 0) +
+    //   ' - ' + $('#slider-range').slider('values', 1));
+    // console.log('before slide: ', this.state.style.selectedArea);
+  }
+
+  displayEventsOld(event, index) {
+    // let prevTimestamp = 0;
+        // prevMarginTop = 0;
+    let selectedMin = this.state.selectedMin,
+      selectedMax = this.state.selectedMax;
+
+    let dateString = event[0].date;
+    // let localTime = moment.utc(dateString).format('YYYY-MM-DD HH:mm:ss'),
+    //   d = new Date(localTime),
+    //   dateInUTCFormat = moment.utc(d.toUTCString()).format('YYYY-MM-DD HH:mm:ss');
+
+    // dateInUTCFormat = dateInUTCFormat.replace(/-/g, '/');
+    // let convertedDate = new Date(Date.parse((dateInUTCFormat).toString()));
+    // let currentTimestamp = convertedDate.getTime();
+
+    // let selectedRange = [
+    //     $('#slider-range').slider('values', 0),
+    //     $('#slider-range').slider('values', 1)
+    //   ],
+    //   selectedMin = ((500 * (100 - selectedRange[1]) / 100) - 12.8),
+    //   selectedMax = ((500 * (100 - selectedRange[1]) / 100) - 12.8) +
+    //     (500 * (selectedRange[1] - selectedRange[0]) / 100);
+    let barId = 'bar' + index,
+      topPositions = getPos(document.getElementById(barId));
+
+    let top = topPositions.y + 10;
+
+    if (topPositions.y !== undefined) {
+      if (selectedMin !== '' && selectedMax !== '') {
+        if (selectedMin <= top && selectedMax >= top) {
+          console.log('event1', selectedMin, selectedMax, top);
+        }
+        else {
+          // console.log('event2', selectedMin, selectedMax, topPositions.y);
+          dateString = '';
+        }
+      }
+      else {
+        // console.log('event3', selectedMin, selectedMax, topPositions.y);
+        dateString = '';
+      }
+      // prevMarginTop = (prevTimestamp - currentTimestamp);
+      // prevTimestamp = currentTimestamp;
+      // console.log('event for Top', dateString, topPositions.y);
+    }
+    return dateString;
+  }
+
+  displayEvents(selectedMin, selectedMax) {
+    // return (eventReturn) => {
+    let eventDate = '';
+    rows.map(function(event, index) {
+      let dateString = event[0].date;
+
+      let stylenew = {
+        height: '20px',
+        width: '200px',
+        marginLeft: '150px'
+      };
+      let barId = 'bar' + index,
+        topPositions = getPos(document.getElementById(barId));
+
+      let top = topPositions.y - 215;
+
+      if (topPositions.y !== undefined) {
+        if (selectedMin !== '' && selectedMax !== '') {
+          if (selectedMin <= top && selectedMax >= top) {
+            console.log('event1', selectedMin, selectedMax, top, dateString);
+          }
+          else {
+            // console.log('event2', selectedMin, selectedMax, topPositions.y);
+            dateString = '';
+          }
+        }
+        else {
+          // console.log('event3', selectedMin, selectedMax, topPositions.y);
+          dateString = '';
+        }
+      }
+      if (dateString !== '') {
+        eventDate = eventDate + '<br/>' + dateString;
+      }
+      // console.log('event for Top', event[0].date, top);
+    });
+    return (
+      <div dangerouslySetInnerHTML={{__html: eventDate}}></div>
+    );
+    // };
   }
 
   render() {
@@ -12641,10 +12812,11 @@ class TimelineGraph extends React.Component {
       // overflowY: 'scroll', direction: 'rtl',
     return (
       <div>
-        <div id='slider-range' style={{height: '250px', position: 'absolute'}}></div>
+        <div id='slider-range' style={{height: baseHeight + 'px', position: 'absolute'}}></div>
+        <div id='selectedArea' style={this.state.style.selectedArea}></div>
         <div id='timelineGraph' style={{
-          height: '500px', width: '70px', border: '1px solid red',
-          marginLeft: '12px', position: 'absolute'}}>
+          height: baseHeight + 'px', width: '70px', border: '0px solid red',
+          marginLeft: '5px', position: 'absolute'}}>
           {
             rows.map(function(event, index) {
               let dateString = event[0].date;
@@ -12655,14 +12827,17 @@ class TimelineGraph extends React.Component {
               dateInUTCFormat = dateInUTCFormat.replace(/-/g, '/');
               let convertedDate = new Date(Date.parse((dateInUTCFormat).toString()));
               let currentTimestamp = convertedDate.getTime();
-              console.log(rows.length, ' ', currentTimestamp, ' ', prevTimestamp, ' ',
-                (currentTimestamp - prevTimestamp));
+              // console.log(rows.length, ' ', currentTimestamp, ' ', prevTimestamp, ' ',
+                // (currentTimestamp - prevTimestamp));
+
+              let barId = 'bar' + index;
 
               let style = {
-                height: '2px',
-                width: '50px',
-                backgroundColor: getTimelineColor((event[0].type).toLowerCase()),
-                marginTop: (index === 0) ? 5 : ((prevTimestamp - currentTimestamp) === prevMarginTop
+                height: timelineBarHeight + 'px',
+                width: timelineBarWidth + 'px',
+                fontSize: '11px',
+                backgroundColor: Colors.turquoise, // getTimelineColor((event[0].type).toLowerCase()),
+                marginTop: (index === 0) ? 0 : ((prevTimestamp - currentTimestamp) === prevMarginTop
                   ? 2 : ((prevTimestamp - currentTimestamp) / 100))
               };
 
@@ -12670,13 +12845,24 @@ class TimelineGraph extends React.Component {
               prevTimestamp = currentTimestamp;
 
               return (
-                <div style={style}></div>
+                <div id={barId} style={style}>{dateString}{event[0].type}</div>
               );
             })
           }
         </div>
-        <div style={{position: 'absolute', marginTop: '530px'}}>
-          <label for='amount'>Target sales goal (Millions):</label>
+        <div style={{'marginLeft': '250px', 'position': 'absolute'}}>
+          {console.log(this.state.selectedMin, this.state.selectedMax)}
+          {this.displayEvents(this.state.selectedMin, this.state.selectedMax)}
+          {/*{
+            rows.map(function(event, index) {
+              let dateString = this.displayEventsOld(event, index);
+              return (
+                <div>{dateString}</div>
+              );
+            })
+          }*/}
+        </div>
+        <div style={{position: 'absolute', marginTop: '1530px'}}>
           <input type='text' id='amount' readonly style={{border: '0px', color: '#f6931f', fontWeight: 'bold'}} />
         </div>
       </div>
