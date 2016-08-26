@@ -2,7 +2,10 @@ import React from 'react';
 // import $ from 'jquery';
 import {Colors} from 'theme/colors';
 import moment from 'moment';
-// import {data} from 'utils/eventData';
+import {
+  formatDateInLocalTimeZone
+} from 'utils/utils';
+
 const data = {
   'total': 354,
   'next': 200,
@@ -12578,9 +12581,9 @@ const data = {
 };
 
 const rows = data.rows;
-let baseHeight = 1500,
-  timelineBarHeight = '12', // 2',
-  timelineBarWidth = '200'; // '50';
+let baseHeight = 500,
+  timelineBarHeight = '2', // 2',
+  timelineBarWidth = '50'; // '50';
 
 let style = {
   'selectedArea': {
@@ -12589,7 +12592,7 @@ let style = {
     'width': '50px',
     'position': 'absolute',
     'marginLeft': '5px',
-    'background': Colors.pebble
+    'background': Colors.smoke
   }
 };
 
@@ -12641,7 +12644,7 @@ class TimelineGraph extends React.Component {
           'width': '50px',
           'position': 'absolute',
           'marginLeft': '5px',
-          'background': Colors.pebble
+          'background': Colors.smoke
         }
       },
       'selectedMin': '',
@@ -12656,8 +12659,8 @@ class TimelineGraph extends React.Component {
     return (event) => {
       let sliderValue = $('#slider-range').slider('value'),
         selectedRange = [
-          sliderValue - 3,
-          sliderValue + 3
+          sliderValue - 6,
+          sliderValue + 6
         ];
 
       this.setState({
@@ -12668,7 +12671,7 @@ class TimelineGraph extends React.Component {
             'width': timelineBarWidth + 'px',
             'position': 'absolute',
             'marginLeft': '5px',
-            'background': Colors.pebble,
+            'background': Colors.smoke,
             'zIndex': 1000,
             'opacity': 0.7
           }
@@ -12692,9 +12695,11 @@ class TimelineGraph extends React.Component {
 
   displayEvents(selectedMin, selectedMax) {
     // return (eventReturn) => {
-    let eventDate = '';
+    let eventDetails = '';
+
     rows.map(function(event, index) {
-      let dateString = event[0].date;
+      let dateString = event[0].date,
+        newLine = '<br />';
 
       let stylenew = {
         height: '20px',
@@ -12708,24 +12713,44 @@ class TimelineGraph extends React.Component {
         let top = topPositions.y - 215;
         if (selectedMin !== '' && selectedMax !== '') {
           if (selectedMin <= top && selectedMax >= top) {
-            document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
+            if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+              document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
+            }
           }
           else {
-            document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
+            if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+              document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
+            }
             dateString = '';
           }
         }
         else {
-          document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
+          if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+            document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
+          }
           dateString = '';
         }
       }
       if (dateString !== '') {
-        eventDate = eventDate + '<br/>' + dateString;
+        newLine = (index === 0) ? '' : '<br />';
+        let dateTime = formatDateInLocalTimeZone(dateString);
+
+        eventDetails += '<div>';
+        eventDetails += '<div style="float:left;"><span style="font-size: 14px; font-weight: 600;">' + dateTime.date;
+        eventDetails += '<br/>' + dateTime.time + '</span></div>';
+        eventDetails += '<div style="margin-left:20px;float:left;height:100px;width:500px;background-color:white;border: 1px solid #cbcbd1;font-size: 14px;margin-bottom:20px;">';
+        eventDetails += 'ID: ' + event[0].id;
+        eventDetails += '<br/>Protocol: ' + event[0].protocol.service;
+        eventDetails += '<br/>udpOrTcp: ' + event[0].protocol.udpOrTcp + '</div>';
+        eventDetails += '</div>';
+
+        // eventDetails += newLine + '<span style="font-size: 14px; font-weight: 600;">' + dateTime.date;
+        // eventDetails += '<br/>' + dateTime.time + '</span>';
+
       }
     });
     return (
-      <div dangerouslySetInnerHTML={{__html: eventDate}}></div>
+      <div dangerouslySetInnerHTML={{__html: eventDetails}}></div>
     );
     // };
   }
@@ -12764,14 +12789,15 @@ class TimelineGraph extends React.Component {
 
               prevMarginTop = (prevTimestamp - currentTimestamp);
               prevTimestamp = currentTimestamp;
+              //{dateString}{event[0].type}
 
               return (
-                <div id={barId} style={style}>{dateString}{event[0].type}</div>
+                <div id={barId} style={style}></div>
               );
             })
           }
         </div>
-        <div style={{'marginLeft': '250px', 'position': 'absolute'}}>
+        <div style={{'marginLeft': '150px', 'position': 'absolute'}}>
           {this.displayEvents(this.state.selectedMin, this.state.selectedMax)}
         </div>
       </div>
