@@ -9,22 +9,6 @@ import {baseUrl} from 'config';
 import {logoutUtil} from './auth';
 import { push } from 'react-router-redux';
 
-import alerts from 'json/alerts';
-import alert from 'json/alert';
-import traffic from 'json/traffic';
-import asset from 'json/asset';
-import userAgent from 'json/user-agent';
-import newSummaryPage from 'json/new-summary-page';
-
-const layouts = {
-  alerts,
-  alert,
-  traffic,
-  asset,
-  userAgent,
-  newSummaryPage
-};
-
 export function requestPageData(id, api) {
   return {
     type: REQUEST_LAYOUT_DATA,
@@ -53,25 +37,9 @@ function getUrl(id) {
 }
 
 function getLayout(urlId) {
-  let temp = urlId.slice(1, urlId.length);
-  if (temp === 'new-summary-page') {
-    return newSummaryPage;
-  }
-  else if (temp === 'alerts') {
-    return alerts;
-  }
-  else if (temp === 'alert') {
-    return alert;
-  }
-  else if (temp === 'traffic') {
-    return traffic;
-  }
-  else if (temp === 'asset') {
-    return asset;
-  }
-  else if (temp === 'user-agent') {
-    return userAgent;
-  }
+  const temp = urlId.slice(1, urlId.length),
+    layout = require('json/' + temp).default;
+  return layout;
 }
 
 export function fetchLayoutData(id, params) {
@@ -97,17 +65,22 @@ export function fetchLayoutData(id, params) {
       }
     })
     .then(response => {
+      const status = response.status;
       // if auth token expires, logout.
-      if (response.status === 401) {
+      if (status === 401) {
         logoutUtil(dispatch);
       }
-      else if (response.status === 400) {
+      else if (status === 404 || status === 500) {
         dispatch(receivePageData(id, {json: getLayout(urlId)}));
       }
-      return response.json();
+      else {
+        return response.json();
+      }
     })
     .then(json => {
-      dispatch(receivePageData(id, {json}));
+      if (json) {
+        dispatch(receivePageData(id, {json}));
+      }
     })
     .catch((ex) => {
       dispatch(errorPageData(id, ex));

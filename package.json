@@ -160,6 +160,7 @@
     "karma-intl-shim": "^1.0.3",
     "karma-mocha": "^0.2.0",
     "karma-mocha-reporter": "^2.0.0",
+    "karma-junit-reporter": "^1.1.0",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-webpack-with-fast-source-maps": "^1.9.2",
     "less": "^2.6.1",

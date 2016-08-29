@@ -53,7 +53,8 @@ const config = {
   coverage_enabled   : !argv.watch,
   coverage_reporters : [
     { type : 'text-summary' },
-    { type : 'lcov', dir : 'coverage' }
+    { type : 'lcov', dir : 'coverage' },
+    { type : 'cobertura', dir : 'target' }
   ]
 };
 

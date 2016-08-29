@@ -459,7 +459,7 @@ export class TableCard extends React.Component {
     generateDataSource(props);
 
     return (
-      <div style={props.attributes.style}>
+      <div>
         <Table id={props.attributes.id}
           style={{width: '100%'}}
           className='threatTable'
