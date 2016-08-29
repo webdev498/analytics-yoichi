@@ -1,11 +1,13 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+
 import {
   createRenderer
 } from 'react-addons-test-utils';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import { mount, render, shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
 import {CoreLayout} from 'layouts/CoreLayout';
@@ -17,14 +19,11 @@ import MetricsCard from 'components/MetricsCard';
 import AppBar from 'material-ui/AppBar';
 
 import DropDownMenu from 'material-ui/DropDownMenu';
-import Menu from 'material-ui/Menu/Menu';
+// import Menu from 'material-ui/Menu/Menu';
 import MenuItem from 'material-ui/MenuItem/MenuItem';
 import Paper from 'material-ui/Paper';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import AppTheme from 'theme/AppTheme';
-
-const muiTheme = getMuiTheme(AppTheme);
+import { simulateEvent } from '../testUtils';
 
 injectTapEventPlugin();
 
@@ -143,6 +142,8 @@ function setupPageHeaderShallow(auth = {user: null}, showKibana = false) {
   };
 }
 
+// TODO, part of the tests use shallow render or react addons and others use
+// enzyme library. Use enzyme library everywhere.
 describe('CoreLayout', () => {
   describe('index File', () => {
     it('should render correctly', () => {
@@ -254,7 +255,7 @@ describe('CoreLayout', () => {
       // expect(component.prop('hideKibana')).to.be.true;
     });
 
-    describe('dropDown', function() {
+    describe('timeRange dropDown', function() {
       it('should have dropdown with 6 children', () => {
         let {component} = setupPageHeaderShallow(undefined, false),
           dropDown = component.childAt(1);
@@ -278,8 +279,27 @@ describe('CoreLayout', () => {
       });
     });
 
-    it('should logout', () => {
+    describe('user dropdown', function() {
+      it('should call logout', () => {
+        const auth = {user: {id: 'random', name: 'John Snow'}};
+        let {component} = setupPageHeader(auth, undefined, true);
 
+        let toggleMenu = component.ref('menuToggleDiv');
+        expect(toggleMenu.childAt(0).type()).to.equal('div');
+        expect(toggleMenu.childAt(1).type()).to.be.null;
+        expect(component.state().showMenu).to.be.false;
+
+        toggleMenu.simulate('click');
+
+        expect(toggleMenu.childAt(1).type()).to.not.be.null;
+        expect(toggleMenu.childAt(1).type()).to.equal(Paper);
+        expect(component.state().showMenu).to.be.true;
+
+        const button = toggleMenu.find('MenuItem').first().find('EnhancedButton');
+
+        simulateEvent(button, 'click');
+        expect(component.prop('logout').callCount).to.equal(1);
+      });
     });
   });
 
