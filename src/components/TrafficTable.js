@@ -289,7 +289,7 @@ class TrafficTable extends React.Component {
           className='threatTable'
           pageButtonLimit={5}
           currentPage={0}
-          itemsPerPage={10}
+          itemsPerPage={25}
           previousPageLabel={'<<'} nextPageLabel={'>>'}>
           <Thead>
             <Th style={{backgroundColor: Colors.smoke, width: '100px'}} column='type'><b>Type</b></Th>

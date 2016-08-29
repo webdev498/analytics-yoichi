@@ -22,7 +22,11 @@ const styles = {
     fontSize: '14px',
     fontWeight: '600',
     color: Colors.grape
-  }
+  },
+  minHeight: {
+    minHeight: '200px'
+  },
+  noData: {}
 };
 
 export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, orgDataset, connection, numberSuffix,
@@ -399,12 +403,32 @@ class HorizontalBarChart extends React.Component {
 
   renderChart(props) {
     if (!props.data) {
+      styles.noData = {
+        display: 'none'
+      };
       return;
     }
 
     if (props.data.rows && props.data.rows.length === 0) {
+      styles.noData = {
+        display: 'none'
+      };
       return;
     }
+
+    if (props.data && props.chartData &&
+      props.chartData.fieldMapping &&
+      props.chartData.fieldMapping[0] &&
+      props.chartData.fieldMapping[0].reportId &&
+      props.data[props.chartData.fieldMapping[0].reportId].rows &&
+      props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
+      styles.noData = {
+        display: 'none'
+      };
+      return;
+    }
+
+    styles.noData = {};
 
     const data = props.data,
       fieldMapping = props.chartData.fieldMapping,
@@ -437,15 +461,15 @@ class HorizontalBarChart extends React.Component {
   };
 
   render() {
-    const {props} = this,
-      minHeight = {minHeight: '200px'};
+    const {props} = this;
+    this.renderChart(props);
+
     return (
-      <div style={props.attributes.chartBorder}>
+      <div style={{...props.attributes.chartBorder, ...styles.noData}}>
         <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>{props.meta.title}
           <span style={{fontSize: '12px', fontWeight: 'normal'}}> {props.meta.subTitle}</span>
         </div>
-        <div id={props.attributes.id} style={{...props.attributes.style, ...minHeight}}>
-          {this.renderChart(props)}
+        <div id={props.attributes.id} style={{...props.attributes.style, ...styles.minHeight}}>
         </div>
       </div>
     );

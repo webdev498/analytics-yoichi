@@ -1,0 +1,104 @@
+div.contextMenu {
+  position:absolute;
+  top:0px;
+  left:0px;
+  background-color: $WhiteColor;
+  border: 1px solid $GrapeColor;
+  border-bottom: 0px;
+}
+
+div.contextMenu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.contextMenu ul li {
+  /*display: block;*/
+  border-bottom: 1px solid gray;
+  padding: 5px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+div.contextMenu ul li:hover {
+  background-color: $CoralColorShade1;
+}
+
+/*******************************************/
+.ui-draggable, .ui-droppable {
+  background-position: top;
+}
+
+.ui-slider-vertical {
+  width: 0.3em;
+}
+
+.ui-slider .ui-slider-handle {
+  width: 0.7em;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active,
+.ui-button.ui-state-active:hover {
+  border: 1px solid $CoralColor;
+  background: $CoralColor;
+  font-weight: normal;
+  color: #ffffff;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+    border-bottom-right-radius: 5px;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+    border-bottom-left-radius: 5px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 5px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    border-top-left-radius: 5px;
+}
+
+.ui-slider-vertical .ui-slider-handle {
+  left: -.25em;
+}
+
+.ui-slider .ui-slider-handle {
+  height: 1.6em;
+}
+
+.ui-widget-header {
+  background: #ffffff; /*#B4B7C0;*/
+}
+/*******************************************/
+
+/* Let's get this party started */
+#timelineGraph ::-webkit-scrollbar {
+    width: 12px;
+}
+
+/* Track */
+#timelineGraph ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+#timelineGraph ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(255,0,0,0.8);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+#timelineGraph ::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(255,0,0,0.4);
+}

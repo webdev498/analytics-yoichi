@@ -157,7 +157,7 @@ const alert = {
               "path": "/api/alert/traffic",
               "pathParams": {},
               "queryParams": {
-                "count": 25,
+                "count": 200,
                 "from": 0,
                 "window": "1w"
               }
