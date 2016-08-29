@@ -20,8 +20,8 @@ export default (store) => {
       <Route path='login' component={NonLoggedLayout} />
 
       { /* Routes requiring login */ }
-      { /* <Route onEnter={requireLogin} component={CoreLayout}> */}
-      <Route component={CoreLayout}>
+      <Route onEnter={requireLogin} component={CoreLayout}>
+      { /* <Route component={CoreLayout}> */ }
         <Redirect from='dashboard' to='/' />
         <IndexRoute />
         <Route path='alerts' />

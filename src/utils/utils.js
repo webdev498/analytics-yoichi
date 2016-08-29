@@ -467,3 +467,9 @@ export function formatMicroseconds(miliseconds) {
 export function kFormatter(num) {
   return num > 999 ? (num / 1000).toFixed(2) + 'k' : num;
 }
+
+export function firstCharCapitalize(string) {
+  return string.toLowerCase().replace(/\b\w/g, function(m) {
+    return m.toUpperCase();
+  });
+};

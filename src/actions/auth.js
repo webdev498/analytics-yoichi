@@ -33,39 +33,39 @@ export function fetchUserData() {
   };
 
   return function(dispatch) {
-    dispatch(userDetailsLoaded(
-      {
-        '__authDetails': {
-          'user': {
-            'id': 'mohan',
-            'name': 'Mohan Rao'
-          },
-          'application': {
-            'id': 'taf_dashboard',
-            'name': 'taf_dashboard'
-          },
-          'roles': [
-            'ROLE_USER',
-            'ROLE_ADMIN',
-            'ROLE_SUPER_USER'
-          ]
-        }
-      }
-    ));
+    // dispatch(userDetailsLoaded(
+    //   {
+    //     '__authDetails': {
+    //       'user': {
+    //         'id': 'mohan',
+    //         'name': 'Mohan Rao'
+    //       },
+    //       'application': {
+    //         'id': 'taf_dashboard',
+    //         'name': 'taf_dashboard'
+    //       },
+    //       'roles': [
+    //         'ROLE_USER',
+    //         'ROLE_ADMIN',
+    //         'ROLE_SUPER_USER'
+    //       ]
+    //     }
+    //   }
+    // ));
 
-    // dispatch(userDetailsLoading());
+    dispatch(userDetailsLoading());
 
-    // return fetch(baseUrl + '/api/user/profile', {
-    //   method: 'GET',
-    //   headers: authorizationHeader
-    // })
-    // .then(response => response.json())
-    // .then(json => {
-    //   dispatch(userDetailsLoaded(json));
-    // })
-    // .catch((ex) => {
-    //   dispatch(userDetailsError(ex));
-    // });
+    return fetch(baseUrl + '/api/user/profile', {
+      method: 'GET',
+      headers: authorizationHeader
+    })
+    .then(response => response.json())
+    .then(json => {
+      dispatch(userDetailsLoaded(json));
+    })
+    .catch((ex) => {
+      dispatch(userDetailsError(ex));
+    });
   };
 }
 
