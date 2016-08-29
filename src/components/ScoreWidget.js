@@ -27,7 +27,7 @@ class ScoreWidget extends React.Component {
 
     return (
       <div style={style} className={className}>
-        {props.scoreValue}
+        {scoreValue}
       </div>
     );
   }

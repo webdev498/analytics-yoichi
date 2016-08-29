@@ -46,9 +46,9 @@ class riskAssetsTable extends React.Component {
       <div style={styles.card}>
         <Table style={{width: '100%'}}
           className='threatTable'
-          pageButtonLimit={8}
+          pageButtonLimit={5}
           currentPage={0}
-          itemsPerPage={8}
+          itemsPerPage={5}
           previousPageLabel={'<<'}
           nextPageLabel={'>>'}>
           <Thead>
