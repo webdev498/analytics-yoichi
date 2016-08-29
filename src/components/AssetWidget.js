@@ -48,14 +48,14 @@ class AssetWidget extends React.Component {
     else if (asset.type === 'ip') {
       return (
         <div>
-          <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>desktop_mac</FontIcon>
+          <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>language</FontIcon>
         </div>
       );
     }
     else if (asset.type === 'host') {
       return (
         <div>
-          <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>data_usage</FontIcon>
+          <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>desktop_mac</FontIcon>
         </div>
       );
     }
