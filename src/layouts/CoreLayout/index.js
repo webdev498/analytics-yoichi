@@ -116,7 +116,7 @@ export class CoreLayout extends React.Component {
   componentDidMount() {
     this.props.fetchUserData();
 
-    this.props.history.listen(() => {
+    this.context.router.listen(() => {
       this.hideKibana();
     });
   }
@@ -198,6 +198,10 @@ CoreLayout.propTypes = {
 
 CoreLayout.childContextTypes = {
   clickThrough: React.PropTypes.func
+};
+
+CoreLayout.contextTypes = {
+  router: React.PropTypes.object
 };
 
 function mapStateToProps(state, ownProps) {

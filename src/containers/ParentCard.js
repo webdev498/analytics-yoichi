@@ -247,9 +247,10 @@ class ParentCard extends React.Component {
                   ref={(ref) => this.clearIcon = ref}>
                   close
                 </FontIcon>
+
                 <div style={{...styles.clearDiv}}
-                  onClick={this.clearSearchText()}
-                ></div>
+                  onClick={this.clearSearchText()} />
+
                 <input
                   id='searchText'
                   type='text'
@@ -258,6 +259,7 @@ class ParentCard extends React.Component {
                   onFocus={this.displayClearIcon(true)}
                   onBlur={this.displayClearIcon(false)}
                   ref={(ref) => this.myTextInput = ref} />
+
                 <FontIcon className='material-icons'
                   style={styles.searchIcon}
                   onClick={this.focusSearchText()}>
