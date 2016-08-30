@@ -469,6 +469,9 @@ export function kFormatter(num) {
 }
 
 export function firstCharCapitalize(string) {
+  if (string === undefined) {
+    return string;
+  }
   return string.toLowerCase().replace(/\b\w/g, function(m) {
     return m.toUpperCase();
   });
