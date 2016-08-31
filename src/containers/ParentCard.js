@@ -12,7 +12,6 @@ import {updateRoute} from 'actions/core';
 const styles = {
   wrap: {
     position: 'relative',
-    borderTop: '6px solid ' + Colors.smoke,
     borderRadius: 0,
     boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
   },
@@ -141,7 +140,7 @@ class ParentCard extends React.Component {
       api.pathParams = Object.assign({}, api.pathParams, props.params);
     }
 
-    props.fetchApiData(props.id, api);
+    props.fetchApiData(props.id, api, props.params);
   }
 
   componentDidMount() {

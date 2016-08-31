@@ -56,15 +56,24 @@ export function removeComponentWithId(id) {
   };
 }
 
-function getUrl(api, duration) {
+function getUrl(api, duration, routerParams) {
   const {queryParams: query, path, pathParams} = api;
 
   let url = path;
 
   const pathKeys = Object.keys(pathParams);
+
   pathKeys.forEach((key) => {
     let templateString = `{${key}}`;
-    url = url.replace(templateString, pathParams[key]);
+
+    const param = pathParams[key];
+    // if param is :pathParam, it implies use path param of the current url.
+    if (param.startsWith(':pathParam')) {
+      url = url.replace(templateString, routerParams[key]);
+    }
+    else {
+      url = url.replace(templateString, pathParams[key]);
+    }
   });
 
   const keys = Object.keys(query);
@@ -77,6 +86,10 @@ function getUrl(api, duration) {
       if ((key === 'window' || key === 'timeShift') && (query[key] === '')) {
         queryString += key + '=' + duration + '&';
       }
+      // if query value is :pathParam, it implies use path param of the current url.
+      else if (query[key].startsWith(':pathParam')) {
+        queryString += key + '=' + routerParams[key];
+      }
       else {
         queryString += key + '=' + query[key] + '&';
       }
@@ -88,7 +101,7 @@ function getUrl(api, duration) {
   return baseUrl + url + queryString;
 }
 
-export function fetchApiData(id, api) {
+export function fetchApiData(id, api, params) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
 
@@ -105,7 +118,7 @@ export function fetchApiData(id, api) {
       'Authorization': `${tokenType} ${accessToken}`
     }, api.headers);
 
-    return fetch(getUrl(api, currentDuration), {
+    return fetch(getUrl(api, currentDuration, params), {
       method: 'GET',
       headers: defaultHeaders
     })
