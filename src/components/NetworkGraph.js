@@ -148,6 +148,10 @@ let actionsData = {
         "user"
       ],
       "group": "explore",
+      "targetType": "machine",
+      "edgeType": "logged_in",
+      "reversed": false,
+      "label": "All machines this user has logged into",
       "parameters": [
         {
           "name": "id",
@@ -165,6 +169,31 @@ let actionsData = {
         "user"
       ],
       "group": "explore",
+      "targetType": "user",
+      "edgeType": "sudo",
+      "reversed": false,
+      "label": "All users this user has \"sudo\" into",
+      "parameters": [
+        {
+          "name": "id",
+          "userInput": false
+        },
+        {
+          "name": "type",
+          "userInput": false
+        }
+      ]
+    },
+    {
+      "name": "taf_process_by_machine",
+      "types": [
+        "machine"
+      ],
+      "group": "explore",
+      "targetType": "process",
+      "edgeType": "process_start",
+      "reversed": false,
+      "label": "All processes launched by this user",
       "parameters": [
         {
           "name": "id",
@@ -179,16 +208,28 @@ let actionsData = {
     {
       "name": "taf_process_by_user",
       "types": [
-        "user"
+        "logged_in"
       ],
       "group": "explore",
+      "targetType": "process",
+      "edgeType": "process_start",
+      "reversed": false,
+      "label": "All processes launched by this user",
       "parameters": [
+        {
+          "name": "destination.id",
+          "userInput": false
+        },
         {
           "name": "id",
           "userInput": false
         },
         {
           "name": "type",
+          "userInput": false
+        },
+        {
+          "name": "source.id",
           "userInput": false
         }
       ]
@@ -199,7 +240,16 @@ let actionsData = {
         "machine"
       ],
       "group": "explore",
+      "targetType": "machine",
+      "edgeType": "connect",
+      "reversed": false,
+      "label": "All internal outgoing connections made by this machine",
       "parameters": [
+        {
+          "name": "bandwidth",
+          "userInput": true,
+          "label": "Bandwidth"
+        },
         {
           "name": "id",
           "userInput": false
@@ -216,6 +266,10 @@ let actionsData = {
         "machine"
       ],
       "group": "explore",
+      "targetType": "machine",
+      "edgeType": "connect",
+      "reversed": true,
+      "label": "All internal incoming connections received by this machine",
       "parameters": [
         {
           "name": "id",
@@ -233,6 +287,10 @@ let actionsData = {
         "machine"
       ],
       "group": "explore",
+      "targetType": "user",
+      "edgeType": "logged_in",
+      "reversed": true,
+      "label": "All users logged onto this machine",
       "parameters": [
         {
           "name": "id",
@@ -247,9 +305,14 @@ let actionsData = {
     {
       "name": "taf_outgoing_machines_external",
       "types": [
-        "machine"
+        "machine",
+        "ip"
       ],
       "group": "explore",
+      "targetType": "domain",
+      "edgeType": "connect",
+      "reversed": false,
+      "label": "All external outgoing connections made by this machine",
       "parameters": [
         {
           "name": "id",
@@ -267,23 +330,10 @@ let actionsData = {
         "machine"
       ],
       "group": "explore",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_outgoing_machines_external",
-      "types": [
-        "ip"
-      ],
-      "group": "explore",
+      "targetType": "domain",
+      "edgeType": "connect",
+      "reversed": true,
+      "label": "All external incoming connections received by this machine",
       "parameters": [
         {
           "name": "id",
@@ -301,6 +351,10 @@ let actionsData = {
         "ip"
       ],
       "group": "explore",
+      "targetType": "domain",
+      "edgeType": "same_ip",
+      "reversed": false,
+      "label": "All domains using the same IP",
       "parameters": [
         {
           "name": "id",
@@ -315,9 +369,14 @@ let actionsData = {
     {
       "name": "taf_ips_with_same_asn",
       "types": [
-        "ip"
+        "ip",
+        "domain"
       ],
       "group": "explore",
+      "targetType": "ip",
+      "edgeType": "same_asn",
+      "reversed": false,
+      "label": "All IPs with the same ASN",
       "parameters": [
         {
           "name": "id",
@@ -335,40 +394,10 @@ let actionsData = {
         "domain"
       ],
       "group": "explore",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_ips_with_same_asn",
-      "types": [
-        "domain"
-      ],
-      "group": "explore",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_domains_with_same_ssl",
-      "types": [
-        "domain"
-      ],
-      "group": "explore",
+      "targetType": "ip",
+      "edgeType": "same_domain",
+      "reversed": false,
+      "label": "All IPs resolving to the same domain",
       "parameters": [
         {
           "name": "id",
@@ -382,7 +411,7 @@ let actionsData = {
     }
   ],
   "groups": {
-    "explore": null
+    "explore": "Explore"
   }
 };
 
@@ -413,7 +442,7 @@ function getNodesEdges(data) {
     for (let metadataType in dataNode.metadata) {
       nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' + dataNode.metadata[metadataType];
       nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' + dataNode.metadata[metadataType];
-      nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' + dataNode.metadata[metadataType];
+      nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' + dataNode.metadata[metadataType];
     }
     nodeObject.borderWidth = '0';
     nodeObject.font = {
@@ -486,7 +515,7 @@ function getNodesEdges(data) {
 function getIcon(nodeType) {
   let iconPath = 'img/asset.png';
   nodeType = nodeType.toLowerCase();
-  switch(nodeType) {
+  switch (nodeType) {
     case 'ip':
       iconPath = 'img/asset.png';
       break;
@@ -511,31 +540,47 @@ function getIcon(nodeType) {
   return iconPath;
 }
 
-// function getActionsByTypes() {
-//   let nodeTypes = [],
-//     lookup = {};
-//   for (let i = 0; i < actionsData.length; i++) {
-//     for (let j = 0; j < actionsData.types.length; j++) {
-//       let type = actionsData.types[j];
-//       if (!(type in lookup)) {
-//         lookup[type] = 1;
-//         const obj = {
-//           type: type
-//         };
+function getActionsByTypes(actionsData) {
+  let nodeTypes = [],
+    lookup = {},
+    actions = [];
+  for (let i = 0; i < actionsData.length; i++) {
+    for (let j = 0; j < actionsData[i].types.length; j++) {
+      let type = actionsData[i].types[j];
+      if (!(type in lookup)) {
+        lookup[type] = 1;
+        const obj = {
+          type: type
+        };
 
-//         nodeTypes.push(obj);
-//       }
-//     }
-//   }
-//   for (let i = 0; i < nodeTypes.length; i++) {
-//     for (let i = 0; i < actionsData.length; i++) {
-//       let actionObject = {};
-//       actionObject.node = {
-//         type: 'test'
-//       }
-//     }
-//   }
-// }
+        nodeTypes.push(obj);
+      }
+    }
+  }
+
+  for (let i = 0; i < nodeTypes.length; i++) {
+    let actionObject = {},
+      nodeType = (nodeTypes[i].type).toLowerCase();
+    actionObject.nodeType = nodeType;
+    actionObject.actions = [];
+
+    for (let j = 0; j < actionsData.length; j++) {
+      if ((actionsData[j].types).indexOf(nodeType) > -1) {
+        let tempObj = {
+          reportId: actionsData[j].name,
+          targetType: actionsData[j].targetType,
+          label: actionsData[j].label,
+          parameters: actionsData[j].parameters
+        };
+        actionObject.actions.push(tempObj);
+      }
+    }
+
+    actions.push(actionObject);
+  }
+
+  return actions;
+}
 
 class NetworkGraph extends React.Component {
   constructor(props) {
@@ -552,6 +597,7 @@ class NetworkGraph extends React.Component {
       },
       selectedNodeDetails: '',
       isLoad: true,
+      actionsData: [],
       actions: ''
     };
 
@@ -936,7 +982,7 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  getContextMenu(options, nodeID) {
+  getContextMenu(nodeID) {
     return (event) => {
       // Create the list element:
       let actions = document.getElementById('tempActions');
@@ -944,25 +990,30 @@ class NetworkGraph extends React.Component {
       let list = document.createElement('ul');
       // list.setAttribute('id', 'actionList');
 
-      for (let i = 0; i < options.length; i++) {
-        // Create the list item:
-        let item = document.createElement('li');
-        item.onclick = this.extendGraph(nodeID);
+      let actionsData = this.state.actionsData;
 
-        // Set its contents:
-        item.appendChild(document.createTextNode(options[i]));
+      for (let i = 0; i < actionsData.length; i++) {
+        for (let j = 0; j < actionsData[i].actions.length; j++) {
+          // Create the list item:
+          let item = document.createElement('li');
+          // item.onclick = this.extendGraph(nodeID);
 
-        // Add it to the list:
-        list.appendChild(item);
+          // Set its contents:
+          item.appendChild(document.createTextNode(actionsData[i].actions[j].label));
+
+          // Add it to the list:
+          list.appendChild(item);
+        }
       }
 
       // actions.appendChild(list);
       list.appendChild(actions.cloneNode(true));
 
       // Finally, return the constructed list:
-      this.setState({
+      let listHTML = {
         'actions': list.innerHTML
-      });
+      };
+      this.setState(listHTML);
 
       return list;
     };
@@ -970,12 +1021,12 @@ class NetworkGraph extends React.Component {
 
   loadContextMenu(network) {
     return (event) => {
-      contextMenuOptions = [];
       let actions = document.getElementById('tempActions');
       actions.innerHTML = '';
-      this.setState({
+      let listHTML = {
         'actions': ''
-      });
+      };
+      this.setState(listHTML);
 
       if (network.getSelection().nodes.length > 0) {
         let SelectedNodeIDs = network.getSelection(),
@@ -988,27 +1039,21 @@ class NetworkGraph extends React.Component {
             if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
               console.log('Selected Node Id:', this.state.nodes[i]);
               selectedNodeDetails += this.state.nodes[i].nodeDetails;
-              // for (let metadataType in this.state.nodes[i].metadata) {
-              //   selectedNodeDetails += '\n  <b>' + metadataType + ':</b> ' + this.state.nodes[i].metadata[metadataType];
-              //   selectedNodeDetails += '<br /><b>' + metadataType + ':</b> ' +
-              //     this.state.nodes[i].metadata[metadataType];
+              // if (this.state.nodes[i].actions !== undefined) {
+              //   contextMenuOptions = this.state.nodes[i].actions;
+              //   selectedNodeIndex = i;
+              //   break;
               // }
-              if (this.state.nodes[i].actions !== undefined) {
-                contextMenuOptions = this.state.nodes[i].actions;
-                selectedNodeIndex = i;
-                break;
-              }
             }
           }
 
-          if (contextMenuOptions.length > 0) {
-            $('#tempActions').append(this.getContextMenu(contextMenuOptions, SelectedNodeIDs.nodes[0]));
+          $('#tempActions').append(this.getContextMenu(SelectedNodeIDs.nodes[0]));
 
-            this.setState({
-              'isLoad': false,
-              'selectedNodeDetails': selectedNodeDetails
-            });
-          }
+          let statesJSON = {
+            'isLoad': false,
+            'selectedNodeDetails': selectedNodeDetails
+          };
+          this.setState(statesJSON);
         }
       }
     };
@@ -1067,9 +1112,13 @@ class NetworkGraph extends React.Component {
 
     console.log('loadNetworkGraph');
 
-    let nodesEdges = getNodesEdges(data[0]);
+    let nodesEdges = getNodesEdges(data.graphs[0]);
     this.state.nodes = nodesEdges.nodes;
     this.state.edges = nodesEdges.edges;
+
+    this.state.actionsData = getActionsByTypes(data.actions);
+
+    // console.log(JSON.stringify(data.actions));
 
     if (this.networkGraph !== null && this.networkGraph !== undefined) {
       let options = {
@@ -1106,14 +1155,18 @@ class NetworkGraph extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props} = this,
+      rawData = {
+        graphs: data.graphs,
+        actions: actionsData.actions
+      };
 
     return (
       <div style={{display: 'flex'}}>
         <div ref={(ref) => this.networkGraph = ref} style={{...style.networkGraph, ...this.state.style.networkGraph}}
           id='networkGraph'>
           {/*{this.loadNetworkGraph(props.data, this.state.isLoad)}*/}
-          {this.loadNetworkGraph(data.graphs, this.state.isLoad)}
+          {this.loadNetworkGraph(rawData, this.state.isLoad)}
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...style.contextualMenu, ...this.state.style.contextualMenu}}
