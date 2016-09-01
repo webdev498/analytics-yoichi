@@ -1,10 +1,10 @@
 div.contextMenu {
-  position:absolute;
+  /*position:absolute;
   top:0px;
-  left:0px;
-  background-color: $WhiteColor;
-  border: 1px solid $GrapeColor;
-  border-bottom: 0px;
+  left:0px;*/
+  /*background-color: $WhiteColor;*/
+  /*border: 1px solid $GrapeColor;*/
+  /*border-bottom: 0px;*/
 }
 
 div.contextMenu ul {
@@ -15,14 +15,15 @@ div.contextMenu ul {
 
 div.contextMenu ul li {
   /*display: block;*/
-  border-bottom: 1px solid gray;
-  padding: 5px;
-  font-size: 12px;
+  /*border-bottom: 1px solid gray;*/
+  padding: 14px;
+  font-size: 14px;
   cursor: pointer;
+  color: $WhiteColor;
 }
 
 div.contextMenu ul li:hover {
-  background-color: $CoralColorShade1;
+  /*background-color: $CoralColorShade1;*/
 }
 
 /*******************************************/
