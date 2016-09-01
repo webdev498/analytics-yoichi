@@ -61,7 +61,6 @@ export class CoreLayout extends React.Component {
     logout: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired
   }
 

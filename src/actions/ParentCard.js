@@ -87,7 +87,7 @@ function getUrl(api, duration, routerParams) {
         queryString += key + '=' + duration + '&';
       }
       // if query value is :pathParam, it implies use path param of the current url.
-      else if (query[key].startsWith(':pathParam')) {
+      else if (('' + query[key]).startsWith(':pathParam')) {
         queryString += key + '=' + routerParams[key];
       }
       else {
