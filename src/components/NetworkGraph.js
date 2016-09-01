@@ -1308,8 +1308,7 @@ class NetworkGraph extends React.Component {
   render() {
     const {props} = this,
       rawData = {
-        graphs: data.graphs,
-        actions: actionsData.actions
+        graphs: data.graphs
       };
 
     console.log('render');
