@@ -142,7 +142,7 @@ let data = {
   ]
 };
 
-let actionsData = {
+/*let actionsData = {
   "actions": [
     {
       "name": "taf_machines_by_user",
@@ -415,7 +415,7 @@ let actionsData = {
   "groups": {
     "explore": "Explore"
   }
-};
+};*/
 
 let paddingSpace1 = '\n           ',
   paddingSpace2 = '           ',
@@ -1264,7 +1264,9 @@ class NetworkGraph extends React.Component {
       let nodesEdges = getNodesEdges(data.graphs[0]);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
-      this.state.actionsData = getActionsByTypes(data.actions);
+      const actionsData = this.context.store.getState().actions;
+      // this.state.actionsData = getActionsByTypes(this.context.store.getState().actions);
+      this.state.actionsData = getActionsByTypes(actionsData.list.actions);
     }
 
     // console.log(JSON.stringify(data.actions));
@@ -1337,5 +1339,9 @@ class NetworkGraph extends React.Component {
     );
   }
 }
+
+NetworkGraph.contextTypes = {
+  store: React.PropTypes.object
+};
 
 export default NetworkGraph;
