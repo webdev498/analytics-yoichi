@@ -35,388 +35,6 @@ const style = {
   }
 };
 
-let data = {
-  "graphs": [
-    {
-      "type": "alert",
-      "label": "SSH Brute Force",
-      "metadata": {
-        "key": "value"
-      },
-      "nodes": [
-        {
-          "id": "10.0.0.1",
-          "type": "IP",
-          "metadata": {
-            "OS": "Windows 8.1",
-            "Name": "John Smith"
-          },
-          "actions" : [ "outgoing connections", "incoming connections", "users logged in"]
-        },
-        {
-          "id": "10.0.0.2",
-          "type": "IP",
-          "metadata": {
-            "OS": "Ubuntu 14",
-            "Name": "dbserver01"
-          }
-        },
-        {
-          "id": "119.163.120.20",
-          "type": "IP",
-          "metadata": {
-            "Country": "China",
-            "Owner": "China169Backbone"
-          }
-        },
-        {
-          "id": "xyzwebsite.com",
-          "type": "domain",
-          "metadata": {
-            "Country": "China"
-          }
-        },
-        {
-          "id": "abcwebsite.com",
-          "type": "domain"
-        },
-        {
-          "id": "ttaylor",
-          "type": "user",
-          "label": "Tom Taylor",
-          "metadata": {
-            "Title": "VP of finance"
-          }
-        },
-        {
-          "id": "app3.exe",
-          "type": "app"
-        }
-      ],
-      "edges": [
-        {
-          "source": "10.0.0.1",
-          "relation": "ssh",
-          "target": "10.0.0.2",
-          "directed": true,
-          "label": "lateral movement"
-        },
-        {
-          "source": "119.163.120.202",
-          "relation": "ssh",
-          "target": "10.0.0.1",
-          "directed": true,
-          "label": "breach",
-          "metadata": {
-            "Date": "2016-08-15T12:01:02.123"
-          }
-        },
-        {
-          "source": "10.0.0.1",
-          "relation": "http",
-          "target": "xyzwebsite.com",
-          "directed": true,
-          "label": "data upload"
-        },
-        {
-          "source": "10.0.0.1",
-          "relation": "http",
-          "target": "abcwebsite.com",
-          "directed": true,
-          "label": "data upload"
-        },
-        {
-          "source": "ttaylor",
-          "target": "10.0.0.1",
-          "directed": true,
-          "label": "login"
-        },
-        {
-          "source": "ttaylor",
-          "target": "app3",
-          "directed": true,
-          "label": "execute"
-        }
-      ]
-    }
-  ]
-};
-
-/*let actionsData = {
-  "actions": [
-    {
-      "name": "taf_machines_by_user",
-      "types": [
-        "user"
-      ],
-      "group": "explore",
-      "targetType": "machine",
-      "edgeType": "logged_in",
-      "reversed": false,
-      "label": "All machines this user has logged into",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_sudo_by_user",
-      "types": [
-        "user"
-      ],
-      "group": "explore",
-      "targetType": "user",
-      "edgeType": "sudo",
-      "reversed": false,
-      "label": "All users this user has \"sudo\" into",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_process_by_machine",
-      "types": [
-        "machine"
-      ],
-      "group": "explore",
-      "targetType": "process",
-      "edgeType": "process_start",
-      "reversed": false,
-      "label": "All processes launched by this user",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_process_by_user",
-      "types": [
-        "logged_in"
-      ],
-      "group": "explore",
-      "targetType": "process",
-      "edgeType": "process_start",
-      "reversed": false,
-      "label": "All processes launched by this user",
-      "parameters": [
-        {
-          "name": "destination.id",
-          "userInput": false
-        },
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        },
-        {
-          "name": "source.id",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_outgoing_machines_internal",
-      "types": [
-        "machine"
-      ],
-      "group": "explore",
-      "targetType": "machine",
-      "edgeType": "connect",
-      "reversed": false,
-      "label": "All internal outgoing connections made by this machine",
-      "parameters": [
-        {
-          "name": "bandwidth",
-          "userInput": true,
-          "label": "Bandwidth"
-        },
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_incoming_machines_internal",
-      "types": [
-        "machine"
-      ],
-      "group": "explore",
-      "targetType": "machine",
-      "edgeType": "connect",
-      "reversed": true,
-      "label": "All internal incoming connections received by this machine",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_users_by_machine",
-      "types": [
-        "machine"
-      ],
-      "group": "explore",
-      "targetType": "user",
-      "edgeType": "logged_in",
-      "reversed": true,
-      "label": "All users logged onto this machine",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_outgoing_machines_external",
-      "types": [
-        "machine",
-        "ip"
-      ],
-      "group": "explore",
-      "targetType": "domain",
-      "edgeType": "connect",
-      "reversed": false,
-      "label": "All external outgoing connections made by this machine",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_incoming_machines_external",
-      "types": [
-        "machine"
-      ],
-      "group": "explore",
-      "targetType": "domain",
-      "edgeType": "connect",
-      "reversed": true,
-      "label": "All external incoming connections received by this machine",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_domains_with_same_ip",
-      "types": [
-        "ip"
-      ],
-      "group": "explore",
-      "targetType": "domain",
-      "edgeType": "same_ip",
-      "reversed": false,
-      "label": "All domains using the same IP",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_ips_with_same_asn",
-      "types": [
-        "ip",
-        "domain"
-      ],
-      "group": "explore",
-      "targetType": "ip",
-      "edgeType": "same_asn",
-      "reversed": false,
-      "label": "All IPs with the same ASN",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    },
-    {
-      "name": "taf_ips_with_same_domain",
-      "types": [
-        "domain"
-      ],
-      "group": "explore",
-      "targetType": "ip",
-      "edgeType": "same_domain",
-      "reversed": false,
-      "label": "All IPs resolving to the same domain",
-      "parameters": [
-        {
-          "name": "id",
-          "userInput": false
-        },
-        {
-          "name": "type",
-          "userInput": false
-        }
-      ]
-    }
-  ],
-  "groups": {
-    "explore": "Explore"
-  }
-};*/
-
 let paddingSpace1 = '\n           ',
   paddingSpace2 = '           ',
   x = 0,
@@ -585,7 +203,7 @@ function getActionsByTypes(actionsData) {
   return actions;
 }
 
-function fetchExtendedNodes(reportId, duration) {
+function fetchExtendedNodes(reportId, duration, parameters) {
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
     apiUrl = baseUrl + '/api/analytics/reporting/execute/' + reportId + '?window=' + duration,
@@ -596,57 +214,15 @@ function fetchExtendedNodes(reportId, duration) {
       'Authorization': `${tokenType} ${accessToken}`
     }, customHeaders);
 
-  /*return fetch(apiUrl, {
-    method: 'GET',
-    headers: defaultHeaders
-  })
-  .then(function(response) {
-    return response.json();
-  })
-  .catch((ex) => {
-    return null;
-  });*/
-
-  return fetch(apiUrl, { // let fetchApiData =
+  return fetch(apiUrl, {
     method: 'GET',
     headers: defaultHeaders
   })
   .then(response => response.json()
-    // .then(function(json) {
-    //   return json.rows;
-    // })
   )
-
-  // .then(function(response) {
-  //   response.json().then(
-  //     function(json) {
-  //       return json;
-  //     }
-  //   );
-  // })
-
-  // .then(function(response) {
-  //   return response.json().then(function(json) {
-  //     Promise.resolve(json).then(function(value) {
-  //       return value;
-  //     }, function(value) {
-  //       // not called
-  //     });
-  //     // json => json.rows
-  //     // {
-  //     //   return response.ok ? json.rows : Promise.reject(json);
-  //     // }
-  //   });
-  // })
   .catch(error => {
     return Promise.reject(Error(error.message));
   });
-
-  // fetchApiData.then(
-  //   function(json) {
-  //     return json.rows;
-  //   }
-  // );
 }
 
 class NetworkGraph extends React.Component {
@@ -668,326 +244,45 @@ class NetworkGraph extends React.Component {
       nodesListStatus: 'default',
       actionsData: [],
       actions: '',
-      duration: duration
+      duration: duration,
+      selectedNodesForExtendingGraph: []
     };
-
-    /*this.state.nodes = [
-      {
-        id: 1,
-        level: 1,
-        label: '\n  <b>IP:</b> 10.0.0.1\n  <b>OS:</b> WS-FIN-277111\n  <b>Name:</b> John Smith\'s PC  ',
-        title: '<b>IP:</b> 10.0.0.1<br /><b>OS:</b> WS-FIN-277111<br /><b>Name:</b> John Smith\'s PC  ',
-        borderWidth: '0',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        shape: 'image',
-        color: '#F2F2F4',
-        image: 'img/asset.png',
-        orgImage: 'img/asset.png',
-        actions: ['Outgoing Connections', 'Incoming Connections', 'Outgoing Connections', 'Users Logged in'],
-        // fixed: true,
-        x: 0,
-        y: 0
-      },
-      {
-        id: 2,
-        level: 2,
-        label: paddingSpace2 + '<b>IP:</b> 10.0.0.2' + paddingSpace1 + '<b>Type:</b> ssh' + paddingSpace1 +
-          '<b>OS:</b> WS-FIN-277444' + paddingSpace1 + '<b>Name:</b> Roger Lok’s PC',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        borderWidth: '0',
-        shape: 'image',
-        color: '#F2F2F4',
-        image: 'img/asset.png',
-        orgImage: 'img/asset.png',
-        actions: ['Outgoing Connections1', 'Incoming Connections2', 'Outgoing Connections3', 'Users Logged in4'],
-        x: 350,
-        y: -100
-      },
-      {
-        id: 3,
-        level: 3,
-        label: paddingSpace2 + '<b>IP:</b> 119.163.120.202' + paddingSpace1 + '<b>Type:</b> ssh' + paddingSpace1 +
-          '<b>Country:</b> China' + paddingSpace1 + '<b>OS:</b> WS-FIN-277333' + paddingSpace1 +
-          '<b>Owner:</b> China169Backbone',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        borderWidth: '0',
-        shape: 'image',
-        color: '#F2F2F4',
-        image: 'img/asset.png',
-        orgImage: 'img/asset.png',
-        x: 350,
-        y: 20
-      },
-      {
-        id: 4,
-        level: 4,
-        label: paddingSpace2 + 'xyzwebsite.com' + paddingSpace1 + '<b>Country:</b> China',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        borderWidth: '0',
-        shape: 'image',
-        color: '#F2F2F4',
-        image: 'img/http.png',
-        orgImage: 'img/http.png',
-        width: '30',
-        height: '30',
-        x: 350,
-        y: 175
-      },
-      {
-        id: 5,
-        level: 5,
-        label: paddingSpace2 + 'abcwebsite.com',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        borderWidth: '0',
-        shape: 'image',
-        color: '#F2F2F4',
-        image: 'img/http.png',
-        orgImage: 'img/http.png',
-        width: '30',
-        height: '30',
-        x: 350,
-        y: 280
-      },
-      {
-        id: 6,
-        level: 6,
-        label: paddingSpace2 + '<b>User 2:</b> Tom Taylor',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        borderWidth: '0',
-        shape: 'image',
-        color: '#F2F2F4',
-        image: 'img/user.png',
-        orgImage: 'img/user.png',
-        x: 80,
-        y: 180
-      },
-      {
-        id: 7,
-        level: 7,
-        label: paddingSpace2 + '<b>User 1:</b> John Smith',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        borderWidth: '0',
-        shape: 'image',
-        color: '#F2F2F4',
-        image: 'img/user.png',
-        orgImage: 'img/user.png',
-        x: -40,
-        y: 180
-      },
-      {
-        id: 8,
-        level: 8,
-        label: 'App3.exe',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        borderWidth: '0',
-        shape: 'image',
-        color: '#F2F2F4',
-        image: 'img/app_orange.png',
-        orgImage: 'img/app_orange.png',
-        x: 80,
-        y: 290
-      },
-      {
-        id: 9,
-        level: 9,
-        label: 'App2.exe',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        borderWidth: '0',
-        shape: 'image',
-        color: '#F2F2F4',
-        image: 'img/app_yellow.png',
-        orgImage: 'img/app_yellow.png',
-        x: 10,
-        y: 290
-      },
-      {
-        id: 10,
-        level: 10,
-        label: 'App2.exe',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        borderWidth: '0',
-        shape: 'image',
-        color: '#F2F2F4',
-        image: 'img/app_green.png',
-        orgImage: 'img/app_green.png',
-        x: -60,
-        y: 290
-      }
-    ];
-    this.state.edges = [
-      {
-        from: 1,
-        to: 2,
-        arrows: {middle: {scaleFactor: 0.5}, arrowStrikethrough: false},
-        label: 'Lateral Movement\n\n\n',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        length: 300,
-        smooth: {
-          type: 'discrete'
-        },
-        'color': Colors.pebble
-      },
-      {
-        from: 3,
-        to: 1,
-        arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
-        label: 'Breach\n\n\n',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        length: 300,
-        smooth: {
-          type: 'discrete'
-        },
-        'color': Colors.pebble
-      },
-      {
-        from: 1,
-        to: 4,
-        arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
-        label: 'Data upload\n\n\n',
-        label: '',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        length: 300,
-        smooth: {
-          type: 'discrete'
-        },
-        'color': Colors.pebble
-      },
-      {
-        from: 1,
-        to: 5,
-        arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
-        label: 'Data upload\n\n\n',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        length: 300,
-        smooth: {
-          type: 'discrete'
-        },
-        'color': Colors.pebble
-      },
-      {
-        from: 6,
-        to: 1,
-        arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
-        label: 'Login\n\n\n',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        length: 300,
-        smooth: {
-          type: 'discrete'
-        },
-        'color': Colors.pebble
-      },
-      {
-        from: 8,
-        to: 6,
-        arrows: {middle: {scaleFactor: 0.5}, arrowStrikethrough: false},
-        label: 'Execute\n\n\n',
-        'font': {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        },
-        length: 300,
-        smooth: {
-          type: 'discrete'
-        },
-        'color': Colors.pebble
-      }
-    ];*/
 
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
     this.getContextMenu = this.getContextMenu.bind(this);
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
+    this.isNodeAlreadyExists = this.isNodeAlreadyExists.bind(this);
     // this.selectNode = this.selectNode.bind(this);
     // this.deselectNode = this.deselectNode.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.setState({map: map});
-  //   window.map = this;
-  // }
+  isNodeAlreadyExists(nodeID) {
+    return (event) => {
+      let nodes = this.state.nodes;
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].nodeID === nodeID) {
+          return true;
+        }
+      }
+      return false;
+    };
+  }
 
-  extendGraph(nodeID, nodeType, reportId) {
+  extendGraph(nodeID, nodeType, reportId, parameters) {
     const that = this;
     // console.log(JSON.stringify(nodeAt));
     return (event) => {
-      const extendedNodes = fetchExtendedNodes(reportId, this.state.duration);
+      let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
+      for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+        if (selectedNodesForExtendingGraph[i].id === nodeID) {
+          return;
+        }
+      }
+      console.log('selectedNodesForExtendingGraph', selectedNodesForExtendingGraph);
+      // return;
+
+      const extendedNodes = fetchExtendedNodes(reportId, this.state.duration, parameters);
       let rows = extendedNodes;
       if (!extendedNodes) {
         return;
@@ -995,111 +290,74 @@ class NetworkGraph extends React.Component {
       extendedNodes.then(
         function(json) {
           rows = json.rows;
+          let nodes = that.state.nodes,
+            edges = that.state.edges;
+
           for (let i = 0; i < rows.length; i++) {
-            let nodes = that.state.nodes,
-              edges = that.state.edges,
-              nodeObject = {
-                id: rows[i][0],
-                type: nodeType,
-                label: '\n  <b>' + nodeType + ':</b> ' + rows[i][0],
-                title: '<b>' + nodeType + ':</b> ' + rows[i][0],
-                nodeDetails: nodeType + ': ' + rows[i][0],
-                borderWidth: '0',
-                'font': {
-                  'face': 'Open Sans',
-                  'color': Colors.pebble,
-                  'size': '11',
-                  'align': 'left'
+            // if (that.isNodeAlreadyExists(rows[i][0]) === false) {
+              let nodeObject = {
+                  id: rows[i][0],
+                  type: nodeType,
+                  label: '\n  <b>' + nodeType + ':</b> ' + rows[i][0],
+                  title: '<b>' + nodeType + ':</b> ' + rows[i][0],
+                  nodeDetails: nodeType + ': ' + rows[i][0],
+                  borderWidth: '0',
+                  'font': {
+                    'face': 'Open Sans',
+                    'color': Colors.pebble,
+                    'size': '11',
+                    'align': 'left'
+                  },
+                  shape: 'image',
+                  color: '#F2F2F4',
+                  image: getIcon(nodeType),
+                  orgImage: getIcon(nodeType),
+                  x: 550,
+                  y: -100
                 },
-                shape: 'image',
-                color: '#F2F2F4',
-                image: getIcon(nodeType),
-                orgImage: getIcon(nodeType),
-                x: 550,
-                y: -100
-              },
-              edgeObject = {
-                from: nodeID,
-                to: rows[i][0],
-                arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
-                label: '',
-                'font': {
-                  'face': 'Open Sans',
-                  'color': Colors.pebble,
-                  'size': '11',
-                  'align': 'left'
-                },
-                length: 300,
-                smooth: {
-                  type: 'discrete'
-                },
-                'color': Colors.pebble
-              };
+                edgeObject = {
+                  from: nodeID,
+                  to: rows[i][0],
+                  arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
+                  label: '',
+                  'font': {
+                    'face': 'Open Sans',
+                    'color': Colors.pebble,
+                    'size': '11',
+                    'align': 'left'
+                  },
+                  length: 300,
+                  smooth: {
+                    type: 'discrete'
+                  },
+                  'color': Colors.pebble
+                };
 
-            nodes.push(nodeObject);
-            edges.push(edgeObject);
+              nodes.push(nodeObject);
+              edges.push(edgeObject);
+            }
+          // }
 
-            that.setState({
-              'loadAgain': true,
-              'nodesListStatus': 'extended',
-              'nodes': nodes,
-              'edges': edges
-            });
-          }
+          selectedNodesForExtendingGraph.push({
+            'nodeID': nodeID,
+            'reportId': reportId
+          });
+
+          that.setState({
+            'loadAgain': true,
+            'nodesListStatus': 'extended',
+            'nodes': nodes,
+            'edges': edges,
+            'networkGraph': {
+              width: '100%'
+            },
+            'contextualMenu': {
+              display: 'done'
+            },
+            selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
+          });
         }
       );
-
-      // console.log(extendedNodes.then(
-      //   function(json) {
-      //     return json.rows;
-      //   }
-      //   ));
-
-      // console.log(extendedNodes['[[PromiseValue]]']);
-      /*this.state.nodes.push(
-        {
-          id: nodeID,
-          level: nodeID,
-          label: '\n  <b>IP:</b> 192.168.2.21\n  <b>OS:</b> Win 2008\n  <b>Name:</b> Peter Patter\'s PC  ',
-          title: '<b>IP:</b> 192.168.2.21<br /><b>OS:</b> Win 2008<br /><b>Name:</b> Peter Patter\'s PC  ',
-          borderWidth: '0',
-          'font': {
-            'face': 'Open Sans',
-            'color': Colors.pebble,
-            'size': '11',
-            'align': 'left'
-          },
-          shape: 'image',
-          color: '#F2F2F4',
-          image: 'img/asset.png',
-          orgImage: 'img/asset.png',
-          actions: ['Outgoing Connections', 'Incoming Connections', 'Outgoing Connections', 'Users Logged in'],
-          // fixed: true,
-          x: 550,
-          y: -100
-        }
-      );
-      this.state.edges.push(
-        {
-          from: 2,
-          to: nodeID,
-          arrows: {middle: {scaleFactor: 0.5}, arrowStrikethrough: false},
-          label: 'Lateral Movement\n\n\n',
-          'font': {
-            'face': 'Open Sans',
-            'color': Colors.pebble,
-            'size': '11',
-            'align': 'left'
-          },
-          length: 300,
-          smooth: {
-            type: 'discrete'
-          },
-          'color': Colors.pebble
-        }
-      );*/
-      // this.loadNetworkGraph();
-      // contextMenu = undefined;
     };
   }
 
@@ -1122,8 +380,9 @@ class NetworkGraph extends React.Component {
             // actionsHtml += "<li onclick=\"this.extendGraph('" + actionsData[i].actions[j].reportId + "')\">" +
             //   actionsData[i].actions[j].label + '</li>';
             let item = document.createElement('li');
+            let parameters = actionsData[i].actions[j].parameters;
             // list.setAttribute('onclick', this.extendGraph(actionsData[i].actions[j].reportId));
-            item.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId);
+            item.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parameters);
             item.appendChild(document.createTextNode(actionsData[i].actions[j].label));
             list.appendChild(item);
             // (function(value) {
@@ -1258,10 +517,9 @@ class NetworkGraph extends React.Component {
       return;
     }
 
-    console.log('loadNetworkGraph');
-
+    console.log('loadNetworkGraph', data);
     if (this.state.nodesListStatus === 'default') {
-      let nodesEdges = getNodesEdges(data.graphs[0]);
+      let nodesEdges = getNodesEdges(data[0]);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       const actionsData = this.context.store.getState().actions;
@@ -1306,10 +564,7 @@ class NetworkGraph extends React.Component {
   }
 
   render() {
-    const {props} = this,
-      rawData = {
-        graphs: data.graphs
-      };
+    const {props} = this;
 
     console.log('render');
 
@@ -1317,8 +572,7 @@ class NetworkGraph extends React.Component {
       <div style={{display: 'flex'}}>
         <div ref={(ref) => this.networkGraph = ref} style={{...style.networkGraph, ...this.state.style.networkGraph}}
           id='networkGraph'>
-          {/*{this.loadNetworkGraph(props.data, this.state.loadAgain)}*/}
-          {this.loadNetworkGraph(rawData, this.state.loadAgain)}
+          {this.loadNetworkGraph(props.data, this.state.loadAgain)}
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...style.contextualMenu, ...this.state.style.contextualMenu}}
