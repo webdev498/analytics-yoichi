@@ -665,6 +665,7 @@ class NetworkGraph extends React.Component {
       },
       selectedNodeDetails: '',
       loadAgain: true,
+      nodesListStatus: 'default',
       actionsData: [],
       actions: '',
       duration: duration
@@ -982,25 +983,22 @@ class NetworkGraph extends React.Component {
   //   window.map = this;
   // }
 
-  extendGraph(nodeType, reportId) {
+  extendGraph(nodeID, nodeType, reportId) {
     const that = this;
+    // console.log(JSON.stringify(nodeAt));
     return (event) => {
-      console.log('test');
       const extendedNodes = fetchExtendedNodes(reportId, this.state.duration);
       let rows = extendedNodes;
       if (!extendedNodes) {
         return;
       }
-      console.log('extendedNodes: ', extendedNodes);
       extendedNodes.then(
         function(json) {
-          console.log('json.rows: ', json.rows);
           rows = json.rows;
           for (let i = 0; i < rows.length; i++) {
-            console.log('name: ', rows[i][0]);
-            that.setState({
-              'loadAgain': true,
-              'nodes': Object.assign(that.state.nodes, {
+            let nodes = that.state.nodes,
+              edges = that.state.edges,
+              nodeObject = {
                 id: rows[i][0],
                 type: nodeType,
                 label: '\n  <b>' + nodeType + ':</b> ' + rows[i][0],
@@ -1019,7 +1017,33 @@ class NetworkGraph extends React.Component {
                 orgImage: getIcon(nodeType),
                 x: 550,
                 y: -100
-              })
+              },
+              edgeObject = {
+                from: nodeID,
+                to: rows[i][0],
+                arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
+                label: '',
+                'font': {
+                  'face': 'Open Sans',
+                  'color': Colors.pebble,
+                  'size': '11',
+                  'align': 'left'
+                },
+                length: 300,
+                smooth: {
+                  type: 'discrete'
+                },
+                'color': Colors.pebble
+              };
+
+            nodes.push(nodeObject);
+            edges.push(edgeObject);
+
+            that.setState({
+              'loadAgain': true,
+              'nodesListStatus': 'extended',
+              'nodes': nodes,
+              'edges': edges
             });
           }
         }
@@ -1079,7 +1103,7 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  getContextMenu(nodeID, nodeType) {
+  getContextMenu(nodeID, nodeType, nodeAt) {
     return (event) => {
       // Create the list element:
       let actions = document.getElementById('tempActions');
@@ -1099,7 +1123,7 @@ class NetworkGraph extends React.Component {
             //   actionsData[i].actions[j].label + '</li>';
             let item = document.createElement('li');
             // list.setAttribute('onclick', this.extendGraph(actionsData[i].actions[j].reportId));
-            item.onclick = this.extendGraph(nodeType, actionsData[i].actions[j].reportId);
+            item.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId);
             item.appendChild(document.createTextNode(actionsData[i].actions[j].label));
             list.appendChild(item);
             // (function(value) {
@@ -1142,7 +1166,7 @@ class NetworkGraph extends React.Component {
           selectedNodeIndex = 0,
           selectedNodeDetails = '',
           nodeType = '';
-        // let nodeAt = network.getBoundingBox(SelectedNodeIDs.nodes[0]);
+        let nodeAt = network.getBoundingBox(SelectedNodeIDs.nodes[0]);
 
         if (SelectedNodeIDs.nodes[0] !== undefined) {
           for (let i = 0; i < this.state.nodes.length; i++) {
@@ -1162,7 +1186,7 @@ class NetworkGraph extends React.Component {
 
           // $('#tempActions').append(this.getContextMenu(SelectedNodeIDs.nodes[0], nodeType));
           $('#actions').html('');
-          $('#actions').append(this.getContextMenu(SelectedNodeIDs.nodes[0], nodeType));
+          $('#actions').append(this.getContextMenu(SelectedNodeIDs.nodes[0], nodeType, nodeAt));
 
           let statesJSON = {
             'loadAgain': false,
@@ -1236,11 +1260,12 @@ class NetworkGraph extends React.Component {
 
     console.log('loadNetworkGraph');
 
-    let nodesEdges = getNodesEdges(data.graphs[0]);
-    this.state.nodes = nodesEdges.nodes;
-    this.state.edges = nodesEdges.edges;
-
-    this.state.actionsData = getActionsByTypes(data.actions);
+    if (this.state.nodesListStatus === 'default') {
+      let nodesEdges = getNodesEdges(data.graphs[0]);
+      this.state.nodes = nodesEdges.nodes;
+      this.state.edges = nodesEdges.edges;
+      this.state.actionsData = getActionsByTypes(data.actions);
+    }
 
     // console.log(JSON.stringify(data.actions));
 
