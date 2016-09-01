@@ -36,7 +36,7 @@ const styles = {
   }
 };
 
-class AlertDetails extends React.Component {
+class AlertDetailsNew extends React.Component {
   static propTypes = {
     data: PropTypes.object
   }
@@ -78,4 +78,8 @@ class AlertDetails extends React.Component {
   }
 }
 
-export default AlertDetails;
+AlertDetailsNew.contextTypes = {
+  store: React.PropTypes.object
+};
+
+export default AlertDetailsNew;

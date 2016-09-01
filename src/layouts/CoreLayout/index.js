@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import Header from './PageHeader';
 import Sidebar from './Sidebar';
@@ -7,6 +6,7 @@ import PageContent from './PageContent';
 import Kibana from 'components/Kibana';
 
 import { fetchUserData, logout } from 'actions/auth';
+import { fetchActionsList } from 'actions/actionsList';
 
 import Loader from 'components/Loader';
 // import FontIcon from 'material-ui/FontIcon';
@@ -56,10 +56,12 @@ const styles = {
 
 export class CoreLayout extends React.Component {
   static propTypes = {
-    fetchUserData: PropTypes.object.isRequired,
-    logout: PropTypes.object.isRequired,
-    history: PropTypes.func.isRequired,
+    fetchUserData: PropTypes.func.isRequired,
+    fetchActionsList: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired
   }
 
@@ -115,6 +117,7 @@ export class CoreLayout extends React.Component {
 
   componentDidMount() {
     this.props.fetchUserData();
+    this.props.fetchActionsList();
 
     this.context.router.listen(() => {
       this.hideKibana();
@@ -156,19 +159,11 @@ export class CoreLayout extends React.Component {
           showKibana={showKibana}
           hideKibana={this.hideKibana} />
 
-        <ReactCSSTransitionGroup transitionName='example' transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-          <nav style={{...styles.nav, ...sidebarWidth}} onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
-            <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
-              location={props.location}
-              hideKibana={this.hideKibana} />
-            {/*<div style={styles.handle}
-              onClick={this.toggleSidebar}>
-              <FontIcon className='material-icons' style={styles.icon}>
-                {icon}
-              </FontIcon>
-            </div>*/}
-          </nav>
-        </ReactCSSTransitionGroup>
+        <nav style={{...styles.nav, ...sidebarWidth}} onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
+          <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
+            location={props.location}
+            hideKibana={this.hideKibana} />
+        </nav>
 
         <div style={styles.base}>
           <div style={contentStyle}>
@@ -192,10 +187,6 @@ export class CoreLayout extends React.Component {
   }
 }
 
-CoreLayout.propTypes = {
-  children: PropTypes.element
-};
-
 CoreLayout.childContextTypes = {
   clickThrough: React.PropTypes.func
 };
@@ -212,5 +203,5 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  fetchUserData, logout
+  fetchUserData, logout, fetchActionsList
 })(CoreLayout);
