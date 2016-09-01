@@ -56,9 +56,9 @@ const links = [
     text: 'traffic'
   },
   {
-    to: '/asset',
+    to: '/assets',
     icon: 'desktop_mac',
-    text: 'asset'
+    text: 'assets'
   },
   {
     to: '/user-agent',

@@ -16,26 +16,39 @@ const styles = {
   }
 };
 
-function getTableRows(rows) {
-  return rows.map((row, index) => {
-    const details = row[0];
-
-    return (
-      <Tr key={rows.id} style={{backgroundColor: 'transparent'}}>
-        <Td column='asset' style={{padding: '15px 0', width: '100%'}}>
-          <AssetWidget data={details} />
-        </Td>
-        <Td column='score' style={{padding: '15px 0', width: '60px', textAlign: 'right'}}>
-          <ScoreWidget scoreValue={details.risk.score} inverse />
-        </Td>
-      </Tr>
-    );
-  });
-}
-
 class riskAssetsTable extends React.Component {
   static propTypes = {
-    data: PropTypes.object
+    data: PropTypes.object,
+    updateRoute: PropTypes.func.isRequired
+  }
+
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(row) {
+    return () => {
+      this.props.updateRoute(`/asset/${row[0].type}/${row[0].id}`);
+    };
+  }
+
+  getTableRows(rows) {
+    return rows.map((row, index) => {
+      const details = row[0];
+
+      return (
+        <Tr key={rows.id} style={{backgroundColor: 'transparent', cursor: 'pointer'}}
+          onClick={this.handleClick(row)} >
+          <Td column='asset' style={{padding: '15px 0', width: '100%'}}>
+            <AssetWidget data={details} />
+          </Td>
+          <Td column='score' style={{padding: '15px 0', width: '60px', textAlign: 'right'}}>
+            <ScoreWidget scoreValue={details.risk.score} inverse />
+          </Td>
+        </Tr>
+      );
+    });
   }
 
   render() {
@@ -55,7 +68,7 @@ class riskAssetsTable extends React.Component {
             <Th style={{width: '100px', padding: 0}} column='asset'>ASSET</Th>
             <Th style={{width: '50px', padding: 0}} column='score'>SCORE</Th>
           </Thead>
-          {getTableRows(props.data.rows)}
+          {this.getTableRows(props.data.rows)}
         </Table>
       </div>
     );
