@@ -90,21 +90,6 @@ class LoginView extends React.Component {
     this.blurInputText2 = this.blurInputText2.bind(this);
   }
 
-  getInitialState() {
-    return {
-      floatingLabel: {
-        color: Colors.navigation,
-        fontWeight: '300'
-      },
-      floatingLabelFocus1: {
-        color: Colors.navigation
-      },
-      floatingLabelFocus2: {
-        color: Colors.navigation
-      }
-    };
-  }
-
   componentDidMount() {
     const accessToken = Cookies.get('access_token');
     const tokenType = Cookies.get('token_type');
