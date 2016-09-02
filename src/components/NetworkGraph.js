@@ -26,10 +26,10 @@ const style = {
   }
 };
 
-let x = 0,
-  y = 0,
-  xArray = [0, 350, 350, 350, 350, 80, -40, 80, 10, -60],
-  yArray = [0, -100, 20, 175, 280, 180, 180, 290, 290, 290];
+// let x = 0,
+//   y = 0,
+//   xArray = [0, 350, 350, 350, 350, 80, -40, 80, 10, -60],
+//   yArray = [0, -100, 20, 175, 280, 180, 180, 290, 290, 290];
 
 function getNodesEdges(data) {
   let nodes = [],
@@ -59,7 +59,9 @@ function getNodesEdges(data) {
       'align': 'left'
     };
     nodeObject.shape = 'image';
-    nodeObject.color = '#F2F2F4';
+    nodeObject.color = {};
+    nodeObject.color.color = '#F2F2F4';
+    nodeObject.color.highlight = Colors.cherry;
     nodeObject.image = getIcon(dataNode.type);
     nodeObject.orgImage = getIcon(dataNode.type);
     let actions = [];
@@ -108,7 +110,9 @@ function getNodesEdges(data) {
     edgeObject.smooth = {
       type: 'discrete'
     };
-    edgeObject.color = Colors.pebble;
+    edgeObject.color = {};
+    edgeObject.color.color = Colors.pebble;
+    edgeObject.color.highlight = Colors.cherry;
 
     edges.push(edgeObject);
   }
@@ -190,9 +194,22 @@ function getActionsByTypes(actionsData) {
 }
 
 function fetchExtendedNodes(reportId, duration, parameters) {
+  let otherParameters = '';
+  if (parameters !== undefined && parameters.length !== undefined) {
+    for (let i = 0; i < parameters.length; i++) {
+      if (i === 0) {
+        otherParameters = parameters[i].name + '=' + parameters[i].value;
+      }
+      else {
+        otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
+      }
+    }
+  }
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
-    apiUrl = baseUrl + '/api/analytics/reporting/execute/' + reportId + '?window=' + duration,
+    // apiUrl = baseUrl + '/api/analytics/reporting/execute/' + reportId + '?window=' + duration + '&' +
+      // otherParameters,
+    apiUrl = baseUrl + '/api/analytics/reporting/execute/' + reportId + '?' + otherParameters,
     customHeaders = {
       'Accept': 'application/json'
     },
@@ -209,6 +226,16 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   .catch(error => {
     return Promise.reject(Error(error.message));
   });
+}
+
+function isNodeAlreadyExists(nodes, nodeID) {
+  let exists = 0;
+  for (let i = 0; i < nodes.length; i++) {
+    if (nodes[i].id === nodeID) {
+      exists = 1;
+    }
+  }
+  return exists;
 }
 
 class NetworkGraph extends React.Component {
@@ -243,21 +270,8 @@ class NetworkGraph extends React.Component {
     this.getContextMenu = this.getContextMenu.bind(this);
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
-    this.isNodeAlreadyExists = this.isNodeAlreadyExists.bind(this);
     // this.selectNode = this.selectNode.bind(this);
     this.deselectNode = this.deselectNode.bind(this);
-  }
-
-  isNodeAlreadyExists(nodeID) {
-    return (event) => {
-      let nodes = this.state.nodes;
-      for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].nodeID === nodeID) {
-          return true;
-        }
-      }
-      return false;
-    };
   }
 
   extendGraph(nodeID, nodeType, reportId, parameters) {
@@ -266,12 +280,12 @@ class NetworkGraph extends React.Component {
     return (event) => {
       let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-        if (selectedNodesForExtendingGraph[i].id === nodeID) {
+        if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
+          selectedNodesForExtendingGraph[i].reportId === reportId) {
+          alert('You have already performed this action.');
           return;
         }
       }
-      console.log('selectedNodesForExtendingGraph', selectedNodesForExtendingGraph);
-      // return;
 
       const extendedNodes = fetchExtendedNodes(reportId, this.state.duration, parameters);
       let rows = extendedNodes;
@@ -285,49 +299,58 @@ class NetworkGraph extends React.Component {
             edges = that.state.edges;
 
           for (let i = 0; i < rows.length; i++) {
-            // if (that.isNodeAlreadyExists(rows[i][0]) === false) {
-              let nodeObject = {
-                  id: rows[i][0],
-                  type: nodeType,
-                  label: '\n  <b>' + nodeType + ':</b> ' + rows[i][0],
-                  title: '<b>' + nodeType + ':</b> ' + rows[i][0],
-                  nodeDetails: nodeType + ': ' + rows[i][0],
-                  borderWidth: '0',
-                  'font': {
-                    'face': 'Open Sans',
-                    'color': Colors.pebble,
-                    'size': '11',
-                    'align': 'left'
-                  },
-                  shape: 'image',
-                  color: '#F2F2F4',
-                  image: getIcon(nodeType),
-                  orgImage: getIcon(nodeType)/*,
-                  x: 550,
-                  y: -100*/
+            let nodeObject = {
+                id: rows[i][0],
+                type: nodeType,
+                label: '\n  <b>' + nodeType + ':</b> ' + rows[i][0],
+                title: '<b>' + nodeType + ':</b> ' + rows[i][0],
+                nodeDetails: nodeType + ': ' + rows[i][0],
+                borderWidth: '0',
+                'font': {
+                  'face': 'Open Sans',
+                  'color': Colors.pebble,
+                  'size': '11',
+                  'align': 'left'
                 },
-                edgeObject = {
-                  from: nodeID,
-                  to: rows[i][0],
-                  arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
-                  label: '',
-                  'font': {
-                    'face': 'Open Sans',
-                    'color': Colors.pebble,
-                    'size': '11',
-                    'align': 'left'
-                  },
-                  length: 1000,
-                  smooth: {
-                    type: 'discrete'
-                  },
-                  'color': Colors.pebble
-                };
+                shape: 'image',
+                color: {
+                  'color': '#F2F2F4',
+                  'highlight': Colors.cherry
+                },
+                image: getIcon(nodeType),
+                orgImage: getIcon(nodeType)/*,
+                x: 550,
+                y: -100*/
+              },
+              edgeObject = {
+                from: nodeID,
+                to: rows[i][0],
+                arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
+                label: '',
+                'font': {
+                  'face': 'Open Sans',
+                  'color': Colors.pebble,
+                  'size': '11',
+                  'align': 'left'
+                },
+                length: 1000,
+                smooth: {
+                  type: 'discrete'
+                },
+                'color': {
+                  'color': Colors.pebble,
+                  'highlight': Colors.cherry
+                }
+              };
 
+            if (isNodeAlreadyExists(nodes, rows[i][0]) === 0) {
               nodes.push(nodeObject);
               edges.push(edgeObject);
             }
-          // }
+            else {
+              edges.push(edgeObject);
+            }
+          }
 
           selectedNodesForExtendingGraph.push({
             'nodeID': nodeID,
@@ -376,30 +399,35 @@ class NetworkGraph extends React.Component {
       for (let i = 0; i < actionsData.length; i++) {
         if ((actionsData[i].nodeType).toLowerCase() === nodeType.toLowerCase()) {
           for (let j = 0; j < actionsData[i].actions.length; j++) {
-            let parameters = actionsData[i].actions[j].parameters;
+            let parameters = actionsData[i].actions[j].parameters,
+              parametersToApi = [];
+            if (parameters.length !== undefined) {
+              for (let k = 0; k < parameters.length; k++) {
+                let tempObj = {};
+                if (parameters[k].userInput === false) {
+                  if (parameters[k].name === 'id') {
+                    tempObj.name = parameters[k].name;
+                    tempObj.value = nodeID;
+                  }
+                  if (parameters[k].name === 'type') {
+                    tempObj.name = parameters[k].name;
+                    tempObj.value = nodeType;
+                  }
+                  parametersToApi.push(tempObj);
+                }
+              }
+            }
             let tr = document.createElement('tr');
             let td1 = document.createElement('td');
             td1.appendChild(document.createTextNode(actionsData[i].actions[j].label));
-            td1.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parameters);
+            td1.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parametersToApi);
             let td2 = document.createElement('td');
             let downArrow = document.createElement('img');
-            downArrow.src = 'img/Down-arrow.png';
+            downArrow.src = 'img/downarrow.png';
             td2.appendChild(downArrow);
             tr.appendChild(td1);
             tr.appendChild(td2);
             table.appendChild(tr);
-
-            /* let item = document.createElement('li');
-            let parameters = actionsData[i].actions[j].parameters;
-            item.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parameters);
-            item.appendChild(document.createTextNode(actionsData[i].actions[j].label));
-
-            item.appendChild(document.createTextNode('    '));
-            let downArrow = document.createElement('img');
-            downArrow.src = 'img/Down-arrow.png';
-            item.appendChild(downArrow);
-
-            list.appendChild(item);*/
           }
         }
       }
