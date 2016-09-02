@@ -47,9 +47,41 @@ function getNodesEdges(data) {
     nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
     nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
     for (let metadataType in dataNode.metadata) {
-      nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' + dataNode.metadata[metadataType];
-      nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' + dataNode.metadata[metadataType];
-      nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' + dataNode.metadata[metadataType];
+      if (metadataType !== 'coordinates') {
+        switch (metadataType) {
+          case 'reputation':
+            let values = dataNode.metadata[metadataType].reputation,
+              value = '';
+            for (let v = 0; v < values.length; v++) {
+              if (v === 0) {
+                value = values[0];
+              }
+              else {
+                value += ', ' + values[0];
+              }
+            }
+            nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              value;
+            nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              value;
+            nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' +
+              value;
+            break;
+          case 'displayName':
+            nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
+            nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
+            nodeObject.nodeDetails += ' Name: ' + dataNode.metadata[metadataType];
+            break;
+          default:
+            nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              dataNode.metadata[metadataType];
+            nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              dataNode.metadata[metadataType];
+            nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' +
+              dataNode.metadata[metadataType];
+            break;
+        }
+      }
     }
     nodeObject.borderWidth = '0';
     nodeObject.font = {
@@ -198,10 +230,20 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   if (parameters !== undefined && parameters.length !== undefined) {
     for (let i = 0; i < parameters.length; i++) {
       if (i === 0) {
-        otherParameters = parameters[i].name + '=' + parameters[i].value;
+        if (parameters[i].userInput === true) {
+          otherParameters = parameters[i].name + '=' + $('#' + parameters[i].id).val();
+        }
+        else {
+          otherParameters = parameters[i].name + '=' + parameters[i].value;
+        }
       }
       else {
-        otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
+        if (parameters[i].userInput === true) {
+          otherParameters += parameters[i].name + '=' + $('#' + parameters[i].id).val();
+        }
+        else {
+          otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
+        }
       }
     }
   }
@@ -229,13 +271,27 @@ function fetchExtendedNodes(reportId, duration, parameters) {
 }
 
 function isNodeAlreadyExists(nodes, nodeID) {
-  let exists = 0;
+  let exists = false;
   for (let i = 0; i < nodes.length; i++) {
     if (nodes[i].id === nodeID) {
-      exists = 1;
+      exists = true;
     }
   }
   return exists;
+}
+
+function checkForUserInputs(parameters) {
+  let userInputParameters = [];
+  if (parameters.length !== undefined) {
+    for (let k = 0; k < parameters.length; k++) {
+      let tempObj = {};
+      if (parameters[k].userInput === true) {
+        tempObj.name = parameters[k].name;
+        userInputParameters.push(tempObj);
+      }
+    }
+  }
+  return userInputParameters;
 }
 
 class NetworkGraph extends React.Component {
@@ -302,9 +358,9 @@ class NetworkGraph extends React.Component {
             let nodeObject = {
                 id: rows[i][0],
                 type: nodeType,
-                label: '\n  <b>' + nodeType + ':</b> ' + rows[i][0],
-                title: '<b>' + nodeType + ':</b> ' + rows[i][0],
-                nodeDetails: nodeType + ': ' + rows[i][0],
+                label: '\n  <b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
+                title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
+                nodeDetails: firstCharCapitalize(nodeType) + ': ' + rows[i][0],
                 borderWidth: '0',
                 'font': {
                   'face': 'Open Sans',
@@ -343,7 +399,7 @@ class NetworkGraph extends React.Component {
                 }
               };
 
-            if (isNodeAlreadyExists(nodes, rows[i][0]) === 0) {
+            if (isNodeAlreadyExists(nodes, rows[i][0]) === false) {
               nodes.push(nodeObject);
               edges.push(edgeObject);
             }
@@ -387,7 +443,6 @@ class NetworkGraph extends React.Component {
     return (event) => {
       let actions = document.getElementById('tempActions');
       actions.innerHTML = '';
-      // let list = document.createElement('ul');
       let table = document.createElement('table');
       table.border = '0';
       table.width = '250';
@@ -400,7 +455,8 @@ class NetworkGraph extends React.Component {
         if ((actionsData[i].nodeType).toLowerCase() === nodeType.toLowerCase()) {
           for (let j = 0; j < actionsData[i].actions.length; j++) {
             let parameters = actionsData[i].actions[j].parameters,
-              parametersToApi = [];
+              parametersToApi = [],
+              userInputParameters = [];
             if (parameters.length !== undefined) {
               for (let k = 0; k < parameters.length; k++) {
                 let tempObj = {};
@@ -413,21 +469,58 @@ class NetworkGraph extends React.Component {
                     tempObj.name = parameters[k].name;
                     tempObj.value = nodeType;
                   }
+                  tempObj.userInput = false;
+                  parametersToApi.push(tempObj);
+                }
+                if (parameters[k].userInput === true) {
+                  tempObj.name = parameters[k].name;
+                  tempObj.id = parameters[k].name + j;
+                  tempObj.value = '';
+                  tempObj.userInput = true;
                   parametersToApi.push(tempObj);
                 }
               }
+
+              userInputParameters = checkForUserInputs(parameters);
             }
             let tr = document.createElement('tr');
             let td1 = document.createElement('td');
             td1.appendChild(document.createTextNode(actionsData[i].actions[j].label));
+
             td1.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parametersToApi);
-            let td2 = document.createElement('td');
-            let downArrow = document.createElement('img');
-            downArrow.src = 'img/downarrow.png';
-            td2.appendChild(downArrow);
             tr.appendChild(td1);
-            tr.appendChild(td2);
+
+            if (userInputParameters.length > 0) {
+              let td2 = document.createElement('td');
+              let downArrow = document.createElement('img');
+              downArrow.src = 'img/downarrow.png';
+              // td1.onclick = this.displayUserInputParameter(userInputParameters[p].name + j);
+              td2.appendChild(downArrow);
+              tr.appendChild(td2);
+            }
+
             table.appendChild(tr);
+
+            if (userInputParameters.length > 0) {
+              for (let p = 0; p < userInputParameters.length; p++) {
+                let trUserInput = document.createElement('tr');
+                let tdUserInput = document.createElement('td');
+                tdUserInput.style = 'cursor:auto;';
+                tdUserInput.appendChild(document.createTextNode(
+                  firstCharCapitalize(userInputParameters[p].name + ' :')));
+                // let newLine = document.createElement('br');
+                // tdUserInput.appendChild(newLine);
+                let inputParameter = document.createElement('input');
+                inputParameter.setAttribute('type', 'text');
+                inputParameter.setAttribute('style', 'color:black;');
+                inputParameter.setAttribute('placeholder', userInputParameters[p].name);
+                inputParameter.setAttribute('name', userInputParameters[p].name + j);
+                inputParameter.setAttribute('id', userInputParameters[p].name + j);
+                tdUserInput.appendChild(inputParameter);
+                trUserInput.appendChild(tdUserInput);
+                table.appendChild(trUserInput);
+              }
+            }
           }
         }
       }
