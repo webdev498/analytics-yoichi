@@ -26,12 +26,8 @@ const style = {
   }
 };
 
-let paddingSpace1 = '\n           ',
-  paddingSpace2 = '           ',
-  x = 0,
+let x = 0,
   y = 0,
-  contextMenu = undefined,
-  contextMenuOptions = ['First Option', 'Second Option', 'Third Option'],
   xArray = [0, 350, 350, 350, 350, 80, -40, 80, 10, -60],
   yArray = [0, -100, 20, 175, 280, 180, 180, 290, 290, 290];
 
@@ -47,7 +43,6 @@ function getNodesEdges(data) {
 
     nodeObject.id = dataNode.id;
     nodeObject.type = dataNode.type;
-    // nodeObject.level = i + 1;
     nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
     nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
     nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
@@ -73,7 +68,7 @@ function getNodesEdges(data) {
     }
     nodeObject.actions = actions;
 
-    /*if (xArray[i] !== null && xArray[i] !== undefined) {
+    /* if (xArray[i] !== null && xArray[i] !== undefined) {
       nodeObject.x = xArray[i];
     }
     else {
@@ -250,7 +245,7 @@ class NetworkGraph extends React.Component {
     this.extendGraph = this.extendGraph.bind(this);
     this.isNodeAlreadyExists = this.isNodeAlreadyExists.bind(this);
     // this.selectNode = this.selectNode.bind(this);
-    // this.deselectNode = this.deselectNode.bind(this);
+    this.deselectNode = this.deselectNode.bind(this);
   }
 
   isNodeAlreadyExists(nodeID) {
@@ -369,29 +364,53 @@ class NetworkGraph extends React.Component {
     return (event) => {
       let actions = document.getElementById('tempActions');
       actions.innerHTML = '';
-      let list = document.createElement('ul');
+      // let list = document.createElement('ul');
+      let table = document.createElement('table');
+      table.border = '0';
+      table.width = '250';
+      table.cellPadding = '10';
+      table.cellSpacing = '10';
 
       let actionsData = this.state.actionsData;
 
       for (let i = 0; i < actionsData.length; i++) {
         if ((actionsData[i].nodeType).toLowerCase() === nodeType.toLowerCase()) {
           for (let j = 0; j < actionsData[i].actions.length; j++) {
-            let item = document.createElement('li');
+            let parameters = actionsData[i].actions[j].parameters;
+            let tr = document.createElement('tr');
+            let td1 = document.createElement('td');
+            td1.appendChild(document.createTextNode(actionsData[i].actions[j].label));
+            td1.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parameters);
+            let td2 = document.createElement('td');
+            let downArrow = document.createElement('img');
+            downArrow.src = 'img/Down-arrow.png';
+            td2.appendChild(downArrow);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            table.appendChild(tr);
+
+            /* let item = document.createElement('li');
             let parameters = actionsData[i].actions[j].parameters;
             item.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parameters);
             item.appendChild(document.createTextNode(actionsData[i].actions[j].label));
-            list.appendChild(item);
+
+            item.appendChild(document.createTextNode('    '));
+            let downArrow = document.createElement('img');
+            downArrow.src = 'img/Down-arrow.png';
+            item.appendChild(downArrow);
+
+            list.appendChild(item);*/
           }
         }
       }
 
       let listHTML = {
         'loadAgain': false,
-        'actions': '<ul>' + list.innerHTML + '</ul>'
+        'actions': '<ul>' + table.innerHTML + '</ul>'
       };
       this.setState(listHTML);
 
-      return list;
+      return table;
     };
   }
 
