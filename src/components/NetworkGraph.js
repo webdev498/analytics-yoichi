@@ -8,15 +8,6 @@ import Cookies from 'cookies-js';
 import {baseUrl} from 'config';
 
 const style = {
-  networkGraph: {
-    'height': '600px',
-    'width': '100%'
-  },
-  'contextualMenu': {
-    width: '280px',
-    height: '600px',
-    backgroundColor: '#898E9B'
-  },
   searchTextBox: {
     backgroundColor: '#646A7D',
     padding: '10px',
@@ -82,7 +73,7 @@ function getNodesEdges(data) {
     }
     nodeObject.actions = actions;
 
-    if (xArray[i] !== null && xArray[i] !== undefined) {
+    /*if (xArray[i] !== null && xArray[i] !== undefined) {
       nodeObject.x = xArray[i];
     }
     else {
@@ -94,7 +85,7 @@ function getNodesEdges(data) {
     }
     else {
       nodeObject.y = -100;
-    }
+    }*/
 
     nodes.push(nodeObject);
   }
@@ -118,7 +109,7 @@ function getNodesEdges(data) {
       'size': '11',
       'align': 'left'
     };
-    edgeObject.length = 300;
+    edgeObject.length = 1000;
     edgeObject.smooth = {
       type: 'discrete'
     };
@@ -234,8 +225,13 @@ class NetworkGraph extends React.Component {
       edges: [],
       style: {
         'networkGraph': {
+          'height': '600px',
+          'width': '100%'
         },
         'contextualMenu': {
+          width: '280px',
+          height: '600px',
+          backgroundColor: '#898E9B',
           display: 'none'
         }
       },
@@ -311,9 +307,9 @@ class NetworkGraph extends React.Component {
                   shape: 'image',
                   color: '#F2F2F4',
                   image: getIcon(nodeType),
-                  orgImage: getIcon(nodeType),
+                  orgImage: getIcon(nodeType)/*,
                   x: 550,
-                  y: -100
+                  y: -100*/
                 },
                 edgeObject = {
                   from: nodeID,
@@ -326,7 +322,7 @@ class NetworkGraph extends React.Component {
                     'size': '11',
                     'align': 'left'
                   },
-                  length: 300,
+                  length: 1000,
                   smooth: {
                     type: 'discrete'
                   },
@@ -348,14 +344,22 @@ class NetworkGraph extends React.Component {
             'nodesListStatus': 'extended',
             'nodes': nodes,
             'edges': edges,
-            'networkGraph': {
-              width: '100%'
+            'style': {
+              'networkGraph': {
+                'height': '600px',
+                'width': '100%'
+              },
+              'contextualMenu': {
+                width: '280px',
+                height: '600px',
+                backgroundColor: '#898E9B',
+                display: 'none'
+              }
             },
-            'contextualMenu': {
-              display: 'done'
-            },
-            selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
+            'selectedNodeDetails': '',
+            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
           });
+          $('#actions').html('');
         }
       );
     };
@@ -363,46 +367,27 @@ class NetworkGraph extends React.Component {
 
   getContextMenu(nodeID, nodeType, nodeAt) {
     return (event) => {
-      // Create the list element:
       let actions = document.getElementById('tempActions');
       actions.innerHTML = '';
       let list = document.createElement('ul');
-      // list.setAttribute('id', 'actionList');
 
       let actionsData = this.state.actionsData;
-
-      console.log(nodeType);
-      // let actionsHtml = '<ul>';
 
       for (let i = 0; i < actionsData.length; i++) {
         if ((actionsData[i].nodeType).toLowerCase() === nodeType.toLowerCase()) {
           for (let j = 0; j < actionsData[i].actions.length; j++) {
-            // actionsHtml += "<li onclick=\"this.extendGraph('" + actionsData[i].actions[j].reportId + "')\">" +
-            //   actionsData[i].actions[j].label + '</li>';
             let item = document.createElement('li');
             let parameters = actionsData[i].actions[j].parameters;
-            // list.setAttribute('onclick', this.extendGraph(actionsData[i].actions[j].reportId));
             item.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parameters);
             item.appendChild(document.createTextNode(actionsData[i].actions[j].label));
             list.appendChild(item);
-            // (function(value) {
-            //   item.addEventListener('click', function() {
-            //     alert('test');
-            //   }, false); })(data[i]);
           }
         }
       }
 
-      // actionsHtml += '</ul>';
-
-      // actions.appendChild(list);
-      // list.appendChild(actions.cloneNode(true));
-
-      // Finally, return the constructed list:
       let listHTML = {
         'loadAgain': false,
         'actions': '<ul>' + list.innerHTML + '</ul>'
-        // 'actions': actionsHtml
       };
       this.setState(listHTML);
 
@@ -430,20 +415,13 @@ class NetworkGraph extends React.Component {
         if (SelectedNodeIDs.nodes[0] !== undefined) {
           for (let i = 0; i < this.state.nodes.length; i++) {
             if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
-              console.log('Selected Node Id:', this.state.nodes[i]);
+              // console.log('Selected Node Id:', this.state.nodes[i]);
               selectedNodeDetails += this.state.nodes[i].nodeDetails;
-              console.log('test: ', this.state.nodes[i].type);
               nodeType = this.state.nodes[i].type;
-              // if (this.state.nodes[i].actions !== undefined) {
-              //   contextMenuOptions = this.state.nodes[i].actions;
-              //   selectedNodeIndex = i;
-              //   break;
-              // }
               break;
             }
           }
 
-          // $('#tempActions').append(this.getContextMenu(SelectedNodeIDs.nodes[0], nodeType));
           $('#actions').html('');
           $('#actions').append(this.getContextMenu(SelectedNodeIDs.nodes[0], nodeType, nodeAt));
 
@@ -452,9 +430,13 @@ class NetworkGraph extends React.Component {
             'selectedNodeDetails': selectedNodeDetails,
             style: {
               'networkGraph': {
-                width: '80%'
+                'height': '600px',
+                'width': '100%'
               },
               'contextualMenu': {
+                width: '280px',
+                height: '600px',
+                backgroundColor: '#898E9B'
               }
             }
           };
@@ -487,15 +469,24 @@ class NetworkGraph extends React.Component {
     return (event) => {
       this.setState({
         'loadAgain': false,
-        networkGraph: {
-          width: '100%'
+        style: {
+          'networkGraph': {
+            'height': '600px',
+            'width': '100%'
+          },
+          'contextualMenu': {
+            width: '280px',
+            height: '600px',
+            backgroundColor: '#898E9B',
+            display: 'none'
+          }
         },
-        contextualMenu: {
-          display: 'done'
-        },
-        selectedNodeDetails: ''
+        selectedNodeDetails: '',
+        actions: ''
       });
-      console.log('test deselect node');
+      $('#actions').html('');
+      // document.getElementById('contextualMenu').style.display = 'none';
+      // document.getElementById('networkGraph').style.width = '100%';
       // let SelectedNodeIDs = network.getSelection();
       // console.log(SelectedNodeIDs.nodes[0]);
       // if (SelectedNodeIDs.nodes[0] !== undefined) {
@@ -517,17 +508,13 @@ class NetworkGraph extends React.Component {
       return;
     }
 
-    console.log('loadNetworkGraph', data);
     if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       const actionsData = this.context.store.getState().actions;
-      // this.state.actionsData = getActionsByTypes(this.context.store.getState().actions);
       this.state.actionsData = getActionsByTypes(actionsData.list.actions);
     }
-
-    // console.log(JSON.stringify(data.actions));
 
     if (this.networkGraph !== null && this.networkGraph !== undefined) {
       let options = {
@@ -548,12 +535,9 @@ class NetworkGraph extends React.Component {
         edges: this.state.edges
       };
 
-      // console.log(JSON.stringify(data));
-
       // if (data.nodes.length > 0) {
         let network = new vis.Network(this.networkGraph, data, options),
           networkGraphContainer = document.getElementById('networkGraph');
-        // getContextMenuFunction = this.getContextMenu;
         // network.on('selectNode', this.selectNode(network));
         network.on('deselectNode', this.deselectNode(network));
 
@@ -566,16 +550,14 @@ class NetworkGraph extends React.Component {
   render() {
     const {props} = this;
 
-    console.log('render');
-
     return (
       <div style={{display: 'flex'}}>
-        <div ref={(ref) => this.networkGraph = ref} style={{...style.networkGraph, ...this.state.style.networkGraph}}
+        <div ref={(ref) => this.networkGraph = ref} style={this.state.style.networkGraph}
           id='networkGraph'>
           {this.loadNetworkGraph(props.data, this.state.loadAgain)}
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
-          style={{...style.contextualMenu, ...this.state.style.contextualMenu}}
+          style={this.state.style.contextualMenu}
           id='contextualMenu' className='contextMenu'>
           <input type='text' id='searchNetworkNode'
             style={{...style.searchTextBox}}
