@@ -121,17 +121,42 @@ export function fetchApiData(id, api, params) {
       'Authorization': `${tokenType} ${accessToken}`
     }, api.headers);
 
-    return fetch(getUrl(api, currentDuration, params), {
-      method: 'GET',
-      headers: defaultHeaders
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(receiveApiData(id, {json, api}));
-    })
-    .catch((ex) => {
-      dispatch(errorApiData(id, ex));
-    });
+    if (Array.isArray(api)) {
+      const arr = api.map((apiObj) => {
+        return fetch(getUrl(apiObj, currentDuration, params), {
+          method: 'GET',
+          headers: defaultHeaders
+        })
+        .then(response => response.json());
+      });
+
+      Promise.all(arr)
+      .then((results) => {
+        const json = {};
+        results.forEach((val, index) => {
+          const apiId = api[index].id;
+          json[apiId] = val;
+        });
+
+        dispatch(receiveApiData(id, {json, api}));
+      })
+      .catch((ex) => {
+        dispatch(errorApiData(id, ex));
+      });
+    }
+    else {
+      return fetch(getUrl(api, currentDuration, params), {
+        method: 'GET',
+        headers: defaultHeaders
+      })
+      .then(response => response.json())
+      .then(json => {
+        dispatch(receiveApiData(id, {json, api}));
+      })
+      .catch((ex) => {
+        dispatch(errorApiData(id, ex));
+      });
+    }
   };
 }
 

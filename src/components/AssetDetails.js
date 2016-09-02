@@ -43,17 +43,15 @@ class AssetDetail extends React.Component {
     let {data} = this.props;
     if (!data) return null;
 
-    if (data.errorCode) {
-      return <div style={styles.error}><b>Error:</b> &nbsp; {data.errorMessage}</div>;
-    }
+    const {assetDetail, assetReport} = data;
 
     return (
       <div style={styles.card}>
         <div>
-          <AssetWidget data={data} />
+          {<AssetWidget data={assetDetail} />}
         </div>
         <div style={styles.rankScore}>
-          {data.risk.score}
+          {assetDetail.risk.score}
         </div>
       </div>
     );
