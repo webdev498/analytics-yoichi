@@ -84,14 +84,17 @@ function getUrl(api, duration, routerParams) {
 
     keys.forEach((key) => {
       if ((key === 'window' || key === 'timeShift') && (query[key] === '')) {
-        queryString += key + '=' + duration + '&';
+        queryString += `${key}=${duration}&`;
       }
       // if query value is :pathParam, it implies use path param of the current url.
-      else if (('' + query[key]).startsWith(':pathParam')) {
-        queryString += key + '=' + routerParams[key];
+      else if (('' + query[key]).endsWith(':pathParam')) {
+        // query[key] = 'user:pathParam', it will extract user from.
+        const paramKey = query[key].substr(0, query[key].indexOf(':pathParam'));
+        console.log(paramKey);
+        queryString += `${key}=${routerParams[paramKey]}&`;
       }
       else {
-        queryString += key + '=' + query[key] + '&';
+        queryString += `${key}=${query[key]}&`;
       }
     });
 
@@ -134,7 +137,7 @@ export function fetchApiData(id, api, params) {
 
 // Update api data for all the components that are visible on the page
 // when time range is changed.
-export function updateApiData(newDuration) {
+export function updateApiData(newDuration, params) {
   return function(dispatch, getState) {
     const {apiData} = getState();
 
@@ -148,7 +151,7 @@ export function updateApiData(newDuration) {
         components.forEach((component, index) => {
           const id = component.get('id');
           const api = component.get('api');
-          fetchApiData(id, api)(dispatch, getState);
+          fetchApiData(id, api, params)(dispatch, getState);
         });
       }
     }

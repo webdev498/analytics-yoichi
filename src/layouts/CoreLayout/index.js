@@ -156,7 +156,8 @@ export class CoreLayout extends React.Component {
         <Header
           title='RANK'
           showKibana={showKibana}
-          hideKibana={this.hideKibana} />
+          hideKibana={this.hideKibana}
+          params={props.params} />
 
         <nav style={{...styles.nav, ...sidebarWidth}} onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
           <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
