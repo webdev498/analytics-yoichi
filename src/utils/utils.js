@@ -436,7 +436,7 @@ export function getColorRanges(secureConnectionsValues, maliciousConnectionsValu
   };
 }
 
-function bytesToReact(val, text, {numberStyle, textStyle} = {}) {
+function numberToReactElm(val, text, {numberStyle, textStyle} = {}) {
   return (
     <span>
       <span style={numberStyle}>{val}</span>
@@ -450,7 +450,7 @@ export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
 
   if (bytes === 0) {
     if (numberStyle) {
-      return bytesToReact(0, 'Byte', {numberStyle, textStyle});
+      return numberToReactElm(0, 'Byte', {numberStyle, textStyle});
     }
     else {
       return '0 Byte';
@@ -467,13 +467,7 @@ export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
 
   // if custom sytles are provided then return React Element.
   if (numberStyle) {
-    return bytesToReact(val, text, {numberStyle, textStyle});
-    // return (
-    //   <span>
-    //     <span style={numberStyle}>{}</span>
-    //     <span style={textStyle}>{sizes[i]}</span>
-    //   </span>
-    // );
+    return numberToReactElm(val, text, {numberStyle, textStyle});
   }
   return val + ' ' + text;
 };
@@ -508,3 +502,30 @@ export function firstCharCapitalize(string) {
     return m.toUpperCase();
   });
 };
+
+export function nFormatter(num, digits, {numberStyle, textStyle}) {
+  const si = [
+      { value: 1E18, symbol: 'E' },
+      { value: 1E15, symbol: 'P' },
+      { value: 1E12, symbol: 'T' },
+      { value: 1E9, symbol: 'G' },
+      { value: 1E6, symbol: 'M' },
+      { value: 1E3, symbol: 'k' }
+    ],
+    rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+
+  for (let i = 0; i < si.length; i++) {
+    if (num >= si[i].value) {
+      const digits = (num / si[i].value).toFixed(digits).replace(rx, '$1'),
+        text = si[i].symbol;
+      if (numberStyle) {
+        return numberToReactElm(digits, text);
+      }
+      else {
+        return digits + text;
+      }
+    }
+  }
+
+  return num.toFixed(digits).replace(rx, '$1');
+}

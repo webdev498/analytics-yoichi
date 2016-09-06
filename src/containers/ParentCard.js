@@ -25,7 +25,7 @@ const styles = {
   header: {
     display: 'flex',
     alignItems: 'center',
-    paddingBottom: '60px'
+    paddingBottom: '50px'
   },
   title: {
     textTransform: 'capitalize',

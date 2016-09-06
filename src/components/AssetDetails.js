@@ -5,28 +5,23 @@ import AssetWidget from 'components/AssetWidget';
 import {formatBytes} from 'utils/utils';
 
 const styles = {
-  card: {
-    paddingBottom: '33px'
-  },
   rankScore: {
-    height: '60px',
-    width: '60px',
-    lineHeight: '60px',
-    fontSize: '28px',
+    height: '45px',
+    width: '45px',
+    lineHeight: '45px',
+    fontSize: '20px',
     borderRadius: '50%',
     backgroundColor: Colors.coral,
     color: Colors.arctic,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: '300',
+    marginTop: '33px'
   },
   list: {
     listStyleType: 'none',
     fontSize: '13px',
-    marginTop: '33px',
-    padding: '0 33px',
-    backgroundColor: Colors.subHeadingBGColor,
-    position: 'absolute',
-    left: 0,
-    right: 0
+    padding: 0,
+    margin: 0
   },
   item: {
     display: 'flex',
@@ -45,16 +40,17 @@ const styles = {
     fontSize: '20px'
   },
   value: {
-    color: Colors.coral,
+    fontWeight: '300',
     marginLeft: 'auto'
   },
   heading: {
+    fontWeight: '300'
   },
   text: {
     fontSize: '11px',
-    color: Colors.smoke,
     textTransform: 'uppercase',
-    paddingLeft: '5px'
+    paddingLeft: '5px',
+    fontWeight: '300'
   },
   error: {
     textAlign: 'center',
@@ -147,26 +143,21 @@ class AssetDetail extends React.Component {
     reports.taf_asset_top_dest_countries.rows.forEach(([country, count]) => {
       details.push({
         heading: country,
-        value: count
+        value: count.toLocaleString()
       });
     });
 
-    // details.push({
-    //   title: 'Source Countries',
-    //   value: null
-    // });
+    details.push({
+      title: 'Source Countries',
+      value: null
+    });
 
-    // reports.taf_asset_top_source_countries.rows.forEach(({row: [country, count]}) => {
-    //   details.push({
-    //     heading: country,
-    //     value: count
-    //   });
-    // });
-
-    // details.push({
-    //   heading: 'Countries',
-    //   value: this.getValue(reports.taf_asset_top_source_countries)
-    // });
+    reports.taf_asset_top_source_countries.rows.forEach(([country, count]) => {
+      details.push({
+        heading: country,
+        value: count.toLocaleString()
+      });
+    });
 
     return details.map((report) => this.getElement(report));
   }
@@ -177,13 +168,10 @@ class AssetDetail extends React.Component {
 
     const {assetDetail, assetReports} = data;
 
-    console.log(assetReports);
-
     return (
       <div style={styles.card}>
-        <div>
-          {<AssetWidget data={assetDetail} />}
-        </div>
+        <AssetWidget data={assetDetail} style={{padding: 0}} />
+
         <div style={styles.rankScore}>
           {assetDetail.risk.score}
         </div>
