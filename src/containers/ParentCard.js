@@ -13,6 +13,7 @@ const styles = {
   wrap: {
     position: 'relative',
     borderRadius: 0,
+    padding: '33px',
     boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
   },
   childwrap: {
@@ -227,7 +228,7 @@ class ParentCard extends React.Component {
 
     if (props.meta.showHeader) {
       const childProps = Object.assign({}, props, {search: this.state.search}),
-        cardStyle = {...styles.wrap, ...props.attributes.style, padding: '33px'};
+        cardStyle = {...styles.wrap, ...props.attributes.style};
 
       return (
         <Card style={cardStyle} id={props.id}>
