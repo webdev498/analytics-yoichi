@@ -90,7 +90,6 @@ function getUrl(api, duration, routerParams) {
       else if (('' + query[key]).endsWith(':pathParam')) {
         // query[key] = 'user:pathParam', it will extract user from.
         const paramKey = query[key].substr(0, query[key].indexOf(':pathParam'));
-        console.log(paramKey);
         queryString += `${key}=${routerParams[paramKey]}&`;
       }
       else {
