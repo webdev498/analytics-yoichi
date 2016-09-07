@@ -104,7 +104,8 @@ export class PageHeader extends React.Component {
     updateApiData: PropTypes.func.isRequired,
     hideKibana: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
-    showKibana: PropTypes.bool.isRequired
+    showKibana: PropTypes.bool.isRequired,
+    params: PropTypes.object.isRequired
   }
 
   getChildContext() {
@@ -112,7 +113,7 @@ export class PageHeader extends React.Component {
   }
 
   handleTimeChange(event, index, value) {
-    this.props.updateApiData(TimeRanges[index]);
+    this.props.updateApiData(TimeRanges[index], this.props.params);
     this.setState({value});
   }
 
