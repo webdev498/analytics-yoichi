@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import app from './main.js';
 import koaRouter from 'koa-router';
 
-import {getData} from './abstraction/paretoChart'
+import {getData} from './components/paretoChart'
 
 const router = new koaRouter({
   prefix: '/api'
@@ -16,28 +16,33 @@ const agentOptions = {
 
 const agent = new https.Agent(agentOptions);
 
-router
-.get('/analytics/reporting/execute/taf_threat_trend', async function(ctx, next) {
-  const url = ctx.request.url;
+const reportId = new koaRouter();
 
-  const res = await fetch('https://demo.ranksoftwareinc.com' + ctx.url,
-    {
-      method: 'GET',
-      headers: ctx.headers,
-      agent
-    }
-  )
-  .then((response) => {
-    return response.json().then((json) => {
-      ctx.set('content-type', response.headers.get('content-type'));
-      json.graphBars = getData(json);
-      ctx.body = json;
-      return next();
-    });
-  })
+// reportId
+// .get('/taf_threat_trend', async function(ctx, next) {
+//   const url = ctx.request.url;
 
-  return res;
-}, async function(ctx, next) {})
+//   const res = await fetch('https://demo.ranksoftwareinc.com' + ctx.url,
+//     {
+//       method: 'GET',
+//       headers: ctx.headers,
+//       agent
+//     }
+//   )
+//   .then((response) => {
+//     return response.json().then((json) => {
+//       ctx.set('content-type', response.headers.get('content-type'));
+//       json.graphBars = getData(json);
+//       console.log(json);
+//       ctx.body = json;
+//       return next();
+//     });
+//   })
+
+//   return res;
+// }, async function(ctx, next) {})
+
+router.get('/analytics/reporting/execute', reportId.routes(), reportId.allowedMethods())
 .get('*', async function (ctx, next) {
   const url = ctx.request.url;
   const res = await fetch('https://demo.ranksoftwareinc.com' + ctx.url,

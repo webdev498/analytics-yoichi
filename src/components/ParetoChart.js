@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 import {
+  getIndexFromColumnName,
   isUndefined
 } from 'utils/utils';
 import {
@@ -8,8 +9,46 @@ import {
   generateClickThroughUrl,
   generatePathParams
 } from 'utils/kibanaUtils';
+import {CHART_COLORS} from 'Constants';
 
-export function generateDataSource(data, chartOptions) {
+export function generateDataSource(data, chartOptions, fieldMapping) {
+  const graphBars = [],
+    chartColors = CHART_COLORS;
+
+  let colorIndex = 0,
+    numberOfColors = chartColors.length,
+    x, y;
+
+  const {rows, columns} = data;
+
+  for (let i = 0; i < fieldMapping.length; i++) {
+    let currentChartData = fieldMapping[i];
+
+    // Check for x-axis chart data
+    if (currentChartData.axis === 'x') {
+      // Calculate column index from API response
+      x = getIndexFromColumnName(currentChartData.columns, columns);
+    }
+
+    // Check for y-axis chart data
+    if (currentChartData.axis === 'y') {
+      // Calculate column index from API response
+      y = getIndexFromColumnName(currentChartData.columns, columns);
+    }
+  }
+
+  for (let i = 0; i < rows.length; i++) {
+    const xValue = rows[i][x],
+      yValue = rows[i][y],
+      barObject = {
+        label: xValue || 'Other',
+        value: yValue,
+        color: chartColors[(colorIndex++) % numberOfColors]
+      };
+
+    graphBars.push(barObject);
+  }
+
   return {
     chart: Object.assign({
       'labelFontSize': '11',
@@ -38,7 +77,7 @@ export function generateDataSource(data, chartOptions) {
       'paletteColors': Colors.defaultGraphPaletteColors,
       'decimals': '0'
     }, chartOptions),
-    data: data.graphBars
+    data: graphBars
   };
 };
 

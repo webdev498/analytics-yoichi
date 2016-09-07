@@ -37,8 +37,6 @@ export function getData(data) {
 
   const {rows, columns} = data;
 
-  console.log(rows, columns);
-
   for (let i = 0; i < mapping.length; i++) {
     let chartData = mapping[i];
 
