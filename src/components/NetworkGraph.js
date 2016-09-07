@@ -60,12 +60,14 @@ function getNodesEdges(data) {
                 value += ', ' + values[0];
               }
             }
-            nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              value;
-            nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              value;
-            nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' +
-              value;
+            if (value !== '') {
+              nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                value;
+              nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                value;
+              nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' +
+                value;
+            }
             break;
           case 'displayName':
             nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
