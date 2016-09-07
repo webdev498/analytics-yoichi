@@ -60,12 +60,14 @@ function getNodesEdges(data) {
                 value += ', ' + values[0];
               }
             }
-            nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              value;
-            nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              value;
-            nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' +
-              value;
+            if (value !== '') {
+              nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                value;
+              nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                value;
+              nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' +
+                value;
+            }
             break;
           case 'displayName':
             nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
@@ -93,7 +95,7 @@ function getNodesEdges(data) {
     nodeObject.shape = 'image';
     nodeObject.color = {};
     nodeObject.color.color = '#F2F2F4';
-    nodeObject.color.highlight = Colors.cherry;
+    nodeObject.color.highlight = Colors.turquoise;
     nodeObject.image = getIcon(dataNode.type);
     nodeObject.orgImage = getIcon(dataNode.type);
     let actions = [];
@@ -144,7 +146,7 @@ function getNodesEdges(data) {
     };
     edgeObject.color = {};
     edgeObject.color.color = Colors.pebble;
-    edgeObject.color.highlight = Colors.cherry;
+    edgeObject.color.highlight = Colors.turquoise;
 
     edges.push(edgeObject);
   }
@@ -371,7 +373,7 @@ class NetworkGraph extends React.Component {
                 shape: 'image',
                 color: {
                   'color': '#F2F2F4',
-                  'highlight': Colors.cherry
+                  'highlight': Colors.turquoise
                 },
                 image: getIcon(nodeType),
                 orgImage: getIcon(nodeType)/*,
@@ -395,7 +397,7 @@ class NetworkGraph extends React.Component {
                 },
                 'color': {
                   'color': Colors.pebble,
-                  'highlight': Colors.cherry
+                  'highlight': Colors.turquoise
                 }
               };
 
