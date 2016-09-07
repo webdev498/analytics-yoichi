@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 
 import AssetWidget from 'components/AssetWidget';
-import {formatBytes} from 'utils/utils';
+import {formatBytes, getCountryNameByCountryCode} from 'utils/utils';
 
 const styles = {
   rankScore: {
@@ -34,6 +34,10 @@ const styles = {
     margin: 0,
     paddingTop: '30px',
     display: 'inline-block'
+  },
+  subTitle: {
+    fontSize: '11px',
+    fontWeight: '300'
   },
   titleValue: {
     alignSelf: 'flex-end',
@@ -71,10 +75,16 @@ class AssetDetail extends React.Component {
 
   getElement(report) {
     if (report.title) {
+      const listItemStyle = report.subTitle ? {display: 'block'} : {};
+
       return (
-        <li style={styles.item}>
+        <li style={{...styles.item, ...listItemStyle}}>
           <h3 style={styles.title}>{report.title}</h3>
-          <span style={{...styles.value, ...styles.titleValue}}>{report.value}</span>
+          {
+            report.subTitle
+            ? <div style={styles.subTitle}>{report.subTitle}</div>
+            : <span style={{...styles.value, ...styles.titleValue}}>{report.value}</span>
+          }
         </li>
       );
     }
@@ -137,24 +147,26 @@ class AssetDetail extends React.Component {
 
     details.push({
       title: 'Destination Countries',
+      subTitle: '(number of connections)',
       value: null
     });
 
     reports.taf_asset_top_dest_countries.rows.forEach(([country, count]) => {
       details.push({
-        heading: country,
+        heading: getCountryNameByCountryCode[country],
         value: count.toLocaleString()
       });
     });
 
     details.push({
       title: 'Source Countries',
+      subTitle: '(number of connections)',
       value: null
     });
 
     reports.taf_asset_top_source_countries.rows.forEach(([country, count]) => {
       details.push({
-        heading: country,
+        heading: getCountryNameByCountryCode[country],
         value: count.toLocaleString()
       });
     });
