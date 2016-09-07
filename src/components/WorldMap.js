@@ -158,30 +158,30 @@ class WorldMap extends React.Component {
 
   renderChart(props) {
     if (!props.data) {
-      styles.noData = {
-        display: 'none'
-      };
+      // styles.noData = {
+      //   display: 'none'
+      // };
       return;
     }
 
-    if (props.data.rows && props.data.rows.length === 0) {
-      styles.noData = {
-        display: 'none'
-      };
-      return;
-    }
+    // if (props.data.rows && props.data.rows.length === 0) {
+    //   styles.noData = {
+    //     display: 'none'
+    //   };
+    //   return;
+    // }
 
-    if (props.data && props.chartData &&
-      props.chartData.fieldMapping &&
-      props.chartData.fieldMapping[0] &&
-      props.chartData.fieldMapping[0].reportId &&
-      props.data[props.chartData.fieldMapping[0].reportId].rows &&
-      props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
-      styles.noData = {
-        display: 'none'
-      };
-      return;
-    }
+    // if (props.data && props.chartData &&
+    //   props.chartData.fieldMapping &&
+    //   props.chartData.fieldMapping[0] &&
+    //   props.chartData.fieldMapping[0].reportId &&
+    //   props.data[props.chartData.fieldMapping[0].reportId].rows &&
+    //   props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
+    //   styles.noData = {
+    //     display: 'none'
+    //   };
+    //   return;
+    // }
 
     styles.noData = {};
 
