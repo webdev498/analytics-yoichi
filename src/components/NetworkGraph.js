@@ -2,7 +2,8 @@ import React from 'react';
 import {Colors} from 'theme/colors';
 import $ from 'jquery';
 import {
-  firstCharCapitalize
+  firstCharCapitalize,
+  getCountryNameByCountryCode
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import {baseUrl} from 'config';
@@ -31,6 +32,21 @@ const style = {
 //   xArray = [0, 350, 350, 350, 350, 80, -40, 80, 10, -60],
 //   yArray = [0, -100, 20, 175, 280, 180, 180, 290, 290, 290];
 
+function addNewlines(str) {
+  let char = 15;
+  if (str.length > char) {
+    let result = '';
+    while (str.length > 0) {
+      // let last = str.lastIndexOf(' ');
+      // console.log(last, str);
+      result += str.substring(0, char) + '\n  '; // Math.min(char, last)
+      str = str.substring(char);
+    }
+    return result;
+  }
+  return str;
+}
+
 function getNodesEdges(data) {
   let nodes = [],
     edges = [],
@@ -47,39 +63,51 @@ function getNodesEdges(data) {
     nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
     nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
     for (let metadataType in dataNode.metadata) {
-      if (metadataType !== 'coordinates') {
-        switch (metadataType) {
+      let metadataTypeLower = metadataType.toLowerCase();
+      if (metadataTypeLower !== 'coordinates') {
+        switch (metadataTypeLower) {
           case 'reputation':
             let values = dataNode.metadata[metadataType].reputation,
-              value = '';
+              value1 = '',
+              value2 = '';
             for (let v = 0; v < values.length; v++) {
               if (v === 0) {
-                value = values[0];
+                value1 = values[0];
+                value2 = values[0];
               }
               else {
-                value += ', ' + values[0];
+                value1 += ',\n  ' + values[0];
+                value2 += ',<br />' + values[0];
               }
             }
-            if (value !== '') {
+            if (value1 !== '') {
               nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                value;
+                value1;
               nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                value;
-              nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' +
-                value;
+                value2;
+              nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+                value2;
             }
             break;
-          case 'displayName':
+          case 'country':
+            nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+            nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+            nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+              getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+            break;
+          case 'displayname':
             nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
             nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
-            nodeObject.nodeDetails += ' Name: ' + dataNode.metadata[metadataType];
+            nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
             break;
           default:
             nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              dataNode.metadata[metadataType];
+              addNewlines(dataNode.metadata[metadataType]);
             nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
               dataNode.metadata[metadataType];
-            nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' +
+            nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
               dataNode.metadata[metadataType];
             break;
         }
@@ -309,7 +337,7 @@ class NetworkGraph extends React.Component {
           'width': '100%'
         },
         'contextualMenu': {
-          width: '280px',
+          width: '350px',
           height: '600px',
           backgroundColor: '#898E9B',
           display: 'none'
@@ -426,7 +454,7 @@ class NetworkGraph extends React.Component {
                 'width': '100%'
               },
               'contextualMenu': {
-                width: '280px',
+                width: '350px',
                 height: '600px',
                 backgroundColor: '#898E9B',
                 display: 'none'
@@ -555,6 +583,11 @@ class NetworkGraph extends React.Component {
         let nodeAt = network.getBoundingBox(SelectedNodeIDs.nodes[0]);
 
         if (SelectedNodeIDs.nodes[0] !== undefined) {
+          let node = network.body.nodes[SelectedNodeIDs.nodes[0]];
+          node.setOptions({
+            image: 'img/http.png'
+          });
+
           for (let i = 0; i < this.state.nodes.length; i++) {
             if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
               // console.log('Selected Node Id:', this.state.nodes[i]);
@@ -576,7 +609,7 @@ class NetworkGraph extends React.Component {
                 'width': '100%'
               },
               'contextualMenu': {
-                width: '280px',
+                width: '350px',
                 height: '600px',
                 backgroundColor: '#898E9B'
               }
@@ -617,7 +650,7 @@ class NetworkGraph extends React.Component {
             'width': '100%'
           },
           'contextualMenu': {
-            width: '280px',
+            width: '350px',
             height: '600px',
             backgroundColor: '#898E9B',
             display: 'none'
@@ -650,6 +683,19 @@ class NetworkGraph extends React.Component {
       return;
     }
 
+    console.log(data);
+
+    // var yourString = "The quick brown fox jumps over the lazy dog"; //replace with your string.
+    // var maxLength = 6 // maximum number of characters to extract
+
+    // //trim the string to the maximum length
+    // var trimmedString = yourString.substr(0, maxLength);
+
+    // //re-trim if we are in the middle of a word
+    // trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
+
+    // console.log(trimmedString);
+
     if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
       this.state.nodes = nodesEdges.nodes;
@@ -664,11 +710,13 @@ class NetworkGraph extends React.Component {
         interaction: {
           navigationButtons: true,
           keyboard: false,
-          multiselect: true
+          multiselect: true,
+          hover: true
         },
         autoResize: true,
         height: '600',
-        width: '100%'
+        width: '100%',
+        edges: {selectionWidth: 1}
       };
 
       // create a network
@@ -681,10 +729,67 @@ class NetworkGraph extends React.Component {
         let network = new vis.Network(this.networkGraph, data, options),
           networkGraphContainer = document.getElementById('networkGraph');
         // network.on('selectNode', this.selectNode(network));
-        network.on('deselectNode', this.deselectNode(network));
+        // network.on('deselectNode', this.deselectNode(network));
 
         /* Following code is for left click context menu */
-        network.on('select', this.loadContextMenu(network));
+        // network.on('select', this.loadContextMenu(network));
+
+        network.on("selectNode", this.loadContextMenu(network)
+          // function (params) {
+          // var selectedNodeId = params.nodes[0];
+          // var node = network.body.nodes[selectedNodeId];
+          // node.setOptions({
+          //   image: 'img/http.png'
+          // });
+          // }
+        );
+
+        network.on("deselectNode", function (params) {
+          var deselectedNodeId = params.previousSelection.nodes[0];
+          console.log(deselectedNodeId, data.nodes.image);
+          var node = network.body.nodes[deselectedNodeId];
+          node.setOptions({
+            image: 'img/asset.png' //data.nodes.image
+          });
+        });
+
+        network.on("hoverNode", function (params) {
+          var hoverNodeId = params.node,
+            selectedNodes = network.getSelection().nodes;
+          if (selectedNodes.length > 0) {
+            if (selectedNodes.indexOf(hoverNodeId) < 0) {
+              var node = network.body.nodes[hoverNodeId];
+              node.setOptions({
+                image: 'img/user.png'
+              });
+            }
+          }
+          else {
+            var node = network.body.nodes[hoverNodeId];
+            node.setOptions({
+              image: 'img/user.png'
+            });
+          }
+        });
+
+        network.on("blurNode", function (params) {
+          var blurNodeId = params.node,
+            selectedNodes = network.getSelection().nodes;
+          if (selectedNodes.length > 0) {
+            if (selectedNodes.indexOf(blurNodeId) < 0) {
+              var node = network.body.nodes[blurNodeId];
+              node.setOptions({
+                image: 'img/asset.png'
+              });
+            }
+          }
+          else {
+            var node = network.body.nodes[blurNodeId];
+            node.setOptions({
+              image: 'img/asset.png'
+            });
+          }
+        });
       // }
     }
   }
@@ -699,7 +804,13 @@ class NetworkGraph extends React.Component {
           {this.loadNetworkGraph(props.data, this.state.loadAgain)}
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
-          style={this.state.style.contextualMenu}
+          style={{...this.state.style.contextualMenu,
+            ...{
+              height: '600px',
+              overflowX: 'none',
+              overflowY: 'scroll'
+            }
+          }}
           id='contextualMenu' className='contextMenu'>
           <input type='text' id='searchNetworkNode'
             style={{...style.searchTextBox}}
@@ -708,7 +819,7 @@ class NetworkGraph extends React.Component {
             style={{...style.selectedNodeDetails}}
             dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
           </div>
-          <div id='actions' className='contextMenu'></div>
+          <div id='actions'></div>
           {/* dangerouslySetInnerHTML={{__html: this.state.actions}}*/}
           <div id='tempActions' style={{display: 'none'}}></div>
         </div>

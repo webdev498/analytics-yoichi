@@ -35,6 +35,20 @@ div.contextMenu table tr td {
   color: $WhiteColor;
 }
 
+.contextMenu::-webkit-scrollbar {
+    width: 12px;
+}
+
+.contextMenu::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+.contextMenu::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+
 /*******************************************/
 .ui-draggable, .ui-droppable {
   background-position: top;
