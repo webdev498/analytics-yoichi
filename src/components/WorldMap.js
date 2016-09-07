@@ -20,7 +20,8 @@ const styles = {
     fontWeight: '600',
     position: 'absolute',
     marginTop: '-30px'
-  }
+  },
+  noData: {}
 };
 
 export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
@@ -157,12 +158,32 @@ class WorldMap extends React.Component {
 
   renderChart(props) {
     if (!props.data) {
+      styles.noData = {
+        display: 'none'
+      };
       return;
     }
 
     if (props.data.rows && props.data.rows.length === 0) {
+      styles.noData = {
+        display: 'none'
+      };
       return;
     }
+
+    if (props.data && props.chartData &&
+      props.chartData.fieldMapping &&
+      props.chartData.fieldMapping[0] &&
+      props.chartData.fieldMapping[0].reportId &&
+      props.data[props.chartData.fieldMapping[0].reportId].rows &&
+      props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
+      styles.noData = {
+        display: 'none'
+      };
+      return;
+    }
+
+    styles.noData = {};
 
     const data = props.data,
       fieldMapping = props.chartData.fieldMapping,
@@ -199,7 +220,7 @@ class WorldMap extends React.Component {
       minHeight = {minHeight: props.attributes.chartHeight + 'px'};
 
     return (
-      <div>
+      <div style={{...styles.noData}}>
         <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>
           {props.meta.subTitle}
         </div>

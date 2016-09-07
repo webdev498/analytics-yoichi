@@ -245,20 +245,12 @@ const alerts = {
                       'displayName': 'countryFlag'
                     },
                     {
-                      'fieldName': 'source.name',
+                      'fieldName': 'source.additionalInfo.user',
+                      'displayName': 'User'
+                    },
+                    {
+                      'fieldName': 'source.additionalInfo.machine',
                       'displayName': 'Machine'
-                    },
-                    {
-                      'fieldName': 'source.owner',
-                      'displayName': 'Owner'
-                    },
-                    {
-                      'fieldName': 'source.asn',
-                      'displayName': 'ASN'
-                    },
-                    {
-                      'fieldName': 'source.assets',
-                      'displayName': 'Users'
                     }
                   ],
                   'style': {
@@ -282,20 +274,12 @@ const alerts = {
                       'displayName': 'countryFlag'
                     },
                     {
-                      'fieldName': 'destination.name',
-                      'displayName': 'Name'
+                      'fieldName': 'destination.additionalInfo.user',
+                      'displayName': 'User'
                     },
                     {
-                      'fieldName': 'destination.owner',
-                      'displayName': 'Owner'
-                    },
-                    {
-                      'fieldName': 'destination.asn',
-                      'displayName': 'ASN'
-                    },
-                    {
-                      'fieldName': 'destination.assets',
-                      'displayName': 'Users'
+                      'fieldName': 'destination.additionalInfo.machine',
+                      'displayName': 'Machine'
                     }
                   ],
                   'style': {
@@ -308,16 +292,53 @@ const alerts = {
             }
           ]
         },
-        'id': 'recent-alerts',
+        'id': 'RecentAlerts',
         'type': 'Table',
         'openAlertDetails': true
+      },
+      {
+        'meta': {
+          'showHeader': true,
+          'api': {
+            'path': '/api/analytics/reporting/execute/{reportId}',
+            'pathParams': {
+              'reportId': 'taf_top_at_risk_assets'
+            },
+            'queryParams': {
+              'count': 200,
+              'window': ''
+            }
+          },
+          'title': 'High Risk Assets'
+        },
+        'name': 'Table',
+        'tableOptions': {
+          'itemsPerPage': 5,
+          'sortable': [
+            'SCORE'
+          ],
+          'defaultSort': {
+            'column': 'SCORE',
+            'direction': 'desc'
+          }
+        },
+        'attributes': {
+          'style': {
+            'width': '30%',
+            'marginLeft': '33px'
+          },
+          'id': 'RecentAlerts'
+        },
+        'type': 'riskAssetsTable'
       }
     ],
     [
       {
         'chartOptions': {
           'xAxisname': 'ALERT TYPES',
-          'pYAxisname': 'ALERT COUNT'
+          'baseFontColor': '#6B7282',
+          'pYAxisname': 'ALERT COUNT',
+          'baseFont': 'Open Sans, sans-serif'
         },
         'chartData': {
           'fieldMapping': [
@@ -374,9 +395,12 @@ const alerts = {
       {
         'chartOptions': {
           'linealpha': '0',
+          'paletteColors': '#2BD8D0, #6CD3B4, #B6CD94, #FCC875, #05E9F5',
           'yAxisName': 'ALERT COUNT',
           'drawAnchors': '1',
-          'legendPosition': 'right'
+          'baseFontColor': '#6B7282',
+          'legendPosition': 'right',
+          'baseFont': 'Open Sans, sans-serif'
         },
         'chartData': {
           'fieldMapping': [

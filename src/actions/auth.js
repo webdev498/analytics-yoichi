@@ -33,6 +33,26 @@ export function fetchUserData() {
   };
 
   return function(dispatch) {
+    // dispatch(userDetailsLoaded(
+    //   {
+    //     '__authDetails': {
+    //       'user': {
+    //         'id': 'mohan',
+    //         'name': 'Mohan Rao'
+    //       },
+    //       'application': {
+    //         'id': 'taf_dashboard',
+    //         'name': 'taf_dashboard'
+    //       },
+    //       'roles': [
+    //         'ROLE_USER',
+    //         'ROLE_ADMIN',
+    //         'ROLE_SUPER_USER'
+    //       ]
+    //     }
+    //   }
+    // ));
+
     dispatch(userDetailsLoading());
 
     return fetch(baseUrl + '/api/user/profile', {

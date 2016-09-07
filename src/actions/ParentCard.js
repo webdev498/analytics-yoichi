@@ -56,15 +56,24 @@ export function removeComponentWithId(id) {
   };
 }
 
-function getUrl(api, duration) {
+function getUrl(api, duration, routerParams) {
   const {queryParams: query, path, pathParams} = api;
 
   let url = path;
 
   const pathKeys = Object.keys(pathParams);
+
   pathKeys.forEach((key) => {
     let templateString = `{${key}}`;
-    url = url.replace(templateString, pathParams[key]);
+
+    const param = pathParams[key];
+    // if param is :pathParam, it implies use path param of the current url.
+    if (param.startsWith(':pathParam')) {
+      url = url.replace(templateString, routerParams[key]);
+    }
+    else {
+      url = url.replace(templateString, pathParams[key]);
+    }
   });
 
   const keys = Object.keys(query);
@@ -75,10 +84,16 @@ function getUrl(api, duration) {
 
     keys.forEach((key) => {
       if ((key === 'window' || key === 'timeShift') && (query[key] === '')) {
-        queryString += key + '=' + duration + '&';
+        queryString += `${key}=${duration}&`;
+      }
+      // if query value is :pathParam, it implies use path param of the current url.
+      else if (('' + query[key]).endsWith(':pathParam')) {
+        // query[key] = 'user:pathParam', it will extract user from.
+        const paramKey = query[key].substr(0, query[key].indexOf(':pathParam'));
+        queryString += `${key}=${routerParams[paramKey]}&`;
       }
       else {
-        queryString += key + '=' + query[key] + '&';
+        queryString += `${key}=${query[key]}&`;
       }
     });
 
@@ -88,7 +103,7 @@ function getUrl(api, duration) {
   return baseUrl + url + queryString;
 }
 
-export function fetchApiData(id, api) {
+export function fetchApiData(id, api, params) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
 
@@ -105,23 +120,48 @@ export function fetchApiData(id, api) {
       'Authorization': `${tokenType} ${accessToken}`
     }, api.headers);
 
-    return fetch(getUrl(api, currentDuration), {
-      method: 'GET',
-      headers: defaultHeaders
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(receiveApiData(id, {json, api}));
-    })
-    .catch((ex) => {
-      dispatch(errorApiData(id, ex));
-    });
+    if (Array.isArray(api)) {
+      const arr = api.map((apiObj) => {
+        return fetch(getUrl(apiObj, currentDuration, params), {
+          method: 'GET',
+          headers: defaultHeaders
+        })
+        .then(response => response.json());
+      });
+
+      Promise.all(arr)
+      .then((results) => {
+        const json = {};
+        results.forEach((val, index) => {
+          const apiId = api[index].id;
+          json[apiId] = val;
+        });
+
+        dispatch(receiveApiData(id, {json, api}));
+      })
+      .catch((ex) => {
+        dispatch(errorApiData(id, ex));
+      });
+    }
+    else {
+      return fetch(getUrl(api, currentDuration, params), {
+        method: 'GET',
+        headers: defaultHeaders
+      })
+      .then(response => response.json())
+      .then(json => {
+        dispatch(receiveApiData(id, {json, api}));
+      })
+      .catch((ex) => {
+        dispatch(errorApiData(id, ex));
+      });
+    }
   };
 }
 
 // Update api data for all the components that are visible on the page
 // when time range is changed.
-export function updateApiData(newDuration) {
+export function updateApiData(newDuration, params) {
   return function(dispatch, getState) {
     const {apiData} = getState();
 
@@ -135,7 +175,7 @@ export function updateApiData(newDuration) {
         components.forEach((component, index) => {
           const id = component.get('id');
           const api = component.get('api');
-          fetchApiData(id, api)(dispatch, getState);
+          fetchApiData(id, api, params)(dispatch, getState);
         });
       }
     }

@@ -31,7 +31,8 @@ const styles = {
   'legend2': {
     fontSize: '13px',
     color: Colors.smoke
-  }
+  },
+  noData: {}
 };
 
 let highlightedColor1 = Colors.turquoise,
@@ -146,6 +147,20 @@ function renderChart(props) {
     return;
   }
 
+  if (props.data && props.chartData &&
+    props.chartData.fieldMapping &&
+    props.chartData.fieldMapping[0] &&
+    props.chartData.fieldMapping[0].reportId &&
+    props.data[props.chartData.fieldMapping[0].reportId].rows &&
+    props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
+    styles.noData = {
+      display: 'none'
+    };
+    return;
+  }
+
+  styles.noData = {};
+
   const data = props.data,
     fieldMapping = props.chartData.fieldMapping,
     chartOptions = props.chartOptions;
@@ -220,7 +235,7 @@ class PieChart extends React.Component {
 
     renderChart(props);
     return (
-      <div>
+      <div style={{...styles.noData}}>
         <div style={styles.pieWrap}>
           <div className='pieCard'>
             <div className='pie-chart chart' style={pieChartAttributes.chart2Background}>

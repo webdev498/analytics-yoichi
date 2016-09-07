@@ -12,8 +12,8 @@ import {updateRoute} from 'actions/core';
 const styles = {
   wrap: {
     position: 'relative',
-    borderTop: '6px solid ' + Colors.smoke,
     borderRadius: 0,
+    padding: '33px',
     boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
   },
   childwrap: {
@@ -25,7 +25,7 @@ const styles = {
   header: {
     display: 'flex',
     alignItems: 'center',
-    paddingBottom: '60px'
+    paddingBottom: '50px'
   },
   title: {
     textTransform: 'capitalize',
@@ -141,7 +141,7 @@ class ParentCard extends React.Component {
       api.pathParams = Object.assign({}, api.pathParams, props.params);
     }
 
-    props.fetchApiData(props.id, api);
+    props.fetchApiData(props.id, api, props.params);
   }
 
   componentDidMount() {
@@ -228,7 +228,7 @@ class ParentCard extends React.Component {
 
     if (props.meta.showHeader) {
       const childProps = Object.assign({}, props, {search: this.state.search}),
-        cardStyle = {...styles.wrap, ...props.attributes.style, padding: '33px'};
+        cardStyle = {...styles.wrap, ...props.attributes.style};
 
       return (
         <Card style={cardStyle} id={props.id}>
@@ -247,9 +247,10 @@ class ParentCard extends React.Component {
                   ref={(ref) => this.clearIcon = ref}>
                   close
                 </FontIcon>
+
                 <div style={{...styles.clearDiv}}
-                  onClick={this.clearSearchText()}
-                ></div>
+                  onClick={this.clearSearchText()} />
+
                 <input
                   id='searchText'
                   type='text'
@@ -258,6 +259,7 @@ class ParentCard extends React.Component {
                   onFocus={this.displayClearIcon(true)}
                   onBlur={this.displayClearIcon(false)}
                   ref={(ref) => this.myTextInput = ref} />
+
                 <FontIcon className='material-icons'
                   style={styles.searchIcon}
                   onClick={this.focusSearchText()}>
@@ -276,7 +278,22 @@ class ParentCard extends React.Component {
             </div>
           </header>
           <div> {React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})}
+            {(!props.data && !props.isFetching) ? 'No Data Found.' : null}
             {((props.data && props.data.rows && props.data.rows.length === 0)) ? 'No Data Found.' : null}
+            {(props.data && props.chartData &&
+              props.chartData.fieldMapping &&
+              props.chartData.fieldMapping[0] &&
+              props.chartData.fieldMapping[0].reportId &&
+              props.data[props.chartData.fieldMapping[0].reportId] &&
+              props.data[props.chartData.fieldMapping[0].reportId].rows &&
+              props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) ? 'No Data Found.' : null}
+            {(props.data && props.tableData &&
+              props.tableData.fieldMapping &&
+              props.tableData.fieldMapping[0] &&
+              props.tableData.fieldMapping[0].reportId &&
+              props.data[props.tableData.fieldMapping[0].reportId] &&
+              props.data[props.tableData.fieldMapping[0].reportId].rows &&
+              props.data[props.tableData.fieldMapping[0].reportId].rows.length === 0) ? 'No Data Found.' : null}
           </div>
         </Card>
       );
@@ -285,7 +302,22 @@ class ParentCard extends React.Component {
       return (
         <Card style={{...styles.childwrap, ...props.attributes.style}}>
           {props.isFetching ? <Loader style={props.attributes.loaderStyle} /> : null}
+          {(!props.data && !props.isFetching) ? 'No Data Found.' : null}
           {((props.data && props.data.rows && props.data.rows.length === 0)) ? 'No Data Found.' : null}
+          {(props.data && props.chartData &&
+            props.chartData.fieldMapping &&
+            props.chartData.fieldMapping[0] &&
+            props.chartData.fieldMapping[0].reportId &&
+            props.data[props.chartData.fieldMapping[0].reportId] &&
+            props.data[props.chartData.fieldMapping[0].reportId].rows &&
+            props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) ? 'No Data Found.' : null}
+          {(props.data && props.tableData &&
+              props.tableData.fieldMapping &&
+              props.tableData.fieldMapping[0] &&
+              props.tableData.fieldMapping[0].reportId &&
+              props.data[props.tableData.fieldMapping[0].reportId] &&
+              props.data[props.tableData.fieldMapping[0].reportId].rows &&
+              props.data[props.tableData.fieldMapping[0].reportId].rows.length === 0) ? 'No Data Found.' : null}
           {this.getElement()}
         </Card>
       );

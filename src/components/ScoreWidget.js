@@ -14,12 +14,20 @@ class ScoreWidget extends React.Component {
         textAlign: 'center',
         fontSize: '24px',
         fontFamily: 'Open Sans, sans-serif'
-      },
-      className = (scoreValue >= 60 && scoreValue <= 100) ? 'scoreWidgetBG1' : 'scoreWidgetBG2';
+      };
+
+    let className = (scoreValue >= 60 && scoreValue <= 100) ? 'sw-high-priority' : 'sw-low-priority';
+
+    if (props.inverse) {
+      style.borderRadius = 0;
+      style.backgroundColor = 'transparent';
+      style.color = (scoreValue >= 60 && scoreValue <= 100) ? Colors.coral : Colors.mustard;
+      className = '';
+    }
 
     return (
       <div style={style} className={className}>
-        {props.scoreValue}
+        {scoreValue}
       </div>
     );
   }

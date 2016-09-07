@@ -21,15 +21,20 @@ export default (store) => {
 
       { /* Routes requiring login */ }
       <Route onEnter={requireLogin} component={CoreLayout}>
+      { /* <Route component={CoreLayout}> */ }
         <Redirect from='dashboard' to='/' />
         <IndexRoute />
         <Route path='alerts' />
         <Route path='alert/:alertId/:date' />
+        <Route path='alert-new/:alertId/:date' />
         <Route path='country' />
         <Route path='traffic' />
-        <Route path='asset' />
+        <Route path='assets' />
+        <Route path='asset/:type/:assetId' />
         <Route path='user-agent' />
         <Route path='new-summary-page' />
+        <Route path='network-graph' />
+        <Route path='timeline-graph' />
       </Route>
 
       { /* Catch all route */ }

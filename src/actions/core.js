@@ -65,11 +65,12 @@ export function fetchLayoutData(id, params) {
       }
     })
     .then(response => {
+      const status = response.status;
       // if auth token expires, logout.
-      if (response.status === 401) {
+      if (status === 401) {
         logoutUtil(dispatch);
       }
-      else if (response.status === 404) {
+      else if (status === 404 || status === 500) {
         dispatch(receivePageData(id, {json: getLayout(urlId)}));
       }
       else {

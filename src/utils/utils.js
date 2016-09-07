@@ -1,3 +1,5 @@
+import React from 'react';
+
 import moment from 'moment';
 
 // Function to get Country ID by passing Country Code
@@ -76,10 +78,10 @@ export function generateRawData(fieldMapping, apiData) {
 // Function to get index from column name specified in layout JSON
 export function getIndexFromColumnName(currentChartDataColumns, columnsArray) {
   let columnIndex = '';
-  for (let a = 0; a < currentChartDataColumns.length; a++) {
-    for (let c = 0; c < columnsArray.length; c++) {
-      if (currentChartDataColumns[a] === columnsArray[c].name) {
-        columnIndex = c;
+  for (let i = 0; i < currentChartDataColumns.length; i++) {
+    for (let j = 0; j < columnsArray.length; j++) {
+      if (currentChartDataColumns[i] === columnsArray[j].name) {
+        columnIndex = j;
         break;
       }
     }
@@ -434,16 +436,40 @@ export function getColorRanges(secureConnectionsValues, maliciousConnectionsValu
   };
 }
 
-export function formatBytes(bytes, decimals) {
+function numberToReactElm(val, text, {numberStyle, textStyle} = {}) {
+  return (
+    <span>
+      <span style={numberStyle}>{val}</span>
+      <span style={textStyle}>{text}</span>
+    </span>
+  );
+}
+
+export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
   if (bytes === '' || bytes === undefined) return '-';
-  if (bytes === 0) return '0 Byte';
+
+  if (bytes === 0) {
+    if (numberStyle) {
+      return numberToReactElm(0, 'Byte', {numberStyle, textStyle});
+    }
+    else {
+      return '0 Byte';
+    }
+  }
 
   const k = 1000,
     dm = decimals + 1 || 3,
     sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
     i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[i];
+  const val = (bytes / Math.pow(k, i)).toPrecision(dm),
+    text = sizes[i];
+
+  // if custom sytles are provided then return React Element.
+  if (numberStyle) {
+    return numberToReactElm(val, text, {numberStyle, textStyle});
+  }
+  return val + ' ' + text;
 };
 
 export function formatMicroseconds(miliseconds) {
@@ -466,4 +492,40 @@ export function formatMicroseconds(miliseconds) {
 
 export function kFormatter(num) {
   return num > 999 ? (num / 1000).toFixed(2) + 'k' : num;
+}
+
+export function firstCharCapitalize(string) {
+  if (string === undefined) {
+    return string;
+  }
+  return string.toLowerCase().replace(/\b\w/g, function(m) {
+    return m.toUpperCase();
+  });
+};
+
+export function nFormatter(num, digits, {numberStyle, textStyle}) {
+  const si = [
+      { value: 1E18, symbol: 'E' },
+      { value: 1E15, symbol: 'P' },
+      { value: 1E12, symbol: 'T' },
+      { value: 1E9, symbol: 'G' },
+      { value: 1E6, symbol: 'M' },
+      { value: 1E3, symbol: 'k' }
+    ],
+    rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+
+  for (let i = 0; i < si.length; i++) {
+    if (num >= si[i].value) {
+      const digits = (num / si[i].value).toFixed(digits).replace(rx, '$1'),
+        text = si[i].symbol;
+      if (numberStyle) {
+        return numberToReactElm(digits, text);
+      }
+      else {
+        return digits + text;
+      }
+    }
+  }
+
+  return num.toFixed(digits).replace(rx, '$1');
 }
