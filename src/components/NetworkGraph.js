@@ -9,23 +9,24 @@ import Cookies from 'cookies-js';
 import {baseUrl} from 'config';
 
 const style = {
-  searchTextBox: {
-    backgroundColor: '#646A7D',
-    padding: '10px',
-    border: '0px',
-    margin: '5%',
-    width: '90%',
-    height: '50px',
-    color: '#BBBBC3',
-    fontFamily: 'Open Sans'
+    searchTextBox: {
+      backgroundColor: '#646A7D',
+      padding: '10px',
+      border: '0px',
+      margin: '5%',
+      width: '90%',
+      height: '50px',
+      color: '#BBBBC3',
+      fontFamily: 'Open Sans'
+    },
+    selectedNodeDetails: {
+      margin: '5%',
+      width: '90%',
+      color: '#24293D',
+      fontFamily: 'Open Sans'
+    }
   },
-  selectedNodeDetails: {
-    margin: '5%',
-    width: '90%',
-    color: '#24293D',
-    fontFamily: 'Open Sans'
-  }
-};
+  nodeObjects = {};
 
 // let x = 0,
 //   y = 0,
@@ -55,7 +56,8 @@ function getNodesEdges(data) {
 
   for (let i = 0; i < dataNodes.length; i++) {
     let dataNode = dataNodes[i],
-      nodeObject = {};
+      nodeObject = {},
+      nodeStatus = 'safe';
 
     nodeObject.id = dataNode.id;
     nodeObject.type = dataNode.type;
@@ -87,6 +89,16 @@ function getNodesEdges(data) {
                 value2;
               nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
                 value2;
+
+              if (value1.indexOf('Scanning Host') > -1) {
+                nodeStatus = 'scan';
+              }
+              else {
+                nodeStatus = 'malicious';
+              }
+            }
+            else {
+              nodeStatus = 'safe';
             }
             break;
           case 'country':
@@ -124,8 +136,9 @@ function getNodesEdges(data) {
     nodeObject.color = {};
     nodeObject.color.color = '#F2F2F4';
     nodeObject.color.highlight = Colors.turquoise;
-    nodeObject.image = getIcon(dataNode.type);
-    nodeObject.orgImage = getIcon(dataNode.type);
+    nodeObject.status = nodeStatus;
+    nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
+    // nodeObject.orgImage = getIcon(dataNode.type);
     let actions = [];
     if (dataNode.actions !== null && dataNode.actions !== undefined) {
       actions = dataNode.actions;
@@ -147,6 +160,7 @@ function getNodesEdges(data) {
     }*/
 
     nodes.push(nodeObject);
+    nodeObjects[dataNode.id] = nodeObject;
   }
 
   for (let i = 0; i < dataEdges.length; i++) {
@@ -185,32 +199,16 @@ function getNodesEdges(data) {
   };
 }
 
-function getIcon(nodeType) {
-  let iconPath = 'img/asset.png';
+function getIcon(nodeType, nodeStatus, nodeAction) {
   nodeType = nodeType.toLowerCase();
-  switch (nodeType) {
-    case 'ip':
-      iconPath = 'img/asset.png';
-      break;
-    case 'machine':
-      iconPath = 'img/asset.png';
-      break;
-    case 'http':
-      iconPath = 'img/http.png';
-      break;
-    case 'user':
-      iconPath = 'img/user.png';
-      break;
-    case 'app':
-      iconPath = 'img/app_orange.png';
-      break;
-    case 'domain':
-      iconPath = 'img/http.png';
-      break;
-    default:
-      break;
+  const iconPath = 'img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
+
+  if (nodeType !== '') {
+    return iconPath;
   }
-  return iconPath;
+  else {
+    return 'img/asset.png';
+  }
 }
 
 function getActionsByTypes(actionsData) {
@@ -338,7 +336,7 @@ class NetworkGraph extends React.Component {
         },
         'contextualMenu': {
           width: '350px',
-          height: '600px',
+          // height: '520px',
           backgroundColor: '#898E9B',
           display: 'none'
         }
@@ -356,11 +354,9 @@ class NetworkGraph extends React.Component {
     this.getContextMenu = this.getContextMenu.bind(this);
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
-    // this.selectNode = this.selectNode.bind(this);
-    this.deselectNode = this.deselectNode.bind(this);
   }
 
-  extendGraph(nodeID, nodeType, reportId, parameters) {
+  extendGraph(nodeID, nodeType, reportId, parameters, actionsCount, actionId) {
     const that = this;
     // console.log(JSON.stringify(nodeAt));
     return (event) => {
@@ -385,7 +381,8 @@ class NetworkGraph extends React.Component {
             edges = that.state.edges;
 
           for (let i = 0; i < rows.length; i++) {
-            let nodeObject = {
+            let nodeStatus = 'safe', // Currently, extended nodes doesn't return 'reputation' value.
+              nodeObject = {
                 id: rows[i][0],
                 type: nodeType,
                 label: '\n  <b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
@@ -403,8 +400,8 @@ class NetworkGraph extends React.Component {
                   'color': '#F2F2F4',
                   'highlight': Colors.turquoise
                 },
-                image: getIcon(nodeType),
-                orgImage: getIcon(nodeType)/*,
+                image: getIcon(nodeType, nodeStatus, 'INACTIVE'),
+                status: nodeStatus/*,
                 x: 550,
                 y: -100*/
               },
@@ -432,6 +429,7 @@ class NetworkGraph extends React.Component {
             if (isNodeAlreadyExists(nodes, rows[i][0]) === false) {
               nodes.push(nodeObject);
               edges.push(edgeObject);
+              nodeObjects[rows[i][0]] = nodeObject;
             }
             else {
               edges.push(edgeObject);
@@ -448,22 +446,32 @@ class NetworkGraph extends React.Component {
             'nodesListStatus': 'extended',
             'nodes': nodes,
             'edges': edges,
-            'style': {
+            /* 'style': {
               'networkGraph': {
                 'height': '600px',
                 'width': '100%'
               },
               'contextualMenu': {
                 width: '350px',
-                height: '600px',
+                height: '520px',
                 backgroundColor: '#898E9B',
                 display: 'none'
               }
-            },
-            'selectedNodeDetails': '',
+            },*/
+            // 'selectedNodeDetails': '',
             'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
           });
-          $('#actions').html('');
+          // $('#actions').html('');
+          for (let j = 0; j < actionsCount; j++) {
+            let tempId = 'action' + j;
+
+            if (tempId === actionId) {
+              document.getElementById(tempId).style.color = Colors.turquoise;
+            }
+            else {
+              document.getElementById(tempId).style.color = Colors.white;
+            }
+          }
         }
       );
     };
@@ -516,8 +524,9 @@ class NetworkGraph extends React.Component {
             let tr = document.createElement('tr');
             let td1 = document.createElement('td');
             td1.appendChild(document.createTextNode(actionsData[i].actions[j].label));
-
-            td1.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parametersToApi);
+            td1.id = 'action' + j;
+            td1.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parametersToApi,
+              actionsData[i].actions.length, 'action' + j);
             tr.appendChild(td1);
 
             if (userInputParameters.length > 0) {
@@ -579,26 +588,32 @@ class NetworkGraph extends React.Component {
         let SelectedNodeIDs = network.getSelection(),
           selectedNodeIndex = 0,
           selectedNodeDetails = '',
-          nodeType = '';
-        let nodeAt = network.getBoundingBox(SelectedNodeIDs.nodes[0]);
+          nodeType = '',
+          nodeStatus = 'safe',
+          nodeID = SelectedNodeIDs.nodes[0];
 
-        if (SelectedNodeIDs.nodes[0] !== undefined) {
-          let node = network.body.nodes[SelectedNodeIDs.nodes[0]];
-          node.setOptions({
-            image: 'img/http.png'
-          });
+        let nodeAt = network.getBoundingBox(nodeID);
 
+        if (nodeID !== undefined) {
           for (let i = 0; i < this.state.nodes.length; i++) {
-            if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
+            let node = network.body.nodes[this.state.nodes[i].id];
+            if (this.state.nodes[i].id === nodeID) {
               // console.log('Selected Node Id:', this.state.nodes[i]);
               selectedNodeDetails += this.state.nodes[i].nodeDetails;
               nodeType = this.state.nodes[i].type;
-              break;
+              node.setOptions({
+                image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'SELECTED')
+              });
+            }
+            else {
+              node.setOptions({
+                image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'INACTIVE')
+              });
             }
           }
 
           $('#actions').html('');
-          $('#actions').append(this.getContextMenu(SelectedNodeIDs.nodes[0], nodeType, nodeAt));
+          $('#actions').append(this.getContextMenu(nodeID, nodeType, nodeAt));
 
           let statesJSON = {
             'loadAgain': false,
@@ -610,7 +625,7 @@ class NetworkGraph extends React.Component {
               },
               'contextualMenu': {
                 width: '350px',
-                height: '600px',
+                // height: '520px',
                 backgroundColor: '#898E9B'
               }
             }
@@ -618,59 +633,6 @@ class NetworkGraph extends React.Component {
           this.setState(statesJSON);
         }
       }
-    };
-  }
-
-  /*selectNode(network) {
-    return (event) => {
-      let SelectedNodeIDs = network.getSelection();
-      console.log(SelectedNodeIDs.nodes[0]);
-      if (SelectedNodeIDs.nodes[0] !== undefined) {
-        for (let i = 0; i < this.state.nodes.length; i++) {
-          if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
-            this.state.nodes[i].image = (this.state.nodes[i].orgImage).replace('.png', '_select.png');
-          }
-          else {
-            this.state.nodes[i].image = this.state.nodes[i].orgImage;
-          }
-        }
-        this.loadNetworkGraph();
-      }
-      console.log(JSON.stringify(this.state.nodes));
-    };
-  }*/
-
-  deselectNode(network) {
-    return (event) => {
-      this.setState({
-        'loadAgain': false,
-        style: {
-          'networkGraph': {
-            'height': '600px',
-            'width': '100%'
-          },
-          'contextualMenu': {
-            width: '350px',
-            height: '600px',
-            backgroundColor: '#898E9B',
-            display: 'none'
-          }
-        },
-        selectedNodeDetails: '',
-        actions: ''
-      });
-      $('#actions').html('');
-      // document.getElementById('contextualMenu').style.display = 'none';
-      // document.getElementById('networkGraph').style.width = '100%';
-      // let SelectedNodeIDs = network.getSelection();
-      // console.log(SelectedNodeIDs.nodes[0]);
-      // if (SelectedNodeIDs.nodes[0] !== undefined) {
-      //   for (let i = 0; i < this.state.nodes.length; i++) {
-      //     if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
-      //       this.state.nodes[i].image = 'img/asset.png';
-      //     }
-      //   }
-      // }
     };
   }
 
@@ -682,19 +644,6 @@ class NetworkGraph extends React.Component {
     if (!data) {
       return;
     }
-
-    console.log(data);
-
-    // var yourString = "The quick brown fox jumps over the lazy dog"; //replace with your string.
-    // var maxLength = 6 // maximum number of characters to extract
-
-    // //trim the string to the maximum length
-    // var trimmedString = yourString.substr(0, maxLength);
-
-    // //re-trim if we are in the middle of a word
-    // trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
-
-    // console.log(trimmedString);
 
     if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
@@ -711,7 +660,8 @@ class NetworkGraph extends React.Component {
           navigationButtons: true,
           keyboard: false,
           multiselect: true,
-          hover: true
+          hover: true,
+          selectConnectedEdges: false
         },
         autoResize: true,
         height: '600',
@@ -725,72 +675,96 @@ class NetworkGraph extends React.Component {
         edges: this.state.edges
       };
 
-      // if (data.nodes.length > 0) {
-        let network = new vis.Network(this.networkGraph, data, options),
-          networkGraphContainer = document.getElementById('networkGraph');
-        // network.on('selectNode', this.selectNode(network));
-        // network.on('deselectNode', this.deselectNode(network));
+      if (data.nodes.length > 0) {
+        let network = new vis.Network(this.networkGraph, data, options);
+        network.on('select', this.loadContextMenu(network));
 
-        /* Following code is for left click context menu */
-        // network.on('select', this.loadContextMenu(network));
+        const that = this;
 
-        network.on("selectNode", this.loadContextMenu(network)
-          // function (params) {
-          // var selectedNodeId = params.nodes[0];
-          // var node = network.body.nodes[selectedNodeId];
-          // node.setOptions({
-          //   image: 'img/http.png'
-          // });
-          // }
-        );
+        network.on('deselectNode', function(params) {
+          let deselectedNode = params.previousSelection.nodes[0];
+          let node = network.body.nodes[deselectedNode];
+          if (nodeObjects[deselectedNode] !== undefined) {
+            node.setOptions({
+              image: getIcon(nodeObjects[deselectedNode].type, nodeObjects[deselectedNode].status, 'INACTIVE')
+            });
 
-        network.on("deselectNode", function (params) {
-          var deselectedNodeId = params.previousSelection.nodes[0];
-          console.log(deselectedNodeId, data.nodes.image);
-          var node = network.body.nodes[deselectedNodeId];
-          node.setOptions({
-            image: 'img/asset.png' //data.nodes.image
-          });
+            that.setState({
+              'loadAgain': false,
+              style: {
+                'networkGraph': {
+                  'height': '600px',
+                  'width': '100%'
+                },
+                'contextualMenu': {
+                  width: '350px',
+                  // height: '520px',
+                  backgroundColor: '#898E9B',
+                  display: 'none'
+                }
+              },
+              selectedNodeDetails: '',
+              actions: ''
+            });
+            $('#actions').html('');
+          }
         });
 
-        network.on("hoverNode", function (params) {
-          var hoverNodeId = params.node,
-            selectedNodes = network.getSelection().nodes;
-          if (selectedNodes.length > 0) {
-            if (selectedNodes.indexOf(hoverNodeId) < 0) {
-              var node = network.body.nodes[hoverNodeId];
+        network.on('hoverNode', function(params) {
+          let hoverNode = params.node,
+            selectedNodes = network.getSelection().nodes,
+            node = network.body.nodes[hoverNode];
+
+          if (nodeObjects[hoverNode] !== undefined) {
+            if (selectedNodes.length > 0) {
+              if (selectedNodes.indexOf(hoverNode) > -1) {
+                node.setOptions({
+                  image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
+                });
+              }
+              else {
+                node.setOptions({
+                  image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
+                });
+              }
+            }
+            else {
               node.setOptions({
-                image: 'img/user.png'
+                image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
               });
             }
           }
-          else {
-            var node = network.body.nodes[hoverNodeId];
-            node.setOptions({
-              image: 'img/user.png'
-            });
-          }
         });
 
-        network.on("blurNode", function (params) {
-          var blurNodeId = params.node,
-            selectedNodes = network.getSelection().nodes;
-          if (selectedNodes.length > 0) {
-            if (selectedNodes.indexOf(blurNodeId) < 0) {
-              var node = network.body.nodes[blurNodeId];
+        network.on('blurNode', function(params) {
+          let blurNode = params.node,
+            selectedNodes = network.getSelection().nodes,
+            node = network.body.nodes[blurNode];
+
+          if (nodeObjects[blurNode] !== undefined) {
+            if (selectedNodes.length > 0) {
+              if (selectedNodes.indexOf(blurNode) > -1) {
+                node.setOptions({
+                  image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
+                });
+              }
+              else {
+                node.setOptions({
+                  image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
+                });
+              }
+            }
+            else {
               node.setOptions({
-                image: 'img/asset.png'
+                image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
               });
             }
           }
-          else {
-            var node = network.body.nodes[blurNodeId];
-            node.setOptions({
-              image: 'img/asset.png'
-            });
-          }
         });
-      // }
+      }
+      else {
+        document.getElementById('networkGraph').innerHTML = 'No Data Found.';
+      }
     }
   }
 
@@ -799,29 +773,31 @@ class NetworkGraph extends React.Component {
 
     return (
       <div style={{display: 'flex'}}>
-        <div ref={(ref) => this.networkGraph = ref} style={this.state.style.networkGraph}
+        <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
+          ...{
+            backgroundColor: Colors.networkGraphBGColor
+          }}}
           id='networkGraph'>
           {this.loadNetworkGraph(props.data, this.state.loadAgain)}
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
-          style={{...this.state.style.contextualMenu,
-            ...{
-              height: '600px',
-              overflowX: 'none',
-              overflowY: 'scroll'
-            }
-          }}
-          id='contextualMenu' className='contextMenu'>
+          style={{...this.state.style.contextualMenu}} id='contextualMenu'>
           <input type='text' id='searchNetworkNode'
             style={{...style.searchTextBox}}
             placeholder='Search' /><br />
-          <div
-            style={{...style.selectedNodeDetails}}
-            dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
+          <div style={{
+            height: '520px',
+            overflowX: 'none',
+            overflowY: 'scroll'
+          }} className='contextMenu'>
+            <div
+              style={{...style.selectedNodeDetails}}
+              dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
+            </div>
+            <div id='actions'></div>
+            {/* dangerouslySetInnerHTML={{__html: this.state.actions}}*/}
+            <div id='tempActions' style={{display: 'none'}}></div>
           </div>
-          <div id='actions'></div>
-          {/* dangerouslySetInnerHTML={{__html: this.state.actions}}*/}
-          <div id='tempActions' style={{display: 'none'}}></div>
         </div>
       </div>
     );
