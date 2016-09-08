@@ -335,10 +335,12 @@ class NetworkGraph extends React.Component {
           'width': '100%'
         },
         'contextualMenu': {
-          width: '350px',
+          width: '300px',
           // height: '520px',
           backgroundColor: '#898E9B',
-          display: 'none'
+          display: 'none',
+          position: 'absolute',
+          left: '830px'
         }
       },
       selectedNodeDetails: '',
@@ -452,7 +454,7 @@ class NetworkGraph extends React.Component {
                 'width': '100%'
               },
               'contextualMenu': {
-                width: '350px',
+                width: '300px',
                 height: '520px',
                 backgroundColor: '#898E9B',
                 display: 'none'
@@ -624,9 +626,11 @@ class NetworkGraph extends React.Component {
                 'width': '100%'
               },
               'contextualMenu': {
-                width: '350px',
+                width: '300px',
                 // height: '520px',
-                backgroundColor: '#898E9B'
+                backgroundColor: '#898E9B',
+                position: 'absolute',
+                left: '830px'
               }
             }
           };
@@ -655,7 +659,26 @@ class NetworkGraph extends React.Component {
 
     if (this.networkGraph !== null && this.networkGraph !== undefined) {
       let options = {
-        physics: false,
+        /*physics: {
+          enabled: true,
+          // barnesHut: {
+          //   springLength: 10,
+          //   avoidOverlap: 0
+          // },
+          // forceAtlas2Based: {
+          //   springLength: 10,
+          //   avoidOverlap: 0
+          // }
+          stabilization: {
+            enabled: true
+          }
+        },*/
+        // physics: false,
+        physics: {
+          'barnesHut': {
+            'avoidOverlap': 1
+          }
+        },
         interaction: {
           navigationButtons: true,
           keyboard: false,
@@ -666,7 +689,10 @@ class NetworkGraph extends React.Component {
         autoResize: true,
         height: '600',
         width: '100%',
-        edges: {selectionWidth: 1}
+        edges: {selectionWidth: 1},
+        layout: {
+          improvedLayout: true
+        }
       };
 
       // create a network
@@ -697,10 +723,12 @@ class NetworkGraph extends React.Component {
                   'width': '100%'
                 },
                 'contextualMenu': {
-                  width: '350px',
+                  width: '300px',
                   // height: '520px',
                   backgroundColor: '#898E9B',
-                  display: 'none'
+                  display: 'none',
+                  position: 'absolute',
+                  left: '830px'
                 }
               },
               selectedNodeDetails: '',
@@ -761,6 +789,12 @@ class NetworkGraph extends React.Component {
             }
           }
         });
+
+        $('.vis-up').hide();
+        $('.vis-down').hide();
+        $('.vis-left').hide();
+        $('.vis-right').hide();
+        $('.vis-zoomExtends').hide();
       }
       else {
         document.getElementById('networkGraph').innerHTML = 'No Data Found.';
@@ -775,7 +809,7 @@ class NetworkGraph extends React.Component {
       <div style={{display: 'flex'}}>
         <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
           ...{
-            backgroundColor: Colors.networkGraphBGColor
+            // backgroundColor: Colors.networkGraphBGColor
           }}}
           id='networkGraph'>
           {this.loadNetworkGraph(props.data, this.state.loadAgain)}

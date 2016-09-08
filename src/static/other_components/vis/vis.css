@@ -972,7 +972,7 @@ div.vis-network div.vis-close:hover {
 div.vis-network div.vis-manipulation div.vis-button,
 div.vis-network div.vis-edit-mode div.vis-button {
   float:left;
-  font-family: verdana;
+  font-family: 'Open Sans, verdana';
   font-size: 12px;
   -moz-border-radius: 15px;
   border-radius: 15px;
@@ -1070,7 +1070,7 @@ div.vis-network-tooltip {
   padding: 5px;
   white-space: nowrap;
 
-  font-family: verdana;
+  font-family: 'Open Sans';
   font-size:14px;
   color:#000000;
   background-color: #f5f4ed;
@@ -1102,11 +1102,11 @@ div.vis-network div.vis-navigation div.vis-button {
 }
 
 div.vis-network div.vis-navigation div.vis-button:hover {
-    box-shadow: 0 0 3px 3px rgba(56, 207, 21, 0.30);
+    /*box-shadow: 0 0 3px 3px rgba(56, 207, 21, 0.30);*/
 }
 
 div.vis-network div.vis-navigation div.vis-button:active {
-    box-shadow: 0 0 1px 3px rgba(56, 207, 21, 0.95);
+    /*box-shadow: 0 0 1px 3px rgba(56, 207, 21, 0.95);*/
 }
 
 div.vis-network div.vis-navigation div.vis-button.vis-up {
