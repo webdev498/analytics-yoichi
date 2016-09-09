@@ -324,7 +324,8 @@ const alerts = {
         },
         'attributes': {
           'style': {
-            'width': '30%',
+            'width': '290px',
+            'flex': '0 0 290px',
             'marginLeft': '33px'
           },
           'id': 'RecentAlerts'
