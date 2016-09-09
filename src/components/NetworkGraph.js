@@ -26,7 +26,8 @@ const style = {
       fontFamily: 'Open Sans'
     }
   },
-  nodeObjects = {};
+  nodeObjects = {},
+  edgeObjects = {};
 
 // let x = 0,
 //   y = 0,
@@ -130,7 +131,6 @@ function getNodesEdges(data) {
         actions = dataNode.actions;
       }
       nodeObject.actions = actions;
-
       /* if (xArray[i] !== null && xArray[i] !== undefined) {
         nodeObject.x = xArray[i];
       }
@@ -180,6 +180,7 @@ function getNodesEdges(data) {
       edgeObject.color.highlight = Colors.turquoise;
 
       edges.push(edgeObject);
+      edgeObjects[dataEdge.target] = edgeObject;
     }
   }
 
@@ -345,7 +346,9 @@ class NetworkGraph extends React.Component {
           backgroundColor: '#898E9B',
           display: 'none',
           position: 'absolute',
-          left: '830px'
+          // left: '830px'
+          top: '0px',
+          right: '0px'
         }
       },
       selectedNodeDetails: '',
@@ -356,7 +359,8 @@ class NetworkGraph extends React.Component {
       actions: '',
       duration: duration,
       alertDate: alertDate,
-      selectedNodesForExtendingGraph: []
+      selectedNodesForExtendingGraph: [],
+      zoomScale: '100%'
     };
 
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
@@ -457,7 +461,9 @@ class NetworkGraph extends React.Component {
                   backgroundColor: '#898E9B',
                   display: 'none',
                   position: 'absolute',
-                  left: '830px'
+                  // left: '830px'
+                  top: '0px',
+                  right: '0px'
                 }
               },
               selectedNodeDetails: '',
@@ -519,6 +525,12 @@ class NetworkGraph extends React.Component {
               });
             }
           }
+        });
+
+        network.on('zoom', function(params) {
+          that.setState({
+            'zoomScale': parseInt(params.scale * 100) + '%'
+          });
         });
 
         $('.vis-up').hide();
@@ -587,7 +599,9 @@ class NetworkGraph extends React.Component {
                 // height: '520px',
                 backgroundColor: '#898E9B',
                 position: 'absolute',
-                left: '830px'
+                // left: '830px'
+                top: '0px',
+                right: '0px'
               }
             }
           };
@@ -633,9 +647,16 @@ class NetworkGraph extends React.Component {
                     else if (parameters[k].name === 'date') {
                       tempObj.value = this.state.alertDate;
                     }
-                    else if ((parameters[k].name === 'ip' || parameters[k].name === 'sourceip') &&
-                      nodeType.toLowerCase() === 'ip') {
+                    else if (parameters[k].name === 'ip' && nodeType.toLowerCase() === 'ip') {
                       tempObj.value = nodeID;
+                    }
+                    else if (parameters[k].name === 'sourceip') {
+                      if (edgeObjects[nodeID] !== undefined) {
+                        tempObj.value = edgeObjects[nodeID].from;
+                      }
+                      else {
+                        tempObj.value = '';
+                      }
                     }
                     else {
                       tempObj.value = '';
@@ -745,6 +766,7 @@ class NetworkGraph extends React.Component {
           for (let i = 0; i < nodesEdges.edges.length; i++) {
             if (isNodeOrEdgeAlreadyExists(edges, nodesEdges.edges[i].id) === false) {
               edges.push(nodesEdges.edges[i]);
+              edgeObjects[nodesEdges.edges[i].to] = nodesEdges.edges[i];
             }
           }
 
@@ -863,7 +885,7 @@ class NetworkGraph extends React.Component {
             style={{...style.searchTextBox}}
             placeholder='Search' /><br />
           <div style={{
-            height: '520px',
+            height: '645px',
             overflowX: 'none',
             overflowY: 'scroll'
           }} className='contextMenu'>
@@ -876,6 +898,13 @@ class NetworkGraph extends React.Component {
             <div id='tempActions' style={{display: 'none'}}></div>
           </div>
         </div>
+        <div style={{
+          bottom: '20px',
+          fontSize: '12px',
+          left: '35px',
+          position: 'absolute',
+          backgroundColor: Colors.white
+        }}>{ /* {this.state.zoomScale}*/}</div>
       </div>
     );
   }
