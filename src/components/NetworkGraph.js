@@ -630,7 +630,7 @@ class NetworkGraph extends React.Component {
           for (let i = 0; i < this.state.edges.length; i++) {
             let node = network.body.edges[this.state.edges[i].id];
             if (this.state.edges[i].id === nodeID) {
-              console.log('aa: ', this.state.edges[i], nodeID);
+              // console.log('aa: ', this.state.edges[i], nodeID);
               // console.log('Selected Node Id:', this.state.nodes[i]);
               selectedNodeDetails += this.state.edges[i].edgeDetails;
               nodeType = this.state.edges[i].type;
