@@ -7,6 +7,7 @@ import {
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import {baseUrl} from 'config';
+import Loader from '../components/Loader';
 
 const style = {
     searchTextBox: {
@@ -24,6 +25,9 @@ const style = {
       width: '90%',
       color: '#24293D',
       fontFamily: 'Open Sans'
+    },
+    loaderStyle: {
+
     }
   },
   nodeObjects = {},
@@ -125,7 +129,6 @@ function getNodesEdges(data) {
       nodeObject.color.highlight = Colors.turquoise;
       nodeObject.status = nodeStatus;
       nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-      // nodeObject.orgImage = getIcon(dataNode.type);
       let actions = [];
       if (dataNode.actions !== null && dataNode.actions !== undefined) {
         actions = dataNode.actions;
@@ -283,6 +286,9 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   .then(response => response.json()
   )
   .catch(error => {
+    this.setState({
+      isFetching: false
+    });
     return Promise.reject(Error(error.message));
   });
 }
@@ -360,7 +366,8 @@ class NetworkGraph extends React.Component {
       duration: duration,
       alertDate: alertDate,
       selectedNodesForExtendingGraph: [],
-      zoomScale: '100%'
+      zoomScale: '100%',
+      isFetching: false
     };
 
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
@@ -732,8 +739,10 @@ class NetworkGraph extends React.Component {
 
   extendGraph(network, nodeID, nodeType, reportId, parameters, actionsCount, actionId) {
     const that = this;
-    // console.log(JSON.stringify(nodeAt));
     return (event) => {
+      this.setState({
+        isFetching: true
+      });
       let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
         if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
@@ -744,15 +753,23 @@ class NetworkGraph extends React.Component {
       }
 
       const extendedNodes = fetchExtendedNodes(reportId, this.state.duration, parameters);
-      // let rows = extendedNodes;
       if (!extendedNodes) {
+        this.setState({
+          isFetching: false
+        });
         return;
       }
       extendedNodes.then(
         function(json) {
-          // rows = json.rows;
           let nodes = that.state.nodes,
             edges = that.state.edges;
+
+          if (json[0] === undefined) {
+            that.setState({
+              isFetching: false
+            });
+            return;
+          }
 
           let nodesEdges = getNodesEdges(json[0]);
 
@@ -770,60 +787,6 @@ class NetworkGraph extends React.Component {
             }
           }
 
-          /*for (let i = 0; i < rows.length; i++) {
-            let nodeStatus = 'safe', // Currently, extended nodes doesn't return 'reputation' value.
-              nodeObject = {
-                id: rows[i][0],
-                type: nodeType,
-                label: '\n  <b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
-                title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
-                nodeDetails: firstCharCapitalize(nodeType) + ': ' + rows[i][0],
-                borderWidth: '0',
-                'font': {
-                  'face': 'Open Sans',
-                  'color': Colors.pebble,
-                  'size': '11',
-                  'align': 'left'
-                },
-                shape: 'image',
-                color: {
-                  'color': '#F2F2F4',
-                  'highlight': Colors.turquoise
-                },
-                image: getIcon(nodeType, nodeStatus, 'INACTIVE'),
-                status: nodeStatus
-              },
-              edgeObject = {
-                from: nodeID,
-                to: rows[i][0],
-                arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
-                label: '',
-                'font': {
-                  'face': 'Open Sans',
-                  'color': Colors.pebble,
-                  'size': '11',
-                  'align': 'left'
-                },
-                length: 1000,
-                smooth: {
-                  type: 'discrete'
-                },
-                'color': {
-                  'color': Colors.pebble,
-                  'highlight': Colors.turquoise
-                }
-              };
-
-            if (isNodeAlreadyExists(nodes, rows[i][0]) === false) {
-              nodes.push(nodeObject);
-              edges.push(edgeObject);
-              nodeObjects[rows[i][0]] = nodeObject;
-            }
-            else {
-              edges.push(edgeObject);
-            }
-          }*/
-
           selectedNodesForExtendingGraph.push({
             'nodeID': nodeID,
             'reportId': reportId
@@ -836,24 +799,12 @@ class NetworkGraph extends React.Component {
             'nodesListStatus': 'extended',
             'nodes': nodes,
             'edges': edges,
-            /* 'style': {
-              'networkGraph': {
-                'height': '600px',
-                'width': '100%'
-              },
-              'contextualMenu': {
-                width: '300px',
-                height: '520px',
-                backgroundColor: '#898E9B',
-                display: 'none'
-              }
-            },*/
-            // 'selectedNodeDetails': '',
-            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
+            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
+            isFetching: false
           });
-          // $('#actions').html('');
         }
       );
+
       for (let j = 0; j < actionsCount; j++) {
         let tempId = 'action' + j;
 
@@ -872,6 +823,7 @@ class NetworkGraph extends React.Component {
 
     return (
       <div style={{display: 'flex'}}>
+        {this.state.isFetching ? <Loader style={style.loaderStyle} /> : null}
         <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
           ...{
             // backgroundColor: Colors.networkGraphBGColor
