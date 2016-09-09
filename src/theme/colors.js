@@ -63,6 +63,8 @@ export const TimelineBarColors = [
 
 export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
 
+export const NetworkGraphBGColor = '#F7F7F9';
+
 export const Colors = {
   garnet: GarnetColor,
   grape: GrapeColor,
@@ -87,7 +89,8 @@ export const Colors = {
   worldmapLegendsColor: WorldmapLegendsColor,
   axisColor: AxisColor,
   // defaultTimelineGraphPaletteColors: DefaultTimelineGraphPaletteColors
-  timelineBarColors: TimelineBarColors
+  timelineBarColors: TimelineBarColors,
+  networkGraphBGColor: NetworkGraphBGColor
 };
 
 export const PrimaryPalette = {
