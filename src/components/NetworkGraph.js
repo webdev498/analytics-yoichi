@@ -402,12 +402,12 @@ class NetworkGraph extends React.Component {
             enabled: true
           }
         },*/
-        physics: false,
-        // physics: {
-        //   'barnesHut': {
-        //     'avoidOverlap': 1
-        //   }
-        // },
+        // physics: false,
+        physics: {
+          'barnesHut': {
+            'avoidOverlap': 1
+          }
+        },
         interaction: {
           navigationButtons: true,
           keyboard: false,
