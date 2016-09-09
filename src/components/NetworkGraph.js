@@ -802,6 +802,13 @@ class NetworkGraph extends React.Component {
             'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
             isFetching: false
           });
+
+          let node = network.body.nodes[nodeID];
+          if (nodeObjects[nodeID] !== undefined) {
+            node.setOptions({
+              image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
+            });
+          }
         }
       );
 
