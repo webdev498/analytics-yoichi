@@ -2,29 +2,31 @@ import React from 'react';
 import {Colors} from 'theme/colors';
 import $ from 'jquery';
 import {
-  firstCharCapitalize
+  firstCharCapitalize,
+  getCountryNameByCountryCode
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import {baseUrl} from 'config';
 
 const style = {
-  searchTextBox: {
-    backgroundColor: '#646A7D',
-    padding: '10px',
-    border: '0px',
-    margin: '5%',
-    width: '90%',
-    height: '50px',
-    color: '#BBBBC3',
-    fontFamily: 'Open Sans'
+    searchTextBox: {
+      backgroundColor: '#646A7D',
+      padding: '10px',
+      border: '0px',
+      margin: '5%',
+      width: '90%',
+      height: '50px',
+      color: '#BBBBC3',
+      fontFamily: 'Open Sans'
+    },
+    selectedNodeDetails: {
+      margin: '5%',
+      width: '90%',
+      color: '#24293D',
+      fontFamily: 'Open Sans'
+    }
   },
-  selectedNodeDetails: {
-    margin: '5%',
-    width: '90%',
-    color: '#24293D',
-    fontFamily: 'Open Sans'
-  }
-};
+  nodeObjects = {};
 
 // let x = 0,
 //   y = 0,
@@ -37,118 +39,148 @@ function getNodesEdges(data) {
     dataNodes = data.nodes,
     dataEdges = data.edges;
 
-  for (let i = 0; i < dataNodes.length; i++) {
-    let dataNode = dataNodes[i],
-      nodeObject = {};
+  if (dataNodes !== undefined) {
+    for (let i = 0; i < dataNodes.length; i++) {
+      let dataNode = dataNodes[i],
+        nodeObject = {},
+        nodeStatus = 'safe';
 
-    nodeObject.id = dataNode.id;
-    nodeObject.type = dataNode.type;
-    nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-    nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-    nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-    for (let metadataType in dataNode.metadata) {
-      if (metadataType !== 'coordinates') {
-        switch (metadataType) {
-          case 'reputation':
-            let values = dataNode.metadata[metadataType].reputation,
-              value = '';
-            for (let v = 0; v < values.length; v++) {
-              if (v === 0) {
-                value = values[0];
+      nodeObject.id = dataNode.id;
+      nodeObject.type = dataNode.type;
+      nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+      nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+      nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+      for (let metadataType in dataNode.metadata) {
+        let metadataTypeLower = metadataType.toLowerCase();
+        if (metadataTypeLower !== 'coordinates') {
+          switch (metadataTypeLower) {
+            case 'reputation':
+              let values = dataNode.metadata[metadataType].reputation,
+                value1 = '',
+                value2 = '';
+              for (let v = 0; v < values.length; v++) {
+                if (v === 0) {
+                  value1 = values[0];
+                  value2 = values[0];
+                }
+                else {
+                  value1 += ',\n  ' + values[0];
+                  value2 += ',<br />' + values[0];
+                }
+              }
+              if (value1 !== '') {
+                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  value1;
+                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  value2;
+                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+                  value2;
+
+                if (value1.indexOf('Scanning Host') > -1) {
+                  nodeStatus = 'scan';
+                }
+                else {
+                  nodeStatus = 'malicious';
+                }
               }
               else {
-                value += ', ' + values[0];
+                nodeStatus = 'safe';
               }
-            }
-            if (value !== '') {
+              break;
+            case 'country':
               nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                value;
+                getCountryNameByCountryCode[dataNode.metadata[metadataType]];
               nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                value;
-              nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' +
-                value;
-            }
-            break;
-          case 'displayName':
-            nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
-            nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
-            nodeObject.nodeDetails += ' Name: ' + dataNode.metadata[metadataType];
-            break;
-          default:
-            nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              dataNode.metadata[metadataType];
-            nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              dataNode.metadata[metadataType];
-            nodeObject.nodeDetails += ' ' + firstCharCapitalize(metadataType) + ': ' +
-              dataNode.metadata[metadataType];
-            break;
+                getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+              nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+                getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+              break;
+            case 'displayname':
+              nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
+              nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
+              nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
+              break;
+            default:
+              nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                addNewlines(dataNode.metadata[metadataType]);
+              nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                dataNode.metadata[metadataType];
+              nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+                dataNode.metadata[metadataType];
+              break;
+          }
         }
       }
-    }
-    nodeObject.borderWidth = '0';
-    nodeObject.font = {
-      'face': 'Open Sans',
-      'color': Colors.pebble,
-      'size': '11',
-      'align': 'left'
-    };
-    nodeObject.shape = 'image';
-    nodeObject.color = {};
-    nodeObject.color.color = '#F2F2F4';
-    nodeObject.color.highlight = Colors.turquoise;
-    nodeObject.image = getIcon(dataNode.type);
-    nodeObject.orgImage = getIcon(dataNode.type);
-    let actions = [];
-    if (dataNode.actions !== null && dataNode.actions !== undefined) {
-      actions = dataNode.actions;
-    }
-    nodeObject.actions = actions;
+      nodeObject.borderWidth = '0';
+      nodeObject.font = {
+        'face': 'Open Sans',
+        'color': Colors.pebble,
+        'size': '11',
+        'align': 'left'
+      };
+      nodeObject.shape = 'image';
+      nodeObject.color = {};
+      nodeObject.color.color = '#F2F2F4';
+      nodeObject.color.highlight = Colors.turquoise;
+      nodeObject.status = nodeStatus;
+      nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
+      // nodeObject.orgImage = getIcon(dataNode.type);
+      let actions = [];
+      if (dataNode.actions !== null && dataNode.actions !== undefined) {
+        actions = dataNode.actions;
+      }
+      nodeObject.actions = actions;
 
-    /* if (xArray[i] !== null && xArray[i] !== undefined) {
-      nodeObject.x = xArray[i];
-    }
-    else {
-      nodeObject.x = 350;
-    }
+      /* if (xArray[i] !== null && xArray[i] !== undefined) {
+        nodeObject.x = xArray[i];
+      }
+      else {
+        nodeObject.x = 350;
+      }
 
-    if (yArray[i] !== null && yArray[i] !== undefined) {
-      nodeObject.y = yArray[i];
-    }
-    else {
-      nodeObject.y = -100;
-    }*/
+      if (yArray[i] !== null && yArray[i] !== undefined) {
+        nodeObject.y = yArray[i];
+      }
+      else {
+        nodeObject.y = -100;
+      }*/
 
-    nodes.push(nodeObject);
+      nodes.push(nodeObject);
+      nodeObjects[dataNode.id] = nodeObject;
+    }
   }
 
-  for (let i = 0; i < dataEdges.length; i++) {
-    let dataEdge = dataEdges[i],
-      edgeObject = {};
+  if (dataEdges !== undefined) {
+    for (let i = 0; i < dataEdges.length; i++) {
+      let dataEdge = dataEdges[i],
+        edgeObject = {};
 
-    edgeObject.from = dataEdge.source;
-    edgeObject.to = dataEdge.target;
-    edgeObject.arrows = {
-      'to': {
-        'scaleFactor': 0.5
-      },
-      'arrowStrikethrough': false
-    };
-    edgeObject.label = dataEdge.label + '\n\n\n';
-    edgeObject.font = {
-      'face': 'Open Sans',
-      'color': Colors.pebble,
-      'size': '11',
-      'align': 'left'
-    };
-    edgeObject.length = 1000;
-    edgeObject.smooth = {
-      type: 'discrete'
-    };
-    edgeObject.color = {};
-    edgeObject.color.color = Colors.pebble;
-    edgeObject.color.highlight = Colors.turquoise;
+      edgeObject.id = dataEdge.id;
+      edgeObject.from = dataEdge.source;
+      edgeObject.to = dataEdge.target;
+      edgeObject.arrows = {
+        'to': {
+          'scaleFactor': 0.5
+        },
+        'arrowStrikethrough': false
+      };
+      edgeObject.label = dataEdge.label + '\n\n\n';
+      edgeObject.font = {
+        'face': 'Open Sans',
+        'color': Colors.pebble,
+        'size': '11',
+        'align': 'left'
+      };
+      edgeObject.length = 1000;
+      edgeObject.smooth = {
+        type: 'discrete'
+      };
+      edgeObject.color = {};
+      edgeObject.color.color = Colors.pebble;
+      edgeObject.color.highlight = Colors.turquoise;
 
-    edges.push(edgeObject);
+      edges.push(edgeObject);
+    }
   }
 
   return {
@@ -157,32 +189,16 @@ function getNodesEdges(data) {
   };
 }
 
-function getIcon(nodeType) {
-  let iconPath = 'img/asset.png';
+function getIcon(nodeType, nodeStatus, nodeAction) {
   nodeType = nodeType.toLowerCase();
-  switch (nodeType) {
-    case 'ip':
-      iconPath = 'img/asset.png';
-      break;
-    case 'machine':
-      iconPath = 'img/asset.png';
-      break;
-    case 'http':
-      iconPath = 'img/http.png';
-      break;
-    case 'user':
-      iconPath = 'img/user.png';
-      break;
-    case 'app':
-      iconPath = 'img/app_orange.png';
-      break;
-    case 'domain':
-      iconPath = 'img/http.png';
-      break;
-    default:
-      break;
+  const iconPath = 'img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
+
+  if (nodeType !== '') {
+    return iconPath;
   }
-  return iconPath;
+  else {
+    return 'img/asset.png';
+  }
 }
 
 function getActionsByTypes(actionsData) {
@@ -251,9 +267,7 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   }
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
-    // apiUrl = baseUrl + '/api/analytics/reporting/execute/' + reportId + '?window=' + duration + '&' +
-      // otherParameters,
-    apiUrl = baseUrl + '/api/analytics/reporting/execute/' + reportId + '?' + otherParameters,
+    apiUrl = baseUrl + '/api/analytics/actions/execute/' + reportId + '?' + otherParameters,
     customHeaders = {
       'Accept': 'application/json'
     },
@@ -272,10 +286,10 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   });
 }
 
-function isNodeAlreadyExists(nodes, nodeID) {
+function isNodeOrEdgeAlreadyExists(array, id) {
   let exists = false;
-  for (let i = 0; i < nodes.length; i++) {
-    if (nodes[i].id === nodeID) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].id === id) {
       exists = true;
     }
   }
@@ -296,10 +310,27 @@ function checkForUserInputs(parameters) {
   return userInputParameters;
 }
 
+function addNewlines(str) {
+  let char = 15;
+  if (str.length > char) {
+    let result = '';
+    while (str.length > 0) {
+      // let last = str.lastIndexOf(' ');
+      // console.log(last, str);
+      result += str.substring(0, char) + '\n  '; // Math.min(char, last)
+      str = str.substring(char);
+    }
+    return result;
+  }
+  return str;
+}
+
 class NetworkGraph extends React.Component {
   constructor(props) {
     super(props);
-    const {duration} = this.props;
+    const {duration} = this.props,
+      alertDate = this.props.params.date;
+
     this.state = {
       nodes: [],
       edges: [],
@@ -309,18 +340,22 @@ class NetworkGraph extends React.Component {
           'width': '100%'
         },
         'contextualMenu': {
-          width: '280px',
-          height: '600px',
+          width: '300px',
+          // height: '520px',
           backgroundColor: '#898E9B',
-          display: 'none'
+          display: 'none',
+          position: 'absolute',
+          left: '830px'
         }
       },
       selectedNodeDetails: '',
+      selectedNode: '',
       loadAgain: true,
       nodesListStatus: 'default',
       actionsData: [],
       actions: '',
       duration: duration,
+      alertDate: alertDate,
       selectedNodesForExtendingGraph: []
     };
 
@@ -328,120 +363,241 @@ class NetworkGraph extends React.Component {
     this.getContextMenu = this.getContextMenu.bind(this);
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
-    // this.selectNode = this.selectNode.bind(this);
-    this.deselectNode = this.deselectNode.bind(this);
   }
 
-  extendGraph(nodeID, nodeType, reportId, parameters) {
-    const that = this;
-    // console.log(JSON.stringify(nodeAt));
-    return (event) => {
-      let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
-      for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-        if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
-          selectedNodesForExtendingGraph[i].reportId === reportId) {
-          alert('You have already performed this action.');
-          return;
+  loadNetworkGraph(data, loadAgain) {
+    if (!loadAgain) {
+      return;
+    }
+
+    if (!data) {
+      return;
+    }
+
+    if (this.state.nodesListStatus === 'default') {
+      let nodesEdges = getNodesEdges(data[0]);
+      this.state.nodes = nodesEdges.nodes;
+      this.state.edges = nodesEdges.edges;
+      const actionsData = this.context.store.getState().actions;
+      this.state.actionsData = getActionsByTypes(actionsData.list.actions);
+    }
+
+    if (this.networkGraph !== null && this.networkGraph !== undefined) {
+      let options = {
+        /*physics: {
+          enabled: true,
+          // barnesHut: {
+          //   springLength: 10,
+          //   avoidOverlap: 0
+          // },
+          // forceAtlas2Based: {
+          //   springLength: 10,
+          //   avoidOverlap: 0
+          // }
+          stabilization: {
+            enabled: true
+          }
+        },*/
+        physics: false,
+        // physics: {
+        //   'barnesHut': {
+        //     'avoidOverlap': 1
+        //   }
+        // },
+        interaction: {
+          navigationButtons: true,
+          keyboard: false,
+          multiselect: true,
+          hover: true,
+          selectConnectedEdges: false
+        },
+        autoResize: true,
+        height: '600',
+        width: '100%',
+        edges: {selectionWidth: 1},
+        layout: {
+          improvedLayout: true
         }
-      }
+      };
 
-      const extendedNodes = fetchExtendedNodes(reportId, this.state.duration, parameters);
-      let rows = extendedNodes;
-      if (!extendedNodes) {
-        return;
-      }
-      extendedNodes.then(
-        function(json) {
-          rows = json.rows;
-          let nodes = that.state.nodes,
-            edges = that.state.edges;
+      // create a network
+      let data = {
+        nodes: this.state.nodes,
+        edges: this.state.edges
+      };
 
-          for (let i = 0; i < rows.length; i++) {
-            let nodeObject = {
-                id: rows[i][0],
-                type: nodeType,
-                label: '\n  <b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
-                title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
-                nodeDetails: firstCharCapitalize(nodeType) + ': ' + rows[i][0],
-                borderWidth: '0',
-                'font': {
-                  'face': 'Open Sans',
-                  'color': Colors.pebble,
-                  'size': '11',
-                  'align': 'left'
+      if (data.nodes.length > 0) {
+        let network = new vis.Network(this.networkGraph, data, options);
+        network.on('select', this.loadContextMenu(network));
+
+        const that = this;
+
+        if (this.state.selectedNode !== '') {
+          network.selectNodes([this.state.selectedNode], false);
+        }
+
+        network.on('deselectNode', function(params) {
+          let deselectedNode = params.previousSelection.nodes[0];
+          let node = network.body.nodes[deselectedNode];
+          if (nodeObjects[deselectedNode] !== undefined) {
+            node.setOptions({
+              image: getIcon(nodeObjects[deselectedNode].type, nodeObjects[deselectedNode].status, 'INACTIVE')
+            });
+
+            that.setState({
+              'loadAgain': false,
+              style: {
+                'networkGraph': {
+                  'height': '600px',
+                  'width': '100%'
                 },
-                shape: 'image',
-                color: {
-                  'color': '#F2F2F4',
-                  'highlight': Colors.turquoise
-                },
-                image: getIcon(nodeType),
-                orgImage: getIcon(nodeType)/*,
-                x: 550,
-                y: -100*/
-              },
-              edgeObject = {
-                from: nodeID,
-                to: rows[i][0],
-                arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
-                label: '',
-                'font': {
-                  'face': 'Open Sans',
-                  'color': Colors.pebble,
-                  'size': '11',
-                  'align': 'left'
-                },
-                length: 1000,
-                smooth: {
-                  type: 'discrete'
-                },
-                'color': {
-                  'color': Colors.pebble,
-                  'highlight': Colors.turquoise
+                'contextualMenu': {
+                  width: '300px',
+                  // height: '520px',
+                  backgroundColor: '#898E9B',
+                  display: 'none',
+                  position: 'absolute',
+                  left: '830px'
                 }
-              };
+              },
+              selectedNodeDetails: '',
+              actions: '',
+              selectedNode: ''
+            });
+            $('#actions').html('');
+            document.getElementById('refreshData').style.marginLeft = 'auto';
+          }
+        });
 
-            if (isNodeAlreadyExists(nodes, rows[i][0]) === false) {
-              nodes.push(nodeObject);
-              edges.push(edgeObject);
+        network.on('hoverNode', function(params) {
+          let hoverNode = params.node,
+            selectedNodes = network.getSelection().nodes,
+            node = network.body.nodes[hoverNode];
+
+          if (nodeObjects[hoverNode] !== undefined) {
+            if (selectedNodes.length > 0) {
+              if (selectedNodes.indexOf(hoverNode) > -1) {
+                node.setOptions({
+                  image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
+                });
+              }
+              else {
+                node.setOptions({
+                  image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
+                });
+              }
             }
             else {
-              edges.push(edgeObject);
+              node.setOptions({
+                image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
+              });
+            }
+          }
+        });
+
+        network.on('blurNode', function(params) {
+          let blurNode = params.node,
+            selectedNodes = network.getSelection().nodes,
+            node = network.body.nodes[blurNode];
+
+          if (nodeObjects[blurNode] !== undefined) {
+            if (selectedNodes.length > 0) {
+              if (selectedNodes.indexOf(blurNode) > -1) {
+                node.setOptions({
+                  image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
+                });
+              }
+              else {
+                node.setOptions({
+                  image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
+                });
+              }
+            }
+            else {
+              node.setOptions({
+                image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
+              });
+            }
+          }
+        });
+
+        $('.vis-up').hide();
+        $('.vis-down').hide();
+        $('.vis-left').hide();
+        $('.vis-right').hide();
+        $('.vis-zoomExtends').hide();
+      }
+      else {
+        document.getElementById('networkGraph').innerHTML = 'No Data Found.';
+      }
+    }
+  }
+
+  loadContextMenu(network) {
+    return (event) => {
+      let actions = document.getElementById('tempActions');
+      actions.innerHTML = '';
+      let listHTML = {
+        'loadAgain': false,
+        'actions': ''
+      };
+      this.setState(listHTML);
+
+      if (network.getSelection().nodes.length > 0) {
+        let SelectedNodeIDs = network.getSelection(),
+          selectedNodeDetails = '',
+          nodeType = '',
+          nodeID = SelectedNodeIDs.nodes[0];
+
+        let nodeAt = network.getBoundingBox(nodeID);
+
+        if (nodeID !== undefined) {
+          for (let i = 0; i < this.state.nodes.length; i++) {
+            let node = network.body.nodes[this.state.nodes[i].id];
+            if (this.state.nodes[i].id === nodeID) {
+              // console.log('Selected Node Id:', this.state.nodes[i]);
+              selectedNodeDetails += this.state.nodes[i].nodeDetails;
+              nodeType = this.state.nodes[i].type;
+              node.setOptions({
+                image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'SELECTED')
+              });
+            }
+            else {
+              node.setOptions({
+                image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'INACTIVE')
+              });
             }
           }
 
-          selectedNodesForExtendingGraph.push({
-            'nodeID': nodeID,
-            'reportId': reportId
-          });
+          $('#actions').html('');
+          $('#actions').append(this.getContextMenu(network, nodeID, nodeType, nodeAt));
+          document.getElementById('refreshData').style.marginLeft = '660px';
 
-          that.setState({
-            'loadAgain': true,
-            'nodesListStatus': 'extended',
-            'nodes': nodes,
-            'edges': edges,
-            'style': {
+          let statesJSON = {
+            'loadAgain': false,
+            'selectedNodeDetails': selectedNodeDetails,
+            selectedNode: nodeID,
+            style: {
               'networkGraph': {
                 'height': '600px',
                 'width': '100%'
               },
               'contextualMenu': {
-                width: '280px',
-                height: '600px',
+                width: '300px',
+                // height: '520px',
                 backgroundColor: '#898E9B',
-                display: 'none'
+                position: 'absolute',
+                left: '830px'
               }
-            },
-            'selectedNodeDetails': '',
-            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
-          });
-          $('#actions').html('');
+            }
+          };
+          this.setState(statesJSON);
         }
-      );
+      }
     };
   }
 
-  getContextMenu(nodeID, nodeType, nodeAt) {
+  getContextMenu(network, nodeID, nodeType, nodeAt) {
     return (event) => {
       let actions = document.getElementById('tempActions');
       actions.innerHTML = '';
@@ -463,14 +619,29 @@ class NetworkGraph extends React.Component {
               for (let k = 0; k < parameters.length; k++) {
                 let tempObj = {};
                 if (parameters[k].userInput === false) {
-                  if (parameters[k].name === 'id') {
-                    tempObj.name = parameters[k].name;
-                    tempObj.value = nodeID;
+                  tempObj.name = parameters[k].name;
+                  if (parameters[k].value !== undefined) {
+                    tempObj.value = parameters[k].value;
                   }
-                  if (parameters[k].name === 'type') {
-                    tempObj.name = parameters[k].name;
-                    tempObj.value = nodeType;
+                  else {
+                    if (parameters[k].name === 'id') {
+                      tempObj.value = nodeID;
+                    }
+                    else if (parameters[k].name === 'type') {
+                      tempObj.value = nodeType;
+                    }
+                    else if (parameters[k].name === 'date') {
+                      tempObj.value = this.state.alertDate;
+                    }
+                    else if ((parameters[k].name === 'ip' || parameters[k].name === 'sourceip') &&
+                      nodeType.toLowerCase() === 'ip') {
+                      tempObj.value = nodeID;
+                    }
+                    else {
+                      tempObj.value = '';
+                    }
                   }
+
                   tempObj.userInput = false;
                   parametersToApi.push(tempObj);
                 }
@@ -488,8 +659,9 @@ class NetworkGraph extends React.Component {
             let tr = document.createElement('tr');
             let td1 = document.createElement('td');
             td1.appendChild(document.createTextNode(actionsData[i].actions[j].label));
-
-            td1.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parametersToApi);
+            td1.id = 'action' + j;
+            td1.onclick = this.extendGraph(network, nodeID, nodeType, actionsData[i].actions[j].reportId, parametersToApi,
+              actionsData[i].actions.length, 'action' + j);
             tr.appendChild(td1);
 
             if (userInputParameters.length > 0) {
@@ -537,156 +709,140 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  loadContextMenu(network) {
+  extendGraph(network, nodeID, nodeType, reportId, parameters, actionsCount, actionId) {
+    const that = this;
+    // console.log(JSON.stringify(nodeAt));
     return (event) => {
-      let actions = document.getElementById('tempActions');
-      actions.innerHTML = '';
-      let listHTML = {
-        'loadAgain': false,
-        'actions': ''
-      };
-      this.setState(listHTML);
+      let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
+      for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+        if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
+          selectedNodesForExtendingGraph[i].reportId === reportId) {
+          alert('You have already performed this action.');
+          return;
+        }
+      }
 
-      if (network.getSelection().nodes.length > 0) {
-        let SelectedNodeIDs = network.getSelection(),
-          selectedNodeIndex = 0,
-          selectedNodeDetails = '',
-          nodeType = '';
-        let nodeAt = network.getBoundingBox(SelectedNodeIDs.nodes[0]);
+      const extendedNodes = fetchExtendedNodes(reportId, this.state.duration, parameters);
+      // let rows = extendedNodes;
+      if (!extendedNodes) {
+        return;
+      }
+      extendedNodes.then(
+        function(json) {
+          // rows = json.rows;
+          let nodes = that.state.nodes,
+            edges = that.state.edges;
 
-        if (SelectedNodeIDs.nodes[0] !== undefined) {
-          for (let i = 0; i < this.state.nodes.length; i++) {
-            if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
-              // console.log('Selected Node Id:', this.state.nodes[i]);
-              selectedNodeDetails += this.state.nodes[i].nodeDetails;
-              nodeType = this.state.nodes[i].type;
-              break;
+          let nodesEdges = getNodesEdges(json[0]);
+
+          for (let i = 0; i < nodesEdges.nodes.length; i++) {
+            if (isNodeOrEdgeAlreadyExists(nodes, nodesEdges.nodes[i].id) === false) {
+              nodes.push(nodesEdges.nodes[i]);
+              nodeObjects[nodesEdges.nodes[i].id] = nodesEdges.nodes[i];
             }
           }
 
-          $('#actions').html('');
-          $('#actions').append(this.getContextMenu(SelectedNodeIDs.nodes[0], nodeType, nodeAt));
+          for (let i = 0; i < nodesEdges.edges.length; i++) {
+            if (isNodeOrEdgeAlreadyExists(edges, nodesEdges.edges[i].id) === false) {
+              edges.push(nodesEdges.edges[i]);
+            }
+          }
 
-          let statesJSON = {
+          /*for (let i = 0; i < rows.length; i++) {
+            let nodeStatus = 'safe', // Currently, extended nodes doesn't return 'reputation' value.
+              nodeObject = {
+                id: rows[i][0],
+                type: nodeType,
+                label: '\n  <b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
+                title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
+                nodeDetails: firstCharCapitalize(nodeType) + ': ' + rows[i][0],
+                borderWidth: '0',
+                'font': {
+                  'face': 'Open Sans',
+                  'color': Colors.pebble,
+                  'size': '11',
+                  'align': 'left'
+                },
+                shape: 'image',
+                color: {
+                  'color': '#F2F2F4',
+                  'highlight': Colors.turquoise
+                },
+                image: getIcon(nodeType, nodeStatus, 'INACTIVE'),
+                status: nodeStatus
+              },
+              edgeObject = {
+                from: nodeID,
+                to: rows[i][0],
+                arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
+                label: '',
+                'font': {
+                  'face': 'Open Sans',
+                  'color': Colors.pebble,
+                  'size': '11',
+                  'align': 'left'
+                },
+                length: 1000,
+                smooth: {
+                  type: 'discrete'
+                },
+                'color': {
+                  'color': Colors.pebble,
+                  'highlight': Colors.turquoise
+                }
+              };
+
+            if (isNodeAlreadyExists(nodes, rows[i][0]) === false) {
+              nodes.push(nodeObject);
+              edges.push(edgeObject);
+              nodeObjects[rows[i][0]] = nodeObject;
+            }
+            else {
+              edges.push(edgeObject);
+            }
+          }*/
+
+          selectedNodesForExtendingGraph.push({
+            'nodeID': nodeID,
+            'reportId': reportId
+          });
+
+          network.setData({nodes: nodes, edges: edges});
+
+          that.setState({
             'loadAgain': false,
-            'selectedNodeDetails': selectedNodeDetails,
-            style: {
+            'nodesListStatus': 'extended',
+            'nodes': nodes,
+            'edges': edges,
+            /* 'style': {
               'networkGraph': {
                 'height': '600px',
                 'width': '100%'
               },
               'contextualMenu': {
-                width: '280px',
-                height: '600px',
-                backgroundColor: '#898E9B'
+                width: '300px',
+                height: '520px',
+                backgroundColor: '#898E9B',
+                display: 'none'
               }
-            }
-          };
-          this.setState(statesJSON);
+            },*/
+            // 'selectedNodeDetails': '',
+            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
+          });
+          // $('#actions').html('');
+        }
+      );
+      for (let j = 0; j < actionsCount; j++) {
+        let tempId = 'action' + j;
+
+        if (tempId === actionId) {
+          document.getElementById(tempId).style.color = Colors.turquoise;
+        }
+        else {
+          document.getElementById(tempId).style.color = Colors.white;
         }
       }
     };
-  }
-
-  /*selectNode(network) {
-    return (event) => {
-      let SelectedNodeIDs = network.getSelection();
-      console.log(SelectedNodeIDs.nodes[0]);
-      if (SelectedNodeIDs.nodes[0] !== undefined) {
-        for (let i = 0; i < this.state.nodes.length; i++) {
-          if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
-            this.state.nodes[i].image = (this.state.nodes[i].orgImage).replace('.png', '_select.png');
-          }
-          else {
-            this.state.nodes[i].image = this.state.nodes[i].orgImage;
-          }
-        }
-        this.loadNetworkGraph();
-      }
-      console.log(JSON.stringify(this.state.nodes));
-    };
-  }*/
-
-  deselectNode(network) {
-    return (event) => {
-      this.setState({
-        'loadAgain': false,
-        style: {
-          'networkGraph': {
-            'height': '600px',
-            'width': '100%'
-          },
-          'contextualMenu': {
-            width: '280px',
-            height: '600px',
-            backgroundColor: '#898E9B',
-            display: 'none'
-          }
-        },
-        selectedNodeDetails: '',
-        actions: ''
-      });
-      $('#actions').html('');
-      // document.getElementById('contextualMenu').style.display = 'none';
-      // document.getElementById('networkGraph').style.width = '100%';
-      // let SelectedNodeIDs = network.getSelection();
-      // console.log(SelectedNodeIDs.nodes[0]);
-      // if (SelectedNodeIDs.nodes[0] !== undefined) {
-      //   for (let i = 0; i < this.state.nodes.length; i++) {
-      //     if (this.state.nodes[i].id === SelectedNodeIDs.nodes[0]) {
-      //       this.state.nodes[i].image = 'img/asset.png';
-      //     }
-      //   }
-      // }
-    };
-  }
-
-  loadNetworkGraph(data, loadAgain) {
-    if (!loadAgain) {
-      return;
-    }
-
-    if (!data) {
-      return;
-    }
-
-    if (this.state.nodesListStatus === 'default') {
-      let nodesEdges = getNodesEdges(data[0]);
-      this.state.nodes = nodesEdges.nodes;
-      this.state.edges = nodesEdges.edges;
-      const actionsData = this.context.store.getState().actions;
-      this.state.actionsData = getActionsByTypes(actionsData.list.actions);
-    }
-
-    if (this.networkGraph !== null && this.networkGraph !== undefined) {
-      let options = {
-        physics: false,
-        interaction: {
-          navigationButtons: true,
-          keyboard: false,
-          multiselect: true
-        },
-        autoResize: true,
-        height: '600',
-        width: '100%'
-      };
-
-      // create a network
-      let data = {
-        nodes: this.state.nodes,
-        edges: this.state.edges
-      };
-
-      // if (data.nodes.length > 0) {
-        let network = new vis.Network(this.networkGraph, data, options),
-          networkGraphContainer = document.getElementById('networkGraph');
-        // network.on('selectNode', this.selectNode(network));
-        network.on('deselectNode', this.deselectNode(network));
-
-        /* Following code is for left click context menu */
-        network.on('select', this.loadContextMenu(network));
-      // }
-    }
   }
 
   render() {
@@ -694,23 +850,31 @@ class NetworkGraph extends React.Component {
 
     return (
       <div style={{display: 'flex'}}>
-        <div ref={(ref) => this.networkGraph = ref} style={this.state.style.networkGraph}
+        <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
+          ...{
+            // backgroundColor: Colors.networkGraphBGColor
+          }}}
           id='networkGraph'>
           {this.loadNetworkGraph(props.data, this.state.loadAgain)}
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
-          style={this.state.style.contextualMenu}
-          id='contextualMenu' className='contextMenu'>
+          style={{...this.state.style.contextualMenu}} id='contextualMenu'>
           <input type='text' id='searchNetworkNode'
             style={{...style.searchTextBox}}
             placeholder='Search' /><br />
-          <div
-            style={{...style.selectedNodeDetails}}
-            dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
+          <div style={{
+            height: '520px',
+            overflowX: 'none',
+            overflowY: 'scroll'
+          }} className='contextMenu'>
+            <div
+              style={{...style.selectedNodeDetails}}
+              dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
+            </div>
+            <div id='actions'></div>
+            {/* dangerouslySetInnerHTML={{__html: this.state.actions}}*/}
+            <div id='tempActions' style={{display: 'none'}}></div>
           </div>
-          <div id='actions' className='contextMenu'></div>
-          {/* dangerouslySetInnerHTML={{__html: this.state.actions}}*/}
-          <div id='tempActions' style={{display: 'none'}}></div>
         </div>
       </div>
     );

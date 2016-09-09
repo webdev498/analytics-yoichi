@@ -269,7 +269,7 @@ class ParentCard extends React.Component {
               : null
             }
 
-            <div style={styles.iconWrap}>
+            <div style={styles.iconWrap} id='refreshData'>
               <FontIcon className='material-icons'
                 style={styles.refreshIcon}
                 onClick={this.refreshData}>
