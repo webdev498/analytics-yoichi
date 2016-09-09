@@ -444,7 +444,7 @@ export class TableCard extends React.Component {
       if (props.openAlertDetails) {
         const {rows} = props.data;
         const currentRow = rows[index][0];
-        const url = `/alert/${currentRow.id}/${currentRow.date}`;
+        const url = `/alert-new/${currentRow.id}/${currentRow.date}`;
         props.updateRoute(url);
       }
       else {
