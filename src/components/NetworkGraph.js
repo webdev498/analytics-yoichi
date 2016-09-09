@@ -443,10 +443,6 @@ class NetworkGraph extends React.Component {
 
         const that = this;
 
-        if (this.state.selectedNode !== '') {
-          network.selectNodes([this.state.selectedNode], false);
-        }
-
         network.on('deselectNode', function(params) {
           let deselectedNode = params.previousSelection.nodes[0];
           let node = network.body.nodes[deselectedNode];
