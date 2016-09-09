@@ -267,8 +267,6 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   }
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
-    // apiUrl = baseUrl + '/api/analytics/reporting/execute/' + reportId + '?window=' + duration + '&' +
-      // otherParameters,
     apiUrl = baseUrl + '/api/analytics/actions/execute/' + reportId + '?' + otherParameters,
     customHeaders = {
       'Accept': 'application/json'
@@ -330,7 +328,9 @@ function addNewlines(str) {
 class NetworkGraph extends React.Component {
   constructor(props) {
     super(props);
-    const {duration} = this.props;
+    const {duration} = this.props,
+      alertDate = this.props.params.date;
+
     this.state = {
       nodes: [],
       edges: [],
@@ -355,6 +355,7 @@ class NetworkGraph extends React.Component {
       actionsData: [],
       actions: '',
       duration: duration,
+      alertDate: alertDate,
       selectedNodesForExtendingGraph: []
     };
 
@@ -569,7 +570,7 @@ class NetworkGraph extends React.Component {
           }
 
           $('#actions').html('');
-          $('#actions').append(this.getContextMenu(nodeID, nodeType, nodeAt));
+          $('#actions').append(this.getContextMenu(network, nodeID, nodeType, nodeAt));
           document.getElementById('refreshData').style.marginLeft = '660px';
 
           let statesJSON = {
@@ -596,7 +597,7 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  getContextMenu(nodeID, nodeType, nodeAt) {
+  getContextMenu(network, nodeID, nodeType, nodeAt) {
     return (event) => {
       let actions = document.getElementById('tempActions');
       actions.innerHTML = '';
@@ -618,14 +619,29 @@ class NetworkGraph extends React.Component {
               for (let k = 0; k < parameters.length; k++) {
                 let tempObj = {};
                 if (parameters[k].userInput === false) {
-                  if (parameters[k].name === 'id') {
-                    tempObj.name = parameters[k].name;
-                    tempObj.value = nodeID;
+                  tempObj.name = parameters[k].name;
+                  if (parameters[k].value !== undefined) {
+                    tempObj.value = parameters[k].value;
                   }
-                  if (parameters[k].name === 'type') {
-                    tempObj.name = parameters[k].name;
-                    tempObj.value = nodeType;
+                  else {
+                    if (parameters[k].name === 'id') {
+                      tempObj.value = nodeID;
+                    }
+                    else if (parameters[k].name === 'type') {
+                      tempObj.value = nodeType;
+                    }
+                    else if (parameters[k].name === 'date') {
+                      tempObj.value = this.state.alertDate;
+                    }
+                    else if ((parameters[k].name === 'ip' || parameters[k].name === 'sourceip') &&
+                      nodeType.toLowerCase() === 'ip') {
+                      tempObj.value = nodeID;
+                    }
+                    else {
+                      tempObj.value = '';
+                    }
                   }
+
                   tempObj.userInput = false;
                   parametersToApi.push(tempObj);
                 }
@@ -644,7 +660,7 @@ class NetworkGraph extends React.Component {
             let td1 = document.createElement('td');
             td1.appendChild(document.createTextNode(actionsData[i].actions[j].label));
             td1.id = 'action' + j;
-            td1.onclick = this.extendGraph(nodeID, nodeType, actionsData[i].actions[j].reportId, parametersToApi,
+            td1.onclick = this.extendGraph(network, nodeID, nodeType, actionsData[i].actions[j].reportId, parametersToApi,
               actionsData[i].actions.length, 'action' + j);
             tr.appendChild(td1);
 
@@ -693,7 +709,7 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  extendGraph(nodeID, nodeType, reportId, parameters, actionsCount, actionId) {
+  extendGraph(network, nodeID, nodeType, reportId, parameters, actionsCount, actionId) {
     const that = this;
     // console.log(JSON.stringify(nodeAt));
     return (event) => {
@@ -791,8 +807,10 @@ class NetworkGraph extends React.Component {
             'reportId': reportId
           });
 
+          network.setData({nodes: nodes, edges: edges});
+
           that.setState({
-            'loadAgain': true,
+            'loadAgain': false,
             'nodesListStatus': 'extended',
             'nodes': nodes,
             'edges': edges,
