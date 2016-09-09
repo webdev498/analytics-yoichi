@@ -7,6 +7,7 @@ import {
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import {baseUrl} from 'config';
+import Loader from '../components/Loader';
 
 const style = {
     searchTextBox: {
@@ -24,6 +25,9 @@ const style = {
       width: '90%',
       color: '#24293D',
       fontFamily: 'Open Sans'
+    },
+    loaderStyle: {
+
     }
   },
   nodeObjects = {},
@@ -125,7 +129,6 @@ function getNodesEdges(data) {
       nodeObject.color.highlight = Colors.turquoise;
       nodeObject.status = nodeStatus;
       nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-      // nodeObject.orgImage = getIcon(dataNode.type);
       let actions = [];
       if (dataNode.actions !== null && dataNode.actions !== undefined) {
         actions = dataNode.actions;
@@ -156,6 +159,7 @@ function getNodesEdges(data) {
         edgeObject = {};
 
       edgeObject.id = dataEdge.id;
+      edgeObject.type = dataEdge.type;
       edgeObject.from = dataEdge.source;
       edgeObject.to = dataEdge.target;
       edgeObject.arrows = {
@@ -165,6 +169,9 @@ function getNodesEdges(data) {
         'arrowStrikethrough': false
       };
       edgeObject.label = dataEdge.label + '\n\n\n';
+      edgeObject.edgeDetails = 'Edge Type: ' + dataEdge.label;
+      edgeObject.edgeDetails += '<br/>Source: ' + dataEdge.source;
+      edgeObject.edgeDetails += '<br/>Target: ' + dataEdge.target;
       edgeObject.font = {
         'face': 'Open Sans',
         'color': Colors.pebble,
@@ -181,6 +188,7 @@ function getNodesEdges(data) {
 
       edges.push(edgeObject);
       edgeObjects[dataEdge.target] = edgeObject;
+      edgeObjects[edgeObject.id] = edgeObject;
     }
   }
 
@@ -283,6 +291,9 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   .then(response => response.json()
   )
   .catch(error => {
+    this.setState({
+      isFetching: false
+    });
     return Promise.reject(Error(error.message));
   });
 }
@@ -360,7 +371,8 @@ class NetworkGraph extends React.Component {
       duration: duration,
       alertDate: alertDate,
       selectedNodesForExtendingGraph: [],
-      zoomScale: '100%'
+      zoomScale: '100%',
+      isFetching: false
     };
 
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
@@ -402,12 +414,12 @@ class NetworkGraph extends React.Component {
             enabled: true
           }
         },*/
-        physics: false,
-        // physics: {
-        //   'barnesHut': {
-        //     'avoidOverlap': 1
-        //   }
-        // },
+        // physics: false,
+        physics: {
+          'barnesHut': {
+            'avoidOverlap': 1
+          }
+        },
         interaction: {
           navigationButtons: true,
           keyboard: false,
@@ -431,14 +443,11 @@ class NetworkGraph extends React.Component {
       };
 
       if (data.nodes.length > 0) {
-        let network = new vis.Network(this.networkGraph, data, options);
-        network.on('select', this.loadContextMenu(network));
-
         const that = this;
 
-        if (this.state.selectedNode !== '') {
-          network.selectNodes([this.state.selectedNode], false);
-        }
+        let network = new vis.Network(this.networkGraph, data, options);
+        network.on('selectNode', this.loadContextMenu(network, 'node'));
+        network.on('selectEdge', this.loadContextMenu(network, 'edge'));
 
         network.on('deselectNode', function(params) {
           let deselectedNode = params.previousSelection.nodes[0];
@@ -545,7 +554,7 @@ class NetworkGraph extends React.Component {
     }
   }
 
-  loadContextMenu(network) {
+  loadContextMenu(network, contextMenuType) {
     return (event) => {
       let actions = document.getElementById('tempActions');
       actions.innerHTML = '';
@@ -555,7 +564,7 @@ class NetworkGraph extends React.Component {
       };
       this.setState(listHTML);
 
-      if (network.getSelection().nodes.length > 0) {
+      if (contextMenuType === 'node' && network.getSelection().nodes.length > 0) {
         let SelectedNodeIDs = network.getSelection(),
           selectedNodeDetails = '',
           nodeType = '',
@@ -582,7 +591,7 @@ class NetworkGraph extends React.Component {
           }
 
           $('#actions').html('');
-          $('#actions').append(this.getContextMenu(network, nodeID, nodeType, nodeAt));
+          $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
           document.getElementById('refreshData').style.marginLeft = '660px';
 
           let statesJSON = {
@@ -608,10 +617,64 @@ class NetworkGraph extends React.Component {
           this.setState(statesJSON);
         }
       }
+
+      if (contextMenuType === 'edge' && network.getSelection().edges.length > 0) {
+        let SelectedNodeIDs = network.getSelection(),
+          selectedNodeDetails = '',
+          nodeType = '',
+          nodeID = SelectedNodeIDs.edges[0];
+
+        let nodeAt = network.getBoundingBox(nodeID);
+        // console.log('edge', nodeID);
+        if (nodeID !== undefined) {
+          for (let i = 0; i < this.state.edges.length; i++) {
+            let node = network.body.edges[this.state.edges[i].id];
+            if (this.state.edges[i].id === nodeID) {
+              // console.log('aa: ', this.state.edges[i], nodeID);
+              // console.log('Selected Node Id:', this.state.nodes[i]);
+              selectedNodeDetails += this.state.edges[i].edgeDetails;
+              nodeType = this.state.edges[i].type;
+              // node.setOptions({
+              //   image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'SELECTED')
+              // });
+            }
+            else {
+              // node.setOptions({
+              //   image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'INACTIVE')
+              // });
+            }
+          }
+
+          $('#actions').html('');
+          $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
+          document.getElementById('refreshData').style.marginLeft = '660px';
+
+          let statesJSON = {
+            'loadAgain': false,
+            'selectedNodeDetails': selectedNodeDetails,
+            style: {
+              'networkGraph': {
+                'height': '600px',
+                'width': '100%'
+              },
+              'contextualMenu': {
+                width: '300px',
+                // height: '520px',
+                backgroundColor: '#898E9B',
+                position: 'absolute',
+                // left: '830px'
+                top: '0px',
+                right: '0px'
+              }
+            }
+          };
+          this.setState(statesJSON);
+        }
+      }
     };
   }
 
-  getContextMenu(network, nodeID, nodeType, nodeAt) {
+  getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt) {
     return (event) => {
       let actions = document.getElementById('tempActions');
       actions.innerHTML = '';
@@ -658,6 +721,22 @@ class NetworkGraph extends React.Component {
                         tempObj.value = '';
                       }
                     }
+                    else if (parameters[k].name === 'source.id') {
+                      if (edgeObjects[nodeID] !== undefined) {
+                        tempObj.value = edgeObjects[nodeID].from;
+                      }
+                      else {
+                        tempObj.value = '';
+                      }
+                    }
+                    else if (parameters[k].name === 'destination.id') {
+                      if (edgeObjects[nodeID] !== undefined) {
+                        tempObj.value = edgeObjects[nodeID].to;
+                      }
+                      else {
+                        tempObj.value = '';
+                      }
+                    }
                     else {
                       tempObj.value = '';
                     }
@@ -681,7 +760,8 @@ class NetworkGraph extends React.Component {
             let td1 = document.createElement('td');
             td1.appendChild(document.createTextNode(actionsData[i].actions[j].label));
             td1.id = 'action' + j;
-            td1.onclick = this.extendGraph(network, nodeID, nodeType, actionsData[i].actions[j].reportId, parametersToApi,
+            td1.onclick = this.extendGraph(contextMenuType, network, nodeID, nodeType,
+              actionsData[i].actions[j].reportId, parametersToApi,
               actionsData[i].actions.length, 'action' + j);
             tr.appendChild(td1);
 
@@ -730,29 +810,42 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  extendGraph(network, nodeID, nodeType, reportId, parameters, actionsCount, actionId) {
+  extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId) {
     const that = this;
-    // console.log(JSON.stringify(nodeAt));
     return (event) => {
+      this.setState({
+        isFetching: true
+      });
       let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
         if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
           selectedNodesForExtendingGraph[i].reportId === reportId) {
           alert('You have already performed this action.');
+          that.setState({
+            isFetching: false
+          });
           return;
         }
       }
 
       const extendedNodes = fetchExtendedNodes(reportId, this.state.duration, parameters);
-      // let rows = extendedNodes;
       if (!extendedNodes) {
+        this.setState({
+          isFetching: false
+        });
         return;
       }
       extendedNodes.then(
         function(json) {
-          // rows = json.rows;
           let nodes = that.state.nodes,
             edges = that.state.edges;
+
+          if (json[0] === undefined) {
+            that.setState({
+              isFetching: false
+            });
+            return;
+          }
 
           let nodesEdges = getNodesEdges(json[0]);
 
@@ -767,62 +860,9 @@ class NetworkGraph extends React.Component {
             if (isNodeOrEdgeAlreadyExists(edges, nodesEdges.edges[i].id) === false) {
               edges.push(nodesEdges.edges[i]);
               edgeObjects[nodesEdges.edges[i].to] = nodesEdges.edges[i];
+              edgeObjects[nodesEdges.edges[i].id] = nodesEdges.edges[i];
             }
           }
-
-          /*for (let i = 0; i < rows.length; i++) {
-            let nodeStatus = 'safe', // Currently, extended nodes doesn't return 'reputation' value.
-              nodeObject = {
-                id: rows[i][0],
-                type: nodeType,
-                label: '\n  <b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
-                title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + rows[i][0],
-                nodeDetails: firstCharCapitalize(nodeType) + ': ' + rows[i][0],
-                borderWidth: '0',
-                'font': {
-                  'face': 'Open Sans',
-                  'color': Colors.pebble,
-                  'size': '11',
-                  'align': 'left'
-                },
-                shape: 'image',
-                color: {
-                  'color': '#F2F2F4',
-                  'highlight': Colors.turquoise
-                },
-                image: getIcon(nodeType, nodeStatus, 'INACTIVE'),
-                status: nodeStatus
-              },
-              edgeObject = {
-                from: nodeID,
-                to: rows[i][0],
-                arrows: {to: {scaleFactor: 0.5}, arrowStrikethrough: false},
-                label: '',
-                'font': {
-                  'face': 'Open Sans',
-                  'color': Colors.pebble,
-                  'size': '11',
-                  'align': 'left'
-                },
-                length: 1000,
-                smooth: {
-                  type: 'discrete'
-                },
-                'color': {
-                  'color': Colors.pebble,
-                  'highlight': Colors.turquoise
-                }
-              };
-
-            if (isNodeAlreadyExists(nodes, rows[i][0]) === false) {
-              nodes.push(nodeObject);
-              edges.push(edgeObject);
-              nodeObjects[rows[i][0]] = nodeObject;
-            }
-            else {
-              edges.push(edgeObject);
-            }
-          }*/
 
           selectedNodesForExtendingGraph.push({
             'nodeID': nodeID,
@@ -836,24 +876,30 @@ class NetworkGraph extends React.Component {
             'nodesListStatus': 'extended',
             'nodes': nodes,
             'edges': edges,
-            /* 'style': {
-              'networkGraph': {
-                'height': '600px',
-                'width': '100%'
-              },
-              'contextualMenu': {
-                width: '300px',
-                height: '520px',
-                backgroundColor: '#898E9B',
-                display: 'none'
-              }
-            },*/
-            // 'selectedNodeDetails': '',
-            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
+            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
+            isFetching: false
           });
-          // $('#actions').html('');
+
+          if (contextMenuType === 'node') {
+            let node = network.body.nodes[nodeID];
+            if (nodeObjects[nodeID] !== undefined) {
+              node.setOptions({
+                image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
+              });
+            }
+          }
+
+          if (contextMenuType === 'edge') {
+            // let node = network.body.nodes[nodeID];
+            // if (nodeObjects[nodeID] !== undefined) {
+            //   node.setOptions({
+            //     image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
+            //   });
+            // }
+          }
         }
       );
+
       for (let j = 0; j < actionsCount; j++) {
         let tempId = 'action' + j;
 
@@ -872,6 +918,7 @@ class NetworkGraph extends React.Component {
 
     return (
       <div style={{display: 'flex'}}>
+        {this.state.isFetching ? <Loader style={style.loaderStyle} /> : null}
         <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
           ...{
             // backgroundColor: Colors.networkGraphBGColor
