@@ -199,7 +199,7 @@ function getIcon(nodeType, nodeStatus, nodeAction) {
     return iconPath;
   }
   else {
-    return 'img/asset.png';
+    return '/img/asset.png';
   }
 }
 
@@ -773,7 +773,7 @@ class NetworkGraph extends React.Component {
             if (userInputParameters.length > 0) {
               let td2 = document.createElement('td');
               let downArrow = document.createElement('img');
-              downArrow.src = 'img/downarrow.png';
+              downArrow.src = '/img/downarrow.png';
               // td1.onclick = this.displayUserInputParameter(userInputParameters[p].name + j);
               td2.appendChild(downArrow);
               tr.appendChild(td2);
@@ -975,8 +975,8 @@ class NetworkGraph extends React.Component {
             marginBottom: '24px',
             marginTop: '10px'
           }}>
-            <img id='rightArrow' src='img/rightArrow.png' onClick={this.collapseExpandCM('collapse')} />
-            <img id='leftArrow' src='img/leftArrow.png' onClick={this.collapseExpandCM('expand')}
+            <img id='rightArrow' src='/img/rightArrow.png' onClick={this.collapseExpandCM('collapse')} />
+            <img id='leftArrow' src='/img/leftArrow.png' onClick={this.collapseExpandCM('expand')}
               style={{display: 'none'}} />
           </div>
         </div>
