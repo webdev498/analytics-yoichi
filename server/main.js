@@ -4,20 +4,23 @@ import webpack from 'webpack';
 import webpackConfig from '../build/webpack.config';
 import historyApiFallback from 'koa-connect-history-api-fallback';
 import serve from 'koa-static';
-import proxy from 'koa-proxy';
 import _debug from 'debug';
 import config from '../config';
 import webpackDevMiddleware from './middleware/webpack-dev';
 import webpackHMRMiddleware from './middleware/webpack-hmr';
 
+import apiMiddleware from './api';
+
 const debug = _debug('app:server');
 const paths = config.utils_paths;
 const app = new Koa();
 
-// Enable koa-proxy if it has been enabled in the config.
-if (config.proxy && config.proxy.enabled) {
-  app.use(convert(proxy(config.proxy.options)));
-}
+// use koa routing
+// app.use(routing(app));
+
+// use api Middleware for api proxy.
+// app.use(apiMiddleware);
+app.use(apiMiddleware.routes());
 
 // This rewrites all routes requests to the root /index.html file
 // (ignoring file requests). If you want to implement isomorphic
@@ -43,7 +46,8 @@ if (config.env === 'development') {
   // of development since this directory will be copied into ~/dist
   // when the application is compiled.
   app.use(convert(serve(paths.client('static'))));
-} else {
+}
+else {
   debug(
     'Server is being run outside of live development mode. This starter kit ' +
     'does not provide any production-ready server functionality. To learn ' +

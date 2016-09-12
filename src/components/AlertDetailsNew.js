@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
+import SummaryWidget from 'components/SummaryWidget';
 
 import {
   formatDateInLocalTimeZone
@@ -7,21 +7,10 @@ import {
 
 const styles = {
   card: {
-    // display: 'flex'
-  },
-  rankScore: {
-    height: '60px',
-    width: '60px',
-    lineHeight: '60px',
-    fontSize: '28px',
-    borderRadius: '50%',
-    backgroundColor: Colors.coral,
-    color: Colors.arctic,
-    textAlign: 'center'
-  },
-  list: {
-    listStyleType: 'none',
     fontSize: '13px'
+  },
+  section: {
+    paddingTop: '35px'
   },
   item: {
     padding: '3px'
@@ -51,27 +40,20 @@ class AlertDetailsNew extends React.Component {
 
     data = data.data.rank_alert;
 
-    let dateTime = formatDateInLocalTimeZone(data.created),
-      dateFormatted = dateTime.date + ' ' + dateTime.time;
+    let {date, time} = formatDateInLocalTimeZone(data.created);
 
     return (
       <div style={styles.card}>
-        <div style={styles.rankScore}>
-          {data.score}
-        </div>
-        <div>
-          <h5 style={styles.itemTitle}>
-            Summary
-          </h5>
-          <div>
-            {data.message}
-          </div>
-        </div>
-        <div>
+        <SummaryWidget data={data} />
+        <div style={styles.section}>
           <h5 style={styles.itemTitle}>
             DATE & TIME
           </h5>
-          <div>{dateFormatted}</div>
+          <div>
+            {date}
+            <span>&nbsp;&nbsp;&nbsp;</span>
+            {time}
+          </div>
         </div>
       </div>
     );

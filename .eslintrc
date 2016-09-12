@@ -5,7 +5,8 @@
     "standard-react"
   ],
   "plugins" : [
-    "flow-vars"
+    "flow-vars",
+    "babel"
   ],
   "env"     : {
     "browser" : true
@@ -31,6 +32,8 @@
       "let": "never", // Exactly one let declaration per block
       "const": "never" // Exactly one declarator per const declaration per block
     }],
-    "jsx-quotes": ["error", "prefer-single"]
+    "jsx-quotes": ["error", "prefer-single"],
+    "babel/generator-star-spacing": 1,
+    "babel/arrow-parens": 1,
   }
 }

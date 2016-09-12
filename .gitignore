@@ -12,7 +12,7 @@ target
 .project
 
 src/static/bower_components
-src/static/env.js
+env.js
 src/layout.js
 
 *.json.gzip
