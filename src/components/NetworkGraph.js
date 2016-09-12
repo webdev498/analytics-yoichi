@@ -952,7 +952,7 @@ class NetworkGraph extends React.Component {
           style={{...this.state.style.contextualMenu}} id='contextualMenu'>
           <input type='text' id='searchNetworkNode'
             style={{...style.searchTextBox}}
-            placeholder='Search' /><br />
+            placeholder='Search' />
 
           <div style={{
             height: '570px',
@@ -964,7 +964,6 @@ class NetworkGraph extends React.Component {
               dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
             </div>
             <div id='actions'></div>
-            {/* dangerouslySetInnerHTML={{__html: this.state.actions}}*/}
           </div>
 
           <div id='collapseExpandCM' style={{
@@ -999,10 +998,6 @@ class NetworkGraph extends React.Component {
         document.getElementById('contextualMenuContents').style.display = 'none';
         document.getElementById('searchNetworkNode').style.display = 'none';
         document.getElementById('leftArrow').style.display = 'block';
-        // $('#rightArrow').hide();
-        // $('#contextualMenuContents').hide();
-        // $('#searchNetworkNode').hide();
-        // $('#leftArrow').show();
       }
       if (action === 'expand') {
         $('#contextualMenu').animate({width: '259px'});
@@ -1010,10 +1005,6 @@ class NetworkGraph extends React.Component {
         document.getElementById('contextualMenuContents').style.display = 'block';
         document.getElementById('searchNetworkNode').style.display = 'block';
         document.getElementById('leftArrow').style.display = 'none';
-        // $('#rightArrow').show();
-        // $('.contextMenu').show();
-        // $('#searchNetworkNode').show();
-        // $('#leftArrow').hide();
       }
     };
   }
