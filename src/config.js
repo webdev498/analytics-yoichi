@@ -12,28 +12,3 @@ export const clientId = 'taf_dashboard';
 export const redirectUri = clientRedirectUri || 'http://localhost:3000/#/dashboard?';
 
 export const defaultRoute = clientDefaultRoute || '/';
-
-export const networkGraphDefaultOptions = {
-  physics: {
-    'barnesHut': {
-      'avoidOverlap': 1
-    }
-  },
-  interaction: {
-    navigationButtons: true,
-    keyboard: false,
-    multiselect: true,
-    hover: true,
-    selectConnectedEdges: false
-  },
-  autoResize: true,
-  height: '600',
-  width: '100%',
-  edges: {
-    selectionWidth: 1 // ,
-    // physics: false
-  },
-  layout: {
-    improvedLayout: true
-  }
-};
