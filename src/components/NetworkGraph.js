@@ -958,7 +958,7 @@ class NetworkGraph extends React.Component {
             height: '570px',
             overflowX: 'hidden',
             overflowY: 'scroll'
-          }} className='contextMenu'>
+          }} className='contextMenu' id='contextualMenuContents'>
             <div
               style={{...style.selectedNodeDetails}}
               dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
@@ -995,31 +995,25 @@ class NetworkGraph extends React.Component {
     return (event) => {
       if (action === 'collapse') {
         $('#contextualMenu').animate({width: '100px'});
-        $('#rightArrow').hide();
-        $('.contextMenu').hide();
-        $('#searchNetworkNode').hide();
-        $('#leftArrow').show();
-        // $('#contextualMenu').toggle('slide', { direction: 'right' }, 700);
-        // this.setState({
-        //   'contextualMenu': {
-        //     width: '25px',
-        //     // height: '520px',
-        //     backgroundColor: '#898E9B', // '#6B7282',
-        //     // opacity: '0.8',
-        //     display: 'none',
-        //     position: 'absolute',
-        //     // left: '830px'
-        //     top: '0px',
-        //     right: '0px'
-        //   }
-        // });
+        document.getElementById('rightArrow').style.display = 'none';
+        document.getElementById('contextualMenuContents').style.display = 'none';
+        document.getElementById('searchNetworkNode').style.display = 'none';
+        document.getElementById('leftArrow').style.display = 'block';
+        // $('#rightArrow').hide();
+        // $('#contextualMenuContents').hide();
+        // $('#searchNetworkNode').hide();
+        // $('#leftArrow').show();
       }
       if (action === 'expand') {
         $('#contextualMenu').animate({width: '259px'});
-        $('#rightArrow').show();
-        $('.contextMenu').show();
-        $('#searchNetworkNode').show();
-        $('#leftArrow').hide();
+        document.getElementById('rightArrow').style.display = 'block';
+        document.getElementById('contextualMenuContents').style.display = 'block';
+        document.getElementById('searchNetworkNode').style.display = 'block';
+        document.getElementById('leftArrow').style.display = 'none';
+        // $('#rightArrow').show();
+        // $('.contextMenu').show();
+        // $('#searchNetworkNode').show();
+        // $('#leftArrow').hide();
       }
     };
   }
