@@ -529,3 +529,15 @@ export function nFormatter(num, digits, {numberStyle, textStyle}) {
 
   return num.toFixed(digits).replace(rx, '$1');
 }
+
+export function parseQuery(qstr) {
+  const query = {},
+    arr = qstr.substr(1).split('&');
+
+  arr.forEach((val) => {
+    const b = val.split('=');
+    query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+  });
+
+  return query;
+}

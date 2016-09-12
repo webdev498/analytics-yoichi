@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import createBrowserHistory from 'history/lib/createBrowserHistory';
-import { createHashHistory } from 'history';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
+// import { createHashHistory } from 'history';
 import { useRouterHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import makeRoutes from './routes';
@@ -23,7 +23,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 // Configure history for react-router
-const browserHistory = useRouterHistory(createHashHistory)({
+const browserHistory = useRouterHistory(createBrowserHistory)({
   queryKey: false
 });
 

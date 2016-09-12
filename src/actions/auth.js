@@ -4,6 +4,8 @@ import {baseUrl} from 'config';
 
 import { push } from 'react-router-redux';
 
+import {parseQuery} from 'utils/utils';
+
 export function userDetailsLoading() {
   return {
     type: USER_DETAILS_LOADING
@@ -69,8 +71,11 @@ export function fetchUserData() {
   };
 }
 
-export function isLoggedIn(globalState, query, store) {
-  if ((query && query['access_token'])) {
+export function isLoggedIn(location, store) {
+  let hash = location && location.hash;
+
+  if (hash) {
+    const query = parseQuery(hash);
     const accessToken = query['access_token'];
     const tokenType = query['token_type'];
 
@@ -79,6 +84,16 @@ export function isLoggedIn(globalState, query, store) {
 
     return true;
   }
+
+  // if ((query && query['access_token'])) {
+  //   const accessToken = query['access_token'];
+  //   const tokenType = query['token_type'];
+
+  //   Cookies.set('access_token', accessToken, { path: '/' });
+  //   Cookies.set('token_type', tokenType, { path: '/' });
+
+  //   return true;
+  // }
 
   return Cookies.get('access_token') && Cookies.get('token_type');
 }

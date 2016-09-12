@@ -8,7 +8,7 @@ import {isLoggedIn} from 'actions/auth';
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
-    if (!isLoggedIn(store.getState(), nextState.location.query, store)) {
+    if (!isLoggedIn(nextState.location, store)) {
       replace('/login');
     }
 
