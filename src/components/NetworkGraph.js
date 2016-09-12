@@ -943,6 +943,7 @@ class NetworkGraph extends React.Component {
         <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
           ...{
             // backgroundColor: Colors.networkGraphBGColor
+            width: '1100px'
           }}}
           id='networkGraph'>
           {this.loadNetworkGraph(props.data, this.state.loadAgain)}
@@ -971,7 +972,9 @@ class NetworkGraph extends React.Component {
             marginBottom: '24px',
             marginTop: '10px'
           }}>
-            <img src='img/rightArrow.png' onClick={this.collapseExpandCM('collapse')} />
+            <img id='rightArrow' src='img/rightArrow.png' onClick={this.collapseExpandCM('collapse')} />
+            <img id='leftArrow' src='img/leftArrow.png' onClick={this.collapseExpandCM('expand')}
+              style={{display: 'none'}} />
           </div>
         </div>
 
@@ -991,36 +994,32 @@ class NetworkGraph extends React.Component {
   collapseExpandCM(action) {
     return (event) => {
       if (action === 'collapse') {
+        $('#contextualMenu').animate({width: '100px'});
+        $('#rightArrow').hide();
+        $('.contextMenu').hide();
+        $('#searchNetworkNode').hide();
+        $('#leftArrow').show();
         // $('#contextualMenu').toggle('slide', { direction: 'right' }, 700);
-        this.setState({
-          'contextualMenu': {
-            width: '25px',
-            // height: '520px',
-            backgroundColor: '#898E9B', // '#6B7282',
-            // opacity: '0.8',
-            display: 'none',
-            position: 'absolute',
-            // left: '830px'
-            top: '0px',
-            right: '0px'
-          }
-        });
+        // this.setState({
+        //   'contextualMenu': {
+        //     width: '25px',
+        //     // height: '520px',
+        //     backgroundColor: '#898E9B', // '#6B7282',
+        //     // opacity: '0.8',
+        //     display: 'none',
+        //     position: 'absolute',
+        //     // left: '830px'
+        //     top: '0px',
+        //     right: '0px'
+        //   }
+        // });
       }
       if (action === 'expand') {
-        // $('#contextualMenu').toggle('slide', { direction: 'left' }, 700);
-        this.setState({
-          'contextualMenu': {
-            width: '259px',
-            // height: '520px',
-            backgroundColor: '#898E9B', // '#6B7282',
-            // opacity: '0.8',
-            display: 'none',
-            position: 'absolute',
-            // left: '830px'
-            top: '0px',
-            right: '0px'
-          }
-        });
+        $('#contextualMenu').animate({width: '259px'});
+        $('#rightArrow').show();
+        $('.contextMenu').show();
+        $('#searchNetworkNode').show();
+        $('#leftArrow').hide();
       }
     };
   }
