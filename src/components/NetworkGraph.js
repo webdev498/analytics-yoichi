@@ -911,10 +911,14 @@ class NetworkGraph extends React.Component {
           }
 
           if (contextMenuType === 'edge') {
-            // let node = network.body.nodes[nodeID];
-            // if (nodeObjects[nodeID] !== undefined) {
-            //   node.setOptions({
-            //     image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
+            // let edge = network.body.edges[nodeID];
+            // // console.log(nodeID);
+            // if (edgeObjects[nodeID] !== undefined) {
+            //   // console.log('test1');
+            //   edge.setOptions({
+            //     color: {
+            //       color: Colors.turquoise
+            //     }
             //   });
             // }
           }
