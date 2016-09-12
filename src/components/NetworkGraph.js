@@ -6,7 +6,7 @@ import {
   getCountryNameByCountryCode
 } from 'utils/utils';
 import Cookies from 'cookies-js';
-import {baseUrl} from 'config';
+import {baseUrl, networkGraphDefaultOptions} from 'config';
 import Loader from '../components/Loader';
 
 const style = {
@@ -14,16 +14,23 @@ const style = {
       backgroundColor: '#646A7D',
       padding: '10px',
       border: '0px',
-      margin: '5%',
-      width: '90%',
-      height: '50px',
-      color: '#BBBBC3',
-      fontFamily: 'Open Sans'
+      // margin: '5%',
+      width: '211px',
+      height: '40px',
+      color: '#B8BBC3',
+      fontFamily: 'Open Sans',
+      marginTop: '28px',
+      marginLeft: '24px',
+      marginRight: '24px'
     },
     selectedNodeDetails: {
-      margin: '5%',
+      marginTop: '28px',
+      marginBottom: '28px',
+      marginLeft: '24px',
+      marginRight: '24px',
       width: '90%',
       color: '#24293D',
+      fontSize: '12pt',
       fontFamily: 'Open Sans'
     },
     loaderStyle: {
@@ -338,9 +345,10 @@ class NetworkGraph extends React.Component {
           'width': '100%'
         },
         'contextualMenu': {
-          width: '300px',
+          width: '259px',
           // height: '520px',
-          backgroundColor: '#898E9B',
+          backgroundColor: '#898E9B', // '#6B7282',
+          // opacity: '0.8',
           display: 'none',
           position: 'absolute',
           // left: '830px'
@@ -358,13 +366,23 @@ class NetworkGraph extends React.Component {
       alertDate: alertDate,
       selectedNodesForExtendingGraph: [],
       zoomScale: '100%',
-      isFetching: false
+      isFetching: false,
+      actionPerformed: {
+        top: 0,
+        right: '259px',
+        fontSize: '12pt',
+        position: 'absolute',
+        padding: '20px',
+        backgroundColor: Colors.coral,
+        display: 'none'
+      }
     };
 
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
     this.getContextMenu = this.getContextMenu.bind(this);
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
+    this.collapseExpandCM = this.collapseExpandCM.bind(this);
   }
 
   loadNetworkGraph(data, loadAgain) {
@@ -385,42 +403,7 @@ class NetworkGraph extends React.Component {
     }
 
     if (this.networkGraph !== null && this.networkGraph !== undefined) {
-      let options = {
-        /*physics: {
-          enabled: true,
-          // barnesHut: {
-          //   springLength: 10,
-          //   avoidOverlap: 0
-          // },
-          // forceAtlas2Based: {
-          //   springLength: 10,
-          //   avoidOverlap: 0
-          // }
-          stabilization: {
-            enabled: true
-          }
-        },*/
-        // physics: false,
-        physics: {
-          'barnesHut': {
-            'avoidOverlap': 1
-          }
-        },
-        interaction: {
-          navigationButtons: true,
-          keyboard: false,
-          multiselect: true,
-          hover: true,
-          selectConnectedEdges: false
-        },
-        autoResize: true,
-        height: '600',
-        width: '100%',
-        edges: {selectionWidth: 1},
-        layout: {
-          improvedLayout: true
-        }
-      };
+      let options = networkGraphDefaultOptions;
 
       // create a network
       let data = {
@@ -453,20 +436,12 @@ class NetworkGraph extends React.Component {
 
         network.on('deselectNode', function(params) {
           let deselectedNode = params.previousSelection.nodes[0],
-            node = network.body.nodes[deselectedNode],
-            selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
+            node = network.body.nodes[deselectedNode];
 
           if (nodeObjects[deselectedNode] !== undefined) {
             node.setOptions({
               image: getIcon(nodeObjects[deselectedNode].type, nodeObjects[deselectedNode].status, 'INACTIVE')
             });
-
-            for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-              if (selectedNodesForExtendingGraph[i].nodeID === deselectedNode) {
-                selectedNodesForExtendingGraph[i].nodeID = '';
-                selectedNodesForExtendingGraph[i].reportId = '';
-              }
-            }
 
             that.setState({
               'loadAgain': false,
@@ -476,19 +451,19 @@ class NetworkGraph extends React.Component {
                   'width': '100%'
                 },
                 'contextualMenu': {
-                  width: '300px',
-                  // height: '520px',
-                  backgroundColor: '#898E9B',
+                  width: '259px',
+                  backgroundColor: '#898E9B', // '#6B7282',
+                  // opacity: '0.8',
                   display: 'none',
                   position: 'absolute',
-                  // left: '830px'
                   top: '0px',
                   right: '0px'
                 }
               },
               selectedNodeDetails: '',
               actions: '',
-              selectedNode: ''
+              selectedNode: '',
+              selectedNodesForExtendingGraph: []
             });
             $('#actions').html('');
             document.getElementById('refreshData').style.marginLeft = 'auto';
@@ -584,8 +559,8 @@ class NetworkGraph extends React.Component {
 
   loadContextMenu(network, contextMenuType) {
     return (event) => {
-      let actions = document.getElementById('tempActions');
-      actions.innerHTML = '';
+      // let actions = document.getElementById('tempActions');
+      // actions.innerHTML = '';
       let listHTML = {
         'loadAgain': false,
         'actions': ''
@@ -632,9 +607,10 @@ class NetworkGraph extends React.Component {
                 'width': '100%'
               },
               'contextualMenu': {
-                width: '300px',
+                width: '259px',
                 // height: '520px',
-                backgroundColor: '#898E9B',
+                backgroundColor: '#898E9B', // '#6B7282',
+                // opacity: '0.8',
                 position: 'absolute',
                 // left: '830px'
                 top: '0px',
@@ -686,9 +662,10 @@ class NetworkGraph extends React.Component {
                 'width': '100%'
               },
               'contextualMenu': {
-                width: '300px',
+                width: '259px',
                 // height: '520px',
-                backgroundColor: '#898E9B',
+                backgroundColor: '#898E9B', // '#6B7282',
+                // opacity: '0.8',
                 position: 'absolute',
                 // left: '830px'
                 top: '0px',
@@ -704,8 +681,8 @@ class NetworkGraph extends React.Component {
 
   getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt) {
     return (event) => {
-      let actions = document.getElementById('tempActions');
-      actions.innerHTML = '';
+      // let actions = document.getElementById('tempActions');
+      // actions.innerHTML = '';
       let table = document.createElement('table');
       table.border = '0';
       table.width = '250';
@@ -848,7 +825,8 @@ class NetworkGraph extends React.Component {
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
         if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
           selectedNodesForExtendingGraph[i].reportId === reportId) {
-          alert('You have already performed this action.');
+          $('#actionPerformed').fadeIn('slow');
+          $('#actionPerformed').fadeOut(10000);
           that.setState({
             isFetching: false
           });
@@ -974,9 +952,10 @@ class NetworkGraph extends React.Component {
           <input type='text' id='searchNetworkNode'
             style={{...style.searchTextBox}}
             placeholder='Search' /><br />
+
           <div style={{
-            height: '645px',
-            overflowX: 'none',
+            height: '570px',
+            overflowX: 'hidden',
             overflowY: 'scroll'
           }} className='contextMenu'>
             <div
@@ -985,9 +964,19 @@ class NetworkGraph extends React.Component {
             </div>
             <div id='actions'></div>
             {/* dangerouslySetInnerHTML={{__html: this.state.actions}}*/}
-            <div id='tempActions' style={{display: 'none'}}></div>
+          </div>
+
+          <div id='collapseExpandCM' style={{
+            marginLeft: '24px',
+            marginBottom: '24px',
+            marginTop: '10px'
+          }}>
+            <img src='img/rightArrow.png' onClick={this.collapseExpandCM('collapse')} />
           </div>
         </div>
+
+        <div style={this.state.actionPerformed} id='actionPerformed'>You have already performed this action.</div>
+
         <div style={{
           bottom: '20px',
           fontSize: '12px',
@@ -997,6 +986,43 @@ class NetworkGraph extends React.Component {
         }}>{ /* {this.state.zoomScale}*/}</div>
       </div>
     );
+  }
+
+  collapseExpandCM(action) {
+    return (event) => {
+      if (action === 'collapse') {
+        // $('#contextualMenu').toggle('slide', { direction: 'right' }, 700);
+        this.setState({
+          'contextualMenu': {
+            width: '25px',
+            // height: '520px',
+            backgroundColor: '#898E9B', // '#6B7282',
+            // opacity: '0.8',
+            display: 'none',
+            position: 'absolute',
+            // left: '830px'
+            top: '0px',
+            right: '0px'
+          }
+        });
+      }
+      if (action === 'expand') {
+        // $('#contextualMenu').toggle('slide', { direction: 'left' }, 700);
+        this.setState({
+          'contextualMenu': {
+            width: '259px',
+            // height: '520px',
+            backgroundColor: '#898E9B', // '#6B7282',
+            // opacity: '0.8',
+            display: 'none',
+            position: 'absolute',
+            // left: '830px'
+            top: '0px',
+            right: '0px'
+          }
+        });
+      }
+    };
   }
 }
 

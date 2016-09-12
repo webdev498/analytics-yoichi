@@ -7,3 +7,25 @@ export const clientId = 'taf_dashboard';
 export const redirectUri = window.global.redirectUri || 'http://localhost:3000/#/dashboard?';
 
 export const defaultRoute = window.global.defaultRoute || '/';
+
+export const networkGraphDefaultOptions = {
+  physics: {
+    'barnesHut': {
+      'avoidOverlap': 1
+    }
+  },
+  interaction: {
+    navigationButtons: true,
+    keyboard: false,
+    multiselect: true,
+    hover: true,
+    selectConnectedEdges: false
+  },
+  autoResize: true,
+  height: '600',
+  width: '100%',
+  edges: {selectionWidth: 1},
+  layout: {
+    improvedLayout: true
+  }
+};
