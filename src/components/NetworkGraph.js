@@ -546,7 +546,6 @@ class NetworkGraph extends React.Component {
         $('.vis-down').hide();
         $('.vis-left').hide();
         $('.vis-right').hide();
-        $('.vis-zoomExtends').hide();
       }
       else {
         document.getElementById('networkGraph').innerHTML = 'No Data Found.';
