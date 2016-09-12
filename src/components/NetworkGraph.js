@@ -33,11 +33,6 @@ const style = {
   nodeObjects = {},
   edgeObjects = {};
 
-// let x = 0,
-//   y = 0,
-//   xArray = [0, 350, 350, 350, 350, 80, -40, 80, 10, -60],
-//   yArray = [0, -100, 20, 175, 280, 180, 180, 290, 290, 290];
-
 function getNodesEdges(data) {
   let nodes = [],
     edges = [],
@@ -50,106 +45,95 @@ function getNodesEdges(data) {
         nodeObject = {},
         nodeStatus = 'safe';
 
-      nodeObject.id = dataNode.id;
-      nodeObject.type = dataNode.type;
-      nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-      nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-      nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-      for (let metadataType in dataNode.metadata) {
-        let metadataTypeLower = metadataType.toLowerCase();
-        if (metadataTypeLower !== 'coordinates') {
-          switch (metadataTypeLower) {
-            case 'reputation':
-              let values = dataNode.metadata[metadataType].reputation,
-                value1 = '',
-                value2 = '';
-              for (let v = 0; v < values.length; v++) {
-                if (v === 0) {
-                  value1 = values[0];
-                  value2 = values[0];
+      if (nodeObjects[dataNode.id] === undefined) {
+        nodeObject.id = dataNode.id;
+        nodeObject.type = dataNode.type;
+        nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+        nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+        nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+        for (let metadataType in dataNode.metadata) {
+          let metadataTypeLower = metadataType.toLowerCase();
+          if (metadataTypeLower !== 'coordinates') {
+            switch (metadataTypeLower) {
+              case 'reputation':
+                let values = dataNode.metadata[metadataType].reputation,
+                  value1 = '',
+                  value2 = '';
+                for (let v = 0; v < values.length; v++) {
+                  if (v === 0) {
+                    value1 = values[0];
+                    value2 = values[0];
+                  }
+                  else {
+                    value1 += ',\n  ' + values[0];
+                    value2 += ',<br />' + values[0];
+                  }
                 }
-                else {
-                  value1 += ',\n  ' + values[0];
-                  value2 += ',<br />' + values[0];
-                }
-              }
-              if (value1 !== '') {
-                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  value1;
-                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  value2;
-                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                  value2;
+                if (value1 !== '') {
+                  nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                    value1;
+                  nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                    value2;
+                  nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+                    value2;
 
-                if (value1.indexOf('Scanning Host') > -1) {
-                  nodeStatus = 'scan';
+                  if (value1.indexOf('Scanning Host') > -1) {
+                    nodeStatus = 'scan';
+                  }
+                  else {
+                    nodeStatus = 'malicious';
+                  }
                 }
                 else {
-                  nodeStatus = 'malicious';
+                  nodeStatus = 'safe';
                 }
-              }
-              else {
-                nodeStatus = 'safe';
-              }
-              break;
-            case 'country':
-              nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-              nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-              nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-              break;
-            case 'displayname':
-              nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
-              nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
-              nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
-              break;
-            default:
-              nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                addNewlines(dataNode.metadata[metadataType]);
-              nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                dataNode.metadata[metadataType];
-              nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                dataNode.metadata[metadataType];
-              break;
+                break;
+              case 'country':
+                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+                break;
+              case 'displayname':
+                nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
+                nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
+                nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
+                break;
+              default:
+                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  addNewlines(dataNode.metadata[metadataType]);
+                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  dataNode.metadata[metadataType];
+                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+                  dataNode.metadata[metadataType];
+                break;
+            }
           }
         }
-      }
-      nodeObject.borderWidth = '0';
-      nodeObject.font = {
-        'face': 'Open Sans',
-        'color': Colors.pebble,
-        'size': '11',
-        'align': 'left'
-      };
-      nodeObject.shape = 'image';
-      nodeObject.color = {};
-      nodeObject.color.color = '#F2F2F4';
-      nodeObject.color.highlight = Colors.turquoise;
-      nodeObject.status = nodeStatus;
-      nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-      let actions = [];
-      if (dataNode.actions !== null && dataNode.actions !== undefined) {
-        actions = dataNode.actions;
-      }
-      nodeObject.actions = actions;
-      /* if (xArray[i] !== null && xArray[i] !== undefined) {
-        nodeObject.x = xArray[i];
-      }
-      else {
-        nodeObject.x = 350;
-      }
+        nodeObject.borderWidth = '0';
+        nodeObject.font = {
+          'face': 'Open Sans',
+          'color': Colors.pebble,
+          'size': '11',
+          'align': 'left'
+        };
+        nodeObject.shape = 'image';
+        nodeObject.color = {};
+        nodeObject.color.color = '#F2F2F4';
+        nodeObject.color.highlight = Colors.turquoise;
+        nodeObject.status = nodeStatus;
+        nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
+        let actions = [];
+        if (dataNode.actions !== null && dataNode.actions !== undefined) {
+          actions = dataNode.actions;
+        }
+        nodeObject.actions = actions;
 
-      if (yArray[i] !== null && yArray[i] !== undefined) {
-        nodeObject.y = yArray[i];
+        nodes.push(nodeObject);
+        nodeObjects[dataNode.id] = nodeObject;
       }
-      else {
-        nodeObject.y = -100;
-      }*/
-
-      nodes.push(nodeObject);
-      nodeObjects[dataNode.id] = nodeObject;
     }
   }
 
@@ -158,37 +142,39 @@ function getNodesEdges(data) {
       let dataEdge = dataEdges[i],
         edgeObject = {};
 
-      edgeObject.id = dataEdge.id;
-      edgeObject.type = dataEdge.type;
-      edgeObject.from = dataEdge.source;
-      edgeObject.to = dataEdge.target;
-      edgeObject.arrows = {
-        'to': {
-          'scaleFactor': 0.5
-        },
-        'arrowStrikethrough': false
-      };
-      edgeObject.label = dataEdge.label + '\n\n\n';
-      edgeObject.edgeDetails = 'Edge Type: ' + dataEdge.label;
-      edgeObject.edgeDetails += '<br/>Source: ' + dataEdge.source;
-      edgeObject.edgeDetails += '<br/>Target: ' + dataEdge.target;
-      edgeObject.font = {
-        'face': 'Open Sans',
-        'color': Colors.pebble,
-        'size': '11',
-        'align': 'left'
-      };
-      edgeObject.length = 1000;
-      edgeObject.smooth = {
-        type: 'discrete'
-      };
-      edgeObject.color = {};
-      edgeObject.color.color = Colors.pebble;
-      edgeObject.color.highlight = Colors.turquoise;
+      if (edgeObjects[dataEdge.id] === undefined) {
+        edgeObject.id = dataEdge.id;
+        edgeObject.type = dataEdge.type;
+        edgeObject.from = dataEdge.source;
+        edgeObject.to = dataEdge.target;
+        edgeObject.arrows = {
+          'to': {
+            'scaleFactor': 0.5
+          },
+          'arrowStrikethrough': false
+        };
+        edgeObject.label = dataEdge.label + '\n\n\n';
+        edgeObject.edgeDetails = 'Edge Type: ' + dataEdge.label;
+        edgeObject.edgeDetails += '<br/>Source: ' + dataEdge.source;
+        edgeObject.edgeDetails += '<br/>Target: ' + dataEdge.target;
+        edgeObject.font = {
+          'face': 'Open Sans',
+          'color': Colors.pebble,
+          'size': '11',
+          'align': 'left'
+        };
+        edgeObject.length = 1000;
+        edgeObject.smooth = {
+          type: 'discrete'
+        };
+        edgeObject.color = {};
+        edgeObject.color.color = Colors.pebble;
+        edgeObject.color.highlight = Colors.turquoise;
 
-      edges.push(edgeObject);
-      edgeObjects[dataEdge.target] = edgeObject;
-      edgeObjects[edgeObject.id] = edgeObject;
+        edges.push(edgeObject);
+        edgeObjects[dataEdge.target] = edgeObject;
+        edgeObjects[edgeObject.id] = edgeObject;
+      }
     }
   }
 
@@ -446,16 +432,41 @@ class NetworkGraph extends React.Component {
         const that = this;
 
         let network = new vis.Network(this.networkGraph, data, options);
+
+        if (data.nodes.length <= 10) {
+          network.setOptions({
+            physics: false
+          });
+        }
+        else {
+          network.setOptions({
+            physics: {
+              'barnesHut': {
+                'avoidOverlap': 1
+              }
+            }
+          });
+        }
+
         network.on('selectNode', this.loadContextMenu(network, 'node'));
         network.on('selectEdge', this.loadContextMenu(network, 'edge'));
 
         network.on('deselectNode', function(params) {
-          let deselectedNode = params.previousSelection.nodes[0];
-          let node = network.body.nodes[deselectedNode];
+          let deselectedNode = params.previousSelection.nodes[0],
+            node = network.body.nodes[deselectedNode],
+            selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
+
           if (nodeObjects[deselectedNode] !== undefined) {
             node.setOptions({
               image: getIcon(nodeObjects[deselectedNode].type, nodeObjects[deselectedNode].status, 'INACTIVE')
             });
+
+            for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+              if (selectedNodesForExtendingGraph[i].nodeID === deselectedNode) {
+                selectedNodesForExtendingGraph[i].nodeID = '';
+                selectedNodesForExtendingGraph[i].reportId = '';
+              }
+            }
 
             that.setState({
               'loadAgain': false,
@@ -896,6 +907,21 @@ class NetworkGraph extends React.Component {
             'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
             isFetching: false
           });
+
+          if (nodes.length <= 10) {
+            network.setOptions({
+              physics: false
+            });
+          }
+          else {
+            network.setOptions({
+              physics: {
+                'barnesHut': {
+                  'avoidOverlap': 1
+                }
+              }
+            });
+          }
 
           if (contextMenuType === 'node') {
             let node = network.body.nodes[nodeID];
