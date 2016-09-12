@@ -1,12 +1,17 @@
-window.global = window.global || {};
+import {
+  clientLoginUrl,
+  clientBaseUrl,
+  clientRedirectUri,
+  clientDefaultRoute
+} from '../env.js';
 
-export const baseUrl = window.global.baseUrl || 'https://demo.ranksoftwareinc.com';
-export const loginUrl = baseUrl + '/oauth/authorize';
+export const baseUrl = (clientBaseUrl !== undefined) ? clientBaseUrl : 'https://demo.ranksoftwareinc.com';
+export const loginUrl = clientLoginUrl || (baseUrl + '/oauth/authorize');
 export const responseType = 'token';
 export const clientId = 'taf_dashboard';
-export const redirectUri = window.global.redirectUri || 'http://localhost:3000/#/dashboard?';
+export const redirectUri = clientRedirectUri || 'http://localhost:3000/#/dashboard?';
 
-export const defaultRoute = window.global.defaultRoute || '/';
+export const defaultRoute = clientDefaultRoute || '/';
 
 export const networkGraphDefaultOptions = {
   physics: {
