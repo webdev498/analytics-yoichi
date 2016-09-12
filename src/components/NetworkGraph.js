@@ -487,7 +487,8 @@ class NetworkGraph extends React.Component {
         network.on('hoverNode', function(params) {
           let hoverNode = params.node,
             selectedNodes = network.getSelection().nodes,
-            node = network.body.nodes[hoverNode];
+            node = network.body.nodes[hoverNode],
+            selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
           if (nodeObjects[hoverNode] !== undefined) {
             if (selectedNodes.length > 0) {
@@ -506,6 +507,14 @@ class NetworkGraph extends React.Component {
               node.setOptions({
                 image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
               });
+
+              for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+                if (selectedNodesForExtendingGraph[i].nodeID === hoverNode) {
+                  node.setOptions({
+                    image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
+                  });
+                }
+              }
             }
           }
         });
@@ -513,7 +522,8 @@ class NetworkGraph extends React.Component {
         network.on('blurNode', function(params) {
           let blurNode = params.node,
             selectedNodes = network.getSelection().nodes,
-            node = network.body.nodes[blurNode];
+            node = network.body.nodes[blurNode],
+            selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
           if (nodeObjects[blurNode] !== undefined) {
             if (selectedNodes.length > 0) {
@@ -532,6 +542,14 @@ class NetworkGraph extends React.Component {
               node.setOptions({
                 image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
               });
+
+              for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+                if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
+                  node.setOptions({
+                    image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
+                  });
+                }
+              }
             }
           }
         });
