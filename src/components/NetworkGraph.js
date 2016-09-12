@@ -200,7 +200,7 @@ function getNodesEdges(data) {
 
 function getIcon(nodeType, nodeStatus, nodeAction) {
   nodeType = nodeType.toLowerCase();
-  const iconPath = 'img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
+  const iconPath = '/img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
 
   if (nodeType !== '') {
     return iconPath;

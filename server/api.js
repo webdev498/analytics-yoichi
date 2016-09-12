@@ -6,6 +6,8 @@ import koaRouter from 'koa-router';
 
 import {getData} from './components/paretoChart'
 
+import {serverBaseUrl} from '../env';
+
 const router = new koaRouter({
   prefix: '/api'
 });
@@ -22,7 +24,7 @@ const reportId = new koaRouter();
 // .get('/taf_threat_trend', async function(ctx, next) {
 //   const url = ctx.request.url;
 
-//   const res = await fetch('https://demo.ranksoftwareinc.com' + ctx.url,
+//   const res = await fetch(serverBaseUrl + ctx.url,
 //     {
 //       method: 'GET',
 //       headers: ctx.headers,
@@ -45,7 +47,7 @@ const reportId = new koaRouter();
 router.get('/analytics/reporting/execute', reportId.routes(), reportId.allowedMethods())
 .get('*', async function (ctx, next) {
   const url = ctx.request.url;
-  const res = await fetch('https://demo.ranksoftwareinc.com' + ctx.url,
+  const res = await fetch(serverBaseUrl + ctx.url,
     {
       method: 'GET',
       headers: ctx.headers,
