@@ -47,6 +47,7 @@ function getNodesEdges(data) {
     dataEdges = data.edges;
 
   if (dataNodes !== undefined) {
+    console.log('getNodesEdges', data, dataNodes);
     for (let i = 0; i < dataNodes.length; i++) {
       let dataNode = dataNodes[i],
         nodeObject = {},
@@ -382,7 +383,8 @@ class NetworkGraph extends React.Component {
         fontSize: '12pt',
         position: 'absolute',
         padding: '20px',
-        backgroundColor: Colors.coral,
+        backgroundColor: '#DADADE',
+        color: '#24293D',
         display: 'none'
       }
     };
@@ -412,6 +414,7 @@ class NetworkGraph extends React.Component {
 
     if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
+      console.log(data[0], nodesEdges);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       const actionsData = this.context.store.getState().actions;
@@ -613,6 +616,13 @@ class NetworkGraph extends React.Component {
 
           $('#actions').html('');
           $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
+
+          $('#contextualMenu').animate({width: '259px'});
+          document.getElementById('rightArrow').style.display = 'block';
+          document.getElementById('contextualMenuContents').style.display = 'block';
+          // document.getElementById('searchNetworkNode').style.display = 'block';
+          document.getElementById('expandCM').style.display = 'none';
+
           document.getElementById('refreshData').style.marginLeft = '660px';
 
           let statesJSON = {
@@ -670,6 +680,13 @@ class NetworkGraph extends React.Component {
 
           $('#actions').html('');
           $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
+
+          $('#contextualMenu').animate({width: '259px'});
+          document.getElementById('rightArrow').style.display = 'block';
+          document.getElementById('contextualMenuContents').style.display = 'block';
+          // document.getElementById('searchNetworkNode').style.display = 'block';
+          document.getElementById('expandCM').style.display = 'none';
+
           document.getElementById('refreshData').style.marginLeft = '660px';
 
           let statesJSON = {
@@ -975,12 +992,12 @@ class NetworkGraph extends React.Component {
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...this.state.style.contextualMenu}} id='contextualMenu'>
-          <input type='text' id='searchNetworkNode'
+          { /* <input type='text' id='searchNetworkNode'
             style={{...style.searchTextBox}}
-            placeholder='Search' />
+            placeholder='Search' /> */ }
 
           <div style={{
-            height: '570px',
+            height: '650px', // '570px',
             overflowX: 'hidden',
             overflowY: 'auto'
           }} className='contextMenu' id='contextualMenuContents'>
@@ -997,9 +1014,16 @@ class NetworkGraph extends React.Component {
             marginTop: '10px'
           }}>
             <img id='rightArrow' src='/img/rightArrow.png' onClick={this.collapseExpandCM('collapse')} />
-            <img id='leftArrow' src='/img/leftArrow.png' onClick={this.collapseExpandCM('expand')}
-              style={{display: 'none'}} />
           </div>
+        </div>
+
+        <div id='expandCM' style={{
+          bottom: '25px',
+          right: '24px',
+          position: 'absolute',
+          display: 'none'
+        }}>
+          <img id='leftArrow' src='/img/leftArrow.png' onClick={this.collapseExpandCM('expand')} />
         </div>
 
         <div style={this.state.actionPerformed} id='actionPerformed'>You have already performed this action.</div>
@@ -1018,18 +1042,18 @@ class NetworkGraph extends React.Component {
   collapseExpandCM(action) {
     return (event) => {
       if (action === 'collapse') {
-        $('#contextualMenu').animate({width: '100px'});
+        $('#contextualMenu').animate({width: '0px'});
         document.getElementById('rightArrow').style.display = 'none';
         document.getElementById('contextualMenuContents').style.display = 'none';
-        document.getElementById('searchNetworkNode').style.display = 'none';
-        document.getElementById('leftArrow').style.display = 'block';
+        // document.getElementById('searchNetworkNode').style.display = 'none';
+        document.getElementById('expandCM').style.display = 'block';
       }
       if (action === 'expand') {
         $('#contextualMenu').animate({width: '259px'});
         document.getElementById('rightArrow').style.display = 'block';
         document.getElementById('contextualMenuContents').style.display = 'block';
-        document.getElementById('searchNetworkNode').style.display = 'block';
-        document.getElementById('leftArrow').style.display = 'none';
+        // document.getElementById('searchNetworkNode').style.display = 'block';
+        document.getElementById('expandCM').style.display = 'none';
       }
     };
   }
