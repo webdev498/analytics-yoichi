@@ -339,6 +339,14 @@ function addNewlines(str) {
   return str;
 }
 
+function getPos(el) {
+  // yay readability
+  for (var lx = 0, ly = 0;
+    el != null;
+    lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
+  return {x: lx, y: ly};
+}
+
 class NetworkGraph extends React.Component {
   constructor(props) {
     super(props);
@@ -862,8 +870,10 @@ class NetworkGraph extends React.Component {
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
         if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
           selectedNodesForExtendingGraph[i].reportId === reportId) {
+          let position = getPos(document.getElementById(actionId));
+          $('#actionPerformed').css('top', position.y - 85);
           $('#actionPerformed').fadeIn('slow');
-          $('#actionPerformed').fadeOut(10000);
+          $('#actionPerformed').fadeOut(3000);
           that.setState({
             isFetching: false
           });
