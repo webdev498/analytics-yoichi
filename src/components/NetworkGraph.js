@@ -406,17 +406,17 @@ class NetworkGraph extends React.Component {
       let options = networkGraphDefaultOptions;
 
       // create a network
-      let data = {
+      let networkData = {
         nodes: this.state.nodes,
         edges: this.state.edges
       };
 
-      if (data.nodes.length > 0) {
+      if (networkData.nodes.length > 0) {
         const that = this;
 
-        let network = new vis.Network(this.networkGraph, data, options);
+        let network = new vis.Network(this.networkGraph, networkData, options);
 
-        if (data.nodes.length <= 10) {
+        if (networkData.nodes.length <= 10) {
           network.setOptions({
             physics: false
           });
@@ -540,11 +540,11 @@ class NetworkGraph extends React.Component {
           }
         });
 
-        network.on('zoom', function(params) {
-          that.setState({
-            'zoomScale': parseInt(params.scale * 100) + '%'
-          });
-        });
+        // network.on('zoom', function(params) {
+        //   that.setState({
+        //     'zoomScale': parseInt(params.scale * 100) + '%'
+        //   });
+        // });
 
         $('.vis-up').hide();
         $('.vis-down').hide();
