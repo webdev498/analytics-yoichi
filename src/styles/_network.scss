@@ -16,8 +16,10 @@ div.contextMenu ul {
 div.contextMenu ul li {
   /*display: block;*/
   /*border-bottom: 1px solid gray;*/
-  padding: 14px;
-  font-size: 14px;
+  padding-left: 28px;
+  padding-right: 28px;
+  padding-bottom: 14px;
+  font-size: 12pt;
   cursor: pointer;
   color: $WhiteColor;
 }
@@ -29,10 +31,13 @@ div.contextMenu ul li:hover {
 div.contextMenu table tr td {
   /*display: block;*/
   /*border-bottom: 1px solid gray;*/
-  padding: 14px;
-  font-size: 14px;
+  padding-left: 26px;
+  padding-right: 26px;
+  padding-bottom: 14px;
+  font-size: 12pt;
   cursor: pointer;
   color: $WhiteColor;
+  font-weight: lighter;
 }
 
 .contextMenu::-webkit-scrollbar {

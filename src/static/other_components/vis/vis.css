@@ -1141,8 +1141,8 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 }
 div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
     background-image: url("img/network/zoomExtends.png");
-    bottom:50px;
-    right:15px;
+    bottom:87px;
+    /*right:15px;*/
 }
 
 div.vis-color-picker {

@@ -6,7 +6,7 @@ import {
   getCountryNameByCountryCode
 } from 'utils/utils';
 import Cookies from 'cookies-js';
-import {baseUrl} from 'config';
+import {baseUrl, networkGraphDefaultOptions} from 'config';
 import Loader from '../components/Loader';
 
 const style = {
@@ -14,16 +14,23 @@ const style = {
       backgroundColor: '#646A7D',
       padding: '10px',
       border: '0px',
-      margin: '5%',
-      width: '90%',
-      height: '50px',
-      color: '#BBBBC3',
-      fontFamily: 'Open Sans'
+      // margin: '5%',
+      width: '211px',
+      height: '40px',
+      color: '#B8BBC3',
+      fontFamily: 'Open Sans',
+      marginTop: '28px',
+      marginLeft: '24px',
+      marginRight: '24px'
     },
     selectedNodeDetails: {
-      margin: '5%',
+      marginTop: '28px',
+      marginBottom: '28px',
+      marginLeft: '24px',
+      marginRight: '24px',
       width: '90%',
       color: '#24293D',
+      fontSize: '12pt',
       fontFamily: 'Open Sans'
     },
     loaderStyle: {
@@ -32,11 +39,6 @@ const style = {
   },
   nodeObjects = {},
   edgeObjects = {};
-
-// let x = 0,
-//   y = 0,
-//   xArray = [0, 350, 350, 350, 350, 80, -40, 80, 10, -60],
-//   yArray = [0, -100, 20, 175, 280, 180, 180, 290, 290, 290];
 
 function getNodesEdges(data) {
   let nodes = [],
@@ -50,106 +52,95 @@ function getNodesEdges(data) {
         nodeObject = {},
         nodeStatus = 'safe';
 
-      nodeObject.id = dataNode.id;
-      nodeObject.type = dataNode.type;
-      nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-      nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-      nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-      for (let metadataType in dataNode.metadata) {
-        let metadataTypeLower = metadataType.toLowerCase();
-        if (metadataTypeLower !== 'coordinates') {
-          switch (metadataTypeLower) {
-            case 'reputation':
-              let values = dataNode.metadata[metadataType].reputation,
-                value1 = '',
-                value2 = '';
-              for (let v = 0; v < values.length; v++) {
-                if (v === 0) {
-                  value1 = values[0];
-                  value2 = values[0];
+      if (nodeObjects[dataNode.id] === undefined) {
+        nodeObject.id = dataNode.id;
+        nodeObject.type = dataNode.type;
+        nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+        nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+        nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+        for (let metadataType in dataNode.metadata) {
+          let metadataTypeLower = metadataType.toLowerCase();
+          if (metadataTypeLower !== 'coordinates') {
+            switch (metadataTypeLower) {
+              case 'reputation':
+                let values = dataNode.metadata[metadataType].reputation,
+                  value1 = '',
+                  value2 = '';
+                for (let v = 0; v < values.length; v++) {
+                  if (v === 0) {
+                    value1 = values[0];
+                    value2 = values[0];
+                  }
+                  else {
+                    value1 += ',\n  ' + values[0];
+                    value2 += ',<br />' + values[0];
+                  }
                 }
-                else {
-                  value1 += ',\n  ' + values[0];
-                  value2 += ',<br />' + values[0];
-                }
-              }
-              if (value1 !== '') {
-                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  value1;
-                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  value2;
-                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                  value2;
+                if (value1 !== '') {
+                  nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                    value1;
+                  nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                    value2;
+                  nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+                    value2;
 
-                if (value1.indexOf('Scanning Host') > -1) {
-                  nodeStatus = 'scan';
+                  if (value1.indexOf('Scanning Host') > -1) {
+                    nodeStatus = 'scan';
+                  }
+                  else {
+                    nodeStatus = 'malicious';
+                  }
                 }
                 else {
-                  nodeStatus = 'malicious';
+                  nodeStatus = 'safe';
                 }
-              }
-              else {
-                nodeStatus = 'safe';
-              }
-              break;
-            case 'country':
-              nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-              nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-              nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-              break;
-            case 'displayname':
-              nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
-              nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
-              nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
-              break;
-            default:
-              nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                addNewlines(dataNode.metadata[metadataType]);
-              nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                dataNode.metadata[metadataType];
-              nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                dataNode.metadata[metadataType];
-              break;
+                break;
+              case 'country':
+                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+                break;
+              case 'displayname':
+                nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
+                nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
+                nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
+                break;
+              default:
+                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  addNewlines(dataNode.metadata[metadataType]);
+                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  dataNode.metadata[metadataType];
+                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+                  dataNode.metadata[metadataType];
+                break;
+            }
           }
         }
-      }
-      nodeObject.borderWidth = '0';
-      nodeObject.font = {
-        'face': 'Open Sans',
-        'color': Colors.pebble,
-        'size': '11',
-        'align': 'left'
-      };
-      nodeObject.shape = 'image';
-      nodeObject.color = {};
-      nodeObject.color.color = '#F2F2F4';
-      nodeObject.color.highlight = Colors.turquoise;
-      nodeObject.status = nodeStatus;
-      nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-      let actions = [];
-      if (dataNode.actions !== null && dataNode.actions !== undefined) {
-        actions = dataNode.actions;
-      }
-      nodeObject.actions = actions;
-      /* if (xArray[i] !== null && xArray[i] !== undefined) {
-        nodeObject.x = xArray[i];
-      }
-      else {
-        nodeObject.x = 350;
-      }
+        nodeObject.borderWidth = '0';
+        nodeObject.font = {
+          'face': 'Open Sans',
+          'color': Colors.pebble,
+          'size': '11',
+          'align': 'left'
+        };
+        nodeObject.shape = 'image';
+        nodeObject.color = {};
+        nodeObject.color.color = '#F2F2F4';
+        nodeObject.color.highlight = Colors.turquoise;
+        nodeObject.status = nodeStatus;
+        nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
+        let actions = [];
+        if (dataNode.actions !== null && dataNode.actions !== undefined) {
+          actions = dataNode.actions;
+        }
+        nodeObject.actions = actions;
 
-      if (yArray[i] !== null && yArray[i] !== undefined) {
-        nodeObject.y = yArray[i];
+        nodes.push(nodeObject);
+        nodeObjects[dataNode.id] = nodeObject;
       }
-      else {
-        nodeObject.y = -100;
-      }*/
-
-      nodes.push(nodeObject);
-      nodeObjects[dataNode.id] = nodeObject;
     }
   }
 
@@ -158,37 +149,39 @@ function getNodesEdges(data) {
       let dataEdge = dataEdges[i],
         edgeObject = {};
 
-      edgeObject.id = dataEdge.id;
-      edgeObject.type = dataEdge.type;
-      edgeObject.from = dataEdge.source;
-      edgeObject.to = dataEdge.target;
-      edgeObject.arrows = {
-        'to': {
-          'scaleFactor': 0.5
-        },
-        'arrowStrikethrough': false
-      };
-      edgeObject.label = dataEdge.label + '\n\n\n';
-      edgeObject.edgeDetails = 'Edge Type: ' + dataEdge.label;
-      edgeObject.edgeDetails += '<br/>Source: ' + dataEdge.source;
-      edgeObject.edgeDetails += '<br/>Target: ' + dataEdge.target;
-      edgeObject.font = {
-        'face': 'Open Sans',
-        'color': Colors.pebble,
-        'size': '11',
-        'align': 'left'
-      };
-      edgeObject.length = 1000;
-      edgeObject.smooth = {
-        type: 'discrete'
-      };
-      edgeObject.color = {};
-      edgeObject.color.color = Colors.pebble;
-      edgeObject.color.highlight = Colors.turquoise;
+      if (edgeObjects[dataEdge.id] === undefined) {
+        edgeObject.id = dataEdge.id;
+        edgeObject.type = dataEdge.type;
+        edgeObject.from = dataEdge.source;
+        edgeObject.to = dataEdge.target;
+        edgeObject.arrows = {
+          'to': {
+            'scaleFactor': 0.5
+          },
+          'arrowStrikethrough': false
+        };
+        edgeObject.label = dataEdge.label + '\n\n\n';
+        edgeObject.edgeDetails = 'Edge Type: ' + dataEdge.label;
+        edgeObject.edgeDetails += '<br/>Source: ' + dataEdge.source;
+        edgeObject.edgeDetails += '<br/>Target: ' + dataEdge.target;
+        edgeObject.font = {
+          'face': 'Open Sans',
+          'color': Colors.pebble,
+          'size': '11',
+          'align': 'left'
+        };
+        edgeObject.length = 1000;
+        edgeObject.smooth = {
+          type: 'discrete'
+        };
+        edgeObject.color = {};
+        edgeObject.color.color = Colors.pebble;
+        edgeObject.color.highlight = Colors.turquoise;
 
-      edges.push(edgeObject);
-      edgeObjects[dataEdge.target] = edgeObject;
-      edgeObjects[edgeObject.id] = edgeObject;
+        edges.push(edgeObject);
+        edgeObjects[dataEdge.target] = edgeObject;
+        edgeObjects[edgeObject.id] = edgeObject;
+      }
     }
   }
 
@@ -206,7 +199,7 @@ function getIcon(nodeType, nodeStatus, nodeAction) {
     return iconPath;
   }
   else {
-    return 'img/asset.png';
+    return '/img/asset.png';
   }
 }
 
@@ -352,9 +345,10 @@ class NetworkGraph extends React.Component {
           'width': '100%'
         },
         'contextualMenu': {
-          width: '300px',
+          width: '259px',
           // height: '520px',
-          backgroundColor: '#898E9B',
+          backgroundColor: '#898E9B', // '#6B7282',
+          // opacity: '0.8',
           display: 'none',
           position: 'absolute',
           // left: '830px'
@@ -372,13 +366,23 @@ class NetworkGraph extends React.Component {
       alertDate: alertDate,
       selectedNodesForExtendingGraph: [],
       zoomScale: '100%',
-      isFetching: false
+      isFetching: false,
+      actionPerformed: {
+        top: 0,
+        right: '259px',
+        fontSize: '12pt',
+        position: 'absolute',
+        padding: '20px',
+        backgroundColor: Colors.coral,
+        display: 'none'
+      }
     };
 
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
     this.getContextMenu = this.getContextMenu.bind(this);
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
+    this.collapseExpandCM = this.collapseExpandCM.bind(this);
   }
 
   loadNetworkGraph(data, loadAgain) {
@@ -399,42 +403,7 @@ class NetworkGraph extends React.Component {
     }
 
     if (this.networkGraph !== null && this.networkGraph !== undefined) {
-      let options = {
-        /*physics: {
-          enabled: true,
-          // barnesHut: {
-          //   springLength: 10,
-          //   avoidOverlap: 0
-          // },
-          // forceAtlas2Based: {
-          //   springLength: 10,
-          //   avoidOverlap: 0
-          // }
-          stabilization: {
-            enabled: true
-          }
-        },*/
-        // physics: false,
-        physics: {
-          'barnesHut': {
-            'avoidOverlap': 1
-          }
-        },
-        interaction: {
-          navigationButtons: true,
-          keyboard: false,
-          multiselect: true,
-          hover: true,
-          selectConnectedEdges: false
-        },
-        autoResize: true,
-        height: '600',
-        width: '100%',
-        edges: {selectionWidth: 1},
-        layout: {
-          improvedLayout: true
-        }
-      };
+      let options = networkGraphDefaultOptions;
 
       // create a network
       let data = {
@@ -446,12 +415,29 @@ class NetworkGraph extends React.Component {
         const that = this;
 
         let network = new vis.Network(this.networkGraph, data, options);
+
+        if (data.nodes.length <= 10) {
+          network.setOptions({
+            physics: false
+          });
+        }
+        else {
+          network.setOptions({
+            physics: {
+              'barnesHut': {
+                'avoidOverlap': 1
+              }
+            }
+          });
+        }
+
         network.on('selectNode', this.loadContextMenu(network, 'node'));
         network.on('selectEdge', this.loadContextMenu(network, 'edge'));
 
         network.on('deselectNode', function(params) {
-          let deselectedNode = params.previousSelection.nodes[0];
-          let node = network.body.nodes[deselectedNode];
+          let deselectedNode = params.previousSelection.nodes[0],
+            node = network.body.nodes[deselectedNode];
+
           if (nodeObjects[deselectedNode] !== undefined) {
             node.setOptions({
               image: getIcon(nodeObjects[deselectedNode].type, nodeObjects[deselectedNode].status, 'INACTIVE')
@@ -465,19 +451,19 @@ class NetworkGraph extends React.Component {
                   'width': '100%'
                 },
                 'contextualMenu': {
-                  width: '300px',
-                  // height: '520px',
-                  backgroundColor: '#898E9B',
+                  width: '259px',
+                  backgroundColor: '#898E9B', // '#6B7282',
+                  // opacity: '0.8',
                   display: 'none',
                   position: 'absolute',
-                  // left: '830px'
                   top: '0px',
                   right: '0px'
                 }
               },
               selectedNodeDetails: '',
               actions: '',
-              selectedNode: ''
+              selectedNode: '',
+              selectedNodesForExtendingGraph: []
             });
             $('#actions').html('');
             document.getElementById('refreshData').style.marginLeft = 'auto';
@@ -487,7 +473,8 @@ class NetworkGraph extends React.Component {
         network.on('hoverNode', function(params) {
           let hoverNode = params.node,
             selectedNodes = network.getSelection().nodes,
-            node = network.body.nodes[hoverNode];
+            node = network.body.nodes[hoverNode],
+            selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
           if (nodeObjects[hoverNode] !== undefined) {
             if (selectedNodes.length > 0) {
@@ -506,6 +493,14 @@ class NetworkGraph extends React.Component {
               node.setOptions({
                 image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
               });
+
+              for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+                if (selectedNodesForExtendingGraph[i].nodeID === hoverNode) {
+                  node.setOptions({
+                    image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
+                  });
+                }
+              }
             }
           }
         });
@@ -513,7 +508,8 @@ class NetworkGraph extends React.Component {
         network.on('blurNode', function(params) {
           let blurNode = params.node,
             selectedNodes = network.getSelection().nodes,
-            node = network.body.nodes[blurNode];
+            node = network.body.nodes[blurNode],
+            selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
           if (nodeObjects[blurNode] !== undefined) {
             if (selectedNodes.length > 0) {
@@ -532,6 +528,14 @@ class NetworkGraph extends React.Component {
               node.setOptions({
                 image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
               });
+
+              for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+                if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
+                  node.setOptions({
+                    image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
+                  });
+                }
+              }
             }
           }
         });
@@ -546,7 +550,6 @@ class NetworkGraph extends React.Component {
         $('.vis-down').hide();
         $('.vis-left').hide();
         $('.vis-right').hide();
-        $('.vis-zoomExtends').hide();
       }
       else {
         document.getElementById('networkGraph').innerHTML = 'No Data Found.';
@@ -556,8 +559,8 @@ class NetworkGraph extends React.Component {
 
   loadContextMenu(network, contextMenuType) {
     return (event) => {
-      let actions = document.getElementById('tempActions');
-      actions.innerHTML = '';
+      // let actions = document.getElementById('tempActions');
+      // actions.innerHTML = '';
       let listHTML = {
         'loadAgain': false,
         'actions': ''
@@ -604,9 +607,10 @@ class NetworkGraph extends React.Component {
                 'width': '100%'
               },
               'contextualMenu': {
-                width: '300px',
+                width: '259px',
                 // height: '520px',
-                backgroundColor: '#898E9B',
+                backgroundColor: '#898E9B', // '#6B7282',
+                // opacity: '0.8',
                 position: 'absolute',
                 // left: '830px'
                 top: '0px',
@@ -658,9 +662,10 @@ class NetworkGraph extends React.Component {
                 'width': '100%'
               },
               'contextualMenu': {
-                width: '300px',
+                width: '259px',
                 // height: '520px',
-                backgroundColor: '#898E9B',
+                backgroundColor: '#898E9B', // '#6B7282',
+                // opacity: '0.8',
                 position: 'absolute',
                 // left: '830px'
                 top: '0px',
@@ -676,8 +681,8 @@ class NetworkGraph extends React.Component {
 
   getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt) {
     return (event) => {
-      let actions = document.getElementById('tempActions');
-      actions.innerHTML = '';
+      // let actions = document.getElementById('tempActions');
+      // actions.innerHTML = '';
       let table = document.createElement('table');
       table.border = '0';
       table.width = '250';
@@ -768,7 +773,7 @@ class NetworkGraph extends React.Component {
             if (userInputParameters.length > 0) {
               let td2 = document.createElement('td');
               let downArrow = document.createElement('img');
-              downArrow.src = 'img/downarrow.png';
+              downArrow.src = '/img/downarrow.png';
               // td1.onclick = this.displayUserInputParameter(userInputParameters[p].name + j);
               td2.appendChild(downArrow);
               tr.appendChild(td2);
@@ -820,7 +825,8 @@ class NetworkGraph extends React.Component {
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
         if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
           selectedNodesForExtendingGraph[i].reportId === reportId) {
-          alert('You have already performed this action.');
+          $('#actionPerformed').fadeIn('slow');
+          $('#actionPerformed').fadeOut(10000);
           that.setState({
             isFetching: false
           });
@@ -880,6 +886,21 @@ class NetworkGraph extends React.Component {
             isFetching: false
           });
 
+          if (nodes.length <= 10) {
+            network.setOptions({
+              physics: false
+            });
+          }
+          else {
+            network.setOptions({
+              physics: {
+                'barnesHut': {
+                  'avoidOverlap': 1
+                }
+              }
+            });
+          }
+
           if (contextMenuType === 'node') {
             let node = network.body.nodes[nodeID];
             if (nodeObjects[nodeID] !== undefined) {
@@ -890,10 +911,14 @@ class NetworkGraph extends React.Component {
           }
 
           if (contextMenuType === 'edge') {
-            // let node = network.body.nodes[nodeID];
-            // if (nodeObjects[nodeID] !== undefined) {
-            //   node.setOptions({
-            //     image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
+            // let edge = network.body.edges[nodeID];
+            // // console.log(nodeID);
+            // if (edgeObjects[nodeID] !== undefined) {
+            //   // console.log('test1');
+            //   edge.setOptions({
+            //     color: {
+            //       color: Colors.turquoise
+            //     }
             //   });
             // }
           }
@@ -922,6 +947,7 @@ class NetworkGraph extends React.Component {
         <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
           ...{
             // backgroundColor: Colors.networkGraphBGColor
+            width: '1100px'
           }}}
           id='networkGraph'>
           {this.loadNetworkGraph(props.data, this.state.loadAgain)}
@@ -930,21 +956,33 @@ class NetworkGraph extends React.Component {
           style={{...this.state.style.contextualMenu}} id='contextualMenu'>
           <input type='text' id='searchNetworkNode'
             style={{...style.searchTextBox}}
-            placeholder='Search' /><br />
+            placeholder='Search' />
+
           <div style={{
-            height: '645px',
-            overflowX: 'none',
+            height: '570px',
+            overflowX: 'hidden',
             overflowY: 'scroll'
-          }} className='contextMenu'>
+          }} className='contextMenu' id='contextualMenuContents'>
             <div
               style={{...style.selectedNodeDetails}}
               dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
             </div>
             <div id='actions'></div>
-            {/* dangerouslySetInnerHTML={{__html: this.state.actions}}*/}
-            <div id='tempActions' style={{display: 'none'}}></div>
+          </div>
+
+          <div id='collapseExpandCM' style={{
+            marginLeft: '24px',
+            marginBottom: '24px',
+            marginTop: '10px'
+          }}>
+            <img id='rightArrow' src='/img/rightArrow.png' onClick={this.collapseExpandCM('collapse')} />
+            <img id='leftArrow' src='/img/leftArrow.png' onClick={this.collapseExpandCM('expand')}
+              style={{display: 'none'}} />
           </div>
         </div>
+
+        <div style={this.state.actionPerformed} id='actionPerformed'>You have already performed this action.</div>
+
         <div style={{
           bottom: '20px',
           fontSize: '12px',
@@ -954,6 +992,25 @@ class NetworkGraph extends React.Component {
         }}>{ /* {this.state.zoomScale}*/}</div>
       </div>
     );
+  }
+
+  collapseExpandCM(action) {
+    return (event) => {
+      if (action === 'collapse') {
+        $('#contextualMenu').animate({width: '100px'});
+        document.getElementById('rightArrow').style.display = 'none';
+        document.getElementById('contextualMenuContents').style.display = 'none';
+        document.getElementById('searchNetworkNode').style.display = 'none';
+        document.getElementById('leftArrow').style.display = 'block';
+      }
+      if (action === 'expand') {
+        $('#contextualMenu').animate({width: '259px'});
+        document.getElementById('rightArrow').style.display = 'block';
+        document.getElementById('contextualMenuContents').style.display = 'block';
+        document.getElementById('searchNetworkNode').style.display = 'block';
+        document.getElementById('leftArrow').style.display = 'none';
+      }
+    };
   }
 }
 
