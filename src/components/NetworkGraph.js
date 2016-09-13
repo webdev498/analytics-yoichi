@@ -34,7 +34,6 @@ const style = {
     fontFamily: 'Open Sans'
   },
   loaderStyle: {
-
   }
 };
 
@@ -512,6 +511,36 @@ class NetworkGraph extends React.Component {
           }
         });
 
+        // network.on('dragStart', function(params) {
+        //   let dragNode = params.nodes[0];
+        //   if (dragNode !== undefined) {
+        //     let node = network.body.nodes[dragNode];
+        //     node.setOptions({
+        //       image: getIcon(nodeObjects[dragNode].type, nodeObjects[dragNode].status, 'INACTIVE')
+        //     });
+        //   }
+        // });
+
+        // network.on('dragging', function(params) {
+        //   let dragNode = params.nodes[0];
+        //   if (dragNode !== undefined) {
+        //     let node = network.body.nodes[dragNode];
+        //     node.setOptions({
+        //       image: getIcon(nodeObjects[dragNode].type, nodeObjects[dragNode].status, 'INACTIVE')
+        //     });
+        //   }
+        // });
+
+        // network.on('dragEnd', function(params) {
+        //   let dragNode = params.nodes[0];
+        //   if (dragNode !== undefined) {
+        //     let node = network.body.nodes[dragNode];
+        //     node.setOptions({
+        //       image: getIcon(nodeObjects[dragNode].type, nodeObjects[dragNode].status, 'INACTIVE')
+        //     });
+        //   }
+        // });
+
         network.on('hoverNode', function(params) {
           let hoverNode = params.node,
             selectedNodes = network.getSelection().nodes,
@@ -601,6 +630,7 @@ class NetworkGraph extends React.Component {
 
   loadContextMenu(network, contextMenuType) {
     return (event) => {
+      console.log('test');
       // let actions = document.getElementById('tempActions');
       // actions.innerHTML = '';
       let listHTML = {
