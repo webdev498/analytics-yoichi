@@ -47,6 +47,7 @@ const reportId = new koaRouter();
 router.get('/analytics/reporting/execute', reportId.routes(), reportId.allowedMethods())
 .get('*', async function (ctx, next) {
   const url = ctx.request.url;
+  console.log('url', url);
   const res = await fetch(serverBaseUrl + ctx.url,
     {
       method: 'GET',
