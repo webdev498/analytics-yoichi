@@ -1023,7 +1023,7 @@ class NetworkGraph extends React.Component {
           position: 'absolute',
           display: 'none'
         }}>
-          <img id='leftArrow' src='/img/leftArrow.png' onClick={this.collapseExpandCM('expand')} />
+          <img id='leftArrow' src='/img/menu.png' onClick={this.collapseExpandCM('expand')} />
         </div>
 
         <div style={this.state.actionPerformed} id='actionPerformed'>You have already performed this action.</div>
