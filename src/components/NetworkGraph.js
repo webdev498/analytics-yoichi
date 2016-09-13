@@ -55,7 +55,8 @@ function getNodesEdges(data) {
       if (nodeObjects[dataNode.id] === undefined) {
         nodeObject.id = dataNode.id;
         nodeObject.type = dataNode.type;
-        nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+        nodeObject.label = '\n  ' + firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+        // nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
         nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
         nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
         for (let metadataType in dataNode.metadata) {
@@ -77,8 +78,10 @@ function getNodesEdges(data) {
                   }
                 }
                 if (value1 !== '') {
-                  nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
                     value1;
+                  // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                    // value1;
                   nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
                     value2;
                   nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
@@ -96,21 +99,26 @@ function getNodesEdges(data) {
                 }
                 break;
               case 'country':
-                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
                   getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+                // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  // getCountryNameByCountryCode[dataNode.metadata[metadataType]];
                 nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
                   getCountryNameByCountryCode[dataNode.metadata[metadataType]];
                 nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
                   getCountryNameByCountryCode[dataNode.metadata[metadataType]];
                 break;
               case 'displayname':
-                nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
+                nodeObject.label += '\n  Name: ' + dataNode.metadata[metadataType];
+                // nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
                 nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
                 nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
                 break;
               default:
-                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
                   addNewlines(dataNode.metadata[metadataType]);
+                // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+                  // addNewlines(dataNode.metadata[metadataType]);
                 nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
                   dataNode.metadata[metadataType];
                 nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
@@ -199,7 +207,7 @@ function getIcon(nodeType, nodeStatus, nodeAction) {
     return iconPath;
   }
   else {
-    return '/img/asset.png';
+    return '/img/inactive.png';
   }
 }
 
@@ -353,7 +361,8 @@ class NetworkGraph extends React.Component {
           position: 'absolute',
           // left: '830px'
           top: '0px',
-          right: '0px'
+          right: '0px',
+          bottom: '0px'
         }
       },
       selectedNodeDetails: '',
@@ -394,23 +403,30 @@ class NetworkGraph extends React.Component {
       return;
     }
 
+    let networkData = {
+      nodes: [],
+      edges: []
+    };
+
+    console.log(this.state);
+
     if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       const actionsData = this.context.store.getState().actions;
       this.state.actionsData = getActionsByTypes(actionsData.list.actions);
+
+      networkData = {
+        nodes: nodesEdges.nodes,
+        edges: nodesEdges.edges
+      };
     }
 
     if (this.networkGraph !== null && this.networkGraph !== undefined) {
       let options = networkGraphDefaultOptions;
 
       // create a network
-      let networkData = {
-        nodes: this.state.nodes,
-        edges: this.state.edges
-      };
-
       if (networkData.nodes.length > 0) {
         const that = this;
 
@@ -424,9 +440,10 @@ class NetworkGraph extends React.Component {
         else {
           network.setOptions({
             physics: {
-              'barnesHut': {
-                'avoidOverlap': 1
-              }
+              // 'barnesHut': {
+              //   'avoidOverlap': 1
+              // },
+              'stabilization': true
             }
           });
         }
@@ -457,7 +474,8 @@ class NetworkGraph extends React.Component {
                   display: 'none',
                   position: 'absolute',
                   top: '0px',
-                  right: '0px'
+                  right: '0px',
+                  bottom: '0px'
                 }
               },
               selectedNodeDetails: '',
@@ -614,7 +632,8 @@ class NetworkGraph extends React.Component {
                 position: 'absolute',
                 // left: '830px'
                 top: '0px',
-                right: '0px'
+                right: '0px',
+                bottom: '0px'
               }
             }
           };
@@ -669,7 +688,8 @@ class NetworkGraph extends React.Component {
                 position: 'absolute',
                 // left: '830px'
                 top: '0px',
-                right: '0px'
+                right: '0px',
+                bottom: '0px'
               }
             }
           };
@@ -894,9 +914,10 @@ class NetworkGraph extends React.Component {
           else {
             network.setOptions({
               physics: {
-                'barnesHut': {
-                  'avoidOverlap': 1
-                }
+                // 'barnesHut': {
+                //   'avoidOverlap': 1
+                // },
+                'stabilization': true
               }
             });
           }
@@ -961,7 +982,7 @@ class NetworkGraph extends React.Component {
           <div style={{
             height: '570px',
             overflowX: 'hidden',
-            overflowY: 'scroll'
+            overflowY: 'auto'
           }} className='contextMenu' id='contextualMenuContents'>
             <div
               style={{...style.selectedNodeDetails}}

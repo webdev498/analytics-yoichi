@@ -30653,27 +30653,27 @@ return /******/ (function(modules) { // webpackBootstrap
             ctx.strokeText(this.lines[i], x, yLine);
           }
           /* Below code is added by Trupti on 18 August 2016 (START) */
-          if ((this.lines[i]).trim() != '') {
-            var mainLabel = this.lines[i];
-            if (mainLabel.indexOf('</b>') > -1) {
-              var headingTitle = mainLabel.split('</b>');
-              var headingTitle1 = headingTitle[0].replace('<b>','');
-              var textWidth = ctx.measureText(headingTitle1).width;
-              ctx.font = 'bold ' + fontSize + "px " + this.fontOptions.face;
-              ctx.fillText(headingTitle1, x, yLine);
-              ctx.font = (selected && this.nodeOptions.labelHighlightBold ? 'bold ' : '') + fontSize + "px " + this.fontOptions.face;
-              // console.log(x, headingTitle1.length, textWidth, x + (headingTitle1.length * 5));
-              // ctx.lineHeight = 50;
-              ctx.fillText(headingTitle[1], x + textWidth + 2, yLine);
-            }
-            else {
-              ctx.font = (selected && this.nodeOptions.labelHighlightBold ? 'bold ' : '') + fontSize + "px " + this.fontOptions.face;
-              // ctx.lineHeight = 50;
-              ctx.fillText(this.lines[i], x, yLine);
-            }
-          }
+          // if ((this.lines[i]).trim() != '') {
+          //   var mainLabel = this.lines[i];
+          //   if (mainLabel.indexOf('</b>') > -1) {
+          //     var headingTitle = mainLabel.split('</b>');
+          //     var headingTitle1 = headingTitle[0].replace('<b>','');
+          //     var textWidth = ctx.measureText(headingTitle1).width;
+          //     ctx.font = 'bold ' + fontSize + "px " + this.fontOptions.face;
+          //     ctx.fillText(headingTitle1, x, yLine);
+          //     ctx.font = (selected && this.nodeOptions.labelHighlightBold ? 'bold ' : '') + fontSize + "px " + this.fontOptions.face;
+          //     // console.log(x, headingTitle1.length, textWidth, x + (headingTitle1.length * 5));
+          //     // ctx.lineHeight = 50;
+          //     ctx.fillText(headingTitle[1], x + textWidth + 2, yLine);
+          //   }
+          //   else {
+          //     ctx.font = (selected && this.nodeOptions.labelHighlightBold ? 'bold ' : '') + fontSize + "px " + this.fontOptions.face;
+          //     // ctx.lineHeight = 50;
+          //     ctx.fillText(this.lines[i], x, yLine);
+          //   }
+          // }
           /* Below code is added by Trupti on 18 August 2016 (END) */
-          // ctx.fillText(this.lines[i], x, yLine);
+          ctx.fillText(this.lines[i], x, yLine);
           yLine += fontSize;
         }
       }

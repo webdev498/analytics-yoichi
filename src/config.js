@@ -15,9 +15,10 @@ export const defaultRoute = clientDefaultRoute || '/';
 
 export const networkGraphDefaultOptions = {
   physics: {
-    'barnesHut': {
-      'avoidOverlap': 1
-    }
+    // 'barnesHut': {
+    //   'avoidOverlap': 1
+    // },
+    'stabilization': true
   },
   interaction: {
     navigationButtons: true,
