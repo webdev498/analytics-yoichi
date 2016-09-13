@@ -10,35 +10,133 @@ import {baseUrl, networkGraphDefaultOptions} from 'config';
 import Loader from '../components/Loader';
 
 const style = {
-    searchTextBox: {
-      backgroundColor: '#646A7D',
-      padding: '10px',
-      border: '0px',
-      // margin: '5%',
-      width: '211px',
-      height: '40px',
-      color: '#B8BBC3',
-      fontFamily: 'Open Sans',
-      marginTop: '28px',
-      marginLeft: '24px',
-      marginRight: '24px'
-    },
-    selectedNodeDetails: {
-      marginTop: '28px',
-      marginBottom: '28px',
-      marginLeft: '24px',
-      marginRight: '24px',
-      width: '90%',
-      color: '#24293D',
-      fontSize: '12pt',
-      fontFamily: 'Open Sans'
-    },
-    loaderStyle: {
-
-    }
+  searchTextBox: {
+    backgroundColor: '#646A7D',
+    padding: '10px',
+    border: '0px',
+    // margin: '5%',
+    width: '211px',
+    height: '40px',
+    color: '#B8BBC3',
+    fontFamily: 'Open Sans',
+    marginTop: '28px',
+    marginLeft: '24px',
+    marginRight: '24px'
   },
-  nodeObjects = {},
+  selectedNodeDetails: {
+    marginTop: '28px',
+    marginBottom: '28px',
+    marginLeft: '24px',
+    marginRight: '24px',
+    width: '90%',
+    color: '#24293D',
+    fontSize: '12pt',
+    fontFamily: 'Open Sans'
+  },
+  loaderStyle: {
+
+  }
+};
+
+let nodeObjects = {},
   edgeObjects = {};
+
+function createNodeObject(dataNode, nodeObject, nodeStatus) {
+  nodeObject.id = dataNode.id;
+  nodeObject.type = dataNode.type;
+  nodeObject.label = '\n  ' + firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+  // nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+  nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+  nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+  for (let metadataType in dataNode.metadata) {
+    let metadataTypeLower = metadataType.toLowerCase();
+    if (metadataTypeLower !== 'coordinates') {
+      switch (metadataTypeLower) {
+        case 'reputation':
+          let values = dataNode.metadata[metadataType].reputation,
+            value1 = '',
+            value2 = '';
+          for (let v = 0; v < values.length; v++) {
+            if (v === 0) {
+              value1 = values[0];
+              value2 = values[0];
+            }
+            else {
+              value1 += ',\n  ' + values[0];
+              value2 += ',<br />' + values[0];
+            }
+          }
+          if (value1 !== '') {
+            nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+              value1;
+            // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              // value1;
+            nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              value2;
+            nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+              value2;
+
+            if (value1.indexOf('Scanning Host') > -1) {
+              nodeStatus = 'scan';
+            }
+            else {
+              nodeStatus = 'malicious';
+            }
+          }
+          else {
+            nodeStatus = 'safe';
+          }
+          break;
+        case 'country':
+          nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+          // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            // getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+          nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+          nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+          break;
+        case 'displayname':
+          nodeObject.label += '\n  Name: ' + dataNode.metadata[metadataType];
+          // nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
+          nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
+          nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
+          break;
+        default:
+          nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+            addNewlines(dataNode.metadata[metadataType]);
+          // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            // addNewlines(dataNode.metadata[metadataType]);
+          nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            dataNode.metadata[metadataType];
+          nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+            dataNode.metadata[metadataType];
+          break;
+      }
+    }
+  }
+  nodeObject.borderWidth = '0';
+  nodeObject.font = {
+    'face': 'Open Sans',
+    'color': Colors.pebble,
+    'size': '11',
+    'align': 'left'
+  };
+  nodeObject.shape = 'image';
+  nodeObject.color = {};
+  nodeObject.color.color = '#F2F2F4';
+  nodeObject.color.highlight = Colors.turquoise;
+  nodeObject.status = nodeStatus;
+  nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
+  let actions = [];
+  if (dataNode.actions !== null && dataNode.actions !== undefined) {
+    actions = dataNode.actions;
+  }
+  nodeObject.actions = actions;
+
+  return nodeObject;
+}
 
 function getNodesEdges(data) {
   let nodes = [],
@@ -52,92 +150,13 @@ function getNodesEdges(data) {
         nodeObject = {},
         nodeStatus = 'safe';
 
+      console.log('nodeObjects', Object.keys(nodeObjects).length);
+
+      // if ((Object.keys(nodeObjects).length !== 0 && nodeObjects[dataNode.id] === undefined) ||
+        // Object.keys(nodeObjects).length === 0) {
       if (nodeObjects[dataNode.id] === undefined) {
-        nodeObject.id = dataNode.id;
-        nodeObject.type = dataNode.type;
-        nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-        nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-        nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-        for (let metadataType in dataNode.metadata) {
-          let metadataTypeLower = metadataType.toLowerCase();
-          if (metadataTypeLower !== 'coordinates') {
-            switch (metadataTypeLower) {
-              case 'reputation':
-                let values = dataNode.metadata[metadataType].reputation,
-                  value1 = '',
-                  value2 = '';
-                for (let v = 0; v < values.length; v++) {
-                  if (v === 0) {
-                    value1 = values[0];
-                    value2 = values[0];
-                  }
-                  else {
-                    value1 += ',\n  ' + values[0];
-                    value2 += ',<br />' + values[0];
-                  }
-                }
-                if (value1 !== '') {
-                  nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                    value1;
-                  nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                    value2;
-                  nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                    value2;
-
-                  if (value1.indexOf('Scanning Host') > -1) {
-                    nodeStatus = 'scan';
-                  }
-                  else {
-                    nodeStatus = 'malicious';
-                  }
-                }
-                else {
-                  nodeStatus = 'safe';
-                }
-                break;
-              case 'country':
-                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-                break;
-              case 'displayname':
-                nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
-                nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
-                nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
-                break;
-              default:
-                nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  addNewlines(dataNode.metadata[metadataType]);
-                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  dataNode.metadata[metadataType];
-                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                  dataNode.metadata[metadataType];
-                break;
-            }
-          }
-        }
-        nodeObject.borderWidth = '0';
-        nodeObject.font = {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        };
-        nodeObject.shape = 'image';
-        nodeObject.color = {};
-        nodeObject.color.color = '#F2F2F4';
-        nodeObject.color.highlight = Colors.turquoise;
-        nodeObject.status = nodeStatus;
-        nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-        let actions = [];
-        if (dataNode.actions !== null && dataNode.actions !== undefined) {
-          actions = dataNode.actions;
-        }
-        nodeObject.actions = actions;
-
+        console.log('getNodesEdges', data, dataNodes);
+        nodeObject = createNodeObject(dataNode, nodeObject, nodeStatus);
         nodes.push(nodeObject);
         nodeObjects[dataNode.id] = nodeObject;
       }
@@ -199,7 +218,7 @@ function getIcon(nodeType, nodeStatus, nodeAction) {
     return iconPath;
   }
   else {
-    return '/img/asset.png';
+    return '/img/inactive.png';
   }
 }
 
@@ -330,6 +349,14 @@ function addNewlines(str) {
   return str;
 }
 
+function getPos(el) {
+  // yay readability
+  for (var lx = 0, ly = 0;
+    el != null;
+    lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
+  return {x: lx, y: ly};
+}
+
 class NetworkGraph extends React.Component {
   constructor(props) {
     super(props);
@@ -353,7 +380,8 @@ class NetworkGraph extends React.Component {
           position: 'absolute',
           // left: '830px'
           top: '0px',
-          right: '0px'
+          right: '0px',
+          bottom: '0px'
         }
       },
       selectedNodeDetails: '',
@@ -373,7 +401,8 @@ class NetworkGraph extends React.Component {
         fontSize: '12pt',
         position: 'absolute',
         padding: '20px',
-        backgroundColor: Colors.coral,
+        backgroundColor: '#DADADE',
+        color: '#24293D',
         display: 'none'
       }
     };
@@ -394,42 +423,54 @@ class NetworkGraph extends React.Component {
       return;
     }
 
+    nodeObjects = {};
+    edgeObjects = {};
+
+    let networkData = {
+      nodes: [],
+      edges: []
+    };
+
+    console.log(this.state);
+
     if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
+      console.log(data[0], nodesEdges);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       const actionsData = this.context.store.getState().actions;
       this.state.actionsData = getActionsByTypes(actionsData.list.actions);
+
+      networkData = {
+        nodes: nodesEdges.nodes,
+        edges: nodesEdges.edges
+      };
     }
 
     if (this.networkGraph !== null && this.networkGraph !== undefined) {
       let options = networkGraphDefaultOptions;
 
       // create a network
-      let networkData = {
-        nodes: this.state.nodes,
-        edges: this.state.edges
-      };
-
       if (networkData.nodes.length > 0) {
         const that = this;
 
         let network = new vis.Network(this.networkGraph, networkData, options);
 
-        if (networkData.nodes.length <= 10) {
-          network.setOptions({
-            physics: false
-          });
-        }
-        else {
-          network.setOptions({
-            physics: {
-              'barnesHut': {
-                'avoidOverlap': 1
-              }
-            }
-          });
-        }
+        // if (networkData.nodes.length <= 10) {
+        //   network.setOptions({
+        //     physics: false
+        //   });
+        // }
+        // else {
+        //   network.setOptions({
+        //     physics: {
+        //       // 'barnesHut': {
+        //       //   'avoidOverlap': 1
+        //       // },
+        //       'stabilization': true
+        //     }
+        //   });
+        // }
 
         network.on('selectNode', this.loadContextMenu(network, 'node'));
         network.on('selectEdge', this.loadContextMenu(network, 'edge'));
@@ -457,7 +498,8 @@ class NetworkGraph extends React.Component {
                   display: 'none',
                   position: 'absolute',
                   top: '0px',
-                  right: '0px'
+                  right: '0px',
+                  bottom: '0px'
                 }
               },
               selectedNodeDetails: '',
@@ -595,6 +637,13 @@ class NetworkGraph extends React.Component {
 
           $('#actions').html('');
           $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
+
+          $('#contextualMenu').animate({width: '259px'});
+          document.getElementById('rightArrow').style.display = 'block';
+          document.getElementById('contextualMenuContents').style.display = 'block';
+          // document.getElementById('searchNetworkNode').style.display = 'block';
+          document.getElementById('expandCM').style.display = 'none';
+
           document.getElementById('refreshData').style.marginLeft = '660px';
 
           let statesJSON = {
@@ -614,7 +663,8 @@ class NetworkGraph extends React.Component {
                 position: 'absolute',
                 // left: '830px'
                 top: '0px',
-                right: '0px'
+                right: '0px',
+                bottom: '0px'
               }
             }
           };
@@ -651,6 +701,13 @@ class NetworkGraph extends React.Component {
 
           $('#actions').html('');
           $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
+
+          $('#contextualMenu').animate({width: '259px'});
+          document.getElementById('rightArrow').style.display = 'block';
+          document.getElementById('contextualMenuContents').style.display = 'block';
+          // document.getElementById('searchNetworkNode').style.display = 'block';
+          document.getElementById('expandCM').style.display = 'none';
+
           document.getElementById('refreshData').style.marginLeft = '660px';
 
           let statesJSON = {
@@ -669,7 +726,8 @@ class NetworkGraph extends React.Component {
                 position: 'absolute',
                 // left: '830px'
                 top: '0px',
-                right: '0px'
+                right: '0px',
+                bottom: '0px'
               }
             }
           };
@@ -685,7 +743,7 @@ class NetworkGraph extends React.Component {
       // actions.innerHTML = '';
       let table = document.createElement('table');
       table.border = '0';
-      table.width = '250';
+      table.width = '259';
       table.cellPadding = '10';
       table.cellSpacing = '10';
 
@@ -825,8 +883,10 @@ class NetworkGraph extends React.Component {
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
         if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
           selectedNodesForExtendingGraph[i].reportId === reportId) {
+          let position = getPos(document.getElementById(actionId));
+          $('#actionPerformed').css('top', position.y - 85);
           $('#actionPerformed').fadeIn('slow');
-          $('#actionPerformed').fadeOut(10000);
+          $('#actionPerformed').fadeOut(3000);
           that.setState({
             isFetching: false
           });
@@ -886,20 +946,21 @@ class NetworkGraph extends React.Component {
             isFetching: false
           });
 
-          if (nodes.length <= 10) {
-            network.setOptions({
-              physics: false
-            });
-          }
-          else {
-            network.setOptions({
-              physics: {
-                'barnesHut': {
-                  'avoidOverlap': 1
-                }
-              }
-            });
-          }
+          // if (nodes.length <= 10) {
+          //   network.setOptions({
+          //     physics: false
+          //   });
+          // }
+          // else {
+          //   network.setOptions({
+          //     physics: {
+          //       // 'barnesHut': {
+          //       //   'avoidOverlap': 1
+          //       // },
+          //       'stabilization': true
+          //     }
+          //   });
+          // }
 
           if (contextMenuType === 'node') {
             let node = network.body.nodes[nodeID];
@@ -929,10 +990,10 @@ class NetworkGraph extends React.Component {
         let tempId = 'action' + j;
 
         if (tempId === actionId) {
-          document.getElementById(tempId).style.color = Colors.turquoise;
+          document.getElementById(tempId).style.backgroundColor = '#979BA7';
         }
         else {
-          document.getElementById(tempId).style.color = Colors.white;
+          document.getElementById(tempId).style.backgroundColor = 'transparent';
         }
       }
     };
@@ -954,14 +1015,14 @@ class NetworkGraph extends React.Component {
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...this.state.style.contextualMenu}} id='contextualMenu'>
-          <input type='text' id='searchNetworkNode'
+          { /* <input type='text' id='searchNetworkNode'
             style={{...style.searchTextBox}}
-            placeholder='Search' />
+            placeholder='Search' /> */ }
 
           <div style={{
-            height: '570px',
+            height: '650px', // '570px',
             overflowX: 'hidden',
-            overflowY: 'scroll'
+            overflowY: 'auto'
           }} className='contextMenu' id='contextualMenuContents'>
             <div
               style={{...style.selectedNodeDetails}}
@@ -976,9 +1037,16 @@ class NetworkGraph extends React.Component {
             marginTop: '10px'
           }}>
             <img id='rightArrow' src='/img/rightArrow.png' onClick={this.collapseExpandCM('collapse')} />
-            <img id='leftArrow' src='/img/leftArrow.png' onClick={this.collapseExpandCM('expand')}
-              style={{display: 'none'}} />
           </div>
+        </div>
+
+        <div id='expandCM' style={{
+          bottom: '25px',
+          right: '24px',
+          position: 'absolute',
+          display: 'none'
+        }}>
+          <img id='leftArrow' src='/img/menu.png' onClick={this.collapseExpandCM('expand')} />
         </div>
 
         <div style={this.state.actionPerformed} id='actionPerformed'>You have already performed this action.</div>
@@ -997,18 +1065,18 @@ class NetworkGraph extends React.Component {
   collapseExpandCM(action) {
     return (event) => {
       if (action === 'collapse') {
-        $('#contextualMenu').animate({width: '100px'});
+        $('#contextualMenu').animate({width: '0px'});
         document.getElementById('rightArrow').style.display = 'none';
         document.getElementById('contextualMenuContents').style.display = 'none';
-        document.getElementById('searchNetworkNode').style.display = 'none';
-        document.getElementById('leftArrow').style.display = 'block';
+        // document.getElementById('searchNetworkNode').style.display = 'none';
+        document.getElementById('expandCM').style.display = 'block';
       }
       if (action === 'expand') {
         $('#contextualMenu').animate({width: '259px'});
         document.getElementById('rightArrow').style.display = 'block';
         document.getElementById('contextualMenuContents').style.display = 'block';
-        document.getElementById('searchNetworkNode').style.display = 'block';
-        document.getElementById('leftArrow').style.display = 'none';
+        // document.getElementById('searchNetworkNode').style.display = 'block';
+        document.getElementById('expandCM').style.display = 'none';
       }
     };
   }
