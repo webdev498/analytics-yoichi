@@ -10,35 +10,133 @@ import {baseUrl, networkGraphDefaultOptions} from 'config';
 import Loader from '../components/Loader';
 
 const style = {
-    searchTextBox: {
-      backgroundColor: '#646A7D',
-      padding: '10px',
-      border: '0px',
-      // margin: '5%',
-      width: '211px',
-      height: '40px',
-      color: '#B8BBC3',
-      fontFamily: 'Open Sans',
-      marginTop: '28px',
-      marginLeft: '24px',
-      marginRight: '24px'
-    },
-    selectedNodeDetails: {
-      marginTop: '28px',
-      marginBottom: '28px',
-      marginLeft: '24px',
-      marginRight: '24px',
-      width: '90%',
-      color: '#24293D',
-      fontSize: '12pt',
-      fontFamily: 'Open Sans'
-    },
-    loaderStyle: {
-
-    }
+  searchTextBox: {
+    backgroundColor: '#646A7D',
+    padding: '10px',
+    border: '0px',
+    // margin: '5%',
+    width: '211px',
+    height: '40px',
+    color: '#B8BBC3',
+    fontFamily: 'Open Sans',
+    marginTop: '28px',
+    marginLeft: '24px',
+    marginRight: '24px'
   },
-  nodeObjects = {},
+  selectedNodeDetails: {
+    marginTop: '28px',
+    marginBottom: '28px',
+    marginLeft: '24px',
+    marginRight: '24px',
+    width: '90%',
+    color: '#24293D',
+    fontSize: '12pt',
+    fontFamily: 'Open Sans'
+  },
+  loaderStyle: {
+
+  }
+};
+
+let nodeObjects = {},
   edgeObjects = {};
+
+function createNodeObject(dataNode, nodeObject, nodeStatus) {
+  nodeObject.id = dataNode.id;
+  nodeObject.type = dataNode.type;
+  nodeObject.label = '\n  ' + firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+  // nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+  nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
+  nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+  for (let metadataType in dataNode.metadata) {
+    let metadataTypeLower = metadataType.toLowerCase();
+    if (metadataTypeLower !== 'coordinates') {
+      switch (metadataTypeLower) {
+        case 'reputation':
+          let values = dataNode.metadata[metadataType].reputation,
+            value1 = '',
+            value2 = '';
+          for (let v = 0; v < values.length; v++) {
+            if (v === 0) {
+              value1 = values[0];
+              value2 = values[0];
+            }
+            else {
+              value1 += ',\n  ' + values[0];
+              value2 += ',<br />' + values[0];
+            }
+          }
+          if (value1 !== '') {
+            nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+              value1;
+            // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              // value1;
+            nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              value2;
+            nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+              value2;
+
+            if (value1.indexOf('Scanning Host') > -1) {
+              nodeStatus = 'scan';
+            }
+            else {
+              nodeStatus = 'malicious';
+            }
+          }
+          else {
+            nodeStatus = 'safe';
+          }
+          break;
+        case 'country':
+          nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+          // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            // getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+          nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+          nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
+          break;
+        case 'displayname':
+          nodeObject.label += '\n  Name: ' + dataNode.metadata[metadataType];
+          // nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
+          nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
+          nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
+          break;
+        default:
+          nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+            addNewlines(dataNode.metadata[metadataType]);
+          // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            // addNewlines(dataNode.metadata[metadataType]);
+          nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            dataNode.metadata[metadataType];
+          nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+            dataNode.metadata[metadataType];
+          break;
+      }
+    }
+  }
+  nodeObject.borderWidth = '0';
+  nodeObject.font = {
+    'face': 'Open Sans',
+    'color': Colors.pebble,
+    'size': '11',
+    'align': 'left'
+  };
+  nodeObject.shape = 'image';
+  nodeObject.color = {};
+  nodeObject.color.color = '#F2F2F4';
+  nodeObject.color.highlight = Colors.turquoise;
+  nodeObject.status = nodeStatus;
+  nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
+  let actions = [];
+  if (dataNode.actions !== null && dataNode.actions !== undefined) {
+    actions = dataNode.actions;
+  }
+  nodeObject.actions = actions;
+
+  return nodeObject;
+}
 
 function getNodesEdges(data) {
   let nodes = [],
@@ -47,106 +145,18 @@ function getNodesEdges(data) {
     dataEdges = data.edges;
 
   if (dataNodes !== undefined) {
-    console.log('getNodesEdges', data, dataNodes);
     for (let i = 0; i < dataNodes.length; i++) {
       let dataNode = dataNodes[i],
         nodeObject = {},
         nodeStatus = 'safe';
 
+      console.log('nodeObjects', Object.keys(nodeObjects).length);
+
+      // if ((Object.keys(nodeObjects).length !== 0 && nodeObjects[dataNode.id] === undefined) ||
+        // Object.keys(nodeObjects).length === 0) {
       if (nodeObjects[dataNode.id] === undefined) {
-        nodeObject.id = dataNode.id;
-        nodeObject.type = dataNode.type;
-        nodeObject.label = '\n  ' + firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-        // nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-        nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-        nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-        for (let metadataType in dataNode.metadata) {
-          let metadataTypeLower = metadataType.toLowerCase();
-          if (metadataTypeLower !== 'coordinates') {
-            switch (metadataTypeLower) {
-              case 'reputation':
-                let values = dataNode.metadata[metadataType].reputation,
-                  value1 = '',
-                  value2 = '';
-                for (let v = 0; v < values.length; v++) {
-                  if (v === 0) {
-                    value1 = values[0];
-                    value2 = values[0];
-                  }
-                  else {
-                    value1 += ',\n  ' + values[0];
-                    value2 += ',<br />' + values[0];
-                  }
-                }
-                if (value1 !== '') {
-                  nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
-                    value1;
-                  // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                    // value1;
-                  nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                    value2;
-                  nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                    value2;
-
-                  if (value1.indexOf('Scanning Host') > -1) {
-                    nodeStatus = 'scan';
-                  }
-                  else {
-                    nodeStatus = 'malicious';
-                  }
-                }
-                else {
-                  nodeStatus = 'safe';
-                }
-                break;
-              case 'country':
-                nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
-                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-                // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  // getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                  getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-                break;
-              case 'displayname':
-                nodeObject.label += '\n  Name: ' + dataNode.metadata[metadataType];
-                // nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
-                nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
-                nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
-                break;
-              default:
-                nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
-                  addNewlines(dataNode.metadata[metadataType]);
-                // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  // addNewlines(dataNode.metadata[metadataType]);
-                nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-                  dataNode.metadata[metadataType];
-                nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-                  dataNode.metadata[metadataType];
-                break;
-            }
-          }
-        }
-        nodeObject.borderWidth = '0';
-        nodeObject.font = {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        };
-        nodeObject.shape = 'image';
-        nodeObject.color = {};
-        nodeObject.color.color = '#F2F2F4';
-        nodeObject.color.highlight = Colors.turquoise;
-        nodeObject.status = nodeStatus;
-        nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-        let actions = [];
-        if (dataNode.actions !== null && dataNode.actions !== undefined) {
-          actions = dataNode.actions;
-        }
-        nodeObject.actions = actions;
-
+        console.log('getNodesEdges', data, dataNodes);
+        nodeObject = createNodeObject(dataNode, nodeObject, nodeStatus);
         nodes.push(nodeObject);
         nodeObjects[dataNode.id] = nodeObject;
       }
@@ -413,6 +423,9 @@ class NetworkGraph extends React.Component {
       return;
     }
 
+    nodeObjects = {};
+    edgeObjects = {};
+
     let networkData = {
       nodes: [],
       edges: []
@@ -443,21 +456,21 @@ class NetworkGraph extends React.Component {
 
         let network = new vis.Network(this.networkGraph, networkData, options);
 
-        if (networkData.nodes.length <= 10) {
-          network.setOptions({
-            physics: false
-          });
-        }
-        else {
-          network.setOptions({
-            physics: {
-              // 'barnesHut': {
-              //   'avoidOverlap': 1
-              // },
-              'stabilization': true
-            }
-          });
-        }
+        // if (networkData.nodes.length <= 10) {
+        //   network.setOptions({
+        //     physics: false
+        //   });
+        // }
+        // else {
+        //   network.setOptions({
+        //     physics: {
+        //       // 'barnesHut': {
+        //       //   'avoidOverlap': 1
+        //       // },
+        //       'stabilization': true
+        //     }
+        //   });
+        // }
 
         network.on('selectNode', this.loadContextMenu(network, 'node'));
         network.on('selectEdge', this.loadContextMenu(network, 'edge'));
@@ -933,21 +946,21 @@ class NetworkGraph extends React.Component {
             isFetching: false
           });
 
-          if (nodes.length <= 10) {
-            network.setOptions({
-              physics: false
-            });
-          }
-          else {
-            network.setOptions({
-              physics: {
-                // 'barnesHut': {
-                //   'avoidOverlap': 1
-                // },
-                'stabilization': true
-              }
-            });
-          }
+          // if (nodes.length <= 10) {
+          //   network.setOptions({
+          //     physics: false
+          //   });
+          // }
+          // else {
+          //   network.setOptions({
+          //     physics: {
+          //       // 'barnesHut': {
+          //       //   'avoidOverlap': 1
+          //       // },
+          //       'stabilization': true
+          //     }
+          //   });
+          // }
 
           if (contextMenuType === 'node') {
             let node = network.body.nodes[nodeID];
