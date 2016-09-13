@@ -22,22 +22,19 @@ const app = new Koa();
 // app.use(apiMiddleware);
 app.use(apiMiddleware.routes());
 
-// on direct landing to alert page it is not routing correctly to index.html  due to '.' in the route,
-// therefore included this custom rewrites.
-historyApiFallback({
+// This rewrites all routes requests to the root /index.html file
+// (ignoring file requests). If you want to implement isomorphic
+// rendering, you'll want to remove this middleware.
+app.use(convert(historyApiFallback({
+  // on direct landing to alert page it is not routing correctly to index.html due to '.' in the route,
+  // therefore included this custom rewrites.
   rewrites: [
     {
       from: /\/alert-new/,
       to: '/index.html'
     }
-  ]
-});
-
-// This rewrites all routes requests to the root /index.html file
-// (ignoring file requests). If you want to implement isomorphic
-// rendering, you'll want to remove this middleware.
-app.use(convert(historyApiFallback({
-  verbose: false
+  ],
+  verbose: true
 })));
 
 // ------------------------------------
