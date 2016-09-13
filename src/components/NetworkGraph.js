@@ -722,7 +722,7 @@ class NetworkGraph extends React.Component {
       // actions.innerHTML = '';
       let table = document.createElement('table');
       table.border = '0';
-      table.width = '250';
+      table.width = '259';
       table.cellPadding = '10';
       table.cellSpacing = '10';
 
@@ -967,10 +967,10 @@ class NetworkGraph extends React.Component {
         let tempId = 'action' + j;
 
         if (tempId === actionId) {
-          document.getElementById(tempId).style.color = Colors.turquoise;
+          document.getElementById(tempId).style.backgroundColor = '#979BA7';
         }
         else {
-          document.getElementById(tempId).style.color = Colors.white;
+          document.getElementById(tempId).style.backgroundColor = 'transparent';
         }
       }
     };
