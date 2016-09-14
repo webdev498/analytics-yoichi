@@ -38,7 +38,8 @@ const style = {
 };
 
 let nodeObjects = {},
-  edgeObjects = {};
+  edgeObjects = {},
+  timeWindow = '1h';
 
 function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.id = dataNode.id;
@@ -410,13 +411,18 @@ class NetworkGraph extends React.Component {
     this.collapseExpandCM = this.collapseExpandCM.bind(this);
   }
 
-  loadNetworkGraph(data, loadAgain) {
-    if (!loadAgain) {
+  loadNetworkGraph(data, loadAgain, duration) {
+    if (!loadAgain && timeWindow === duration) {
       return;
     }
 
     if (!data) {
       return;
+    }
+
+    if (timeWindow !== duration) {
+      $('#actions').html('');
+      document.getElementById('contextualMenu').style.display = 'none';
     }
 
     nodeObjects = {};
@@ -427,7 +433,9 @@ class NetworkGraph extends React.Component {
       edges: []
     };
 
-    if (this.state.nodesListStatus === 'default') {
+    if (this.state.nodesListStatus === 'default' || timeWindow !== duration) {
+      timeWindow = duration;
+
       let nodesEdges = getNodesEdges(data[0]);
       // console.log(data[0], nodesEdges);
       this.state.nodes = nodesEdges.nodes;
@@ -466,7 +474,7 @@ class NetworkGraph extends React.Component {
           });
         }
 
-        network.on('selectNode', this.loadContextMenu(network, 'node'));
+        network.on('doubleClick', this.loadContextMenu(network, 'node'));
         network.on('selectEdge', this.loadContextMenu(network, 'edge'));
 
         network.on('deselectNode', function(params) {
@@ -660,6 +668,7 @@ class NetworkGraph extends React.Component {
 
   loadContextMenu(network, contextMenuType) {
     return (event) => {
+      // console.log('selectNode: ', contextMenuType);
       // let actions = document.getElementById('tempActions');
       // actions.innerHTML = '';
       let listHTML = {
@@ -960,7 +969,7 @@ class NetworkGraph extends React.Component {
         }
       }
 
-      const extendedNodes = fetchExtendedNodes(reportId, this.state.duration, parameters);
+      const extendedNodes = fetchExtendedNodes(reportId, timeWindow, parameters);
       if (!extendedNodes) {
         this.setState({
           isFetching: false
@@ -1077,7 +1086,7 @@ class NetworkGraph extends React.Component {
             width: '1100px'
           }}}
           id='networkGraph'>
-          {this.loadNetworkGraph(props.data, this.state.loadAgain)}
+          {this.loadNetworkGraph(props.data, this.state.loadAgain, props.duration)}
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...this.state.style.contextualMenu}} id='contextualMenu'>
