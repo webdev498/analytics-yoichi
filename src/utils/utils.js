@@ -498,6 +498,9 @@ export function firstCharCapitalize(string) {
   if (string === undefined) {
     return string;
   }
+  if (string !== undefined && string.toLowerCase() === 'ip') {
+    return string.toUpperCase();
+  }
   return string.toLowerCase().replace(/\b\w/g, function(m) {
     return m.toUpperCase();
   });

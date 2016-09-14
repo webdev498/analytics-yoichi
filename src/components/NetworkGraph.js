@@ -267,27 +267,27 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   let otherParameters = '';
   if (parameters !== undefined && parameters.length !== undefined) {
     for (let i = 0; i < parameters.length; i++) {
-      if (i === 0) {
-        if (parameters[i].userInput === true) {
-          otherParameters = parameters[i].name + '=' + $('#' + parameters[i].id).val();
-        }
-        else {
-          otherParameters = parameters[i].name + '=' + parameters[i].value;
-        }
+      // if (i === 0) {
+      //   if (parameters[i].userInput === true) {
+      //     otherParameters = parameters[i].name + '=' + $('#' + parameters[i].id).val();
+      //   }
+      //   else {
+      //     otherParameters = parameters[i].name + '=' + parameters[i].value;
+      //   }
+      // }
+      // else {
+      if (parameters[i].userInput === true) {
+        otherParameters += '&' + parameters[i].name + '=' + $('#' + parameters[i].id).val();
       }
       else {
-        if (parameters[i].userInput === true) {
-          otherParameters += parameters[i].name + '=' + $('#' + parameters[i].id).val();
-        }
-        else {
-          otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
-        }
+        otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
       }
+      // }
     }
   }
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
-    apiUrl = baseUrl + '/api/analytics/actions/execute/' + reportId + '?' + otherParameters,
+    apiUrl = baseUrl + '/api/analytics/actions/execute/' + reportId + '?window=' + duration + otherParameters,
     customHeaders = {
       'Accept': 'application/json'
     },
@@ -434,7 +434,7 @@ class NetworkGraph extends React.Component {
 
     if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
-      console.log(data[0], nodesEdges);
+      // console.log(data[0], nodesEdges);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       const actionsData = this.context.store.getState().actions;
@@ -455,21 +455,21 @@ class NetworkGraph extends React.Component {
 
         let network = new vis.Network(this.networkGraph, networkData, options);
 
-        // if (networkData.nodes.length <= 10) {
-        //   network.setOptions({
-        //     physics: false
-        //   });
-        // }
-        // else {
-        //   network.setOptions({
-        //     physics: {
-        //       // 'barnesHut': {
-        //       //   'avoidOverlap': 1
-        //       // },
-        //       'stabilization': true
-        //     }
-        //   });
-        // }
+        if (networkData.nodes.length <= 10) {
+          network.setOptions({
+            physics: false
+          });
+        }
+        else {
+          network.setOptions({
+            physics: {
+              // 'barnesHut': {
+              //   'avoidOverlap': 1
+              // },
+              'stabilization': true
+            }
+          });
+        }
 
         network.on('selectNode', this.loadContextMenu(network, 'node'));
         network.on('selectEdge', this.loadContextMenu(network, 'edge'));
@@ -976,21 +976,21 @@ class NetworkGraph extends React.Component {
             isFetching: false
           });
 
-          // if (nodes.length <= 10) {
-          //   network.setOptions({
-          //     physics: false
-          //   });
-          // }
-          // else {
-          //   network.setOptions({
-          //     physics: {
-          //       // 'barnesHut': {
-          //       //   'avoidOverlap': 1
-          //       // },
-          //       'stabilization': true
-          //     }
-          //   });
-          // }
+          if (nodes.length <= 10) {
+            network.setOptions({
+              physics: false
+            });
+          }
+          else {
+            network.setOptions({
+              physics: {
+                // 'barnesHut': {
+                //   'avoidOverlap': 1
+                // },
+                'stabilization': true
+              }
+            });
+          }
 
           if (contextMenuType === 'node') {
             let node = network.body.nodes[nodeID];
