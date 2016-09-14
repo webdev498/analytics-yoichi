@@ -474,7 +474,7 @@ class NetworkGraph extends React.Component {
           });
         }
 
-        network.on('doubleClick', this.loadContextMenu(network, 'node'));
+        network.on('selectNode', this.loadContextMenu(network, 'node'));
         network.on('selectEdge', this.loadContextMenu(network, 'edge'));
 
         network.on('deselectNode', function(params) {
