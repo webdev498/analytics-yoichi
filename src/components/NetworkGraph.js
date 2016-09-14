@@ -149,12 +149,9 @@ function getNodesEdges(data) {
         nodeObject = {},
         nodeStatus = 'safe';
 
-      console.log('nodeObjects', Object.keys(nodeObjects).length);
-
       // if ((Object.keys(nodeObjects).length !== 0 && nodeObjects[dataNode.id] === undefined) ||
         // Object.keys(nodeObjects).length === 0) {
       if (nodeObjects[dataNode.id] === undefined) {
-        console.log('getNodesEdges', data, dataNodes);
         nodeObject = createNodeObject(dataNode, nodeObject, nodeStatus);
         nodes.push(nodeObject);
         nodeObjects[dataNode.id] = nodeObject;
@@ -475,43 +472,51 @@ class NetworkGraph extends React.Component {
         network.on('selectEdge', this.loadContextMenu(network, 'edge'));
 
         network.on('deselectNode', function(params) {
-          let deselectedNode = params.previousSelection.nodes[0],
-            node = network.body.nodes[deselectedNode];
+          console.log('deselectNode', params);
+          let i = 0;
+          for (let nodeObject in nodeObjects) {
+            let deselectedNode = nodeObjects[nodeObject], // params.previousSelection.nodes[0],
+              node = network.body.nodes[deselectedNode.id];
 
-          if (nodeObjects[deselectedNode] !== undefined) {
-            node.setOptions({
-              image: getIcon(nodeObjects[deselectedNode].type, nodeObjects[deselectedNode].status, 'INACTIVE')
-            });
+            if (deselectedNode !== undefined) {
+              node.setOptions({
+                image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
+              });
 
-            that.setState({
-              'loadAgain': false,
-              style: {
-                'networkGraph': {
-                  'height': '600px',
-                  'width': '100%'
-                },
-                'contextualMenu': {
-                  width: '259px',
-                  backgroundColor: '#898E9B', // '#6B7282',
-                  // opacity: '0.8',
-                  display: 'none',
-                  position: 'absolute',
-                  top: '0px',
-                  right: '0px',
-                  bottom: '0px'
-                }
-              },
-              selectedNodeDetails: '',
-              actions: '',
-              selectedNode: '',
-              selectedNodesForExtendingGraph: []
-            });
-            $('#actions').html('');
-            document.getElementById('refreshData').style.marginLeft = 'auto';
+              if (i === 0) {
+                that.setState({
+                  'loadAgain': false,
+                  style: {
+                    'networkGraph': {
+                      'height': '600px',
+                      'width': '100%'
+                    },
+                    'contextualMenu': {
+                      width: '259px',
+                      backgroundColor: '#898E9B', // '#6B7282',
+                      // opacity: '0.8',
+                      display: 'none',
+                      position: 'absolute',
+                      top: '0px',
+                      right: '0px',
+                      bottom: '0px'
+                    }
+                  },
+                  selectedNodeDetails: '',
+                  actions: '',
+                  selectedNode: '',
+                  selectedNodesForExtendingGraph: []
+                });
+                $('#actions').html('');
+                document.getElementById('refreshData').style.marginLeft = 'auto';
+              }
+              i++;
+            }
           }
         });
 
         // network.on('dragStart', function(params) {
+        //   console.log('dragStart');
         //   let dragNode = params.nodes[0];
         //   if (dragNode !== undefined) {
         //     let node = network.body.nodes[dragNode];
@@ -522,6 +527,7 @@ class NetworkGraph extends React.Component {
         // });
 
         // network.on('dragging', function(params) {
+        //   console.log('dragging');
         //   let dragNode = params.nodes[0];
         //   if (dragNode !== undefined) {
         //     let node = network.body.nodes[dragNode];
@@ -532,6 +538,7 @@ class NetworkGraph extends React.Component {
         // });
 
         // network.on('dragEnd', function(params) {
+        //   console.log('dragEnd');
         //   let dragNode = params.nodes[0];
         //   if (dragNode !== undefined) {
         //     let node = network.body.nodes[dragNode];
@@ -542,14 +549,27 @@ class NetworkGraph extends React.Component {
         // });
 
         network.on('hoverNode', function(params) {
+          console.log('hoverNode');
           let hoverNode = params.node,
-            selectedNodes = network.getSelection().nodes,
+            // selectedNodes = network.getSelection().nodes,
             node = network.body.nodes[hoverNode],
             selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
           if (nodeObjects[hoverNode] !== undefined) {
-            if (selectedNodes.length > 0) {
-              if (selectedNodes.indexOf(hoverNode) > -1) {
+            node.setOptions({
+              image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
+            });
+
+            for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+              if (selectedNodesForExtendingGraph[i].nodeID === hoverNode) {
+                node.setOptions({
+                  image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
+                });
+              }
+            }
+            /* if (selectedNodes.length > 0) {
+              console.log('hoverNode1', that.state.selectedNode, selectedNodes);
+              if (selectedNodes.indexOf(hoverNode) > -1 && that.state.selectedNode === hoverNode) {
                 node.setOptions({
                   image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
                 });
@@ -561,6 +581,7 @@ class NetworkGraph extends React.Component {
               }
             }
             else {
+              console.log('hoverNode2');
               node.setOptions({
                 image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
               });
@@ -572,19 +593,33 @@ class NetworkGraph extends React.Component {
                   });
                 }
               }
-            }
+            }*/
           }
         });
 
         network.on('blurNode', function(params) {
+          console.log('blurNode');
           let blurNode = params.node,
-            selectedNodes = network.getSelection().nodes,
+            // selectedNodes = network.getSelection().nodes,
             node = network.body.nodes[blurNode],
             selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
           if (nodeObjects[blurNode] !== undefined) {
-            if (selectedNodes.length > 0) {
-              if (selectedNodes.indexOf(blurNode) > -1) {
+            node.setOptions({
+              image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
+            });
+
+            for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+              if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
+                console.log('blurNode2');
+                node.setOptions({
+                  image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
+                });
+              }
+            }
+            /* if (selectedNodes.length > 0) {
+              if (selectedNodes.indexOf(blurNode) > -1 && that.state.selectedNode === blurNode) {
+                console.log('blurNode1');
                 node.setOptions({
                   image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
                 });
@@ -602,12 +637,13 @@ class NetworkGraph extends React.Component {
 
               for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
                 if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
+                  console.log('blurNode2');
                   node.setOptions({
                     image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
                   });
                 }
               }
-            }
+            }*/
           }
         });
 
@@ -630,7 +666,7 @@ class NetworkGraph extends React.Component {
 
   loadContextMenu(network, contextMenuType) {
     return (event) => {
-      console.log('test');
+      console.log('selectNode');
       // let actions = document.getElementById('tempActions');
       // actions.innerHTML = '';
       let listHTML = {
@@ -643,7 +679,8 @@ class NetworkGraph extends React.Component {
         let SelectedNodeIDs = network.getSelection(),
           selectedNodeDetails = '',
           nodeType = '',
-          nodeID = SelectedNodeIDs.nodes[0];
+          nodeID = SelectedNodeIDs.nodes[0],
+          selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
 
         let nodeAt = network.getBoundingBox(nodeID);
 
@@ -676,6 +713,11 @@ class NetworkGraph extends React.Component {
 
           document.getElementById('refreshData').style.marginLeft = '660px';
 
+          selectedNodesForExtendingGraph.push({
+            'nodeID': nodeID,
+            'reportId': ''
+          });
+
           let statesJSON = {
             'loadAgain': false,
             'selectedNodeDetails': selectedNodeDetails,
@@ -696,7 +738,8 @@ class NetworkGraph extends React.Component {
                 right: '0px',
                 bottom: '0px'
               }
-            }
+            },
+            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
           };
           this.setState(statesJSON);
         }
