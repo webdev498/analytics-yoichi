@@ -69,8 +69,6 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           if (value1 !== '') {
             nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
               value1;
-            // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              // value1;
             nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
               value2;
             nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
@@ -90,8 +88,6 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
         case 'country':
           nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-          // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            // getCountryNameByCountryCode[dataNode.metadata[metadataType]];
           nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
           nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
@@ -99,15 +95,12 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           break;
         case 'displayname':
           nodeObject.label += '\n  Name: ' + dataNode.metadata[metadataType];
-          // nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
           nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
           nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
           break;
         default:
           nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
             addNewlines(dataNode.metadata[metadataType]);
-          // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            // addNewlines(dataNode.metadata[metadataType]);
           nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             dataNode.metadata[metadataType];
           nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
