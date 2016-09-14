@@ -427,8 +427,6 @@ class NetworkGraph extends React.Component {
       edges: []
     };
 
-    console.log(this.state);
-
     if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
       // console.log(data[0], nodesEdges);
@@ -472,7 +470,6 @@ class NetworkGraph extends React.Component {
         network.on('selectEdge', this.loadContextMenu(network, 'edge'));
 
         network.on('deselectNode', function(params) {
-          console.log('deselectNode', params);
           let i = 0;
           for (let nodeObject in nodeObjects) {
             let deselectedNode = nodeObjects[nodeObject], // params.previousSelection.nodes[0],
@@ -549,7 +546,6 @@ class NetworkGraph extends React.Component {
         // });
 
         network.on('hoverNode', function(params) {
-          console.log('hoverNode');
           let hoverNode = params.node,
             // selectedNodes = network.getSelection().nodes,
             node = network.body.nodes[hoverNode],
@@ -598,7 +594,6 @@ class NetworkGraph extends React.Component {
         });
 
         network.on('blurNode', function(params) {
-          console.log('blurNode');
           let blurNode = params.node,
             // selectedNodes = network.getSelection().nodes,
             node = network.body.nodes[blurNode],
@@ -611,7 +606,6 @@ class NetworkGraph extends React.Component {
 
             for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
               if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
-                console.log('blurNode2');
                 node.setOptions({
                   image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
                 });
@@ -666,7 +660,6 @@ class NetworkGraph extends React.Component {
 
   loadContextMenu(network, contextMenuType) {
     return (event) => {
-      console.log('selectNode');
       // let actions = document.getElementById('tempActions');
       // actions.innerHTML = '';
       let listHTML = {
