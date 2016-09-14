@@ -18,7 +18,8 @@
     "__DEBUG__"    : false,
     "__DEBUG_NEW_WINDOW__" : false,
     "__BASENAME__" : false,
-    "FusionCharts": false
+    "FusionCharts": false,
+    "vis": false
   },
   "rules": {
     "semi" : [2, "always"],
@@ -33,7 +34,6 @@
       "const": "never" // Exactly one declarator per const declaration per block
     }],
     "jsx-quotes": ["error", "prefer-single"],
-    "babel/generator-star-spacing": 1,
-    "babel/arrow-parens": 1,
+    "babel/generator-star-spacing": 1
   }
 }

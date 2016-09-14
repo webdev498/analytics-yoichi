@@ -68,7 +68,7 @@ class AssetDetail extends React.Component {
   }
 
   getValue(data) {
-    return (data.rows & data.rows.length === 1)
+    return (data && data.rows && data.rows.length === 1)
       ? data.rows[0][0]
       : 0;
   }

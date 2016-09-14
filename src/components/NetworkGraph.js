@@ -34,12 +34,30 @@ const style = {
     fontFamily: 'Open Sans'
   },
   loaderStyle: {
-
   }
 };
 
 let nodeObjects = {},
   edgeObjects = {};
+
+function generateDataFromAssetDetails(data) {
+  const assetData = [];
+  const nodes = [];
+
+  nodes[0] = {
+    id: data.id,
+    label: data.info.name,
+    type: data.type,
+    metadata: data.info
+  };
+
+  assetData[0] = {
+    nodes,
+    edges: []
+  };
+
+  return assetData;
+}
 
 function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.id = dataNode.id;
@@ -512,6 +530,36 @@ class NetworkGraph extends React.Component {
           }
         });
 
+        // network.on('dragStart', function(params) {
+        //   let dragNode = params.nodes[0];
+        //   if (dragNode !== undefined) {
+        //     let node = network.body.nodes[dragNode];
+        //     node.setOptions({
+        //       image: getIcon(nodeObjects[dragNode].type, nodeObjects[dragNode].status, 'INACTIVE')
+        //     });
+        //   }
+        // });
+
+        // network.on('dragging', function(params) {
+        //   let dragNode = params.nodes[0];
+        //   if (dragNode !== undefined) {
+        //     let node = network.body.nodes[dragNode];
+        //     node.setOptions({
+        //       image: getIcon(nodeObjects[dragNode].type, nodeObjects[dragNode].status, 'INACTIVE')
+        //     });
+        //   }
+        // });
+
+        // network.on('dragEnd', function(params) {
+        //   let dragNode = params.nodes[0];
+        //   if (dragNode !== undefined) {
+        //     let node = network.body.nodes[dragNode];
+        //     node.setOptions({
+        //       image: getIcon(nodeObjects[dragNode].type, nodeObjects[dragNode].status, 'INACTIVE')
+        //     });
+        //   }
+        // });
+
         network.on('hoverNode', function(params) {
           let hoverNode = params.node,
             selectedNodes = network.getSelection().nodes,
@@ -601,6 +649,7 @@ class NetworkGraph extends React.Component {
 
   loadContextMenu(network, contextMenuType) {
     return (event) => {
+      console.log('test');
       // let actions = document.getElementById('tempActions');
       // actions.innerHTML = '';
       let listHTML = {
@@ -1002,6 +1051,11 @@ class NetworkGraph extends React.Component {
   render() {
     const {props} = this;
 
+    let assetData;
+    if (props.data && !Array.isArray(props.data)) {
+      assetData = generateDataFromAssetDetails(props.data);
+    }
+
     return (
       <div style={{display: 'flex'}}>
         {this.state.isFetching ? <Loader style={style.loaderStyle} /> : null}
@@ -1011,7 +1065,11 @@ class NetworkGraph extends React.Component {
             width: '1100px'
           }}}
           id='networkGraph'>
-          {this.loadNetworkGraph(props.data, this.state.loadAgain)}
+          {
+            assetData
+            ? this.loadNetworkGraph(assetData, this.state.loadAgain)
+            : this.loadNetworkGraph(props.data, this.state.loadAgain)
+          }
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...this.state.style.contextualMenu}} id='contextualMenu'>
