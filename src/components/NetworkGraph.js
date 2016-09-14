@@ -45,7 +45,6 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.id = dataNode.id;
   nodeObject.type = dataNode.type;
   nodeObject.label = '\n  ' + firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-  // nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
   nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
   nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
   for (let metadataType in dataNode.metadata) {
@@ -56,14 +55,16 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           let values = dataNode.metadata[metadataType].reputation,
             value1 = '',
             value2 = '';
-          for (let v = 0; v < values.length; v++) {
-            if (v === 0) {
-              value1 = values[0];
-              value2 = values[0];
-            }
-            else {
-              value1 += ',\n  ' + values[0];
-              value2 += ',<br />' + values[0];
+          if (values !== undefined) {
+            for (let v = 0; v < values.length; v++) {
+              if (v === 0) {
+                value1 = values[0];
+                value2 = values[0];
+              }
+              else {
+                value1 += ',\n  ' + values[0];
+                value2 += ',<br />' + values[0];
+              }
             }
           }
           if (value1 !== '') {
@@ -143,8 +144,6 @@ function getNodesEdges(data) {
         nodeObject = {},
         nodeStatus = 'safe';
 
-      // if ((Object.keys(nodeObjects).length !== 0 && nodeObjects[dataNode.id] === undefined) ||
-        // Object.keys(nodeObjects).length === 0) {
       if (nodeObjects[dataNode.id] === undefined) {
         nodeObject = createNodeObject(dataNode, nodeObject, nodeStatus);
         nodes.push(nodeObject);
