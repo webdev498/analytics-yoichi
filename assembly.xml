@@ -8,7 +8,43 @@
     <fileSets>
         <fileSet>
             <directory>${basedir}/dist</directory>
-            <outputDirectory>.</outputDirectory>
+            <outputDirectory>./dist</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/_translations</directory>
+            <outputDirectory>./_translations</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/bin</directory>
+            <outputDirectory>./bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/build</directory>
+            <outputDirectory>./build</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/config</directory>
+            <outputDirectory>./config</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/interfaces</directory>
+            <outputDirectory>./interfaces</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/scripts</directory>
+            <outputDirectory>./scripts</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/server</directory>
+            <outputDirectory>./server</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/package.json</directory>
+            <outputDirectory>./package.json</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>${basedir}/.babelrc</directory>
+            <outputDirectory>./.babelrc</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>
