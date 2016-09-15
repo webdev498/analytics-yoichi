@@ -504,12 +504,15 @@ export function firstCharCapitalize(string) {
   if (string.indexOf('_') > -1) {
     string = string.replace('_', ' ');
   }
-  if (string.indexOf(' ip') > -1) {
-    string = string.replace(' ip', ' IP');
-  }
-  return string.toLowerCase().replace(/\b\w/g, function(m) {
+
+  string = string.toLowerCase().replace(/\b\w/g, function(m) {
     return m.toUpperCase();
   });
+
+  if (string.indexOf(' Ip') > -1) {
+    string = string.replace(' Ip', ' IP');
+  }
+  return string;
 };
 
 export function nFormatter(num, digits, {numberStyle, textStyle}) {
