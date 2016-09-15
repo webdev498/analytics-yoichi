@@ -1104,8 +1104,8 @@ class NetworkGraph extends React.Component {
           id='networkGraph'>
           {
             assetData
-            ? this.loadNetworkGraph(assetData, this.state.loadAgain)
-            : this.loadNetworkGraph(props.data, this.state.loadAgain)
+            ? this.loadNetworkGraph(assetData, this.state.loadAgain, props.duration)
+            : this.loadNetworkGraph(props.data, this.state.loadAgain, props.duration)
           }
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
