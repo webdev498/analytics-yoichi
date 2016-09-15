@@ -6,6 +6,9 @@ export const clientRedirectUri = 'http://localhost:3000/dashboard?';
 export const clientDefaultRoute = '/';
 
 export const serverBaseUrl = 'https://demo.ranksoftwareinc.com';
+
+export const kibanaBaseUrl = 'https://demo.ranksoftwareinc.com';
+export const openKibanaInNewWindow = true;
 ```
 
 Requirements
