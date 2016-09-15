@@ -14,6 +14,9 @@ import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import {Colors} from 'theme/colors';
 import { Link } from 'react-router';
+import {
+  openKibanaInNewWindow
+} from '../../../env.js';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppTheme from 'theme/AppTheme';
@@ -144,12 +147,16 @@ export class PageHeader extends React.Component {
         style={{...styles.appBar, ...props.style}}
         showMenuIconButton={false}>
 
-        <MenuItem
-          ref='backBtn'
-          style={{...kibanaStyle}}
-          onClick={this.props.hideKibana}>
-          Back to Summary
-        </MenuItem>
+        {
+          openKibanaInNewWindow
+          ? null
+          : <MenuItem
+            ref='backBtn'
+            style={{...kibanaStyle}}
+            onClick={this.props.hideKibana}>
+            Back to Summary
+          </MenuItem>
+        }
 
         <DropDownMenu
           ref='dropDown'
