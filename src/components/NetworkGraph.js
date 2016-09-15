@@ -38,7 +38,8 @@ const style = {
 };
 
 let nodeObjects = {},
-  edgeObjects = {};
+  edgeObjects = {},
+  timeWindow = '1h';
 
 function generateDataFromAssetDetails(data) {
   const assetData = [];
@@ -63,7 +64,6 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.id = dataNode.id;
   nodeObject.type = dataNode.type;
   nodeObject.label = '\n  ' + firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-  // nodeObject.label = '\n  <b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
   nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
   nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
   for (let metadataType in dataNode.metadata) {
@@ -74,21 +74,21 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           let values = dataNode.metadata[metadataType].reputation,
             value1 = '',
             value2 = '';
-          for (let v = 0; v < values.length; v++) {
-            if (v === 0) {
-              value1 = values[0];
-              value2 = values[0];
-            }
-            else {
-              value1 += ',\n  ' + values[0];
-              value2 += ',<br />' + values[0];
+          if (values !== undefined) {
+            for (let v = 0; v < values.length; v++) {
+              if (v === 0) {
+                value1 = values[0];
+                value2 = values[0];
+              }
+              else {
+                value1 += ',\n  ' + values[0];
+                value2 += ',<br />' + values[0];
+              }
             }
           }
           if (value1 !== '') {
             nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
               value1;
-            // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              // value1;
             nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
               value2;
             nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
@@ -108,8 +108,6 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
         case 'country':
           nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-          // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            // getCountryNameByCountryCode[dataNode.metadata[metadataType]];
           nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
           nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
@@ -117,15 +115,12 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           break;
         case 'displayname':
           nodeObject.label += '\n  Name: ' + dataNode.metadata[metadataType];
-          // nodeObject.label += '\n  <b>Name:</b> ' + dataNode.metadata[metadataType];
           nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
           nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
           break;
         default:
           nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
             addNewlines(dataNode.metadata[metadataType]);
-          // nodeObject.label += '\n  <b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            // addNewlines(dataNode.metadata[metadataType]);
           nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             dataNode.metadata[metadataType];
           nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
@@ -168,12 +163,7 @@ function getNodesEdges(data) {
         nodeObject = {},
         nodeStatus = 'safe';
 
-      console.log('nodeObjects', Object.keys(nodeObjects).length);
-
-      // if ((Object.keys(nodeObjects).length !== 0 && nodeObjects[dataNode.id] === undefined) ||
-        // Object.keys(nodeObjects).length === 0) {
       if (nodeObjects[dataNode.id] === undefined) {
-        console.log('getNodesEdges', data, dataNodes);
         nodeObject = createNodeObject(dataNode, nodeObject, nodeStatus);
         nodes.push(nodeObject);
         nodeObjects[dataNode.id] = nodeObject;
@@ -286,27 +276,27 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   let otherParameters = '';
   if (parameters !== undefined && parameters.length !== undefined) {
     for (let i = 0; i < parameters.length; i++) {
-      if (i === 0) {
-        if (parameters[i].userInput === true) {
-          otherParameters = parameters[i].name + '=' + $('#' + parameters[i].id).val();
-        }
-        else {
-          otherParameters = parameters[i].name + '=' + parameters[i].value;
-        }
+      // if (i === 0) {
+      //   if (parameters[i].userInput === true) {
+      //     otherParameters = parameters[i].name + '=' + $('#' + parameters[i].id).val();
+      //   }
+      //   else {
+      //     otherParameters = parameters[i].name + '=' + parameters[i].value;
+      //   }
+      // }
+      // else {
+      if (parameters[i].userInput === true) {
+        otherParameters += '&' + parameters[i].name + '=' + $('#' + parameters[i].id).val();
       }
       else {
-        if (parameters[i].userInput === true) {
-          otherParameters += parameters[i].name + '=' + $('#' + parameters[i].id).val();
-        }
-        else {
-          otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
-        }
+        otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
       }
+      // }
     }
   }
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
-    apiUrl = baseUrl + '/api/analytics/actions/execute/' + reportId + '?' + otherParameters,
+    apiUrl = baseUrl + '/api/analytics/actions/execute/' + reportId + '?window=' + duration + otherParameters,
     customHeaders = {
       'Accept': 'application/json'
     },
@@ -432,13 +422,18 @@ class NetworkGraph extends React.Component {
     this.collapseExpandCM = this.collapseExpandCM.bind(this);
   }
 
-  loadNetworkGraph(data, loadAgain) {
-    if (!loadAgain) {
+  loadNetworkGraph(data, loadAgain, duration) {
+    if (!loadAgain && timeWindow === duration) {
       return;
     }
 
     if (!data) {
       return;
+    }
+
+    if (timeWindow !== duration) {
+      $('#actions').html('');
+      document.getElementById('contextualMenu').style.display = 'none';
     }
 
     nodeObjects = {};
@@ -449,11 +444,11 @@ class NetworkGraph extends React.Component {
       edges: []
     };
 
-    console.log(this.state);
+    if (this.state.nodesListStatus === 'default' || timeWindow !== duration) {
+      timeWindow = duration;
 
-    if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
-      console.log(data[0], nodesEdges);
+      // console.log(data[0], nodesEdges);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       const actionsData = this.context.store.getState().actions;
@@ -474,63 +469,70 @@ class NetworkGraph extends React.Component {
 
         let network = new vis.Network(this.networkGraph, networkData, options);
 
-        // if (networkData.nodes.length <= 10) {
-        //   network.setOptions({
-        //     physics: false
-        //   });
-        // }
-        // else {
-        //   network.setOptions({
-        //     physics: {
-        //       // 'barnesHut': {
-        //       //   'avoidOverlap': 1
-        //       // },
-        //       'stabilization': true
-        //     }
-        //   });
-        // }
+        if (networkData.nodes.length <= 10) {
+          network.setOptions({
+            physics: false
+          });
+        }
+        else {
+          network.setOptions({
+            physics: {
+              // 'barnesHut': {
+              //   'avoidOverlap': 1
+              // },
+              'stabilization': true
+            }
+          });
+        }
 
         network.on('selectNode', this.loadContextMenu(network, 'node'));
         network.on('selectEdge', this.loadContextMenu(network, 'edge'));
 
         network.on('deselectNode', function(params) {
-          let deselectedNode = params.previousSelection.nodes[0],
-            node = network.body.nodes[deselectedNode];
+          let i = 0;
+          for (let nodeObject in nodeObjects) {
+            let deselectedNode = nodeObjects[nodeObject], // params.previousSelection.nodes[0],
+              node = network.body.nodes[deselectedNode.id];
 
-          if (nodeObjects[deselectedNode] !== undefined) {
-            node.setOptions({
-              image: getIcon(nodeObjects[deselectedNode].type, nodeObjects[deselectedNode].status, 'INACTIVE')
-            });
+            if (deselectedNode !== undefined) {
+              node.setOptions({
+                image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
+              });
 
-            that.setState({
-              'loadAgain': false,
-              style: {
-                'networkGraph': {
-                  'height': '600px',
-                  'width': '100%'
-                },
-                'contextualMenu': {
-                  width: '259px',
-                  backgroundColor: '#898E9B', // '#6B7282',
-                  // opacity: '0.8',
-                  display: 'none',
-                  position: 'absolute',
-                  top: '0px',
-                  right: '0px',
-                  bottom: '0px'
-                }
-              },
-              selectedNodeDetails: '',
-              actions: '',
-              selectedNode: '',
-              selectedNodesForExtendingGraph: []
-            });
-            $('#actions').html('');
-            document.getElementById('refreshData').style.marginLeft = 'auto';
+              if (i === 0) {
+                that.setState({
+                  'loadAgain': false,
+                  style: {
+                    'networkGraph': {
+                      'height': '600px',
+                      'width': '100%'
+                    },
+                    'contextualMenu': {
+                      width: '259px',
+                      backgroundColor: '#898E9B', // '#6B7282',
+                      // opacity: '0.8',
+                      display: 'none',
+                      position: 'absolute',
+                      top: '0px',
+                      right: '0px',
+                      bottom: '0px'
+                    }
+                  },
+                  selectedNodeDetails: '',
+                  actions: '',
+                  selectedNode: '',
+                  selectedNodesForExtendingGraph: []
+                });
+                $('#actions').html('');
+                document.getElementById('refreshData').style.marginLeft = 'auto';
+              }
+              i++;
+            }
           }
         });
 
         // network.on('dragStart', function(params) {
+        //   console.log('dragStart');
         //   let dragNode = params.nodes[0];
         //   if (dragNode !== undefined) {
         //     let node = network.body.nodes[dragNode];
@@ -541,6 +543,7 @@ class NetworkGraph extends React.Component {
         // });
 
         // network.on('dragging', function(params) {
+        //   console.log('dragging');
         //   let dragNode = params.nodes[0];
         //   if (dragNode !== undefined) {
         //     let node = network.body.nodes[dragNode];
@@ -551,6 +554,7 @@ class NetworkGraph extends React.Component {
         // });
 
         // network.on('dragEnd', function(params) {
+        //   console.log('dragEnd');
         //   let dragNode = params.nodes[0];
         //   if (dragNode !== undefined) {
         //     let node = network.body.nodes[dragNode];
@@ -562,13 +566,25 @@ class NetworkGraph extends React.Component {
 
         network.on('hoverNode', function(params) {
           let hoverNode = params.node,
-            selectedNodes = network.getSelection().nodes,
+            // selectedNodes = network.getSelection().nodes,
             node = network.body.nodes[hoverNode],
             selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
           if (nodeObjects[hoverNode] !== undefined) {
-            if (selectedNodes.length > 0) {
-              if (selectedNodes.indexOf(hoverNode) > -1) {
+            node.setOptions({
+              image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
+            });
+
+            for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+              if (selectedNodesForExtendingGraph[i].nodeID === hoverNode) {
+                node.setOptions({
+                  image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
+                });
+              }
+            }
+            /* if (selectedNodes.length > 0) {
+              console.log('hoverNode1', that.state.selectedNode, selectedNodes);
+              if (selectedNodes.indexOf(hoverNode) > -1 && that.state.selectedNode === hoverNode) {
                 node.setOptions({
                   image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
                 });
@@ -580,6 +596,7 @@ class NetworkGraph extends React.Component {
               }
             }
             else {
+              console.log('hoverNode2');
               node.setOptions({
                 image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
               });
@@ -591,19 +608,31 @@ class NetworkGraph extends React.Component {
                   });
                 }
               }
-            }
+            }*/
           }
         });
 
         network.on('blurNode', function(params) {
           let blurNode = params.node,
-            selectedNodes = network.getSelection().nodes,
+            // selectedNodes = network.getSelection().nodes,
             node = network.body.nodes[blurNode],
             selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
           if (nodeObjects[blurNode] !== undefined) {
-            if (selectedNodes.length > 0) {
-              if (selectedNodes.indexOf(blurNode) > -1) {
+            node.setOptions({
+              image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
+            });
+
+            for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+              if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
+                node.setOptions({
+                  image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
+                });
+              }
+            }
+            /* if (selectedNodes.length > 0) {
+              if (selectedNodes.indexOf(blurNode) > -1 && that.state.selectedNode === blurNode) {
+                console.log('blurNode1');
                 node.setOptions({
                   image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
                 });
@@ -621,12 +650,13 @@ class NetworkGraph extends React.Component {
 
               for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
                 if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
+                  console.log('blurNode2');
                   node.setOptions({
                     image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
                   });
                 }
               }
-            }
+            }*/
           }
         });
 
@@ -649,7 +679,7 @@ class NetworkGraph extends React.Component {
 
   loadContextMenu(network, contextMenuType) {
     return (event) => {
-      console.log('test');
+      // console.log('selectNode: ', contextMenuType);
       // let actions = document.getElementById('tempActions');
       // actions.innerHTML = '';
       let listHTML = {
@@ -662,7 +692,8 @@ class NetworkGraph extends React.Component {
         let SelectedNodeIDs = network.getSelection(),
           selectedNodeDetails = '',
           nodeType = '',
-          nodeID = SelectedNodeIDs.nodes[0];
+          nodeID = SelectedNodeIDs.nodes[0],
+          selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
 
         let nodeAt = network.getBoundingBox(nodeID);
 
@@ -695,6 +726,11 @@ class NetworkGraph extends React.Component {
 
           document.getElementById('refreshData').style.marginLeft = '660px';
 
+          selectedNodesForExtendingGraph.push({
+            'nodeID': nodeID,
+            'reportId': ''
+          });
+
           let statesJSON = {
             'loadAgain': false,
             'selectedNodeDetails': selectedNodeDetails,
@@ -715,7 +751,8 @@ class NetworkGraph extends React.Component {
                 right: '0px',
                 bottom: '0px'
               }
-            }
+            },
+            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
           };
           this.setState(statesJSON);
         }
@@ -943,7 +980,7 @@ class NetworkGraph extends React.Component {
         }
       }
 
-      const extendedNodes = fetchExtendedNodes(reportId, this.state.duration, parameters);
+      const extendedNodes = fetchExtendedNodes(reportId, timeWindow, parameters);
       if (!extendedNodes) {
         this.setState({
           isFetching: false
@@ -995,21 +1032,21 @@ class NetworkGraph extends React.Component {
             isFetching: false
           });
 
-          // if (nodes.length <= 10) {
-          //   network.setOptions({
-          //     physics: false
-          //   });
-          // }
-          // else {
-          //   network.setOptions({
-          //     physics: {
-          //       // 'barnesHut': {
-          //       //   'avoidOverlap': 1
-          //       // },
-          //       'stabilization': true
-          //     }
-          //   });
-          // }
+          if (nodes.length <= 10) {
+            network.setOptions({
+              physics: false
+            });
+          }
+          else {
+            network.setOptions({
+              physics: {
+                // 'barnesHut': {
+                //   'avoidOverlap': 1
+                // },
+                'stabilization': true
+              }
+            });
+          }
 
           if (contextMenuType === 'node') {
             let node = network.body.nodes[nodeID];
