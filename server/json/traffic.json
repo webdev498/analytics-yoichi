@@ -337,9 +337,9 @@
       },
       {
         "chartOptions": {
-          "showValues": "0",
+          "showValues": "1",
           "showLabels": "1",
-          "singleLineCharacters": "27"
+          "chartRightMargin": "0"
         },
         "chartData": {
           "showTrendLines": false,
