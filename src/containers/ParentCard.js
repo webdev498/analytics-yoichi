@@ -269,13 +269,20 @@ class ParentCard extends React.Component {
               : null
             }
 
-            <div style={styles.iconWrap} id='refreshData'>
-              <FontIcon className='material-icons'
-                style={styles.refreshIcon}
-                onClick={this.refreshData}>
-                replay
-              </FontIcon>
-            </div>
+            {
+              props.meta.showRefresh === false
+              ? null
+              : (
+                <div style={styles.iconWrap} id='refreshData'>
+                  <FontIcon className='material-icons'
+                    style={styles.refreshIcon}
+                    onClick={this.refreshData}>
+                    replay
+                  </FontIcon>
+                </div>
+              )
+            }
+
           </header>
           <div> {React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})}
             { /* {(!props.data && !props.isFetching) ? 'No Data Found.' : null}
