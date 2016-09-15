@@ -1,4 +1,4 @@
-import {baseUrl} from 'config';
+import {kibanaBaseUrl} from '../../env.js';
 import moment from 'moment';
 import {
   LOW_SCORE_RANGE,
@@ -147,5 +147,5 @@ export function generateQueryParam(data, duration, dataObj, key, value, currentR
 }
 
 export function generateClickThroughUrl(pathParams, queryParams) {
-  return baseUrl + '/api/kibana/query/' + pathParams + queryParams;
+  return kibanaBaseUrl + '/api/kibana/query/' + pathParams + queryParams;
 }

@@ -501,6 +501,12 @@ export function firstCharCapitalize(string) {
   if (string !== undefined && string.toLowerCase() === 'ip') {
     return string.toUpperCase();
   }
+  if (string.indexOf('_') > -1) {
+    string = string.replace('_', ' ');
+  }
+  if (string.indexOf(' ip') > -1) {
+    string = string.replace(' ip', ' IP');
+  }
   return string.toLowerCase().replace(/\b\w/g, function(m) {
     return m.toUpperCase();
   });

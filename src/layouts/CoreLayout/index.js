@@ -12,6 +12,9 @@ import Loader from 'components/Loader';
 // import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
 import 'styles/core.scss';
+import {
+  openKibanaInNewWindow
+} from '../../../env.js';
 
 const styles = {
   kibana: {
@@ -145,10 +148,12 @@ export class CoreLayout extends React.Component {
     //   icon = 'keyboard_arrow_left';
     // }
 
-    let contentStyle = Object.assign({}, styles.content, show);
+    let contentStyle = Object.assign({}, styles.content, show),
+      kibanaUrl = '';
 
     if (showKibana) {
       contentStyle = Object.assign({}, styles.content, hide);
+      kibanaUrl = this.state.url;
     }
 
     return (
@@ -175,7 +180,13 @@ export class CoreLayout extends React.Component {
           </div>
 
           {
-            showKibana
+            showKibana && openKibanaInNewWindow && kibanaUrl !== ''
+            ? window.open(kibanaUrl)
+            : null
+          }
+
+          {
+            showKibana && !openKibanaInNewWindow
             ? <div style={styles.kibana}>
               <Kibana url={this.state.url} />
             </div>
