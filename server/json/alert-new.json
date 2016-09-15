@@ -1,0 +1,55 @@
+{
+  "layout": [
+    [
+      {
+        "meta": {
+          "showHeader": true,
+          "showRefresh": false,
+          "api": {
+            "path": "/api/alert/{alertId}",
+            "pathParams": {
+              "alertId": ":pathParam"
+            },
+            "queryParams": {
+              "date": "date:pathParam",
+              "window": ""
+            }
+          },
+          "title": "Alert Detail"
+        },
+        "name": "AlertDetail",
+        "attributes": {
+          "style": {
+            "backgroundColor": "#F7F7F9",
+            "width": "20%"
+          }
+        },
+        "id": "alert-detail",
+        "type": "AlertDetailsNew"
+      },
+      {
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/graph/{alertId}",
+            "pathParams": {
+              "alertId": ":pathParam"
+            },
+            "queryParams": {}
+          },
+          "title": "Overview"
+        },
+        "name": "NetworkGraph",
+        "attributes": {
+          "style": {
+            "width": "80%",
+            "height": "725px"
+          },
+          "id": "NetworkGraph"
+        },
+        "id": "network-graph",
+        "type": "NetworkGraph"
+      }
+    ]
+  ]
+}

@@ -153,7 +153,9 @@ export function fetchApiData(id, api, params) {
         method: 'GET',
         headers: defaultHeaders
       })
-      .then(response => response.json())
+      .then(response => {
+        return response.json();
+      })
       .then(json => {
         if (json.errorCode && json.errorCode >= 400) {
           throw new Error(json.errorMessage);

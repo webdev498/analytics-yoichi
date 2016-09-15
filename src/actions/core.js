@@ -36,11 +36,11 @@ function getUrl(id) {
   return `${baseUrl}/api/store/dashboard${id}`;
 }
 
-function getLayout(urlId) {
-  const temp = urlId.slice(1, urlId.length),
-    layout = require('json/' + temp).default;
-  return layout;
-}
+// function getLayout(urlId) {
+//   const temp = urlId.slice(1, urlId.length),
+//     layout = require('json/' + temp).default;
+//   return layout;
+// }
 
 export function fetchLayoutData(id, params) {
   const accessToken = Cookies.get('access_token');
@@ -66,18 +66,21 @@ export function fetchLayoutData(id, params) {
     })
     .then(response => {
       const status = response.status;
+      console.log(response, response._bodyText);
       // if auth token expires, logout.
       if (status === 401) {
         logoutUtil(dispatch);
       }
       else if (status === 404 || status === 500) {
-        dispatch(receivePageData(id, {json: getLayout(urlId)}));
+        // dispatch(receivePageData(id, {json: getLayout(urlId)}));
       }
       else {
         return response.json();
+        // return response.text();
       }
     })
     .then(json => {
+      console.log(json);
       if (json) {
         dispatch(receivePageData(id, {json}));
       }

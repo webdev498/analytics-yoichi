@@ -1,4 +1,4 @@
-const newSummaryPage = {
+{
   "layout": [
     [
       {
@@ -888,6 +888,4 @@ const newSummaryPage = {
       }
     ]
   ]
-};
-
-export default newSummaryPage;
+}
