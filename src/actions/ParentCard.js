@@ -132,7 +132,12 @@ export function fetchApiData(id, api, params) {
       Promise.all(arr)
       .then((results) => {
         const json = {};
+
         results.forEach((val, index) => {
+          if (val.errorCode && val.errorCode >= 400) {
+            throw new Error(val.errorMessage);
+          }
+
           const apiId = api[index].id;
           json[apiId] = val;
         });
@@ -150,6 +155,10 @@ export function fetchApiData(id, api, params) {
       })
       .then(response => response.json())
       .then(json => {
+        if (json.errorCode && json.errorCode >= 400) {
+          throw new Error(json.errorMessage);
+        }
+
         dispatch(receiveApiData(id, {json, api}));
       })
       .catch((ex) => {

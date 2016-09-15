@@ -2,400 +2,138 @@ const asset = {
   'layout': [
     [
       {
+        'id': 'asset-detail',
+        'type': 'AssetDetails',
         'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_alert_count_time_shifted'
+          'showHeader': true,
+          'api': [
+            {
+              'path': '/api/entity/{type}/{assetId}',
+              'pathParams': {
+                'assetId': ':pathParam',
+                'type': ':pathParam'
+              },
+              'queryParams': {},
+              'id': 'assetDetail'
             },
-            'queryParams': {
-              'window': ''
+            {
+              'path': '/api/analytics/reporting/execute/{reportId}',
+              'pathParams': {
+                'reportId': 'taf_asset_session_count,taf_asset_internal_resource_count,taf_asset_total_incoming_bandwidth_external,taf_asset_total_incoming_bandwidth_internal,taf_asset_total_outgoing_bandwidth_external,taf_asset_total_outgoing_bandwidth_internal,taf_asset_top_dest_countries,taf_asset_top_source_countries,taf_asset_top_dest_countries,taf_asset_top_source_countries'
+              },
+              'queryParams': {
+                'user': 'assetId:pathParam',
+                'window': ''
+              },
+              'id': 'assetReports'
             }
-          }
-        },
-        'name': 'MetricsCard',
-        'attributes': {
-          'countStyle': {
-            'color': '#F69275'
-          },
-          'style': {
-            'marginRight': '3px',
-            'width': '25%',
-            'borderTop': '6px solid #F69275'
-          }
-        },
-        'id': '1',
-        'type': 'MetricsCard',
-        'title': 'High Priority Alerts',
-        'kibana': {
-          'pathParams': [
-            'alerts-score'
           ],
-          'queryParams': {
-            'fromAndToBasedOnToday': '',
-            'scoreRange': ''
+          'title': 'Risk Profile'
+        },
+        'name': 'AssetDetails',
+        'attributes': {
+          'style': {
+            'width': '250px',
+            'flex': '0 0 250px',
+            'backgroundColor': '#F7F7F9'
           }
         }
       },
       {
+        'id': 'network-graph',
+        'type': 'NetworkGraph',
+        'name': 'NetworkGraph',
         'meta': {
-          'showHeader': false,
+          'showHeader': true,
           'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
+            'path': '/api/entity/{type}/{assetId}',
             'pathParams': {
-              'reportId': 'taf_malware_count_time_shifted'
+              'assetId': ':pathParam',
+              'type': ':pathParam'
             },
-            'queryParams': {
-              'window': ''
-            }
-          }
-        },
-        'name': 'MetricsCard',
-        'attributes': {
-          'countStyle': {
-            'color': '#F69275'
+            'queryParams': {},
+            'id': 'assetDetail'
           },
-          'style': {
-            'marginRight': '3px',
-            'width': '25%',
-            'borderTop': '6px solid #F69275'
-          }
+          'title': 'Overview'
         },
-        'id': '2',
-        'type': 'MetricsCard',
-        'title': 'High Priority Malware'
-      },
-      {
-        'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_event_count_time_shifted'
-            },
-            'queryParams': {
-              'window': ''
-            }
-          }
-        },
-        'name': 'MetricsCard',
         'attributes': {
-          'countStyle': {
-            'color': '#2bd8d0'
-          },
           'style': {
-            'marginRight': '3px',
-            'width': '25%',
-            'borderTop': '6px solid #2bd8d0'
-          }
-        },
-        'id': '3',
-        'type': 'MetricsCard',
-        'title': 'Events Processed',
-        'kibana': {
-          'pathParams': [
-            'traffic-details'
-          ],
-          'queryParams': {
-            'fromAndToBasedOnToday': ''
-          }
-        }
-      },
-      {
-        'meta': {
-          'showHeader': false,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_asset_count_time_shifted'
-            },
-            'queryParams': {
-              'window': ''
-            }
-          }
-        },
-        'name': 'MetricsCard',
-        'attributes': {
-          'countStyle': {
-            'color': '#2bd8d0'
+            'width': '80%'
           },
-          'style': {
-            'marginRight': '3px',
-            'width': '25%',
-            'borderTop': '6px solid #2bd8d0'
-          }
-        },
-        'id': '4',
-        'type': 'MetricsCard',
-        'title': 'Assets Monitored',
-        'kibana': {
-          'pathParams': [
-            'assets-all'
-          ],
-          'queryParams': {
-            'fromAndToBasedOnToday': ''
-          }
+          'id': 'NetworkGraph'
         }
       }
     ],
     [
       {
-        'chartOptions': {},
-        'chartData': {
-          'fieldMapping': [
-            {
-              'reportId': 'taf_asset_count_time_shifted',
-              'columns': [
-                '0.0'
-              ]
-            },
-            {
-              'reportId': 'taf_total_usage',
-              'columns': [
-                'date'
-              ]
-            },
-            {
-              'reportId': 'taf_top_talkers_connections',
-              'columns': [
-                'connections'
-              ]
-            }
-          ]
-        },
+        'id': 'asset-activity',
+        'type': 'Compound',
+        'name': 'Compound',
         'meta': {
           'showHeader': true,
-          'legend': [
-            'Connections',
-            'Used by',
-            'Assets'
-          ],
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted'
-            },
-            'queryParams': {
-              'timeShift': '',
-              'window': ''
-            }
-          },
-          'title': 'Top Connections'
+          'title': 'Activity',
+          'showRefresh': false
         },
         'attributes': {
           'style': {
-            'marginRight': '33px',
-            'width': '100%'
+            'width': '300px'
           },
-          'id': 'PieChartConnections'
+          'id': 'activity'
         },
-        'id': 'pie-chart-connections',
-        'type': 'PieChart'
-      },
-      {
-        'chartOptions': {
-          'showValues': '0',
-          'showLabels': '1',
-          'numberSuffix': '%'
-        },
-        'chartData': {
-          'showTrendLines': true,
-          'fieldMapping': [
-            {
-              'reportId': 'taf_asset_count_time_shifted',
-              'columns': [
-                '0.0'
-              ]
-            },
-            {
-              'reportId': 'taf_total_usage',
-              'columns': [
-                'date'
-              ]
-            },
-            {
-              'reportId': 'taf_top_talkers_connections',
-              'columns': [
-                'connections'
-              ]
-            }
-          ],
-          'reportId': 'taf_top_talkers_connections',
-          'trendLines': [
-            {
-              'line': [
-                {
-                  'dashed': '1',
-                  'color': '#f69275',
-                  'valueOnRight': '1',
-                  'dashLen': '4',
-                  'dashGap': '2'
+        children: [
+          {
+            'id': 'connections-by-protocol',
+            'type': 'HorizontalBarChart',
+            'meta': {
+              'showHeader': true,
+              'showRefresh': false,
+              'api': {
+                'path': '/api/analytics/reporting/execute/{reportId}',
+                'pathParams': {
+                  'reportId': 'taf_connections_by_protocol'
+                },
+                'queryParams': {
+                  'window': ''
                 }
-              ]
-            }
-          ],
-          'multipleReportIds': true
-        },
-        'meta': {
-          'showHeader': true,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted'
+              },
+              'title': 'Connections By Protocol'
             },
-            'queryParams': {
-              'timeShift': '',
-              'window': ''
+            'attributes': {
+              'chartCaption': {
+                'display': 'none'
+              },
+              'chartWidth': '250px',
+              'chartHeight': '250px',
+              'style': {
+                'width': '100%',
+                'padding': 0,
+                'boxShadow': 'none'
+              },
+              'id': 'connections-by-protocol-chart'
+            },
+            'chartOptions': {
+              'showValues': '1',
+              'showLabels': '1',
+              'chartRightMargin': '0'
+            },
+            'chart': {
+              'showAnnotations': false
+            },
+            'chartData': {
+              'showTrendLines': false,
+              'fieldMapping': [
+                {
+                  'reportId': 'taf_connections_by_protocol',
+                  'columns': [
+                    'protocol.service',
+                    'date'
+                  ]
+                }
+              ],
+              'multipleReportIds': false
             }
-          },
-          'title': 'Top IPs Using The Most Connections'
-        },
-        'attributes': {
-          'chartCaption': {
-            'display': 'none'
-          },
-          'style': {
-            'width': '100%'
-          },
-          'id': 'HorizontalBarChartConnections'
-        },
-        'id': 'horizontal-bar-chart-connections',
-        'type': 'HorizontalBarChart',
-        'kibana': {
-          'pathParams': [
-            'ip-connection-details'
-          ],
-          'queryParams': {
-            'fromAndToBasedOnToday': '',
-            'ip': ''
           }
-        }
-      }
-    ],
-    [
-      {
-        'chartOptions': {},
-        'chartData': {
-          'fieldMapping': [
-            {
-              'reportId': 'taf_asset_count_time_shifted',
-              'columns': [
-                '0.0'
-              ]
-            },
-            {
-              'reportId': 'taf_total_usage',
-              'columns': [
-                'bandwidth'
-              ]
-            },
-            {
-              'reportId': 'taf_top_talkers_bandwidth',
-              'columns': [
-                'bandwidth'
-              ]
-            }
-          ]
-        },
-        'meta': {
-          'showHeader': true,
-          'legend': [
-            'Bandwidth ',
-            'Used by',
-            'Assets'
-          ],
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted'
-            },
-            'queryParams': {
-              'timeShift': '',
-              'window': ''
-            }
-          },
-          'title': 'Top Bandwidth'
-        },
-        'attributes': {
-          'style': {
-            'marginRight': '33px',
-            'width': '100%'
-          },
-          'id': 'PieChartBandwidth'
-        },
-        'id': 'pie-chart-bandwidth',
-        'type': 'PieChart'
-      },
-      {
-        'chartOptions': {
-          'showValues': '0',
-          'showLabels': '1',
-          'numberSuffix': '%'
-        },
-        'chartData': {
-          'showTrendLines': true,
-          'fieldMapping': [
-            {
-              'reportId': 'taf_asset_count_time_shifted',
-              'columns': [
-                '0.0'
-              ]
-            },
-            {
-              'reportId': 'taf_total_usage',
-              'columns': [
-                'bandwidth'
-              ]
-            },
-            {
-              'reportId': 'taf_top_talkers_bandwidth',
-              'columns': [
-                'bandwidth'
-              ]
-            }
-          ],
-          'reportId': 'taf_top_talkers_bandwidth',
-          'trendLines': [
-            {
-              'line': [
-                {
-                  'dashed': '1',
-                  'color': '#f69275',
-                  'valueOnRight': '1',
-                  'dashLen': '4',
-                  'dashGap': '2'
-                }
-              ]
-            }
-          ],
-          'multipleReportIds': true
-        },
-        'meta': {
-          'showHeader': true,
-          'api': {
-            'path': '/api/analytics/reporting/execute/{reportId}',
-            'pathParams': {
-              'reportId': 'taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted'
-            },
-            'queryParams': {
-              'timeShift': '',
-              'window': ''
-            }
-          },
-          'title': 'Top IPs Using The Highest Bandwidth'
-        },
-        'attributes': {
-          'chartCaption': {
-            'display': 'none'
-          },
-          'style': {
-            'width': '100%'
-          },
-          'id': 'HorizontalBarChartBandwidth'
-        },
-        'id': 'horizontal-bar-chart-bandwidth',
-        'type': 'HorizontalBarChart'
+        ]
       }
     ]
   ]

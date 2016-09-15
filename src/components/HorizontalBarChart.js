@@ -52,29 +52,13 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, o
       }
 
       if (!labelExists && label1 !== 'N/A') {
-        let obj1 = {},
-          newLine = '',
-          singleLineChar = parseInt(singleLineCharacters),
-          lastIndex = singleLineChar;
-        obj1.label = '';
-        if (label1.length > singleLineChar) {
-          let k = 0;
-          while (k < label1.length) {
-            if (label1.length < (k + singleLineChar)) {
-              lastIndex = label1.length;
-            }
-            obj1.label = obj1.label + newLine + label1.substring(k, lastIndex);
-            newLine = '{br}';
-            k = k + singleLineChar;
-            lastIndex = k + singleLineChar;
-          }
-        }
-        else {
-          obj1.label = label1;
-        }
-        obj1.value = rowsArray[d][columnIndexArray[1]];
-        obj1.connection = connection;
-        obj1.toolText = rowsArray[d][columnIndexArray[0]] + ', ' + rowsArray[d][columnIndexArray[1]];
+        const obj1 = {
+          label: label1,
+          value: rowsArray[d][columnIndexArray[1]],
+          connection: connection,
+          toolText: rowsArray[d][columnIndexArray[0]] + ', ' + rowsArray[d][columnIndexArray[1]]
+        };
+
         dataset.push(obj1);
 
         if (displayTopFive) {
@@ -118,7 +102,7 @@ export function generateDataArray(columnIndexArray, rowsArray, displayTopFive, o
   };
 }
 
-export function generateDataSource(rawData, chartOptions, chartData) {
+export function generateDataSource(rawData, chartOptions, chartData, chart) {
   const {fieldMapping, multipleReportIds, displayTopFive, showTrendLines, trendLines} = chartData,
     numberSuffix = (!isUndefined(chartOptions.numberSuffix)) ? chartOptions.numberSuffix : '',
     singleLineCharacters =
@@ -348,13 +332,15 @@ export function generateDataSource(rawData, chartOptions, chartData) {
       'xAxisNameFontSize': '14',
       'yAxisNameFontSize': '14',
       'labelFontSize': '11',
-      'chartLeftMargin': '0',
       'numDivLines': '4',
       'baseFont': 'Open Sans, sans-serif',
       'baseFontColor': Colors.pebble
-    }, chartOptions),
-    'annotations': {'groups': [{'items': annotationItems}]}
+    }, chartOptions)
   };
+
+  if (!(chart && chart.showAnnotations === false)) {
+    dataSourceObject.annotations = {'groups': [{'items': annotationItems}]};
+  }
 
   if (paletteColors !== '') {
     dataSourceObject.chart.paletteColors = paletteColors;
@@ -432,7 +418,7 @@ class HorizontalBarChart extends React.Component {
 
     const data = props.data,
       fieldMapping = props.chartData.fieldMapping,
-      {chartOptions, chartData} = props,
+      {chartOptions, chartData, chart} = props,
       {clickThrough} = this.context;
 
     let rawData = {};
@@ -446,7 +432,7 @@ class HorizontalBarChart extends React.Component {
         height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
-        dataSource: generateDataSource(rawData, chartOptions, chartData),
+        dataSource: generateDataSource(rawData, chartOptions, chartData, chart),
         events: {
           dataplotClick: function(eventObj, dataObj) {
             const url = getDataPlotClickUrl(props, dataObj);
