@@ -156,8 +156,10 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
           break;
         default:
-          // nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
-            // addNewlines(dataNode.metadata[metadataType]);
+          if (metadataTypeLower === 'title') {
+            nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+              addNewlines(dataNode.metadata[metadataType]);
+          }
           nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             dataNode.metadata[metadataType];
           nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
