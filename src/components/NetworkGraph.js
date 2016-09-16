@@ -64,7 +64,8 @@ function generateDataFromAssetDetails(data) {
 function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.id = dataNode.id;
   nodeObject.type = dataNode.type;
-  nodeObject.label = '\n  ' + firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+  // nodeObject.label = '\n  ' + firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+  nodeObject.label = '  ' + dataNode.id;
   nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
   nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
   for (let metadataType in dataNode.metadata) {
@@ -72,28 +73,63 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
     if (metadataTypeLower !== 'coordinates') {
       switch (metadataTypeLower) {
         case 'reputation':
-          let values = dataNode.metadata[metadataType].reputation,
+          let values = dataNode.metadata[metadataType],
             value1 = '',
-            value2 = '';
+            value2 = '',
+            newLine1 = '\n  ',
+            newLine2 = '<br />';
+
           if (values !== undefined) {
             for (let v = 0; v < values.length; v++) {
-              if (v === 0) {
-                value1 = values[0];
-                value2 = values[0];
+              if (value1 === '') {
+                newLine1 = '';
+                newLine2 = '';
               }
               else {
-                value1 += ',\n  ' + values[0];
-                value2 += ',<br />' + values[0];
+                newLine1 = '\n  ';
+                newLine2 = '<br />';
+              }
+              for (let valueType in values[v]) {
+                if (valueType === 'reputation') {
+                  let value3 = '',
+                    value4 = '',
+                    newLine3 = ',\n  ',
+                    newLine4 = ',<br />';
+                  for (let rv = 0; rv < values[v][valueType].length; rv++) {
+                    if (value1 === '') {
+                      newLine1 = '';
+                      newLine2 = '';
+                    }
+                    else {
+                      newLine1 = '\n  ';
+                      newLine2 = '<br />';
+                    }
+                    if (value3 === '') {
+                      newLine3 = '';
+                      newLine4 = '';
+                    }
+                    else {
+                      newLine3 = ',\n  ';
+                      newLine4 = ',<br />';
+                    }
+                    value3 += newLine3 + values[v][valueType][rv];
+                    value4 += newLine4 + values[v][valueType][rv];
+                  }
+                  value1 += newLine1 + 'Reputation: ' + value3;
+                  value2 += newLine2 + '<b>Reputation:</b> ' + value4;
+                }
+                else {
+                  value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
+                  value2 += newLine2 + '<b>' + firstCharCapitalize(valueType) + ' Reputation:</b> ' +
+                    values[v][valueType];
+                }
               }
             }
           }
           if (value1 !== '') {
-            nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
-              value1;
-            nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              value2;
-            nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-              value2;
+            nodeObject.label += '\n  ' + value1;
+            nodeObject.title += '<br />' + value2;
+            nodeObject.nodeDetails += '<br />' + value2;
 
             if (value1.indexOf('Scanning Host') > -1) {
               nodeStatus = 'scan';
@@ -115,13 +151,13 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
           break;
         case 'displayname':
-          nodeObject.label += '\n  Name: ' + dataNode.metadata[metadataType];
+          // nodeObject.label += '\n  Name: ' + dataNode.metadata[metadataType];
           nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
           nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
           break;
         default:
-          nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
-            addNewlines(dataNode.metadata[metadataType]);
+          // nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+            // addNewlines(dataNode.metadata[metadataType]);
           nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             dataNode.metadata[metadataType];
           nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
@@ -1006,7 +1042,7 @@ class NetworkGraph extends React.Component {
             edges: edges
           };
 
-          console.log('previousNodesEdges', previousNodesEdges);
+          // console.log('previousNodesEdges', previousNodesEdges);
 
           let nodesEdges = getNodesEdges(json[0]);
 
