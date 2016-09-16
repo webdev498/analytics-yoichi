@@ -39,7 +39,8 @@ const style = {
 
 let nodeObjects = {},
   edgeObjects = {},
-  timeWindow = '1h';
+  timeWindow = '1h',
+  previousNodesEdges = {};
 
 function generateDataFromAssetDetails(data) {
   const assetData = [];
@@ -423,6 +424,11 @@ class NetworkGraph extends React.Component {
   }
 
   loadNetworkGraph(data, loadAgain, duration) {
+    if (timeWindow !== duration) {
+      timeWindow = duration;
+      return;
+    }
+
     if (!loadAgain && timeWindow === duration) {
       return;
     }
@@ -431,22 +437,16 @@ class NetworkGraph extends React.Component {
       return;
     }
 
-    if (timeWindow !== duration) {
-      $('#actions').html('');
-      document.getElementById('contextualMenu').style.display = 'none';
-    }
-
     nodeObjects = {};
     edgeObjects = {};
+    previousNodesEdges = {};
 
     let networkData = {
       nodes: [],
       edges: []
     };
 
-    if (this.state.nodesListStatus === 'default' || timeWindow !== duration) {
-      timeWindow = duration;
-
+    if (this.state.nodesListStatus === 'default') { //  || timeWindow !== duration
       let nodesEdges = getNodesEdges(data[0]);
       // console.log(data[0], nodesEdges);
       this.state.nodes = nodesEdges.nodes;
@@ -523,7 +523,7 @@ class NetworkGraph extends React.Component {
                   selectedNode: '',
                   selectedNodesForExtendingGraph: []
                 });
-                $('#actions').html('');
+                document.getElementById('actions').innerHTML = '';
                 document.getElementById('refreshData').style.marginLeft = 'auto';
               }
               i++;
@@ -715,7 +715,7 @@ class NetworkGraph extends React.Component {
             }
           }
 
-          $('#actions').html('');
+          document.getElementById('actions').innerHTML = '';
           $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
 
           $('#contextualMenu').animate({width: '259px'});
@@ -724,11 +724,12 @@ class NetworkGraph extends React.Component {
           // document.getElementById('searchNetworkNode').style.display = 'block';
           document.getElementById('expandCM').style.display = 'none';
 
-          document.getElementById('refreshData').style.marginLeft = '660px';
+          document.getElementById('refreshData').style.marginLeft = '735px';
 
           selectedNodesForExtendingGraph.push({
             'nodeID': nodeID,
-            'reportId': ''
+            'reportId': '',
+            'timeWindow': timeWindow
           });
 
           let statesJSON = {
@@ -785,7 +786,7 @@ class NetworkGraph extends React.Component {
             }
           }
 
-          $('#actions').html('');
+          document.getElementById('actions').innerHTML = '';
           $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
 
           $('#contextualMenu').animate({width: '259px'});
@@ -794,7 +795,7 @@ class NetworkGraph extends React.Component {
           // document.getElementById('searchNetworkNode').style.display = 'block';
           document.getElementById('expandCM').style.display = 'none';
 
-          document.getElementById('refreshData').style.marginLeft = '660px';
+          document.getElementById('refreshData').style.marginLeft = '735px';
 
           let statesJSON = {
             'loadAgain': false,
@@ -968,7 +969,8 @@ class NetworkGraph extends React.Component {
       let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
         if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
-          selectedNodesForExtendingGraph[i].reportId === reportId) {
+          selectedNodesForExtendingGraph[i].reportId === reportId &&
+          selectedNodesForExtendingGraph[i].timeWindow === timeWindow) {
           let position = getPos(document.getElementById(actionId));
           $('#actionPerformed').css('top', position.y - 85);
           $('#actionPerformed').fadeIn('slow');
@@ -999,6 +1001,13 @@ class NetworkGraph extends React.Component {
             return;
           }
 
+          previousNodesEdges = {
+            nodes: nodes,
+            edges: edges
+          };
+
+          console.log('previousNodesEdges', previousNodesEdges);
+
           let nodesEdges = getNodesEdges(json[0]);
 
           for (let i = 0; i < nodesEdges.nodes.length; i++) {
@@ -1018,7 +1027,8 @@ class NetworkGraph extends React.Component {
 
           selectedNodesForExtendingGraph.push({
             'nodeID': nodeID,
-            'reportId': reportId
+            'reportId': reportId,
+            'timeWindow': timeWindow
           });
 
           network.setData({nodes: nodes, edges: edges});
@@ -1069,6 +1079,8 @@ class NetworkGraph extends React.Component {
             //   });
             // }
           }
+
+          document.getElementById('undo').onclick = that.undoGraph(network);
         }
       );
 
@@ -1144,6 +1156,16 @@ class NetworkGraph extends React.Component {
           <img id='leftArrow' src='/img/menu.png' onClick={this.collapseExpandCM('expand')} />
         </div>
 
+        <div id='undoGraph' style={{
+          bottom: '128px',
+          left: '35px',
+          position: 'absolute',
+          cursor: 'pointer',
+          display: 'none'
+        }}>
+          <img id='undo' src='/img/undo.png' />
+        </div>
+
         <div style={this.state.actionPerformed} id='actionPerformed'>You have already performed this action.</div>
 
         <div style={{
@@ -1172,6 +1194,60 @@ class NetworkGraph extends React.Component {
         document.getElementById('contextualMenuContents').style.display = 'block';
         // document.getElementById('searchNetworkNode').style.display = 'block';
         document.getElementById('expandCM').style.display = 'none';
+      }
+    };
+  }
+
+  undoGraph(network) {
+    return (event) => {
+      console.log(previousNodesEdges);
+      if (previousNodesEdges.nodes !== undefined && previousNodesEdges.edges !== undefined) {
+        network.setData({nodes: previousNodesEdges.nodes, edges: previousNodesEdges.edges});
+        this.setState({
+          'loadAgain': false,
+          'nodesListStatus': 'extended',
+          'nodes': previousNodesEdges.nodes,
+          'edges': previousNodesEdges.edges,
+          isFetching: false,
+          style: {
+            'networkGraph': {
+              'height': '600px',
+              'width': '100%'
+            },
+            'contextualMenu': {
+              width: '259px',
+              backgroundColor: '#898E9B', // '#6B7282',
+              // opacity: '0.8',
+              display: 'none',
+              position: 'absolute',
+              top: '0px',
+              right: '0px',
+              bottom: '0px'
+            }
+          },
+          selectedNodeDetails: '',
+          actions: '',
+          selectedNode: '',
+          selectedNodesForExtendingGraph: []
+        });
+
+        if (previousNodesEdges.nodes.length <= 10) {
+          network.setOptions({
+            physics: false
+          });
+        }
+        else {
+          network.setOptions({
+            physics: {
+              // 'barnesHut': {
+              //   'avoidOverlap': 1
+              // },
+              'stabilization': true
+            }
+          });
+        }
+
+        document.getElementById('actions').innerHTML = '';
       }
     };
   }
