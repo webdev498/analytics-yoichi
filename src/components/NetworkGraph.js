@@ -39,7 +39,8 @@ const style = {
 
 let nodeObjects = {},
   edgeObjects = {},
-  timeWindow = '1h';
+  timeWindow = '1h',
+  undoGraphCount = 0;
 
 function generateDataFromAssetDetails(data) {
   const assetData = [];
@@ -488,13 +489,8 @@ class NetworkGraph extends React.Component {
 
     if (this.state.nodesListStatus === 'default') { //  || timeWindow !== duration
       let nodesEdges = getNodesEdges(data[0]);
-      // console.log(data[0], nodesEdges);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
-      this.state.previousNodesEdges = {
-        nodes: nodesEdges.nodes,
-        edges: nodesEdges.edges
-      };
       const actionsData = this.context.store.getState().actions;
       this.state.actionsData = getActionsByTypes(actionsData.list.actions);
 
@@ -1046,18 +1042,20 @@ class NetworkGraph extends React.Component {
             return;
           }
 
-          console.log('nodes', nodes);
-          console.log('previous', that.state.previousNodesEdges);
-          console.log('json', json[0]);
+          if (that.state.previousNodesEdges.nodes.length > 0) {
+            undoGraphCount++;
+          }
+          else {
+            undoGraphCount = 0;
+          }
 
-          // that.setState({
-          //   previousNodesEdges: {
-          //     nodes: network.body.nodes,
-          //     edges: network.body.edges
-          //   }
-          // });
+          console.log('undoGraphCount1', undoGraphCount);
 
-          // console.log('previousNodesEdges', previousNodesEdges);
+          let nodesPrevious = [],
+            edgesPrevious = [];
+
+          nodesPrevious.push(Object.assign([], nodes));
+          edgesPrevious.push(Object.assign([], edges));
 
           let nodesEdges = getNodesEdges(json[0]),
             isGraphExtended = false;
@@ -1093,8 +1091,14 @@ class NetworkGraph extends React.Component {
             'nodes': nodes,
             'edges': edges,
             'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
-            isFetching: false
+            isFetching: false,
+            previousNodesEdges: {
+              nodes: that.state.previousNodesEdges.nodes.concat(nodesPrevious),
+              edges: that.state.previousNodesEdges.edges.concat(edgesPrevious)
+            }
           });
+
+          console.log('previousNodesEdges', that.state.previousNodesEdges);
 
           if (nodes.length <= 10) {
             network.setOptions({
@@ -1268,54 +1272,74 @@ class NetworkGraph extends React.Component {
   undoGraph(network) {
     return (event) => {
       console.log('previousNodesEdges1', this.state.previousNodesEdges);
+      console.log('undoGraphCount2', undoGraphCount);
       let previousNodesEdges = this.state.previousNodesEdges;
-      if (previousNodesEdges.nodes !== undefined && previousNodesEdges.edges !== undefined) {
-        network.setData({nodes: previousNodesEdges.nodes, edges: previousNodesEdges.edges});
-        this.setState({
-          'loadAgain': false,
-          'nodesListStatus': 'extended',
-          'nodes': previousNodesEdges.nodes,
-          'edges': previousNodesEdges.edges,
-          isFetching: false,
-          style: {
-            'networkGraph': {
-              'height': '600px',
-              'width': '100%'
+      if (previousNodesEdges.nodes !== undefined &&
+        previousNodesEdges.edges !== undefined) {
+        if (previousNodesEdges.nodes[undoGraphCount] !== undefined &&
+          previousNodesEdges.edges[undoGraphCount] !== undefined) {
+          network.setData({nodes: previousNodesEdges.nodes[undoGraphCount],
+            edges: previousNodesEdges.edges[undoGraphCount]});
+
+          if (previousNodesEdges.nodes[undoGraphCount].length <= 10) {
+            network.setOptions({
+              physics: false
+            });
+          }
+          else {
+            network.setOptions({
+              physics: {
+                // 'barnesHut': {
+                //   'avoidOverlap': 1
+                // },
+                'stabilization': true
+              }
+            });
+          }
+
+          let tempNodesArray = Object.assign([], previousNodesEdges.nodes),
+            tempEdgesArray = Object.assign([], previousNodesEdges.edges);
+
+          tempNodesArray.splice(undoGraphCount, 1);
+          tempEdgesArray.splice(undoGraphCount, 1);
+
+          this.setState({
+            'loadAgain': false,
+            'nodesListStatus': 'extended',
+            'nodes': previousNodesEdges.nodes[undoGraphCount],
+            'edges': previousNodesEdges.edges[undoGraphCount],
+            isFetching: false,
+            style: {
+              'networkGraph': {
+                'height': '600px',
+                'width': '100%'
+              },
+              'contextualMenu': {
+                width: '259px',
+                backgroundColor: '#898E9B', // '#6B7282',
+                // opacity: '0.8',
+                display: 'none',
+                position: 'absolute',
+                top: '0px',
+                right: '0px',
+                bottom: '0px'
+              }
             },
-            'contextualMenu': {
-              width: '259px',
-              backgroundColor: '#898E9B', // '#6B7282',
-              // opacity: '0.8',
-              display: 'none',
-              position: 'absolute',
-              top: '0px',
-              right: '0px',
-              bottom: '0px'
-            }
-          },
-          selectedNodeDetails: '',
-          actions: '',
-          selectedNode: '',
-          selectedNodesForExtendingGraph: []
-        });
-
-        if (previousNodesEdges.nodes.length <= 10) {
-          network.setOptions({
-            physics: false
-          });
-        }
-        else {
-          network.setOptions({
-            physics: {
-              // 'barnesHut': {
-              //   'avoidOverlap': 1
-              // },
-              'stabilization': true
+            selectedNodeDetails: '',
+            actions: '',
+            selectedNode: '',
+            selectedNodesForExtendingGraph: [],
+            previousNodesEdges: {
+              nodes: Object.assign([], tempNodesArray),
+              edges: Object.assign([], tempEdgesArray)
             }
           });
-        }
 
-        document.getElementById('actions').innerHTML = '';
+          document.getElementById('actions').innerHTML = '';
+          undoGraphCount--;
+
+          console.log('previousNodesEdges2', this.state.previousNodesEdges);
+        }
       }
     };
   }
