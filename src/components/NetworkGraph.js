@@ -118,8 +118,8 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
                   value2 += newLine2 + '<b>Reputation:</b> ' + value4;
                 }
                 else {
-                  value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
-                  value2 += newLine2 + '<b>' + firstCharCapitalize(valueType) + ' Reputation:</b> ' +
+                  // value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
+                  value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
                     values[v][valueType];
                 }
               }
@@ -142,7 +142,7 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           }
           break;
         case 'country':
-          nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+          nodeObject.label += '\n  ' +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
           nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
@@ -1016,6 +1016,7 @@ class NetworkGraph extends React.Component {
           selectedNodesForExtendingGraph[i].reportId === reportId &&
           selectedNodesForExtendingGraph[i].timeWindow === timeWindow) {
           let position = getPos(document.getElementById(actionId));
+          document.getElementById('actionPerformed').innerHTML = 'You have already performed this action.';
           $('#actionPerformed').css('top', position.y - 85);
           $('#actionPerformed').fadeIn('slow');
           $('#actionPerformed').fadeOut(3000);
@@ -1058,12 +1059,14 @@ class NetworkGraph extends React.Component {
 
           // console.log('previousNodesEdges', previousNodesEdges);
 
-          let nodesEdges = getNodesEdges(json[0]);
+          let nodesEdges = getNodesEdges(json[0]),
+            isGraphExtended = false;
 
           for (let i = 0; i < nodesEdges.nodes.length; i++) {
             if (isNodeOrEdgeAlreadyExists(nodes, nodesEdges.nodes[i].id) === false) {
               nodes.push(nodesEdges.nodes[i]);
               nodeObjects[nodesEdges.nodes[i].id] = nodesEdges.nodes[i];
+              isGraphExtended = true;
             }
           }
 
@@ -1072,6 +1075,7 @@ class NetworkGraph extends React.Component {
               edges.push(nodesEdges.edges[i]);
               edgeObjects[nodesEdges.edges[i].to] = nodesEdges.edges[i];
               edgeObjects[nodesEdges.edges[i].id] = nodesEdges.edges[i];
+              isGraphExtended = true;
             }
           }
 
@@ -1128,6 +1132,20 @@ class NetworkGraph extends React.Component {
             //     }
             //   });
             // }
+          }
+
+          if (!isGraphExtended) {
+            console.log('not isGraphExtended', isGraphExtended);
+            let position = getPos(document.getElementById(actionId));
+            document.getElementById('actionPerformed').innerHTML =
+              'There are no nodes/edges available for extending the graph.';
+            $('#actionPerformed').css('top', position.y - 85);
+            $('#actionPerformed').fadeIn('slow');
+            $('#actionPerformed').fadeOut(3000);
+            that.setState({
+              isFetching: false
+            });
+            return;
           }
 
           document.getElementById('undo').onclick = that.undoGraph(network);
@@ -1215,7 +1233,7 @@ class NetworkGraph extends React.Component {
           <img id='undo' src='/img/undo.png' />
         </div>
 
-        <div style={this.state.actionPerformed} id='actionPerformed'>You have already performed this action.</div>
+        <div style={this.state.actionPerformed} id='actionPerformed'></div>
 
         <div style={{
           bottom: '20px',
