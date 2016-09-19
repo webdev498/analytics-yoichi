@@ -32,7 +32,8 @@ export const networkGraphDefaultOptions = {
   width: '100%',
   edges: {
     selectionWidth: 1,
-    physics: false
+    physics: false // ,
+    // length: 1000
   },
   layout: {
     improvedLayout: true

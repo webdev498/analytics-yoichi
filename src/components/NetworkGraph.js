@@ -39,8 +39,7 @@ const style = {
 
 let nodeObjects = {},
   edgeObjects = {},
-  timeWindow = '1h',
-  previousNodesEdges = {};
+  timeWindow = '1h';
 
 function generateDataFromAssetDetails(data) {
   const assetData = [];
@@ -451,6 +450,10 @@ class NetworkGraph extends React.Component {
         backgroundColor: '#DADADE',
         color: '#24293D',
         display: 'none'
+      },
+      previousNodesEdges: {
+        nodes: [],
+        edges: []
       }
     };
 
@@ -477,7 +480,6 @@ class NetworkGraph extends React.Component {
 
     nodeObjects = {};
     edgeObjects = {};
-    previousNodesEdges = {};
 
     let networkData = {
       nodes: [],
@@ -489,6 +491,10 @@ class NetworkGraph extends React.Component {
       // console.log(data[0], nodesEdges);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
+      this.state.previousNodesEdges = {
+        nodes: nodesEdges.nodes,
+        edges: nodesEdges.edges
+      };
       const actionsData = this.context.store.getState().actions;
       this.state.actionsData = getActionsByTypes(actionsData.list.actions);
 
@@ -1039,10 +1045,16 @@ class NetworkGraph extends React.Component {
             return;
           }
 
-          previousNodesEdges = {
-            nodes: nodes,
-            edges: edges
-          };
+          console.log('nodes', nodes);
+          console.log('previous', that.state.previousNodesEdges);
+          console.log('json', json[0]);
+
+          // that.setState({
+          //   previousNodesEdges: {
+          //     nodes: network.body.nodes,
+          //     edges: network.body.edges
+          //   }
+          // });
 
           // console.log('previousNodesEdges', previousNodesEdges);
 
@@ -1198,8 +1210,7 @@ class NetworkGraph extends React.Component {
           bottom: '128px',
           left: '35px',
           position: 'absolute',
-          cursor: 'pointer',
-          display: 'none'
+          cursor: 'pointer'
         }}>
           <img id='undo' src='/img/undo.png' />
         </div>
@@ -1238,7 +1249,8 @@ class NetworkGraph extends React.Component {
 
   undoGraph(network) {
     return (event) => {
-      console.log(previousNodesEdges);
+      console.log('previousNodesEdges1', this.state.previousNodesEdges);
+      let previousNodesEdges = this.state.previousNodesEdges;
       if (previousNodesEdges.nodes !== undefined && previousNodesEdges.edges !== undefined) {
         network.setData({nodes: previousNodesEdges.nodes, edges: previousNodesEdges.edges});
         this.setState({
