@@ -198,7 +198,6 @@ function getNodesEdges(data) {
 
   if (dataNodes !== undefined) {
     for (let i = 0; i < dataNodes.length; i++) {
-      console.log('test', dataNodes[i]);
       let dataNode = dataNodes[i],
         nodeObject = {},
         nodeStatus = 'safe';
@@ -1297,8 +1296,6 @@ class NetworkGraph extends React.Component {
 
   undoGraph(network) {
     return (event) => {
-      console.log('previousNodesEdges1', this.state.previousNodesEdges);
-      console.log('undoGraphCount2', undoGraphCount);
       let previousNodesEdges = this.state.previousNodesEdges;
       if (previousNodesEdges.nodes !== undefined &&
         previousNodesEdges.edges !== undefined) {
@@ -1384,13 +1381,8 @@ class NetworkGraph extends React.Component {
             }
           });
 
-          console.log('actual nodes data1:', this.state.nodes);
-          console.log('actual edges data1:', this.state.edges);
-
           document.getElementById('actions').innerHTML = '';
           undoGraphCount--;
-
-          console.log('previousNodesEdges2', this.state.previousNodesEdges);
         }
       }
     };
