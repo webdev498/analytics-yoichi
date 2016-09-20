@@ -198,6 +198,7 @@ function getNodesEdges(data) {
 
   if (dataNodes !== undefined) {
     for (let i = 0; i < dataNodes.length; i++) {
+      console.log('test', dataNodes[i]);
       let dataNode = dataNodes[i],
         nodeObject = {},
         nodeStatus = 'safe';
@@ -571,6 +572,45 @@ class NetworkGraph extends React.Component {
           }
         });
 
+        network.on('deselectEdge', function(params) {
+          let i = 0;
+          for (let edgeObject in edgeObjects) {
+            let deselectedEdge = edgeObjects[edgeObject];
+            // let edge = network.body.edges[deselectedEdge.id];
+
+            if (deselectedEdge !== undefined) {
+              if (i === 0) {
+                that.setState({
+                  'loadAgain': false,
+                  style: {
+                    'networkGraph': {
+                      'height': '600px',
+                      'width': '100%'
+                    },
+                    'contextualMenu': {
+                      width: '259px',
+                      backgroundColor: '#898E9B', // '#6B7282',
+                      // opacity: '0.8',
+                      display: 'none',
+                      position: 'absolute',
+                      top: '0px',
+                      right: '0px',
+                      bottom: '0px'
+                    }
+                  },
+                  selectedNodeDetails: '',
+                  actions: '',
+                  selectedNode: '',
+                  selectedNodesForExtendingGraph: []
+                });
+                document.getElementById('actions').innerHTML = '';
+                document.getElementById('refreshData').style.marginLeft = 'auto';
+              }
+              i++;
+            }
+          }
+        });
+
         // network.on('dragStart', function(params) {
         //   console.log('dragStart');
         //   let dragNode = params.nodes[0];
@@ -733,7 +773,7 @@ class NetworkGraph extends React.Component {
           selectedNodeDetails = '',
           nodeType = '',
           nodeID = SelectedNodeIDs.nodes[0],
-          selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
+          selectedNodesForExtendingGraph = []; // this.state.selectedNodesForExtendingGraph;
 
         let nodeAt = network.getBoundingBox(nodeID);
 
@@ -900,10 +940,12 @@ class NetworkGraph extends React.Component {
                     else if (parameters[k].name === 'date') {
                       tempObj.value = this.state.alertDate;
                     }
-                    else if (parameters[k].name === 'ip' && nodeType.toLowerCase() === 'ip') {
+                    else if (parameters[k].name === 'ip' && (nodeType.toLowerCase() === 'internal_ip' ||
+                      nodeType.toLowerCase() === 'external_ip')) {
                       tempObj.value = nodeID;
                     }
-                    else if (parameters[k].name === 'sourceip') {
+                    else if (parameters[k].name === 'sourceip' || parameters[k].name === 'source.id' ||
+                      parameters[k].name === 'srcip') {
                       if (edgeObjects[nodeID] !== undefined) {
                         tempObj.value = edgeObjects[nodeID].from;
                       }
@@ -911,15 +953,8 @@ class NetworkGraph extends React.Component {
                         tempObj.value = '';
                       }
                     }
-                    else if (parameters[k].name === 'source.id') {
-                      if (edgeObjects[nodeID] !== undefined) {
-                        tempObj.value = edgeObjects[nodeID].from;
-                      }
-                      else {
-                        tempObj.value = '';
-                      }
-                    }
-                    else if (parameters[k].name === 'destination.id') {
+                    else if (parameters[k].name === 'destinationip' || parameters[k].name === 'destination.id' ||
+                      parameters[k].name === 'destip') {
                       if (edgeObjects[nodeID] !== undefined) {
                         tempObj.value = edgeObjects[nodeID].to;
                       }
@@ -1036,6 +1071,12 @@ class NetworkGraph extends React.Component {
             edges = that.state.edges;
 
           if (json[0] === undefined) {
+            let position = getPos(document.getElementById(actionId));
+            document.getElementById('actionPerformed').innerHTML =
+              'There are no nodes/edges available for extending the graph.';
+            $('#actionPerformed').css('top', position.y - 85);
+            $('#actionPerformed').fadeIn('slow');
+            $('#actionPerformed').fadeOut(3000);
             that.setState({
               isFetching: false
             });
@@ -1048,8 +1089,6 @@ class NetworkGraph extends React.Component {
           else {
             undoGraphCount = 0;
           }
-
-          console.log('undoGraphCount1', undoGraphCount);
 
           let nodesPrevious = [],
             edgesPrevious = [];
@@ -1088,8 +1127,8 @@ class NetworkGraph extends React.Component {
           that.setState({
             'loadAgain': false,
             'nodesListStatus': 'extended',
-            'nodes': nodes,
-            'edges': edges,
+            'nodes': Object.assign([], nodes),
+            'edges': Object.assign([], edges),
             'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
             isFetching: false,
             previousNodesEdges: {
@@ -1097,8 +1136,6 @@ class NetworkGraph extends React.Component {
               edges: that.state.previousNodesEdges.edges.concat(edgesPrevious)
             }
           });
-
-          console.log('previousNodesEdges', that.state.previousNodesEdges);
 
           if (nodes.length <= 10) {
             network.setOptions({
@@ -1126,23 +1163,12 @@ class NetworkGraph extends React.Component {
           }
 
           if (contextMenuType === 'edge') {
-            // let edge = network.body.edges[nodeID];
-            // // console.log(nodeID);
-            // if (edgeObjects[nodeID] !== undefined) {
-            //   // console.log('test1');
-            //   edge.setOptions({
-            //     color: {
-            //       color: Colors.turquoise
-            //     }
-            //   });
-            // }
           }
 
           if (!isGraphExtended) {
-            console.log('not isGraphExtended', isGraphExtended);
             let position = getPos(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
-              'There are no nodes/edges available for extending the graph.';
+              'The responsed nodes/edges are already exists on the graph.';
             $('#actionPerformed').css('top', position.y - 85);
             $('#actionPerformed').fadeIn('slow');
             $('#actionPerformed').fadeOut(3000);
@@ -1278,6 +1304,9 @@ class NetworkGraph extends React.Component {
         previousNodesEdges.edges !== undefined) {
         if (previousNodesEdges.nodes[undoGraphCount] !== undefined &&
           previousNodesEdges.edges[undoGraphCount] !== undefined) {
+          let updatedNodes = Object.assign([], previousNodesEdges.nodes[undoGraphCount]),
+            updatedEdges = Object.assign([], previousNodesEdges.edges[undoGraphCount]);
+
           network.setData({nodes: previousNodesEdges.nodes[undoGraphCount],
             edges: previousNodesEdges.edges[undoGraphCount]});
 
@@ -1297,6 +1326,26 @@ class NetworkGraph extends React.Component {
             });
           }
 
+          for (let key in nodeObjects) {
+            if (updatedNodes.length !== undefined) {
+              for (let i = 0; i < updatedNodes.length; i++) {
+                if (updatedNodes[i].id !== key) {
+                  delete nodeObjects[key];
+                }
+              }
+            }
+          }
+
+          for (let key in edgeObjects) {
+            if (updatedEdges.length !== undefined) {
+              for (let i = 0; i < updatedEdges.length; i++) {
+                if (updatedEdges[i].id !== key) {
+                  delete edgeObjects[key];
+                }
+              }
+            }
+          }
+
           let tempNodesArray = Object.assign([], previousNodesEdges.nodes),
             tempEdgesArray = Object.assign([], previousNodesEdges.edges);
 
@@ -1306,8 +1355,8 @@ class NetworkGraph extends React.Component {
           this.setState({
             'loadAgain': false,
             'nodesListStatus': 'extended',
-            'nodes': previousNodesEdges.nodes[undoGraphCount],
-            'edges': previousNodesEdges.edges[undoGraphCount],
+            'nodes': updatedNodes,
+            'edges': updatedEdges,
             isFetching: false,
             style: {
               'networkGraph': {
@@ -1334,6 +1383,9 @@ class NetworkGraph extends React.Component {
               edges: Object.assign([], tempEdgesArray)
             }
           });
+
+          console.log('actual nodes data1:', this.state.nodes);
+          console.log('actual edges data1:', this.state.edges);
 
           document.getElementById('actions').innerHTML = '';
           undoGraphCount--;
