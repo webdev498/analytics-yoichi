@@ -32,8 +32,6 @@ const style = {
     color: '#24293D',
     fontSize: '12pt',
     fontFamily: 'Open Sans'
-  },
-  loaderStyle: {
   }
 };
 
@@ -473,6 +471,9 @@ class NetworkGraph extends React.Component {
         position: 'absolute',
         cursor: 'pointer',
         display: 'none'
+      },
+      loaderText: '',
+      loaderStyle: {
       }
     };
 
@@ -633,6 +634,21 @@ class NetworkGraph extends React.Component {
             }
           }
         });
+
+        // network.on('dragEnd', function(params) {
+        //   for (let i = 0; i < params.nodes.length; i++) {
+        //     let nodeId = params.nodes[i];
+        //     console.log(nodeId);
+        //     this.state.nodes.update({id: nodeId, fixed: {x: true, y: true}});
+        //   }
+        // });
+        // network.on('dragStart', function(params) {
+        //   for (let i = 0; i < params.nodes.length; i++) {
+        //     let nodeId = params.nodes[i];
+        //     console.log(nodeId);
+        //     this.state.nodes.update({id: nodeId, fixed: {x: false, y: false}});
+        //   }
+        // });
 
         // network.on('dragStart', function(params) {
         //   console.log('dragStart');
@@ -1010,7 +1026,7 @@ class NetworkGraph extends React.Component {
             td1.id = 'action' + j;
             td1.onclick = this.extendGraph(contextMenuType, network, nodeID, nodeType,
               actionsData[i].actions[j].reportId, parametersToApi,
-              actionsData[i].actions.length, 'action' + j);
+              actionsData[i].actions.length, 'action' + j, actionsData[i].actions[j].label);
             tr.appendChild(td1);
 
             if (userInputParameters.length > 0) {
@@ -1058,11 +1074,21 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId) {
+  extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId, actionLabel) {
     const that = this;
     return (event) => {
       this.setState({
-        isFetching: true
+        isFetching: true,
+        loaderText: actionLabel,
+        loaderStyle: {
+          position: 'absolute',
+          top: '350px',
+          display: 'flex',
+          backgroundColor: '#898E9B',
+          padding: '20px',
+          left: '300px',
+          width: '350px'
+        }
       });
       let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
@@ -1160,6 +1186,9 @@ class NetworkGraph extends React.Component {
             'edges': Object.assign([], edges),
             'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
             isFetching: false,
+            loaderText: '',
+            loaderStyle: {
+            },
             previousNodesEdges: {
               nodes: (nodesPrevious.length > 0) ? that.state.previousNodesEdges.nodes.concat(nodesPrevious)
                 : that.state.previousNodesEdges.nodes,
@@ -1249,7 +1278,8 @@ class NetworkGraph extends React.Component {
 
     return (
       <div style={{display: 'flex'}}>
-        {this.state.isFetching ? <Loader style={style.loaderStyle} /> : null}
+        {this.state.isFetching ? <Loader style={{}} loaderStyle={this.state.loaderStyle}
+          text={this.state.loaderText} /> : null}
         <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
           ...{
             // backgroundColor: Colors.networkGraphBGColor
