@@ -455,6 +455,24 @@ class NetworkGraph extends React.Component {
       previousNodesEdges: {
         nodes: [],
         edges: []
+      },
+      originalNodesEdges: {
+        nodes: [],
+        edges: []
+      },
+      undoGraphStyle: {
+        bottom: '128px',
+        left: '35px',
+        position: 'absolute',
+        cursor: 'pointer',
+        display: 'none'
+      },
+      resetGraphStyle: {
+        bottom: '158px',
+        left: '35px',
+        position: 'absolute',
+        cursor: 'pointer',
+        display: 'none'
       }
     };
 
@@ -463,6 +481,8 @@ class NetworkGraph extends React.Component {
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
     this.collapseExpandCM = this.collapseExpandCM.bind(this);
+    this.undoGraph = this.undoGraph.bind(this);
+    this.resetGraph = this.resetGraph.bind(this);
   }
 
   loadNetworkGraph(data, loadAgain, duration) {
@@ -491,6 +511,10 @@ class NetworkGraph extends React.Component {
       let nodesEdges = getNodesEdges(data[0]);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
+      this.state.originalNodesEdges = {
+        nodes: Object.assign([], nodesEdges.nodes),
+        edges: Object.assign([], nodesEdges.edges)
+      };
       const actionsData = this.context.store.getState().actions;
       this.state.actionsData = getActionsByTypes(actionsData.list.actions);
 
@@ -1123,6 +1147,12 @@ class NetworkGraph extends React.Component {
 
           network.setData({nodes: nodes, edges: edges});
 
+          if (!isGraphExtended) {
+            nodesPrevious = [];
+            edgesPrevious = [];
+            undoGraphCount--;
+          }
+
           that.setState({
             'loadAgain': false,
             'nodesListStatus': 'extended',
@@ -1131,8 +1161,22 @@ class NetworkGraph extends React.Component {
             'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
             isFetching: false,
             previousNodesEdges: {
-              nodes: that.state.previousNodesEdges.nodes.concat(nodesPrevious),
-              edges: that.state.previousNodesEdges.edges.concat(edgesPrevious)
+              nodes: (nodesPrevious.length > 0) ? that.state.previousNodesEdges.nodes.concat(nodesPrevious)
+                : that.state.previousNodesEdges.nodes,
+              edges: (edgesPrevious.length > 0) ? that.state.previousNodesEdges.edges.concat(edgesPrevious)
+                : that.state.previousNodesEdges.edges
+            },
+            undoGraphStyle: {
+              bottom: '128px',
+              left: '35px',
+              position: 'absolute',
+              cursor: 'pointer'
+            },
+            resetGraphStyle: {
+              bottom: '158px',
+              left: '35px',
+              position: 'absolute',
+              cursor: 'pointer'
             }
           });
 
@@ -1178,6 +1222,7 @@ class NetworkGraph extends React.Component {
           }
 
           document.getElementById('undo').onclick = that.undoGraph(network);
+          document.getElementById('reset').onclick = that.resetGraph(network);
         }
       );
 
@@ -1253,13 +1298,12 @@ class NetworkGraph extends React.Component {
           <img id='leftArrow' src='/img/menu.png' onClick={this.collapseExpandCM('expand')} />
         </div>
 
-        <div id='undoGraph' style={{
-          bottom: '128px',
-          left: '35px',
-          position: 'absolute',
-          cursor: 'pointer'
-        }}>
+        <div id='undoGraph' style={this.state.undoGraphStyle}>
           <img id='undo' src='/img/undo.png' />
+        </div>
+
+        <div id='resetGraph' style={this.state.resetGraphStyle}>
+          <img id='reset' src='/img/reset.png' />
         </div>
 
         <div style={this.state.actionPerformed} id='actionPerformed'></div>
@@ -1384,6 +1428,91 @@ class NetworkGraph extends React.Component {
           document.getElementById('actions').innerHTML = '';
           undoGraphCount--;
         }
+      }
+    };
+  }
+
+  resetGraph(network) {
+    return (event) => {
+      let originalNodesEdges = this.state.originalNodesEdges;
+      if (originalNodesEdges.nodes !== undefined &&
+        originalNodesEdges.edges !== undefined) {
+        let updatedNodes = Object.assign([], originalNodesEdges.nodes),
+          updatedEdges = Object.assign([], originalNodesEdges.edges);
+
+        network.setData({nodes: originalNodesEdges.nodes,
+          edges: originalNodesEdges.edges});
+
+        if (originalNodesEdges.nodes.length <= 10) {
+          network.setOptions({
+            physics: false
+          });
+        }
+        else {
+          network.setOptions({
+            physics: {
+              // 'barnesHut': {
+              //   'avoidOverlap': 1
+              // },
+              'stabilization': true
+            }
+          });
+        }
+
+        for (let key in nodeObjects) {
+          if (updatedNodes.length !== undefined) {
+            for (let i = 0; i < updatedNodes.length; i++) {
+              if (updatedNodes[i].id !== key) {
+                delete nodeObjects[key];
+              }
+            }
+          }
+        }
+
+        for (let key in edgeObjects) {
+          if (updatedEdges.length !== undefined) {
+            for (let i = 0; i < updatedEdges.length; i++) {
+              if (updatedEdges[i].id !== key) {
+                delete edgeObjects[key];
+              }
+            }
+          }
+        }
+
+        this.setState({
+          'loadAgain': false,
+          'nodesListStatus': 'extended',
+          'nodes': updatedNodes,
+          'edges': updatedEdges,
+          isFetching: false,
+          style: {
+            'networkGraph': {
+              'height': '600px',
+              'width': '100%'
+            },
+            'contextualMenu': {
+              width: '259px',
+              backgroundColor: '#898E9B', // '#6B7282',
+              // opacity: '0.8',
+              display: 'none',
+              position: 'absolute',
+              top: '0px',
+              right: '0px',
+              bottom: '0px'
+            }
+          },
+          selectedNodeDetails: '',
+          actions: '',
+          selectedNode: '',
+          selectedNodesForExtendingGraph: [],
+          previousNodesEdges: {
+            nodes: [],
+            edges: []
+          }
+        });
+
+        document.getElementById('actions').innerHTML = '';
+        undoGraphCount = 0;
       }
     };
   }

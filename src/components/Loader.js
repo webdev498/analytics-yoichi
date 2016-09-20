@@ -34,6 +34,8 @@ const Loader = (props) => (
               repeatCount='indefinite' />
           </path>
     </svg>
+    {props.text !== undefined ? <div style={{
+    }}>{props.text}</div> : null}
   </div>
 );
 
