@@ -32,15 +32,13 @@ const style = {
     color: '#24293D',
     fontSize: '12pt',
     fontFamily: 'Open Sans'
-  },
-  loaderStyle: {
   }
 };
 
 let nodeObjects = {},
   edgeObjects = {},
   timeWindow = '1h',
-  previousNodesEdges = {};
+  undoGraphCount = 0;
 
 function generateDataFromAssetDetails(data) {
   const assetData = [];
@@ -119,8 +117,8 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
                   value2 += newLine2 + '<b>Reputation:</b> ' + value4;
                 }
                 else {
-                  value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
-                  value2 += newLine2 + '<b>' + firstCharCapitalize(valueType) + ' Reputation:</b> ' +
+                  // value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
+                  value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
                     values[v][valueType];
                 }
               }
@@ -143,7 +141,7 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           }
           break;
         case 'country':
-          nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+          nodeObject.label += '\n  ' +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
           nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
@@ -451,6 +449,31 @@ class NetworkGraph extends React.Component {
         backgroundColor: '#DADADE',
         color: '#24293D',
         display: 'none'
+      },
+      previousNodesEdges: {
+        nodes: [],
+        edges: []
+      },
+      originalNodesEdges: {
+        nodes: [],
+        edges: []
+      },
+      undoGraphStyle: {
+        bottom: '128px',
+        left: '35px',
+        position: 'absolute',
+        cursor: 'pointer',
+        display: 'none'
+      },
+      resetGraphStyle: {
+        bottom: '158px',
+        left: '35px',
+        position: 'absolute',
+        cursor: 'pointer',
+        display: 'none'
+      },
+      loaderText: '',
+      loaderStyle: {
       }
     };
 
@@ -459,6 +482,8 @@ class NetworkGraph extends React.Component {
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
     this.collapseExpandCM = this.collapseExpandCM.bind(this);
+    this.undoGraph = this.undoGraph.bind(this);
+    this.resetGraph = this.resetGraph.bind(this);
   }
 
   loadNetworkGraph(data, loadAgain, duration) {
@@ -477,7 +502,6 @@ class NetworkGraph extends React.Component {
 
     nodeObjects = {};
     edgeObjects = {};
-    previousNodesEdges = {};
 
     let networkData = {
       nodes: [],
@@ -486,9 +510,12 @@ class NetworkGraph extends React.Component {
 
     if (this.state.nodesListStatus === 'default') { //  || timeWindow !== duration
       let nodesEdges = getNodesEdges(data[0]);
-      // console.log(data[0], nodesEdges);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
+      this.state.originalNodesEdges = {
+        nodes: Object.assign([], nodesEdges.nodes),
+        edges: Object.assign([], nodesEdges.edges)
+      };
       const actionsData = this.context.store.getState().actions;
       this.state.actionsData = getActionsByTypes(actionsData.list.actions);
 
@@ -568,6 +595,60 @@ class NetworkGraph extends React.Component {
             }
           }
         });
+
+        network.on('deselectEdge', function(params) {
+          let i = 0;
+          for (let edgeObject in edgeObjects) {
+            let deselectedEdge = edgeObjects[edgeObject];
+            // let edge = network.body.edges[deselectedEdge.id];
+
+            if (deselectedEdge !== undefined) {
+              if (i === 0) {
+                that.setState({
+                  'loadAgain': false,
+                  style: {
+                    'networkGraph': {
+                      'height': '600px',
+                      'width': '100%'
+                    },
+                    'contextualMenu': {
+                      width: '259px',
+                      backgroundColor: '#898E9B', // '#6B7282',
+                      // opacity: '0.8',
+                      display: 'none',
+                      position: 'absolute',
+                      top: '0px',
+                      right: '0px',
+                      bottom: '0px'
+                    }
+                  },
+                  selectedNodeDetails: '',
+                  actions: '',
+                  selectedNode: '',
+                  selectedNodesForExtendingGraph: []
+                });
+                document.getElementById('actions').innerHTML = '';
+                document.getElementById('refreshData').style.marginLeft = 'auto';
+              }
+              i++;
+            }
+          }
+        });
+
+        // network.on('dragEnd', function(params) {
+        //   for (let i = 0; i < params.nodes.length; i++) {
+        //     let nodeId = params.nodes[i];
+        //     console.log(nodeId);
+        //     this.state.nodes.update({id: nodeId, fixed: {x: true, y: true}});
+        //   }
+        // });
+        // network.on('dragStart', function(params) {
+        //   for (let i = 0; i < params.nodes.length; i++) {
+        //     let nodeId = params.nodes[i];
+        //     console.log(nodeId);
+        //     this.state.nodes.update({id: nodeId, fixed: {x: false, y: false}});
+        //   }
+        // });
 
         // network.on('dragStart', function(params) {
         //   console.log('dragStart');
@@ -731,7 +812,7 @@ class NetworkGraph extends React.Component {
           selectedNodeDetails = '',
           nodeType = '',
           nodeID = SelectedNodeIDs.nodes[0],
-          selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
+          selectedNodesForExtendingGraph = []; // this.state.selectedNodesForExtendingGraph;
 
         let nodeAt = network.getBoundingBox(nodeID);
 
@@ -898,10 +979,12 @@ class NetworkGraph extends React.Component {
                     else if (parameters[k].name === 'date') {
                       tempObj.value = this.state.alertDate;
                     }
-                    else if (parameters[k].name === 'ip' && nodeType.toLowerCase() === 'ip') {
+                    else if (parameters[k].name === 'ip' && (nodeType.toLowerCase() === 'internal_ip' ||
+                      nodeType.toLowerCase() === 'external_ip')) {
                       tempObj.value = nodeID;
                     }
-                    else if (parameters[k].name === 'sourceip') {
+                    else if (parameters[k].name === 'sourceip' || parameters[k].name === 'source.id' ||
+                      parameters[k].name === 'srcip') {
                       if (edgeObjects[nodeID] !== undefined) {
                         tempObj.value = edgeObjects[nodeID].from;
                       }
@@ -909,15 +992,8 @@ class NetworkGraph extends React.Component {
                         tempObj.value = '';
                       }
                     }
-                    else if (parameters[k].name === 'source.id') {
-                      if (edgeObjects[nodeID] !== undefined) {
-                        tempObj.value = edgeObjects[nodeID].from;
-                      }
-                      else {
-                        tempObj.value = '';
-                      }
-                    }
-                    else if (parameters[k].name === 'destination.id') {
+                    else if (parameters[k].name === 'destinationip' || parameters[k].name === 'destination.id' ||
+                      parameters[k].name === 'destip') {
                       if (edgeObjects[nodeID] !== undefined) {
                         tempObj.value = edgeObjects[nodeID].to;
                       }
@@ -950,7 +1026,7 @@ class NetworkGraph extends React.Component {
             td1.id = 'action' + j;
             td1.onclick = this.extendGraph(contextMenuType, network, nodeID, nodeType,
               actionsData[i].actions[j].reportId, parametersToApi,
-              actionsData[i].actions.length, 'action' + j);
+              actionsData[i].actions.length, 'action' + j, actionsData[i].actions[j].label);
             tr.appendChild(td1);
 
             if (userInputParameters.length > 0) {
@@ -998,11 +1074,21 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId) {
+  extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId, actionLabel) {
     const that = this;
     return (event) => {
       this.setState({
-        isFetching: true
+        isFetching: true,
+        loaderText: actionLabel,
+        loaderStyle: {
+          position: 'absolute',
+          top: '350px',
+          display: 'flex',
+          backgroundColor: '#898E9B',
+          padding: '20px',
+          left: '300px',
+          width: '350px'
+        }
       });
       let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
@@ -1010,6 +1096,7 @@ class NetworkGraph extends React.Component {
           selectedNodesForExtendingGraph[i].reportId === reportId &&
           selectedNodesForExtendingGraph[i].timeWindow === timeWindow) {
           let position = getPos(document.getElementById(actionId));
+          document.getElementById('actionPerformed').innerHTML = 'You have already performed this action.';
           $('#actionPerformed').css('top', position.y - 85);
           $('#actionPerformed').fadeIn('slow');
           $('#actionPerformed').fadeOut(3000);
@@ -1033,25 +1120,39 @@ class NetworkGraph extends React.Component {
             edges = that.state.edges;
 
           if (json[0] === undefined) {
+            let position = getPos(document.getElementById(actionId));
+            document.getElementById('actionPerformed').innerHTML =
+              'There are no nodes/edges available for extending the graph.';
+            $('#actionPerformed').css('top', position.y - 85);
+            $('#actionPerformed').fadeIn('slow');
+            $('#actionPerformed').fadeOut(3000);
             that.setState({
               isFetching: false
             });
             return;
           }
 
-          previousNodesEdges = {
-            nodes: nodes,
-            edges: edges
-          };
+          if (that.state.previousNodesEdges.nodes.length > 0) {
+            undoGraphCount++;
+          }
+          else {
+            undoGraphCount = 0;
+          }
 
-          // console.log('previousNodesEdges', previousNodesEdges);
+          let nodesPrevious = [],
+            edgesPrevious = [];
 
-          let nodesEdges = getNodesEdges(json[0]);
+          nodesPrevious.push(Object.assign([], nodes));
+          edgesPrevious.push(Object.assign([], edges));
+
+          let nodesEdges = getNodesEdges(json[0]),
+            isGraphExtended = false;
 
           for (let i = 0; i < nodesEdges.nodes.length; i++) {
             if (isNodeOrEdgeAlreadyExists(nodes, nodesEdges.nodes[i].id) === false) {
               nodes.push(nodesEdges.nodes[i]);
               nodeObjects[nodesEdges.nodes[i].id] = nodesEdges.nodes[i];
+              isGraphExtended = true;
             }
           }
 
@@ -1060,6 +1161,7 @@ class NetworkGraph extends React.Component {
               edges.push(nodesEdges.edges[i]);
               edgeObjects[nodesEdges.edges[i].to] = nodesEdges.edges[i];
               edgeObjects[nodesEdges.edges[i].id] = nodesEdges.edges[i];
+              isGraphExtended = true;
             }
           }
 
@@ -1071,13 +1173,40 @@ class NetworkGraph extends React.Component {
 
           network.setData({nodes: nodes, edges: edges});
 
+          if (!isGraphExtended) {
+            nodesPrevious = [];
+            edgesPrevious = [];
+            undoGraphCount--;
+          }
+
           that.setState({
             'loadAgain': false,
             'nodesListStatus': 'extended',
-            'nodes': nodes,
-            'edges': edges,
+            'nodes': Object.assign([], nodes),
+            'edges': Object.assign([], edges),
             'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
-            isFetching: false
+            isFetching: false,
+            loaderText: '',
+            loaderStyle: {
+            },
+            previousNodesEdges: {
+              nodes: (nodesPrevious.length > 0) ? that.state.previousNodesEdges.nodes.concat(nodesPrevious)
+                : that.state.previousNodesEdges.nodes,
+              edges: (edgesPrevious.length > 0) ? that.state.previousNodesEdges.edges.concat(edgesPrevious)
+                : that.state.previousNodesEdges.edges
+            },
+            undoGraphStyle: {
+              bottom: '128px',
+              left: '35px',
+              position: 'absolute',
+              cursor: 'pointer'
+            },
+            resetGraphStyle: {
+              bottom: '158px',
+              left: '35px',
+              position: 'absolute',
+              cursor: 'pointer'
+            }
           });
 
           if (nodes.length <= 10) {
@@ -1106,19 +1235,23 @@ class NetworkGraph extends React.Component {
           }
 
           if (contextMenuType === 'edge') {
-            // let edge = network.body.edges[nodeID];
-            // // console.log(nodeID);
-            // if (edgeObjects[nodeID] !== undefined) {
-            //   // console.log('test1');
-            //   edge.setOptions({
-            //     color: {
-            //       color: Colors.turquoise
-            //     }
-            //   });
-            // }
+          }
+
+          if (!isGraphExtended) {
+            let position = getPos(document.getElementById(actionId));
+            document.getElementById('actionPerformed').innerHTML =
+              'The responsed nodes/edges are already exists on the graph.';
+            $('#actionPerformed').css('top', position.y - 85);
+            $('#actionPerformed').fadeIn('slow');
+            $('#actionPerformed').fadeOut(3000);
+            that.setState({
+              isFetching: false
+            });
+            return;
           }
 
           document.getElementById('undo').onclick = that.undoGraph(network);
+          document.getElementById('reset').onclick = that.resetGraph(network);
         }
       );
 
@@ -1145,7 +1278,8 @@ class NetworkGraph extends React.Component {
 
     return (
       <div style={{display: 'flex'}}>
-        {this.state.isFetching ? <Loader style={style.loaderStyle} /> : null}
+        {this.state.isFetching ? <Loader style={{}} loaderStyle={this.state.loaderStyle}
+          text={this.state.loaderText} /> : null}
         <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
           ...{
             // backgroundColor: Colors.networkGraphBGColor
@@ -1194,17 +1328,15 @@ class NetworkGraph extends React.Component {
           <img id='leftArrow' src='/img/menu.png' onClick={this.collapseExpandCM('expand')} />
         </div>
 
-        <div id='undoGraph' style={{
-          bottom: '128px',
-          left: '35px',
-          position: 'absolute',
-          cursor: 'pointer',
-          display: 'none'
-        }}>
+        <div id='undoGraph' style={this.state.undoGraphStyle}>
           <img id='undo' src='/img/undo.png' />
         </div>
 
-        <div style={this.state.actionPerformed} id='actionPerformed'>You have already performed this action.</div>
+        <div id='resetGraph' style={this.state.resetGraphStyle}>
+          <img id='reset' src='/img/reset.png' />
+        </div>
+
+        <div style={this.state.actionPerformed} id='actionPerformed'></div>
 
         <div style={{
           bottom: '20px',
@@ -1238,14 +1370,150 @@ class NetworkGraph extends React.Component {
 
   undoGraph(network) {
     return (event) => {
-      console.log(previousNodesEdges);
-      if (previousNodesEdges.nodes !== undefined && previousNodesEdges.edges !== undefined) {
-        network.setData({nodes: previousNodesEdges.nodes, edges: previousNodesEdges.edges});
+      let previousNodesEdges = this.state.previousNodesEdges;
+      if (previousNodesEdges.nodes !== undefined &&
+        previousNodesEdges.edges !== undefined) {
+        if (previousNodesEdges.nodes[undoGraphCount] !== undefined &&
+          previousNodesEdges.edges[undoGraphCount] !== undefined) {
+          let updatedNodes = Object.assign([], previousNodesEdges.nodes[undoGraphCount]),
+            updatedEdges = Object.assign([], previousNodesEdges.edges[undoGraphCount]);
+
+          network.setData({nodes: previousNodesEdges.nodes[undoGraphCount],
+            edges: previousNodesEdges.edges[undoGraphCount]});
+
+          if (previousNodesEdges.nodes[undoGraphCount].length <= 10) {
+            network.setOptions({
+              physics: false
+            });
+          }
+          else {
+            network.setOptions({
+              physics: {
+                // 'barnesHut': {
+                //   'avoidOverlap': 1
+                // },
+                'stabilization': true
+              }
+            });
+          }
+
+          for (let key in nodeObjects) {
+            if (updatedNodes.length !== undefined) {
+              for (let i = 0; i < updatedNodes.length; i++) {
+                if (updatedNodes[i].id !== key) {
+                  delete nodeObjects[key];
+                }
+              }
+            }
+          }
+
+          for (let key in edgeObjects) {
+            if (updatedEdges.length !== undefined) {
+              for (let i = 0; i < updatedEdges.length; i++) {
+                if (updatedEdges[i].id !== key) {
+                  delete edgeObjects[key];
+                }
+              }
+            }
+          }
+
+          let tempNodesArray = Object.assign([], previousNodesEdges.nodes),
+            tempEdgesArray = Object.assign([], previousNodesEdges.edges);
+
+          tempNodesArray.splice(undoGraphCount, 1);
+          tempEdgesArray.splice(undoGraphCount, 1);
+
+          this.setState({
+            'loadAgain': false,
+            'nodesListStatus': 'extended',
+            'nodes': updatedNodes,
+            'edges': updatedEdges,
+            isFetching: false,
+            style: {
+              'networkGraph': {
+                'height': '600px',
+                'width': '100%'
+              },
+              'contextualMenu': {
+                width: '259px',
+                backgroundColor: '#898E9B', // '#6B7282',
+                // opacity: '0.8',
+                display: 'none',
+                position: 'absolute',
+                top: '0px',
+                right: '0px',
+                bottom: '0px'
+              }
+            },
+            selectedNodeDetails: '',
+            actions: '',
+            selectedNode: '',
+            selectedNodesForExtendingGraph: [],
+            previousNodesEdges: {
+              nodes: Object.assign([], tempNodesArray),
+              edges: Object.assign([], tempEdgesArray)
+            }
+          });
+
+          document.getElementById('actions').innerHTML = '';
+          undoGraphCount--;
+        }
+      }
+    };
+  }
+
+  resetGraph(network) {
+    return (event) => {
+      let originalNodesEdges = this.state.originalNodesEdges;
+      if (originalNodesEdges.nodes !== undefined &&
+        originalNodesEdges.edges !== undefined) {
+        let updatedNodes = Object.assign([], originalNodesEdges.nodes),
+          updatedEdges = Object.assign([], originalNodesEdges.edges);
+
+        network.setData({nodes: originalNodesEdges.nodes,
+          edges: originalNodesEdges.edges});
+
+        if (originalNodesEdges.nodes.length <= 10) {
+          network.setOptions({
+            physics: false
+          });
+        }
+        else {
+          network.setOptions({
+            physics: {
+              // 'barnesHut': {
+              //   'avoidOverlap': 1
+              // },
+              'stabilization': true
+            }
+          });
+        }
+
+        for (let key in nodeObjects) {
+          if (updatedNodes.length !== undefined) {
+            for (let i = 0; i < updatedNodes.length; i++) {
+              if (updatedNodes[i].id !== key) {
+                delete nodeObjects[key];
+              }
+            }
+          }
+        }
+
+        for (let key in edgeObjects) {
+          if (updatedEdges.length !== undefined) {
+            for (let i = 0; i < updatedEdges.length; i++) {
+              if (updatedEdges[i].id !== key) {
+                delete edgeObjects[key];
+              }
+            }
+          }
+        }
+
         this.setState({
           'loadAgain': false,
           'nodesListStatus': 'extended',
-          'nodes': previousNodesEdges.nodes,
-          'edges': previousNodesEdges.edges,
+          'nodes': updatedNodes,
+          'edges': updatedEdges,
           isFetching: false,
           style: {
             'networkGraph': {
@@ -1266,26 +1534,15 @@ class NetworkGraph extends React.Component {
           selectedNodeDetails: '',
           actions: '',
           selectedNode: '',
-          selectedNodesForExtendingGraph: []
+          selectedNodesForExtendingGraph: [],
+          previousNodesEdges: {
+            nodes: [],
+            edges: []
+          }
         });
 
-        if (previousNodesEdges.nodes.length <= 10) {
-          network.setOptions({
-            physics: false
-          });
-        }
-        else {
-          network.setOptions({
-            physics: {
-              // 'barnesHut': {
-              //   'avoidOverlap': 1
-              // },
-              'stabilization': true
-            }
-          });
-        }
-
         document.getElementById('actions').innerHTML = '';
+        undoGraphCount = 0;
       }
     };
   }
