@@ -74,13 +74,79 @@
           "title": "Activity",
           "showRefresh": false
         },
+        "innerStyle": {
+          "flexDirection": "column"
+        },
         "attributes": {
           "style": {
-            "width": "300px"
+            "width": "300px",
+            "flexDirection": "column"
           },
           "id": "activity"
         },
         "children": [
+          {
+            "chartOptions": {
+              "xAxisName": "",
+              "lineThickness": "1",
+              "showYAxisValues": "1",
+              "xAxisNameFontSize": "10",
+              "yAxisNameFontSize": "10",
+              "labelFontSize": "8",
+              "drawAnchors": "1",
+              "anchorRadius": "1",
+              "showlegend": "0",
+              "outCnvBaseFontSize": "8"
+            },
+            "chartData": {
+              "fieldMapping": {
+                "x": [{
+                  "reportId": "taf_asset_dns_count_by_time",
+                  "columns": ["date"]
+                }],
+                "y": [{
+                  "reportId": "taf_asset_dns_count_by_time",
+                  "columns": [
+                    "data.dns.query"
+                  ]
+                }]
+              },
+              "filter": {
+                "reportId": "taf_asset_dns_count_by_time",
+                "columns": [
+                  "data.dns.rCodeName"
+                ]
+              }
+            },
+            "meta": {
+              "showHeader": true,
+              "showRefresh": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_asset_dns_count_by_time"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              },
+              "title": "DNS Lookups"
+            },
+            "attributes": {
+              "chartHeight": "200",
+              "chartCaption": {
+                "display": "none"
+              },
+              "style": {
+                "width": "100%",
+                "padding": 0,
+                "boxShadow": "none"
+              },
+              "id": "dns-lookups-chart"
+            },
+            "id": "dns-lookups",
+            "type": "MultiSeriesLineChart"
+          },
           {
             "id": "connections-by-protocol",
             "type": "HorizontalBarChart",
@@ -107,7 +173,8 @@
               "style": {
                 "width": "100%",
                 "padding": 0,
-                "boxShadow": "none"
+                "boxShadow": "none",
+                "marginBottom": "50px"
               },
               "id": "connections-by-protocol-chart"
             },

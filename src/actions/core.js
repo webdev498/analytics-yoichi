@@ -66,7 +66,6 @@ export function fetchLayoutData(id, params) {
     })
     .then(response => {
       const status = response.status;
-      console.log(response, response._bodyText);
       // if auth token expires, logout.
       if (status === 401) {
         logoutUtil(dispatch);
@@ -80,7 +79,6 @@ export function fetchLayoutData(id, params) {
       }
     })
     .then(json => {
-      console.log(json);
       if (json) {
         dispatch(receivePageData(id, {json}));
       }
