@@ -791,7 +791,7 @@ class NetworkGraph extends React.Component {
         $('.vis-right').hide();
       }
       else {
-        document.getElementById('networkGraph').innerHTML = 'No Data Found.';
+        document.getElementById('networkGraph').innerHTML = 'No additional results were found.';
       }
     }
   }
