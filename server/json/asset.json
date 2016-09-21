@@ -199,6 +199,71 @@
               ],
               "multipleReportIds": false
             }
+          },
+          {
+            "chartOptions": {
+              "xAxisName": "",
+              "lineThickness": "1",
+              "showYAxisValues": "1",
+              "xAxisNameFontSize": "10",
+              "yAxisNameFontSize": "10",
+              "labelFontSize": "8",
+              "drawAnchors": "1",
+              "anchorRadius": "1",
+              "showlegend": "0",
+              "outCnvBaseFontSize": "8"
+            },
+            "chartData": {
+              "multipleReports": true,
+              "fieldMapping": {
+                "x": [{
+                  "reportId": "taf_asset_total_bandwidth_internal_by_time",
+                  "columns": ["date"]
+                }],
+                "y": [
+                  {
+                    "reportId": "taf_asset_total_bandwidth_internal_by_time",
+                    "columns": [
+                      "bandwidth"
+                    ]
+                  },
+                  {
+                    "reportId": "taf_asset_total_bandwidth_external_by_time",
+                    "columns": [
+                      "bandwidth"
+                    ]
+                  }
+                ]
+              }
+            },
+            "meta": {
+              "showHeader": true,
+              "showRefresh": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_asset_total_bandwidth_internal_by_time,taf_asset_total_bandwidth_external_by_time"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              },
+              "title": "Data Transfered"
+            },
+            "attributes": {
+              "chartHeight": "200",
+              "chartCaption": {
+                "display": "none"
+              },
+              "style": {
+                "width": "100%",
+                "padding": 0,
+                "boxShadow": "none"
+              },
+              "id": "data-transfer-chart"
+            },
+            "id": "data-transfer",
+            "type": "MultiSeriesLineChart"
           }
         ]
       }

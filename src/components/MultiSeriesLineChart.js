@@ -5,10 +5,6 @@ import {
   calculateDateDisplayFormat
 } from 'utils/dateUtils';
 
-import {
-  generateRawData
-} from 'utils/utils';
-
 const chart = {
   'captionFontSize': '14',
   'subcaptionFontSize': '14',
@@ -31,10 +27,10 @@ const chart = {
   'paletteColors': Colors.LineChartPallete
 };
 
-function getIndex(obj, cols) {
+function getIndex(obj, columns) {
   let index;
   const colName = obj.columns[0];
-  cols.forEach((col, currentIndex) => {
+  columns.forEach((col, currentIndex) => {
     if (colName === col.name) index = currentIndex;
   });
 
@@ -88,7 +84,7 @@ function getDataSource(props, rawData) {
 
   const keys = Object.keys(filterData);
   const categories = [{
-    category: getData(filterData[keys[0]], x, 'label', (val) => { formatDate(val, duration); })
+    category: getData(filterData[keys[0]], x, 'label', val => (formatDate(val, duration)))
   }];
 
   const dataset = [];
@@ -109,6 +105,35 @@ function getDataSource(props, rawData) {
   return dataSource;
 }
 
+function getDataMultipleReports(props) {
+  const {chartData: {fieldMapping: {x, y}}, data, duration} = props,
+    xObj = x[0];
+
+  const xIndex = getIndex(xObj, data[xObj.reportId].columns);
+
+  const categories = [{
+    category: getData(data[xObj.reportId].rows, xIndex, 'label', val => (formatDate(val, duration)))
+  }];
+
+  const dataset = [];
+
+  y.forEach((set) => {
+    const {rows, columns} = data[set.reportId],
+      index = getIndex(set, columns);
+
+    dataset.push({
+      seriesname: set.reportId,
+      data: getData(rows, index, 'value')
+    });
+  });
+
+  return {
+    chart: Object.assign({}, chart, props.chartOptions),
+    categories,
+    dataset
+  };
+}
+
 class MultiSeriesLineChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
@@ -116,22 +141,19 @@ class MultiSeriesLineChart extends React.Component {
   }
 
   renderChart(props) {
-    if (!props.duration) {
-      return;
-    }
-
     if (!props.data) {
       return;
     }
 
-    if (props.data.rows && props.data.rows.length === 0) {
-      return;
+    const {chartData: {multipleReports}} = props;
+
+    let dataSource;
+    if (multipleReports) {
+      dataSource = getDataMultipleReports(props);
     }
-
-    const data = props.data,
-      fieldMapping = props.chartData.fieldMapping;
-
-    let rawData = generateRawData(fieldMapping, data);
+    else {
+      dataSource = getDataSource(props);
+    }
 
     FusionCharts.ready(function() {
       const fusioncharts = new FusionCharts({
@@ -141,7 +163,7 @@ class MultiSeriesLineChart extends React.Component {
         height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
-        dataSource: getDataSource(props, rawData)
+        dataSource
       });
 
       fusioncharts.render();
