@@ -156,8 +156,4 @@ class MultiSeriesLineChart extends React.Component {
   }
 }
 
-MultiSeriesLineChart.contextTypes = {
-  clickThrough: React.PropTypes.func
-};
-
 export default MultiSeriesLineChart;
