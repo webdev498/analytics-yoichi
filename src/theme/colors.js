@@ -65,6 +65,8 @@ export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
 
 export const NetworkGraphBGColor = '#F7F7F9';
 
+export const LineChartPallete = `${CherryColor},${CoralColor},${MustardColor},${SeafoamColor},${TurquoiseColor}`;
+
 export const Colors = {
   garnet: GarnetColor,
   grape: GrapeColor,

@@ -370,7 +370,7 @@ class MultiSeriesCombiChart extends React.Component {
     rawData = generateRawData(fieldMapping, data);
 
     FusionCharts.ready(function() {
-      const fusioncharts = new FusionCharts ({
+      const fusioncharts = new FusionCharts({
         type: 'mscombi2d',
         renderAt: props.attributes.id,
         width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',

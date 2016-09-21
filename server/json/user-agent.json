@@ -1,4 +1,4 @@
-const userAgent = {
+{
   "layout": [
     [
       {
@@ -328,6 +328,4 @@ const userAgent = {
       }
     ]
   ]
-};
-
-export default userAgent;
+}

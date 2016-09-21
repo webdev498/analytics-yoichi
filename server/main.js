@@ -9,7 +9,7 @@ import config from '../config';
 import webpackDevMiddleware from './middleware/webpack-dev';
 import webpackHMRMiddleware from './middleware/webpack-hmr';
 
-import apiMiddleware from './api';
+import apiMiddleware from './routes/api';
 
 const debug = _debug('app:server');
 const paths = config.utils_paths;
@@ -34,7 +34,7 @@ app.use(convert(historyApiFallback({
       to: '/index.html'
     }
   ],
-  verbose: true
+  verbose: false
 })));
 
 // ------------------------------------

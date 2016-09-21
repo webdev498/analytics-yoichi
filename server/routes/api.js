@@ -1,12 +1,13 @@
 import https from 'https';
 import fetch from 'node-fetch';
 
-import app from './main.js';
+import app from '../main.js';
 import koaRouter from 'koa-router';
 
-import {getData} from './components/paretoChart'
+import {getData} from '../components/paretoChart'
 
-import {serverBaseUrl} from '../env';
+import {serverBaseUrl} from '../../env';
+import layoutRoutes from './layouts';
 
 const router = new koaRouter({
   prefix: '/api'
@@ -44,7 +45,8 @@ const reportId = new koaRouter();
 //   return res;
 // }, async function(ctx, next) {})
 
-router.get('/analytics/reporting/execute', reportId.routes(), reportId.allowedMethods())
+router
+.get('/store/*', layoutRoutes)
 .get('*', async function (ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);
