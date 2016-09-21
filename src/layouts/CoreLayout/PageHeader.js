@@ -14,13 +14,12 @@ import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import {Colors} from 'theme/colors';
 import { Link } from 'react-router';
-import {
-  openKibanaInNewWindow
-} from '../../../env.js';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppTheme from 'theme/AppTheme';
 const muiTheme = getMuiTheme(AppTheme);
+
+const openKibanaInNewWindow = window.global && window.global.openKibanaInNewWindow;
 
 const TimeRanges = [
   {

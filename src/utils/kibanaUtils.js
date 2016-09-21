@@ -1,4 +1,3 @@
-import {kibanaBaseUrl} from '../../env.js';
 import moment from 'moment';
 import {
   LOW_SCORE_RANGE,
@@ -9,6 +8,8 @@ import {isUndefined,
   getTimePairFromWindow,
   getCountryCodeByCountryName
 } from 'utils/utils';
+
+const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
 
 export function generatePathParams(pathParamArray) {
   let pathParams = '';
