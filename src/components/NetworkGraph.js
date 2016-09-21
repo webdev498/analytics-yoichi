@@ -983,8 +983,7 @@ class NetworkGraph extends React.Component {
                       nodeType.toLowerCase() === 'external_ip')) {
                       tempObj.value = nodeID;
                     }
-                    else if (parameters[k].name === 'sourceip' || parameters[k].name === 'source.id' ||
-                      parameters[k].name === 'srcip') {
+                    else if (parameters[k].name === 'source.id') {
                       if (edgeObjects[nodeID] !== undefined) {
                         tempObj.value = edgeObjects[nodeID].from;
                       }
@@ -992,8 +991,7 @@ class NetworkGraph extends React.Component {
                         tempObj.value = '';
                       }
                     }
-                    else if (parameters[k].name === 'destinationip' || parameters[k].name === 'destination.id' ||
-                      parameters[k].name === 'destip') {
+                    else if (parameters[k].name === 'target.id') {
                       if (edgeObjects[nodeID] !== undefined) {
                         tempObj.value = edgeObjects[nodeID].to;
                       }
