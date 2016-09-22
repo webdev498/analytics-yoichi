@@ -3,6 +3,7 @@ import {Colors} from 'theme/colors';
 
 import AssetWidget from 'components/AssetWidget';
 import {formatBytes, getCountryNameByCountryCode} from 'utils/utils';
+import ScoreWidget from 'components/ScoreWidget';
 
 const styles = {
   rankScore: {
@@ -10,11 +11,6 @@ const styles = {
     width: '45px',
     lineHeight: '45px',
     fontSize: '20px',
-    borderRadius: '50%',
-    backgroundColor: Colors.coral,
-    color: Colors.arctic,
-    textAlign: 'center',
-    fontWeight: '300',
     marginTop: '33px'
   },
   list: {
@@ -184,9 +180,8 @@ class AssetDetail extends React.Component {
       <div style={styles.card}>
         <AssetWidget data={assetDetail} style={{padding: 0}} />
 
-        <div style={styles.rankScore}>
-          {assetDetail.risk.score}
-        </div>
+        <ScoreWidget scoreValue={assetDetail.risk.score} style={styles.rankScore} />
+
         <ul style={styles.list}>
           {this.getReports(assetReports)}
         </ul>
