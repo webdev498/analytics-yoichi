@@ -242,6 +242,10 @@ function getNodesEdges(data) {
         edgeObject.color.color = Colors.pebble;
         edgeObject.color.highlight = Colors.turquoise;
 
+        if (dataEdge.type == 'ioc') {
+          edgeObject.dashes = true;
+        }
+
         edges.push(edgeObject);
         edgeObjects[dataEdge.target] = edgeObject;
         edgeObjects[edgeObject.id] = edgeObject;
