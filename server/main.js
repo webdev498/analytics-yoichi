@@ -32,6 +32,14 @@ app.use(convert(historyApiFallback({
     {
       from: /\/alert-new/,
       to: '/index.html'
+    },
+    {
+      from: /\/alert/,
+      to: '/index.html'
+    },
+    {
+      from: /\/asset/,
+      to: '/index.html'
     }
   ],
   verbose: false
