@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 
 const chart = {
+  'baseFont': 'Open Sans, sans-serif',
   'baseFontColor': '#333333',
   'showBorder': '0',
   'bgColor': '#ffffff',

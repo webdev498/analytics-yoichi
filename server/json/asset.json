@@ -141,7 +141,18 @@
               "style": {
                 "width": "100%",
                 "padding": 0,
-                "boxShadow": "none"
+                "boxShadow": "none",
+                "marginBottom": "35px"
+              },
+              "header": {
+                "style": {
+                  "paddingBottom": 0
+                },
+                "title": {
+                  "fontSize": "13px",
+                  "fontWeight": 600,
+                  "textTransform": "capitalize"
+                }
               },
               "id": "dns-lookups-chart"
             },
@@ -177,7 +188,18 @@
               "style": {
                 "width": "100%",
                 "padding": 0,
-                "boxShadow": "none"
+                "boxShadow": "none",
+                "marginBottom": "35px"
+              },
+              "header": {
+                "style": {
+                  "paddingBottom": 0
+                },
+                "title": {
+                  "fontSize": "13px",
+                  "fontWeight": 600,
+                  "textTransform": "capitalize"
+                }
               },
               "id": "login-count-chart"
             },
@@ -185,6 +207,16 @@
             "type": "MultiSeriesColumn2d"
           },
           {
+            "header": {
+              "style": {
+                "paddingBottom": 0
+              },
+              "title": {
+                "fontSize": "13px",
+                "fontWeight": 600,
+                "textTransform": "capitalize"
+              }
+            },
             "id": "connections-by-protocol",
             "type": "HorizontalBarChart",
             "meta": {
@@ -205,12 +237,22 @@
               "chartCaption": {
                 "display": "none"
               },
-              "chartWidth": "250px",
-              "chartHeight": "250px",
+              "chartWidth": "100%",
+              "chartHeight": "200px",
               "style": {
                 "width": "100%",
                 "padding": 0,
                 "boxShadow": "none"
+              },
+              "header": {
+                "style": {
+                  "paddingBottom": 0
+                },
+                "title": {
+                  "fontSize": "13px",
+                  "fontWeight": 600,
+                  "textTransform": "capitalize"
+                }
               },
               "id": "connections-by-protocol-chart"
             },
@@ -296,7 +338,18 @@
               "style": {
                 "width": "100%",
                 "padding": 0,
-                "boxShadow": "none"
+                "boxShadow": "none",
+                "marginTop": "35px"
+              },
+              "header": {
+                "style": {
+                  "paddingBottom": 0
+                },
+                "title": {
+                  "fontSize": "13px",
+                  "fontWeight": 600,
+                  "textTransform": "capitalize"
+                }
               },
               "id": "data-transfer-chart"
             },

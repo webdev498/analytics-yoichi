@@ -6,6 +6,7 @@ import {
 } from 'utils/dateUtils';
 
 const chart = {
+  'baseFont': 'Open Sans, sans-serif',
   'captionFontSize': '14',
   'subcaptionFontSize': '14',
   'subcaptionFontBold': '0',
