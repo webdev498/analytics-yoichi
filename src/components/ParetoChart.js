@@ -9,15 +9,11 @@ import {
   generateClickThroughUrl,
   generatePathParams
 } from 'utils/kibanaUtils';
-import {CHART_COLORS} from 'Constants';
 
 export function generateDataSource(data, chartOptions, fieldMapping) {
-  const graphBars = [],
-    chartColors = CHART_COLORS;
+  const graphBars = [];
 
-  let colorIndex = 0,
-    numberOfColors = chartColors.length,
-    x, y;
+  let x, y;
 
   const {rows, columns} = data;
 
@@ -42,8 +38,7 @@ export function generateDataSource(data, chartOptions, fieldMapping) {
       yValue = rows[i][y],
       barObject = {
         label: xValue || 'Other',
-        value: yValue,
-        color: chartColors[(colorIndex++) % numberOfColors]
+        value: yValue
       };
 
     graphBars.push(barObject);

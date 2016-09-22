@@ -338,8 +338,12 @@
       {
         "chartOptions": {
           "showValues": "1",
+          "paletteColors": "#2bd8d0",
           "showLabels": "1",
           "chartRightMargin": "0"
+        },
+        "chart": {
+          "showAnnotations": false
         },
         "chartData": {
           "showTrendLines": false,
