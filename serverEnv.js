@@ -1,1 +1,1 @@
- export const serverBaseUrl = 'https://demo.ranksoftwareinc.com';
+export const serverBaseUrl = 'https://demo.ranksoftwareinc.com';

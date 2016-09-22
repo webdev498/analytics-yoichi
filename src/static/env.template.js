@@ -1,11 +1,8 @@
 window.global = {
   baseUrl: '',
-  redirectUri: 'http://localhost:3000/#/dashboard?',
+  redirectUri: 'http://localhost:3000/dashboard?',
   defaultRoute: '/',
-  clientLoginUrl: 'https://demo.ranksoftwareinc.com/oauth/authorize',
-  clientBaseUrl: '',
-  clientRedirectUri: 'http://localhost:3000/dashboard?',
-  clientDefaultRoute: '/',
+  loginUrl: 'https://api.ranksoftwareinc.com/oauth/authorize',
   kibanaBaseUrl: 'https://demo.ranksoftwareinc.com',
   openKibanaInNewWindow: false
 };
