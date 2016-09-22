@@ -305,13 +305,15 @@
                     "reportId": "taf_asset_total_bandwidth_internal_by_time",
                     "columns": [
                       "bandwidth"
-                    ]
+                    ],
+                    "seriesname": "Internal Bandwidth"
                   },
                   {
                     "reportId": "taf_asset_total_bandwidth_external_by_time",
                     "columns": [
                       "bandwidth"
-                    ]
+                    ],
+                    "seriesname": "External Bandwidth"
                   }
                 ]
               }

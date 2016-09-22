@@ -122,7 +122,7 @@ function getDataMultipleReports(props) {
       index = getIndex(set, columns);
 
     dataset.push({
-      seriesname: set.reportId,
+      seriesname: set.seriesname,
       data: getData(rows, index, 'value')
     });
   });
