@@ -87,7 +87,8 @@
         "children": [
           {
             "chartOptions": {
-              "xAxisName": "",
+              "xAxisName": "TIME",
+              "divLineThickness": "2",
               "lineThickness": "1",
               "showYAxisValues": "1",
               "xAxisNameFontSize": "10",
@@ -150,7 +151,7 @@
           {
             "chartOptions": {
               "paletteColors": "#2bd8d0,#F69275",
-              "xAxisName": "",
+              "xAxisName": "MACHINES IN NETWORK",
               "divLineThickness": "2",
               "showYAxisValues": "1",
               "xAxisNameFontSize": "10",
@@ -209,15 +210,15 @@
               "style": {
                 "width": "100%",
                 "padding": 0,
-                "boxShadow": "none",
-                "marginBottom": "50px"
+                "boxShadow": "none"
               },
               "id": "connections-by-protocol-chart"
             },
             "chartOptions": {
               "showValues": "1",
               "showLabels": "1",
-              "chartRightMargin": "0"
+              "chartRightMargin": "0",
+              "divLineThickness": "2"
             },
             "chart": {
               "showAnnotations": false
@@ -238,7 +239,8 @@
           },
           {
             "chartOptions": {
-              "xAxisName": "",
+              "xAxisName": "TIME",
+              "divLineThickness": "2",
               "lineThickness": "1",
               "showYAxisValues": "1",
               "xAxisNameFontSize": "10",
