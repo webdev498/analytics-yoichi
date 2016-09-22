@@ -148,6 +148,42 @@
             "type": "MultiSeriesLineChart"
           },
           {
+            "chartOptions": {
+              "paletteColors": "#2bd8d0,#F69275",
+              "xAxisName": "",
+              "divLineThickness": "2",
+              "showYAxisValues": "1",
+              "xAxisNameFontSize": "10",
+              "yAxisNameFontSize": "10",
+              "labelFontSize": "8",
+              "drawAnchors": "1",
+              "anchorRadius": "1",
+              "showlegend": "0",
+              "outCnvBaseFontSize": "8"
+            },
+            "chartData": {},
+            "meta": {
+              "showHeader": true,
+              "showRefresh": false,
+              "api": null,
+              "title": "Login Count"
+            },
+            "attributes": {
+              "chartHeight": "200",
+              "chartCaption": {
+                "display": "none"
+              },
+              "style": {
+                "width": "100%",
+                "padding": 0,
+                "boxShadow": "none"
+              },
+              "id": "login-count-chart"
+            },
+            "id": "login-count",
+            "type": "MultiSeriesColumn2d"
+          },
+          {
             "id": "connections-by-protocol",
             "type": "HorizontalBarChart",
             "meta": {

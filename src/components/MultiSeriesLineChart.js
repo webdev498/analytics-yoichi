@@ -18,10 +18,9 @@ const chart = {
   'legendShadow': '0',
   'showAxisLines': '0',
   'showAlternateHGridColor': '0',
-  'divlineThickness': '1',
-  'divLineIsDashed': '1',
-  'divLineDashLen': '1',
-  'divLineGapLen': '1',
+  'divLineAlpha': '50',
+  'divLineColor': Colors.cloud,
+  'divLineThickness': '1',
   'xAxisName': 'Day',
   'showValues': '0',
   'paletteColors': Colors.LineChartPallete
