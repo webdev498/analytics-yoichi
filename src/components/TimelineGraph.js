@@ -12652,7 +12652,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 830,
@@ -12725,7 +12725,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 104,
@@ -13202,7 +13202,7 @@ import {
                 "eventId": "MJ9zQGYzEeaWSgrOrMuSaQ",
                 "score": 0,
                 "details": {
-                  
+
                 },
                 "eventDate": "2016-08-19T17:33:16.730"
               },
@@ -13219,7 +13219,7 @@ import {
         },
         "origin": "live",
         "correlationIds": [
-          
+
         ],
         "destination": {
           "ipHighBits": 0,
@@ -13228,7 +13228,7 @@ import {
           "ip": "172.31.9.169",
           "name": "172.31.9.169",
           "reputation": [
-            
+
           ]
         },
         "id": "OikKAfh1T2lrS0FmaERiR2wyWlU0eE9EVXVNVEV3TGpFek1pNHlNREZMTVRjeUxqTXhMamt1TVRZNS1RQ2xpdmVOc3NoLWJydXRlLWZvcmNl-Q",
@@ -13239,7 +13239,7 @@ import {
           "ip": "185.110.132.201",
           "name": "185.110.132.201",
           "reputation": [
-            
+
           ]
         },
         "type": "rank_alert"
@@ -13296,7 +13296,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 348,
@@ -13369,7 +13369,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 243,
@@ -13449,7 +13449,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 604,
@@ -13522,7 +13522,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 147,
@@ -13602,7 +13602,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 399,
@@ -13675,7 +13675,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 57,
@@ -13755,7 +13755,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 858,
@@ -13828,7 +13828,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 63,
@@ -13908,7 +13908,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 307,
@@ -13981,7 +13981,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 69,
@@ -14061,7 +14061,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 623,
@@ -14134,7 +14134,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 101,
@@ -14214,7 +14214,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 142,
@@ -14287,7 +14287,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 199,
@@ -14367,7 +14367,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 842,
@@ -14440,7 +14440,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 192,
@@ -14520,7 +14520,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 101,
@@ -14593,7 +14593,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 46,
@@ -14673,7 +14673,7 @@ import {
           "ip": "172.31.9.169",
           "name": "rank-sensor",
           "reputation": [
-            
+
           ]
         },
         "micros": 454,
@@ -14977,7 +14977,7 @@ class TimelineGraph extends React.Component {
           {
             rows.map(function(event, index) {
               let dateString = event[0].date;
-              
+
               let localTime = moment.utc(dateString).format('YYYY-MM-DD HH:mm:ss'),
                 d = new Date(localTime),
                 dateInUTCFormat = moment.utc(d.toUTCString()).format('YYYY-MM-DD HH:mm:ss');

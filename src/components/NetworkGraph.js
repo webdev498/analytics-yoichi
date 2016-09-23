@@ -1124,7 +1124,7 @@ class NetworkGraph extends React.Component {
           if (json[0] === undefined) {
             let position = getPos(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
-              'There are no nodes/edges available for extending the graph.';
+              'No additional results found.';
             $('#actionPerformed').css('top', position.y - 85);
             $('#actionPerformed').fadeIn('slow');
             $('#actionPerformed').fadeOut(3000);
@@ -1242,7 +1242,7 @@ class NetworkGraph extends React.Component {
           if (!isGraphExtended) {
             let position = getPos(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
-              'The responsed nodes/edges are already exists on the graph.';
+              'No additional results found.';
             $('#actionPerformed').css('top', position.y - 85);
             $('#actionPerformed').fadeIn('slow');
             $('#actionPerformed').fadeOut(3000);
