@@ -69,6 +69,7 @@ class TimelineGraph extends React.Component {
     this.pageChanged = this.pageChanged.bind(this);
     this.prevPageChanged = this.prevPageChanged.bind(this);
     this.nextPageChanged = this.nextPageChanged.bind(this);
+    this.fetchData = this.fetchData.bind(this);
   }
 
   /*updateSelectedArea() {
@@ -232,67 +233,68 @@ class TimelineGraph extends React.Component {
     );
   }
 
+  fetchData(that, pageNumber) {
+    that.setState({
+      'isFetching': true
+    });
+
+    const parameters = {
+      pageNumber: pageNumber,
+      timelineType: this.state.timelineType,
+      duration: this.state.duration,
+      alertDate: this.state.alertDate,
+      filter: this.state.filter,
+      pageSize: this.state.pageSize,
+      nextPageStart: this.state.nextPageStart
+    };
+
+    const fetchedData = fetchData(parameters);
+
+    if (!fetchedData) {
+      that.setState({
+        isFetching: false
+      });
+      return;
+    }
+    fetchedData.then(
+      function(json) {
+        console.log(json);
+        that.setState({
+          'isFetching': false,
+          'currentPage': pageNumber,
+          'rows': json.rows,
+          'nextPageStart': json.next
+        });
+      }
+    );
+  }
+
   pageChanged() {
     const that = this;
     return (pageNumber, e) => {
       e.preventDefault();
-      that.setState({
-        'isFetching': true
-      });
-
-      const parameters = {
-        pageNumber: pageNumber,
-        timelineType: this.state.timelineType,
-        duration: this.state.duration,
-        alertDate: this.state.alertDate,
-        filter: this.state.filter,
-        pageSize: this.state.pageSize,
-        nextPageStart: this.state.nextPageStart
-      };
-
-      const fetchedData = fetchData(parameters);
-
-      if (!fetchedData) {
-        that.setState({
-          isFetching: false
-        });
-        return;
-      }
-      fetchedData.then(
-        function(json) {
-          console.log(json);
-          that.setState({
-            'isFetching': false,
-            'currentPage': pageNumber,
-            'rows': json.rows,
-            'nextPageStart': json.next
-          });
-        }
-      );
+      this.fetchData(that, pageNumber);
     };
   }
 
-  prevPageChanged(pageNumber, e) {
-    e.preventDefault();
-    console.log('prev:', (parseInt(pageNumber) - 1));
-    if ((parseInt(pageNumber) - 1) > 0) {
-      this.setState({
-        'currentPage': pageNumber - 1
-      });
-      // this.populateData(pageNumber);
-      fetchData(pageNumber);
-    }
+  prevPageChanged() {
+    const that = this;
+    return (pageNumber, e) => {
+      e.preventDefault();
+      if ((parseInt(pageNumber) - 1) > 0) {
+        this.fetchData(that, pageNumber - 1);
+      }
+    };
   }
 
-  nextPageChanged(pageNumber, pageSize, e) {
-    e.preventDefault();
-    if ((parseInt(pageNumber) + 1) <= pageSize) {
-      this.setState({
-        'currentPage': pageNumber + 1
-      });
-      fetchData(pageNumber);
-      // this.populateData(pageNumber);
-    }
+  nextPageChanged() {
+    const that = this;
+    return (pageNumber, pageSize, e) => {
+      e.preventDefault();
+      if ((parseInt(pageNumber) + 1) <= pageSize) {
+        this.fetchData(that, pageNumber + 1);
+      }
+    };
   }
 
   render() {
@@ -347,8 +349,8 @@ class TimelineGraph extends React.Component {
         </div>
         <PaginationWidget Size={this.state.totalPage}
           onPageChanged={this.pageChanged()}
-          onPrevPageChanged={this.prevPageChanged}
-          onNextPageChanged={this.nextPageChanged}
+          onPrevPageChanged={this.prevPageChanged()}
+          onNextPageChanged={this.nextPageChanged()}
           currentPage={this.state.currentPage} />
       </div>
     );
