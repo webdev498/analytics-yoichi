@@ -5,7 +5,8 @@ import moment from 'moment';
 import {
   formatBytes,
   formatMicroseconds,
-  formatDateInLocalTimeZone
+  formatDateInLocalTimeZone,
+  getEventTypeString
 } from 'utils/utils';
 
 /*const data = {
@@ -14706,7 +14707,7 @@ import {
 };*/
 
 // const rows = data.rows;
-let rows = [];
+// let rows = [];
 let baseHeight = 500,
   timelineBarHeight = '2', // 2',
   timelineBarWidth = '50'; // '50';
@@ -14829,24 +14830,25 @@ class TimelineGraph extends React.Component {
   }
 
   componentDidMount() {
-    $('#slider-range').slider({
-      orientation: 'vertical',
-      range: 'min',
-      min: 0,
-      max: 100,
-      slide: this.updateSelectedArea()
-    });
+    // $('#slider-range').slider({
+    //   orientation: 'vertical',
+    //   range: 'min',
+    //   min: 0,
+    //   max: 100,
+    //   slide: this.updateSelectedArea()
+    // });
   }
 
   displayEventBar() {
     // return (a) => {
-      const {props} = this;
+      // const {props} = this;
 
-      if(!props.data) {
-        return;
-      }
+      // if(!props.data) {
+      //   return;
+      // }
 
-      rows = props.data.rows;
+      // rows = props.data.rows;
+
       // console.log(JSON.stringify(rows));
 
       // let prevTimestamp = 0,
@@ -14887,89 +14889,86 @@ class TimelineGraph extends React.Component {
 
   displayEvents(selectedMin, selectedMax) {
     // return (a) => {
-      const {props} = this;
+    const {props} = this;
 
-      if(!props.data) {
-        return;
+    if (!props.data) {
+      return;
+    }
+
+    const rows = props.data.rows;
+    // return (eventReturn) => {
+    let eventDetails = '';
+
+    rows.map(function(event, index) {
+      let dateString = event[0].date,
+        newLine = '<br />';
+
+      let stylenew = {
+        height: '20px',
+        width: '200px',
+        marginLeft: '150px'
+      };
+      // let barId = 'bar' + index,
+      //   topPositions = getPos(document.getElementById(barId));
+
+      // if (topPositions.y !== undefined) {
+      //   let top = topPositions.y - 215;
+      //   if (selectedMin !== '' && selectedMax !== '') {
+      //     if (selectedMin <= top && selectedMax >= top) {
+      //       if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+      //         document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
+      //       }
+      //     }
+      //     else {
+      //       if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+      //         document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
+      //       }
+      //       dateString = '';
+      //     }
+      //   }
+      //   else {
+      //     if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+      //       document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
+      //     }
+      //     dateString = '';
+      //   }
+      // }
+      if (dateString !== '') {
+        newLine = (index === 0) ? '' : '<br />';
+        let dateTime = formatDateInLocalTimeZone(dateString);
+        console.log('get details', getDetails(event[0]));
+        let details = getDetails(event[0]);
+        // details = details.toString();
+
+        eventDetails += '<div style="display:flex;">';
+        eventDetails += '<div style="width: 120px;"><span style="font-size: 9pt; font-weight: 600;">' + dateTime.date;
+        eventDetails += '<br/>' + dateTime.time + '</span></div>';
+        eventDetails += '<div style="height:170px;width:20px;font-size: 10pt;background-color:#fcc875;box-shadow: 2px 2px 0 #cccccc;writing-mode:tb;padding-top: 7px;">' + getEventTypeString(event[0].type) + '</div>';
+        eventDetails += '<div style="box-shadow: 2px 2px 0 #cccccc;float:left;padding: 10px;height:170px;width:500px;background-color:white;border: 1px solid #cbcbd1;font-size: 14px;margin-bottom:20px;">';
+        eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:semibold;">' + event[0].id + ' ' + event[0].type + '</div>';
+        eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:lighter;">' + details + '</div>';
+        // eventDetails += '<br/>Protocol: ' + event[0].protocol.service;
+        // eventDetails += '<br/>udpOrTcp: ' + event[0].protocol.udpOrTcp + '</div>';
+        eventDetails += '</div>';
+        eventDetails += '</div>';
+
+        // eventDetails += newLine + '<span style="font-size: 14px; font-weight: 600;">' + dateTime.date;
+        // eventDetails += '<br/>' + dateTime.time + '</span>';
       }
-
-      const rows = props.data.rows;
-      // return (eventReturn) => {
-      let eventDetails = '';
-
-      rows.map(function(event, index) {
-        let dateString = event[0].date,
-          newLine = '<br />';console.log(dateString);
-
-          console.log(JSON.stringify(dateString));
-
-        let stylenew = {
-          height: '20px',
-          width: '200px',
-          marginLeft: '150px'
-        };
-        let barId = 'bar' + index,
-          topPositions = getPos(document.getElementById(barId));
-
-        if (topPositions.y !== undefined) {
-          let top = topPositions.y - 215;
-          if (selectedMin !== '' && selectedMax !== '') {
-            if (selectedMin <= top && selectedMax >= top) {
-              if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
-                document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
-              }
-            }
-            else {
-              if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
-                document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
-              }
-              dateString = '';
-            }
-          }
-          else {
-            if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
-              document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
-            }
-            dateString = '';
-          }
-        }
-        if (dateString !== '') {
-          newLine = (index === 0) ? '' : '<br />';
-          let dateTime = formatDateInLocalTimeZone(dateString);
-          console.log('get details', getDetails(event[0]));
-          let details = getDetails(event[0]);
-          // details = details.toString();
-
-          eventDetails += '<div style="display:flex;">';
-          eventDetails += '<div style="width: 120px;"><span style="font-size: 9pt; font-weight: 600;">' + dateTime.date;
-          eventDetails += '<br/>' + dateTime.time + '</span></div>';
-          eventDetails += '<div style="height:150px;width:20px;background-color:#fcc875;box-shadow: 2px 2px 0 #cccccc;writing-mode:tb;">' + event[0].type + '</div>';
-          eventDetails += '<div style="box-shadow: 2px 2px 0 #cccccc;float:left;height:150px;width:500px;background-color:white;border: 1px solid #cbcbd1;font-size: 14px;margin-bottom:20px;">';
-          eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:semibold;">' + event[0].id + ' ' + event[0].type + '</div>';
-          eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:lighter;">' + details + '</div>';
-          // eventDetails += '<br/>Protocol: ' + event[0].protocol.service;
-          // eventDetails += '<br/>udpOrTcp: ' + event[0].protocol.udpOrTcp + '</div>';
-          eventDetails += '</div>';
-          eventDetails += '</div>';
-
-          // eventDetails += newLine + '<span style="font-size: 14px; font-weight: 600;">' + dateTime.date;
-          // eventDetails += '<br/>' + dateTime.time + '</span>';
-
-        }
-      });
-      return (
-        <div dangerouslySetInnerHTML={{__html: eventDetails}}></div>
-      );
+    });
+    return (
+      <div dangerouslySetInnerHTML={{__html: eventDetails}}></div>
+    );
     // };
   }
 
   render() {
     let prevTimestamp = 0,
-        prevMarginTop = 0;
+      prevMarginTop = 0;
 
     return (
-      <div>{this.displayEventBar()}
-        <div id='slider-range' style={{height: baseHeight + 'px', position: 'absolute'}}></div>
+      <div>{/*{this.displayEventBar()}*/}
+        {/*<div id='slider-range' style={{height: baseHeight + 'px', position: 'absolute'}}></div>
         <div id='selectedArea' style={this.state.style.selectedArea}></div>
         <div id='timelineGraph' style={{
           height: baseHeight + 'px', width: '70px', border: '0px solid red',
@@ -15007,7 +15006,7 @@ class TimelineGraph extends React.Component {
               );
             })
           }
-        </div>
+        </div>*/}
         <div style={{'marginLeft': '150px', 'position': 'absolute'}}>
           {this.displayEvents(this.state.selectedMin, this.state.selectedMax)}
         </div>
