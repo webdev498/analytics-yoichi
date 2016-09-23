@@ -55,6 +55,24 @@ div.contextMenu table tr td {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }
 
+.rotate {
+  /* Safari */
+  -webkit-transform: rotate(-90deg);
+
+  /* Firefox */
+  -moz-transform: rotate(-90deg);
+
+  /* IE */
+  -ms-transform: rotate(-90deg);
+
+  /* Opera */
+  -o-transform: rotate(-90deg);
+
+  /* Internet Explorer */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+
 /*******************************************/
 .ui-draggable, .ui-droppable {
   background-position: top;

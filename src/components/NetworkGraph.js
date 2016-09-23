@@ -119,7 +119,7 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
                 else {
                   // value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
                   value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-                    values[v][valueType];
+                    values[v][valueType] + '<br />' ;
                 }
               }
             }
