@@ -74,6 +74,7 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           let values = dataNode.metadata[metadataType],
             value1 = '',
             value2 = '',
+            value5 = '',
             newLine1 = '\n  ',
             newLine2 = '<br />';
 
@@ -115,11 +116,14 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
                   }
                   value1 += newLine1 + 'Reputation: ' + value3;
                   value2 += newLine2 + '<b>Reputation:</b> ' + value4;
+                  value5 += newLine2 + 'Reputation: ' + value4;
                 }
                 else {
                   // value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
                   value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-                    values[v][valueType] + '<br />' ;
+                    values[v][valueType] + '<br />';
+                  value5 += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
+                    values[v][valueType] + '<br />';
                 }
               }
             }
@@ -127,7 +131,7 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           if (value1 !== '') {
             nodeObject.label += '\n  ' + value1;
             nodeObject.title += '<br />' + value2;
-            nodeObject.nodeDetails += '<br />' + value2;
+            nodeObject.nodeDetails += '<br />' + value5;
 
             if (value1.indexOf('Scanning Host') > -1) {
               nodeStatus = 'scan';
