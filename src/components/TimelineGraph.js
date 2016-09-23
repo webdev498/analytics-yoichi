@@ -4,15 +4,15 @@ import moment from 'moment';
 import PaginationWidget from 'components/PaginationWidget';
 import Loader from '../components/Loader';
 import {
-  formatBytes,
-  formatMicroseconds,
   formatDateInLocalTimeZone,
   getEventTypeString
 } from 'utils/utils';
-import {baseUrl} from 'config';
-import Cookies from 'cookies-js';
+import {
+  fetchData,
+  getSourceDestination,
+  getDetails
+} from 'utils/timelineUtils';
 
-// const rows = data.rows;
 // let rows = [];
 let baseHeight = 500,
   timelineBarHeight = '2', // 2',
@@ -28,265 +28,6 @@ let style = {
     'background': Colors.smoke
   }
 };
-
-const styles = {
-  list: {
-    listStyleType: 'none',
-    margin: 0,
-    padding: 0
-  },
-  source: {
-    fontSize: '15px'
-  }
-};
-
-function getSource(source) {
-  let details = '';
-  if (source.ip) {
-    details += '<span>';
-    details += '<span>' + source.ip + ' </span>';
-    if (source.country) {
-      details += '<span class="flag-icon flag-icon-' + source.country.toLowerCase() + '"> </span>';
-    }
-    if (source.port) {
-      details += '<span> on Port ' + source.port + '</span>';
-    }
-    details += '</span>';
-  }
-
-  return details;
-}
-
-function getDestinaton(dest) {
-  let details = '';
-  if (dest.ip) {
-    details += '<span>';
-    details += '<span> connected to ' + dest.ip + ' </span>';
-    if (dest.country) {
-      details += '<span class={"flag-icon flag-icon-' + dest.country.toLowerCase() + '"> </span>';
-    }
-    if (dest.port) {
-      details += '<span> on Port ' + dest.port + '</span>';
-    }
-    details += '</span>';
-  }
-
-  return details;
-}
-
-function getSourceDestination(row) {
-  let details = '';
-  const {source, destination} = row;
-  details += '<div style={styles.source}>';
-  details += '<span>' + getSource(source) + '</span>';
-  details += '<span>' + getDestinaton(destination) + '</span>';
-  details += '</div>';
-  return details;
-}
-
-function getConn(row) {
-  const {data} = row;
-  let details = '';
-  details += '<div>';
-  details += '<span>Service: ' + data.conn.service + '</span><br />';
-  details += '<span>State: ' + data.conn.state + '</span><br />';
-  details += '<span>Requested Bytes: ' + formatBytes(data.conn.reqBytes, 2) + '</span><br />';
-  details += '<span>Response Bytes: ' + formatBytes(data.conn.respBytes, 2) + '</span><br />';
-  details += '<span>Duration: ' + formatMicroseconds(data.conn.duration) + '</span>';
-  details += '</div>';
-  return details;
-}
-
-function getSSH(row) {
-  const {data} = row;
-  let details = '';
-  details += '<div>';
-  details += '<span>Direction: ' + data.ssh.direction + '</span><br />';
-  details += '<span>Client: ' + data.ssh.client + '</span><br />';
-  details += '<span>Server: ' + data.ssh.server + '</span><br />';
-  details += '<span>Successful: ' + data.ssh.success + '</span>';
-  details += '</div>';
-  return details;
-}
-
-function getDNS(row) {
-  const {data} = row;
-  let details = '';
-  details += '<div>';
-  details += '<span>DNS Response: ' + data.dns.answers[0] + '</span>';
-  details += '</div>';
-  return details;
-}
-
-function getHTTP(row) {
-  const {data} = row;
-  let details = '';
-  details += '<div>';
-  details += '<span>User Agent: ' + data.http.userAgent + '</span><br />';
-  details += '<span>Referrer: ' + data.http.referrer + '</span>';
-  details += '</div>';
-  return details;
-}
-
-function getSSL(row) {
-  const {data} = row;
-  let details = '';
-  details += '<div>';
-  details += '<span>Server: ' + data.ssl.serverName + '</span><br />';
-  details += '<span>SSL Version: ' + data.ssl.versio + '</span><br />';
-  details += '<span>Issuer: ' + data.ssl.issue + '</span>';
-  details += '</div>';
-  return details;
-}
-
-function getFile(row) {
-  const {data} = row;
-  let details = '';
-  details += '<div>';
-  details += '<span>Source: ' + data.files.txHosts[0] + '</span><br />';
-  details += '<span>Destination: ' + data.files.rxHosts[0] + '</span><br />';
-  details += '<span>File Hash: ' + data.files.sha256 + '</span>';
-  details += '</div>';
-  return details;
-}
-
-function getReport(row) {
-  const {data} = row;
-  let details = '';
-  details += '<div>';
-  details += '<span>File Name: ' + data.report.file.fileName + '</span><br />';
-  details += '<span>sha256: ' + data.report.file.sha256 + '</span><br />';
-  details += '<span>Status: ' + data.report.status + '</span><br />';
-  details += '<span>Score: ' + data.report.score + '</span><br />';
-  details += '<span>MIME Type: ' + data.report.file.mimeType + '</span>';
-  details += '</div>';
-  return details;
-}
-
-function getAlert(row) {
-  const {data} = row;
-  let details = '';
-  details += '<div>';
-  details += '<span>Severity: ' + data.alert.severity + '</span><br />';
-  details += '<span>Signature: ' + data.alert.signature + '</span><br />';
-  details += '<span>Protocol: ' + data.alert.proto + '</span><br />';
-  details += '<span>Category: ' + data.alert.category + '</span>';
-  details += '</div>';
-  return details;
-}
-
-function getOther(data) {
-  const keys = Object.keys(data);
-
-  function getDetails(value) {
-    const keys = Object.keys(value);
-    return keys.map((key) => {
-      return (<li>{key}: {value[key]} &nbsp;&nbsp;</li>);
-    });
-  }
-
-  return (
-    <ul style={styles.list}>
-      {
-        keys.map((key) => {
-          const value = data[key];
-          if (Object.keys(value) > 1) {
-            return getDetails(value);
-          }
-          else {
-            return (<li>{key}: {value} &nbsp;&nbsp;</li>);
-          }
-        })
-      }
-    </ul>
-  );
-}
-
-function getDetails(row) {
-  switch (row.type.toLowerCase()) {
-    case 'conn':
-      return getConn(row);
-    case 'ssh':
-      return getSSH(row);
-    case 'dns':
-      return getDNS(row);
-    case 'http':
-      return getHTTP(row);
-    case 'ssl':
-      return getSSL(row);
-    case 'file':
-      return getFile(row);
-    case 'report':
-      return getReport(row);
-    case 'alert':
-      return getAlert(row);
-    default:
-      return getOther(row.data[row.type]);
-  }
-}
-
-function getTimelineColor(eventType) {
-  let color = '';
-  switch (eventType) {
-    case 'conn':
-      color = Colors.defaultTimelineGraphPaletteColors[0];
-      break;
-    case 'ip':
-      color = Colors.defaultTimelineGraphPaletteColors[1];
-      break;
-    case 'ssh':
-      color = Colors.defaultTimelineGraphPaletteColors[2];
-      break;
-    case 'dns':
-      color = Colors.turquoise;
-      break;
-    case 'ssl':
-      color = Colors.cloud;
-      break;
-    case 'file':
-      color = Colors.garnet;
-      break;
-    case 'http':
-      color = 'red';
-      break;
-  }
-  return color;
-}
-
-function getPos(el) {
-  let lx = 0, ly = 0;
-  for (lx = 0, ly = 0;
-     el != null;
-     lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
-  return {x: lx, y: ly};
-}
-
-function fetchData(pageNumber) {
-  const accessToken = Cookies.get('access_token'),
-    tokenType = Cookies.get('token_type'),
-    apiUrl = baseUrl + '/api/alert/' + this.state.timelineType + '?window=' + this.state.duration +
-    '&date=' + this.state.alertDate + '&filter=' + this.state.filter + '&count=' + this.state.pageSize +
-    '&from=' + pageNumber,
-    customHeaders = {
-      'Accept': 'application/json'
-    },
-    defaultHeaders = Object.assign({
-      'Authorization': `${tokenType} ${accessToken}`
-    }, customHeaders);
-
-  return fetch(apiUrl, {
-    method: 'GET',
-    headers: defaultHeaders
-  })
-  .then(response => response.json()
-  )
-  .catch(error => {
-    this.setState({
-      isFetching: false
-    });
-    return Promise.reject(Error(error.message));
-  });
-}
 
 class TimelineGraph extends React.Component {
   static propTypes = {
@@ -322,16 +63,15 @@ class TimelineGraph extends React.Component {
       'isFetching': false
     };
 
-    this.updateSelectedArea = this.updateSelectedArea.bind(this);
+    // this.updateSelectedArea = this.updateSelectedArea.bind(this);
+    // this.displayEventBar = this.displayEventBar.bind(this);
     this.displayEvents = this.displayEvents.bind(this);
-    this.displayEventBar = this.displayEventBar.bind(this);
     this.pageChanged = this.pageChanged.bind(this);
     this.prevPageChanged = this.prevPageChanged.bind(this);
     this.nextPageChanged = this.nextPageChanged.bind(this);
-    this.fetchData = this.fetchData.bind(this);
   }
 
-  updateSelectedArea() {
+  /*updateSelectedArea() {
     return (event) => {
       let sliderValue = $('#slider-range').slider('value'),
         selectedRange = [
@@ -415,10 +155,9 @@ class TimelineGraph extends React.Component {
       //   );
       // })
     // };
-  }
+  }*/
 
   displayEvents(selectedMin, selectedMax) {
-    // return (a) => {
     if (this.state.rows.length === 0) {
       const {props} = this;
 
@@ -493,33 +232,6 @@ class TimelineGraph extends React.Component {
     );
   }
 
-  fetchData(pageNumber) {
-    const accessToken = Cookies.get('access_token'),
-      tokenType = Cookies.get('token_type'),
-      apiUrl = baseUrl + '/api/alert/' + this.state.timelineType + '?window=' + this.state.duration +
-      '&date=' + this.state.alertDate + '&filter=' + this.state.filter + '&count=' + this.state.pageSize +
-      '&from=' + this.state.nextPageStart,
-      customHeaders = {
-        'Accept': 'application/json'
-      },
-      defaultHeaders = Object.assign({
-        'Authorization': `${tokenType} ${accessToken}`
-      }, customHeaders);
-
-    return fetch(apiUrl, {
-      method: 'GET',
-      headers: defaultHeaders
-    })
-    .then(response => response.json()
-    )
-    .catch(error => {
-      this.setState({
-        isFetching: false
-      });
-      return Promise.reject(Error(error.message));
-    });
-  }
-
   pageChanged() {
     const that = this;
     return (pageNumber, e) => {
@@ -528,7 +240,17 @@ class TimelineGraph extends React.Component {
         'isFetching': true
       });
 
-      const fetchedData = that.fetchData(pageNumber);
+      const parameters = {
+        pageNumber: pageNumber,
+        timelineType: this.state.timelineType,
+        duration: this.state.duration,
+        alertDate: this.state.alertDate,
+        filter: this.state.filter,
+        pageSize: this.state.pageSize,
+        nextPageStart: this.state.nextPageStart
+      };
+
+      const fetchedData = fetchData(parameters);
 
       if (!fetchedData) {
         that.setState({
