@@ -6,7 +6,7 @@ import koaRouter from 'koa-router';
 
 import {getData} from '../components/paretoChart'
 
-import {serverBaseUrl} from '../../env';
+import {serverBaseUrl} from '../../serverEnv';
 import layoutRoutes from './layouts';
 
 const router = new koaRouter({

@@ -19,7 +19,7 @@ const styles = {
 class riskAssetsTable extends React.Component {
   static propTypes = {
     data: PropTypes.object,
-    updateRoute: PropTypes.func.isRequired
+    updateRoute: PropTypes.func
   }
 
   constructor(props) {

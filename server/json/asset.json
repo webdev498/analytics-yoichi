@@ -87,7 +87,8 @@
         "children": [
           {
             "chartOptions": {
-              "xAxisName": "",
+              "xAxisName": "TIME",
+              "divLineThickness": "2",
               "lineThickness": "1",
               "showYAxisValues": "1",
               "xAxisNameFontSize": "10",
@@ -140,7 +141,18 @@
               "style": {
                 "width": "100%",
                 "padding": 0,
-                "boxShadow": "none"
+                "boxShadow": "none",
+                "marginBottom": "35px"
+              },
+              "header": {
+                "style": {
+                  "paddingBottom": 0
+                },
+                "title": {
+                  "fontSize": "13px",
+                  "fontWeight": 600,
+                  "textTransform": "capitalize"
+                }
               },
               "id": "dns-lookups-chart"
             },
@@ -148,6 +160,63 @@
             "type": "MultiSeriesLineChart"
           },
           {
+            "chartOptions": {
+              "paletteColors": "#2bd8d0,#F69275",
+              "xAxisName": "MACHINES IN NETWORK",
+              "divLineThickness": "2",
+              "showYAxisValues": "1",
+              "xAxisNameFontSize": "10",
+              "yAxisNameFontSize": "10",
+              "labelFontSize": "8",
+              "drawAnchors": "1",
+              "anchorRadius": "1",
+              "showlegend": "0",
+              "outCnvBaseFontSize": "8"
+            },
+            "chartData": {},
+            "meta": {
+              "showHeader": true,
+              "showRefresh": false,
+              "api": null,
+              "title": "Login Count"
+            },
+            "attributes": {
+              "chartHeight": "200",
+              "chartCaption": {
+                "display": "none"
+              },
+              "style": {
+                "width": "100%",
+                "padding": 0,
+                "boxShadow": "none",
+                "marginBottom": "35px"
+              },
+              "header": {
+                "style": {
+                  "paddingBottom": 0
+                },
+                "title": {
+                  "fontSize": "13px",
+                  "fontWeight": 600,
+                  "textTransform": "capitalize"
+                }
+              },
+              "id": "login-count-chart"
+            },
+            "id": "login-count",
+            "type": "MultiSeriesColumn2d"
+          },
+          {
+            "header": {
+              "style": {
+                "paddingBottom": 0
+              },
+              "title": {
+                "fontSize": "13px",
+                "fontWeight": 600,
+                "textTransform": "capitalize"
+              }
+            },
             "id": "connections-by-protocol",
             "type": "HorizontalBarChart",
             "meta": {
@@ -168,20 +237,30 @@
               "chartCaption": {
                 "display": "none"
               },
-              "chartWidth": "250px",
-              "chartHeight": "250px",
+              "chartWidth": "100%",
+              "chartHeight": "200px",
               "style": {
                 "width": "100%",
                 "padding": 0,
-                "boxShadow": "none",
-                "marginBottom": "50px"
+                "boxShadow": "none"
+              },
+              "header": {
+                "style": {
+                  "paddingBottom": 0
+                },
+                "title": {
+                  "fontSize": "13px",
+                  "fontWeight": 600,
+                  "textTransform": "capitalize"
+                }
               },
               "id": "connections-by-protocol-chart"
             },
             "chartOptions": {
               "showValues": "1",
               "showLabels": "1",
-              "chartRightMargin": "0"
+              "chartRightMargin": "0",
+              "divLineThickness": "2"
             },
             "chart": {
               "showAnnotations": false
@@ -199,6 +278,85 @@
               ],
               "multipleReportIds": false
             }
+          },
+          {
+            "chartOptions": {
+              "xAxisName": "TIME",
+              "divLineThickness": "2",
+              "lineThickness": "1",
+              "showYAxisValues": "1",
+              "xAxisNameFontSize": "10",
+              "yAxisNameFontSize": "10",
+              "labelFontSize": "8",
+              "drawAnchors": "1",
+              "anchorRadius": "1",
+              "showlegend": "0",
+              "outCnvBaseFontSize": "8"
+            },
+            "chartData": {
+              "multipleReports": true,
+              "fieldMapping": {
+                "x": [{
+                  "reportId": "taf_asset_total_bandwidth_internal_by_time",
+                  "columns": ["date"]
+                }],
+                "y": [
+                  {
+                    "reportId": "taf_asset_total_bandwidth_internal_by_time",
+                    "columns": [
+                      "bandwidth"
+                    ],
+                    "seriesname": "Internal Bandwidth"
+                  },
+                  {
+                    "reportId": "taf_asset_total_bandwidth_external_by_time",
+                    "columns": [
+                      "bandwidth"
+                    ],
+                    "seriesname": "External Bandwidth"
+                  }
+                ]
+              }
+            },
+            "meta": {
+              "showHeader": true,
+              "showRefresh": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_asset_total_bandwidth_internal_by_time,taf_asset_total_bandwidth_external_by_time"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              },
+              "title": "Data Transfered"
+            },
+            "attributes": {
+              "chartHeight": "200",
+              "chartCaption": {
+                "display": "none"
+              },
+              "style": {
+                "width": "100%",
+                "padding": 0,
+                "boxShadow": "none",
+                "marginTop": "35px"
+              },
+              "header": {
+                "style": {
+                  "paddingBottom": 0
+                },
+                "title": {
+                  "fontSize": "13px",
+                  "fontWeight": 600,
+                  "textTransform": "capitalize"
+                }
+              },
+              "id": "data-transfer-chart"
+            },
+            "id": "data-transfer",
+            "type": "MultiSeriesLineChart"
           }
         ]
       }

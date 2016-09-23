@@ -31,7 +31,7 @@ const styles = {
     textTransform: 'capitalize',
     fontSize: '21px',
     fontWeight: 300,
-    'whiteSpace': 'nowrap'
+    whiteSpace: 'nowrap'
   },
   iconWrap: {
     marginLeft: 'auto',
@@ -230,13 +230,17 @@ class ParentCard extends React.Component {
       const childProps = Object.assign({}, props, {search: this.state.search}),
         cardStyle = {...styles.wrap, ...props.attributes.style};
 
+      const headerStyle = props.attributes.header || {};
+
       return (
         <Card style={cardStyle} id={props.id}>
           {props.isFetching ? <Loader /> : null}
 
-          <header style={styles.header}>
+          <header style={{...styles.header, ...headerStyle.style}}>
             <div>
-              <span style={styles.title}>{props.meta.title}</span>
+              <span style={{...styles.title, ...headerStyle.title}}>
+                {props.meta.title}
+              </span>
             </div>
 
             {

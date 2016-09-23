@@ -9,12 +9,10 @@ import { fetchUserData, logout } from 'actions/auth';
 import { fetchActionsList } from 'actions/actionsList';
 
 import Loader from 'components/Loader';
-// import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
 import 'styles/core.scss';
-import {
-  openKibanaInNewWindow
-} from '../../../env.js';
+
+const openKibanaInNewWindow = window.global && window.global.openKibanaInNewWindow;
 
 const styles = {
   kibana: {

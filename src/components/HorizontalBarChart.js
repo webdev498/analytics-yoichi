@@ -24,7 +24,7 @@ const styles = {
     color: Colors.grape
   },
   minHeight: {
-    minHeight: '200px'
+    minHeight: '150px'
   },
   noData: {}
 };
