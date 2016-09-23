@@ -10,24 +10,24 @@ class PaginationWidget extends React.Component {
   }
 
   render() {
-    // console.log('currentPage:'+this.props.currentPage);
     var li = [];
     var pageCount = this.props.Size;
+    console.log(pageCount, this.props.currentPage);
     for (var i = 1; i <= pageCount; i++) {
       if (i === 1) {
         li.push(<li key='Prev' >
-          <a onClick={this.props.onPrevPageChanged.bind(null, this.props.currentPage)}>Prev</a>
+          <button onClick={this.props.onPrevPageChanged.bind(null, this.props.currentPage)}>Prev</button>
         </li>);
       }
       if (this.props.currentPage === i) {
-        li.push(<li key={i} className='active'><a>{i}</a></li>);
+        li.push(<li key={i} className='active'><button>{i}</button></li>);
       }
       else {
-        li.push(<li key={i} ><a onClick={this.props.onPageChanged.bind(null, i)}>{i}</a></li>);
+        li.push(<li key={i} ><button onClick={this.props.onPageChanged.bind(null, i)}>{i}</button></li>);
       }
       if (i === pageCount) {
         li.push(<li key='Next' >
-          <a onClick={this.props.onNextPageChanged.bind(null, this.props.currentPage, pageCount)}>Next</a>
+          <button onClick={this.props.onNextPageChanged.bind(null, this.props.currentPage, pageCount)}>Next</button>
         </li>);
       }
     }
