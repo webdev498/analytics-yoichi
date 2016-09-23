@@ -167,7 +167,7 @@ class TimelineGraph extends React.Component {
       }
 
       this.state.totalCount = props.data.total;
-      this.state.totalPage = (props.data.total / props.attributes.noOfEventsPerPage);
+      this.state.totalPage = parseInt(props.data.total / props.attributes.noOfEventsPerPage);
       this.state.currentPage = 1;
       this.state.pageSize = props.attributes.noOfEventsPerPage;
       this.state.nextPageStart = props.data.next;
@@ -222,7 +222,7 @@ class TimelineGraph extends React.Component {
         eventDetails += '<br/>' + dateTime.time + '</span></div>';
         eventDetails += '<div style="height:190px;width:20px;font-size: 10pt;background-color:#fcc875;box-shadow: 2px 2px 0 #cccccc;writing-mode:tb;padding-top: 7px;">' + getEventTypeString(event[0].type) + '</div>';
         eventDetails += '<div style="box-shadow: 2px 2px 0 #cccccc;float:left;padding: 10px;height:190px;width:500px;background-color:white;border: 1px solid #cbcbd1;font-size: 14px;margin-bottom:20px;">';
-        eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:semibold;">' + getSourceDestination(event[0]) + '</div>';
+        eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:600;">' + getSourceDestination(event[0]) + '</div>';
         eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:lighter;">' + details + '</div>';
         eventDetails += '</div>';
         eventDetails += '</div>';

@@ -10,25 +10,36 @@ class PaginationWidget extends React.Component {
   }
 
   render() {
-    var li = [];
-    var pageCount = this.props.Size;
-    console.log(pageCount, this.props.currentPage);
-    for (var i = 1; i <= pageCount; i++) {
-      if (i === 1) {
+    let li = [];
+    let pageCount = this.props.Size,
+      currentPage = this.props.currentPage;
+    let start = currentPage - 4;
+    let end = currentPage + 4;
+    if (currentPage < 5) {
+      start = 1;
+      end = 9;
+    }
+    if (currentPage > pageCount - 4) {
+      start = pageCount - 8;
+      end = pageCount;
+    }
+    if (pageCount > 0) {
+      for (let i = start; i <= end; i++) {
         li.push(<li key='Prev' >
           <button onClick={this.props.onPrevPageChanged.bind(null, this.props.currentPage)}>Prev</button>
         </li>);
-      }
-      if (this.props.currentPage === i) {
-        li.push(<li key={i} className='active'><button>{i}</button></li>);
-      }
-      else {
-        li.push(<li key={i} ><button onClick={this.props.onPageChanged.bind(null, i)}>{i}</button></li>);
-      }
-      if (i === pageCount) {
-        li.push(<li key='Next' >
-          <button onClick={this.props.onNextPageChanged.bind(null, this.props.currentPage, pageCount)}>Next</button>
-        </li>);
+
+        if (this.props.currentPage === i) {
+          li.push(<li key={i} className='active'><button>{i}</button></li>);
+        }
+        else {
+          li.push(<li key={i} ><button onClick={this.props.onPageChanged.bind(null, i)}>{i}</button></li>);
+        }
+        if (i === end) {
+          li.push(<li key='Next' >
+            <button onClick={this.props.onNextPageChanged.bind(null, this.props.currentPage, pageCount)}>Next</button>
+          </li>);
+        }
       }
     }
     return (<ul className='pagination'>{li}</ul>);
