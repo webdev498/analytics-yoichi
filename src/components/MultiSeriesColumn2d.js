@@ -80,10 +80,10 @@ class MultiSeriesColumn2d extends React.Component {
     function getApiObj(params) {
       let reportId;
       if (params.type === 'user') {
-        reportId = 'taf_asset_logins_on_machine_by_users';
+        reportId = 'taf_asset_logins_by_user_on_machines';
       }
       else {
-        reportId = 'taf_asset_logins_by_user_on_machines';
+        reportId = 'taf_asset_logins_on_machine_by_users';
       }
 
       return [
@@ -107,7 +107,7 @@ class MultiSeriesColumn2d extends React.Component {
           'queryParams': {
             'window': '',
             'user': 'assetId:pathParam',
-            'status': 'success'
+            'status': 'fail'
           },
           'id': 'fail'
         }
