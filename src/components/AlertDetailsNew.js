@@ -17,7 +17,13 @@ const styles = {
   },
   itemTitle: {
     width: '100px',
-    display: 'inline-block'
+    fontSize: '13px',
+    display: 'inline-block',
+    fontWeight: '600',
+    margin: 0
+  },
+  date: {
+    fontWeight: '300'
   },
   error: {
     textAlign: 'center',
@@ -49,7 +55,7 @@ class AlertDetailsNew extends React.Component {
           <h5 style={styles.itemTitle}>
             DATE & TIME
           </h5>
-          <div>
+          <div style={styles.date}>
             {date}
             <span>&nbsp;&nbsp;&nbsp;</span>
             {time}
