@@ -17,13 +17,23 @@ class PaginationWidget extends React.Component {
     let end = currentPage + 4;
     if (currentPage < 5) {
       start = 1;
-      end = 9;
+      if (pageCount < 9) {
+        end = pageCount;
+      }
+      else {
+        end = 9;
+      }
     }
     if (currentPage > pageCount - 4) {
-      start = pageCount - 8;
+      if ((pageCount - 8) < 1) {
+        start = 1;
+      }
+      else {
+       start = pageCount - 8; 
+      }
       end = pageCount;
     }
-    if (pageCount > 0) {
+    if (pageCount > 0 && start > 0 && end > 0) {
       for (let i = start; i <= end; i++) {
         li.push(<li key='Prev' >
           <button onClick={this.props.onPrevPageChanged.bind(null, this.props.currentPage)}>Prev</button>

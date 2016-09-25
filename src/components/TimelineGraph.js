@@ -16,7 +16,8 @@ import {
 // let rows = [];
 let baseHeight = 500,
   timelineBarHeight = '2', // 2',
-  timelineBarWidth = '50'; // '50';
+  timelineBarWidth = '50', // '50';
+  timeWindow = '1h';
 
 let style = {
   'selectedArea': {
@@ -51,7 +52,6 @@ class TimelineGraph extends React.Component {
       'selectedMin': '',
       'selectedMax': '',
       'timelineType': props.meta.api.pathParams.type,
-      'duration': props.duration,
       'alertDate': props.meta.api.queryParams.date,
       'filter': props.meta.api.queryParams.filter,
       'totalCount': 0,
@@ -159,9 +159,8 @@ class TimelineGraph extends React.Component {
   }*/
 
   displayEvents(selectedMin, selectedMax) {
-    if (this.state.rows.length === 0) {
-      const {props} = this;
-
+    const {props} = this;
+    if (this.state.rows.length === 0 || timeWindow !== props.duration) {
       if (!props.data) {
         return;
       }
@@ -172,7 +171,7 @@ class TimelineGraph extends React.Component {
       this.state.pageSize = props.attributes.noOfEventsPerPage;
       this.state.nextPageStart = props.data.next;
       this.state.rows = props.data.rows;
-      this.state.duration = props.duration;
+      timeWindow = props.duration;
     }
 
     const rows = this.state.rows;
@@ -241,7 +240,7 @@ class TimelineGraph extends React.Component {
     const parameters = {
       pageNumber: pageNumber,
       timelineType: this.state.timelineType,
-      duration: this.state.duration,
+      duration: timeWindow,
       alertDate: this.state.alertDate,
       filter: this.state.filter,
       pageSize: this.state.pageSize,
