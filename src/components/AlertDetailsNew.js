@@ -36,6 +36,19 @@ class AlertDetailsNew extends React.Component {
     data: PropTypes.object
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {data, meta, params, fetchApiData} = nextProps;
+
+    if (data) {
+      const {data: {rank_alert: {chartsFilter}}} = data;
+
+      if (chartsFilter) {
+        const {fetchDataFor: {id, api}} = meta;
+        fetchApiData(id, api, params, chartsFilter);
+      }
+    }
+  }
+
   render() {
     let {data} = this.props;
     if (!data) return null;

@@ -58,7 +58,23 @@ router
     }
   );
 
-  ctx.set('content-type', res.headers.get('content-type'));
+  ctx.set('content-type', res.headers.get('content-type'))
+  ctx.body = res.body;
+})
+.post('*', async function (ctx, next) {
+  const url = ctx.request.url;
+  console.log('url', url);
+  const res = await fetch(serverBaseUrl + ctx.url,
+    {
+      method: 'POST',
+      headers: ctx.headers,
+      'rejectUnauthorized': false,
+      agent,
+      body: JSON.stringify(ctx.request.body)
+    }
+  );
+
+  ctx.set('content-type', res.headers.get('content-type'))
   ctx.body = res.body;
 });
 

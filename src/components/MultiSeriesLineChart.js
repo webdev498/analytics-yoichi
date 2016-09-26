@@ -172,6 +172,7 @@ class MultiSeriesLineChart extends React.Component {
 
   render() {
     const {props} = this;
+    // console.log('multiLineChart.js', props.data);
     return (
       <div id={props.attributes.id}>{this.renderChart(props)}</div>
     );

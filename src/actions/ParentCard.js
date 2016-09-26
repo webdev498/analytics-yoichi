@@ -103,7 +103,7 @@ function getUrl(api, duration, routerParams) {
   return baseUrl + url + queryString;
 }
 
-export function fetchApiData(id, api, params) {
+export function fetchApiData(id, api, params, body) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
 
@@ -123,8 +123,9 @@ export function fetchApiData(id, api, params) {
     if (Array.isArray(api)) {
       const arr = api.map((apiObj) => {
         return fetch(getUrl(apiObj, currentDuration, params), {
-          method: 'GET',
-          headers: defaultHeaders
+          method: api.method || 'GET',
+          headers: defaultHeaders,
+          body
         })
         .then(response => response.json());
       });
@@ -150,8 +151,11 @@ export function fetchApiData(id, api, params) {
     }
     else {
       return fetch(getUrl(api, currentDuration, params), {
-        method: 'GET',
-        headers: defaultHeaders
+        method: api.method || 'GET',
+        headers: Object.assign({}, defaultHeaders, {
+          'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify(body)
       })
       .then(response => {
         return response.json();
