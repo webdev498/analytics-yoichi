@@ -3,6 +3,7 @@ import {Colors} from 'theme/colors';
 import moment from 'moment';
 import PaginationWidget from 'components/PaginationWidget';
 import Loader from '../components/Loader';
+import Card from 'material-ui/Card/Card';
 import {
   formatDateInLocalTimeZone,
   getEventTypeString
@@ -219,11 +220,14 @@ class TimelineGraph extends React.Component {
         eventDetails += '<div style="display:flex;">';
         eventDetails += '<div style="width: 120px;"><span style="font-size: 9pt; font-weight: 600;">' + dateTime.date;
         eventDetails += '<br/>' + dateTime.time + '</span></div>';
-        eventDetails += '<div style="height:190px;width:20px;font-size: 10pt;background-color:#fcc875;box-shadow: 2px 2px 0 #cccccc;writing-mode:tb;padding-top: 7px;">' + getEventTypeString(event[0].type) + '</div>';
-        eventDetails += '<div style="box-shadow: 2px 2px 0 #cccccc;float:left;padding: 10px;height:190px;width:500px;background-color:white;border: 1px solid #cbcbd1;font-size: 14px;margin-bottom:20px;">';
+        // eventDetails += '<div style="height:190px;width:20px;font-size: 10pt;background-color:#fcc875;box-shadow: 2px 2px 0 #cccccc;writing-mode:tb;padding-top: 7px;">' + getEventTypeString(event[0].type) + '</div>';
+        eventDetails += '<div style="box-shadow: 2px 2px 0 #cccccc;float:left;padding: 10px;height:215px;width:500px;background-color:white;border: 1px solid #cbcbd1;font-size: 14px;margin-bottom:20px;">';
+        // eventDetails += '<Card>';
         eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:600;">' + getSourceDestination(event[0]) + '</div>';
+        eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:lighter;">Type: ' + getEventTypeString(event[0].type) + '</div>';
         eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:lighter;">' + details + '</div>';
         eventDetails += '</div>';
+        // eventDetails += '</Card>';
         eventDetails += '</div>';
       }
     });
