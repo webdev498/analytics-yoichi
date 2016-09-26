@@ -487,7 +487,7 @@ export function formatMicroseconds(miliseconds) {
   var ms = miliseconds % 1000;
   if (ms >= 0) timeString += (ms + ' ms');
 
-  return Math.floor(timeString / 1000);
+  return timeString;// Math.floor(timeString / 1000);
 }
 
 export function kFormatter(num) {

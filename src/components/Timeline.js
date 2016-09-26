@@ -148,7 +148,8 @@ class TimelineGraph extends React.Component {
                       <br />{dateTime.time}</span>
                   </div>
 
-                  <Card style={{boxShadow: '1px 1px 0 #cccccc',
+                  <Card style={{
+                    boxShadow: '1px 1px 0 #cccccc',
                     padding: '10px',
                     height: '215px',
                     width: '500px',
@@ -156,13 +157,13 @@ class TimelineGraph extends React.Component {
                     border: '1px solid #cbcbd1',
                     fontSize: '14px',
                     marginBottom: '20px'}}>
-                    <div style={{fontSize: '13pt', Color: '#444C63', fontWeight: '600'}}>
+                    <div style={{fontSize: '13pt', Color: Colors.grape, fontWeight: '600'}}>
                       {getSourceDestination(event[0])}
                     </div>
-                    <div style={{fontSize: '13pt', color: '#444C63', fontWeight: 'lighter'}}>
+                    <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
                       Type: {getEventTypeString(event[0].type)}
                     </div>
-                    <div style={{fontSize: '13pt', color: '#444C63', fontWeight: 'lighter'}}>
+                    <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
                       {getDetails(event[0])}
                     </div>
                   </Card>

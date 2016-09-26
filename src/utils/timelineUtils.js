@@ -122,11 +122,11 @@ function getConn(row) {
   const {data} = row;
   return (
     <div>
-      <span>Service: {data.conn.service} </span><br />
-      <span>State: {data.conn.state} </span><br />
-      <span>Requested Bytes: {formatBytes(data.conn.reqBytes, 2)} </span><br />
-      <span>Response Bytes: {formatBytes(data.conn.respBytes, 2)} </span><br />
-      <span>Duration: {formatMicroseconds(data.conn.duration)} </span>
+      {checkForNANUndefined(data.conn.service, 'Service', true)}
+      {checkForNANUndefined(data.conn.state, 'State', true)}
+      {checkForNANUndefined(formatBytes(data.conn.reqBytes, 2), 'Requested Bytes', true)}
+      {checkForNANUndefined(formatBytes(data.conn.respBytes, 2), 'Response Bytes', true)}
+      {checkForNANUndefined(formatMicroseconds(data.conn.duration), 'Duration', false)}
     </div>
   );
 }
@@ -135,10 +135,10 @@ function getSSH(row) {
   const {data} = row;
   return (
     <div>
-      <span>Direction: {data.ssh.direction} </span><br />
-      <span>Client: {data.ssh.client} </span><br />
-      <span>Server: {data.ssh.server} </span><br />
-      <span>Successful: {data.ssh.success} </span>
+      {checkForNANUndefined(data.ssh.direction, 'Direction', true)}
+      {checkForNANUndefined(data.ssh.client, 'Client', true)}
+      {checkForNANUndefined(data.ssh.server, 'Server', true)}
+      {checkForNANUndefined(data.ssh.success, 'Successful', false)}
     </div>
   );
 }
@@ -148,7 +148,7 @@ function getDNS(row) {
 
   return (
     <div>
-      <span>DNS Response: {data.dns.answers[0]}</span>
+      {checkForNANUndefined(data.dns.answers[0], 'DNS Response', true)}
     </div>
   );
 }
@@ -158,9 +158,8 @@ function getHTTP(row) {
 
   return (
     <div>
-      <span>User Agent: {data.http.userAgent} </span>
-      <br />
-      <span>Referrer: {data.http.referrer} </span>
+      {checkForNANUndefined(data.http.userAgent, 'User Agent', true)}
+      {checkForNANUndefined(data.http.referrer, 'Referrer', false)}
     </div>
   );
 }
@@ -170,9 +169,9 @@ function getSSL(row) {
 
   return (
     <div>
-      Server: {data.ssl.serverName}<br />
-      SSL Version: {data.ssl.versio}<br />
-      Issuer: {data.ssl.issue}
+      {checkForNANUndefined(data.ssl.serverName, 'Server', true)}
+      {checkForNANUndefined(data.ssl.version, 'SSL Version', true)}
+      {checkForNANUndefined(data.ssl.issue, 'Issuer', false)}
     </div>
   );
 }
@@ -182,9 +181,9 @@ function getFile(row) {
 
   return (
     <div>
-      Source: {data.files.txHosts[0]}<br />
-      Destination: {data.files.rxHosts[0]}<br />
-      File Hash: {data.files.sha256}
+      {checkForNANUndefined(data.files.txHosts[0], 'Source', true)}
+      {checkForNANUndefined(data.files.rxHosts[0], 'Destination', true)}
+      {checkForNANUndefined(data.files.sha256, 'File Hash', false)}
     </div>
   );
 }
@@ -193,11 +192,11 @@ function getReport(row) {
   const {data} = row;
   return (
     <div>
-      File Name: {data.report.file.fileName}<br />
-      sha256: {data.report.file.sha256}<br />
-      Status: {data.report.status}<br />
-      Score: {data.report.score}<br />
-      MIME Type: {data.report.file.mimeType}
+      {checkForNANUndefined(data.report.file.fileName, 'File Name', true)}
+      {checkForNANUndefined(data.report.file.sha256, 'sha256', true)}
+      {checkForNANUndefined(data.report.status, 'Status', true)}
+      {checkForNANUndefined(data.report.score, 'Score', true)}
+      {checkForNANUndefined(data.report.file.mimeType, 'MIME Type', false)}
     </div>
   );
 }
@@ -233,10 +232,10 @@ function getAlert(row) {
   const {data} = row;
   return (
     <div>
-      <span>Severity: {data.alert.severity} </span><br />
-      <span>Signature: {data.alert.signature} </span><br />
-      <span>Protocol: {data.alert.proto} </span><br />
-      <span>Category: {data.alert.category} </span>
+      {checkForNANUndefined(data.alert.severity, 'Severity', true)}
+      {checkForNANUndefined(data.alert.signature, 'Signature', true)}
+      {checkForNANUndefined(data.alert.proto, 'Protocol', true)}
+      {checkForNANUndefined(data.alert.category, 'Category', false)}
     </div>
   );
 }
@@ -275,4 +274,28 @@ export function getPosition(el) {
      el != null;
      lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
   return {x: lx, y: ly};
+}
+
+function checkForNANUndefined(value, title, newline) {
+  if (value === true || value === false) {
+    return (
+      <span>
+        {title}: {value ? 'True' : 'False'}
+        {(newline ? <br /> : null)}
+      </span>
+    );
+  }
+  else {
+    if (value !== 'NaN' && value !== 'NAN' && value !== undefined && value !== '') {
+      return (
+        <span>
+          {title}: {value}
+          {(newline ? <br /> : null)}
+        </span>
+      );
+    }
+    else {
+      return null;
+    }
+  }
 }
