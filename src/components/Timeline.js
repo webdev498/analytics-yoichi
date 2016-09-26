@@ -65,7 +65,6 @@ class TimelineGraph extends React.Component {
         'selectedMin': selectedMin,
         'selectedMax': selectedMax
       });
-      console.log(this.state);
     }
   }
 
@@ -119,7 +118,6 @@ class TimelineGraph extends React.Component {
                 if (selectedMin <= top && selectedMax >= top) {
                   if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null &&
                     displayCount < sliderRange) {
-                    console.log(displayCount, sliderRange);
                     document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
                     displayCount++;
                   }
@@ -201,7 +199,6 @@ class TimelineGraph extends React.Component {
     }
     fetchedData.then(
       function(json) {
-        console.log(json);
         that.setState({
           'isFetching': false,
           'currentPage': pageNumber,
