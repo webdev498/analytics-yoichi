@@ -29,15 +29,17 @@ class PaginationWidget extends React.Component {
         start = 1;
       }
       else {
-       start = pageCount - 8; 
+        start = pageCount - 8;
       }
       end = pageCount;
     }
     if (pageCount > 0 && start > 0 && end > 0) {
       for (let i = start; i <= end; i++) {
-        li.push(<li key='Prev' >
-          <button onClick={this.props.onPrevPageChanged.bind(null, this.props.currentPage)}>Prev</button>
-        </li>);
+        if (i === start) {
+          li.push(<li key='Prev'>
+            <button onClick={this.props.onPrevPageChanged.bind(null, this.props.currentPage)}>Prev</button>
+          </li>);
+        }
 
         if (this.props.currentPage === i) {
           li.push(<li key={i} className='active'><button>{i}</button></li>);
@@ -46,7 +48,7 @@ class PaginationWidget extends React.Component {
           li.push(<li key={i} ><button onClick={this.props.onPageChanged.bind(null, i)}>{i}</button></li>);
         }
         if (i === end) {
-          li.push(<li key='Next' >
+          li.push(<li key='Next'>
             <button onClick={this.props.onNextPageChanged.bind(null, this.props.currentPage, pageCount)}>Next</button>
           </li>);
         }

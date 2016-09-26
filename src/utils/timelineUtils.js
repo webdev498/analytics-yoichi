@@ -243,7 +243,7 @@ function getTimelineColor(eventType) {
   return color;
 }
 
-function getPos(el) {
+export function getPosition(el) {
   let lx = 0, ly = 0;
   for (lx = 0, ly = 0;
      el != null;

@@ -1308,7 +1308,7 @@ class NetworkGraph extends React.Component {
             height: '650px', // '570px',
             overflowX: 'hidden',
             overflowY: 'auto'
-          }} className='contextMenu' id='contextualMenuContents'>
+          }} className='contextMenu scrollbarStyle' id='contextualMenuContents'>
             <div
               style={{...style.selectedNodeDetails}}
               dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>

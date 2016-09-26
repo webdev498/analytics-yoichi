@@ -41,16 +41,16 @@ div.contextMenu table tr td {
   font-weight: lighter;
 }
 
-.contextMenu::-webkit-scrollbar {
+.scrollbarStyle::-webkit-scrollbar {
     width: 12px;
 }
 
-.contextMenu::-webkit-scrollbar-track {
+.scrollbarStyle::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     border-radius: 10px;
 }
 
-.contextMenu::-webkit-scrollbar-thumb {
+.scrollbarStyle::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }

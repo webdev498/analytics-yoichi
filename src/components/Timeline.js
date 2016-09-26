@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
-import moment from 'moment';
 import PaginationWidget from 'components/PaginationWidget';
 import Loader from '../components/Loader';
+import TimelineBar from '../components/TimelineBar';
 import Card from 'material-ui/Card/Card';
 import {
   formatDateInLocalTimeZone,
@@ -11,25 +11,12 @@ import {
 import {
   fetchData,
   getSourceDestination,
-  getDetails
+  getDetails,
+  getPosition
 } from 'utils/timelineUtils';
 
-// let rows = [];
-let baseHeight = 500,
-  timelineBarHeight = '2', // 2',
-  timelineBarWidth = '50', // '50';
-  timeWindow = '1h';
-
-let style = {
-  'selectedArea': {
-    'marginTop': '5px',
-    'height': '0px',
-    'width': '50px',
-    'position': 'absolute',
-    'marginLeft': '5px',
-    'background': Colors.smoke
-  }
-};
+let timeWindow = '1h',
+  sliderRange = 4;
 
 class TimelineGraph extends React.Component {
   static propTypes = {
@@ -50,8 +37,8 @@ class TimelineGraph extends React.Component {
           'background': Colors.smoke
         }
       },
-      'selectedMin': '',
-      'selectedMax': '',
+      'selectedMin': 0,
+      'selectedMax': 50,
       'timelineType': props.meta.api.pathParams.type,
       'alertDate': props.meta.api.queryParams.date,
       'filter': props.meta.api.queryParams.filter,
@@ -64,100 +51,25 @@ class TimelineGraph extends React.Component {
       'isFetching': false
     };
 
-    // this.updateSelectedArea = this.updateSelectedArea.bind(this);
-    // this.displayEventBar = this.displayEventBar.bind(this);
     this.displayEvents = this.displayEvents.bind(this);
     this.pageChanged = this.pageChanged.bind(this);
     this.prevPageChanged = this.prevPageChanged.bind(this);
     this.nextPageChanged = this.nextPageChanged.bind(this);
     this.fetchData = this.fetchData.bind(this);
+    this.setSelectedSliderValues = this.setSelectedSliderValues.bind(this);
   }
 
-  /*updateSelectedArea() {
-    return (event) => {
-      let sliderValue = $('#slider-range').slider('value'),
-        selectedRange = [
-          sliderValue - 6,
-          sliderValue + 6
-        ];
-
+  setSelectedSliderValues(selectedMin, selectedMax) {
+    // return (event) => {
+    if (selectedMin !== undefined && selectedMax !== undefined) {
       this.setState({
-        'style': {
-          'selectedArea': {
-            'marginTop': ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8) + 'px',
-            'height': (baseHeight * (selectedRange[1] - selectedRange[0]) / 100) + 'px',
-            'width': timelineBarWidth + 'px',
-            'position': 'absolute',
-            'marginLeft': '5px',
-            'background': Colors.smoke,
-            'zIndex': 1000,
-            'opacity': 0.7
-          }
-        },
-        'selectedMin': ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8),
-        'selectedMax': ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8) +
-          (baseHeight * (selectedRange[1] - selectedRange[0]) / 100)
+        'selectedMin': selectedMin,
+        'selectedMax': selectedMax
       });
-    };
-  }
-
-  componentDidMount() {
-    // $('#slider-range').slider({
-    //   orientation: 'vertical',
-    //   range: 'min',
-    //   min: 0,
-    //   max: 100,
-    //   slide: this.updateSelectedArea()
-    // });
-  }
-
-  displayEventBar() {
-    // return (a) => {
-      // const {props} = this;
-
-      // if(!props.data) {
-      //   return;
-      // }
-
-      // rows = props.data.rows;
-
-      // console.log(JSON.stringify(rows));
-
-      // let prevTimestamp = 0,
-      //   prevMarginTop = 0;
-
-      // rows.map(function(event, index) {
-      //   let dateString = event[0].date;
-      //   console.log(dateString);
-      //   let localTime = moment.utc(dateString).format('YYYY-MM-DD HH:mm:ss'),
-      //     d = new Date(localTime),
-      //     dateInUTCFormat = moment.utc(d.toUTCString()).format('YYYY-MM-DD HH:mm:ss');
-
-      //   dateInUTCFormat = dateInUTCFormat.replace(/-/g, '/');
-      //   let convertedDate = new Date(Date.parse((dateInUTCFormat).toString()));
-      //   let currentTimestamp = convertedDate.getTime();
-
-      //   let barId = 'bar' + index;
-
-      //   let style = {
-      //     height: timelineBarHeight + 'px',
-      //     width: timelineBarWidth + 'px',
-      //     fontSize: '11px',
-      //     backgroundColor: Colors.timelineBarColors[1], // getTimelineColor((event[0].type).toLowerCase()),
-      //     marginTop: (index === 0) ? 0 : ((prevTimestamp - currentTimestamp) === prevMarginTop
-      //       ? 2 : ((prevTimestamp - currentTimestamp) / 100))
-      //   };
-
-      //   prevMarginTop = (prevTimestamp - currentTimestamp);
-      //   prevTimestamp = currentTimestamp;
-      //   //{dateString}{event[0].type}
-
-      //   return (
-      //     <div id={barId} style={style}>1111111</div>
-      //   );
-      // })
+      console.log(this.state);
+    }
     // };
-  }*/
+  }
 
   displayEvents(selectedMin, selectedMax) {
     const {props} = this;
@@ -173,29 +85,38 @@ class TimelineGraph extends React.Component {
       this.state.nextPageStart = props.data.next;
       this.state.rows = props.data.rows;
       timeWindow = props.duration;
+
+      if (this.state.rows.length === 0) {
+        return (
+          <div style={{marginLeft: '-150px'}}>No additional results were found.</div>
+        );
+      }
     }
 
     const rows = this.state.rows;
-    let eventDetails = '';
+    let eventDetails = '',
+      displayCount = 0;
 
     rows.map(function(event, index) {
       let dateString = event[0].date,
-        newLine = '<br />';
-
-      let stylenew = {
-        height: '20px',
-        width: '200px',
-        marginLeft: '150px'
-      };
-      /* let barId = 'bar' + index,
-        topPositions = getPos(document.getElementById(barId));
+        newLine = '<br />',
+        dateTime = {
+          date: '',
+          time: ''
+        },
+        barId = 'bar' + index,
+        topPositions = getPosition(document.getElementById(barId));
 
       if (topPositions.y !== undefined) {
-        let top = topPositions.y - 215;
+        let top = topPositions.y - 200;
+        // console.log(selectedMin, selectedMax, topPositions.y, top);
         if (selectedMin !== '' && selectedMax !== '') {
           if (selectedMin <= top && selectedMax >= top) {
-            if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+            if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null &&
+              displayCount < sliderRange) {
+              console.log(displayCount, sliderRange);
               document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
+              displayCount++;
             }
           }
           else {
@@ -211,10 +132,10 @@ class TimelineGraph extends React.Component {
           }
           dateString = '';
         }
-      }*/
+      }
       if (dateString !== '') {
         newLine = (index === 0) ? '' : '<br />';
-        let dateTime = formatDateInLocalTimeZone(dateString);
+        dateTime = formatDateInLocalTimeZone(dateString);
         let details = getDetails(event[0]);
 
         eventDetails += '<div style="display:flex;">';
@@ -232,7 +153,12 @@ class TimelineGraph extends React.Component {
       }
     });
     return (
-      <div dangerouslySetInnerHTML={{__html: eventDetails}}></div>
+      <div dangerouslySetInnerHTML={{__html: eventDetails}} style={{
+        width: '675px',
+        overflowX: 'hidden',
+        overflowY: 'hidden',
+        height: '940px'
+      }}></div>
     );
   }
 
@@ -301,52 +227,9 @@ class TimelineGraph extends React.Component {
   }
 
   render() {
-    // let prevTimestamp = 0,
-    //   prevMarginTop = 0;
-
     return (
       <div>
         {this.state.isFetching ? <Loader style={{}} /> : null}
-        {/*{this.displayEventBar()}*/}
-        {/*<div id='slider-range' style={{height: baseHeight + 'px', position: 'absolute'}}></div>
-        <div id='selectedArea' style={this.state.style.selectedArea}></div>
-        <div id='timelineGraph' style={{
-          height: baseHeight + 'px', width: '70px', border: '0px solid red',
-          marginLeft: '5px', position: 'absolute'}}>
-          {
-            rows.map(function(event, index) {
-              let dateString = event[0].date;
-
-              let localTime = moment.utc(dateString).format('YYYY-MM-DD HH:mm:ss'),
-                d = new Date(localTime),
-                dateInUTCFormat = moment.utc(d.toUTCString()).format('YYYY-MM-DD HH:mm:ss');
-
-              dateInUTCFormat = dateInUTCFormat.replace(/-/g, '/');
-              let convertedDate = new Date(Date.parse((dateInUTCFormat).toString()));
-              let currentTimestamp = convertedDate.getTime();
-
-              let barId = 'bar' + index;
-
-              let style = {
-                height: timelineBarHeight + 'px',
-                width: timelineBarWidth + 'px',
-                fontSize: '11px',
-                backgroundColor: Colors.timelineBarColors[1], // getTimelineColor((event[0].type).toLowerCase()),
-                // marginTop: (index === 0) ? 0 : ((prevTimestamp - currentTimestamp) === prevMarginTop
-                //   ? 2 : ((prevTimestamp - currentTimestamp) / 10000))
-                marginTop: (index === 0) ? 0 : 2
-              };
-
-              prevMarginTop = (prevTimestamp - currentTimestamp);
-              prevTimestamp = currentTimestamp;
-              //{dateString}{event[0].type}
-
-              return (
-                <div id={barId} style={style}></div>
-              );
-            })
-          }
-        </div>*/}
         <div style={{'marginLeft': '150px', 'position': 'absolute'}}>
           {this.displayEvents(this.state.selectedMin, this.state.selectedMax)}
         </div>
@@ -355,6 +238,7 @@ class TimelineGraph extends React.Component {
           onPrevPageChanged={this.prevPageChanged()}
           onNextPageChanged={this.nextPageChanged()}
           currentPage={this.state.currentPage} />
+        <TimelineBar data={this.state.rows} setSelectedSliderValues={this.setSelectedSliderValues} />
       </div>
     );
   }
