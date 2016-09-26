@@ -92,71 +92,86 @@ class TimelineGraph extends React.Component {
     }
 
     const rows = this.state.rows;
-    let eventDetails = '',
-      displayCount = 0;
+    let displayCount = 0;
 
-    rows.map(function(event, index) {
-      let dateString = event[0].date,
-        newLine = '<br />',
-        dateTime = {
-          date: '',
-          time: ''
-        },
-        barId = 'bar' + index,
-        topPositions = getPosition(document.getElementById(barId));
-
-      if (topPositions.y !== undefined) {
-        let top = topPositions.y - 200;
-        // console.log(selectedMin, selectedMax, topPositions.y, top);
-        if (selectedMin !== '' && selectedMax !== '') {
-          if (selectedMin <= top && selectedMax >= top) {
-            if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null &&
-              displayCount < sliderRange) {
-              console.log(displayCount, sliderRange);
-              document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
-              displayCount++;
-            }
-          }
-          else {
-            if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
-              document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
-            }
-            dateString = '';
-          }
-        }
-        else {
-          if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
-            document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
-          }
-          dateString = '';
-        }
-      }
-      if (dateString !== '') {
-        newLine = (index === 0) ? '' : '<br />';
-        dateTime = formatDateInLocalTimeZone(dateString);
-        let details = getDetails(event[0]);
-
-        eventDetails += '<div style="display:flex;">';
-        eventDetails += '<div style="width: 120px;"><span style="font-size: 9pt; font-weight: 600;">' + dateTime.date;
-        eventDetails += '<br/>' + dateTime.time + '</span></div>';
-        // eventDetails += '<div style="height:190px;width:20px;font-size: 10pt;background-color:#fcc875;box-shadow: 2px 2px 0 #cccccc;writing-mode:tb;padding-top: 7px;">' + getEventTypeString(event[0].type) + '</div>';
-        eventDetails += '<div style="box-shadow: 2px 2px 0 #cccccc;float:left;padding: 10px;height:215px;width:500px;background-color:white;border: 1px solid #cbcbd1;font-size: 14px;margin-bottom:20px;">';
-        // eventDetails += '<Card>';
-        eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:600;">' + getSourceDestination(event[0]) + '</div>';
-        eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:lighter;">Type: ' + getEventTypeString(event[0].type) + '</div>';
-        eventDetails += '<div style="font-size:13pt;color:#444C63;font-weight:lighter;">' + details + '</div>';
-        eventDetails += '</div>';
-        // eventDetails += '</Card>';
-        eventDetails += '</div>';
-      }
-    });
     return (
-      <div dangerouslySetInnerHTML={{__html: eventDetails}} style={{
+      <div style={{
         width: '675px',
         overflowX: 'hidden',
         overflowY: 'hidden',
         height: '940px'
-      }}></div>
+      }}>
+        {
+          rows.map(function(event, index) {
+            let dateString = event[0].date,
+              newLine = '<br />',
+              dateTime = {
+                date: '',
+                time: ''
+              },
+              barId = 'bar' + index,
+              topPositions = getPosition(document.getElementById(barId));
+
+            if (topPositions.y !== undefined) {
+              let top = topPositions.y - 200;
+              // console.log(selectedMin, selectedMax, topPositions.y, top);
+              if (selectedMin !== '' && selectedMax !== '') {
+                if (selectedMin <= top && selectedMax >= top) {
+                  if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null &&
+                    displayCount < sliderRange) {
+                    console.log(displayCount, sliderRange);
+                    document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
+                    displayCount++;
+                  }
+                }
+                else {
+                  if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+                    document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
+                  }
+                  dateString = '';
+                }
+              }
+              else {
+                if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+                  document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
+                }
+                dateString = '';
+              }
+            }
+            if (dateString !== '') {
+              newLine = (index === 0) ? '' : '<br />';
+              dateTime = formatDateInLocalTimeZone(dateString);
+              return (
+                <div style={{display: 'flex'}}>
+                  <div style={{width: '120px'}}>
+                    <span style={{fontSize: '9pt', fontWeight: '600'}}>{dateTime.date}
+                      <br />{dateTime.time}</span>
+                  </div>
+
+                  <Card style={{boxShadow: '1px 1px 0 #cccccc',
+                    padding: '10px',
+                    height: '215px',
+                    width: '500px',
+                    backgroundColor: Colors.white,
+                    border: '1px solid #cbcbd1',
+                    fontSize: '14px',
+                    marginBottom: '20px'}}>
+                    <div style={{fontSize: '13pt', Color: '#444C63', fontWeight: '600'}}>
+                      {getSourceDestination(event[0])}
+                    </div>
+                    <div style={{fontSize: '13pt', color: '#444C63', fontWeight: 'lighter'}}>
+                      Type: {getEventTypeString(event[0].type)}
+                    </div>
+                    <div style={{fontSize: '13pt', color: '#444C63', fontWeight: 'lighter'}}>
+                      {getDetails(event[0])}
+                    </div>
+                  </Card>
+                </div>
+              );
+            }
+          })
+        }
+      </div>
     );
   }
 
