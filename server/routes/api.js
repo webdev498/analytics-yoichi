@@ -45,6 +45,8 @@ const reportId = new koaRouter();
 //   return res;
 // }, async function(ctx, next) {})
 
+const timeout = 1000 * 60;
+
 router
 .get('/store/*', layoutRoutes)
 .get('*', async function (ctx, next) {
@@ -54,6 +56,7 @@ router
     {
       method: 'GET',
       headers: ctx.headers,
+      timeout,
       agent
     }
   );
@@ -69,6 +72,7 @@ router
       method: 'POST',
       headers: ctx.headers,
       'rejectUnauthorized': false,
+      timeout,
       agent,
       body: JSON.stringify(ctx.request.body)
     }

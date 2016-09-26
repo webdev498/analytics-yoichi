@@ -11,47 +11,66 @@ import {Map, fromJS} from 'immutable';
 
 const initialState = fromJS({duration: '1h', components: {}});
 
+function requestApi(id, state) {
+  const dataMap = Map({
+    id,
+    isFetching: true,
+    isError: false
+  });
+
+  return state.updateIn(['components'], val => val.set(id, dataMap));
+}
+
+function receiveApi(id, state, action) {
+  const {data} = action,
+    {json, api, query} = data;
+
+  const dataMap = Map({
+    id,
+    isFetching: false,
+    isError: false,
+    data: json,
+    api,
+    query
+  });
+
+  return state.updateIn(['components'], val => val.set(id, dataMap));
+}
+
+function errorApi(id, state, action) {
+  const {errorData} = action;
+
+  const dataMap = Map({
+    id,
+    isFetching: false,
+    isError: true,
+    errorData
+  });
+
+  return state.updateIn(['components'], val => val.set(id, dataMap));
+}
+
+function apiStates(state, action, fn) {
+  let {id} = action;
+  id = id.split(',');
+
+  id.forEach(currentId => {
+    state = fn(currentId, state, action);
+  });
+
+  return state;
+}
+
 export default function APIDataReducer(state = initialState, action) {
   switch (action.type) {
     case REQUEST_API_DATA: {
-      const {id} = action;
-      const dataMap = Map({
-        id,
-        isFetching: true,
-        isError: false
-      });
-
-      return state.updateIn(['components'], val => val.set(id, dataMap));
+      return apiStates(state, action, requestApi);
     }
     case RECEIVE_API_DATA: {
-      const {id, data} = action,
-        {json, api, query} = data;
-
-      let newState;
-      const dataMap = Map({
-        id,
-        isFetching: false,
-        isError: false,
-        data: json,
-        api,
-        query
-      });
-
-      newState = state.updateIn(['components'], val => val.set(id, dataMap));
-
-      return newState;
+      return apiStates(state, action, receiveApi);
     }
     case ERROR_API_DATA: {
-      const {id, errorData} = action;
-
-      const dataMap = Map({
-        id,
-        isFetching: false,
-        isError: true,
-        errorData
-      });
-
-      return state.updateIn(['components'], val => val.set(id, dataMap));
+      return apiStates(state, action, errorApi);
     }
     case TIME_INTERVAL_UPDATE: {
       const {data: duration} = action;
@@ -59,8 +78,7 @@ export default function APIDataReducer(state = initialState, action) {
     }
     case REMOVE_COMPONENT: {
       const {id} = action;
-      const newState = state.deleteIn(['components', id]);
-      return newState;
+      return state.deleteIn(['components', id]);
     }
     case PARENT_CARD_EVENT: {
       const {id, callback} = action;
