@@ -74,6 +74,7 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           let values = dataNode.metadata[metadataType],
             value1 = '',
             value2 = '',
+            value5 = '',
             newLine1 = '\n  ',
             newLine2 = '<br />';
 
@@ -115,11 +116,14 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
                   }
                   value1 += newLine1 + 'Reputation: ' + value3;
                   value2 += newLine2 + '<b>Reputation:</b> ' + value4;
+                  value5 += newLine2 + 'Reputation: ' + value4;
                 }
                 else {
                   // value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
                   value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-                    values[v][valueType];
+                    values[v][valueType] + '<br />';
+                  value5 += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
+                    values[v][valueType] + '<br />';
                 }
               }
             }
@@ -127,7 +131,7 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           if (value1 !== '') {
             nodeObject.label += '\n  ' + value1;
             nodeObject.title += '<br />' + value2;
-            nodeObject.nodeDetails += '<br />' + value2;
+            nodeObject.nodeDetails += '<br />' + value5;
 
             if (value1.indexOf('Scanning Host') > -1) {
               nodeStatus = 'scan';
@@ -241,6 +245,10 @@ function getNodesEdges(data) {
         edgeObject.color = {};
         edgeObject.color.color = Colors.pebble;
         edgeObject.color.highlight = Colors.turquoise;
+
+        if (dataEdge.type == 'ioc') {
+          edgeObject.dashes = true;
+        }
 
         edges.push(edgeObject);
         edgeObjects[dataEdge.target] = edgeObject;
@@ -791,7 +799,7 @@ class NetworkGraph extends React.Component {
         $('.vis-right').hide();
       }
       else {
-        document.getElementById('networkGraph').innerHTML = 'No Data Found.';
+        document.getElementById('networkGraph').innerHTML = 'No additional results were found.';
       }
     }
   }
@@ -983,8 +991,7 @@ class NetworkGraph extends React.Component {
                       nodeType.toLowerCase() === 'external_ip')) {
                       tempObj.value = nodeID;
                     }
-                    else if (parameters[k].name === 'sourceip' || parameters[k].name === 'source.id' ||
-                      parameters[k].name === 'srcip') {
+                    else if (parameters[k].name === 'source.id') {
                       if (edgeObjects[nodeID] !== undefined) {
                         tempObj.value = edgeObjects[nodeID].from;
                       }
@@ -992,8 +999,7 @@ class NetworkGraph extends React.Component {
                         tempObj.value = '';
                       }
                     }
-                    else if (parameters[k].name === 'destinationip' || parameters[k].name === 'destination.id' ||
-                      parameters[k].name === 'destip') {
+                    else if (parameters[k].name === 'target.id') {
                       if (edgeObjects[nodeID] !== undefined) {
                         tempObj.value = edgeObjects[nodeID].to;
                       }
@@ -1122,7 +1128,7 @@ class NetworkGraph extends React.Component {
           if (json[0] === undefined) {
             let position = getPos(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
-              'There are no nodes/edges available for extending the graph.';
+              'No additional results found.';
             $('#actionPerformed').css('top', position.y - 85);
             $('#actionPerformed').fadeIn('slow');
             $('#actionPerformed').fadeOut(3000);
@@ -1240,7 +1246,7 @@ class NetworkGraph extends React.Component {
           if (!isGraphExtended) {
             let position = getPos(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
-              'The responsed nodes/edges are already exists on the graph.';
+              'No additional results found.';
             $('#actionPerformed').css('top', position.y - 85);
             $('#actionPerformed').fadeIn('slow');
             $('#actionPerformed').fadeOut(3000);
@@ -1302,7 +1308,7 @@ class NetworkGraph extends React.Component {
             height: '650px', // '570px',
             overflowX: 'hidden',
             overflowY: 'auto'
-          }} className='contextMenu' id='contextualMenuContents'>
+          }} className='contextMenu scrollbarStyle' id='contextualMenuContents'>
             <div
               style={{...style.selectedNodeDetails}}
               dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
