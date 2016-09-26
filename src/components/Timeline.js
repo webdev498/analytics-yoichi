@@ -60,7 +60,6 @@ class TimelineGraph extends React.Component {
   }
 
   setSelectedSliderValues(selectedMin, selectedMax) {
-    // return (event) => {
     if (selectedMin !== undefined && selectedMax !== undefined) {
       this.setState({
         'selectedMin': selectedMin,
@@ -68,7 +67,6 @@ class TimelineGraph extends React.Component {
       });
       console.log(this.state);
     }
-    // };
   }
 
   displayEvents(selectedMin, selectedMax) {
