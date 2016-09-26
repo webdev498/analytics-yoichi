@@ -20,6 +20,14 @@ class TimelineGraph extends React.Component {
     super(props);
     this.state = {
       'selectedAreaStyle': {
+        'marginTop': '0px', // ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - 12.8) + 'px',
+        'height': '65px', // (baseHeight * ((sliderValue + sliderRange) - (sliderValue - sliderRange)) / 100) + 'px',
+        'width': timelineBarWidth + 'px',
+        'position': 'absolute',
+        'marginLeft': '5px',
+        'background': Colors.smoke,
+        'zIndex': 1000,
+        'opacity': 0.7
       }
     };
 
