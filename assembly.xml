@@ -47,10 +47,6 @@
             <outputDirectory>.</outputDirectory>
         </file>
         <file>
-            <source>${basedir}/start.json</source>
-            <outputDirectory>.</outputDirectory>
-        </file>
-        <file>
             <source>${basedir}/.babelrc</source>
             <outputDirectory>.</outputDirectory>
         </file>
