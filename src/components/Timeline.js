@@ -3,7 +3,8 @@ import {Colors} from 'theme/colors';
 import PaginationWidget from 'components/PaginationWidget';
 import Loader from '../components/Loader';
 import TimelineBar from '../components/TimelineBar';
-import Card from 'material-ui/Card/Card';
+import TrafficEvents from '../components/TrafficEvents';
+import Alerts from '../components/Alerts';
 import {
   formatDateInLocalTimeZone,
   getEventTypeString
@@ -50,15 +51,18 @@ function getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, di
   return dateString;
 }
 
-class TimelineGraph extends React.Component {
+class Timeline extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
-    meta: PropTypes.object
+    meta: PropTypes.object,
+    id: PropTypes.string
   }
 
   constructor(props) {
     super(props);
     this.state = {
+      'id': props.id,
+      'type': props.attributes.type,
       'style': {
         'selectedArea': {
           'marginTop': '0px',
@@ -79,6 +83,7 @@ class TimelineGraph extends React.Component {
       'currentPage': 1,
       'pageSize': props.attributes.noOfEventsPerPage,
       'maxNumbersOnLeftRight': props.attributes.maxNumbersOnLeftRightPagination,
+      'displaySelectedRows': props.attributes.displaySelectedRows,
       'rows': [],
       'nextPageStart': 0,
       'isFetching': false
@@ -90,6 +95,7 @@ class TimelineGraph extends React.Component {
     this.nextPageChanged = this.nextPageChanged.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.setSelectedSliderValues = this.setSelectedSliderValues.bind(this);
+    this.displayData = this.displayData.bind(this);
   }
 
   setSelectedSliderValues(selectedMin, selectedMax) {
@@ -101,8 +107,22 @@ class TimelineGraph extends React.Component {
     }
   }
 
+  displayData(id, data) {
+    if (this.state.type === 'traffic') {
+      return (
+        <TrafficEvents id={id} data={data} />
+      );
+    }
+    if (this.state.type === 'alert') {
+      return (
+        <Alerts id={id} data={data} />
+      );
+    }
+  }
+
   displayEvents(selectedMin, selectedMax) {
     const {props} = this;
+    console.log(props);
     if (this.state.rows.length === 0 || timeWindow !== props.duration) {
       if (!props.data) {
         return;
@@ -123,16 +143,27 @@ class TimelineGraph extends React.Component {
       }
     }
 
-    const rows = this.state.rows;
-    let displayCount = 0;
+    const rows = this.state.rows,
+      displaySelectedRows = this.state.displaySelectedRows,
+      that = this;
+
+    let displayCount = 0,
+      mainDivStyle = {
+        width: '675px',
+        height: '940px',
+        overflow: 'hidden'
+      },
+      scrollbarStyle = displaySelectedRows ? '' : 'scrollbarStyle';
+
+    if (!displaySelectedRows) {
+      mainDivStyle = Object.assign(mainDivStyle, {
+        overflowX: 'hidden',
+        overflowY: 'auto'
+      });
+    }
 
     return (
-      <div style={{
-        width: '675px',
-        overflowX: 'hidden',
-        overflowY: 'hidden',
-        height: '940px'
-      }}>
+      <div style={mainDivStyle} className={scrollbarStyle}>
         {
           rows.map(function(event, index) {
             let dateString = event[0].date,
@@ -143,7 +174,9 @@ class TimelineGraph extends React.Component {
               },
               barId = 'bar' + index;
 
-            dateString = getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, displayCount);
+            if (displaySelectedRows) {
+              dateString = getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, displayCount);
+            }
 
             if (dateString !== '') {
               newLine = (index === 0) ? '' : '<br />';
@@ -155,25 +188,16 @@ class TimelineGraph extends React.Component {
                       <br />{dateTime.time}</span>
                   </div>
 
-                  <Card style={{
-                    boxShadow: '1px 1px 0 #cccccc',
-                    padding: '10px',
-                    height: '215px',
-                    width: '500px',
-                    backgroundColor: Colors.white,
-                    border: '1px solid #cbcbd1',
-                    fontSize: '14px',
-                    marginBottom: '20px'}} key={barId}>
-                    <div style={{fontSize: '13pt', Color: Colors.grape, fontWeight: '600'}}>
-                      {getSourceDestination(event[0])}
-                    </div>
-                    <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
-                      Type: {getEventTypeString(event[0].type)}
-                    </div>
-                    <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
-                      {getDetails(event[0])}
-                    </div>
-                  </Card>
+                  {that.displayData(barId, event[0])}
+                  {/*<div style={{fontSize: '13pt', Color: Colors.grape, fontWeight: '600'}}>
+                    {getSourceDestination(event[0])}
+                  </div>
+                  <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+                    Type: {getEventTypeString(event[0].type)}
+                  </div>
+                  <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+                    {getDetails(event[0])}
+                  </div>*/}
                 </div>
               );
             }
@@ -212,7 +236,9 @@ class TimelineGraph extends React.Component {
           'isFetching': false,
           'currentPage': pageNumber,
           'rows': json.rows,
-          'nextPageStart': json.next
+          'nextPageStart': json.next,
+          'selectedMin': 0,
+          'selectedMax': 50
         });
       }
     );
@@ -259,11 +285,11 @@ class TimelineGraph extends React.Component {
           onNextPageChanged={this.nextPageChanged()}
           currentPage={this.state.currentPage}
           maxNumbersOnLeftRight={this.state.maxNumbersOnLeftRight} />
-        <TimelineBar data={this.state.rows} setSelectedSliderValues={this.setSelectedSliderValues}
+        <TimelineBar id={this.state.id} data={this.state.rows} setSelectedSliderValues={this.setSelectedSliderValues}
           duration={timeWindow} />
       </div>
     );
   }
 }
 
-export default TimelineGraph;
+export default Timeline;

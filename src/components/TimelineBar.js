@@ -12,9 +12,10 @@ let baseHeight = 900,
 
 const halfOfTheSliderHeight = 12.8;
 
-class TimelineGraph extends React.Component {
+class TimelineBar extends React.Component {
   static propTypes = {
-    setSelectedSliderValues: PropTypes.func
+    setSelectedSliderValues: PropTypes.func,
+    id: PropTypes.string
   }
 
   constructor(props) {
@@ -29,7 +30,10 @@ class TimelineGraph extends React.Component {
         // 'background': Colors.smoke,
         // 'zIndex': 1000,
         // 'opacity': 0.7
-      }
+      },
+      'sliderId': 'slider-' + props.id,
+      'selectedAreaId': 'selected-area-' + props.id,
+      'timelineId': props.id
     };
 
     this.updateSelectedArea = this.updateSelectedArea.bind(this);
@@ -38,7 +42,7 @@ class TimelineGraph extends React.Component {
 
   updateSelectedArea() {
     return (event) => {
-      let sliderValue = $('#slider-range').slider('value'),
+      let sliderValue = $('#' + this.state.sliderId).slider('value'),
         selectedRange = [
           sliderValue - sliderRange,
           sliderValue + sliderRange
@@ -75,7 +79,7 @@ class TimelineGraph extends React.Component {
     rows = props.data;
 
     if (rows.length > 0) {
-      $('#slider-range').slider({
+      $('#' + this.state.sliderId).slider({
         orientation: 'vertical',
         range: 'min',
         min: 0,
@@ -106,10 +110,10 @@ class TimelineGraph extends React.Component {
 
     return (
       <div>
-        <div id='slider-range' style={{height: baseHeight + 'px', position: 'absolute'}}></div>
+        <div id={this.state.sliderId} style={{height: baseHeight + 'px', position: 'absolute'}}></div>
         {this.displayEventBar()}
-        <div id='selectedArea' style={this.state.selectedAreaStyle}></div>
-        <div id='timelineGraph' style={{
+        <div id={this.state.selectedAreaId} style={this.state.selectedAreaStyle}></div>
+        <div id={this.state.timelineId} style={{
           height: baseHeight + 'px', width: '70px', border: '0px solid red',
           marginLeft: '5px', position: 'absolute'}}>
           {
@@ -151,4 +155,4 @@ class TimelineGraph extends React.Component {
   }
 }
 
-export default TimelineGraph;
+export default TimelineBar;
