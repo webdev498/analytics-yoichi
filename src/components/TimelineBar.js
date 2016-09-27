@@ -9,9 +9,10 @@ let baseHeight = 900,
   timelineBarWidth = '50',  // '50';
   sliderValue = 95,
   sliderRange = 4,
-  rows = [];
+  rows = [],
+  selectedTimeWindow = '';
 
-class TimelineGraph extends React.Component {
+class TimelineBar extends React.Component {
   static propTypes = {
     setSelectedSliderValues: PropTypes.func
   }
@@ -82,6 +83,7 @@ class TimelineGraph extends React.Component {
         slide: this.updateSelectedArea(),
         value: sliderValue
       });
+
       // this.state = {
       //   'selectedAreaStyle': {
       //     'marginTop': ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - 12.8) + 'px',
@@ -149,4 +151,4 @@ class TimelineGraph extends React.Component {
   }
 }
 
-export default TimelineGraph;
+export default TimelineBar;

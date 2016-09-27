@@ -17,8 +17,9 @@ import {
 
 let timeWindow = '1h',
   sliderRange = 4;
+const topMarginLag = 200;
 
-class TimelineGraph extends React.Component {
+class Timeline extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
     meta: PropTypes.object
@@ -112,7 +113,7 @@ class TimelineGraph extends React.Component {
               topPositions = getPosition(document.getElementById(barId));
 
             if (topPositions.y !== undefined) {
-              let top = topPositions.y - 200;
+              let top = topPositions.y - topMarginLag;
               // console.log(selectedMin, selectedMax, topPositions.y, top);
               if (selectedMin !== '' && selectedMax !== '') {
                 if (selectedMin <= top && selectedMax >= top) {
@@ -249,10 +250,11 @@ class TimelineGraph extends React.Component {
           onPrevPageChanged={this.prevPageChanged()}
           onNextPageChanged={this.nextPageChanged()}
           currentPage={this.state.currentPage} />
-        <TimelineBar data={this.state.rows} setSelectedSliderValues={this.setSelectedSliderValues} />
+        <TimelineBar data={this.state.rows} setSelectedSliderValues={this.setSelectedSliderValues}
+          duration={timeWindow} />
       </div>
     );
   }
 }
 
-export default TimelineGraph;
+export default Timeline;
