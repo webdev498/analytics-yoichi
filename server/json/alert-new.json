@@ -16,17 +16,36 @@
             }
           },
           "title": "Alert Detail",
-          "fetchDataFor": {
-            "id": "connection-status,connection-by-type,data-source-dest",
-            "api": {
-              "method": "POST",
-              "path": "/api/analytics/reporting/executeById",
-              "pathParams": {},
-              "queryParams": {
-                "window": ""
+          "fetchDataFor": [
+            {
+              "id": "connection-status,connection-by-type,data-source-dest",
+              "api": {
+                "method": "POST",
+                "path": "/api/analytics/reporting/executeById",
+                "body": "data.rank_alert.chartsFilter$customParam",
+                "pathParams": {},
+                "queryParams": {
+                  "window": ""
+                },
+                "loadOnce": true
+              }
+            },
+            {
+              "id": "timeline",
+              "api": {
+                "method": "GET",
+                "path": "/api/alert/traffic",
+                "pathParams": {},
+                "queryParams": {
+                  "count": 200,
+                  "from": 0,
+                  "window": "",
+                  "filter": "data.rank_alert.trafficFilter$customParam",
+                  "date": ":pathParam"
+                }
               }
             }
-          }
+          ]
         },
         "name": "AlertDetail",
         "attributes": {
