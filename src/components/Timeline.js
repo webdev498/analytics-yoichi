@@ -189,15 +189,6 @@ class Timeline extends React.Component {
                   </div>
 
                   {that.displayData(barId, event[0])}
-                  {/*<div style={{fontSize: '13pt', Color: Colors.grape, fontWeight: '600'}}>
-                    {getSourceDestination(event[0])}
-                  </div>
-                  <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
-                    Type: {getEventTypeString(event[0].type)}
-                  </div>
-                  <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
-                    {getDetails(event[0])}
-                  </div>*/}
                 </div>
               );
             }
