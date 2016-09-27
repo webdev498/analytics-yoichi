@@ -1,8 +1,6 @@
 import React, {PropTypes} from 'react';
 
-const maxNumbersOnLeftRight = 4;
-
-function getLimitsForPaginationButtons(pageCount, currentPage) {
+function getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftRight) {
   let start = currentPage - maxNumbersOnLeftRight,
     end = currentPage + maxNumbersOnLeftRight;
 
@@ -35,6 +33,7 @@ class PaginationWidget extends React.Component {
   static propTypes = {
     Size: PropTypes.number,
     currentPage: PropTypes.number,
+    maxNumbersOnLeftRight: PropTypes.number,
     onPageChanged: PropTypes.func,
     onPrevPageChanged: PropTypes.func,
     onNextPageChanged: PropTypes.func
@@ -44,7 +43,8 @@ class PaginationWidget extends React.Component {
     let li = [],
       pageCount = this.props.Size,
       currentPage = this.props.currentPage,
-      limits = getLimitsForPaginationButtons(pageCount, currentPage),
+      maxNumbersOnLeftRight = this.props.maxNumbersOnLeftRight,
+      limits = getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftRight),
       start = limits.start,
       end = limits.end;
 

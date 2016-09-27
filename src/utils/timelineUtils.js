@@ -52,7 +52,7 @@ export function getDetails(row) {
     case 'alert':
       return getAlert(row);
     default:
-      return getOther(row.data[row.type]);
+      return null;// getOther(row.data[row.type]);
   }
 }
 
@@ -291,7 +291,9 @@ function checkForNANUndefined(value, title, newline) {
       );
     }
     else {
-      return null;
+      return (
+        <span></span>
+      );
     }
   }
 }

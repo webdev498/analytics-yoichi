@@ -17,9 +17,40 @@ import {
 
 let timeWindow = '1h',
   sliderRange = 4;
+
 const topMarginLag = 200;
 
-class Timeline extends React.Component {
+function getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, displayCount) {
+  let topPositions = getPosition(document.getElementById(barId));
+  if (topPositions.y !== undefined) {
+    let top = topPositions.y - topMarginLag;
+    // console.log(selectedMin, selectedMax, topPositions.y, top);
+    if (selectedMin !== '' && selectedMax !== '') {
+      if (selectedMin <= top && selectedMax >= top) {
+        if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null &&
+          displayCount < sliderRange) {
+          document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
+          displayCount++;
+        }
+      }
+      else {
+        if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+          document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
+        }
+        dateString = '';
+      }
+    }
+    else {
+      if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
+        document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
+      }
+      dateString = '';
+    }
+  }
+  return dateString;
+}
+
+class TimelineGraph extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
     meta: PropTypes.object
@@ -47,6 +78,7 @@ class Timeline extends React.Component {
       'totalPage': 0,
       'currentPage': 1,
       'pageSize': props.attributes.noOfEventsPerPage,
+      'maxNumbersOnLeftRight': props.attributes.maxNumbersOnLeftRightPagination,
       'rows': [],
       'nextPageStart': 0,
       'isFetching': false
@@ -109,34 +141,10 @@ class Timeline extends React.Component {
                 date: '',
                 time: ''
               },
-              barId = 'bar' + index,
-              topPositions = getPosition(document.getElementById(barId));
+              barId = 'bar' + index;
 
-            if (topPositions.y !== undefined) {
-              let top = topPositions.y - topMarginLag;
-              // console.log(selectedMin, selectedMax, topPositions.y, top);
-              if (selectedMin !== '' && selectedMax !== '') {
-                if (selectedMin <= top && selectedMax >= top) {
-                  if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null &&
-                    displayCount < sliderRange) {
-                    document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[0];
-                    displayCount++;
-                  }
-                }
-                else {
-                  if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
-                    document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
-                  }
-                  dateString = '';
-                }
-              }
-              else {
-                if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null) {
-                  document.getElementById(barId).style.backgroundColor = Colors.timelineBarColors[1];
-                }
-                dateString = '';
-              }
-            }
+            dateString = getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, displayCount);
+
             if (dateString !== '') {
               newLine = (index === 0) ? '' : '<br />';
               dateTime = formatDateInLocalTimeZone(dateString);
@@ -155,7 +163,7 @@ class Timeline extends React.Component {
                     backgroundColor: Colors.white,
                     border: '1px solid #cbcbd1',
                     fontSize: '14px',
-                    marginBottom: '20px'}}>
+                    marginBottom: '20px'}} key={barId}>
                     <div style={{fontSize: '13pt', Color: Colors.grape, fontWeight: '600'}}>
                       {getSourceDestination(event[0])}
                     </div>
@@ -249,7 +257,8 @@ class Timeline extends React.Component {
           onPageChanged={this.pageChanged()}
           onPrevPageChanged={this.prevPageChanged()}
           onNextPageChanged={this.nextPageChanged()}
-          currentPage={this.state.currentPage} />
+          currentPage={this.state.currentPage}
+          maxNumbersOnLeftRight={this.state.maxNumbersOnLeftRight} />
         <TimelineBar data={this.state.rows} setSelectedSliderValues={this.setSelectedSliderValues}
           duration={timeWindow} />
       </div>
@@ -257,4 +266,4 @@ class Timeline extends React.Component {
   }
 }
 
-export default Timeline;
+export default TimelineGraph;

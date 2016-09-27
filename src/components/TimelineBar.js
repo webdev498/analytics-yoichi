@@ -1,7 +1,5 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
-// import $ from 'jquery';
-// import {slider} from 'jquery-ui';
 import moment from 'moment';
 
 let baseHeight = 900,
@@ -14,7 +12,7 @@ let baseHeight = 900,
 
 const halfOfTheSliderHeight = 12.8;
 
-class TimelineBar extends React.Component {
+class TimelineGraph extends React.Component {
   static propTypes = {
     setSelectedSliderValues: PropTypes.func
   }
@@ -23,14 +21,14 @@ class TimelineBar extends React.Component {
     super(props);
     this.state = {
       'selectedAreaStyle': {
-        'marginTop': '0px', // ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - halfOfTheSliderHeight) + 'px',
-        'height': '65px', // (baseHeight * ((sliderValue + sliderRange) - (sliderValue - sliderRange)) / 100) + 'px',
-        'width': timelineBarWidth + 'px',
-        'position': 'absolute',
-        'marginLeft': '5px',
-        'background': Colors.smoke,
-        'zIndex': 1000,
-        'opacity': 0.7
+        // 'marginTop': '0px', // ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - halfOfTheSliderHeight) + 'px',
+        // 'height': '65px', // (baseHeight * ((sliderValue + sliderRange) - (sliderValue - sliderRange)) / 100) + 'px',
+        // 'width': timelineBarWidth + 'px',
+        // 'position': 'absolute',
+        // 'marginLeft': '5px',
+        // 'background': Colors.smoke,
+        // 'zIndex': 1000,
+        // 'opacity': 0.7
       }
     };
 
@@ -98,7 +96,7 @@ class TimelineBar extends React.Component {
       //     'opacity': 0.7
       //   }
       // };
-      this.updateSelectedArea();
+      // this.updateSelectedArea();
     }
   }
 
@@ -153,4 +151,4 @@ class TimelineBar extends React.Component {
   }
 }
 
-export default TimelineBar;
+export default TimelineGraph;
