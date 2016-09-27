@@ -1,18 +1,13 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 import PaginationWidget from 'components/PaginationWidget';
-import Loader from '../components/Loader';
 import TimelineBar from '../components/TimelineBar';
 import TrafficEvents from '../components/TrafficEvents';
 import Alerts from '../components/Alerts';
-import {
-  formatDateInLocalTimeZone,
-  getEventTypeString
-} from 'utils/utils';
+import {formatDateInLocalTimeZone} from 'utils/utils';
+
 import {
   fetchData,
-  getSourceDestination,
-  getDetails,
   getPosition
 } from 'utils/timelineUtils';
 
@@ -53,16 +48,20 @@ function getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, di
 
 class Timeline extends React.Component {
   static propTypes = {
-    attributes: PropTypes.object,
-    meta: PropTypes.object,
-    id: PropTypes.string
+    attributes: PropTypes.object.isRequired,
+    meta: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    params: PropTypes.object.isRequired
   }
 
   constructor(props) {
     super(props);
+
+    const {params, attributes} = props;
+
     this.state = {
       'id': props.id,
-      'type': props.attributes.type,
+      'type': attributes.type,
       'style': {
         'selectedArea': {
           'marginTop': '0px',
@@ -75,9 +74,9 @@ class Timeline extends React.Component {
       },
       'selectedMin': 0,
       'selectedMax': 50,
-      'timelineType': props.meta.api.pathParams.type,
-      'alertDate': props.meta.api.queryParams.date,
-      'filter': props.meta.api.queryParams.filter,
+      'timelineType': attributes.type,
+      'alertDate': params.date,
+      // 'filter': props.meta.api.queryParams.filter,
       'totalCount': 0,
       'totalPage': 0,
       'currentPage': 1,
@@ -89,7 +88,6 @@ class Timeline extends React.Component {
       'isFetching': false
     };
 
-    this.displayEvents = this.displayEvents.bind(this);
     this.pageChanged = this.pageChanged.bind(this);
     this.prevPageChanged = this.prevPageChanged.bind(this);
     this.nextPageChanged = this.nextPageChanged.bind(this);
@@ -122,7 +120,6 @@ class Timeline extends React.Component {
 
   displayEvents(selectedMin, selectedMax) {
     const {props} = this;
-    console.log(props);
     if (this.state.rows.length === 0 || timeWindow !== props.duration) {
       if (!props.data) {
         return;
@@ -266,17 +263,20 @@ class Timeline extends React.Component {
   render() {
     return (
       <div>
-        {this.state.isFetching ? <Loader style={{}} /> : null}
         <div style={{'marginLeft': '150px', 'position': 'absolute'}}>
           {this.displayEvents(this.state.selectedMin, this.state.selectedMax)}
         </div>
+
         <PaginationWidget Size={this.state.totalPage}
           onPageChanged={this.pageChanged()}
           onPrevPageChanged={this.prevPageChanged()}
           onNextPageChanged={this.nextPageChanged()}
           currentPage={this.state.currentPage}
           maxNumbersOnLeftRight={this.state.maxNumbersOnLeftRight} />
-        <TimelineBar id={this.state.id} data={this.state.rows} setSelectedSliderValues={this.setSelectedSliderValues}
+
+        <TimelineBar id={this.state.id}
+          data={this.state.rows}
+          setSelectedSliderValues={this.setSelectedSliderValues}
           duration={timeWindow} />
       </div>
     );

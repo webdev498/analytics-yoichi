@@ -144,7 +144,7 @@ class TimelineBar extends React.Component {
               prevTimestamp = currentTimestamp;
 
               return (
-                <div id={barId} style={style}></div>
+                <div id={barId} key={barId} style={style}></div>
                 // {dateString}{event[0].type}
               );
             })
