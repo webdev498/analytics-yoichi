@@ -38,7 +38,7 @@ class riskAssetsTable extends React.Component {
       const details = row[0];
 
       return (
-        <Tr key={rows.id} style={{backgroundColor: 'transparent', cursor: 'pointer'}}
+        <Tr key={`riskAssetsTable${index}`} style={{backgroundColor: 'transparent', cursor: 'pointer'}}
           onClick={this.handleClick(row)} >
           <Td column='asset' style={{padding: '15px 0', width: '100%'}}>
             <AssetWidget data={details} />

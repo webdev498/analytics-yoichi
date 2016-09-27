@@ -36,20 +36,16 @@ export class PageContent extends React.Component {
   renderComponent(componentDetails) {
     const elm = React.createFactory(require('components/' + componentDetails.type).default, null);
 
-    const childrenArray = [];
+    let childrenArray = [];
 
     if (componentDetails.children) {
-      const children = componentDetails.children;
-
-      for (let k = 0, childrenLen = children.length; k < childrenLen; k++) {
-        const childDetails = children[k];
-        childrenArray.push(this.renderComponent(childDetails));
-      }
+      childrenArray = componentDetails.children.map(child => this.renderComponent(child));
     }
 
     const {props} = this;
     componentDetails.location = props.location;
     componentDetails.params = props.params;
+    componentDetails.key = componentDetails.id;
 
     const componentElm = elm({...componentDetails}, childrenArray);
 
@@ -66,27 +62,19 @@ export class PageContent extends React.Component {
     const {layout} = this.props;
     // const {layout} = staticLayout;
 
-    const finalElmements = [];
+    const finalElmements = layout.map((section, index) => {
+      const children = section.map(component => {
+        return this.renderComponent(component);
+      });
 
-    for (let i = 0, len = layout.length; i < len; i++) {
-      const section = layout[i];
-
-      let children = [];
-      for (let j = 0, numberOfColumns = section.length; j < numberOfColumns; j++) {
-        let componentDetails = section[j];
-        const ParentCardElement = this.renderComponent(componentDetails);
-        children.push(ParentCardElement);
-      }
-
-      const currentSection = React.DOM.section(
+      return React.DOM.section(
         {
-          style: {display: 'flex', marginBottom: '33px', justifyContent: 'space-between'}
+          style: {display: 'flex', marginBottom: '33px', justifyContent: 'space-between'},
+          key: `section${index}`
         },
         children
       );
-
-      finalElmements.push(currentSection);
-    }
+    });
 
     return React.DOM.div({}, finalElmements);
   }
