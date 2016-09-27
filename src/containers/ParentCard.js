@@ -94,6 +94,11 @@ const styles = {
     textAlign: 'center',
     fontWeight: 600,
     display: 'inline'
+  },
+  error: {
+    fontSize: '13px',
+    fontWeight: '600',
+    textAlign: 'center'
   }
 };
 
@@ -160,11 +165,6 @@ class ParentCard extends React.Component {
     props.removeComponent(props.id);
   }
 
-  getElement() {
-    const {props} = this;
-    return React.cloneElement(props.children, {...props, updateRoute: this.props.updateRoute});
-  }
-
   refreshData() {
     this.getData();
   };
@@ -223,116 +223,102 @@ class ParentCard extends React.Component {
     };
   }
 
+  getHeader() {
+    const {props} = this;
+
+    const headerStyle = props.attributes.header || {};
+
+    return <header style={{...styles.header, ...headerStyle.style}}>
+      <div>
+        <span style={{...styles.title, ...headerStyle.title}}>
+          {props.meta.title}
+        </span>
+      </div>
+
+      {
+        props.meta.showSearch
+        ? <div style={styles.inputWrap}>
+          <FontIcon className='material-icons'
+            style={{...styles.clearIcon, ...this.state.clearIconStyle}}
+            ref={(ref) => this.clearIcon = ref}>
+            close
+          </FontIcon>
+
+          <div style={{...styles.clearDiv}}
+            onClick={this.clearSearchText()} />
+
+          <input
+            id='searchText'
+            type='text'
+            className='searchText'
+            onChange={this.updateSearch()}
+            onFocus={this.displayClearIcon(true)}
+            onBlur={this.displayClearIcon(false)}
+            ref={(ref) => this.myTextInput = ref} />
+
+          <FontIcon className='material-icons'
+            style={styles.searchIcon}
+            onClick={this.focusSearchText()}>
+            search
+          </FontIcon>
+        </div>
+        : null
+      }
+
+      {
+        props.meta.showRefresh === false
+        ? null
+        : (
+          <div style={styles.iconWrap} id='refreshData'>
+            <FontIcon className='material-icons'
+              style={styles.refreshIcon}
+              onClick={this.refreshData}>
+              replay
+            </FontIcon>
+          </div>
+        )
+      }
+    </header>;
+  }
+
+  getErrorElement() {
+    const {props} = this;
+    return (
+      <div style={styles.error}>
+        {props.errorData.response.statusText}
+      </div>
+    );
+  }
+
   render() {
     const {props} = this;
 
-    if (props.meta.showHeader) {
-      const childProps = Object.assign({}, props, {search: this.state.search}),
-        cardStyle = {...styles.wrap, ...props.attributes.style};
+    const childProps = Object.assign({}, props, {search: this.state.search});
+    let cardStyle = {...styles.wrap, ...props.attributes.style};
 
-      const headerStyle = props.attributes.header || {};
-
-      return (
-        <Card style={cardStyle} id={props.id}>
-          {props.isFetching ? <Loader /> : null}
-
-          <header style={{...styles.header, ...headerStyle.style}}>
-            <div>
-              <span style={{...styles.title, ...headerStyle.title}}>
-                {props.meta.title}
-              </span>
-            </div>
-
-            {
-              props.meta.showSearch
-              ? <div style={styles.inputWrap}>
-                <FontIcon className='material-icons'
-                  style={{...styles.clearIcon, ...this.state.clearIconStyle}}
-                  ref={(ref) => this.clearIcon = ref}>
-                  close
-                </FontIcon>
-
-                <div style={{...styles.clearDiv}}
-                  onClick={this.clearSearchText()} />
-
-                <input
-                  id='searchText'
-                  type='text'
-                  className='searchText'
-                  onChange={this.updateSearch()}
-                  onFocus={this.displayClearIcon(true)}
-                  onBlur={this.displayClearIcon(false)}
-                  ref={(ref) => this.myTextInput = ref} />
-
-                <FontIcon className='material-icons'
-                  style={styles.searchIcon}
-                  onClick={this.focusSearchText()}>
-                  search
-                </FontIcon>
-              </div>
-              : null
-            }
-
-            {
-              props.meta.showRefresh === false
-              ? null
-              : (
-                <div style={styles.iconWrap} id='refreshData'>
-                  <FontIcon className='material-icons'
-                    style={styles.refreshIcon}
-                    onClick={this.refreshData}>
-                    replay
-                  </FontIcon>
-                </div>
-              )
-            }
-
-          </header>
-          <div> {React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})}
-            { /* {(!props.data && !props.isFetching) ? 'No Data Found.' : null}
-            {((props.data && props.data.rows && props.data.rows.length === 0)) ? 'No Data Found.' : null}
-            {(props.data && props.chartData &&
-              props.chartData.fieldMapping &&
-              props.chartData.fieldMapping[0] &&
-              props.chartData.fieldMapping[0].reportId &&
-              props.data[props.chartData.fieldMapping[0].reportId] &&
-              props.data[props.chartData.fieldMapping[0].reportId].rows &&
-              props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) ? 'No Data Found.' : null}
-            {(props.data && props.tableData &&
-              props.tableData.fieldMapping &&
-              props.tableData.fieldMapping[0] &&
-              props.tableData.fieldMapping[0].reportId &&
-              props.data[props.tableData.fieldMapping[0].reportId] &&
-              props.data[props.tableData.fieldMapping[0].reportId].rows &&
-              props.data[props.tableData.fieldMapping[0].reportId].rows.length === 0) ? 'No Data Found.' : null} */ }
-          </div>
-        </Card>
-      );
+    if (!props.meta.showHeader) {
+      cardStyle = {...styles.childwrap, ...props.attributes.style};
     }
-    else {
-      return (
-        <Card style={{...styles.childwrap, ...props.attributes.style}}>
-          {props.isFetching ? <Loader style={props.attributes.loaderStyle} /> : null}
-          { /* {(!props.data && !props.isFetching) ? 'No Data Found.' : null}
-          {((props.data && props.data.rows && props.data.rows.length === 0)) ? 'No Data Found.' : null}
-          {(props.data && props.chartData &&
-            props.chartData.fieldMapping &&
-            props.chartData.fieldMapping[0] &&
-            props.chartData.fieldMapping[0].reportId &&
-            props.data[props.chartData.fieldMapping[0].reportId] &&
-            props.data[props.chartData.fieldMapping[0].reportId].rows &&
-            props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) ? 'No Data Found.' : null}
-          {(props.data && props.tableData &&
-              props.tableData.fieldMapping &&
-              props.tableData.fieldMapping[0] &&
-              props.tableData.fieldMapping[0].reportId &&
-              props.data[props.tableData.fieldMapping[0].reportId] &&
-              props.data[props.tableData.fieldMapping[0].reportId].rows &&
-              props.data[props.tableData.fieldMapping[0].reportId].rows.length === 0) ? 'No Data Found.' : null} */ }
-          {this.getElement()}
-        </Card>
-      );
-    }
+
+    return (
+      <Card style={cardStyle} id={props.id}>
+        {props.isFetching ? <Loader /> : null}
+
+        {
+          props.meta.showHeader
+          ? this.getHeader()
+          : null
+        }
+
+        <div>
+          {
+            props.isError
+            ? this.getErrorElement()
+            : React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})
+          }
+        </div>
+      </Card>
+    );
   }
 }
 

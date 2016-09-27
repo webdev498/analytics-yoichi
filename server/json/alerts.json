@@ -314,9 +314,7 @@
         "name": "Table",
         "tableOptions": {
           "itemsPerPage": 5,
-          "sortable": [
-            "SCORE"
-          ],
+          "sortable": ["SCORE"],
           "defaultSort": {
             "column": "SCORE",
             "direction": "desc"
@@ -328,8 +326,9 @@
             "flex": "0 0 290px",
             "marginLeft": "33px"
           },
-          "id": "RecentAlerts"
+          "id": "risk-assets-table"
         },
+        "id": "risk-assets",
         "type": "riskAssetsTable"
       }
     ],

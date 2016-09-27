@@ -103,7 +103,7 @@ function getUrl(api, duration, routerParams) {
   return baseUrl + url + queryString;
 }
 
-export function fetchApiData(id, api, params) {
+export function fetchApiData(id, api, params, body) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
 
@@ -123,10 +123,20 @@ export function fetchApiData(id, api, params) {
     if (Array.isArray(api)) {
       const arr = api.map((apiObj) => {
         return fetch(getUrl(apiObj, currentDuration, params), {
-          method: 'GET',
-          headers: defaultHeaders
+          method: api.method || 'GET',
+          headers: defaultHeaders,
+          body
         })
-        .then(response => response.json());
+        .then(response => {
+          if (response.status >= 200 && response.status < 300) {
+            return response.json();
+          }
+          else {
+            const error = new Error(response.statusText);
+            error.response = response;
+            throw error;
+          }
+        });
       });
 
       Promise.all(arr)
@@ -134,10 +144,6 @@ export function fetchApiData(id, api, params) {
         const json = {};
 
         results.forEach((val, index) => {
-          if (val.errorCode && val.errorCode >= 400) {
-            throw new Error(val.errorMessage);
-          }
-
           const apiId = api[index].id;
           json[apiId] = val;
         });
@@ -150,17 +156,23 @@ export function fetchApiData(id, api, params) {
     }
     else {
       return fetch(getUrl(api, currentDuration, params), {
-        method: 'GET',
-        headers: defaultHeaders
+        method: api.method || 'GET',
+        headers: Object.assign({}, defaultHeaders, {
+          'Content-Type': 'application/json'
+        }),
+        body: JSON.stringify(body)
       })
       .then(response => {
-        return response.json();
+        if (response.status >= 200 && response.status < 300) {
+          return response.json();
+        }
+        else {
+          const error = new Error(response.statusText);
+          error.response = response;
+          throw error;
+        }
       })
       .then(json => {
-        if (json.errorCode && json.errorCode >= 400) {
-          throw new Error(json.errorMessage);
-        }
-
         dispatch(receiveApiData(id, {json, api}));
       })
       .catch((ex) => {

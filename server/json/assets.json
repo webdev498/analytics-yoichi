@@ -195,9 +195,13 @@
       },
       {
         "chartOptions": {
-          "showValues": "0",
+          "showValues": "1",
           "showLabels": "1",
-          "numberSuffix": "%"
+          "numberSuffix": "%",
+          "chartRightMargin": "0"
+        },
+        "chart": {
+          "showAnnotations": false
         },
         "chartData": {
           "showTrendLines": true,
@@ -329,9 +333,13 @@
       },
       {
         "chartOptions": {
-          "showValues": "0",
+          "showValues": "1",
           "showLabels": "1",
-          "numberSuffix": "%"
+          "numberSuffix": "%",
+          "chartRightMargin": "0"
+        },
+        "chart": {
+          "showAnnotations": false
         },
         "chartData": {
           "showTrendLines": true,

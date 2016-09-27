@@ -9,11 +9,15 @@ import config from '../config';
 import webpackDevMiddleware from './middleware/webpack-dev';
 import webpackHMRMiddleware from './middleware/webpack-hmr';
 
+import koaBody from 'koa-body';
+
 import apiMiddleware from './routes/api';
 
 const debug = _debug('app:server');
 const paths = config.utils_paths;
 const app = new Koa();
+
+app.use(koaBody());
 
 // use koa routing
 // app.use(routing(app));

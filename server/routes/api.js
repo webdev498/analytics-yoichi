@@ -45,6 +45,8 @@ const reportId = new koaRouter();
 //   return res;
 // }, async function(ctx, next) {})
 
+const timeout = 1000 * 60;
+
 router
 .get('/store/*', layoutRoutes)
 .get('*', async function (ctx, next) {
@@ -54,11 +56,31 @@ router
     {
       method: 'GET',
       headers: ctx.headers,
+      timeout,
       agent
     }
   );
 
-  ctx.set('content-type', res.headers.get('content-type'));
+  ctx.set('content-type', res.headers.get('content-type'))
+  ctx.status = res.status;
+  ctx.statusText = res.statusText;
+  ctx.body = res.body;
+})
+.post('*', async function (ctx, next) {
+  const url = ctx.request.url;
+  console.log('url', url);
+  const res = await fetch(serverBaseUrl + ctx.url,
+    {
+      method: 'POST',
+      headers: ctx.headers,
+      'rejectUnauthorized': false,
+      timeout,
+      agent,
+      body: JSON.stringify(ctx.request.body)
+    }
+  );
+
+  ctx.set('content-type', res.headers.get('content-type'))
   ctx.body = res.body;
 });
 

@@ -72,9 +72,16 @@ function getData(data, index, label, callback) {
 }
 
 function getDataSource(props, rawData) {
-  const {chartData: {fieldMapping, filter}, data: {rows, columns}, duration} = props;
-  const x = getIndex(fieldMapping.x[0], columns),
-    y = getIndex(fieldMapping.y[0], columns);
+  const {chartData: {fieldMapping: {x, y}, filter}, data, duration} = props;
+
+  let {rows, columns} = data;
+
+  if (!columns) {
+    ({rows, columns} = data[x[0].reportId]);
+  }
+
+  const xIndex = getIndex(x[0], columns),
+    yIndex = getIndex(y[0], columns);
 
   let filterData;
   if (filter) {
@@ -83,13 +90,16 @@ function getDataSource(props, rawData) {
   }
 
   const keys = Object.keys(filterData);
+
+  if (keys.length === 0) return;
+
   const categories = [{
-    category: getData(filterData[keys[0]], x, 'label', val => (formatDate(val, duration)))
+    category: getData(filterData[keys[0]], xIndex, 'label', val => (formatDate(val, duration)))
   }];
 
   const dataset = [];
   keys.forEach(key => {
-    const data = getData(filterData[key], y, 'value');
+    const data = getData(filterData[key], yIndex, 'value');
     dataset.push({
       seriesname: key,
       data

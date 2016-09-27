@@ -6,13 +6,22 @@ const styles = {
     display: 'flex'
   },
   summaryTitle: {
-    margin: 0
+    margin: 0,
+    fontWeight: '600',
+    fontSize: '13px'
   },
   rankScore: {
-    flex: '0 0 50px'
+    flex: '0 0 45px',
+    height: '45px',
+    width: '45px',
+    lineHeight: '45px',
+    fontSize: '20px'
   },
   summaryWrap: {
     marginLeft: '10px'
+  },
+  text: {
+    fontWeight: '300'
   }
 };
 
@@ -31,7 +40,7 @@ class SummaryWidget extends React.Component {
           <h5 style={styles.summaryTitle}>
             Summary
           </h5>
-          <div>
+          <div style={styles.text}>
             {data.message}
           </div>
         </div>
