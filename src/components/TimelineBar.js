@@ -12,6 +12,8 @@ let baseHeight = 900,
   rows = [],
   selectedTimeWindow = '';
 
+const halfOfTheSliderHeight = 12.8;
+
 class TimelineBar extends React.Component {
   static propTypes = {
     setSelectedSliderValues: PropTypes.func
@@ -21,7 +23,7 @@ class TimelineBar extends React.Component {
     super(props);
     this.state = {
       'selectedAreaStyle': {
-        'marginTop': '0px', // ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - 12.8) + 'px',
+        'marginTop': '0px', // ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - halfOfTheSliderHeight) + 'px',
         'height': '65px', // (baseHeight * ((sliderValue + sliderRange) - (sliderValue - sliderRange)) / 100) + 'px',
         'width': timelineBarWidth + 'px',
         'position': 'absolute',
@@ -46,7 +48,7 @@ class TimelineBar extends React.Component {
 
       this.setState({
         'selectedAreaStyle': {
-          'marginTop': ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8) + 'px',
+          'marginTop': ((baseHeight * (100 - selectedRange[1]) / 100) - halfOfTheSliderHeight) + 'px',
           'height': (baseHeight * (selectedRange[1] - selectedRange[0]) / 100) + 'px',
           'width': timelineBarWidth + 'px',
           'position': 'absolute',
@@ -57,8 +59,8 @@ class TimelineBar extends React.Component {
         }
       });
 
-      let selectedMin = ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8),
-        selectedMax = ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8) +
+      let selectedMin = ((baseHeight * (100 - selectedRange[1]) / 100) - halfOfTheSliderHeight),
+        selectedMax = ((baseHeight * (100 - selectedRange[1]) / 100) - halfOfTheSliderHeight) +
           (baseHeight * (selectedRange[1] - selectedRange[0]) / 100);
 
       this.props.setSelectedSliderValues(selectedMin, selectedMax);
@@ -86,7 +88,7 @@ class TimelineBar extends React.Component {
 
       // this.state = {
       //   'selectedAreaStyle': {
-      //     'marginTop': ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - 12.8) + 'px',
+      //     'marginTop': ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - halfOfTheSliderHeight) + 'px',
       //     'height': (baseHeight * ((sliderValue + sliderRange) - (sliderValue - sliderRange)) / 100) + 'px',
       //     'width': timelineBarWidth + 'px',
       //     'position': 'absolute',
