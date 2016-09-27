@@ -1,7 +1,5 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
-// import $ from 'jquery';
-// import {slider} from 'jquery-ui';
 import moment from 'moment';
 
 let baseHeight = 900,
@@ -9,26 +7,33 @@ let baseHeight = 900,
   timelineBarWidth = '50',  // '50';
   sliderValue = 95,
   sliderRange = 4,
-  rows = [];
+  rows = [],
+  selectedTimeWindow = '';
 
-class TimelineGraph extends React.Component {
+const halfOfTheSliderHeight = 12.8;
+
+class TimelineBar extends React.Component {
   static propTypes = {
-    setSelectedSliderValues: PropTypes.func
+    setSelectedSliderValues: PropTypes.func,
+    id: PropTypes.string
   }
 
   constructor(props) {
     super(props);
     this.state = {
       'selectedAreaStyle': {
-        'marginTop': '0px', // ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - 12.8) + 'px',
-        'height': '65px', // (baseHeight * ((sliderValue + sliderRange) - (sliderValue - sliderRange)) / 100) + 'px',
-        'width': timelineBarWidth + 'px',
-        'position': 'absolute',
-        'marginLeft': '5px',
-        'background': Colors.smoke,
-        'zIndex': 1000,
-        'opacity': 0.7
-      }
+        // 'marginTop': '0px', // ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - halfOfTheSliderHeight) + 'px',
+        // 'height': '65px', // (baseHeight * ((sliderValue + sliderRange) - (sliderValue - sliderRange)) / 100) + 'px',
+        // 'width': timelineBarWidth + 'px',
+        // 'position': 'absolute',
+        // 'marginLeft': '5px',
+        // 'background': Colors.smoke,
+        // 'zIndex': 1000,
+        // 'opacity': 0.7
+      },
+      'sliderId': 'slider-' + props.id,
+      'selectedAreaId': 'selected-area-' + props.id,
+      'timelineId': props.id
     };
 
     this.updateSelectedArea = this.updateSelectedArea.bind(this);
@@ -37,7 +42,7 @@ class TimelineGraph extends React.Component {
 
   updateSelectedArea() {
     return (event) => {
-      let sliderValue = $('#slider-range').slider('value'),
+      let sliderValue = $('#' + this.state.sliderId).slider('value'),
         selectedRange = [
           sliderValue - sliderRange,
           sliderValue + sliderRange
@@ -45,7 +50,7 @@ class TimelineGraph extends React.Component {
 
       this.setState({
         'selectedAreaStyle': {
-          'marginTop': ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8) + 'px',
+          'marginTop': ((baseHeight * (100 - selectedRange[1]) / 100) - halfOfTheSliderHeight) + 'px',
           'height': (baseHeight * (selectedRange[1] - selectedRange[0]) / 100) + 'px',
           'width': timelineBarWidth + 'px',
           'position': 'absolute',
@@ -56,8 +61,8 @@ class TimelineGraph extends React.Component {
         }
       });
 
-      let selectedMin = ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8),
-        selectedMax = ((baseHeight * (100 - selectedRange[1]) / 100) - 12.8) +
+      let selectedMin = ((baseHeight * (100 - selectedRange[1]) / 100) - halfOfTheSliderHeight),
+        selectedMax = ((baseHeight * (100 - selectedRange[1]) / 100) - halfOfTheSliderHeight) +
           (baseHeight * (selectedRange[1] - selectedRange[0]) / 100);
 
       this.props.setSelectedSliderValues(selectedMin, selectedMax);
@@ -74,7 +79,7 @@ class TimelineGraph extends React.Component {
     rows = props.data;
 
     if (rows.length > 0) {
-      $('#slider-range').slider({
+      $('#' + this.state.sliderId).slider({
         orientation: 'vertical',
         range: 'min',
         min: 0,
@@ -82,9 +87,10 @@ class TimelineGraph extends React.Component {
         slide: this.updateSelectedArea(),
         value: sliderValue
       });
+
       // this.state = {
       //   'selectedAreaStyle': {
-      //     'marginTop': ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - 12.8) + 'px',
+      //     'marginTop': ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - halfOfTheSliderHeight) + 'px',
       //     'height': (baseHeight * ((sliderValue + sliderRange) - (sliderValue - sliderRange)) / 100) + 'px',
       //     'width': timelineBarWidth + 'px',
       //     'position': 'absolute',
@@ -94,7 +100,7 @@ class TimelineGraph extends React.Component {
       //     'opacity': 0.7
       //   }
       // };
-      this.updateSelectedArea();
+      // this.updateSelectedArea();
     }
   }
 
@@ -104,10 +110,10 @@ class TimelineGraph extends React.Component {
 
     return (
       <div>
-        <div id='slider-range' style={{height: baseHeight + 'px', position: 'absolute'}}></div>
+        <div id={this.state.sliderId} style={{height: baseHeight + 'px', position: 'absolute'}}></div>
         {this.displayEventBar()}
-        <div id='selectedArea' style={this.state.selectedAreaStyle}></div>
-        <div id='timelineGraph' style={{
+        <div id={this.state.selectedAreaId} style={this.state.selectedAreaStyle}></div>
+        <div id={this.state.timelineId} style={{
           height: baseHeight + 'px', width: '70px', border: '0px solid red',
           marginLeft: '5px', position: 'absolute'}}>
           {
@@ -149,4 +155,4 @@ class TimelineGraph extends React.Component {
   }
 }
 
-export default TimelineGraph;
+export default TimelineBar;

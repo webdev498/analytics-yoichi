@@ -6,14 +6,6 @@ import {
   formatMicroseconds
 } from 'utils/utils';
 
-const styles = {
-  list: {
-    listStyleType: 'none',
-    margin: 0,
-    padding: 0
-  }
-};
-
 export function fetchData(parameters) {
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
@@ -60,7 +52,7 @@ export function getDetails(row) {
     case 'alert':
       return getAlert(row);
     default:
-      return getOther(row.data[row.type]);
+      return null;// getOther(row.data[row.type]);
   }
 }
 
@@ -111,7 +103,7 @@ function getDestinaton(dest) {
 export function getSourceDestination(row) {
   const {source, destination} = row;
   return (
-    <div style={styles.source}>
+    <div>
       <span>{getSource(source)}</span>
       <span>{getDestinaton(destination)}</span>
     </div>
@@ -212,7 +204,11 @@ function getOther(data) {
   }
 
   return (
-    <ul style={styles.list}>
+    <ul style={{
+      listStyleType: 'none',
+      margin: 0,
+      padding: 0
+    }}>
       {
         keys.map((key) => {
           const value = data[key];
@@ -295,7 +291,9 @@ function checkForNANUndefined(value, title, newline) {
       );
     }
     else {
-      return null;
+      return (
+        <span></span>
+      );
     }
   }
 }
