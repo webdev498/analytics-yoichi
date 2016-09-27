@@ -94,6 +94,11 @@ const styles = {
     textAlign: 'center',
     fontWeight: 600,
     display: 'inline'
+  },
+  error: {
+    fontSize: '13px',
+    fontWeight: '600',
+    textAlign: 'center'
   }
 };
 
@@ -158,11 +163,6 @@ class ParentCard extends React.Component {
     this.unsubscribe && this.unsubscribe();
     const {props} = this;
     props.removeComponent(props.id);
-  }
-
-  getElement() {
-    const {props} = this;
-    return React.cloneElement(props.children, {...props, updateRoute: this.props.updateRoute});
   }
 
   refreshData() {
@@ -281,6 +281,15 @@ class ParentCard extends React.Component {
     </header>;
   }
 
+  getErrorElement() {
+    const {props} = this;
+    return (
+      <div style={styles.error}>
+        {props.errorData.response.statusText}
+      </div>
+    );
+  }
+
   render() {
     const {props} = this;
 
@@ -302,7 +311,11 @@ class ParentCard extends React.Component {
         }
 
         <div>
-          {React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})}
+          {
+            props.isError
+            ? this.getErrorElement()
+            : React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})
+          }
         </div>
       </Card>
     );

@@ -10,25 +10,48 @@ class PaginationWidget extends React.Component {
   }
 
   render() {
-    // console.log('currentPage:'+this.props.currentPage);
-    var li = [];
-    var pageCount = this.props.Size;
-    for (var i = 1; i <= pageCount; i++) {
-      if (i === 1) {
-        li.push(<li key='Prev' >
-          <a onClick={this.props.onPrevPageChanged.bind(null, this.props.currentPage)}>Prev</a>
-        </li>);
-      }
-      if (this.props.currentPage === i) {
-        li.push(<li key={i} className='active'><a>{i}</a></li>);
+    let li = [];
+    let pageCount = this.props.Size,
+      currentPage = this.props.currentPage;
+    let start = currentPage - 4;
+    let end = currentPage + 4;
+    if (currentPage < 5) {
+      start = 1;
+      if (pageCount < 9) {
+        end = pageCount;
       }
       else {
-        li.push(<li key={i} ><a onClick={this.props.onPageChanged.bind(null, i)}>{i}</a></li>);
+        end = 9;
       }
-      if (i === pageCount) {
-        li.push(<li key='Next' >
-          <a onClick={this.props.onNextPageChanged.bind(null, this.props.currentPage, pageCount)}>Next</a>
-        </li>);
+    }
+    if (currentPage > pageCount - 4) {
+      if ((pageCount - 8) < 1) {
+        start = 1;
+      }
+      else {
+        start = pageCount - 8;
+      }
+      end = pageCount;
+    }
+    if (pageCount > 0 && start > 0 && end > 0) {
+      for (let i = start; i <= end; i++) {
+        if (i === start) {
+          li.push(<li key='Prev'>
+            <button onClick={this.props.onPrevPageChanged.bind(null, this.props.currentPage)}>Prev</button>
+          </li>);
+        }
+
+        if (this.props.currentPage === i) {
+          li.push(<li key={i} className='active'><button>{i}</button></li>);
+        }
+        else {
+          li.push(<li key={i} ><button onClick={this.props.onPageChanged.bind(null, i)}>{i}</button></li>);
+        }
+        if (i === end) {
+          li.push(<li key='Next'>
+            <button onClick={this.props.onNextPageChanged.bind(null, this.props.currentPage, pageCount)}>Next</button>
+          </li>);
+        }
       }
     }
     return (<ul className='pagination'>{li}</ul>);
