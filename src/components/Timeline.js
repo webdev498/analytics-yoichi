@@ -14,14 +14,14 @@ import {
 let timeWindow = '1h',
   sliderRange = 4;
 
-const topMarginLag = 200;
+const topMarginLag = 985;
 
 function getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, displayCount) {
   let topPositions = getPosition(document.getElementById(barId));
   if (topPositions.y !== undefined) {
     let top = topPositions.y - topMarginLag;
-    // console.log(selectedMin, selectedMax, topPositions.y, top);
     if (selectedMin !== '' && selectedMax !== '') {
+      // console.log(selectedMin, selectedMax, topPositions.y, top);
       if (selectedMin <= top && selectedMax >= top) {
         if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null &&
           displayCount < sliderRange) {
@@ -126,7 +126,7 @@ class Timeline extends React.Component {
       }
 
       this.state.totalCount = props.data.total;
-      this.state.totalPage = parseInt(props.data.total / props.attributes.noOfEventsPerPage);
+      this.state.totalPage = Math.ceil(props.data.total / props.attributes.noOfEventsPerPage);
       this.state.currentPage = 1;
       this.state.pageSize = props.attributes.noOfEventsPerPage;
       this.state.nextPageStart = props.data.next;
@@ -201,13 +201,13 @@ class Timeline extends React.Component {
     });
 
     const parameters = {
-      pageNumber: pageNumber,
+      pageNumber: (pageNumber === 1) ? (this.state.nextPageStart + this.state.pageSize) : this.state.nextPageStart,
       timelineType: this.state.timelineType,
       duration: timeWindow,
       alertDate: this.state.alertDate,
-      filter: this.state.filter,
-      pageSize: this.state.pageSize,
-      nextPageStart: this.state.nextPageStart
+      filter: window.filter, // this.state.filter,
+      pageSize: this.state.pageSize
+      // nextPageStart: this.state.nextPageStart
     };
 
     const fetchedData = fetchData(parameters);
@@ -224,6 +224,8 @@ class Timeline extends React.Component {
           'isFetching': false,
           'currentPage': pageNumber,
           'rows': json.rows,
+          // 'nextPageStart': (pageNumber > 1) ? (that.state.nextPageStart + that.state.pageSize)
+          //   : that.state.nextPageStart,
           'nextPageStart': json.next,
           'selectedMin': 0,
           'selectedMax': 50

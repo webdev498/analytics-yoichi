@@ -58,6 +58,8 @@ class AlertDetailsNew extends React.Component {
         date: params.date
       });
 
+      window.filter = data.data.rank_alert.trafficFilter;
+
       const updatedApi = Object.assign({}, api, {queryParams: updatedQueryParams});
 
       console.log('updatedApi', updatedApi, api);
