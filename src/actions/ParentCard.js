@@ -103,7 +103,7 @@ function getUrl(api, duration, routerParams) {
   return baseUrl + url + queryString;
 }
 
-export function fetchApiData(id, api, params, body) {
+export function fetchApiData(id, api, params, options) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
 
@@ -122,6 +122,7 @@ export function fetchApiData(id, api, params, body) {
 
     if (Array.isArray(api)) {
       const arr = api.map((apiObj) => {
+        const body = options && JSON.stringify(options.body);
         return fetch(getUrl(apiObj, currentDuration, params), {
           method: api.method || 'GET',
           headers: defaultHeaders,
@@ -146,6 +147,7 @@ export function fetchApiData(id, api, params, body) {
         results.forEach((val, index) => {
           const apiId = api[index].id;
           json[apiId] = val;
+          json[apiId].options = options;
         });
 
         dispatch(receiveApiData(id, {json, api}));
@@ -155,12 +157,13 @@ export function fetchApiData(id, api, params, body) {
       });
     }
     else {
+      const body = options && JSON.stringify(options.body);
       return fetch(getUrl(api, currentDuration, params), {
         method: api.method || 'GET',
         headers: Object.assign({}, defaultHeaders, {
           'Content-Type': 'application/json'
         }),
-        body: JSON.stringify(body)
+        body
       })
       .then(response => {
         if (response.status >= 200 && response.status < 300) {
@@ -173,6 +176,7 @@ export function fetchApiData(id, api, params, body) {
         }
       })
       .then(json => {
+        json.options = options;
         dispatch(receiveApiData(id, {json, api}));
       })
       .catch((ex) => {

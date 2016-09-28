@@ -37,11 +37,11 @@
                 "path": "/api/alert/traffic",
                 "pathParams": {},
                 "queryParams": {
-                  "count": 200,
+                  "count": 50,
                   "from": 0,
                   "window": "",
                   "filter": "data.rank_alert.trafficFilter$customParam",
-                  "date": ":pathParam"
+                  "date": "date:pathParam"
                 }
               }
             }
