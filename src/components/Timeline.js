@@ -135,8 +135,6 @@ class Timeline extends React.Component {
       this.state.nextPageStart = props.data.next;
       this.state.rows = props.data.rows;
       timeWindow = props.duration;
-      // this.state.selectedMin = 0;
-      // this.state.selectedMin = 55;
 
       if (this.state.rows.length === 0) {
         return (
