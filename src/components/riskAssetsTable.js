@@ -40,8 +40,9 @@ class riskAssetsTable extends React.Component {
       return (
         <Tr key={`riskAssetsTable${index}`} style={{backgroundColor: 'transparent', cursor: 'pointer'}}
           onClick={this.handleClick(row)} >
-          <Td column='asset' style={{padding: '15px 0', width: '100%'}}>
-            <AssetWidget data={details} />
+          <Td column='asset' style={{padding: '15px 0'}}>
+            <AssetWidget data={details}
+              headingStyle={{width: '110px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}} />
           </Td>
           <Td column='score' style={{padding: '15px 0', width: '60px', textAlign: 'right'}}>
             <ScoreWidget scoreValue={details.risk.score} inverse />
