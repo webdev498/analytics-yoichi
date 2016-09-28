@@ -194,21 +194,27 @@ class ParentCard extends React.Component {
         body = body[key];
       });
 
-      fetchApiData(id, api, params, body);
+      fetchApiData(id, api, params, {body});
     }
     else {
       const {queryParams} = Object.assign({}, api);
       const queryKeys = Object.keys(queryParams);
 
+      let customParams = null;
       queryKeys.forEach(key => {
         let query = queryParams[key];
         if (typeof query === 'string' && query.includes('$customParam')) {
           queryParams[key] = this.getQueryData(query.replace('$customParam', ''), data);
+          // this is to pass custom params such as filter to be passed
+          // to the component that is consuming this api.
+          customParams = {
+            [key]: queryParams[key]
+          };
         }
       });
 
       const updatedApi = Object.assign({}, api, {queryParams: queryParams});
-      fetchApiData(id, updatedApi, params);
+      fetchApiData(id, updatedApi, params, {customParams});
     }
   }
 
