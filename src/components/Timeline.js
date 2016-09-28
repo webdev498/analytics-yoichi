@@ -20,8 +20,8 @@ function getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, di
   let topPositions = getPosition(document.getElementById(barId));
   if (topPositions.y !== undefined) {
     let top = topPositions.y - topMarginLag;
+    console.log(barId, selectedMin, selectedMax, topPositions.y, top);
     if (selectedMin !== '' && selectedMax !== '') {
-      // console.log(selectedMin, selectedMax, topPositions.y, top);
       if (selectedMin <= top && selectedMax >= top) {
         if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null &&
           displayCount < sliderRange) {
@@ -62,18 +62,18 @@ class Timeline extends React.Component {
     this.state = {
       'id': props.id,
       'type': attributes.type,
-      'style': {
-        'selectedArea': {
-          'marginTop': '0px',
-          'height': '0px',
-          'width': '50px',
-          'position': 'absolute',
-          'marginLeft': '5px',
-          'background': Colors.smoke
-        }
+      'selectedAreaStyle': {
+        'marginTop': '0px',
+        'height': '65px',
+        'width': '50px',
+        'position': 'absolute',
+        'marginLeft': '5px',
+        'background': Colors.smoke,
+        'zIndex': 1000,
+        'opacity': 0.7
       },
       'selectedMin': 0,
-      'selectedMax': 50,
+      'selectedMax': 55,
       'timelineType': attributes.type,
       'alertDate': params.date,
       // 'filter': props.meta.api.queryParams.filter,
@@ -85,7 +85,8 @@ class Timeline extends React.Component {
       'displaySelectedRows': props.attributes.displaySelectedRows,
       'rows': [],
       'nextPageStart': 0,
-      'isFetching': false
+      'isFetching': false,
+      'timelineBarLoaded': false
     };
 
     this.pageChanged = this.pageChanged.bind(this);
@@ -94,6 +95,8 @@ class Timeline extends React.Component {
     this.fetchData = this.fetchData.bind(this);
     this.setSelectedSliderValues = this.setSelectedSliderValues.bind(this);
     this.displayData = this.displayData.bind(this);
+    this.getRows = this.getRows.bind(this);
+    this.timelineBarLoaded = this.timelineBarLoaded.bind(this);
   }
 
   setSelectedSliderValues(selectedMin, selectedMax) {
@@ -118,7 +121,7 @@ class Timeline extends React.Component {
     }
   }
 
-  displayEvents(selectedMin, selectedMax) {
+  getRows() {
     const {props} = this;
     if (this.state.rows.length === 0 || timeWindow !== props.duration) {
       if (!props.data) {
@@ -132,14 +135,21 @@ class Timeline extends React.Component {
       this.state.nextPageStart = props.data.next;
       this.state.rows = props.data.rows;
       timeWindow = props.duration;
+      // this.state.selectedMin = 0;
+      // this.state.selectedMin = 55;
 
       if (this.state.rows.length === 0) {
         return (
-          <div style={{marginLeft: '-150px'}}>No additional results were found.</div>
+          <div>No additional results were found.</div>
         );
       }
     }
+  }
 
+  displayEvents(selectedMin, selectedMax) {
+    if (!this.state.timelineBarLoaded) {
+      return;
+    }
     const rows = this.state.rows,
       displaySelectedRows = this.state.displaySelectedRows,
       that = this;
@@ -228,7 +238,7 @@ class Timeline extends React.Component {
           //   : that.state.nextPageStart,
           'nextPageStart': json.next,
           'selectedMin': 0,
-          'selectedMax': 50
+          'selectedMax': 55
         });
       }
     );
@@ -262,24 +272,41 @@ class Timeline extends React.Component {
     };
   }
 
+  timelineBarLoaded(isLoaded) {
+    if (isLoaded) {
+      this.setState({
+        'timelineBarLoaded': isLoaded
+      });
+    }
+  }
+
   render() {
     return (
-      <div>
-        <div style={{'marginLeft': '150px', 'position': 'absolute'}}>
-          {this.displayEvents(this.state.selectedMin, this.state.selectedMax)}
-        </div>
+      <div>{this.getRows()}
+        {
+          (this.state.rows.length > 0)
+            ? <div>
+              <TimelineBar id={this.state.id}
+                data={this.state.rows}
+                setSelectedSliderValues={this.setSelectedSliderValues}
+                duration={timeWindow}
+                timelineBarLoaded={this.timelineBarLoaded}
+                isLoaded={this.state.timelineBarLoaded}
+                selectedAreaStyle={this.state.selectedAreaStyle} />
 
-        <PaginationWidget Size={this.state.totalPage}
-          onPageChanged={this.pageChanged()}
-          onPrevPageChanged={this.prevPageChanged()}
-          onNextPageChanged={this.nextPageChanged()}
-          currentPage={this.state.currentPage}
-          maxNumbersOnLeftRight={this.state.maxNumbersOnLeftRight} />
+              <div style={{'marginLeft': '150px', 'position': 'absolute'}}>
+                {this.displayEvents(this.state.selectedMin, this.state.selectedMax)}
+              </div>
 
-        <TimelineBar id={this.state.id}
-          data={this.state.rows}
-          setSelectedSliderValues={this.setSelectedSliderValues}
-          duration={timeWindow} />
+              <PaginationWidget Size={this.state.totalPage}
+                onPageChanged={this.pageChanged()}
+                onPrevPageChanged={this.prevPageChanged()}
+                onNextPageChanged={this.nextPageChanged()}
+                currentPage={this.state.currentPage}
+                maxNumbersOnLeftRight={this.state.maxNumbersOnLeftRight} />
+            </div>
+          : null
+        }
       </div>
     );
   }
