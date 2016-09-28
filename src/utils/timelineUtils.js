@@ -8,18 +8,27 @@ import {
   getEventTypeString
 } from 'utils/utils';
 
-export function fetchData(parameters) {
+export function fetchData(parameters, type) {
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
-    apiUrl = baseUrl + '/api/alert/' + parameters.timelineType + '?window=' + parameters.duration +
-    '&date=' + parameters.alertDate + '&filter=' + parameters.filter + '&count=' + parameters.pageSize +
-    '&from=' + parameters.pageNumber,
     customHeaders = {
       'Accept': 'application/json'
     },
     defaultHeaders = Object.assign({
       'Authorization': `${tokenType} ${accessToken}`
     }, customHeaders);
+
+  let apiUrl = '';
+
+  // if (type === 'traffic') {
+    apiUrl = baseUrl + '/api/alert/' + parameters.timelineType + '?window=' + parameters.duration +
+      '&date=' + parameters.alertDate + '&filter=' + parameters.filter + '&count=' + parameters.pageSize +
+      '&from=' + parameters.pageNumber;
+  // }
+
+  // if (type === 'alert') {
+  //   apiUrl = baseUrl + '/api/analytics/reporting/execute/' + parameters.reportId + '?window=' + parameters.duration;
+  // }
 
   return fetch(apiUrl, {
     method: 'GET',
@@ -28,9 +37,6 @@ export function fetchData(parameters) {
   .then(response => response.json()
   )
   .catch(error => {
-    this.setState({
-      isFetching: false
-    });
     return Promise.reject(Error(error.message));
   });
 }
@@ -285,12 +291,19 @@ function getRankAlert(row) {
   return (
     <div>
       <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: '600'}}>
-        {checkForNANUndefined(data.rank_alert.message, '', true)}
+        {checkForNANUndefined(data.rank_alert.description, '', true)}
       </div>
-      {getEventType(row)}
       <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
-        {checkForNANUndefined(data.rank_alert.name, 'Name', true)}
-        {checkForNANUndefined(data.rank_alert.category, 'Category', false)}
+        {checkForNANUndefined(data.rank_alert.message, '', true)}
+        {checkForNANUndefined(data.rank_alert.category, 'Category', true)}
+        {checkForNANUndefined(data.rank_alert.score, 'Score', true)}
+        {row.source !== undefined
+          ? checkForNANUndefined(row.source.ip, 'Source', true)
+          // (row.source.port !== undefined ? checkForNANUndefined(row.source.port, ':', true) : null)
+          : null}
+        {row.destination !== undefined
+          ? checkForNANUndefined(row.destination.ip, 'Destination', false, 'Score', true)
+          : null}
       </div>
     </div>
   );

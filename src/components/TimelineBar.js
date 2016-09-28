@@ -77,7 +77,7 @@ class TimelineBar extends React.Component {
     if (!props.data) {
       return;
     }
-
+    // console.log('data', props.data);
     rows = props.data;
 
     if (rows.length > 0) {

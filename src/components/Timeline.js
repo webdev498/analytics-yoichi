@@ -12,15 +12,14 @@ import {
 } from 'utils/timelineUtils';
 
 let timeWindow = '1h',
-  sliderRange = 4;
-
-const topMarginLag = 985;
+  sliderRange = 4,
+  topMarginLag = 980;
 
 function getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, displayCount) {
   let topPositions = getPosition(document.getElementById(barId));
   if (topPositions.y !== undefined) {
     let top = topPositions.y - topMarginLag;
-    console.log(barId, selectedMin, selectedMax, topPositions.y, top);
+    // console.log(barId, selectedMin, selectedMax, topPositions.y, top);
     if (selectedMin !== '' && selectedMax !== '') {
       if (selectedMin <= top && selectedMax >= top) {
         if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null &&
@@ -51,7 +50,8 @@ class Timeline extends React.Component {
     attributes: PropTypes.object.isRequired,
     meta: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
-    params: PropTypes.object.isRequired
+    params: PropTypes.object.isRequired,
+    data: PropTypes.object
   }
 
   constructor(props) {
@@ -97,6 +97,7 @@ class Timeline extends React.Component {
     this.displayData = this.displayData.bind(this);
     this.getRows = this.getRows.bind(this);
     this.timelineBarLoaded = this.timelineBarLoaded.bind(this);
+    // this.setTopMarginLag = this.setTopMarginLag.bind(this);
   }
 
   setSelectedSliderValues(selectedMin, selectedMax) {
@@ -123,6 +124,7 @@ class Timeline extends React.Component {
 
   getRows() {
     const {props} = this;
+    console.log(props);
     if (this.state.rows.length === 0 || timeWindow !== props.duration) {
       if (!props.data) {
         return;
@@ -142,6 +144,7 @@ class Timeline extends React.Component {
         );
       }
     }
+    topMarginLag = props.attributes.topMarginLag;
   }
 
   displayEvents(selectedMin, selectedMax) {
@@ -155,7 +158,7 @@ class Timeline extends React.Component {
     let displayCount = 0,
       mainDivStyle = {
         width: '675px',
-        height: '940px',
+        height: '935px',
         overflow: 'hidden'
       },
       scrollbarStyle = displaySelectedRows ? '' : 'scrollbarStyle';
@@ -203,50 +206,94 @@ class Timeline extends React.Component {
     );
   }
 
-  fetchData(that, pageNumber) {
-    that.setState({
-      'isFetching': true
-    });
-
-    const parameters = {
-      pageNumber: (pageNumber === 1) ? (this.state.nextPageStart + this.state.pageSize) : this.state.nextPageStart,
-      timelineType: this.state.timelineType,
-      duration: timeWindow,
-      alertDate: this.state.alertDate,
-      filter: window.filter, // this.state.filter,
-      pageSize: this.state.pageSize
-      // nextPageStart: this.state.nextPageStart
-    };
-
-    const fetchedData = fetchData(parameters);
-
-    if (!fetchedData) {
+  fetchData(that, pageNumber, type) {
+    return (event) => {
       that.setState({
-        isFetching: false
+        'isFetching': true
       });
-      return;
-    }
-    fetchedData.then(
-      function(json) {
+
+      let parameters = {};
+
+      // if (type === 'traffic') {
+        parameters = {
+          pageNumber: (pageNumber === 1) ? (this.state.nextPageStart + this.state.pageSize) : this.state.nextPageStart,
+          timelineType: this.state.timelineType,
+          duration: timeWindow,
+          alertDate: this.state.alertDate,
+          filter: this.props.data.options.customParams.filter,
+          pageSize: this.state.pageSize
+        };
+      // }
+
+      // if (type === 'alert') {
+      //   parameters = {
+      //     duration: timeWindow,
+      //     reportId: 'taf_alert_by_asset' // kept this hardcoded for now.
+      //     // Later, I will have to use fetchApiData function from props object
+      //   };
+      // }
+
+      const fetchedData = fetchData(parameters, type);
+
+      if (!fetchedData) {
         that.setState({
-          'isFetching': false,
-          'currentPage': pageNumber,
-          'rows': json.rows,
-          // 'nextPageStart': (pageNumber > 1) ? (that.state.nextPageStart + that.state.pageSize)
-          //   : that.state.nextPageStart,
-          'nextPageStart': json.next,
-          'selectedMin': 0,
-          'selectedMax': 55
+          isFetching: false
         });
+        return;
       }
-    );
+      fetchedData.then(
+        function(json) {
+          that.setState({
+            'isFetching': false,
+            'currentPage': pageNumber,
+            'rows': json.rows,
+            // 'nextPageStart': (pageNumber > 1) ? (that.state.nextPageStart + that.state.pageSize)
+            //   : that.state.nextPageStart,
+            'nextPageStart': json.next,
+            'selectedMin': 0,
+            'selectedMax': 55
+          });
+        }
+      );
+    };
   }
 
   pageChanged() {
     const that = this;
     return (pageNumber, e) => {
       e.preventDefault();
-      this.fetchData(that, pageNumber);
+      // let api = {};
+      // if (that.state.type === 'traffic') {
+      //   api = {
+      //     'path': '/api/alert/traffic',
+      //     'queryParams': {
+      //       'window': timeWindow,
+      //       'count': this.state.pageSize,
+      //       'from': (pageNumber === 1) ? (this.state.nextPageStart + this.state.pageSize) : this.state.nextPageStart,
+      //       'filter': this.props.data.options.customParams.filter !== undefined
+      //         ? this.props.data.options.customParams.filter
+      //         : '',
+      //       'date': this.state.alertDate
+      //     },
+      //     'pathParams': {
+      //       'reportId': 'taf_alert_by_asset'
+      //     }
+      //   };
+      // }
+
+      // if (that.state.type === 'alert') {
+      //   api = {
+      //     'path': '/api/analytics/reporting/execute/{reportId}',
+      //     'queryParams': {
+      //       'window': timeWindow
+      //     },
+      //     'pathParams': {
+      //       'reportId': 'taf_alert_by_asset'
+      //     }
+      //   };
+      // }
+      // that.props.fetchApiData(that.props.id, api, that.props.params);
+      this.fetchData(that, pageNumber, that.state.type);
     };
   }
 
@@ -255,7 +302,7 @@ class Timeline extends React.Component {
     return (pageNumber, e) => {
       e.preventDefault();
       if ((parseInt(pageNumber) - 1) > 0) {
-        this.fetchData(that, pageNumber - 1);
+        this.fetchData(that, pageNumber - 1, that.state.type);
       }
     };
   }
@@ -265,18 +312,24 @@ class Timeline extends React.Component {
     return (pageNumber, pageSize, e) => {
       e.preventDefault();
       if ((parseInt(pageNumber) + 1) <= pageSize) {
-        this.fetchData(that, pageNumber + 1);
+        this.fetchData(that, pageNumber + 1, that.state.type);
       }
     };
   }
 
   timelineBarLoaded(isLoaded) {
     if (isLoaded) {
-      this.setState({
-        'timelineBarLoaded': isLoaded
-      });
+      this.state.timelineBarLoaded = isLoaded;
     }
   }
+
+  // setTopMarginLag() {
+  //   const {props} = this;
+  //   if (document.getElementById(props.id) !== null) {
+  //     let offsetTop = document.getElementById(props.id).offsetTop;
+  //     console.log('offsetTop', offsetTop, props.id);
+  //   }
+  // }
 
   render() {
     return (
@@ -305,6 +358,7 @@ class Timeline extends React.Component {
             </div>
           : null
         }
+        {/*{this.setTopMarginLag()}*/}
       </div>
     );
   }
