@@ -20,7 +20,7 @@ function getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, di
   let topPositions = getPosition(document.getElementById(barId));
   if (topPositions.y !== undefined) {
     let top = topPositions.y - topMarginLag;
-    console.log(barId, selectedMin, selectedMax, topPositions.y, top);
+    // console.log(barId, selectedMin, selectedMax, topPositions.y, top);
     if (selectedMin !== '' && selectedMax !== '') {
       if (selectedMin <= top && selectedMax >= top) {
         if (document.getElementById(barId) !== undefined && document.getElementById(barId) !== null &&
@@ -51,7 +51,8 @@ class Timeline extends React.Component {
     attributes: PropTypes.object.isRequired,
     meta: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
-    params: PropTypes.object.isRequired
+    params: PropTypes.object.isRequired,
+    data: PropTypes.object
   }
 
   constructor(props) {
@@ -213,7 +214,7 @@ class Timeline extends React.Component {
       timelineType: this.state.timelineType,
       duration: timeWindow,
       alertDate: this.state.alertDate,
-      filter: window.filter, // this.state.filter,
+      filter: this.props.data.options.customParams.filter,
       pageSize: this.state.pageSize
       // nextPageStart: this.state.nextPageStart
     };
