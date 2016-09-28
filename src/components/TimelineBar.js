@@ -3,18 +3,18 @@ import {Colors} from 'theme/colors';
 import moment from 'moment';
 
 let baseHeight = 900,
-  timelineBarHeight = '10', // 2',
-  timelineBarWidth = '50',  // '50';
+  timelineBarHeight = '10',
+  timelineBarWidth = '50',
   sliderValue = 95,
   sliderRange = 4,
-  rows = [],
-  selectedTimeWindow = '';
+  rows = [];
 
 const halfOfTheSliderHeight = 12.8;
 
 class TimelineBar extends React.Component {
   static propTypes = {
     setSelectedSliderValues: PropTypes.func,
+    timelineBarLoaded: PropTypes.func,
     id: PropTypes.string
   }
 
@@ -22,14 +22,15 @@ class TimelineBar extends React.Component {
     super(props);
     this.state = {
       'selectedAreaStyle': {
-        // 'marginTop': '0px', // ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - halfOfTheSliderHeight) + 'px',
-        // 'height': '65px', // (baseHeight * ((sliderValue + sliderRange) - (sliderValue - sliderRange)) / 100) + 'px',
-        // 'width': timelineBarWidth + 'px',
-        // 'position': 'absolute',
-        // 'marginLeft': '5px',
-        // 'background': Colors.smoke,
-        // 'zIndex': 1000,
-        // 'opacity': 0.7
+        'marginTop': '0px',
+        'height': '65px',
+        'width': timelineBarWidth + 'px',
+        'position': 'absolute',
+        'marginLeft': '5px',
+        'background': Colors.smoke,
+        'zIndex': 1000,
+        'opacity': 0.7,
+        'display': 'block'
       },
       'sliderId': 'slider-' + props.id,
       'selectedAreaId': 'selected-area-' + props.id,
@@ -57,7 +58,8 @@ class TimelineBar extends React.Component {
           'marginLeft': '5px',
           'background': Colors.smoke,
           'zIndex': 1000,
-          'opacity': 0.7
+          'opacity': 0.7,
+          'display': 'block'
         }
       });
 
@@ -88,21 +90,16 @@ class TimelineBar extends React.Component {
         value: sliderValue
       });
 
-      // this.state = {
-      //   'selectedAreaStyle': {
-      //     'marginTop': ((baseHeight * (100 - (sliderValue + sliderRange)) / 100) - halfOfTheSliderHeight) + 'px',
-      //     'height': (baseHeight * ((sliderValue + sliderRange) - (sliderValue - sliderRange)) / 100) + 'px',
-      //     'width': timelineBarWidth + 'px',
-      //     'position': 'absolute',
-      //     'marginLeft': '5px',
-      //     'background': Colors.smoke,
-      //     'zIndex': 1000,
-      //     'opacity': 0.7
-      //   }
-      // };
-      // this.updateSelectedArea();
+      if (!props.isLoaded) {
+        this.props.timelineBarLoaded(true);
+      }
     }
   }
+
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('test');
+  //   this.state.selectedAreaStyle = nextProps.selectedAreaStyle;
+  // }
 
   render() {
     let prevTimestamp = 0,

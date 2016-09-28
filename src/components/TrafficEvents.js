@@ -22,15 +22,7 @@ class TrafficEvents extends React.Component {
         border: '1px solid #cbcbd1',
         fontSize: '14px',
         marginBottom: '20px'}} key={props.id}>
-        <div style={{fontSize: '13pt', Color: Colors.grape, fontWeight: '600'}}>
-          {getSourceDestination(props.data)}
-        </div>
-        <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
-          Type: {getEventTypeString(props.data.type)}
-        </div>
-        <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
           {getDetails(props.data)}
-        </div>
       </Card>
     );
   }

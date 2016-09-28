@@ -1,9 +1,11 @@
 import React from 'react';
 import {baseUrl} from 'config';
 import Cookies from 'cookies-js';
+import {Colors} from 'theme/colors';
 import {
   formatBytes,
-  formatMicroseconds
+  formatMicroseconds,
+  getEventTypeString
 } from 'utils/utils';
 
 export function fetchData(parameters) {
@@ -51,8 +53,10 @@ export function getDetails(row) {
       return getReport(row);
     case 'alert':
       return getAlert(row);
+    case 'rank_alert':
+      return getRankAlert(row);
     default:
-      return null;// getOther(row.data[row.type]);
+      return null; // getOther(row.data[row.type]);
   }
 }
 
@@ -103,9 +107,17 @@ function getDestinaton(dest) {
 export function getSourceDestination(row) {
   const {source, destination} = row;
   return (
-    <div>
+    <div style={{fontSize: '13pt', Color: Colors.grape, fontWeight: '600'}}>
       <span>{getSource(source)}</span>
       <span>{getDestinaton(destination)}</span>
+    </div>
+  );
+}
+
+function getEventType(row) {
+  return (
+    <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+      Type: {getEventTypeString(row.type)}
     </div>
   );
 }
@@ -114,11 +126,15 @@ function getConn(row) {
   const {data} = row;
   return (
     <div>
-      {checkForNANUndefined(data.conn.service, 'Service', true)}
-      {checkForNANUndefined(data.conn.state, 'State', true)}
-      {checkForNANUndefined(formatBytes(data.conn.reqBytes, 2), 'Requested Bytes', true)}
-      {checkForNANUndefined(formatBytes(data.conn.respBytes, 2), 'Response Bytes', true)}
-      {checkForNANUndefined(formatMicroseconds(data.conn.duration), 'Duration', false)}
+      {getSourceDestination(row)}
+      {getEventType(row)}
+      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+        {checkForNANUndefined(data.conn.service, 'Service', true)}
+        {checkForNANUndefined(data.conn.state, 'State', true)}
+        {checkForNANUndefined(formatBytes(data.conn.reqBytes, 2), 'Requested Bytes', true)}
+        {checkForNANUndefined(formatBytes(data.conn.respBytes, 2), 'Response Bytes', true)}
+        {checkForNANUndefined(formatMicroseconds(data.conn.duration), 'Duration', false)}
+      </div>
     </div>
   );
 }
@@ -127,10 +143,14 @@ function getSSH(row) {
   const {data} = row;
   return (
     <div>
-      {checkForNANUndefined(data.ssh.direction, 'Direction', true)}
-      {checkForNANUndefined(data.ssh.client, 'Client', true)}
-      {checkForNANUndefined(data.ssh.server, 'Server', true)}
-      {checkForNANUndefined(data.ssh.success, 'Successful', false)}
+      {getSourceDestination(row)}
+      {getEventType(row)}
+      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+        {checkForNANUndefined(data.ssh.direction, 'Direction', true)}
+        {checkForNANUndefined(data.ssh.client, 'Client', true)}
+        {checkForNANUndefined(data.ssh.server, 'Server', true)}
+        {checkForNANUndefined(data.ssh.success, 'Successful', false)}
+      </div>
     </div>
   );
 }
@@ -140,7 +160,11 @@ function getDNS(row) {
 
   return (
     <div>
-      {checkForNANUndefined(data.dns.answers[0], 'DNS Response', true)}
+      {getSourceDestination(row)}
+      {getEventType(row)}
+      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+        {checkForNANUndefined(data.dns.answers[0], 'DNS Response', true)}
+      </div>
     </div>
   );
 }
@@ -150,8 +174,12 @@ function getHTTP(row) {
 
   return (
     <div>
-      {checkForNANUndefined(data.http.userAgent, 'User Agent', true)}
-      {checkForNANUndefined(data.http.referrer, 'Referrer', false)}
+      {getSourceDestination(row)}
+      {getEventType(row)}
+      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+        {checkForNANUndefined(data.http.userAgent, 'User Agent', true)}
+        {checkForNANUndefined(data.http.referrer, 'Referrer', false)}
+      </div>
     </div>
   );
 }
@@ -161,9 +189,13 @@ function getSSL(row) {
 
   return (
     <div>
-      {checkForNANUndefined(data.ssl.serverName, 'Server', true)}
-      {checkForNANUndefined(data.ssl.version, 'SSL Version', true)}
-      {checkForNANUndefined(data.ssl.issue, 'Issuer', false)}
+      {getSourceDestination(row)}
+      {getEventType(row)}
+      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+        {checkForNANUndefined(data.ssl.serverName, 'Server', true)}
+        {checkForNANUndefined(data.ssl.version, 'SSL Version', true)}
+        {checkForNANUndefined(data.ssl.issue, 'Issuer', false)}
+      </div>
     </div>
   );
 }
@@ -173,9 +205,13 @@ function getFile(row) {
 
   return (
     <div>
-      {checkForNANUndefined(data.files.txHosts[0], 'Source', true)}
-      {checkForNANUndefined(data.files.rxHosts[0], 'Destination', true)}
-      {checkForNANUndefined(data.files.sha256, 'File Hash', false)}
+      {getSourceDestination(row)}
+      {getEventType(row)}
+      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+        {checkForNANUndefined(data.files.txHosts[0], 'Source', true)}
+        {checkForNANUndefined(data.files.rxHosts[0], 'Destination', true)}
+        {checkForNANUndefined(data.files.sha256, 'File Hash', false)}
+      </div>
     </div>
   );
 }
@@ -184,11 +220,15 @@ function getReport(row) {
   const {data} = row;
   return (
     <div>
-      {checkForNANUndefined(data.report.file.fileName, 'File Name', true)}
-      {checkForNANUndefined(data.report.file.sha256, 'sha256', true)}
-      {checkForNANUndefined(data.report.status, 'Status', true)}
-      {checkForNANUndefined(data.report.score, 'Score', true)}
-      {checkForNANUndefined(data.report.file.mimeType, 'MIME Type', false)}
+      {getSourceDestination(row)}
+      {getEventType(row)}
+      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+        {checkForNANUndefined(data.report.file.fileName, 'File Name', true)}
+        {checkForNANUndefined(data.report.file.sha256, 'sha256', true)}
+        {checkForNANUndefined(data.report.status, 'Status', true)}
+        {checkForNANUndefined(data.report.score, 'Score', true)}
+        {checkForNANUndefined(data.report.file.mimeType, 'MIME Type', false)}
+      </div>
     </div>
   );
 }
@@ -208,7 +248,7 @@ function getOther(data) {
       listStyleType: 'none',
       margin: 0,
       padding: 0
-    }}>
+    }} key='test'>
       {
         keys.map((key) => {
           const value = data[key];
@@ -228,10 +268,30 @@ function getAlert(row) {
   const {data} = row;
   return (
     <div>
-      {checkForNANUndefined(data.alert.severity, 'Severity', true)}
-      {checkForNANUndefined(data.alert.signature, 'Signature', true)}
-      {checkForNANUndefined(data.alert.proto, 'Protocol', true)}
-      {checkForNANUndefined(data.alert.category, 'Category', false)}
+      {getSourceDestination(row)}
+      {getEventType(row)}
+      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+        {checkForNANUndefined(data.alert.severity, 'Severity', true)}
+        {checkForNANUndefined(data.alert.signature, 'Signature', true)}
+        {checkForNANUndefined(data.alert.proto, 'Protocol', true)}
+        {checkForNANUndefined(data.alert.category, 'Category', false)}
+      </div>
+    </div>
+  );
+}
+
+function getRankAlert(row) {
+  const {data} = row;
+  return (
+    <div>
+      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: '600'}}>
+        {checkForNANUndefined(data.rank_alert.message, '', true)}
+      </div>
+      {getEventType(row)}
+      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+        {checkForNANUndefined(data.rank_alert.name, 'Name', true)}
+        {checkForNANUndefined(data.rank_alert.category, 'Category', false)}
+      </div>
     </div>
   );
 }
@@ -276,7 +336,7 @@ function checkForNANUndefined(value, title, newline) {
   if (value === true || value === false) {
     return (
       <span>
-        {title}: {value ? 'True' : 'False'}
+        {title !== '' ? title + ':' : ''} {value ? 'True' : 'False'}
         {(newline ? <br /> : null)}
       </span>
     );
@@ -285,7 +345,7 @@ function checkForNANUndefined(value, title, newline) {
     if (value !== 'NaN' && value !== 'NAN' && value !== undefined && value !== '') {
       return (
         <span>
-          {title}: {value}
+          {title !== '' ? title + ':' : ''} {value}
           {(newline ? <br /> : null)}
         </span>
       );

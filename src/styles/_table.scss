@@ -183,7 +183,7 @@ input:focus {
 .pagination > li > button, .pagination > li > span {
     background-color: #fff;
     border: 1px solid #ddd;
-    color: #337ab7;
+    color: $CloudColorShade1;
     float: left;
     line-height: 1.42857;
     margin-left: -1px;
@@ -192,12 +192,13 @@ input:focus {
     text-decoration: none;
 }
 .pagination > .active > button, .pagination > .active > button:focus, .pagination > .active > button:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: #2bd8d0;
+  border-color: #2bd8d0;
   color: #fff;
   cursor: default;
   z-index: 3;
 }
 button {
   cursor: pointer;
+  outline: none;
 }
