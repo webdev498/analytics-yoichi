@@ -42,8 +42,6 @@ class AlertDetailsNew extends React.Component {
 
     data = data.data.rank_alert;
 
-    window.filter = data.trafficFilter;
-
     let {date, time} = formatDateInLocalTimeZone(data.created);
 
     return (
