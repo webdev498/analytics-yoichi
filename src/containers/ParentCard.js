@@ -165,6 +165,67 @@ class ParentCard extends React.Component {
     props.removeComponent(props.id);
   }
 
+  getQueryData(str, data) {
+    const keys = str.split('.');
+
+    try {
+      keys.forEach(key => {
+        data = data[key];
+      });
+
+      return data;
+    }
+    catch (ex) {
+      return null;
+    }
+  }
+
+  callApi(apiObj, props) {
+    const {id, api} = apiObj;
+    const {params, fetchApiData, data} = props;
+
+    if (api.method === 'POST') {
+      let body = data;
+
+      const bodyPath = api.body.replace('$customParam', ''),
+        keys = bodyPath.split('.');
+
+      keys.forEach(key => {
+        body = body[key];
+      });
+
+      fetchApiData(id, api, params, body);
+    }
+    else {
+      const {queryParams} = Object.assign({}, api);
+      const queryKeys = Object.keys(queryParams);
+
+      queryKeys.forEach(key => {
+        let query = queryParams[key];
+        if (typeof query === 'string' && query.includes('$customParam')) {
+          queryParams[key] = this.getQueryData(query.replace('$customParam', ''), data);
+        }
+      });
+
+      const updatedApi = Object.assign({}, api, {queryParams: queryParams});
+      fetchApiData(id, updatedApi, params);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {data} = nextProps;
+    let {meta: {fetchDataFor}} = nextProps;
+    if (data && fetchDataFor) {
+      if (!Array.isArray(fetchDataFor)) {
+        fetchDataFor = [fetchDataFor];
+      }
+
+      fetchDataFor.forEach(apiObj => {
+        this.callApi(apiObj, nextProps);
+      });
+    }
+  }
+
   refreshData() {
     this.getData();
   };
@@ -283,9 +344,19 @@ class ParentCard extends React.Component {
 
   getErrorElement() {
     const {props} = this;
+    let statusText;
+
+    try {
+      statusText = props.errorData.response.statusText;
+    }
+    catch (ex) {
+      console.log(ex, props.errorData);
+      statusText = 'Some error occured';
+    }
+
     return (
       <div style={styles.error}>
-        {props.errorData.response.statusText}
+        {statusText}
       </div>
     );
   }

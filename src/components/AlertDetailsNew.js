@@ -36,50 +36,6 @@ class AlertDetailsNew extends React.Component {
     data: PropTypes.object
   }
 
-  callApi(apiObj, props) {
-    const {id, api} = apiObj;
-    const {params, fetchApiData, data} = props;
-
-    if (api.method === 'POST') {
-      let body = data;
-
-      const bodyPath = api.body.replace('$customParam', ''),
-        keys = bodyPath.split('.');
-
-      keys.forEach(key => {
-        body = body[key];
-      });
-
-      fetchApiData(id, api, params, body);
-    }
-    else {
-      const updatedQueryParams = Object.assign({}, api.queryParams, {
-        filter: data.data.rank_alert.trafficFilter,
-        date: params.date
-      });
-
-      const updatedApi = Object.assign({}, api, {queryParams: updatedQueryParams});
-
-      console.log('updatedApi', updatedApi, api);
-
-      fetchApiData(id, updatedApi, params);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const {data} = nextProps;
-    let {meta: {fetchDataFor}} = nextProps;
-    if (data && fetchDataFor) {
-      if (!Array.isArray(fetchDataFor)) {
-        fetchDataFor = [fetchDataFor];
-      }
-
-      fetchDataFor.forEach(apiObj => {
-        this.callApi(apiObj, nextProps);
-      });
-    }
-  }
-
   render() {
     let {data} = this.props;
     if (!data) return null;
