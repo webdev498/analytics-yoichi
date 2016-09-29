@@ -9,7 +9,6 @@ import {
 } from 'utils/utils';
 
 export function fetchData(parameters, type) {
-  console.log('test1');
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
     customHeaders = {
@@ -21,15 +20,16 @@ export function fetchData(parameters, type) {
 
   let apiUrl = '';
 
-  // if (type === 'traffic') {
+  if (type === 'traffic') {
     apiUrl = baseUrl + '/api/alert/' + parameters.timelineType + '?window=' + parameters.duration +
       '&date=' + parameters.alertDate + '&filter=' + encodeURI(parameters.filter) + '&count=' + parameters.pageSize +
       '&from=' + parameters.pageNumber;
-  // }
+  }
 
-  // if (type === 'alert') {
-  //   apiUrl = baseUrl + '/api/analytics/reporting/execute/' + parameters.reportId + '?window=' + parameters.duration;
-  // }
+  if (type === 'alert') {
+    apiUrl = baseUrl + '/api/analytics/reporting/execute/' + parameters.reportId + '?window=' + parameters.duration +
+      '&count=' + parameters.pageSize + '&from=' + parameters.pageNumber;
+  }
 
   return fetch(apiUrl, {
     method: 'GET',

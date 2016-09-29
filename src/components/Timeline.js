@@ -213,7 +213,7 @@ class Timeline extends React.Component {
 
       let parameters = {};
 
-      // if (type === 'traffic') {
+      if (type === 'traffic') {
         parameters = {
           pageNumber: (pageNumber - 1) * that.state.pageSize,
           timelineType: that.state.timelineType,
@@ -222,15 +222,17 @@ class Timeline extends React.Component {
           filter: that.props.data.options.customParams.filter,
           pageSize: that.state.pageSize
         };
-      // }
+      }
 
-      // if (type === 'alert') {
-      //   parameters = {
-      //     duration: timeWindow,
-      //     reportId: 'taf_alert_by_asset' // kept this hardcoded for now.
-      //     // Later, I will have to use fetchApiData function from props object
-      //   };
-      // }
+      if (type === 'alert') {
+        parameters = {
+          pageNumber: (pageNumber - 1) * that.state.pageSize,
+          pageSize: that.state.pageSize,
+          duration: timeWindow,
+          reportId: 'taf_alert_by_asset' // kept this hardcoded for now.
+          // Later, I will have to use fetchApiData function from props object
+        };
+      }
 
       const fetchedData = fetchData(parameters, type);
 
@@ -242,7 +244,6 @@ class Timeline extends React.Component {
       }
       fetchedData.then(
         function(json) {
-          console.log('pageNumber', pageNumber);
           that.setState({
             'isFetching': false,
             'currentPage': pageNumber,
@@ -261,7 +262,6 @@ class Timeline extends React.Component {
   pageChanged() {
     const that = this;
     return (pageNumber, e) => {
-      console.log('pageNumber', pageNumber);
       e.preventDefault();
       // let api = {};
       // if (that.state.type === 'traffic') {
