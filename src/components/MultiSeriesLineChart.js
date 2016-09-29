@@ -76,6 +76,7 @@ function getDataSource(props, rawData) {
 
   let {rows, columns} = data;
 
+  if (!data[x[0].reportId]) return null;
   if (!columns) {
     ({rows, columns} = data[x[0].reportId]);
   }
@@ -119,6 +120,7 @@ function getDataMultipleReports(props) {
   const {chartData: {fieldMapping: {x, y}}, data, duration} = props,
     xObj = x[0];
 
+  if (!data[xObj.reportId]) return null;
   const xIndex = getIndex(xObj, data[xObj.reportId].columns);
 
   const categories = [{

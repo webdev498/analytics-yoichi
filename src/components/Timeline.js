@@ -206,8 +206,24 @@ class Timeline extends React.Component {
     );
   }
 
-  fetchData(that, pageNumber, type) {
-    return (event) => {
+  fetchData(that, pageNumber) {
+    that.setState({
+      'isFetching': true
+    });
+
+    const parameters = {
+      pageNumber: (pageNumber === 1) ? (this.state.nextPageStart + this.state.pageSize) : this.state.nextPageStart,
+      timelineType: this.state.timelineType,
+      duration: timeWindow,
+      alertDate: this.state.alertDate,
+      filter: this.props.data.options.customParams.filter,
+      pageSize: this.state.pageSize
+      // nextPageStart: this.state.nextPageStart
+    };
+
+    const fetchedData = fetchData(parameters);
+
+    if (!fetchedData) {
       that.setState({
         'isFetching': true
       });

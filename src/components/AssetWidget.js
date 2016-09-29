@@ -70,7 +70,7 @@ class AssetWidget extends React.Component {
       <div style={{...styles.wrap, ...props.style}}>
         {this.getImage(props.data)}
         <div>
-          <div style={styles.heading}>{info.displayName}</div>
+          <div style={{...styles.heading, ...props.headingStyle}}>{info.displayName}</div>
           <div style={styles.subHeading}>{info.title}</div>
         </div>
       </div>

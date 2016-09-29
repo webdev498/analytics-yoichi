@@ -96,7 +96,7 @@
         },
         "attributes": {
           "style": {
-            "width": "300px",
+            "width": "25%",
             "flexDirection": "column"
           },
           "id": "activity"
@@ -292,6 +292,27 @@
             "type": "MultiSeriesLineChart"
           }
         ]
+      },
+      {
+        "id": "timeline",
+        "type": "Timeline",
+        "meta": {
+          "showHeader": true,
+          "api": null,
+          "title": "Timeline"
+        },
+        "attributes": {
+          "type": "traffic",
+          "displaySelectedRows": true,
+          "noOfEventsPerPage": 50,
+          "maxNumbersOnLeftRightPagination": 4,
+          "style": {
+            "height": "1105px",
+            "width": "75%",
+            "backgroundColor": "#F7F7F9"
+          },
+          "id": "timeline-component"
+        }
       }
     ]
   ]
