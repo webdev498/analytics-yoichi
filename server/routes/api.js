@@ -81,6 +81,8 @@ router
   );
 
   ctx.set('content-type', res.headers.get('content-type'))
+  ctx.status = res.status;
+  ctx.statusText = res.statusText;
   ctx.body = res.body;
 });
 

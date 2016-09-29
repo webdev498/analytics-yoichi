@@ -1,9 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
-import moment from 'moment';
-import {
-  calculateDateDisplayFormat
-} from 'utils/dateUtils';
+import {formatDate} from 'utils/dateUtils';
 
 const chart = {
   'baseFont': 'Open Sans, sans-serif',
@@ -35,12 +32,6 @@ function getIndex(obj, columns) {
   });
 
   return index;
-}
-
-function formatDate(date, duration) {
-  const dateDisplayFormat = calculateDateDisplayFormat(duration);
-  let localTimeNew = moment.utc(date).toDate();
-  return moment(localTimeNew).format(dateDisplayFormat);
 }
 
 function getFilteredRows(rows, filterIndex) {
@@ -148,8 +139,7 @@ function getDataMultipleReports(props) {
 
 class MultiSeriesLineChart extends React.Component {
   static propTypes = {
-    attributes: PropTypes.object,
-    meta: PropTypes.object
+    attributes: PropTypes.object
   }
 
   renderChart(props) {
@@ -157,14 +147,20 @@ class MultiSeriesLineChart extends React.Component {
       return;
     }
 
-    const {chartData: {multipleReports}} = props;
-
     let dataSource;
-    if (multipleReports) {
-      dataSource = getDataMultipleReports(props);
+    if (props.processedData) {
+      dataSource = props.data;
+      dataSource.chart = Object.assign({}, chart, dataSource.chart);
     }
     else {
-      dataSource = getDataSource(props);
+      const {chartData: {multipleReports}} = props;
+
+      if (multipleReports) {
+        dataSource = getDataMultipleReports(props);
+      }
+      else {
+        dataSource = getDataSource(props);
+      }
     }
 
     FusionCharts.ready(function() {
