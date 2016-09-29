@@ -4,7 +4,7 @@ import Cookies from 'cookies-js';
 import {Colors} from 'theme/colors';
 import {
   formatBytes,
-  formatMicroseconds,
+  msToTime,
   getEventTypeString
 } from 'utils/utils';
 
@@ -138,6 +138,11 @@ function getEventType(row) {
 
 function getConn(row) {
   const {data} = row;
+  let duration = '';
+  if (data.conn.duration !== undefined && data.conn.duration !== '') {
+    duration = msToTime(data.conn.duration);
+    duration = duration.timeString;
+  }
   return (
     <div>
       {getSourceDestination(row)}
@@ -147,7 +152,7 @@ function getConn(row) {
         {checkForNANUndefined(data.conn.state, 'State', true)}
         {checkForNANUndefined(formatBytes(data.conn.reqBytes, 2), 'Requested Bytes', true)}
         {checkForNANUndefined(formatBytes(data.conn.respBytes, 2), 'Response Bytes', true)}
-        {checkForNANUndefined(formatMicroseconds(data.conn.duration), 'Duration', false)}
+        {checkForNANUndefined(duration, 'Duration', false)}
       </div>
     </div>
   );

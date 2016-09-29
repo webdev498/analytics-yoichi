@@ -49,7 +49,7 @@ export function msToTime(duration) {
 
   return {
     'timeArray': [hours, minutes, seconds],
-    'timeString': hours + ': ' + minutes + ': ' + seconds
+    'timeString': hours + ' : ' + minutes + ' : ' + seconds
   };
 }
 
