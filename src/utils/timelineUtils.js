@@ -9,6 +9,7 @@ import {
 } from 'utils/utils';
 
 export function fetchData(parameters, type) {
+  console.log('test1');
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
     customHeaders = {
@@ -22,7 +23,7 @@ export function fetchData(parameters, type) {
 
   // if (type === 'traffic') {
     apiUrl = baseUrl + '/api/alert/' + parameters.timelineType + '?window=' + parameters.duration +
-      '&date=' + parameters.alertDate + '&filter=' + parameters.filter + '&count=' + parameters.pageSize +
+      '&date=' + parameters.alertDate + '&filter=' + encodeURI(parameters.filter) + '&count=' + parameters.pageSize +
       '&from=' + parameters.pageNumber;
   // }
 
@@ -55,57 +56,64 @@ export function getDetails(row) {
       return getSSL(row);
     case 'file':
       return getFile(row);
+    case 'files':
+      return getFile(row);
     case 'report':
       return getReport(row);
     case 'alert':
       return getAlert(row);
     case 'rank_alert':
       return getRankAlert(row);
+    case 'winevent':
+      return getWinEvent(row);
     default:
       return null; // getOther(row.data[row.type]);
   }
 }
 
 function getSource(source) {
-  if (source.ip) {
-    return (
-      <span>
-        <span> {source.ip} </span>
-        {
-          source.country
-          ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()}> </span>
-          : null
-        }
-        {
-          source.port > 0
-          ? <span> on Port {source.port}</span>
-          : null
-        }
-      </span>
-    );
-  };
-
+  if (source) {
+    if (source.ip) {
+      return (
+        <span>
+          <span> {source.ip} </span>
+          {
+            source.country
+            ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()}> </span>
+            : null
+          }
+          {
+            source.port > 0
+            ? <span> on Port {source.port}</span>
+            : null
+          }
+        </span>
+      );
+    }
+  }
   return null;
 }
 
 function getDestinaton(dest) {
-  if (dest.ip) {
-    return (
-      <span>
-        <span> connected to {dest.ip} </span>
-        {
-          dest.country
-          ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()}> </span>
-          : null
-        }
-        {
-          dest.port > 0
-          ? <span> on Port {dest.port}</span>
-          : null
-        }
-      </span>
-    );
-  };
+  if (dest) {
+    if (dest.ip) {
+      return (
+        <span>
+          <span> connected to {dest.ip} </span>
+          {
+            dest.country
+            ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()}> </span>
+            : null
+          }
+          {
+            dest.port > 0
+            ? <span> on Port {dest.port}</span>
+            : null
+          }
+        </span>
+      );
+    }
+  }
 
   return null;
 }
@@ -113,7 +121,7 @@ function getDestinaton(dest) {
 export function getSourceDestination(row) {
   const {source, destination} = row;
   return (
-    <div style={{fontSize: '13pt', Color: Colors.grape, fontWeight: '600'}}>
+    <div style={{fontSize: '13px', Color: Colors.grape, fontWeight: '600'}}>
       <span>{getSource(source)}</span>
       <span>{getDestinaton(destination)}</span>
     </div>
@@ -122,7 +130,7 @@ export function getSourceDestination(row) {
 
 function getEventType(row) {
   return (
-    <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+    <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
       Type: {getEventTypeString(row.type)}
     </div>
   );
@@ -134,7 +142,7 @@ function getConn(row) {
     <div>
       {getSourceDestination(row)}
       {getEventType(row)}
-      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.conn.service, 'Service', true)}
         {checkForNANUndefined(data.conn.state, 'State', true)}
         {checkForNANUndefined(formatBytes(data.conn.reqBytes, 2), 'Requested Bytes', true)}
@@ -151,7 +159,7 @@ function getSSH(row) {
     <div>
       {getSourceDestination(row)}
       {getEventType(row)}
-      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.ssh.direction, 'Direction', true)}
         {checkForNANUndefined(data.ssh.client, 'Client', true)}
         {checkForNANUndefined(data.ssh.server, 'Server', true)}
@@ -168,7 +176,7 @@ function getDNS(row) {
     <div>
       {getSourceDestination(row)}
       {getEventType(row)}
-      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.dns.answers[0], 'DNS Response', true)}
       </div>
     </div>
@@ -182,7 +190,7 @@ function getHTTP(row) {
     <div>
       {getSourceDestination(row)}
       {getEventType(row)}
-      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.http.userAgent, 'User Agent', true)}
         {checkForNANUndefined(data.http.referrer, 'Referrer', false)}
       </div>
@@ -197,7 +205,7 @@ function getSSL(row) {
     <div>
       {getSourceDestination(row)}
       {getEventType(row)}
-      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.ssl.serverName, 'Server', true)}
         {checkForNANUndefined(data.ssl.version, 'SSL Version', true)}
         {checkForNANUndefined(data.ssl.issue, 'Issuer', false)}
@@ -213,7 +221,7 @@ function getFile(row) {
     <div>
       {getSourceDestination(row)}
       {getEventType(row)}
-      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.files.txHosts[0], 'Source', true)}
         {checkForNANUndefined(data.files.rxHosts[0], 'Destination', true)}
         {checkForNANUndefined(data.files.sha256, 'File Hash', false)}
@@ -228,7 +236,7 @@ function getReport(row) {
     <div>
       {getSourceDestination(row)}
       {getEventType(row)}
-      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.report.file.fileName, 'File Name', true)}
         {checkForNANUndefined(data.report.file.sha256, 'sha256', true)}
         {checkForNANUndefined(data.report.status, 'Status', true)}
@@ -276,7 +284,7 @@ function getAlert(row) {
     <div>
       {getSourceDestination(row)}
       {getEventType(row)}
-      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.alert.severity, 'Severity', true)}
         {checkForNANUndefined(data.alert.signature, 'Signature', true)}
         {checkForNANUndefined(data.alert.proto, 'Protocol', true)}
@@ -290,10 +298,10 @@ function getRankAlert(row) {
   const {data} = row;
   return (
     <div>
-      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: '600'}}>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: '600'}}>
         {checkForNANUndefined(data.rank_alert.description, '', true)}
       </div>
-      <div style={{fontSize: '13pt', color: Colors.grape, fontWeight: 'lighter'}}>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.rank_alert.message, '', true)}
         {checkForNANUndefined(data.rank_alert.category, 'Category', true)}
         {checkForNANUndefined(data.rank_alert.score, 'Score', true)}
@@ -304,6 +312,24 @@ function getRankAlert(row) {
         {row.destination !== undefined
           ? checkForNANUndefined(row.destination.ip, 'Destination', false, 'Score', true)
           : null}
+      </div>
+    </div>
+  );
+}
+
+function getWinEvent(row) {
+  const {data} = row;
+  return (
+    <div>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: '600'}}>
+        {checkForNANUndefined(data.winevent.Message, '', true)}
+      </div>
+      <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
+        {checkForNANUndefined(data.winevent.EventType, 'Type', true)}
+        {checkForNANUndefined(data.winevent.Category, 'Category', true)}
+        {checkForNANUndefined(data.winevent.SourceName, 'Source', true)}
+        {checkForNANUndefined(data.winevent.Severity, 'Severity', false)}
+        {checkForNANUndefined(data.winevent.SeverityValue, '', false)}
       </div>
     </div>
   );

@@ -1,9 +1,10 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 import PaginationWidget from 'components/PaginationWidget';
-import TimelineBar from '../components/TimelineBar';
+// import TimelineBar from '../components/TimelineBar';
 import TrafficEvents from '../components/TrafficEvents';
 import Alerts from '../components/Alerts';
+import Loader from '../components/Loader';
 import {formatDateInLocalTimeZone} from 'utils/utils';
 
 import {
@@ -124,7 +125,6 @@ class Timeline extends React.Component {
 
   getRows() {
     const {props} = this;
-    console.log(props);
     if (this.state.rows.length === 0 || timeWindow !== props.duration) {
       if (!props.data) {
         return;
@@ -148,30 +148,29 @@ class Timeline extends React.Component {
   }
 
   displayEvents(selectedMin, selectedMax) {
-    if (!this.state.timelineBarLoaded) {
-      return;
-    }
+    // if (!this.state.timelineBarLoaded) {
+    //   return;
+    // }
     const rows = this.state.rows,
-      displaySelectedRows = this.state.displaySelectedRows,
+      // displaySelectedRows = this.state.displaySelectedRows,
       that = this;
 
     let displayCount = 0,
       mainDivStyle = {
         width: '675px',
-        height: '935px',
-        overflow: 'hidden'
-      },
-      scrollbarStyle = displaySelectedRows ? '' : 'scrollbarStyle';
+        // overflow: 'hidden'
+      };
+      // scrollbarStyle = displaySelectedRows ? '' : 'scrollbarStyle';
 
-    if (!displaySelectedRows) {
-      mainDivStyle = Object.assign(mainDivStyle, {
-        overflowX: 'hidden',
-        overflowY: 'auto'
-      });
-    }
+    // if (!displaySelectedRows) {
+    //   mainDivStyle = Object.assign(mainDivStyle, {
+    //     overflowX: 'hidden',
+    //     overflowY: 'auto'
+    //   });
+    // } className={scrollbarStyle}
 
     return (
-      <div style={mainDivStyle} className={scrollbarStyle}>
+      <div style={mainDivStyle}>
         {
           rows.map(function(event, index) {
             let dateString = event[0].date,
@@ -182,9 +181,9 @@ class Timeline extends React.Component {
               },
               barId = 'bar' + index;
 
-            if (displaySelectedRows) {
-              dateString = getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, displayCount);
-            }
+            // if (displaySelectedRows) {
+            //   dateString = getDateOfSelectedEvents(barId, dateString, selectedMin, selectedMax, displayCount);
+            // }
 
             if (dateString !== '') {
               newLine = (index === 0) ? '' : '<br />';
@@ -206,24 +205,8 @@ class Timeline extends React.Component {
     );
   }
 
-  fetchData(that, pageNumber) {
-    that.setState({
-      'isFetching': true
-    });
-
-    const parameters = {
-      pageNumber: (pageNumber === 1) ? (this.state.nextPageStart + this.state.pageSize) : this.state.nextPageStart,
-      timelineType: this.state.timelineType,
-      duration: timeWindow,
-      alertDate: this.state.alertDate,
-      filter: this.props.data.options.customParams.filter,
-      pageSize: this.state.pageSize
-      // nextPageStart: this.state.nextPageStart
-    };
-
-    const fetchedData = fetchData(parameters);
-
-    if (!fetchedData) {
+  fetchData(that, pageNumber, type) {
+    // return (event) => {
       that.setState({
         'isFetching': true
       });
@@ -232,12 +215,12 @@ class Timeline extends React.Component {
 
       // if (type === 'traffic') {
         parameters = {
-          pageNumber: (pageNumber === 1) ? (this.state.nextPageStart + this.state.pageSize) : this.state.nextPageStart,
-          timelineType: this.state.timelineType,
+          pageNumber: (pageNumber - 1) * that.state.pageSize,
+          timelineType: that.state.timelineType,
           duration: timeWindow,
-          alertDate: this.state.alertDate,
-          filter: this.props.data.options.customParams.filter,
-          pageSize: this.state.pageSize
+          alertDate: that.state.alertDate,
+          filter: that.props.data.options.customParams.filter,
+          pageSize: that.state.pageSize
         };
       // }
 
@@ -259,6 +242,7 @@ class Timeline extends React.Component {
       }
       fetchedData.then(
         function(json) {
+          console.log('pageNumber', pageNumber);
           that.setState({
             'isFetching': false,
             'currentPage': pageNumber,
@@ -271,30 +255,30 @@ class Timeline extends React.Component {
           });
         }
       );
-    };
+    // };
   }
 
   pageChanged() {
     const that = this;
     return (pageNumber, e) => {
+      console.log('pageNumber', pageNumber);
       e.preventDefault();
       // let api = {};
       // if (that.state.type === 'traffic') {
-      //   api = {
-      //     'path': '/api/alert/traffic',
-      //     'queryParams': {
-      //       'window': timeWindow,
-      //       'count': this.state.pageSize,
-      //       'from': (pageNumber === 1) ? (this.state.nextPageStart + this.state.pageSize) : this.state.nextPageStart,
-      //       'filter': this.props.data.options.customParams.filter !== undefined
-      //         ? this.props.data.options.customParams.filter
-      //         : '',
-      //       'date': this.state.alertDate
-      //     },
-      //     'pathParams': {
-      //       'reportId': 'taf_alert_by_asset'
-      //     }
-      //   };
+        // api = {
+        //   'path': '/api/alert/traffic',
+        //   'queryParams': {
+        //     'window': timeWindow,
+        //     'count': this.state.pageSize,
+        //     'from': (pageNumber === 1) ? (this.state.nextPageStart + this.state.pageSize) : this.state.nextPageStart,
+        //     // 'filter': this.props.data.options.customParams.filter !== undefined
+        //     //   ? this.props.data.options.customParams.filter
+        //     //   : '',
+        //     'filter': '((source.ip = 10.3.162.105 AND (type = conn AND destination.port > 1024 AND destination.internal != true)) OR (source.ip = 10.3.162.105 AND (type = http AND data.http.host % "www.download.windowsupdate.com" AND data.http.userAgent % "Microsoft-CryptoAPI")))',
+        //     'date': this.state.alertDate
+        //   },
+        //   'pathParams': {}
+        // };
       // }
 
       // if (that.state.type === 'alert') {
@@ -350,20 +334,24 @@ class Timeline extends React.Component {
   render() {
     return (
       <div>{this.getRows()}
+        {this.state.isFetching ? <Loader /> : null}
         {
           (this.state.rows.length > 0)
             ? <div>
-              <TimelineBar id={this.state.id}
+              {/*<TimelineBar id={this.state.id}
                 data={this.state.rows}
                 setSelectedSliderValues={this.setSelectedSliderValues}
                 duration={timeWindow}
                 timelineBarLoaded={this.timelineBarLoaded}
                 isLoaded={this.state.timelineBarLoaded}
-                selectedAreaStyle={this.state.selectedAreaStyle} />
+                selectedAreaStyle={this.state.selectedAreaStyle} />*/}
 
-              <div style={{'marginLeft': '150px', 'position': 'absolute'}}>
+              <div>
+                { /*  style={{'marginLeft': '150px', 'position': 'absolute'}}
+                // This is needed after we display Slider navigation*/ }
                 {this.displayEvents(this.state.selectedMin, this.state.selectedMax)}
               </div>
+              <div style={{padding: '15px'}}></div>
 
               <PaginationWidget Size={this.state.totalPage}
                 onPageChanged={this.pageChanged()}
