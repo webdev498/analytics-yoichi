@@ -287,8 +287,8 @@ function getAlert(row) {
       <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.alert.severity, 'Severity', true)}
         {checkForNANUndefined(data.alert.signature, 'Signature', true)}
-        {checkForNANUndefined(data.alert.proto, 'Protocol', true)}
-        {checkForNANUndefined(data.alert.category, 'Category', false)}
+        {checkForNANUndefined(data.alert.category, 'Category', true)}
+        {checkForNANUndefined(data.alert.score, 'Score', false)}
       </div>
     </div>
   );

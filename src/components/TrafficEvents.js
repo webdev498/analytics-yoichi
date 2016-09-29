@@ -13,8 +13,25 @@ class TrafficEvents extends React.Component {
   render() {
     const {props} = this;
     if (props.data.type.toLowerCase() === 'alert' || props.data.type.toLowerCase() === 'rank_alert') {
+      let borderColor = Colors.cherry,
+        score = props.data.data[props.data.type].score;
+      if (score >= 65) {
+        borderColor = Colors.cherry;
+      }
+      if (score < 65 && score >= 35) {
+        borderColor = Colors.coral;
+      }
+      if (score < 35) {
+        borderColor = Colors.mustard;
+      }
+
       alertStyle = {
-        borderLeft: '5px solid red'
+        borderLeft: '5px solid ' + borderColor
+      };
+    }
+    else {
+      alertStyle = {
+        borderLeft: '1px solid #cbcbd1'
       };
     }
     return (
@@ -22,7 +39,7 @@ class TrafficEvents extends React.Component {
         boxShadow: '1px 1px 0 #cccccc',
         padding: '10px',
         height: 'auto',
-        width: '500px',
+        width: '450px',
         backgroundColor: Colors.white,
         border: '1px solid #cbcbd1',
         fontSize: '14px',
