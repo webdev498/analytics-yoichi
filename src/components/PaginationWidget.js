@@ -4,8 +4,6 @@ function getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftR
   let start = currentPage - maxNumbersOnLeftRight,
     end = currentPage + maxNumbersOnLeftRight;
 
-  console.log('start', start, end, pageCount, currentPage);
-
   if (currentPage < (maxNumbersOnLeftRight + 1)) {
     start = 1;
     if (pageCount < ((maxNumbersOnLeftRight * 2) + 1)) {
@@ -24,19 +22,6 @@ function getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftR
     }
     end = pageCount;
   }
-
-  // if (currentPage === pageCount) {
-  //   console.log('qqq', start, end, pageCount, currentPage);
-  //   start = pageCount - (maxNumbersOnLeftRight * 2);
-  //   if (start < 1) {
-  //     start = pageCount - maxNumbersOnLeftRight;
-  //     if (start < 1) {
-  //       start = 2;
-  //     }
-  //   }
-  //   end = pageCount;
-  // }
-  console.log('end', start, end, pageCount, currentPage);
 
   return {
     start: start,
@@ -62,8 +47,6 @@ class PaginationWidget extends React.Component {
       limits = getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftRight),
       start = limits.start,
       end = limits.end;
-
-    console.log('currentPage', currentPage);
 
     if (pageCount > 0 && start > 0 && end > 0) {
       for (let i = start; i <= end; i++) {

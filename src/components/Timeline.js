@@ -150,14 +150,28 @@ class Timeline extends React.Component {
       'isFetching': true
     });
 
-    let parameters = {
-      pageNumber: (pageNumber - 1) * that.state.pageSize,
-      timelineType: that.state.timelineType,
-      duration: timeWindow,
-      alertDate: that.state.alertDate,
-      filter: that.props.data.options.customParams.filter,
-      pageSize: that.state.pageSize
-    };
+    let parameters = {};
+
+    if (type === 'traffic') {
+      parameters = {
+        pageNumber: (pageNumber - 1) * that.state.pageSize,
+        timelineType: that.state.timelineType,
+        duration: timeWindow,
+        alertDate: that.state.alertDate,
+        filter: that.props.data.options.customParams.filter,
+        pageSize: that.state.pageSize
+      };
+    }
+
+    if (type === 'alert') {
+      parameters = {
+        pageNumber: (pageNumber - 1) * that.state.pageSize,
+        pageSize: that.state.pageSize,
+        duration: timeWindow,
+        reportId: 'taf_alert_by_asset' // kept this hardcoded for now.
+        // Later, I will have to use fetchApiData function from props object
+      };
+    }
 
     const fetchedData = fetchData(parameters, type);
 

@@ -5,19 +5,46 @@ import {
   getDetails
 } from 'utils/timelineUtils';
 
+let alertStyle = {
+  border: '1px solid #cbcbd1'
+};
+
 class Alerts extends React.Component {
   render() {
     const {props} = this;
+    if (props.data.type.toLowerCase() === 'alert' || props.data.type.toLowerCase() === 'rank_alert') {
+      let borderColor = Colors.cherry,
+        score = props.data.data[props.data.type].score;
+      if (score >= 65) {
+        borderColor = Colors.cherry;
+      }
+      if (score < 65 && score >= 35) {
+        borderColor = Colors.coral;
+      }
+      if (score < 35) {
+        borderColor = Colors.mustard;
+      }
+
+      alertStyle = {
+        borderLeft: '5px solid ' + borderColor
+      };
+    }
+    else {
+      alertStyle = {
+        borderLeft: '1px solid #cbcbd1'
+      };
+    }
+
     return (
-      <Card style={{
+      <Card style={Object.assign({
         boxShadow: '1px 1px 0 #cccccc',
         padding: '10px',
-        height: '215px',
-        width: '500px',
+        height: 'auto',
+        width: '450px',
         backgroundColor: Colors.white,
         border: '1px solid #cbcbd1',
         fontSize: '14px',
-        marginBottom: '20px'}} key={props.id}>
+        marginBottom: '20px'}, alertStyle)} key={props.id}>
         {getDetails(props.data)}
       </Card>
     );

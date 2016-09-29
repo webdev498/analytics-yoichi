@@ -4,12 +4,11 @@ import Cookies from 'cookies-js';
 import {Colors} from 'theme/colors';
 import {
   formatBytes,
-  formatMicroseconds,
+  msToTime,
   getEventTypeString
 } from 'utils/utils';
 
 export function fetchData(parameters, type) {
-  console.log('test1');
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
     customHeaders = {
@@ -21,15 +20,16 @@ export function fetchData(parameters, type) {
 
   let apiUrl = '';
 
-  // if (type === 'traffic') {
+  if (type === 'traffic') {
     apiUrl = baseUrl + '/api/alert/' + parameters.timelineType + '?window=' + parameters.duration +
       '&date=' + parameters.alertDate + '&filter=' + encodeURI(parameters.filter) + '&count=' + parameters.pageSize +
       '&from=' + parameters.pageNumber;
-  // }
+  }
 
-  // if (type === 'alert') {
-  //   apiUrl = baseUrl + '/api/analytics/reporting/execute/' + parameters.reportId + '?window=' + parameters.duration;
-  // }
+  if (type === 'alert') {
+    apiUrl = baseUrl + '/api/analytics/reporting/execute/' + parameters.reportId + '?window=' + parameters.duration +
+      '&count=' + parameters.pageSize + '&from=' + parameters.pageNumber;
+  }
 
   return fetch(apiUrl, {
     method: 'GET',
@@ -138,6 +138,11 @@ function getEventType(row) {
 
 function getConn(row) {
   const {data} = row;
+  let duration = '';
+  if (data.conn.duration !== undefined && data.conn.duration !== '') {
+    duration = msToTime(data.conn.duration);
+    duration = duration.timeString;
+  }
   return (
     <div>
       {getSourceDestination(row)}
@@ -147,7 +152,7 @@ function getConn(row) {
         {checkForNANUndefined(data.conn.state, 'State', true)}
         {checkForNANUndefined(formatBytes(data.conn.reqBytes, 2), 'Requested Bytes', true)}
         {checkForNANUndefined(formatBytes(data.conn.respBytes, 2), 'Response Bytes', true)}
-        {checkForNANUndefined(formatMicroseconds(data.conn.duration), 'Duration', false)}
+        {checkForNANUndefined(duration, 'Duration', false)}
       </div>
     </div>
   );
@@ -287,8 +292,8 @@ function getAlert(row) {
       <div style={{fontSize: '13px', color: Colors.grape, fontWeight: 'lighter'}}>
         {checkForNANUndefined(data.alert.severity, 'Severity', true)}
         {checkForNANUndefined(data.alert.signature, 'Signature', true)}
-        {checkForNANUndefined(data.alert.proto, 'Protocol', true)}
-        {checkForNANUndefined(data.alert.category, 'Category', false)}
+        {checkForNANUndefined(data.alert.category, 'Category', true)}
+        {checkForNANUndefined(data.alert.score, 'Score', false)}
       </div>
     </div>
   );
