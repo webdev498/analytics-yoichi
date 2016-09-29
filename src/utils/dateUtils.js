@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export function calculateDateDisplayFormat(timeWindow) {
   let dateDisplayFormat = 'D MMM YYYY, HH:mm';
   switch (timeWindow) {
@@ -20,28 +22,34 @@ export function calculateDateDisplayFormat(timeWindow) {
 }
 
 export function calculateDateDisplayFormatForHistogram(timeWindow) {
-  var dateDisplayFormat = "D MMM YYYY, HH:mm";
+  var dateDisplayFormat = 'D MMM YYYY, HH:mm';
   switch (timeWindow) {
-    case "1h":
-      dateDisplayFormat = "ddd, D HH:mm";
+    case '1h':
+      dateDisplayFormat = 'ddd, D HH:mm';
       break;
-    case "6h":
-      dateDisplayFormat = "ddd, D HH:mm";
+    case '6h':
+      dateDisplayFormat = 'ddd, D HH:mm';
       break;
-    case "12h":
-      dateDisplayFormat = "ddd, D HH:mm";
+    case '12h':
+      dateDisplayFormat = 'ddd, D HH:mm';
       break;
-    case "1d":
-      dateDisplayFormat = "ddd, D HH:mm";
+    case '1d':
+      dateDisplayFormat = 'ddd, D HH:mm';
       break;
-    case "1w":
-      dateDisplayFormat = "ddd, D MMM HH:mm";
+    case '1w':
+      dateDisplayFormat = 'ddd, D MMM HH:mm';
       break;
-    case "1mo":
-      dateDisplayFormat = "ddd, D MMM HH:mm";
+    case '1mo':
+      dateDisplayFormat = 'ddd, D MMM HH:mm';
       break;
     default:
       break;
   }
   return dateDisplayFormat;
+}
+
+export function formatDate(date, duration) {
+  const dateDisplayFormat = calculateDateDisplayFormat(duration);
+  let localTimeNew = moment.utc(date).toDate();
+  return moment(localTimeNew).format(dateDisplayFormat);
 }

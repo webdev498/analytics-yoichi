@@ -18,7 +18,7 @@
           "title": "Alert Detail",
           "fetchDataFor": [
             {
-              "id": "connection-status,connection-by-type,data-source-dest",
+              "id": "alert-activity",
               "api": {
                 "method": "POST",
                 "path": "/api/analytics/reporting/executeById",
@@ -84,214 +84,40 @@
     [
       {
         "id": "alert-activity",
-        "type": "Compound",
-        "name": "Compound",
+        "type": "AlertMultiChart",
         "meta": {
           "showHeader": true,
           "title": "Activity",
           "showRefresh": false
         },
-        "innerStyle": {
-          "flexDirection": "column"
+        "chart": {
+          "chartOptions": {
+            "xAxisName": "TIME",
+            "divLineThickness": "2",
+            "lineThickness": "1",
+            "showYAxisValues": "1",
+            "xAxisNameFontSize": "10",
+            "yAxisNameFontSize": "10",
+            "labelFontSize": "8",
+            "drawAnchors": "1",
+            "anchorRadius": "1",
+            "showlegend": "0",
+            "outCnvBaseFontSize": "8"
+          }
         },
         "attributes": {
+          "chart": {
+            "chartHeight": "200",
+            "chartCaption": {
+              "display": "none"
+            }
+          },
           "style": {
             "width": "25%",
             "flexDirection": "column"
           },
           "id": "activity"
-        },
-        "children": [
-          {
-            "chartOptions": {
-              "xAxisName": "TIME",
-              "divLineThickness": "2",
-              "lineThickness": "1",
-              "showYAxisValues": "1",
-              "xAxisNameFontSize": "10",
-              "yAxisNameFontSize": "10",
-              "labelFontSize": "8",
-              "drawAnchors": "1",
-              "anchorRadius": "1",
-              "showlegend": "0",
-              "outCnvBaseFontSize": "8"
-            },
-            "chartData": {
-              "multipleReports": true,
-              "fieldMapping": {
-                "x": [{
-                  "reportId": "taf_conn_by_status",
-                  "columns": ["date"]
-                }],
-                "y": [
-                  {
-                    "reportId": "taf_conn_by_status",
-                    "columns": [
-                      "count"
-                    ],
-                    "seriesname": "Connection Status"
-                  }
-                ]
-              }
-            },
-            "meta": {
-              "showHeader": true,
-              "showRefresh": false,
-              "api": null,
-              "title": "Connection by Status"
-            },
-            "attributes": {
-              "chartHeight": "200",
-              "chartCaption": {
-                "display": "none"
-              },
-              "style": {
-                "width": "100%",
-                "padding": 0,
-                "boxShadow": "none",
-                "marginBottom": "35px"
-              },
-              "header": {
-                "style": {
-                  "paddingBottom": 0
-                },
-                "title": {
-                  "fontSize": "13px",
-                  "fontWeight": 600,
-                  "textTransform": "capitalize"
-                }
-              },
-              "id": "connection-status-chart"
-            },
-            "id": "connection-status",
-            "type": "MultiSeriesLineChart"
-          },
-          {
-            "chartOptions": {
-              "xAxisName": "TIME",
-              "divLineThickness": "2",
-              "lineThickness": "1",
-              "showYAxisValues": "1",
-              "xAxisNameFontSize": "10",
-              "yAxisNameFontSize": "10",
-              "labelFontSize": "8",
-              "drawAnchors": "1",
-              "anchorRadius": "1",
-              "showlegend": "0",
-              "outCnvBaseFontSize": "8"
-            },
-            "chartData": {
-              "fieldMapping": {
-                "x": [{
-                  "reportId": "taf_conn_by_type",
-                  "columns": ["date"]
-                }],
-                "y": [{
-                  "reportId": "taf_conn_by_type",
-                  "columns": ["count"]
-                }]
-              },
-              "filter": {
-                "reportId": "taf_conn_by_type",
-                "columns": ["type"]
-              }
-            },
-            "meta": {
-              "showHeader": true,
-              "showRefresh": false,
-              "api": null,
-              "title": "Connections by type"
-            },
-            "attributes": {
-              "chartHeight": "200",
-              "chartCaption": {
-                "display": "none"
-              },
-              "style": {
-                "width": "100%",
-                "padding": 0,
-                "boxShadow": "none",
-                "marginBottom": "35px"
-              },
-              "header": {
-                "style": {
-                  "paddingBottom": 0
-                },
-                "title": {
-                  "fontSize": "13px",
-                  "fontWeight": 600,
-                  "textTransform": "capitalize"
-                }
-              },
-              "id": "connection-by-type-chart"
-            },
-            "id": "connection-by-type",
-            "type": "MultiSeriesLineChart"
-          },
-          {
-            "chartOptions": {
-              "xAxisName": "TIME",
-              "divLineThickness": "2",
-              "lineThickness": "1",
-              "showYAxisValues": "1",
-              "xAxisNameFontSize": "10",
-              "yAxisNameFontSize": "10",
-              "labelFontSize": "8",
-              "drawAnchors": "1",
-              "anchorRadius": "1",
-              "showlegend": "0",
-              "outCnvBaseFontSize": "8"
-            },
-            "chartData": {
-              "multipleReports": true,
-              "fieldMapping": {
-                "x": [{
-                  "reportId": "taf_data_between_source_and_destination",
-                  "columns": ["date"]
-                }],
-                "y": [
-                  {
-                    "reportId": "taf_data_between_source_and_destination",
-                    "columns": [
-                      "count"
-                    ],
-                    "seriesname": "Connection Status"
-                  }
-                ]
-              }
-            },
-            "meta": {
-              "showHeader": true,
-              "showRefresh": false,
-              "api": null,
-              "title": "Data b/w source and destination"
-            },
-            "attributes": {
-              "chartHeight": "200",
-              "chartCaption": {
-                "display": "none"
-              },
-              "style": {
-                "width": "100%",
-                "padding": 0,
-                "boxShadow": "none"
-              },
-              "header": {
-                "style": {
-                  "paddingBottom": 0
-                },
-                "title": {
-                  "fontSize": "13px",
-                  "fontWeight": 600,
-                  "textTransform": "capitalize"
-                }
-              },
-              "id": "data-source-dest-chart"
-            },
-            "id": "data-source-dest",
-            "type": "MultiSeriesLineChart"
-          }
-        ]
+        }
       },
       {
         "id": "timeline",

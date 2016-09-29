@@ -194,6 +194,8 @@ class ParentCard extends React.Component {
         body = body[key];
       });
 
+      // for the post request if the body is empty, then don't make request.
+      if (!body) return;
       fetchApiData(id, api, params, {body});
     }
     else {
