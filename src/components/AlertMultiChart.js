@@ -125,7 +125,7 @@ class AlertMultiChart extends React.Component {
       if (rows.length !== 0) {
         props.data = this.getData(rows, columns);
         return (
-          <div style={styles.wrap}>
+          <div style={styles.wrap} key={key}>
             <h2 style={styles.title}>{key}</h2>
             <MultiSeriesLineChart {...props} />
           </div>
@@ -151,11 +151,12 @@ class AlertMultiChart extends React.Component {
       data = {[key]: data};
     }
 
-    delete data.options;
+    const normalizedData = Object.assign({}, data);
+    delete normalizedData.options;
 
     return (
       <div>
-        {this.getCharts(data)}
+        {this.getCharts(normalizedData)}
       </div>
     );
   }

@@ -8,7 +8,7 @@ import {
   getEventTypeString
 } from 'utils/utils';
 
-export function fetchData(parameters, type) {
+export function fetchData(parameters, type, options) {
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
     customHeaders = {
@@ -35,8 +35,11 @@ export function fetchData(parameters, type) {
     method: 'GET',
     headers: defaultHeaders
   })
-  .then(response => response.json()
-  )
+  .then(response => response.json())
+  .then(json => {
+    json.options = options;
+    return json;
+  })
   .catch(error => {
     return Promise.reject(Error(error.message));
   });

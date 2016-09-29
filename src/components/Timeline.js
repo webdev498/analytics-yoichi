@@ -26,16 +26,6 @@ class Timeline extends React.Component {
     this.state = {
       'id': props.id,
       'type': attributes.type,
-      'selectedAreaStyle': {
-        'marginTop': '0px',
-        'height': '65px',
-        'width': '50px',
-        'position': 'absolute',
-        'marginLeft': '5px',
-        'background': Colors.smoke,
-        'zIndex': 1000,
-        'opacity': 0.7
-      },
       'selectedMin': 0,
       'selectedMax': 55,
       'timelineType': attributes.type,
@@ -48,27 +38,8 @@ class Timeline extends React.Component {
       'displaySelectedRows': props.attributes.displaySelectedRows,
       'rows': [],
       'nextPageStart': 0,
-      'isFetching': false,
-      'timelineBarLoaded': false
+      'isFetching': false
     };
-
-    this.pageChanged = this.pageChanged.bind(this);
-    this.prevPageChanged = this.prevPageChanged.bind(this);
-    this.nextPageChanged = this.nextPageChanged.bind(this);
-    this.fetchData = this.fetchData.bind(this);
-    this.setSelectedSliderValues = this.setSelectedSliderValues.bind(this);
-    this.displayData = this.displayData.bind(this);
-    this.getRows = this.getRows.bind(this);
-    this.timelineBarLoaded = this.timelineBarLoaded.bind(this);
-  }
-
-  setSelectedSliderValues(selectedMin, selectedMax) {
-    if (selectedMin !== undefined && selectedMax !== undefined) {
-      this.setState({
-        'selectedMin': selectedMin,
-        'selectedMax': selectedMax
-      });
-    }
   }
 
   displayData(id, data) {
@@ -85,21 +56,21 @@ class Timeline extends React.Component {
   }
 
   getRows() {
-    const {props} = this;
-    if (this.state.rows.length === 0 || timeWindow !== props.duration) {
+    const {props, state} = this;
+    if (state.rows.length === 0 || timeWindow !== props.duration) {
       if (!props.data) {
         return;
       }
 
-      this.state.totalCount = props.data.total;
-      this.state.totalPage = Math.ceil(props.data.total / props.attributes.noOfEventsPerPage);
-      this.state.currentPage = 1;
-      this.state.pageSize = props.attributes.noOfEventsPerPage;
-      this.state.nextPageStart = props.data.next;
-      this.state.rows = props.data.rows;
+      state.totalCount = props.data.total;
+      state.totalPage = Math.ceil(props.data.total / props.attributes.noOfEventsPerPage);
+      state.currentPage = 1;
+      state.pageSize = props.attributes.noOfEventsPerPage;
+      state.nextPageStart = props.data.next;
+      state.rows = props.data.rows;
       timeWindow = props.duration;
 
-      if (this.state.rows.length === 0) {
+      if (state.rows.length === 0) {
         return (
           <div>No additional results were found.</div>
         );
@@ -145,85 +116,69 @@ class Timeline extends React.Component {
     );
   }
 
-  fetchData(that, pageNumber, type) {
-    that.setState({
-      'isFetching': true
-    });
+  fetchData(pageNumber, type) {
+    const {state, props} = this;
 
     let parameters = {};
-
     if (type === 'traffic') {
       parameters = {
-        pageNumber: (pageNumber - 1) * that.state.pageSize,
-        timelineType: that.state.timelineType,
+        pageNumber: (pageNumber - 1) * state.pageSize,
+        timelineType: state.timelineType,
         duration: timeWindow,
-        alertDate: that.state.alertDate,
-        filter: that.props.data.options.customParams.filter,
-        pageSize: that.state.pageSize
+        alertDate: state.alertDate,
+        filter: props.data.options.customParams.filter,
+        pageSize: state.pageSize
       };
     }
 
     if (type === 'alert') {
       parameters = {
-        pageNumber: (pageNumber - 1) * that.state.pageSize,
-        pageSize: that.state.pageSize,
+        pageNumber: (pageNumber - 1) * state.pageSize,
+        pageSize: state.pageSize,
         duration: timeWindow,
         reportId: 'taf_alert_by_asset' // kept this hardcoded for now.
         // Later, I will have to use fetchApiData function from props object
       };
     }
 
-    const fetchedData = fetchData(parameters, type);
+    const fetchedData = fetchData(parameters, type, props.data.options);
 
-    if (!fetchedData) {
-      that.setState({
-        isFetching: false
+    this.setState({
+      'isFetching': true
+    });
+
+    fetchedData.then(json => {
+      this.setState({
+        'isFetching': false,
+        'currentPage': pageNumber,
+        'rows': json.rows,
+        'nextPageStart': json.next,
+        'selectedMin': 0,
+        'selectedMax': 55
       });
-      return;
-    }
-    fetchedData.then(
-      function(json) {
-        that.setState({
-          'isFetching': false,
-          'currentPage': pageNumber,
-          'rows': json.rows,
-          'nextPageStart': json.next,
-          'selectedMin': 0,
-          'selectedMax': 55
-        });
-      }
-    );
+    });
   }
 
   pageChanged() {
-    const that = this;
     return (pageNumber) => {
-      this.fetchData(that, pageNumber, that.state.type);
+      this.fetchData(pageNumber, this.state.type);
     };
   }
 
   prevPageChanged() {
-    const that = this;
     return (pageNumber) => {
       if ((parseInt(pageNumber) - 1) > 0) {
-        this.fetchData(that, pageNumber - 1, that.state.type);
+        this.fetchData(pageNumber - 1, this.state.type);
       }
     };
   }
 
   nextPageChanged() {
-    const that = this;
     return (pageNumber, pageSize) => {
       if ((parseInt(pageNumber) + 1) <= pageSize) {
-        this.fetchData(that, pageNumber + 1, that.state.type);
+        this.fetchData(pageNumber + 1, this.state.type);
       }
     };
-  }
-
-  timelineBarLoaded(isLoaded) {
-    if (isLoaded) {
-      this.state.timelineBarLoaded = isLoaded;
-    }
   }
 
   render() {
