@@ -79,7 +79,7 @@ class Timeline extends React.Component {
     }
     if (this.state.type === 'alert') {
       return (
-        <Alerts id={id} data={data} />
+        <Alerts id={id} data={data} key={id} />
       );
     }
   }
@@ -129,7 +129,7 @@ class Timeline extends React.Component {
             if (dateString !== '') {
               dateTime = formatDateInLocalTimeZone(dateString);
               return (
-                <div style={{display: 'flex'}}>
+                <div style={{display: 'flex'}} key={barId}>
                   <div style={{width: '120px'}}>
                     <span style={{fontSize: '9pt', fontWeight: '600'}}>{dateTime.date}
                       <br />{dateTime.time}</span>
