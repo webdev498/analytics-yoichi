@@ -66,6 +66,7 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.label = '  ' + dataNode.id;
   nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
   nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+  nodeObject.metadata = dataNode.metadata;
   for (let metadataType in dataNode.metadata) {
     let metadataTypeLower = metadataType.toLowerCase();
     if (metadataTypeLower !== 'coordinates') {
@@ -643,54 +644,6 @@ class NetworkGraph extends React.Component {
           }
         });
 
-        // network.on('dragEnd', function(params) {
-        //   for (let i = 0; i < params.nodes.length; i++) {
-        //     let nodeId = params.nodes[i];
-        //     console.log(nodeId);
-        //     this.state.nodes.update({id: nodeId, fixed: {x: true, y: true}});
-        //   }
-        // });
-        // network.on('dragStart', function(params) {
-        //   for (let i = 0; i < params.nodes.length; i++) {
-        //     let nodeId = params.nodes[i];
-        //     console.log(nodeId);
-        //     this.state.nodes.update({id: nodeId, fixed: {x: false, y: false}});
-        //   }
-        // });
-
-        // network.on('dragStart', function(params) {
-        //   console.log('dragStart');
-        //   let dragNode = params.nodes[0];
-        //   if (dragNode !== undefined) {
-        //     let node = network.body.nodes[dragNode];
-        //     node.setOptions({
-        //       image: getIcon(nodeObjects[dragNode].type, nodeObjects[dragNode].status, 'INACTIVE')
-        //     });
-        //   }
-        // });
-
-        // network.on('dragging', function(params) {
-        //   console.log('dragging');
-        //   let dragNode = params.nodes[0];
-        //   if (dragNode !== undefined) {
-        //     let node = network.body.nodes[dragNode];
-        //     node.setOptions({
-        //       image: getIcon(nodeObjects[dragNode].type, nodeObjects[dragNode].status, 'INACTIVE')
-        //     });
-        //   }
-        // });
-
-        // network.on('dragEnd', function(params) {
-        //   console.log('dragEnd');
-        //   let dragNode = params.nodes[0];
-        //   if (dragNode !== undefined) {
-        //     let node = network.body.nodes[dragNode];
-        //     node.setOptions({
-        //       image: getIcon(nodeObjects[dragNode].type, nodeObjects[dragNode].status, 'INACTIVE')
-        //     });
-        //   }
-        // });
-
         network.on('hoverNode', function(params) {
           let hoverNode = params.node,
             // selectedNodes = network.getSelection().nodes,
@@ -709,33 +662,6 @@ class NetworkGraph extends React.Component {
                 });
               }
             }
-            /* if (selectedNodes.length > 0) {
-              console.log('hoverNode1', that.state.selectedNode, selectedNodes);
-              if (selectedNodes.indexOf(hoverNode) > -1 && that.state.selectedNode === hoverNode) {
-                node.setOptions({
-                  image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
-                });
-              }
-              else {
-                node.setOptions({
-                  image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
-                });
-              }
-            }
-            else {
-              console.log('hoverNode2');
-              node.setOptions({
-                image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
-              });
-
-              for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-                if (selectedNodesForExtendingGraph[i].nodeID === hoverNode) {
-                  node.setOptions({
-                    image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
-                  });
-                }
-              }
-            }*/
           }
         });
 
@@ -757,33 +683,6 @@ class NetworkGraph extends React.Component {
                 });
               }
             }
-            /* if (selectedNodes.length > 0) {
-              if (selectedNodes.indexOf(blurNode) > -1 && that.state.selectedNode === blurNode) {
-                console.log('blurNode1');
-                node.setOptions({
-                  image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
-                });
-              }
-              else {
-                node.setOptions({
-                  image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
-                });
-              }
-            }
-            else {
-              node.setOptions({
-                image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
-              });
-
-              for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-                if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
-                  console.log('blurNode2');
-                  node.setOptions({
-                    image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
-                  });
-                }
-              }
-            }*/
           }
         });
 
@@ -1006,6 +905,10 @@ class NetworkGraph extends React.Component {
                       else {
                         tempObj.value = '';
                       }
+                    }
+                    else if ((parameters[k].name).indexOf('metadata') > -1) {
+                      let paramName = (parameters[k].name).replace('metadata.', '');
+                      tempObj.value = nodeObjects[nodeID].metadata[paramName];
                     }
                     else {
                       tempObj.value = '';
