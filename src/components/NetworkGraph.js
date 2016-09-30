@@ -67,6 +67,7 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.label = '  ' + dataNode.id;
   nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
   nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
+  nodeObject.actions = (dataNode.actions !== undefined) ? dataNode.actions : [];
   nodeObject.metadata = dataNode.metadata;
   for (let metadataType in dataNode.metadata) {
     let metadataTypeLower = metadataType.toLowerCase();
@@ -861,15 +862,18 @@ class NetworkGraph extends React.Component {
       table.cellPadding = '10';
       table.cellSpacing = '10';
 
-      let actionsData = this.state.actionsData;
+      let actionsData = this.state.actionsData,
+        actionsList = [];
 
       for (let i = 0; i < actionsData.length; i++) {
         if ((actionsData[i].nodeType).toLowerCase() === nodeType.toLowerCase()) {
-          for (let j = 0; j < actionsData[i].actions.length; j++) {
+          actionsList = Object.assign(actionsList, actionsData[i].actions);
+          console.log('main action list', actionsData[i].actions);
+
+          /*for (let j = 0; j < actionsData[i].actions.length; j++) {
             let parameters = actionsData[i].actions[j].parameters,
               parametersToApi = [],
               userInputParameters = [];
-            console.log(parameters);
             if (parameters.length !== undefined) {
               for (let k = 0; k < parameters.length; k++) {
                 let tempObj = {};
@@ -910,7 +914,6 @@ class NetworkGraph extends React.Component {
                     }
                     else if ((parameters[k].name).indexOf('metadata') > -1) {
                       let paramName = (parameters[k].name).replace('metadata.', '');
-                      console.log(paramName, nodeObjects[nodeID].metadata[paramName]);
                       tempObj.value = nodeObjects[nodeID].metadata[paramName];
                     }
                     else {
@@ -972,6 +975,131 @@ class NetworkGraph extends React.Component {
                 table.appendChild(trUserInput);
               }
             }
+          }*/
+        }
+      }
+
+      // Append the actions associated with nodes
+      if (nodeObjects[nodeID].actions !== undefined && nodeObjects[nodeID].actions.length > 0) {
+        actionsList = Object.assign(actionsList, nodeObjects[nodeID].actions);
+      }
+
+      console.log('final action list', actionsList);
+
+      for (let j = 0; j < actionsList.length; j++) {
+        let parameters = actionsList[j].parameters,
+          parametersToApi = [],
+          userInputParameters = [],
+          linkValueForFullMalwareReport = '';
+
+        if (parameters.length !== undefined) {
+          for (let k = 0; k < parameters.length; k++) {
+            let tempObj = {};
+            if (parameters[k].userInput === false && parameters[k].name !== 'link') {
+              tempObj.name = parameters[k].name;
+              if (parameters[k].value !== undefined) {
+                tempObj.value = parameters[k].value;
+              }
+              else {
+                if (parameters[k].name === 'id') {
+                  tempObj.value = nodeID;
+                }
+                else if (parameters[k].name === 'type') {
+                  tempObj.value = nodeType;
+                }
+                else if (parameters[k].name === 'date') {
+                  tempObj.value = this.state.alertDate;
+                }
+                else if (parameters[k].name === 'ip' && (nodeType.toLowerCase() === 'internal_ip' ||
+                  nodeType.toLowerCase() === 'external_ip')) {
+                  tempObj.value = nodeID;
+                }
+                else if (parameters[k].name === 'source.id') {
+                  if (edgeObjects[nodeID] !== undefined) {
+                    tempObj.value = edgeObjects[nodeID].from;
+                  }
+                  else {
+                    tempObj.value = '';
+                  }
+                }
+                else if (parameters[k].name === 'target.id') {
+                  if (edgeObjects[nodeID] !== undefined) {
+                    tempObj.value = edgeObjects[nodeID].to;
+                  }
+                  else {
+                    tempObj.value = '';
+                  }
+                }
+                else if ((parameters[k].name).indexOf('metadata') > -1) {
+                  let paramName = (parameters[k].name).replace('metadata.', ''),
+                    metadataValue = nodeObjects[nodeID].metadata[paramName];
+                  tempObj.value = (metadataValue !== undefined) ? metadataValue : '';
+                }
+                else {
+                  tempObj.value = '';
+                }
+              }
+
+              tempObj.userInput = false;
+              parametersToApi.push(tempObj);
+            }
+            if (parameters[k].userInput === true) {
+              tempObj.name = parameters[k].name;
+              tempObj.id = parameters[k].name + j;
+              tempObj.value = '';
+              tempObj.userInput = true;
+              parametersToApi.push(tempObj);
+            }
+            if (parameters[k].name === 'link') {
+              linkValueForFullMalwareReport = parameters[k].value !== undefined
+              ? parameters[k].value : '';
+            }
+          }
+
+          userInputParameters = checkForUserInputs(parameters);
+        }
+        let tr = document.createElement('tr'),
+          td1 = document.createElement('td'),
+          reportId = (actionsList[j].reportId !== undefined) ? actionsList[j].reportId
+          : (actionsList[j].name !== undefined ? actionsList[j].name : ''),
+          actionType = (actionsList[j].actionType !== undefined) ? actionsList[j].actionType : '';
+
+        td1.appendChild(document.createTextNode(actionsList[j].label));
+        td1.id = 'action' + j;
+        td1.onclick = this.extendGraph(contextMenuType, network, nodeID, nodeType,
+          reportId, parametersToApi, actionsList.length, 'action' + j, actionsList[j].label,
+          linkValueForFullMalwareReport);
+        tr.appendChild(td1);
+
+        if (userInputParameters.length > 0) {
+          let td2 = document.createElement('td');
+          let downArrow = document.createElement('img');
+          downArrow.src = '/img/downarrow.png';
+          // td1.onclick = this.displayUserInputParameter(userInputParameters[p].name + j);
+          td2.appendChild(downArrow);
+          tr.appendChild(td2);
+        }
+
+        table.appendChild(tr);
+
+        if (userInputParameters.length > 0) {
+          for (let p = 0; p < userInputParameters.length; p++) {
+            let trUserInput = document.createElement('tr');
+            let tdUserInput = document.createElement('td');
+            tdUserInput.style = 'cursor:auto;';
+            tdUserInput.appendChild(document.createTextNode(
+              firstCharCapitalize(userInputParameters[p].name + ' :')));
+            // let newLine = document.createElement('br');
+            // tdUserInput.appendChild(newLine);
+            let inputParameter = document.createElement('input');
+            inputParameter.setAttribute('type', 'text');
+            inputParameter.setAttribute('style', 'color:black;');
+            inputParameter.setAttribute('placeholder', userInputParameters[p].name);
+            inputParameter.setAttribute('name', userInputParameters[p].name + j);
+            inputParameter.setAttribute('id', userInputParameters[p].name + j);
+            tdUserInput.appendChild(inputParameter);
+            trUserInput.appendChild(tdUserInput);
+            table.appendChild(trUserInput);
           }
         }
       }
@@ -986,7 +1114,8 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId, actionLabel) {
+  extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId, actionLabel,
+    linkValueForFullMalwareReport) {
     const that = this;
     return (event) => {
       this.setState({
@@ -1017,6 +1146,10 @@ class NetworkGraph extends React.Component {
           });
           return;
         }
+      }
+
+      if (linkValueForFullMalwareReport !== '') {
+        window.open(baseUrl + linkValueForFullMalwareReport);
       }
 
       const extendedNodes = fetchExtendedNodes(reportId, timeWindow, parameters);
