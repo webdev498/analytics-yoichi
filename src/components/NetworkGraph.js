@@ -62,6 +62,74 @@ function generateDataFromAssetDetails(data) {
   return assetData;
 }
 
+function createReputationText(values, newLine1, newLine2, value1, value2, value5) {
+  let value3 = '',
+    value4 = '',
+    newLine3 = ',\n  ',
+    newLine4 = ',<br />';
+  for (let rv = 0; rv < values.length; rv++) {
+    if (value1 === '') {
+      newLine1 = '';
+      newLine2 = '';
+    }
+    else {
+      newLine1 = '\n  ';
+      newLine2 = '<br />';
+    }
+    if (value3 === '') {
+      newLine3 = '';
+      newLine4 = '';
+    }
+    else {
+      newLine3 = ',\n  ';
+      newLine4 = ',<br />';
+    }
+    value3 += newLine3 + values[rv];
+    value4 += newLine4 + values[rv];
+  }
+  value1 += newLine1 + 'Reputation: ' + value3;
+  value2 += newLine2 + '<b>Reputation:</b> ' + value4;
+  value5 += newLine2 + 'Reputation: ' + value4;
+  return {
+    value1: value1,
+    value2: value2,
+    value5: value5
+  };
+}
+
+function parseReputationText(values, newLine1, newLine2, value1, value2, value5) {
+  for (let v = 0; v < values.length; v++) {
+    if (value1 === '') {
+      newLine1 = '';
+      newLine2 = '';
+    }
+    else {
+      newLine1 = '\n  ';
+      newLine2 = '<br />';
+    }
+    for (let valueType in values[v]) {
+      if (valueType === 'reputation') {
+        let reputationText = createReputationText(values[v][valueType], newLine1, newLine2, value1, value2, value5);
+        value1 = reputationText.value1;
+        value2 = reputationText.value2;
+        value5 = reputationText.value5;
+      }
+      else {
+        // value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
+        value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
+          values[v][valueType] + '<br />';
+        value5 += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
+          values[v][valueType] + '<br />';
+      }
+    }
+  }
+  return {
+    value1: value1,
+    value2: value2,
+    value5: value5
+  };
+}
+
 function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.id = dataNode.id;
   nodeObject.type = dataNode.type;
@@ -84,54 +152,18 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
             newLine2 = '<br />';
 
           if (values !== undefined) {
-            for (let v = 0; v < values.length; v++) {
-              if (value1 === '') {
-                newLine1 = '';
-                newLine2 = '';
-              }
-              else {
-                newLine1 = '\n  ';
-                newLine2 = '<br />';
-              }
-              for (let valueType in values[v]) {
-                if (valueType === 'reputation') {
-                  let value3 = '',
-                    value4 = '',
-                    newLine3 = ',\n  ',
-                    newLine4 = ',<br />';
-                  for (let rv = 0; rv < values[v][valueType].length; rv++) {
-                    if (value1 === '') {
-                      newLine1 = '';
-                      newLine2 = '';
-                    }
-                    else {
-                      newLine1 = '\n  ';
-                      newLine2 = '<br />';
-                    }
-                    if (value3 === '') {
-                      newLine3 = '';
-                      newLine4 = '';
-                    }
-                    else {
-                      newLine3 = ',\n  ';
-                      newLine4 = ',<br />';
-                    }
-                    value3 += newLine3 + values[v][valueType][rv];
-                    value4 += newLine4 + values[v][valueType][rv];
-                  }
-                  value1 += newLine1 + 'Reputation: ' + value3;
-                  value2 += newLine2 + '<b>Reputation:</b> ' + value4;
-                  value5 += newLine2 + 'Reputation: ' + value4;
-                }
-                else {
-                  // value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
-                  value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-                    values[v][valueType] + '<br />';
-                  value5 += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
-                    values[v][valueType] + '<br />';
-                }
-              }
+            if (values.reputation !== undefined) {
+              let reputationText = createReputationText(values.reputation,
+                newLine1, newLine2, value1, value2, value5);
+              value1 = reputationText.value1;
+              value2 = reputationText.value2;
+              value5 = reputationText.value5;
             }
+
+            let reputationText = parseReputationText(values, newLine1, newLine2, value1, value2, value5);
+            value1 = reputationText.value1;
+            value2 = reputationText.value2;
+            value5 = reputationText.value5;
           }
           if (value1 !== '') {
             nodeObject.label += '\n  ' + value1;
@@ -251,7 +283,7 @@ function getNodesEdges(data) {
         edgeObject.color.color = Colors.pebble;
         edgeObject.color.highlight = Colors.turquoise;
 
-        if (dataEdge.type == 'ioc') {
+        if (dataEdge.type === 'ioc') {
           edgeObject.dashes = true;
         }
 
@@ -326,22 +358,12 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   let otherParameters = '';
   if (parameters !== undefined && parameters.length !== undefined) {
     for (let i = 0; i < parameters.length; i++) {
-      // if (i === 0) {
-      //   if (parameters[i].userInput === true) {
-      //     otherParameters = parameters[i].name + '=' + $('#' + parameters[i].id).val();
-      //   }
-      //   else {
-      //     otherParameters = parameters[i].name + '=' + parameters[i].value;
-      //   }
-      // }
-      // else {
       if (parameters[i].userInput === true) {
         otherParameters += '&' + parameters[i].name + '=' + $('#' + parameters[i].id).val();
       }
       else {
         otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
       }
-      // }
     }
   }
   const accessToken = Cookies.get('access_token'),
@@ -709,9 +731,6 @@ class NetworkGraph extends React.Component {
 
   loadContextMenu(network, contextMenuType) {
     return (event) => {
-      // console.log('selectNode: ', contextMenuType);
-      // let actions = document.getElementById('tempActions');
-      // actions.innerHTML = '';
       let listHTML = {
         'loadAgain': false,
         'actions': ''
@@ -801,18 +820,8 @@ class NetworkGraph extends React.Component {
           for (let i = 0; i < this.state.edges.length; i++) {
             let node = network.body.edges[this.state.edges[i].id];
             if (this.state.edges[i].id === nodeID) {
-              // console.log('aa: ', this.state.edges[i], nodeID);
-              // console.log('Selected Node Id:', this.state.nodes[i]);
               selectedNodeDetails += this.state.edges[i].edgeDetails;
               nodeType = this.state.edges[i].type;
-              // node.setOptions({
-              //   image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'SELECTED')
-              // });
-            }
-            else {
-              // node.setOptions({
-              //   image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'INACTIVE')
-              // });
             }
           }
 
@@ -837,11 +846,8 @@ class NetworkGraph extends React.Component {
               },
               'contextualMenu': {
                 width: '259px',
-                // height: '520px',
-                backgroundColor: '#898E9B', // '#6B7282',
-                // opacity: '0.8',
+                backgroundColor: '#898E9B',
                 position: 'absolute',
-                // left: '830px'
                 top: '0px',
                 right: '0px',
                 bottom: '0px'
@@ -856,8 +862,6 @@ class NetworkGraph extends React.Component {
 
   getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt) {
     return (event) => {
-      // let actions = document.getElementById('tempActions');
-      // actions.innerHTML = '';
       let table = document.createElement('table');
       table.border = '0';
       table.width = '259';
@@ -1219,7 +1223,6 @@ class NetworkGraph extends React.Component {
           text={this.state.loaderText} /> : null}
         <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
           ...{
-            // backgroundColor: Colors.networkGraphBGColor
             width: '1100px'
           }}}
           id='networkGraph'>
