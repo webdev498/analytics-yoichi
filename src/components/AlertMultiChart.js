@@ -6,7 +6,6 @@ const styles = {
   title: {
     'fontSize': '13px',
     'fontWeight': 600,
-    'textTransform': 'capitalize',
     'margin': 0,
     'paddingBottom': '10px'
   },
@@ -113,7 +112,7 @@ class AlertMultiChart extends React.Component {
     const charts = Object.keys(data);
     const {attributes} = this.props;
     return charts.map(key => {
-      const {rows, columns} = data[key];
+      const {rows, columns, uiConfig} = data[key];
       const props = {
         attributes: {
           id: key,
@@ -126,7 +125,7 @@ class AlertMultiChart extends React.Component {
         props.data = this.getData(rows, columns);
         return (
           <div style={styles.wrap} key={key}>
-            <h2 style={styles.title}>{key}</h2>
+            <h2 style={styles.title}>{uiConfig.title}</h2>
             <MultiSeriesLineChart {...props} />
           </div>
         );
