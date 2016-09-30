@@ -79,7 +79,7 @@
         },
         "attributes": {
           "style": {
-            "width": "300px",
+            "width": "35%",
             "flexDirection": "column"
           },
           "id": "activity"
@@ -359,6 +359,37 @@
             "type": "MultiSeriesLineChart"
           }
         ]
+      },
+      {
+        "id": "timeline",
+        "type": "Timeline",
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "queryParams": {
+              "window": "",
+              "count": 10,
+              "from": 0
+            },
+            "pathParams": {
+              "reportId": "taf_alert_by_asset"
+            }
+          },
+          "title": "Timeline"
+        },
+        "attributes": {
+          "type": "alert",
+          "displaySelectedRows": true,
+          "noOfEventsPerPage": 10,
+          "maxNumbersOnLeftRightPagination": 4,
+          "topMarginLag": 1030,
+          "style": {
+            "width": "65%",
+            "backgroundColor": "#F7F7F9"
+          },
+          "id": "timeline-component"
+        }
       }
     ]
   ]

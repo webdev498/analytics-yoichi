@@ -202,12 +202,13 @@ export function updateApiData(newDuration, params) {
         components.forEach((component, index) => {
           const id = component.get('id');
           const api = component.get('api');
+          const options = component.get('data') && component.get('data').options;
 
           // this is the case if one api serves the data for multiple element
           // therefore on time duration update there are multiple calls for the api request.
           if (api && api.loadOnce) return;
 
-          fetchApiData(id, api, params)(dispatch, getState);
+          fetchApiData(id, api, params, options)(dispatch, getState);
         });
       }
     }

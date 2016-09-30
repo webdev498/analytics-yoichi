@@ -69,12 +69,12 @@ class AssetDetail extends React.Component {
       : 0;
   }
 
-  getElement(report) {
+  getElement(report, index) {
     if (report.title) {
       const listItemStyle = report.subTitle ? {display: 'block'} : {};
 
       return (
-        <li style={{...styles.item, ...listItemStyle}}>
+        <li style={{...styles.item, ...listItemStyle}} key={`assetDetail${index}`}>
           <h3 style={styles.title}>{report.title}</h3>
           {
             report.subTitle
@@ -86,7 +86,7 @@ class AssetDetail extends React.Component {
     }
     else {
       return (
-        <li style={styles.item}>
+        <li style={styles.item} key={`assetDetail${index}`}>
           <span style={styles.heading}>{report.heading}</span>
           <span style={styles.value}>{report.value}</span>
         </li>
@@ -167,7 +167,7 @@ class AssetDetail extends React.Component {
       });
     });
 
-    return details.map((report) => this.getElement(report));
+    return details.map((report, index) => this.getElement(report, index));
   }
 
   render() {
