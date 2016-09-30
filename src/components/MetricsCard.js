@@ -55,7 +55,7 @@ function getCount(data) {
 
 function getPercent(data) {
   return (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A')
-          ? Math.abs(Math.round(data.rows[0][0][2]), 2) + '%'
+          ? Math.abs(Math.round(data.rows[0][0][2])) + '%'
           : '';
 }
 
