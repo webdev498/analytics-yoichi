@@ -868,6 +868,7 @@ class NetworkGraph extends React.Component {
             let parameters = actionsData[i].actions[j].parameters,
               parametersToApi = [],
               userInputParameters = [];
+            console.log(parameters);
             if (parameters.length !== undefined) {
               for (let k = 0; k < parameters.length; k++) {
                 let tempObj = {};
@@ -908,6 +909,7 @@ class NetworkGraph extends React.Component {
                     }
                     else if ((parameters[k].name).indexOf('metadata') > -1) {
                       let paramName = (parameters[k].name).replace('metadata.', '');
+                      console.log(paramName, nodeObjects[nodeID].metadata[paramName]);
                       tempObj.value = nodeObjects[nodeID].metadata[paramName];
                     }
                     else {
