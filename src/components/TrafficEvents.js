@@ -10,6 +10,22 @@ let alertStyle = {
 };
 
 class TrafficEvents extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleRankAlertClick = this.handleRankAlertClick.bind(this);
+  }
+
+  handleRankAlertClick() {
+    const {props} = this;
+
+    return () => {
+      if (props.data.type.toLowerCase() === 'rank_alert') {
+        const url = `/alert-new/${props.data.id}/${props.data.date}`;
+        props.updateRoute(url);
+      }
+    };
+  }
+
   render() {
     const {props} = this;
     if (props.data.type.toLowerCase() === 'alert' || props.data.type.toLowerCase() === 'rank_alert') {
@@ -43,7 +59,8 @@ class TrafficEvents extends React.Component {
         backgroundColor: Colors.white,
         border: '1px solid #cbcbd1',
         fontSize: '14px',
-        marginBottom: '20px'}, alertStyle)} key={props.id}>
+        cursor: 'pointer',
+        marginBottom: '20px'}, alertStyle)} key={props.id} onClick={this.handleRankAlertClick()}>
           {getDetails(props.data)}
       </Card>
     );

@@ -43,14 +43,16 @@ class Timeline extends React.Component {
   }
 
   displayData(id, data) {
-    if (this.state.type === 'traffic') {
+    const {state, props} = this;
+
+    if (state.type === 'traffic') {
       return (
-        <TrafficEvents id={id} data={data} />
+        <TrafficEvents id={id} data={data} updateRoute={props.updateRoute} />
       );
     }
-    if (this.state.type === 'alert') {
+    if (state.type === 'alert') {
       return (
-        <Alerts id={id} data={data} key={id} />
+        <Alerts id={id} data={data} key={id} updateRoute={props.updateRoute} />
       );
     }
   }
