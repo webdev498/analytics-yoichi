@@ -33,6 +33,7 @@ class Timeline extends React.Component {
       'totalCount': 0,
       'totalPage': 0,
       'currentPage': 1,
+      'filter': '',
       'pageSize': props.attributes.noOfEventsPerPage,
       'maxNumbersOnLeftRight': props.attributes.maxNumbersOnLeftRightPagination,
       'displaySelectedRows': props.attributes.displaySelectedRows,
@@ -71,6 +72,10 @@ class Timeline extends React.Component {
       state.nextPageStart = props.data.next;
       state.rows = props.data.rows;
       timeWindow = props.duration;
+
+      if (state.filter === '') {
+        state.filter = props.data.options.customParams.filter;
+      }
 
       if (state.rows.length === 0) {
         return (
@@ -128,7 +133,7 @@ class Timeline extends React.Component {
         timelineType: state.timelineType,
         duration: timeWindow,
         alertDate: state.alertDate,
-        filter: props.data.options.customParams.filter,
+        filter: state.filter,
         pageSize: state.pageSize
       };
     }
