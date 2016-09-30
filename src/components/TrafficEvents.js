@@ -60,6 +60,7 @@ class TrafficEvents extends React.Component {
         border: '1px solid #cbcbd1',
         fontSize: '14px',
         cursor: 'pointer',
+        overflowWrap: 'break-word',
         marginBottom: '20px'}, alertStyle)} key={props.id} onClick={this.handleRankAlertClick()}>
           {getDetails(props.data)}
       </Card>
