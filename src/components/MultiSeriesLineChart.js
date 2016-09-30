@@ -67,8 +67,9 @@ function getDataSource(props, rawData) {
 
   let {rows, columns} = data;
 
-  if (!data[x[0].reportId]) return null;
   if (!columns) {
+    if (!data[x[0].reportId]) return null;
+
     ({rows, columns} = data[x[0].reportId]);
   }
 
