@@ -3,7 +3,8 @@ import {Colors} from 'theme/colors';
 import $ from 'jquery';
 import {
   firstCharCapitalize,
-  getCountryNameByCountryCode
+  getCountryNameByCountryCode,
+  whatIsIt
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import {baseUrl, networkGraphDefaultOptions} from 'config';
@@ -468,14 +469,14 @@ class NetworkGraph extends React.Component {
         edges: []
       },
       undoGraphStyle: {
-        bottom: '128px',
+        top: '560px',
         left: '35px',
         position: 'absolute',
         cursor: 'pointer',
         display: 'none'
       },
       resetGraphStyle: {
-        bottom: '158px',
+        top: '530px',
         left: '35px',
         position: 'absolute',
         cursor: 'pointer',
@@ -1107,13 +1108,13 @@ class NetworkGraph extends React.Component {
                 : that.state.previousNodesEdges.edges
             },
             undoGraphStyle: {
-              bottom: '128px',
+              top: '560px',
               left: '35px',
               position: 'absolute',
               cursor: 'pointer'
             },
             resetGraphStyle: {
-              bottom: '158px',
+              top: '530px',
               left: '35px',
               position: 'absolute',
               cursor: 'pointer'

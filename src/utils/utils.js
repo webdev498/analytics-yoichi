@@ -475,16 +475,16 @@ export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
 export function formatMicroseconds(miliseconds) {
   if (miliseconds === 0) return 0;
 
-  var seconds = Math.floor(miliseconds / 1000);
-  var days = Math.floor(seconds / 86400);
-  var hours = Math.floor((seconds % 86400) / 3600);
-  var minutes = Math.floor(((seconds % 86400) % 3600) / 60);
-  var timeString = '';
+  let seconds = Math.floor(miliseconds / 1000);
+  let days = Math.floor(seconds / 86400);
+  let hours = Math.floor((seconds % 86400) / 3600);
+  let minutes = Math.floor(((seconds % 86400) % 3600) / 60);
+  let timeString = '';
   if (days > 0) timeString += (days > 1) ? (days + ' days ') : (days + ' day ');
   if (hours > 0) timeString += (hours > 1) ? (hours + ' hours ') : (hours + ' hour ');
   if (minutes > 0) timeString += (minutes > 1) ? (minutes + ' minutes ') : (minutes + ' minute ');
   if (seconds > 0) timeString += (seconds > 1) ? (seconds + ' seconds ') : (seconds + ' second ');
-  var ms = miliseconds % 1000;
+  let ms = miliseconds % 1000;
   if (ms >= 0) timeString += (ms + ' ms');
 
   return timeString;// Math.floor(timeString / 1000);
@@ -555,7 +555,7 @@ export function parseQuery(qstr) {
 }
 
 export function getEventTypeString(typeName) {
-  var typeString = '';
+  let typeString = '';
   if (typeName.indexOf('conn') > -1) typeString = 'Connection';
   else if (typeName.indexOf('ssh') > -1) typeString = 'SSH';
   else if (typeName.indexOf('dns') > -1) typeString = 'DNS';
@@ -568,4 +568,29 @@ export function getEventTypeString(typeName) {
   else if (typeName.indexOf('report') > -1) typeString = 'Report';
   else typeString = 'Other';
   return typeString;
+}
+
+let stringConstructor = 'test'.constructor;
+let arrayConstructor = [].constructor;
+let objectConstructor = {}.constructor;
+
+export function whatIsIt(object) {
+  if (object === null) {
+    return 'null';
+  }
+  else if (object === undefined) {
+    return 'undefined';
+  }
+  else if (object.constructor === stringConstructor) {
+    return 'String';
+  }
+  else if (object.constructor === arrayConstructor) {
+    return 'Array';
+  }
+  else if (object.constructor === objectConstructor) {
+    return 'Object';
+  }
+  else {
+    return 'unknown';
+  }
 }
