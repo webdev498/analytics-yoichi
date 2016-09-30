@@ -6,6 +6,11 @@ import ScoreWidget from 'components/ScoreWidget';
 import FontIcon from 'material-ui/FontIcon';
 
 const styles = {
+  assetWidget: {
+    overflowWrap: 'break-word',
+    width: '190px',
+    padding: 0
+  },
   rankScore: {
     height: '45px',
     width: '45px',
@@ -97,7 +102,7 @@ class AssetDetail extends React.Component {
         value: data.rows[0][0][0],
         change: data.rows[0][0][2]
       }
-      : 0;
+      : {value: 0, change: 0};
   }
 
   getChangeElement(change) {
@@ -247,7 +252,7 @@ class AssetDetail extends React.Component {
 
     return (
       <div style={styles.card}>
-        <AssetWidget data={assetDetail} style={{padding: 0}} />
+        <AssetWidget data={assetDetail} style={{padding: 0}} headingStyle={styles.assetWidget} />
 
         <ScoreWidget scoreValue={assetDetail.risk.score} style={styles.rankScore} />
 
