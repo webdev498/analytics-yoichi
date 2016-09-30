@@ -8,7 +8,7 @@ import FontIcon from 'material-ui/FontIcon';
 const styles = {
   assetWidget: {
     overflowWrap: 'break-word',
-    width: '190px',
+    width: '180px',
     padding: 0
   },
   rankScore: {

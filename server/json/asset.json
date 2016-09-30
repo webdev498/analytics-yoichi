@@ -6,6 +6,8 @@
         "type": "AssetDetails",
         "meta": {
           "showHeader": true,
+          "showRefresh": false,
+          "showBackButton": true,
           "api": [
             {
               "path": "/api/entity/{type}/{assetId}",

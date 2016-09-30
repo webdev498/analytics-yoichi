@@ -5,6 +5,7 @@
         "meta": {
           "showHeader": true,
           "showRefresh": false,
+          "showBackButton": true,
           "api": {
             "path": "/api/alert/{alertId}",
             "pathParams": {

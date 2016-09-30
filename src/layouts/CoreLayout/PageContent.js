@@ -45,6 +45,7 @@ export class PageContent extends React.Component {
     const {props} = this;
     componentDetails.location = props.location;
     componentDetails.params = props.params;
+    componentDetails.history = props.history;
     componentDetails.key = componentDetails.id;
 
     const componentElm = elm({...componentDetails}, childrenArray);
