@@ -73,7 +73,8 @@ class Timeline extends React.Component {
       state.rows = props.data.rows;
       timeWindow = props.duration;
 
-      if (state.filter === '') {
+      if (state.filter === '' && props.data.options !== undefined &&
+        props.data.options.customParams !== undefined) {
         state.filter = props.data.options.customParams.filter;
       }
 
