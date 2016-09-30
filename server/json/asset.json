@@ -24,7 +24,7 @@
                 "reportId": "taf_asset_session_count_time_shifted,taf_asset_internal_resource_count_time_shifted,taf_asset_total_incoming_bandwidth_external_time_shifted,taf_asset_total_incoming_bandwidth_internal_time_shifted,taf_asset_total_outgoing_bandwidth_external_time_shifted,taf_asset_total_outgoing_bandwidth_internal_time_shifted,taf_asset_top_dest_countries,taf_asset_top_source_countries,taf_asset_top_dest_countries,taf_asset_top_source_countries"
               },
               "queryParams": {
-                "user": "assetId:pathParam",
+                "type:pathParam": "assetId:pathParam",
                 "window": ""
               },
               "id": "assetReports"
