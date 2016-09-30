@@ -239,7 +239,7 @@
               ]
             }
           ],
-          "multipleReports": true
+          "multipleReportIds": true
         },
         "meta": {
           "showHeader": true,
