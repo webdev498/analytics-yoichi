@@ -86,7 +86,15 @@ const style = {
 let nodeObjects = {},
   edgeObjects = {},
   timeWindow = '1h',
-  undoGraphCount = 0;
+  undoGraphCount = 0,
+  physicsTrue = {
+    physics: {
+      'stabilization': true
+    }
+  },
+  physicsFalse = {
+    physics: false
+  };
 
 function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.id = dataNode.id;
@@ -97,16 +105,17 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.actions = (dataNode.actions !== undefined) ? dataNode.actions : [];
   nodeObject.metadata = dataNode.metadata;
   for (let metadataType in dataNode.metadata) {
-    let metadataTypeLower = metadataType.toLowerCase();
+    let metadataTypeLower = metadataType.toLowerCase(),
+      newLine1 = '\n  ',
+      newLine2 = '<br />';
+
     if (metadataTypeLower !== 'coordinates') {
       switch (metadataTypeLower) {
         case 'reputation':
           let values = dataNode.metadata[metadataType],
             value1 = '',
             value2 = '',
-            value5 = '',
-            newLine1 = '\n  ',
-            newLine2 = '<br />';
+            value5 = '';
 
           if (values !== undefined) {
             if (values.reputation !== undefined) {
@@ -125,9 +134,9 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
             value5 = reputationText.value5;
           }
           if (value1 !== '') {
-            nodeObject.label += '\n  ' + value1;
-            nodeObject.title += '<br />' + value2;
-            nodeObject.nodeDetails += '<br />' + value5;
+            nodeObject.label += newLine1 + value1;
+            nodeObject.title += newLine2 + value2;
+            nodeObject.nodeDetails += newLine2 + value5;
 
             if (value1.indexOf('Scanning Host') > -1) {
               nodeStatus = 'scan';
@@ -141,26 +150,25 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
           }
           break;
         case 'country':
-          nodeObject.label += '\n  ' +
+          nodeObject.label += newLine1 +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-          nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-          nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+          nodeObject.nodeDetails += newLine2 + firstCharCapitalize(metadataType) + ': ' +
             getCountryNameByCountryCode[dataNode.metadata[metadataType]];
           break;
         case 'displayname':
-          // nodeObject.label += '\n  Name: ' + dataNode.metadata[metadataType];
-          nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
-          nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
+          nodeObject.title += newLine2 + '<b>Name:</b> ' + dataNode.metadata[metadataType];
+          nodeObject.nodeDetails += newLine2 + 'Name: ' + dataNode.metadata[metadataType];
           break;
         default:
           if (metadataTypeLower === 'title') {
-            nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
+            nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
               addNewlines(dataNode.metadata[metadataType]);
           }
-          nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             dataNode.metadata[metadataType];
-          nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
+          nodeObject.nodeDetails += newLine2 + firstCharCapitalize(metadataType) + ': ' +
             dataNode.metadata[metadataType];
           break;
       }
@@ -483,11 +491,17 @@ class NetworkGraph extends React.Component {
     super(props);
     const {duration} = this.props,
       alertDate = this.props.params.date;
+    let emptyNodesEdges = {
+        nodes: [],
+        edges: []
+      };
 
     this.state = {
       nodes: [],
       edges: [],
+      isFetching: false,// This flag will get removed after started using fetchApiData function from props object
       showContextMenu: false,
+      showUndoResetButtons: false,
       selectedNodeDetails: '',
       selectedNode: '',
       loadAgain: true,
@@ -497,18 +511,9 @@ class NetworkGraph extends React.Component {
       duration: duration,
       alertDate: alertDate,
       selectedNodesForExtendingGraph: [],
-      zoomScale: '100%',
-      isFetching: false,
-      previousNodesEdges: {
-        nodes: [],
-        edges: []
-      },
-      originalNodesEdges: {
-        nodes: [],
-        edges: []
-      },
-      loaderText: '',
-      showUndoResetButtons: false
+      previousNodesEdges: emptyNodesEdges,
+      originalNodesEdges: emptyNodesEdges,
+      loaderText: ''
     };
 
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
@@ -569,19 +574,10 @@ class NetworkGraph extends React.Component {
         let network = new vis.Network(this.networkGraph, networkData, options);
 
         if (networkData.nodes.length <= 10) {
-          network.setOptions({
-            physics: false
-          });
+          network.setOptions(physicsFalse);
         }
         else {
-          network.setOptions({
-            physics: {
-              // 'barnesHut': {
-              //   'avoidOverlap': 1
-              // },
-              'stabilization': true
-            }
-          });
+          network.setOptions(physicsTrue);
         }
 
         network.on('selectNode', this.loadContextMenu(network, 'node'));
@@ -677,12 +673,6 @@ class NetworkGraph extends React.Component {
             }
           }
         });
-
-        // network.on('zoom', function(params) {
-        //   that.setState({
-        //     'zoomScale': parseInt(params.scale * 100) + '%'
-        //   });
-        // });
 
         document.getElementsByClassName('vis-up')[0].style.visibility = 'hidden';
         document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
@@ -1080,19 +1070,10 @@ class NetworkGraph extends React.Component {
           });
 
           if (nodes.length <= 10) {
-            network.setOptions({
-              physics: false
-            });
+            network.setOptions(physicsFalse);
           }
           else {
-            network.setOptions({
-              physics: {
-                // 'barnesHut': {
-                //   'avoidOverlap': 1
-                // },
-                'stabilization': true
-              }
-            });
+            network.setOptions(physicsTrue);
           }
 
           if (contextMenuType === 'node') {
@@ -1218,15 +1199,6 @@ class NetworkGraph extends React.Component {
         </div>
 
         <div style={{...style.actionPerformed}} id='actionPerformed'></div>
-
-        <div style={{
-          bottom: '20px',
-          fontSize: '12px',
-          left: '35px',
-          position: 'absolute',
-          backgroundColor: Colors.white
-        }}>{ /* {this.state.zoomScale}*/}</div>
-      </div>
     );
   }
 
@@ -1263,19 +1235,10 @@ class NetworkGraph extends React.Component {
             edges: previousNodesEdges.edges[undoGraphCount]});
 
           if (previousNodesEdges.nodes[undoGraphCount].length <= 10) {
-            network.setOptions({
-              physics: false
-            });
+            network.setOptions(physicsFalse);
           }
           else {
-            network.setOptions({
-              physics: {
-                // 'barnesHut': {
-                //   'avoidOverlap': 1
-                // },
-                'stabilization': true
-              }
-            });
+            network.setOptions(physicsTrue);
           }
 
           for (let key in nodeObjects) {
@@ -1340,19 +1303,10 @@ class NetworkGraph extends React.Component {
           edges: originalNodesEdges.edges});
 
         if (originalNodesEdges.nodes.length <= 10) {
-          network.setOptions({
-            physics: false
-          });
+          network.setOptions(physicsFalse);
         }
         else {
-          network.setOptions({
-            physics: {
-              // 'barnesHut': {
-              //   'avoidOverlap': 1
-              // },
-              'stabilization': true
-            }
-          });
+          network.setOptions(physicsTrue);
         }
 
         for (let key in nodeObjects) {
