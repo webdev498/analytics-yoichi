@@ -410,7 +410,7 @@ function fetchExtendedNodes(reportId, duration, parameters) {
   if (parameters !== undefined && parameters.length !== undefined) {
     for (let i = 0; i < parameters.length; i++) {
       if (parameters[i].userInput === true) {
-        otherParameters += '&' + parameters[i].name + '=' + $('#' + parameters[i].id).val();
+        otherParameters += '&' + parameters[i].name + '=' + document.getElementById(parameters[i].id).value;
       }
       else {
         otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
@@ -550,8 +550,57 @@ class NetworkGraph extends React.Component {
         nodes: Object.assign([], nodesEdges.nodes),
         edges: Object.assign([], nodesEdges.edges)
       };
-      const actionsData = this.context.store.getState().actions;
-      this.state.actionsData = getActionsByTypes(actionsData.list.actions);
+      // const actionsData = this.context.store.getState().actions;
+      // this.state.actionsData = getActionsByTypes(actionsData.list.actions);
+      // console.log(this.state.actionsData);
+      this.state.actionsData = [{
+        actions: [
+        {
+          "name": "taf_machines_by_user",
+          "actionType": "graph",
+          "types": [
+            "user"
+          ],
+          "group": "explore",
+          "targetType": "machine",
+          "edgeType": "logged_in",
+          "reversed": false,
+          "label": "All machines the selected user has logged into testing",
+          "parameters": [
+            {
+              "name": "id",
+              "userInput": true
+            },
+            {
+              "name": "type",
+              "userInput": false
+            }
+          ]
+        },
+        {
+          "name": "taf_machines_by_user",
+          "actionType": "graph",
+          "types": [
+            "user"
+          ],
+          "group": "explore",
+          "targetType": "machine",
+          "edgeType": "logged_in",
+          "reversed": false,
+          "label": "All machines the selected user has logged into",
+          "parameters": [
+            {
+              "name": "id",
+              "userInput": false
+            },
+            {
+              "name": "type",
+              "userInput": false
+            }
+          ]
+        }],
+        nodeType: 'user'
+        }];
 
       networkData = {
         nodes: nodesEdges.nodes,
@@ -688,10 +737,6 @@ class NetworkGraph extends React.Component {
         document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
         document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
         document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
-        // $('.vis-up').hide();
-        // $('.vis-down').hide();
-        // $('.vis-left').hide();
-        // $('.vis-right').hide();
       }
       else {
         document.getElementById('networkGraph').innerHTML = 'No additional results were found.';
@@ -911,14 +956,23 @@ class NetworkGraph extends React.Component {
         td1.onclick = this.extendGraph(contextMenuType, network, nodeID, nodeType,
           reportId, parametersToApi, actionsList.length, 'action' + j, actionsList[j].label,
           linkValueForFullMalwareReport);
-        tr.appendChild(td1);
 
+        let td2 = document.createElement('td');
         if (userInputParameters.length > 0) {
-          let td2 = document.createElement('td');
+          td2.id = 'downarrow' + j;
+          td2.style = 'padding-left:0px;';
           let downArrow = document.createElement('img');
           downArrow.src = '/img/downarrow.png';
           // td1.onclick = this.displayUserInputParameter(userInputParameters[p].name + j);
           td2.appendChild(downArrow);
+        }
+        else {
+          td1.colSpan = '2';
+        }
+
+        tr.appendChild(td1);
+
+        if (userInputParameters.length > 0) {
           tr.appendChild(td2);
         }
 
@@ -1122,12 +1176,21 @@ class NetworkGraph extends React.Component {
 
       for (let j = 0; j < actionsCount; j++) {
         let tempId = 'action' + j;
+        let downarrowId = 'downarrow' + j;
 
         if (tempId === actionId) {
           document.getElementById(tempId).style.backgroundColor = '#979BA7';
+          if (document.getElementById(downarrowId) !== undefined &&
+            document.getElementById(downarrowId) !== null) {
+            document.getElementById(downarrowId).style.backgroundColor = '#979BA7';
+          }
         }
         else {
           document.getElementById(tempId).style.backgroundColor = 'transparent';
+          if (document.getElementById(downarrowId) !== undefined &&
+            document.getElementById(downarrowId) !== null) {
+            document.getElementById(downarrowId).style.backgroundColor = 'transparent';
+          }
         }
       }
     };
