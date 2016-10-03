@@ -878,7 +878,8 @@ class NetworkGraph extends React.Component {
       }
 
       // Append the actions associated with nodes
-      if (nodeObjects[nodeID].actions !== undefined && nodeObjects[nodeID].actions.length > 0) {
+      if (nodeObjects[nodeID] !== undefined && nodeObjects[nodeID].actions !== undefined &&
+        nodeObjects[nodeID].actions.length > 0) {
         actionsList = Object.assign(actionsList, nodeObjects[nodeID].actions);
       }
 
