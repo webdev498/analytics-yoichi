@@ -550,57 +550,8 @@ class NetworkGraph extends React.Component {
         nodes: Object.assign([], nodesEdges.nodes),
         edges: Object.assign([], nodesEdges.edges)
       };
-      // const actionsData = this.context.store.getState().actions;
-      // this.state.actionsData = getActionsByTypes(actionsData.list.actions);
-      // console.log(this.state.actionsData);
-      this.state.actionsData = [{
-        actions: [
-        {
-          "name": "taf_machines_by_user",
-          "actionType": "graph",
-          "types": [
-            "user"
-          ],
-          "group": "explore",
-          "targetType": "machine",
-          "edgeType": "logged_in",
-          "reversed": false,
-          "label": "All machines the selected user has logged into testing",
-          "parameters": [
-            {
-              "name": "id",
-              "userInput": true
-            },
-            {
-              "name": "type",
-              "userInput": false
-            }
-          ]
-        },
-        {
-          "name": "taf_machines_by_user",
-          "actionType": "graph",
-          "types": [
-            "user"
-          ],
-          "group": "explore",
-          "targetType": "machine",
-          "edgeType": "logged_in",
-          "reversed": false,
-          "label": "All machines the selected user has logged into",
-          "parameters": [
-            {
-              "name": "id",
-              "userInput": false
-            },
-            {
-              "name": "type",
-              "userInput": false
-            }
-          ]
-        }],
-        nodeType: 'user'
-        }];
+      const actionsData = this.context.store.getState().actions;
+      this.state.actionsData = getActionsByTypes(actionsData.list.actions);
 
       networkData = {
         nodes: nodesEdges.nodes,
