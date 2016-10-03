@@ -109,10 +109,12 @@ function parseReputationText(values, newLine1, newLine2, value1, value2, value5)
     }
     for (let valueType in values[v]) {
       if (valueType === 'reputation') {
-        let reputationText = createReputationText(values[v][valueType], newLine1, newLine2, value1, value2, value5);
-        value1 = reputationText.value1;
-        value2 = reputationText.value2;
-        value5 = reputationText.value5;
+        if ((values[v][valueType]).length > 0) {
+          let reputationText = createReputationText(values[v][valueType], newLine1, newLine2, value1, value2, value5);
+          value1 = reputationText.value1;
+          value2 = reputationText.value2;
+          value5 = reputationText.value5;
+        }
       }
       else {
         // value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
@@ -153,11 +155,13 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
 
           if (values !== undefined) {
             if (values.reputation !== undefined) {
-              let reputationText = createReputationText(values.reputation,
-                newLine1, newLine2, value1, value2, value5);
-              value1 = reputationText.value1;
-              value2 = reputationText.value2;
-              value5 = reputationText.value5;
+              if ((values.reputation).length > 0) {
+                let reputationText = createReputationText(values.reputation,
+                  newLine1, newLine2, value1, value2, value5);
+                value1 = reputationText.value1;
+                value2 = reputationText.value2;
+                value5 = reputationText.value5;
+              }
             }
 
             let reputationText = parseReputationText(values, newLine1, newLine2, value1, value2, value5);
