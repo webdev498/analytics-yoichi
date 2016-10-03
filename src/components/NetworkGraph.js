@@ -4,13 +4,35 @@ import $ from 'jquery';
 import {
   firstCharCapitalize,
   getCountryNameByCountryCode,
-  whatIsIt
+  getPosition
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import {baseUrl, networkGraphDefaultOptions} from 'config';
 import Loader from '../components/Loader';
 
 const style = {
+  networkGraph: {
+    'height': '600px',
+    'width': '100%'
+  },
+  contextualMenu: {
+    width: '259px',
+    backgroundColor: '#898E9B',
+    position: 'absolute',
+    top: '0px',
+    right: '0px',
+    bottom: '0px'
+  },
+  actionPerformed: {
+    top: 0,
+    right: '259px',
+    fontSize: '12pt',
+    position: 'absolute',
+    padding: '20px',
+    backgroundColor: '#DADADE',
+    color: '#24293D',
+    display: 'none'
+  },
   searchTextBox: {
     backgroundColor: '#646A7D',
     padding: '10px',
@@ -35,6 +57,29 @@ const style = {
     fontFamily: 'Open Sans',
     overflowWrap: 'break-word',
     paddingRight: '20px'
+  },
+  undoGraphStyle: {
+    top: '560px',
+    left: '35px',
+    position: 'absolute',
+    cursor: 'pointer',
+    display: 'none'
+  },
+  resetGraphStyle: {
+    top: '530px',
+    left: '35px',
+    position: 'absolute',
+    cursor: 'pointer',
+    display: 'none'
+  },
+  loaderStyle: {
+    position: 'absolute',
+    top: '350px',
+    display: 'flex',
+    backgroundColor: '#898E9B',
+    padding: '20px',
+    left: '300px',
+    width: '350px'
   }
 };
 
@@ -43,99 +88,9 @@ let nodeObjects = {},
   timeWindow = '1h',
   undoGraphCount = 0;
 
-function generateDataFromAssetDetails(data) {
-  const assetData = [];
-  const nodes = [];
-
-  nodes[0] = {
-    id: data.id,
-    label: data.info.name,
-    type: data.type,
-    metadata: data.info
-  };
-
-  assetData[0] = {
-    nodes,
-    edges: []
-  };
-
-  return assetData;
-}
-
-function createReputationText(values, newLine1, newLine2, value1, value2, value5) {
-  let value3 = '',
-    value4 = '',
-    newLine3 = ',\n  ',
-    newLine4 = ',<br />';
-  for (let rv = 0; rv < values.length; rv++) {
-    if (value1 === '') {
-      newLine1 = '';
-      newLine2 = '';
-    }
-    else {
-      newLine1 = '\n  ';
-      newLine2 = '<br />';
-    }
-    if (value3 === '') {
-      newLine3 = '';
-      newLine4 = '';
-    }
-    else {
-      newLine3 = ',\n  ';
-      newLine4 = ',<br />';
-    }
-    value3 += newLine3 + values[rv];
-    value4 += newLine4 + values[rv];
-  }
-  value1 += newLine1 + 'Reputation: ' + value3;
-  value2 += newLine2 + '<b>Reputation:</b> ' + value4;
-  value5 += newLine2 + 'Reputation: ' + value4;
-  return {
-    value1: value1,
-    value2: value2,
-    value5: value5
-  };
-}
-
-function parseReputationText(values, newLine1, newLine2, value1, value2, value5) {
-  for (let v = 0; v < values.length; v++) {
-    if (value1 === '') {
-      newLine1 = '';
-      newLine2 = '';
-    }
-    else {
-      newLine1 = '\n  ';
-      newLine2 = '<br />';
-    }
-    for (let valueType in values[v]) {
-      if (valueType === 'reputation') {
-        if ((values[v][valueType]).length > 0) {
-          let reputationText = createReputationText(values[v][valueType], newLine1, newLine2, value1, value2, value5);
-          value1 = reputationText.value1;
-          value2 = reputationText.value2;
-          value5 = reputationText.value5;
-        }
-      }
-      else {
-        // value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
-        value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-          values[v][valueType] + '<br />';
-        value5 += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
-          values[v][valueType] + '<br />';
-      }
-    }
-  }
-  return {
-    value1: value1,
-    value2: value2,
-    value5: value5
-  };
-}
-
 function createNodeObject(dataNode, nodeObject, nodeStatus) {
   nodeObject.id = dataNode.id;
   nodeObject.type = dataNode.type;
-  // nodeObject.label = '\n  ' + firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
   nodeObject.label = '  ' + dataNode.id;
   nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
   nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
@@ -233,6 +188,41 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
   return nodeObject;
 }
 
+function createEdgeObject(dataEdge, edgeObject) {
+  edgeObject.id = dataEdge.id;
+  edgeObject.type = dataEdge.type;
+  edgeObject.from = dataEdge.source;
+  edgeObject.to = dataEdge.target;
+  edgeObject.arrows = {
+    'to': {
+      'scaleFactor': 0.5
+    },
+    'arrowStrikethrough': false
+  };
+  edgeObject.label = dataEdge.label + '\n\n\n';
+  edgeObject.edgeDetails = 'Edge Type: ' + dataEdge.label;
+  edgeObject.edgeDetails += '<br/>Source: ' + dataEdge.source;
+  edgeObject.edgeDetails += '<br/>Target: ' + dataEdge.target;
+  edgeObject.font = {
+    'face': 'Open Sans',
+    'color': Colors.pebble,
+    'size': '11',
+    'align': 'left'
+  };
+  edgeObject.length = 1000;
+  edgeObject.smooth = {
+    type: 'discrete'
+  };
+  edgeObject.color = {};
+  edgeObject.color.color = Colors.pebble;
+  edgeObject.color.highlight = Colors.turquoise;
+
+  if (dataEdge.type === 'ioc') {
+    edgeObject.dashes = true;
+  }
+  return edgeObject;
+}
+
 function getNodesEdges(data) {
   let nodes = [],
     edges = [],
@@ -259,38 +249,7 @@ function getNodesEdges(data) {
         edgeObject = {};
 
       if (edgeObjects[dataEdge.id] === undefined) {
-        edgeObject.id = dataEdge.id;
-        edgeObject.type = dataEdge.type;
-        edgeObject.from = dataEdge.source;
-        edgeObject.to = dataEdge.target;
-        edgeObject.arrows = {
-          'to': {
-            'scaleFactor': 0.5
-          },
-          'arrowStrikethrough': false
-        };
-        edgeObject.label = dataEdge.label + '\n\n\n';
-        edgeObject.edgeDetails = 'Edge Type: ' + dataEdge.label;
-        edgeObject.edgeDetails += '<br/>Source: ' + dataEdge.source;
-        edgeObject.edgeDetails += '<br/>Target: ' + dataEdge.target;
-        edgeObject.font = {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        };
-        edgeObject.length = 1000;
-        edgeObject.smooth = {
-          type: 'discrete'
-        };
-        edgeObject.color = {};
-        edgeObject.color.color = Colors.pebble;
-        edgeObject.color.highlight = Colors.turquoise;
-
-        if (dataEdge.type === 'ioc') {
-          edgeObject.dashes = true;
-        }
-
+        edgeObject = createEdgeObject(dataEdge, edgeObject);
         edges.push(edgeObject);
         edgeObjects[dataEdge.target] = edgeObject;
         edgeObjects[edgeObject.id] = edgeObject;
@@ -304,6 +263,75 @@ function getNodesEdges(data) {
   };
 }
 
+function createReputationText(values, newLine1, newLine2, value1, value2, value5) {
+  let value3 = '',
+    value4 = '',
+    newLine3 = ',\n  ',
+    newLine4 = ',<br />';
+  for (let rv = 0; rv < values.length; rv++) {
+    if (value1 === '') {
+      newLine1 = '';
+      newLine2 = '';
+    }
+    else {
+      newLine1 = '\n  ';
+      newLine2 = '<br />';
+    }
+    if (value3 === '') {
+      newLine3 = '';
+      newLine4 = '';
+    }
+    else {
+      newLine3 = ',\n  ';
+      newLine4 = ',<br />';
+    }
+    value3 += newLine3 + values[rv];
+    value4 += newLine4 + values[rv];
+  }
+  value1 += newLine1 + 'Reputation: ' + value3;
+  value2 += newLine2 + '<b>Reputation:</b> ' + value4;
+  value5 += newLine2 + 'Reputation: ' + value4;
+  return {
+    value1: value1,
+    value2: value2,
+    value5: value5
+  };
+}
+
+function parseReputationText(values, newLine1, newLine2, value1, value2, value5) {
+  for (let v = 0; v < values.length; v++) {
+    if (value1 === '') {
+      newLine1 = '';
+      newLine2 = '';
+    }
+    else {
+      newLine1 = '\n  ';
+      newLine2 = '<br />';
+    }
+    for (let valueType in values[v]) {
+      if (valueType === 'reputation') {
+        if ((values[v][valueType]).length > 0) {
+          let reputationText = createReputationText(values[v][valueType], newLine1, newLine2, value1, value2, value5);
+          value1 = reputationText.value1;
+          value2 = reputationText.value2;
+          value5 = reputationText.value5;
+        }
+      }
+      else {
+        value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
+          values[v][valueType] + '<br />';
+        value5 += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
+          values[v][valueType] + '<br />';
+      }
+    }
+  }
+  return {
+    value1: value1,
+    value2: value2,
+    value5: value5
+  };
+}
+
 function getIcon(nodeType, nodeStatus, nodeAction) {
   nodeType = nodeType.toLowerCase();
   const iconPath = '/img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
@@ -314,6 +342,25 @@ function getIcon(nodeType, nodeStatus, nodeAction) {
   else {
     return '/img/inactive.png';
   }
+}
+
+function generateDataFromAssetDetails(data) {
+  const assetData = [];
+  const nodes = [];
+
+  nodes[0] = {
+    id: data.id,
+    label: data.info.name,
+    type: data.type,
+    metadata: data.info
+  };
+
+  assetData[0] = {
+    nodes,
+    edges: []
+  };
+
+  return assetData;
 }
 
 function getActionsByTypes(actionsData) {
@@ -423,22 +470,12 @@ function addNewlines(str) {
   if (str.length > char) {
     let result = '';
     while (str.length > 0) {
-      // let last = str.lastIndexOf(' ');
-      // console.log(last, str);
-      result += str.substring(0, char) + '\n  '; // Math.min(char, last)
+      result += str.substring(0, char) + '\n  ';
       str = str.substring(char);
     }
     return result;
   }
   return str;
-}
-
-function getPos(el) {
-  // yay readability
-  for (var lx = 0, ly = 0;
-    el != null;
-    lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
-  return {x: lx, y: ly};
 }
 
 class NetworkGraph extends React.Component {
@@ -450,24 +487,7 @@ class NetworkGraph extends React.Component {
     this.state = {
       nodes: [],
       edges: [],
-      style: {
-        'networkGraph': {
-          'height': '600px',
-          'width': '100%'
-        },
-        'contextualMenu': {
-          width: '259px',
-          // height: '520px',
-          backgroundColor: '#898E9B', // '#6B7282',
-          // opacity: '0.8',
-          display: 'none',
-          position: 'absolute',
-          // left: '830px'
-          top: '0px',
-          right: '0px',
-          bottom: '0px'
-        }
-      },
+      showContextMenu: false,
       selectedNodeDetails: '',
       selectedNode: '',
       loadAgain: true,
@@ -479,16 +499,6 @@ class NetworkGraph extends React.Component {
       selectedNodesForExtendingGraph: [],
       zoomScale: '100%',
       isFetching: false,
-      actionPerformed: {
-        top: 0,
-        right: '259px',
-        fontSize: '12pt',
-        position: 'absolute',
-        padding: '20px',
-        backgroundColor: '#DADADE',
-        color: '#24293D',
-        display: 'none'
-      },
       previousNodesEdges: {
         nodes: [],
         edges: []
@@ -497,23 +507,8 @@ class NetworkGraph extends React.Component {
         nodes: [],
         edges: []
       },
-      undoGraphStyle: {
-        top: '560px',
-        left: '35px',
-        position: 'absolute',
-        cursor: 'pointer',
-        display: 'none'
-      },
-      resetGraphStyle: {
-        top: '530px',
-        left: '35px',
-        position: 'absolute',
-        cursor: 'pointer',
-        display: 'none'
-      },
       loaderText: '',
-      loaderStyle: {
-      }
+      showUndoResetButtons: false
     };
 
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
@@ -606,22 +601,7 @@ class NetworkGraph extends React.Component {
               if (i === 0) {
                 that.setState({
                   'loadAgain': false,
-                  style: {
-                    'networkGraph': {
-                      'height': '600px',
-                      'width': '100%'
-                    },
-                    'contextualMenu': {
-                      width: '259px',
-                      backgroundColor: '#898E9B', // '#6B7282',
-                      // opacity: '0.8',
-                      display: 'none',
-                      position: 'absolute',
-                      top: '0px',
-                      right: '0px',
-                      bottom: '0px'
-                    }
-                  },
+                  showContextMenu: false,
                   selectedNodeDetails: '',
                   actions: '',
                   selectedNode: '',
@@ -639,28 +619,12 @@ class NetworkGraph extends React.Component {
           let i = 0;
           for (let edgeObject in edgeObjects) {
             let deselectedEdge = edgeObjects[edgeObject];
-            // let edge = network.body.edges[deselectedEdge.id];
 
             if (deselectedEdge !== undefined) {
               if (i === 0) {
                 that.setState({
                   'loadAgain': false,
-                  style: {
-                    'networkGraph': {
-                      'height': '600px',
-                      'width': '100%'
-                    },
-                    'contextualMenu': {
-                      width: '259px',
-                      backgroundColor: '#898E9B', // '#6B7282',
-                      // opacity: '0.8',
-                      display: 'none',
-                      position: 'absolute',
-                      top: '0px',
-                      right: '0px',
-                      bottom: '0px'
-                    }
-                  },
+                  showContextMenu: false,
                   selectedNodeDetails: '',
                   actions: '',
                   selectedNode: '',
@@ -676,7 +640,6 @@ class NetworkGraph extends React.Component {
 
         network.on('hoverNode', function(params) {
           let hoverNode = params.node,
-            // selectedNodes = network.getSelection().nodes,
             node = network.body.nodes[hoverNode],
             selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
@@ -697,7 +660,6 @@ class NetworkGraph extends React.Component {
 
         network.on('blurNode', function(params) {
           let blurNode = params.node,
-            // selectedNodes = network.getSelection().nodes,
             node = network.body.nodes[blurNode],
             selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
@@ -722,10 +684,14 @@ class NetworkGraph extends React.Component {
         //   });
         // });
 
-        $('.vis-up').hide();
-        $('.vis-down').hide();
-        $('.vis-left').hide();
-        $('.vis-right').hide();
+        document.getElementsByClassName('vis-up')[0].style.visibility = 'hidden';
+        document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
+        document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
+        document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
+        // $('.vis-up').hide();
+        // $('.vis-down').hide();
+        // $('.vis-left').hide();
+        // $('.vis-right').hide();
       }
       else {
         document.getElementById('networkGraph').innerHTML = 'No additional results were found.';
@@ -785,27 +751,13 @@ class NetworkGraph extends React.Component {
             'timeWindow': timeWindow
           });
 
+          // contextualMenuDisplayNone
+
           let statesJSON = {
             'loadAgain': false,
             'selectedNodeDetails': selectedNodeDetails,
             selectedNode: nodeID,
-            style: {
-              'networkGraph': {
-                'height': '600px',
-                'width': '100%'
-              },
-              'contextualMenu': {
-                width: '259px',
-                // height: '520px',
-                backgroundColor: '#898E9B', // '#6B7282',
-                // opacity: '0.8',
-                position: 'absolute',
-                // left: '830px'
-                top: '0px',
-                right: '0px',
-                bottom: '0px'
-              }
-            },
+            showContextMenu: true,
             'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
           };
           this.setState(statesJSON);
@@ -840,23 +792,12 @@ class NetworkGraph extends React.Component {
 
           document.getElementById('refreshData').style.marginLeft = '735px';
 
+          // contextualMenuDisplayNone
+
           let statesJSON = {
             'loadAgain': false,
             'selectedNodeDetails': selectedNodeDetails,
-            style: {
-              'networkGraph': {
-                'height': '600px',
-                'width': '100%'
-              },
-              'contextualMenu': {
-                width: '259px',
-                backgroundColor: '#898E9B',
-                position: 'absolute',
-                top: '0px',
-                right: '0px',
-                bottom: '0px'
-              }
-            }
+            showContextMenu: true
           };
           this.setState(statesJSON);
         }
@@ -882,7 +823,8 @@ class NetworkGraph extends React.Component {
       }
 
       // Append the actions associated with nodes
-      if (nodeObjects[nodeID].actions !== undefined && nodeObjects[nodeID].actions.length > 0) {
+      if (nodeObjects[nodeID] !== undefined && nodeObjects[nodeID].actions !== undefined &&
+        nodeObjects[nodeID].actions.length > 0) {
         actionsList = Object.assign(actionsList, nodeObjects[nodeID].actions);
       }
 
@@ -1020,23 +962,14 @@ class NetworkGraph extends React.Component {
     return (event) => {
       this.setState({
         isFetching: true,
-        loaderText: actionLabel,
-        loaderStyle: {
-          position: 'absolute',
-          top: '350px',
-          display: 'flex',
-          backgroundColor: '#898E9B',
-          padding: '20px',
-          left: '300px',
-          width: '350px'
-        }
+        loaderText: actionLabel
       });
       let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
         if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
           selectedNodesForExtendingGraph[i].reportId === reportId &&
           selectedNodesForExtendingGraph[i].timeWindow === timeWindow) {
-          let position = getPos(document.getElementById(actionId));
+          let position = getPosition(document.getElementById(actionId));
           document.getElementById('actionPerformed').innerHTML = 'You have already performed this action.';
           $('#actionPerformed').css('top', position.y - 85);
           $('#actionPerformed').fadeIn('slow');
@@ -1065,7 +998,7 @@ class NetworkGraph extends React.Component {
             edges = that.state.edges;
 
           if (json[0] === undefined) {
-            let position = getPos(document.getElementById(actionId));
+            let position = getPosition(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
               'No additional results found.';
             $('#actionPerformed').css('top', position.y - 85);
@@ -1132,26 +1065,13 @@ class NetworkGraph extends React.Component {
             'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
             isFetching: false,
             loaderText: '',
-            loaderStyle: {
-            },
             previousNodesEdges: {
               nodes: (nodesPrevious.length > 0) ? that.state.previousNodesEdges.nodes.concat(nodesPrevious)
                 : that.state.previousNodesEdges.nodes,
               edges: (edgesPrevious.length > 0) ? that.state.previousNodesEdges.edges.concat(edgesPrevious)
                 : that.state.previousNodesEdges.edges
             },
-            undoGraphStyle: {
-              top: '560px',
-              left: '35px',
-              position: 'absolute',
-              cursor: 'pointer'
-            },
-            resetGraphStyle: {
-              top: '530px',
-              left: '35px',
-              position: 'absolute',
-              cursor: 'pointer'
-            }
+            showUndoResetButtons: true
           });
 
           if (nodes.length <= 10) {
@@ -1183,7 +1103,7 @@ class NetworkGraph extends React.Component {
           }
 
           if (!isGraphExtended) {
-            let position = getPos(document.getElementById(actionId));
+            let position = getPosition(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
               'No additional results found.';
             $('#actionPerformed').css('top', position.y - 85);
@@ -1221,11 +1141,14 @@ class NetworkGraph extends React.Component {
       assetData = generateDataFromAssetDetails(props.data);
     }
 
+    let contextMenuStyle = {display: this.state.showContextMenu ? 'block' : 'none'},
+      undoResetStyle = {display: this.state.showUndoResetButtons ? 'block' : 'none'};
+
     return (
       <div style={{display: 'flex'}}>
-        {this.state.isFetching ? <Loader style={{}} loaderStyle={this.state.loaderStyle}
+        {this.state.isFetching ? <Loader style={{}} loaderStyle={style.loaderStyle}
           text={this.state.loaderText} /> : null}
-        <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
+        <div ref={(ref) => this.networkGraph = ref} style={{...style.networkGraph,
           ...{
             width: '1100px'
           }}}
@@ -1237,7 +1160,7 @@ class NetworkGraph extends React.Component {
           }
         </div>
         <div ref={(ref) => this.contextualMenu = ref}
-          style={{...this.state.style.contextualMenu}} id='contextualMenu'>
+          style={{...style.contextualMenu, ...contextMenuStyle}} id='contextualMenu'>
           { /* <input type='text' id='searchNetworkNode'
             style={{...style.searchTextBox}}
             placeholder='Search' /> */ }
@@ -1272,15 +1195,15 @@ class NetworkGraph extends React.Component {
           <img id='leftArrow' src='/img/menu.png' onClick={this.collapseExpandCM('expand')} />
         </div>
 
-        <div id='undoGraph' style={this.state.undoGraphStyle}>
+        <div id='undoGraph' style={{...style.undoGraphStyle, ...undoResetStyle}}>
           <img id='undo' src='/img/undo.png' />
         </div>
 
-        <div id='resetGraph' style={this.state.resetGraphStyle}>
+        <div id='resetGraph' style={{...style.resetGraphStyle, ...undoResetStyle}}>
           <img id='reset' src='/img/reset.png' />
         </div>
 
-        <div style={this.state.actionPerformed} id='actionPerformed'></div>
+        <div style={{...style.actionPerformed}} id='actionPerformed'></div>
 
         <div style={{
           bottom: '20px',
@@ -1373,22 +1296,7 @@ class NetworkGraph extends React.Component {
             'nodes': updatedNodes,
             'edges': updatedEdges,
             isFetching: false,
-            style: {
-              'networkGraph': {
-                'height': '600px',
-                'width': '100%'
-              },
-              'contextualMenu': {
-                width: '259px',
-                backgroundColor: '#898E9B', // '#6B7282',
-                // opacity: '0.8',
-                display: 'none',
-                position: 'absolute',
-                top: '0px',
-                right: '0px',
-                bottom: '0px'
-              }
-            },
+            showContextMenu: false,
             selectedNodeDetails: '',
             actions: '',
             selectedNode: '',
@@ -1459,22 +1367,7 @@ class NetworkGraph extends React.Component {
           'nodes': updatedNodes,
           'edges': updatedEdges,
           isFetching: false,
-          style: {
-            'networkGraph': {
-              'height': '600px',
-              'width': '100%'
-            },
-            'contextualMenu': {
-              width: '259px',
-              backgroundColor: '#898E9B', // '#6B7282',
-              // opacity: '0.8',
-              display: 'none',
-              position: 'absolute',
-              top: '0px',
-              right: '0px',
-              bottom: '0px'
-            }
-          },
+          showContextMenu: false,
           selectedNodeDetails: '',
           actions: '',
           selectedNode: '',
