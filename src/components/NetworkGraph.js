@@ -926,8 +926,6 @@ class NetworkGraph extends React.Component {
             tdUserInput.style = 'cursor:auto;';
             tdUserInput.appendChild(document.createTextNode(
               firstCharCapitalize(userInputParameters[p].name + ' :')));
-            // let newLine = document.createElement('br');
-            // tdUserInput.appendChild(newLine);
             let inputParameter = document.createElement('input');
             inputParameter.setAttribute('type', 'text');
             inputParameter.setAttribute('style', 'color:black;');
@@ -1199,6 +1197,7 @@ class NetworkGraph extends React.Component {
         </div>
 
         <div style={{...style.actionPerformed}} id='actionPerformed'></div>
+      </div>
     );
   }
 
