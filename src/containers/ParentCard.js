@@ -43,6 +43,9 @@ const styles = {
     color: Colors.smoke,
     fontWeight: 600
   },
+  backIcon: {
+    color: Colors.grape
+  },
   crossIcon: {
     fontSize: '20px'
   },
@@ -122,7 +125,8 @@ class ParentCard extends React.Component {
 
   static propTypes = {
     meta: PropTypes.object.isRequired,
-    updateRoute: PropTypes.func.isRequired
+    updateRoute: PropTypes.func.isRequired,
+    history: PropTypes.object
   }
 
   getData() {
@@ -292,6 +296,12 @@ class ParentCard extends React.Component {
     };
   }
 
+  goBack() {
+    return () => {
+      this.props.history.goBack();
+    };
+  }
+
   getHeader() {
     const {props} = this;
 
@@ -346,6 +356,20 @@ class ParentCard extends React.Component {
             </FontIcon>
           </div>
         )
+      }
+
+      {
+        props.meta.showBackButton === true
+        ? (
+          <div style={styles.iconWrap} id='refreshData'>
+            <FontIcon className='material-icons'
+              style={{...styles.refreshIcon, ...styles.backIcon}}
+              onClick={this.goBack()}>
+              arrow_back
+            </FontIcon>
+          </div>
+        )
+        : null
       }
     </header>;
   }

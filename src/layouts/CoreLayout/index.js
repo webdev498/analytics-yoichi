@@ -173,7 +173,7 @@ export class CoreLayout extends React.Component {
             {
               (props.auth.isLoading)
               ? <Loader />
-              : <PageContent location={props.location} params={props.params} />
+              : <PageContent location={props.location} params={props.params} history={this.context.router} />
             }
           </div>
 

@@ -83,17 +83,23 @@ function getUrl(api, duration, routerParams) {
     queryString += '?';
 
     keys.forEach((key) => {
+      let queryKey = key;
+      if (key.endsWith(':pathParam')) {
+        queryKey = key.substr(0, key.indexOf(':pathParam'));
+        queryKey = routerParams[queryKey];
+      }
+
       if ((key === 'window' || key === 'timeShift') && (query[key] === '')) {
-        queryString += `${key}=${encodeURI(duration)}&`;
+        queryString += `${queryKey}=${encodeURI(duration)}&`;
       }
       // if query value is :pathParam, it implies use path param of the current url.
       else if (('' + query[key]).endsWith(':pathParam')) {
         // query[key] = 'user:pathParam', it will extract user from.
         const paramKey = query[key].substr(0, query[key].indexOf(':pathParam'));
-        queryString += `${key}=${encodeURI(routerParams[paramKey])}&`;
+        queryString += `${queryKey}=${encodeURI(routerParams[paramKey])}&`;
       }
       else {
-        queryString += `${key}=${encodeURI(query[key])}&`;
+        queryString += `${queryKey}=${encodeURI(query[key])}&`;
       }
     });
 

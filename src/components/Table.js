@@ -456,11 +456,12 @@ export class TableCard extends React.Component {
   render() {
     const {props} = this;
     const that = this;
-    generateDataSource(props);
+    const id = props.attributes.id;
 
+    generateDataSource(props);
     return (
       <div>
-        <Table id={props.attributes.id}
+        <Table id={id}
           style={{width: '100%'}}
           className='threatTable'
           sortable={props.tableOptions.sortable}
@@ -475,13 +476,16 @@ export class TableCard extends React.Component {
           {
             tableDataSource.map(function(tableRow, index) {
               return (
-                <Tr onClick={that.handleRowClick(tableRow, index)} style={{'cursor': 'pointer'}}>
+                <Tr onClick={that.handleRowClick(tableRow, index)}
+                  style={{'cursor': 'pointer'}}
+                  key={`tr${id}${index}`}>
                   {tableRow.columns.map(function(tableColumn, indexCol) {
                     if (tableColumn.columnType === 'chart') {
                       return (
                         <Td column={tableColumn.columnName}
                           value={tableColumn.chartValue}
-                          style={tableColumn.columnStyle}>
+                          style={tableColumn.columnStyle}
+                          key={`td${id}${indexCol}`}>
                           {loadChartComponentInTableRow(tableColumn, props.duration)}
                         </Td>
                       );
@@ -490,7 +494,8 @@ export class TableCard extends React.Component {
                       return (
                         <Td column={tableColumn.columnName}
                           value={tableColumn.timeValueSort}
-                          style={tableColumn.columnStyle}>
+                          style={tableColumn.columnStyle}
+                          key={`td${id}${indexCol}`}>
                           <DurationWidget timeValue={tableColumn.timeValue} />
                         </Td>
                       );
@@ -499,7 +504,8 @@ export class TableCard extends React.Component {
                       return (
                         <Td column={tableColumn.columnName}
                           value={tableColumn.chartValue}
-                          style={tableColumn.columnStyle}>
+                          style={tableColumn.columnStyle}
+                          key={`td${id}${indexCol}`}>
                           <ScoreWidget scoreValue={tableColumn.chartValue} />
                         </Td>
                       );
@@ -507,7 +513,9 @@ export class TableCard extends React.Component {
                     if (tableColumn.columnType === 'text') {
                       return (
                         <Td column={tableColumn.columnName}
-                          style={tableColumn.columnStyle}>{tableColumn.columnText}
+                          style={tableColumn.columnStyle}
+                          key={`td${id}${indexCol}`}>
+                          {tableColumn.columnText}
                         </Td>
                       );
                     }

@@ -1,11 +1,16 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
 
 import AssetWidget from 'components/AssetWidget';
 import {formatBytes, getCountryNameByCountryCode} from 'utils/utils';
 import ScoreWidget from 'components/ScoreWidget';
+import FontIcon from 'material-ui/FontIcon';
 
 const styles = {
+  assetWidget: {
+    overflowWrap: 'break-word',
+    width: '180px',
+    padding: 0
+  },
   rankScore: {
     height: '45px',
     width: '45px',
@@ -27,36 +32,64 @@ const styles = {
     fontSize: '13px',
     fontWeight: '600',
     textTransform: 'capitalize',
-    margin: 0,
-    paddingTop: '30px',
-    display: 'inline-block'
+    margin: 0
   },
   subTitle: {
     fontSize: '11px',
     fontWeight: '300'
   },
   titleValue: {
-    alignSelf: 'flex-end',
-    fontSize: '20px'
+    fontSize: '18px'
   },
   value: {
-    fontWeight: '300',
+    fontWeight: '600',
+    fontSize: '16px',
     marginLeft: 'auto'
   },
   heading: {
-    fontWeight: '300'
+    fontWeight: '300',
+    margin: 0
   },
   text: {
     fontSize: '11px',
     textTransform: 'uppercase',
-    paddingLeft: '5px',
-    fontWeight: '300'
+    paddingLeft: '2px',
+    fontWeight: '600'
   },
-  error: {
-    textAlign: 'center',
-    marginBottom: '33px'
+  icon: {
+    width: '12px',
+    lineHeight: '14px',
+    marginTop: 'auto'
+  },
+  change: {
+    fontSize: '11px',
+    marginLeft: '15px',
+    display: 'inline-flex',
+    textAlign: 'right'
+  },
+  percent: {
+    width: '40px'
   }
 };
+
+function getArrowIcon(change) {
+  if (change !== 'N/A') {
+    if (parseFloat(change) > 0) {
+      return <FontIcon style={styles.icon} className='material-icons'>arrow_drop_up</FontIcon>;
+    }
+    else if (parseFloat(change) < 0) {
+      return <FontIcon style={styles.icon} className='material-icons'>arrow_drop_down</FontIcon>;
+    }
+    else {
+      return <FontIcon style={{...styles.icon, visibility: 'hidden'}} className='material-icons'>
+        arrow_drop_down
+      </FontIcon>;
+    }
+  }
+  else {
+    return <span style={styles.icon}>-</span>;
+  }
+}
 
 class AssetDetail extends React.Component {
   static propTypes = {
@@ -65,21 +98,50 @@ class AssetDetail extends React.Component {
 
   getValue(data) {
     return (data && data.rows && data.rows.length === 1)
-      ? data.rows[0][0]
-      : 0;
+      ? {
+        value: data.rows[0][0][0],
+        change: data.rows[0][0][2]
+      }
+      : {value: 0, change: 0};
+  }
+
+  getChangeElement(change) {
+    // change = Math.round(change * 100) / 100;
+    change = parseFloat(change).toFixed(2);
+    return (
+      <span style={styles.change}>
+        <span style={styles.percent}>{Math.abs(change)} %</span>
+        {getArrowIcon(change)}
+      </span>
+    );
   }
 
   getElement(report, index) {
+    let value = '', change = null;
+
+    if (report.value !== undefined && report.value !== null) {
+      value = report.value.value;
+      change = report.value.change;
+    }
+
     if (report.title) {
       const listItemStyle = report.subTitle ? {display: 'block'} : {};
-
       return (
-        <li style={{...styles.item, ...listItemStyle}} key={`assetDetail${index}`}>
+        <li style={{...styles.item, ...listItemStyle, paddingTop: '30px'}} key={`assetDetail${index}`}>
           <h3 style={styles.title}>{report.title}</h3>
           {
             report.subTitle
             ? <div style={styles.subTitle}>{report.subTitle}</div>
-            : <span style={{...styles.value, ...styles.titleValue}}>{report.value}</span>
+            : (
+              <div style={{marginLeft: 'auto'}}>
+                <span style={{...styles.value, ...styles.titleValue}}>{value}</span>
+                {
+                  typeof change === 'number'
+                  ? this.getChangeElement(change)
+                  : null
+                }
+              </div>
+            )
           }
         </li>
       );
@@ -87,8 +149,15 @@ class AssetDetail extends React.Component {
     else {
       return (
         <li style={styles.item} key={`assetDetail${index}`}>
-          <span style={styles.heading}>{report.heading}</span>
-          <span style={styles.value}>{report.value}</span>
+          <h3 style={styles.heading}>{report.heading}</h3>
+          <div style={{marginLeft: 'auto'}}>
+            <span style={styles.value}>{value}</span>
+            {
+              typeof change === 'number'
+              ? this.getChangeElement(change)
+              : null
+            }
+          </div>
         </li>
       );
     }
@@ -96,15 +165,16 @@ class AssetDetail extends React.Component {
 
   getReports(reports) {
     const details = [];
-
+    let value = this.getValue(reports.taf_asset_session_count_time_shifted);
     details.push({
       title: 'sessions',
-      value: this.getValue(reports.taf_asset_session_count)
+      value
     });
 
+    value = this.getValue(reports.taf_asset_internal_resource_count_time_shifted);
     details.push({
       title: 'assets accessed',
-      value: this.getValue(reports.taf_asset_internal_resource_count)
+      value
     });
 
     details.push({
@@ -112,16 +182,18 @@ class AssetDetail extends React.Component {
       value: null
     });
 
+    value = this.getValue(reports.taf_asset_total_incoming_bandwidth_external_time_shifted);
+    value.value = formatBytes(value.value, 2, {numberStyle: styles.value, textStyle: styles.text});
     details.push({
       heading: 'External',
-      value: formatBytes(this.getValue(reports.taf_asset_total_incoming_bandwidth_external), 2,
-                          {numberStyle: styles.value, textStyle: styles.text})
+      value
     });
 
+    value = this.getValue(reports.taf_asset_total_incoming_bandwidth_internal_time_shifted);
+    value.value = formatBytes(value.value, 2, {numberStyle: styles.value, textStyle: styles.text});
     details.push({
       heading: 'Internal',
-      value: formatBytes(this.getValue(reports.taf_asset_total_incoming_bandwidth_internal), 2,
-                          {numberStyle: styles.value, textStyle: styles.text})
+      value
     });
 
     details.push({
@@ -129,16 +201,18 @@ class AssetDetail extends React.Component {
       value: null
     });
 
+    value = this.getValue(reports.taf_asset_total_outgoing_bandwidth_external_time_shifted);
+    value.value = formatBytes(value.value, 2, {numberStyle: styles.value, textStyle: styles.text});
     details.push({
       heading: 'External',
-      value: formatBytes(this.getValue(reports.taf_asset_total_outgoing_bandwidth_external), 2,
-                          {numberStyle: styles.value, textStyle: styles.text})
+      value
     });
 
+    value = this.getValue(reports.taf_asset_total_outgoing_bandwidth_internal_time_shifted);
+    value.value = formatBytes(value.value, 2, {numberStyle: styles.value, textStyle: styles.text});
     details.push({
       heading: 'Internal',
-      value: formatBytes(this.getValue(reports.taf_asset_total_outgoing_bandwidth_internal), 2,
-                          {numberStyle: styles.value, textStyle: styles.text})
+      value
     });
 
     details.push({
@@ -150,7 +224,7 @@ class AssetDetail extends React.Component {
     reports.taf_asset_top_dest_countries.rows.forEach(([country, count]) => {
       details.push({
         heading: getCountryNameByCountryCode[country],
-        value: count.toLocaleString()
+        value: {value: count.toLocaleString()}
       });
     });
 
@@ -163,7 +237,7 @@ class AssetDetail extends React.Component {
     reports.taf_asset_top_source_countries.rows.forEach(([country, count]) => {
       details.push({
         heading: getCountryNameByCountryCode[country],
-        value: count.toLocaleString()
+        value: {value: count.toLocaleString()}
       });
     });
 
@@ -178,7 +252,7 @@ class AssetDetail extends React.Component {
 
     return (
       <div style={styles.card}>
-        <AssetWidget data={assetDetail} style={{padding: 0}} />
+        <AssetWidget data={assetDetail} style={{padding: 0}} headingStyle={styles.assetWidget} />
 
         <ScoreWidget scoreValue={assetDetail.risk.score} style={styles.rankScore} />
 
