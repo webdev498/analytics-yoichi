@@ -12,53 +12,12 @@ import Cookies from 'cookies-js';
 import {baseUrl, networkGraphDefaultOptions} from 'config';
 // Loader will get removed after started using fetchApiData function from props object
 import Loader from '../components/Loader';
+import ContextualMenu from '../components/ContextualMenu';
 
 const style = {
   networkGraph: {
     'height': '600px',
     'width': '100%'
-  },
-  contextualMenu: {
-    width: '259px',
-    backgroundColor: '#898E9B',
-    position: 'absolute',
-    top: '0px',
-    right: '0px',
-    bottom: '0px'
-  },
-  actionPerformed: {
-    top: 0,
-    right: '259px',
-    fontSize: '12pt',
-    position: 'absolute',
-    padding: '20px',
-    backgroundColor: '#DADADE',
-    color: '#24293D',
-    display: 'none'
-  },
-  searchTextBox: {
-    backgroundColor: '#646A7D',
-    padding: '10px',
-    border: '0px',
-    width: '211px',
-    height: '40px',
-    color: '#B8BBC3',
-    fontFamily: 'Open Sans',
-    marginTop: '28px',
-    marginLeft: '24px',
-    marginRight: '24px'
-  },
-  selectedNodeDetails: {
-    marginTop: '28px',
-    marginBottom: '28px',
-    marginLeft: '24px',
-    marginRight: '24px',
-    width: '90%',
-    color: '#24293D',
-    fontSize: '12pt',
-    fontFamily: 'Open Sans',
-    overflowWrap: 'break-word',
-    paddingRight: '20px'
   },
   undoGraphStyle: {
     top: '560px',
@@ -592,7 +551,6 @@ class NetworkGraph extends React.Component {
     this.getContextMenu = this.getContextMenu.bind(this);
 
     this.extendGraph = this.extendGraph.bind(this);
-    this.collapseExpandCM = this.collapseExpandCM.bind(this);
 
     this.undoGraph = this.undoGraph.bind(this);
     this.resetGraph = this.resetGraph.bind(this);
@@ -768,8 +726,8 @@ class NetworkGraph extends React.Component {
   loadContextMenu(network, contextMenuType) {
     return (event) => {
       let listHTML = {
-        'loadAgain': false,
-        'actions': ''
+        loadAgain: false,
+        actions: ''
       };
       this.setState(listHTML);
 
@@ -812,19 +770,19 @@ class NetworkGraph extends React.Component {
           document.getElementById('refreshData').style.marginLeft = '735px';
 
           selectedNodesForExtendingGraph.push({
-            'nodeID': nodeID,
-            'reportId': '',
-            'timeWindow': timeWindow
+            nodeID: nodeID,
+            reportId: '',
+            timeWindow: timeWindow
           });
 
-          let statesJSON = {
-            'loadAgain': false,
-            'selectedNodeDetails': selectedNodeDetails,
+          let states = {
+            loadAgain: false,
+            selectedNodeDetails: selectedNodeDetails,
             selectedNode: nodeID,
             showContextMenu: true,
-            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
+            selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
           };
-          this.setState(statesJSON);
+          this.setState(states);
         }
       }
 
@@ -855,12 +813,12 @@ class NetworkGraph extends React.Component {
 
           document.getElementById('refreshData').style.marginLeft = '735px';
 
-          let statesJSON = {
-            'loadAgain': false,
-            'selectedNodeDetails': selectedNodeDetails,
+          let states = {
+            loadAgain: false,
+            selectedNodeDetails: selectedNodeDetails,
             showContextMenu: true
           };
-          this.setState(statesJSON);
+          this.setState(states);
         }
       }
     };
@@ -979,7 +937,6 @@ class NetworkGraph extends React.Component {
           td2.style = 'padding-left:0px;';
           let downArrow = document.createElement('img');
           downArrow.src = '/img/downarrow.png';
-          // td1.onclick = this.displayUserInputParameter(userInputParameters[p].name + j);
           td2.appendChild(downArrow);
         }
         else {
@@ -1158,9 +1115,6 @@ class NetworkGraph extends React.Component {
             }
           }
 
-          if (contextMenuType === 'edge') {
-          }
-
           if (!isGraphExtended) {
             let position = getPosition(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
@@ -1209,8 +1163,7 @@ class NetworkGraph extends React.Component {
       assetData = generateDataFromAssetDetails(props.data);
     }
 
-    let contextMenuStyle = {display: this.state.showContextMenu ? 'block' : 'none'},
-      undoResetStyle = {display: this.state.showUndoResetButtons ? 'block' : 'none'};
+    let undoResetStyle = {display: this.state.showUndoResetButtons ? 'block' : 'none'};
 
     return (
       <div style={{display: 'flex'}}>
@@ -1227,41 +1180,10 @@ class NetworkGraph extends React.Component {
             : this.loadNetworkGraph(props.data, this.state.loadAgain, props.duration)
           }
         </div>
-        <div ref={(ref) => this.contextualMenu = ref}
-          style={{...style.contextualMenu, ...contextMenuStyle}} id='contextualMenu'>
-          { /* <input type='text' id='searchNetworkNode'
-            style={{...style.searchTextBox}}
-            placeholder='Search' /> */ }
 
-          <div style={{
-            height: '650px', // '570px',
-            overflowX: 'hidden',
-            overflowY: 'auto'
-          }} className='contextMenu scrollbarStyle' id='contextualMenuContents'>
-            <div
-              style={{...style.selectedNodeDetails}}
-              dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
-            </div>
-            <div id='actions'></div>
-          </div>
-
-          <div id='collapseExpandCM' style={{
-            marginLeft: '24px',
-            marginBottom: '24px',
-            marginTop: '10px'
-          }}>
-            <img id='rightArrow' src='/img/rightArrow.png' onClick={this.collapseExpandCM('collapse')} />
-          </div>
-        </div>
-
-        <div id='expandCM' style={{
-          bottom: '25px',
-          right: '24px',
-          position: 'absolute',
-          display: 'none'
-        }}>
-          <img id='leftArrow' src='/img/menu.png' onClick={this.collapseExpandCM('expand')} />
-        </div>
+        <ContextualMenu
+          showContextMenu={this.state.showContextMenu}
+          selectedDetails={this.state.selectedNodeDetails} />
 
         <div id='undoGraph' style={{...style.undoGraphStyle, ...undoResetStyle}}>
           <img id='undo' src='/img/undo.png' />
@@ -1270,29 +1192,8 @@ class NetworkGraph extends React.Component {
         <div id='resetGraph' style={{...style.resetGraphStyle, ...undoResetStyle}}>
           <img id='reset' src='/img/reset.png' />
         </div>
-
-        <div style={{...style.actionPerformed}} id='actionPerformed'></div>
       </div>
     );
-  }
-
-  collapseExpandCM(action) {
-    return (event) => {
-      if (action === 'collapse') {
-        $('#contextualMenu').animate({width: '0px'});
-        document.getElementById('rightArrow').style.display = 'none';
-        document.getElementById('contextualMenuContents').style.display = 'none';
-        // document.getElementById('searchNetworkNode').style.display = 'none';
-        document.getElementById('expandCM').style.display = 'block';
-      }
-      if (action === 'expand') {
-        $('#contextualMenu').animate({width: '259px'});
-        document.getElementById('rightArrow').style.display = 'block';
-        document.getElementById('contextualMenuContents').style.display = 'block';
-        // document.getElementById('searchNetworkNode').style.display = 'block';
-        document.getElementById('expandCM').style.display = 'none';
-      }
-    };
   }
 
   undoGraph(network) {
@@ -1342,10 +1243,10 @@ class NetworkGraph extends React.Component {
           tempEdgesArray.splice(undoGraphCount, 1);
 
           this.setState({
-            'loadAgain': false,
-            'nodesListStatus': 'extended',
-            'nodes': updatedNodes,
-            'edges': updatedEdges,
+            loadAgain: false,
+            nodesListStatus: 'extended',
+            nodes: updatedNodes,
+            edges: updatedEdges,
             isFetching: false,
             showContextMenu: false,
             selectedNodeDetails: '',
@@ -1404,10 +1305,10 @@ class NetworkGraph extends React.Component {
         }
 
         this.setState({
-          'loadAgain': false,
-          'nodesListStatus': 'extended',
-          'nodes': updatedNodes,
-          'edges': updatedEdges,
+          loadAgain: false,
+          nodesListStatus: 'extended',
+          nodes: updatedNodes,
+          edges: updatedEdges,
           isFetching: false,
           showContextMenu: false,
           selectedNodeDetails: '',
