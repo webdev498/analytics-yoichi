@@ -106,7 +106,7 @@ function createNodeObject(dataNode) {
   nodeObject.label = '  ' + dataNode.id;
   nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
   nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-  nodeObject.actions = (dataNode.actions !== undefined) ? dataNode.actions : [];
+  nodeObject.actions = (!isUndefined(dataNode.actions)) ? dataNode.actions : [];
 
   let metaDataObject = handleMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
@@ -127,7 +127,7 @@ function createNodeObject(dataNode) {
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
 
   let actions = [];
-  if (dataNode.actions !== null && dataNode.actions !== undefined) {
+  if (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) {
     actions = dataNode.actions;
   }
   nodeObject.actions = actions;
@@ -177,11 +177,11 @@ function getNodesEdges(data) {
     dataNodes = data.nodes,
     dataEdges = data.edges;
 
-  if (dataNodes !== undefined) {
+  if (!isUndefined(dataNodes)) {
     for (let i = 0; i < dataNodes.length; i++) {
       let dataNode = dataNodes[i];
 
-      if (nodeObjects[dataNode.id] === undefined) {
+      if (isUndefined(nodeObjects[dataNode.id])) {
         let nodeObject = createNodeObject(dataNode);
         nodes.push(nodeObject);
         nodeObjects[dataNode.id] = nodeObject;
@@ -189,11 +189,11 @@ function getNodesEdges(data) {
     }
   }
 
-  if (dataEdges !== undefined) {
+  if (!isUndefined(dataEdges)) {
     for (let i = 0; i < dataEdges.length; i++) {
       let dataEdge = dataEdges[i];
 
-      if (edgeObjects[dataEdge.id] === undefined) {
+      if (isUndefined(edgeObjects[dataEdge.id])) {
         let edgeObject = createEdgeObject(dataEdge);
         edges.push(edgeObject);
         edgeObjects[dataEdge.target] = edgeObject;
@@ -224,8 +224,8 @@ function handleMetaData(metadata, nodeObject) {
             value2 = '',
             value5 = '';
 
-          if (values !== undefined) {
-            if (values.reputation !== undefined) {
+          if (!isUndefined(values)) {
+            if (!isUndefined(values.reputation)) {
               if ((values.reputation).length > 0) {
                 let reputationText = createReputationText(values.reputation,
                   newLine1, newLine2, value1, value2, value5);
@@ -433,7 +433,7 @@ function getActionsByTypes(actionsData) {
 
 function fetchExtendedNodes(reportId, duration, parameters) {
   let otherParameters = '';
-  if (parameters !== undefined && parameters.length !== undefined) {
+  if (!isUndefined(parameters) && !isUndefined(parameters.length)) {
     for (let i = 0; i < parameters.length; i++) {
       if (parameters[i].userInput === true) {
         otherParameters += '&' + parameters[i].name + '=' + document.getElementById(parameters[i].id).value;
@@ -479,7 +479,7 @@ function isNodeOrEdgeAlreadyExists(array, id) {
 
 function checkForUserInputs(parameters) {
   let userInputParameters = [];
-  if (parameters.length !== undefined) {
+  if (!isUndefined(parameters.length)) {
     for (let k = 0; k < parameters.length; k++) {
       let tempObj = {};
       if (parameters[k].userInput === true) {
@@ -510,14 +510,14 @@ class NetworkGraph extends React.Component {
     const {duration} = this.props,
       alertDate = this.props.params.date;
     let emptyNodesEdges = {
-        nodes: [],
-        edges: []
-      };
+      nodes: [],
+      edges: []
+    };
 
     this.state = {
       nodes: [],
       edges: [],
-      isFetching: false,// This flag will get removed after started using fetchApiData function from props object
+      isFetching: false, // This flag will get removed after started using fetchApiData function from props object
       showContextMenu: false,
       showUndoResetButtons: false,
       selectedNodeDetails: '',
@@ -582,7 +582,7 @@ class NetworkGraph extends React.Component {
       };
     }
 
-    if (this.networkGraph !== null && this.networkGraph !== undefined) {
+    if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
       let options = networkGraphDefaultOptions;
 
       // create a network
@@ -607,7 +607,7 @@ class NetworkGraph extends React.Component {
             let deselectedNode = nodeObjects[nodeObject], // params.previousSelection.nodes[0],
               node = network.body.nodes[deselectedNode.id];
 
-            if (deselectedNode !== undefined) {
+            if (!isUndefined(deselectedNode)) {
               node.setOptions({
                 image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
               });
@@ -634,7 +634,7 @@ class NetworkGraph extends React.Component {
           for (let edgeObject in edgeObjects) {
             let deselectedEdge = edgeObjects[edgeObject];
 
-            if (deselectedEdge !== undefined) {
+            if (!isUndefined(deselectedEdge)) {
               if (i === 0) {
                 that.setState({
                   'loadAgain': false,
@@ -657,7 +657,7 @@ class NetworkGraph extends React.Component {
             node = network.body.nodes[hoverNode],
             selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
-          if (nodeObjects[hoverNode] !== undefined) {
+          if (!isUndefined(nodeObjects[hoverNode])) {
             node.setOptions({
               image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
             });
@@ -677,7 +677,7 @@ class NetworkGraph extends React.Component {
             node = network.body.nodes[blurNode],
             selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
 
-          if (nodeObjects[blurNode] !== undefined) {
+          if (!isUndefined(nodeObjects[blurNode])) {
             node.setOptions({
               image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
             });
@@ -720,7 +720,7 @@ class NetworkGraph extends React.Component {
 
         let nodeAt = network.getBoundingBox(nodeID);
 
-        if (nodeID !== undefined) {
+        if (!isUndefined(nodeID)) {
           for (let i = 0; i < this.state.nodes.length; i++) {
             let node = network.body.nodes[this.state.nodes[i].id];
             if (this.state.nodes[i].id === nodeID) {
@@ -776,7 +776,7 @@ class NetworkGraph extends React.Component {
 
         let nodeAt = network.getBoundingBox(nodeID);
         // console.log('edge', nodeID);
-        if (nodeID !== undefined) {
+        if (!isUndefined(nodeID)) {
           for (let i = 0; i < this.state.edges.length; i++) {
             let node = network.body.edges[this.state.edges[i].id];
             if (this.state.edges[i].id === nodeID) {
@@ -827,7 +827,7 @@ class NetworkGraph extends React.Component {
       }
 
       // Append the actions associated with nodes
-      if (nodeObjects[nodeID] !== undefined && nodeObjects[nodeID].actions !== undefined &&
+      if (!isUndefined(nodeObjects[nodeID]) && !isUndefined(nodeObjects[nodeID].actions) &&
         nodeObjects[nodeID].actions.length > 0) {
         actionsList = Object.assign(actionsList, nodeObjects[nodeID].actions);
       }
@@ -838,12 +838,12 @@ class NetworkGraph extends React.Component {
           userInputParameters = [],
           linkValueForFullMalwareReport = '';
 
-        if (parameters.length !== undefined) {
+        if (!isUndefined(parameters.length)) {
           for (let k = 0; k < parameters.length; k++) {
             let tempObj = {};
             if (parameters[k].userInput === false && parameters[k].name !== 'link') {
               tempObj.name = parameters[k].name;
-              if (parameters[k].value !== undefined) {
+              if (!isUndefined(parameters[k].value)) {
                 tempObj.value = parameters[k].value;
               }
               else {
@@ -861,7 +861,7 @@ class NetworkGraph extends React.Component {
                   tempObj.value = nodeID;
                 }
                 else if (parameters[k].name === 'source.id') {
-                  if (edgeObjects[nodeID] !== undefined) {
+                  if (!isUndefined(edgeObjects[nodeID])) {
                     tempObj.value = edgeObjects[nodeID].from;
                   }
                   else {
@@ -869,7 +869,7 @@ class NetworkGraph extends React.Component {
                   }
                 }
                 else if (parameters[k].name === 'target.id') {
-                  if (edgeObjects[nodeID] !== undefined) {
+                  if (!isUndefined(edgeObjects[nodeID])) {
                     tempObj.value = edgeObjects[nodeID].to;
                   }
                   else {
@@ -879,7 +879,7 @@ class NetworkGraph extends React.Component {
                 else if ((parameters[k].name).indexOf('metadata') > -1) {
                   let paramName = (parameters[k].name).replace('metadata.', ''),
                     metadataValue = nodeObjects[nodeID].metadata[paramName];
-                  tempObj.value = (metadataValue !== undefined) ? metadataValue : '';
+                  tempObj.value = (!isUndefined(metadataValue)) ? metadataValue : '';
                 }
                 else {
                   tempObj.value = '';
@@ -897,7 +897,7 @@ class NetworkGraph extends React.Component {
               parametersToApi.push(tempObj);
             }
             if (parameters[k].name === 'link') {
-              linkValueForFullMalwareReport = parameters[k].value !== undefined
+              linkValueForFullMalwareReport = !isUndefined(parameters[k].value)
               ? parameters[k].value : '';
             }
           }
@@ -906,9 +906,9 @@ class NetworkGraph extends React.Component {
         }
         let tr = document.createElement('tr'),
           td1 = document.createElement('td'),
-          reportId = (actionsList[j].reportId !== undefined) ? actionsList[j].reportId
-          : (actionsList[j].name !== undefined ? actionsList[j].name : ''),
-          actionType = (actionsList[j].actionType !== undefined) ? actionsList[j].actionType : '';
+          reportId = (!isUndefined(actionsList[j].reportId)) ? actionsList[j].reportId
+          : (!isUndefined(actionsList[j].name) ? actionsList[j].name : ''),
+          actionType = (!isUndefined(actionsList[j].actionType)) ? actionsList[j].actionType : '';
 
         td1.appendChild(document.createTextNode(actionsList[j].label));
         td1.id = 'action' + j;
@@ -1008,7 +1008,7 @@ class NetworkGraph extends React.Component {
           let nodes = that.state.nodes,
             edges = that.state.edges;
 
-          if (json[0] === undefined) {
+          if (isUndefined(json[0])) {
             let position = getPosition(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
               'No additional results found.';
@@ -1241,10 +1241,10 @@ class NetworkGraph extends React.Component {
   undoGraph(network) {
     return (event) => {
       let previousNodesEdges = this.state.previousNodesEdges;
-      if (previousNodesEdges.nodes !== undefined &&
-        previousNodesEdges.edges !== undefined) {
-        if (previousNodesEdges.nodes[undoGraphCount] !== undefined &&
-          previousNodesEdges.edges[undoGraphCount] !== undefined) {
+      if (!isUndefined(previousNodesEdges.nodes) &&
+        !isUndefined(previousNodesEdges.edges)) {
+        if (!isUndefined(previousNodesEdges.nodes[undoGraphCount]) &&
+          !isUndefined(previousNodesEdges.edges[undoGraphCount])) {
           let updatedNodes = Object.assign([], previousNodesEdges.nodes[undoGraphCount]),
             updatedEdges = Object.assign([], previousNodesEdges.edges[undoGraphCount]);
 
@@ -1259,7 +1259,7 @@ class NetworkGraph extends React.Component {
           }
 
           for (let key in nodeObjects) {
-            if (updatedNodes.length !== undefined) {
+            if (!isUndefined(updatedNodes.length)) {
               for (let i = 0; i < updatedNodes.length; i++) {
                 if (updatedNodes[i].id !== key) {
                   delete nodeObjects[key];
@@ -1269,7 +1269,7 @@ class NetworkGraph extends React.Component {
           }
 
           for (let key in edgeObjects) {
-            if (updatedEdges.length !== undefined) {
+            if (!isUndefined(updatedEdges.length)) {
               for (let i = 0; i < updatedEdges.length; i++) {
                 if (updatedEdges[i].id !== key) {
                   delete edgeObjects[key];
@@ -1311,8 +1311,8 @@ class NetworkGraph extends React.Component {
   resetGraph(network) {
     return (event) => {
       let originalNodesEdges = this.state.originalNodesEdges;
-      if (originalNodesEdges.nodes !== undefined &&
-        originalNodesEdges.edges !== undefined) {
+      if (!isUndefined(originalNodesEdges.nodes) &&
+        !isUndefined(originalNodesEdges.edges)) {
         let updatedNodes = Object.assign([], originalNodesEdges.nodes),
           updatedEdges = Object.assign([], originalNodesEdges.edges);
 
@@ -1327,7 +1327,7 @@ class NetworkGraph extends React.Component {
         }
 
         for (let key in nodeObjects) {
-          if (updatedNodes.length !== undefined) {
+          if (!isUndefined(updatedNodes.length)) {
             for (let i = 0; i < updatedNodes.length; i++) {
               if (updatedNodes[i].id !== key) {
                 delete nodeObjects[key];
@@ -1337,7 +1337,7 @@ class NetworkGraph extends React.Component {
         }
 
         for (let key in edgeObjects) {
-          if (updatedEdges.length !== undefined) {
+          if (!isUndefined(updatedEdges.length)) {
             for (let i = 0; i < updatedEdges.length; i++) {
               if (updatedEdges[i].id !== key) {
                 delete edgeObjects[key];
