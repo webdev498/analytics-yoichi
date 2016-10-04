@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 import $ from 'jquery';
 import {
@@ -10,6 +10,7 @@ import {
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import {baseUrl, networkGraphDefaultOptions} from 'config';
+// Loader will get removed after started using fetchApiData function from props object
 import Loader from '../components/Loader';
 
 const style = {
@@ -548,10 +549,15 @@ function addNewlines(str) {
 }
 
 class NetworkGraph extends React.Component {
+  static propTypes = {
+    duration: PropTypes.string,
+    params: PropTypes.object
+  }
+
   constructor(props) {
     super(props);
-    const {duration} = this.props,
-      alertDate = this.props.params.date;
+    const {duration, params} = this.props,
+      alertDate = params.date;
     let emptyNodesEdges = {
       nodes: [],
       edges: []
@@ -560,28 +566,34 @@ class NetworkGraph extends React.Component {
     this.state = {
       nodes: [],
       edges: [],
+      previousNodesEdges: emptyNodesEdges,
+      originalNodesEdges: emptyNodesEdges,
+      duration: duration,
+      alertDate: alertDate,
       isFetching: false, // This flag will get removed after started using fetchApiData function from props object
       showContextMenu: false,
       showUndoResetButtons: false,
+      nodesListStatus: 'default',
       selectedNodeDetails: '',
       selectedNode: '',
-      loadAgain: true,
-      nodesListStatus: 'default',
+      selectedNodesForExtendingGraph: [],
       actionsData: [],
       actions: '',
-      duration: duration,
-      alertDate: alertDate,
-      selectedNodesForExtendingGraph: [],
-      previousNodesEdges: emptyNodesEdges,
-      originalNodesEdges: emptyNodesEdges,
-      loaderText: ''
+      loaderText: '',
+      loadAgain: true
     };
 
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
-    this.getContextMenu = this.getContextMenu.bind(this);
+    this.createNetworkGraph = this.createNetworkGraph.bind(this);
+    this.deselectNode = this.deselectNode.bind(this);
+    this.deselectEdge = this.deselectEdge.bind(this);
+
     this.loadContextMenu = this.loadContextMenu.bind(this);
+    this.getContextMenu = this.getContextMenu.bind(this);
+
     this.extendGraph = this.extendGraph.bind(this);
     this.collapseExpandCM = this.collapseExpandCM.bind(this);
+
     this.undoGraph = this.undoGraph.bind(this);
     this.resetGraph = this.resetGraph.bind(this);
   }
@@ -608,7 +620,7 @@ class NetworkGraph extends React.Component {
       edges: []
     };
 
-    if (this.state.nodesListStatus === 'default') { //  || timeWindow !== duration
+    if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
@@ -626,124 +638,131 @@ class NetworkGraph extends React.Component {
     }
 
     if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
-      let options = networkGraphDefaultOptions;
-
-      // create a network
       if (networkData.nodes.length > 0) {
-        const that = this;
-
-        let network = new vis.Network(this.networkGraph, networkData, options);
-
-        if (networkData.nodes.length <= 10) {
-          network.setOptions(physicsFalse);
-        }
-        else {
-          network.setOptions(physicsTrue);
-        }
-
-        network.on('selectNode', this.loadContextMenu(network, 'node'));
-        network.on('selectEdge', this.loadContextMenu(network, 'edge'));
-
-        network.on('deselectNode', function(params) {
-          let i = 0;
-          for (let nodeObject in nodeObjects) {
-            let deselectedNode = nodeObjects[nodeObject], // params.previousSelection.nodes[0],
-              node = network.body.nodes[deselectedNode.id];
-
-            if (!isUndefined(deselectedNode)) {
-              node.setOptions({
-                image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
-              });
-
-              if (i === 0) {
-                that.setState({
-                  'loadAgain': false,
-                  showContextMenu: false,
-                  selectedNodeDetails: '',
-                  actions: '',
-                  selectedNode: '',
-                  selectedNodesForExtendingGraph: []
-                });
-                document.getElementById('actions').innerHTML = '';
-                document.getElementById('refreshData').style.marginLeft = 'auto';
-              }
-              i++;
-            }
-          }
-        });
-
-        network.on('deselectEdge', function(params) {
-          let i = 0;
-          for (let edgeObject in edgeObjects) {
-            let deselectedEdge = edgeObjects[edgeObject];
-
-            if (!isUndefined(deselectedEdge)) {
-              if (i === 0) {
-                that.setState({
-                  'loadAgain': false,
-                  showContextMenu: false,
-                  selectedNodeDetails: '',
-                  actions: '',
-                  selectedNode: '',
-                  selectedNodesForExtendingGraph: []
-                });
-                document.getElementById('actions').innerHTML = '';
-                document.getElementById('refreshData').style.marginLeft = 'auto';
-              }
-              i++;
-            }
-          }
-        });
-
-        network.on('hoverNode', function(params) {
-          let hoverNode = params.node,
-            node = network.body.nodes[hoverNode],
-            selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
-
-          if (!isUndefined(nodeObjects[hoverNode])) {
-            node.setOptions({
-              image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
-            });
-
-            for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-              if (selectedNodesForExtendingGraph[i].nodeID === hoverNode) {
-                node.setOptions({
-                  image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
-                });
-              }
-            }
-          }
-        });
-
-        network.on('blurNode', function(params) {
-          let blurNode = params.node,
-            node = network.body.nodes[blurNode],
-            selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
-
-          if (!isUndefined(nodeObjects[blurNode])) {
-            node.setOptions({
-              image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
-            });
-
-            for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-              if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
-                node.setOptions({
-                  image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
-                });
-              }
-            }
-          }
-        });
-
-        document.getElementsByClassName('vis-up')[0].style.visibility = 'hidden';
-        document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
-        document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
-        document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
+        this.createNetworkGraph(networkData);
       }
       else {
         document.getElementById('networkGraph').innerHTML = 'No additional results were found.';
       }
     }
+  }
+
+  createNetworkGraph(networkData) {
+    const that = this;
+    let options = networkGraphDefaultOptions,
+      network = new vis.Network(this.networkGraph, networkData, options);
+
+    if (networkData.nodes.length <= 10) {
+      network.setOptions(physicsFalse);
+    }
+    else {
+      network.setOptions(physicsTrue);
+    }
+
+    network.on('selectNode', this.loadContextMenu(network, 'node'));
+    network.on('selectEdge', this.loadContextMenu(network, 'edge'));
+    network.on('deselectNode', this.deselectNode(network));
+    network.on('deselectEdge', this.deselectEdge());
+
+    network.on('hoverNode', function(params) {
+      let hoverNode = params.node,
+        node = network.body.nodes[hoverNode],
+        selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
+
+      if (!isUndefined(nodeObjects[hoverNode])) {
+        node.setOptions({
+          image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
+        });
+
+        for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+          if (selectedNodesForExtendingGraph[i].nodeID === hoverNode) {
+            node.setOptions({
+              image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
+            });
+          }
+        }
+      }
+    });
+
+    network.on('blurNode', function(params) {
+      let blurNode = params.node,
+        node = network.body.nodes[blurNode],
+        selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
+
+      if (!isUndefined(nodeObjects[blurNode])) {
+        node.setOptions({
+          image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
+        });
+
+        for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+          if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
+            node.setOptions({
+              image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
+            });
+          }
+        }
+      }
+    });
+
+    document.getElementsByClassName('vis-up')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
+  }
+
+  deselectNode(network) {
+    return (event) => {
+      let i = 0;
+      for (let nodeObject in nodeObjects) {
+        let deselectedNode = nodeObjects[nodeObject],
+          node = network.body.nodes[deselectedNode.id];
+
+        if (!isUndefined(deselectedNode)) {
+          node.setOptions({
+            image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
+          });
+
+          if (i === 0) {
+            this.setState({
+              loadAgain: false,
+              showContextMenu: false,
+              selectedNodeDetails: '',
+              actions: '',
+              selectedNode: '',
+              selectedNodesForExtendingGraph: []
+            });
+            document.getElementById('actions').innerHTML = '';
+            document.getElementById('refreshData').style.marginLeft = 'auto';
+          }
+          i++;
+        }
+      }
+    };
+  }
+
+  deselectEdge() {
+    return (event) => {
+      let i = 0;
+      for (let edgeObject in edgeObjects) {
+        let deselectedEdge = edgeObjects[edgeObject];
+
+        if (!isUndefined(deselectedEdge)) {
+          if (i === 0) {
+            this.setState({
+              loadAgain: false,
+              showContextMenu: false,
+              selectedNodeDetails: '',
+              actions: '',
+              selectedNode: '',
+              selectedNodesForExtendingGraph: []
+            });
+            document.getElementById('actions').innerHTML = '';
+            document.getElementById('refreshData').style.marginLeft = 'auto';
+          }
+          i++;
+        }
+      }
+    };
   }
 
   loadContextMenu(network, contextMenuType) {
@@ -759,7 +778,7 @@ class NetworkGraph extends React.Component {
           selectedNodeDetails = '',
           nodeType = '',
           nodeID = SelectedNodeIDs.nodes[0],
-          selectedNodesForExtendingGraph = []; // this.state.selectedNodesForExtendingGraph;
+          selectedNodesForExtendingGraph = [];
 
         let nodeAt = network.getBoundingBox(nodeID);
 
@@ -767,7 +786,6 @@ class NetworkGraph extends React.Component {
           for (let i = 0; i < this.state.nodes.length; i++) {
             let node = network.body.nodes[this.state.nodes[i].id];
             if (this.state.nodes[i].id === nodeID) {
-              // console.log('Selected Node Id:', this.state.nodes[i]);
               selectedNodeDetails += this.state.nodes[i].nodeDetails;
               nodeType = this.state.nodes[i].type;
               node.setOptions({
@@ -787,6 +805,7 @@ class NetworkGraph extends React.Component {
           $('#contextualMenu').animate({width: '259px'});
           document.getElementById('rightArrow').style.display = 'block';
           document.getElementById('contextualMenuContents').style.display = 'block';
+          // This is needed when we add search text box in contextual menu. Currently, it is commented.
           // document.getElementById('searchNetworkNode').style.display = 'block';
           document.getElementById('expandCM').style.display = 'none';
 
@@ -797,8 +816,6 @@ class NetworkGraph extends React.Component {
             'reportId': '',
             'timeWindow': timeWindow
           });
-
-          // contextualMenuDisplayNone
 
           let statesJSON = {
             'loadAgain': false,
@@ -815,13 +832,11 @@ class NetworkGraph extends React.Component {
         let SelectedNodeIDs = network.getSelection(),
           selectedNodeDetails = '',
           nodeType = '',
-          nodeID = SelectedNodeIDs.edges[0];
+          nodeID = SelectedNodeIDs.edges[0],
+          nodeAt = network.getBoundingBox(nodeID);
 
-        let nodeAt = network.getBoundingBox(nodeID);
-        // console.log('edge', nodeID);
         if (!isUndefined(nodeID)) {
           for (let i = 0; i < this.state.edges.length; i++) {
-            let node = network.body.edges[this.state.edges[i].id];
             if (this.state.edges[i].id === nodeID) {
               selectedNodeDetails += this.state.edges[i].edgeDetails;
               nodeType = this.state.edges[i].type;
@@ -834,12 +849,11 @@ class NetworkGraph extends React.Component {
           $('#contextualMenu').animate({width: '259px'});
           document.getElementById('rightArrow').style.display = 'block';
           document.getElementById('contextualMenuContents').style.display = 'block';
+          // This is needed when we add search text box in contextual menu. Currently, it is commented.
           // document.getElementById('searchNetworkNode').style.display = 'block';
           document.getElementById('expandCM').style.display = 'none';
 
           document.getElementById('refreshData').style.marginLeft = '735px';
-
-          // contextualMenuDisplayNone
 
           let statesJSON = {
             'loadAgain': false,
