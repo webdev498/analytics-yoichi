@@ -39,7 +39,6 @@ const style = {
     backgroundColor: '#646A7D',
     padding: '10px',
     border: '0px',
-    // margin: '5%',
     width: '211px',
     height: '40px',
     color: '#B8BBC3',
@@ -115,15 +114,16 @@ function createNodeObject(dataNode) {
 
   nodeObject.borderWidth = '0';
   nodeObject.font = {
-    'face': 'Open Sans',
-    'color': Colors.pebble,
-    'size': '11',
-    'align': 'left'
+    face: 'Open Sans',
+    color: Colors.pebble,
+    size: '11',
+    align: 'left'
   };
   nodeObject.shape = 'image';
-  nodeObject.color = {};
-  nodeObject.color.color = Colors.networkNodeLabelColor;
-  nodeObject.color.highlight = Colors.turquoise;
+  nodeObject.color = {
+    color: Colors.networkNodeLabelColor,
+    highlight: Colors.turquoise
+  };
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
 
   let actions = [];
@@ -142,28 +142,29 @@ function createEdgeObject(dataEdge) {
   edgeObject.from = dataEdge.source;
   edgeObject.to = dataEdge.target;
   edgeObject.arrows = {
-    'to': {
-      'scaleFactor': 0.5
+    to: {
+      scaleFactor: 0.5
     },
-    'arrowStrikethrough': false
+    arrowStrikethrough: false
   };
   edgeObject.label = dataEdge.label + '\n\n\n';
   edgeObject.edgeDetails = 'Edge Type: ' + dataEdge.label;
   edgeObject.edgeDetails += '<br/>Source: ' + dataEdge.source;
   edgeObject.edgeDetails += '<br/>Target: ' + dataEdge.target;
   edgeObject.font = {
-    'face': 'Open Sans',
-    'color': Colors.pebble,
-    'size': '11',
-    'align': 'left'
+    face: 'Open Sans',
+    color: Colors.pebble,
+    size: '11',
+    align: 'left'
   };
   edgeObject.length = 1000;
   edgeObject.smooth = {
     type: 'discrete'
   };
-  edgeObject.color = {};
-  edgeObject.color.color = Colors.pebble;
-  edgeObject.color.highlight = Colors.turquoise;
+  edgeObject.color = {
+    color: Colors.pebble,
+    highlight: Colors.turquoise
+  };
 
   if (dataEdge.type === 'ioc') {
     edgeObject.dashes = true;
@@ -219,43 +220,19 @@ function handleMetaData(metadata, nodeObject) {
     if (metadataTypeLower !== 'coordinates') {
       switch (metadataTypeLower) {
         case 'reputation':
-          let values = metadata[metadataType],
-            value1 = '',
-            value2 = '',
-            value5 = '';
-
-          if (!isUndefined(values)) {
-            if (!isUndefined(values.reputation)) {
-              if ((values.reputation).length > 0) {
-                let reputationText = createReputationText(values.reputation,
-                  newLine1, newLine2, value1, value2, value5);
-                value1 = reputationText.value1;
-                value2 = reputationText.value2;
-                value5 = reputationText.value5;
+          let parameters = {
+              values: metadata[metadataType],
+              nodeStatus: nodeStatus,
+              nodeObject: nodeObject,
+              newLine: {
+                newLine1: newLine1,
+                newLine2: newLine2
               }
-            }
+            },
+            tempObject = handleReputationMetaData(parameters);
 
-            let reputationText = parseReputationText(values, newLine1, newLine2, value1, value2, value5);
-            value1 = reputationText.value1;
-            value2 = reputationText.value2;
-            value5 = reputationText.value5;
-          }
-          if (value1 !== '') {
-            nodeObject.label += newLine1 + value1;
-            nodeObject.title += newLine2 + value2;
-            nodeObject.nodeDetails += newLine2 + value5;
-
-            if (value1.indexOf('Scanning Host') > -1) {
-              nodeStatus = 'scan';
-            }
-            else {
-              nodeStatus = 'malicious';
-            }
-          }
-          else {
-            nodeStatus = 'safe';
-          }
-          nodeObject.status = nodeStatus;
+          nodeObject = tempObject.nodeObject;
+          nodeStatus = tempObject.nodeStatus;
           break;
         case 'country':
           nodeObject.label += newLine1 +
@@ -282,19 +259,76 @@ function handleMetaData(metadata, nodeObject) {
       }
     }
   }
+
   nodeObject.status = nodeStatus;
+
   return {
     nodeObject: nodeObject,
     nodeStatus: nodeStatus
   };
 }
 
-function createReputationText(values, newLine1, newLine2, value1, value2, value5) {
-  let value3 = '',
+function handleReputationMetaData(parameters) {
+  let {values, nodeStatus, nodeObject, newLine} = parameters,
+    {newLine1, newLine2} = newLine,
+    value1 = '',
+    value2 = '',
+    value5 = '';
+
+  if (!isUndefined(values)) {
+    if (!isUndefined(values.reputation)) {
+      if ((values.reputation).length > 0) {
+        let newLine = {
+            newLine1: newLine1,
+            newLine2: newLine2
+          },
+          value = {
+            value1: value1,
+            value2: value2,
+            value5: value5
+          },
+          reputationText = createReputationText(values.reputation, newLine, value);
+        value1 = reputationText.value1;
+        value2 = reputationText.value2;
+        value5 = reputationText.value5;
+      }
+    }
+
+    let reputationText = parseReputationText(values, newLine1, newLine2, value1, value2, value5);
+    value1 = reputationText.value1;
+    value2 = reputationText.value2;
+    value5 = reputationText.value5;
+  }
+  if (value1 !== '') {
+    nodeObject.label += newLine1 + value1;
+    nodeObject.title += newLine2 + value2;
+    nodeObject.nodeDetails += newLine2 + value5;
+
+    if (value1.indexOf('Scanning Host') > -1) {
+      nodeStatus = 'scan';
+    }
+    else {
+      nodeStatus = 'malicious';
+    }
+  }
+  else {
+    nodeStatus = 'safe';
+  }
+
+  return {
+    nodeObject: nodeObject,
+    nodeStatus: nodeStatus
+  };
+}
+
+function createReputationText(values, newLine, value) {
+  let {value1, value2, value5} = value,
+    value3 = '',
     value4 = '',
+    {newLine1, newLine2} = newLine,
     newLine3 = ',\n  ',
     newLine4 = ',<br />';
-  for (let rv = 0; rv < values.length; rv++) {
+  for (let i = 0; i < values.length; i++) {
     if (value1 === '') {
       newLine1 = '';
       newLine2 = '';
@@ -311,8 +345,8 @@ function createReputationText(values, newLine1, newLine2, value1, value2, value5
       newLine3 = ',\n  ';
       newLine4 = ',<br />';
     }
-    value3 += newLine3 + values[rv];
-    value4 += newLine4 + values[rv];
+    value3 += newLine3 + values[i];
+    value4 += newLine4 + values[i];
   }
   value1 += newLine1 + 'Reputation: ' + value3;
   value2 += newLine2 + '<b>Reputation:</b> ' + value4;
@@ -325,7 +359,7 @@ function createReputationText(values, newLine1, newLine2, value1, value2, value5
 }
 
 function parseReputationText(values, newLine1, newLine2, value1, value2, value5) {
-  for (let v = 0; v < values.length; v++) {
+  for (let i = 0; i < values.length; i++) {
     if (value1 === '') {
       newLine1 = '';
       newLine2 = '';
@@ -334,10 +368,19 @@ function parseReputationText(values, newLine1, newLine2, value1, value2, value5)
       newLine1 = '\n  ';
       newLine2 = '<br />';
     }
-    for (let valueType in values[v]) {
+    for (let valueType in values[i]) {
       if (valueType === 'reputation') {
-        if ((values[v][valueType]).length > 0) {
-          let reputationText = createReputationText(values[v][valueType], newLine1, newLine2, value1, value2, value5);
+        if ((values[i][valueType]).length > 0) {
+          let newLine = {
+              newLine1: newLine1,
+              newLine2: newLine2
+            },
+            value = {
+              value1: value1,
+              value2: value2,
+              value5: value5
+            },
+            reputationText = createReputationText(values[i][valueType], newLine, value);
           value1 = reputationText.value1;
           value2 = reputationText.value2;
           value5 = reputationText.value5;
@@ -345,9 +388,9 @@ function parseReputationText(values, newLine1, newLine2, value1, value2, value5)
       }
       else {
         value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-          values[v][valueType] + '<br />';
+          values[i][valueType] + '<br />';
         value5 += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
-          values[v][valueType] + '<br />';
+          values[i][valueType] + '<br />';
       }
     }
   }
