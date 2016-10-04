@@ -96,7 +96,9 @@ let nodeObjects = {},
     physics: false
   };
 
-function createNodeObject(dataNode, nodeObject, nodeStatus) {
+function createNodeObject(dataNode) {
+  let nodeObject = {},
+    nodeStatus = 'safe';
   nodeObject.id = dataNode.id;
   nodeObject.type = dataNode.type;
   nodeObject.label = '  ' + dataNode.id;
@@ -183,7 +185,7 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
   };
   nodeObject.shape = 'image';
   nodeObject.color = {};
-  nodeObject.color.color = '#F2F2F4';
+  nodeObject.color.color = Colors.networkNodeLabelColor;
   nodeObject.color.highlight = Colors.turquoise;
   nodeObject.status = nodeStatus;
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
@@ -196,7 +198,8 @@ function createNodeObject(dataNode, nodeObject, nodeStatus) {
   return nodeObject;
 }
 
-function createEdgeObject(dataEdge, edgeObject) {
+function createEdgeObject(dataEdge) {
+  let edgeObject = {};
   edgeObject.id = dataEdge.id;
   edgeObject.type = dataEdge.type;
   edgeObject.from = dataEdge.source;
@@ -239,12 +242,10 @@ function getNodesEdges(data) {
 
   if (dataNodes !== undefined) {
     for (let i = 0; i < dataNodes.length; i++) {
-      let dataNode = dataNodes[i],
-        nodeObject = {},
-        nodeStatus = 'safe';
+      let dataNode = dataNodes[i];
 
       if (nodeObjects[dataNode.id] === undefined) {
-        nodeObject = createNodeObject(dataNode, nodeObject, nodeStatus);
+        let nodeObject = createNodeObject(dataNode);
         nodes.push(nodeObject);
         nodeObjects[dataNode.id] = nodeObject;
       }
@@ -253,11 +254,10 @@ function getNodesEdges(data) {
 
   if (dataEdges !== undefined) {
     for (let i = 0; i < dataEdges.length; i++) {
-      let dataEdge = dataEdges[i],
-        edgeObject = {};
+      let dataEdge = dataEdges[i];
 
       if (edgeObjects[dataEdge.id] === undefined) {
-        edgeObject = createEdgeObject(dataEdge, edgeObject);
+        let edgeObject = createEdgeObject(dataEdge);
         edges.push(edgeObject);
         edgeObjects[dataEdge.target] = edgeObject;
         edgeObjects[edgeObject.id] = edgeObject;

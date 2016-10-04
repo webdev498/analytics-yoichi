@@ -65,6 +65,8 @@ export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
 
 export const NetworkGraphBGColor = '#F7F7F9';
 
+export const NetworkNodeLabelColor = '#F2F2F4';
+
 export const LineChartPallete = `${CherryColor},${CoralColor},${MustardColor},${SeafoamColor},${TurquoiseColor}`;
 
 export const Colors = {
@@ -92,7 +94,8 @@ export const Colors = {
   axisColor: AxisColor,
   // defaultTimelineGraphPaletteColors: DefaultTimelineGraphPaletteColors
   timelineBarColors: TimelineBarColors,
-  networkGraphBGColor: NetworkGraphBGColor
+  networkGraphBGColor: NetworkGraphBGColor,
+  networkNodeLabelColor: NetworkNodeLabelColor
 };
 
 export const PrimaryPalette = {
