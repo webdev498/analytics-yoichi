@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from 'jquery';
 import {Colors} from 'theme/colors';
 
 const style = {
