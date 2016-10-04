@@ -4,7 +4,9 @@ import $ from 'jquery';
 import {
   firstCharCapitalize,
   getCountryNameByCountryCode,
-  getPosition
+  getPosition,
+  isUndefined,
+  isNull
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import {baseUrl, networkGraphDefaultOptions} from 'config';
@@ -97,85 +99,20 @@ let nodeObjects = {},
   };
 
 function createNodeObject(dataNode) {
-  let nodeObject = {},
-    nodeStatus = 'safe';
+  let nodeObject = {};
+
   nodeObject.id = dataNode.id;
   nodeObject.type = dataNode.type;
   nodeObject.label = '  ' + dataNode.id;
   nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
   nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
   nodeObject.actions = (dataNode.actions !== undefined) ? dataNode.actions : [];
-  nodeObject.metadata = dataNode.metadata;
-  for (let metadataType in dataNode.metadata) {
-    let metadataTypeLower = metadataType.toLowerCase(),
-      newLine1 = '\n  ',
-      newLine2 = '<br />';
 
-    if (metadataTypeLower !== 'coordinates') {
-      switch (metadataTypeLower) {
-        case 'reputation':
-          let values = dataNode.metadata[metadataType],
-            value1 = '',
-            value2 = '',
-            value5 = '';
+  let metaDataObject = handleMetaData(dataNode.metadata, nodeObject),
+    nodeStatus = metaDataObject.nodeStatus;
 
-          if (values !== undefined) {
-            if (values.reputation !== undefined) {
-              if ((values.reputation).length > 0) {
-                let reputationText = createReputationText(values.reputation,
-                  newLine1, newLine2, value1, value2, value5);
-                value1 = reputationText.value1;
-                value2 = reputationText.value2;
-                value5 = reputationText.value5;
-              }
-            }
+  nodeObject = metaDataObject.nodeObject;
 
-            let reputationText = parseReputationText(values, newLine1, newLine2, value1, value2, value5);
-            value1 = reputationText.value1;
-            value2 = reputationText.value2;
-            value5 = reputationText.value5;
-          }
-          if (value1 !== '') {
-            nodeObject.label += newLine1 + value1;
-            nodeObject.title += newLine2 + value2;
-            nodeObject.nodeDetails += newLine2 + value5;
-
-            if (value1.indexOf('Scanning Host') > -1) {
-              nodeStatus = 'scan';
-            }
-            else {
-              nodeStatus = 'malicious';
-            }
-          }
-          else {
-            nodeStatus = 'safe';
-          }
-          break;
-        case 'country':
-          nodeObject.label += newLine1 +
-            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-          nodeObject.nodeDetails += newLine2 + firstCharCapitalize(metadataType) + ': ' +
-            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-          break;
-        case 'displayname':
-          nodeObject.title += newLine2 + '<b>Name:</b> ' + dataNode.metadata[metadataType];
-          nodeObject.nodeDetails += newLine2 + 'Name: ' + dataNode.metadata[metadataType];
-          break;
-        default:
-          if (metadataTypeLower === 'title') {
-            nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
-              addNewlines(dataNode.metadata[metadataType]);
-          }
-          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            dataNode.metadata[metadataType];
-          nodeObject.nodeDetails += newLine2 + firstCharCapitalize(metadataType) + ': ' +
-            dataNode.metadata[metadataType];
-          break;
-      }
-    }
-  }
   nodeObject.borderWidth = '0';
   nodeObject.font = {
     'face': 'Open Sans',
@@ -187,8 +124,8 @@ function createNodeObject(dataNode) {
   nodeObject.color = {};
   nodeObject.color.color = Colors.networkNodeLabelColor;
   nodeObject.color.highlight = Colors.turquoise;
-  nodeObject.status = nodeStatus;
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
+
   let actions = [];
   if (dataNode.actions !== null && dataNode.actions !== undefined) {
     actions = dataNode.actions;
@@ -268,6 +205,87 @@ function getNodesEdges(data) {
   return {
     'nodes': nodes,
     'edges': edges
+  };
+}
+
+function handleMetaData(metadata, nodeObject) {
+  let nodeStatus = 'safe';
+  nodeObject.metadata = metadata;
+  for (let metadataType in metadata) {
+    let metadataTypeLower = metadataType.toLowerCase(),
+      newLine1 = '\n  ',
+      newLine2 = '<br />';
+
+    if (metadataTypeLower !== 'coordinates') {
+      switch (metadataTypeLower) {
+        case 'reputation':
+          let values = metadata[metadataType],
+            value1 = '',
+            value2 = '',
+            value5 = '';
+
+          if (values !== undefined) {
+            if (values.reputation !== undefined) {
+              if ((values.reputation).length > 0) {
+                let reputationText = createReputationText(values.reputation,
+                  newLine1, newLine2, value1, value2, value5);
+                value1 = reputationText.value1;
+                value2 = reputationText.value2;
+                value5 = reputationText.value5;
+              }
+            }
+
+            let reputationText = parseReputationText(values, newLine1, newLine2, value1, value2, value5);
+            value1 = reputationText.value1;
+            value2 = reputationText.value2;
+            value5 = reputationText.value5;
+          }
+          if (value1 !== '') {
+            nodeObject.label += newLine1 + value1;
+            nodeObject.title += newLine2 + value2;
+            nodeObject.nodeDetails += newLine2 + value5;
+
+            if (value1.indexOf('Scanning Host') > -1) {
+              nodeStatus = 'scan';
+            }
+            else {
+              nodeStatus = 'malicious';
+            }
+          }
+          else {
+            nodeStatus = 'safe';
+          }
+          nodeObject.status = nodeStatus;
+          break;
+        case 'country':
+          nodeObject.label += newLine1 +
+            getCountryNameByCountryCode[metadata[metadataType]];
+          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            getCountryNameByCountryCode[metadata[metadataType]];
+          nodeObject.nodeDetails += newLine2 + firstCharCapitalize(metadataType) + ': ' +
+            getCountryNameByCountryCode[metadata[metadataType]];
+          break;
+        case 'displayname':
+          nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
+          nodeObject.nodeDetails += newLine2 + 'Name: ' + metadata[metadataType];
+          break;
+        default:
+          if (metadataTypeLower === 'title') {
+            nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
+              addNewlines(metadata[metadataType]);
+          }
+          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            metadata[metadataType];
+          nodeObject.nodeDetails += newLine2 + firstCharCapitalize(metadataType) + ': ' +
+            metadata[metadataType];
+          break;
+      }
+    }
+  }
+  nodeObject.status = nodeStatus;
+  return {
+    nodeObject: nodeObject,
+    nodeStatus: nodeStatus
   };
 }
 
