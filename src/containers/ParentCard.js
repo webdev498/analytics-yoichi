@@ -5,7 +5,7 @@ import Card from 'material-ui/Card/Card';
 import FontIcon from 'material-ui/FontIcon';
 import Loader from '../components/Loader';
 
-import {fetchApiData, removeComponent} from 'actions/ParentCard';
+import {fetchApiData, removeComponent, broadcastEvent} from 'actions/ParentCard';
 import {Colors} from 'theme/colors';
 import {updateRoute} from 'actions/core';
 
@@ -225,7 +225,7 @@ class ParentCard extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {data} = nextProps;
+    const {data, eventData} = nextProps;
     let {meta: {fetchDataFor}} = nextProps;
     if (data && fetchDataFor) {
       if (!Array.isArray(fetchDataFor)) {
@@ -235,6 +235,24 @@ class ParentCard extends React.Component {
       fetchDataFor.forEach(apiObj => {
         this.callApi(apiObj, nextProps);
       });
+    }
+
+    if (eventData) {
+      const {type, data} = eventData;
+
+      if (type === 'updateSearch') {
+        this.myTextInput.value = data;
+        this.setState({
+          search: data,
+          clearIconStyle: {
+            color: Colors.white,
+            background: Colors.smoke
+          },
+          searchTextStyle: {
+            paddingLeft: '53px'
+          }
+        });
+      }
     }
   }
 
@@ -393,6 +411,10 @@ class ParentCard extends React.Component {
     );
   }
 
+  handleMalwareClick() {
+
+  }
+
   render() {
     const {props} = this;
 
@@ -435,7 +457,8 @@ function mapStateToProps(state, ownProps) {
   let data = null,
     isFetching = false,
     isError = false,
-    errorData = null;
+    errorData = null,
+    eventData = null;
 
   if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
@@ -444,6 +467,7 @@ function mapStateToProps(state, ownProps) {
     isFetching = propsById.get('isFetching');
     isError = propsById.get('isError');
     errorData = propsById.get('errorData');
+    eventData = propsById.get('eventData');
   }
 
   const duration = apiData.get('duration');
@@ -453,10 +477,11 @@ function mapStateToProps(state, ownProps) {
     isFetching,
     isError,
     errorData,
-    duration
+    duration,
+    eventData
   };
 }
 
 export default connect(mapStateToProps, {
-  fetchApiData, updateRoute, removeComponent
+  fetchApiData, updateRoute, removeComponent, broadcastEvent
 })(ParentCard);

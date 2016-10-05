@@ -81,17 +81,11 @@ function getArrowIcon(data) {
 class MetricsCard extends React.Component {
   handleClick() {
     const {props} = this,
-      {kibana} = props,
+      {kibana, clickData} = props,
       dataObj = {};
 
-    if (!kibana) return;
-
-    if (props.kibana.tableId && props.kibana.filterText) {
-      return () => {
-        // setFilterText(kibana.tableId, kibana.filterText);
-      };
-    }
-    else {
+    // console.log(props);
+    if (kibana) {
       if (props.kibana.queryParams) {
         dataObj.datasetName = 'high';
       }
@@ -108,6 +102,32 @@ class MetricsCard extends React.Component {
       return () => {
         this.context.clickThrough(generateClickThroughUrl(pathParams, queryParams));
       };
+    }
+
+    if (clickData) {
+      return () => {
+        if (props.history.isActive(clickData.page)) {
+          props.broadcastEvent(clickData.tableId, {data: clickData.filterText, type: 'updateSearch'});
+        }
+        else {
+          window.sessionStorage.broadcastEvent = clickData;
+          props.history.push(clickData.page);
+        }
+      };
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data &&
+      nextProps.clickData &&
+      nextProps.history.isActive(nextProps.clickData.page) &&
+      window.sessionStorage.broadcastEvent
+    ) {
+      setTimeout(function() {
+        delete window.sessionStorage.broadcastEvent;
+        const {clickData} = nextProps;
+        nextProps.broadcastEvent(clickData.tableId, {data: clickData.filterText, type: 'updateSearch'});
+      }, 500);
     }
   }
 
