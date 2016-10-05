@@ -18,21 +18,21 @@ const style = {
     'height': '600px',
     'width': '100%'
   },
-  undoGraphStyle: {
+  undoGraph: {
     top: '560px',
     left: '35px',
     position: 'absolute',
     cursor: 'pointer',
     display: 'none'
   },
-  resetGraphStyle: {
+  resetGraph: {
     top: '530px',
     left: '35px',
     position: 'absolute',
     cursor: 'pointer',
     display: 'none'
   },
-  loaderStyle: {
+  loader: {
     position: 'absolute',
     top: '350px',
     display: 'flex',
@@ -1226,7 +1226,7 @@ class NetworkGraph extends React.Component {
 
     return (
       <div style={{display: 'flex'}}>
-        {this.state.isFetching ? <Loader style={{}} loaderStyle={style.loaderStyle}
+        {this.state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
           text={this.state.loaderText} /> : null}
         <div ref={(ref) => this.networkGraph = ref} style={{...style.networkGraph,
           ...{
@@ -1244,11 +1244,11 @@ class NetworkGraph extends React.Component {
           showContextMenu={this.state.showContextMenu}
           selectedDetails={this.state.selectedNodeDetails} />
 
-        <div id='undoGraph' style={{...style.undoGraphStyle, ...undoResetStyle}}>
+        <div id='undoGraph' style={{...style.undoGraph, ...undoResetStyle}}>
           <img id='undo' src='/img/undo.png' />
         </div>
 
-        <div id='resetGraph' style={{...style.resetGraphStyle, ...undoResetStyle}}>
+        <div id='resetGraph' style={{...style.resetGraph, ...undoResetStyle}}>
           <img id='reset' src='/img/reset.png' />
         </div>
       </div>
