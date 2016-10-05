@@ -1,5 +1,4 @@
 import React from 'react';
-import $ from 'jquery';
 import {Colors} from 'theme/colors';
 
 const style = {
@@ -57,7 +56,7 @@ class ContextualMenu extends React.Component {
   collapseExpand(action) {
     return (event) => {
       if (action === 'collapse') {
-        $('#contextualMenu').animate({width: '0px'});
+        document.getElementById('contextualMenu').style.width = '0px';
         document.getElementById('rightArrow').style.display = 'none';
         document.getElementById('contextualMenuContents').style.display = 'none';
         // This is needed when we add search text box in contextual menu. Currently, it is commented.
@@ -65,7 +64,7 @@ class ContextualMenu extends React.Component {
         document.getElementById('expandCM').style.display = 'block';
       }
       if (action === 'expand') {
-        $('#contextualMenu').animate({width: '259px'});
+        document.getElementById('contextualMenu').style.width = '259px';
         document.getElementById('rightArrow').style.display = 'block';
         document.getElementById('contextualMenuContents').style.display = 'block';
         // This is needed when we add search text box in contextual menu. Currently, it is commented.
