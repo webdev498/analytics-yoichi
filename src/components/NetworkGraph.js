@@ -58,6 +58,12 @@ let nodeObjects = {},
   emptyNodesEdges = {
     nodes: [],
     edges: []
+  },
+  actionPerformed = {
+    width: '259px'
+  },
+  refreshData = {
+    marginLeft: '735px'
   };
 
 function createNodeObject(dataNode) {
@@ -257,7 +263,16 @@ function handleReputationMetaData(parameters) {
       }
     }
 
-    let reputationText = parseReputationText(values, newLine1, newLine2, value1, value2, value5);
+    let newLine = {
+        newLine1: newLine1,
+        newLine2: newLine2
+      },
+      value = {
+        value1: value1,
+        value2: value2,
+        value5: value5
+      },
+      reputationText = parseReputationText(values, newLine, value);
     value1 = reputationText.value1;
     value2 = reputationText.value2;
     value5 = reputationText.value5;
@@ -321,7 +336,10 @@ function createReputationText(values, newLine, value) {
   };
 }
 
-function parseReputationText(values, newLine1, newLine2, value1, value2, value5) {
+function parseReputationText(values, newLine, value) {
+  let {value1, value2, value5} = value,
+    {newLine1, newLine2} = newLine;
+
   for (let i = 0; i < values.length; i++) {
     if (value1 === '') {
       newLine1 = '';
@@ -764,8 +782,6 @@ class NetworkGraph extends React.Component {
           nodeID = SelectedNodeIDs.nodes[0],
           selectedNodesForExtendingGraph = [];
 
-        let nodeAt = network.getBoundingBox(nodeID);
-
         if (!isUndefined(nodeID)) {
           for (let i = 0; i < this.state.nodes.length; i++) {
             let node = network.body.nodes[this.state.nodes[i].id];
@@ -784,15 +800,15 @@ class NetworkGraph extends React.Component {
           }
 
           document.getElementById('actions').innerHTML = '';
-          this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt);
-          document.getElementById('actionPerformed').style.width = '259px';
+          this.getContextMenu(contextMenuType, network, nodeID, nodeType);
+          document.getElementById('actionPerformed').style.width = actionPerformed.width;
           document.getElementById('rightArrow').style.display = 'block';
           document.getElementById('contextualMenuContents').style.display = 'block';
           // This is needed when we add search text box in contextual menu. Currently, it is commented.
           // document.getElementById('searchNetworkNode').style.display = 'block';
           document.getElementById('expandCM').style.display = 'none';
 
-          document.getElementById('refreshData').style.marginLeft = '735px';
+          document.getElementById('refreshData').style.marginLeft = refreshData.marginLeft;
 
           selectedNodesForExtendingGraph.push({
             nodeID: nodeID,
@@ -815,8 +831,7 @@ class NetworkGraph extends React.Component {
         let SelectedNodeIDs = network.getSelection(),
           selectedNodeDetails = '',
           nodeType = '',
-          nodeID = SelectedNodeIDs.edges[0],
-          nodeAt = network.getBoundingBox(nodeID);
+          nodeID = SelectedNodeIDs.edges[0];
 
         if (!isUndefined(nodeID)) {
           for (let i = 0; i < this.state.edges.length; i++) {
@@ -827,7 +842,7 @@ class NetworkGraph extends React.Component {
           }
 
           document.getElementById('actions').innerHTML = '';
-          this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt);
+          this.getContextMenu(contextMenuType, network, nodeID, nodeType);
           document.getElementById('actionPerformed').style.width = '259px';
           document.getElementById('rightArrow').style.display = 'block';
           document.getElementById('contextualMenuContents').style.display = 'block';
@@ -848,7 +863,7 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt) {
+  getContextMenu(contextMenuType, network, nodeID, nodeType) {
     let table = document.createElement('table');
     table.border = '0';
     table.width = '259';
