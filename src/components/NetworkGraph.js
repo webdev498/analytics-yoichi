@@ -591,6 +591,7 @@ class NetworkGraph extends React.Component {
     this.createNetworkGraph = this.createNetworkGraph.bind(this);
     this.deselectNode = this.deselectNode.bind(this);
     this.deselectEdge = this.deselectEdge.bind(this);
+    this.deselect = this.deselect.bind(this);
     this.setHoverBlurNodeImage = this.setHoverBlurNodeImage.bind(this);
 
     this.loadContextMenu = this.loadContextMenu.bind(this);
@@ -718,16 +719,7 @@ class NetworkGraph extends React.Component {
           });
 
           if (i === 0) {
-            this.setState({
-              loadAgain: false,
-              showContextMenu: false,
-              selectedNodeDetails: '',
-              actions: '',
-              selectedNode: '',
-              selectedNodesForExtendingGraph: []
-            });
-            document.getElementById('actions').innerHTML = '';
-            document.getElementById('refreshData').style.marginLeft = 'auto';
+            this.deselect(deselectedNode);
           }
           i++;
         }
@@ -743,21 +735,27 @@ class NetworkGraph extends React.Component {
 
         if (!isUndefined(deselectedEdge)) {
           if (i === 0) {
-            this.setState({
-              loadAgain: false,
-              showContextMenu: false,
-              selectedNodeDetails: '',
-              actions: '',
-              selectedNode: '',
-              selectedNodesForExtendingGraph: []
-            });
-            document.getElementById('actions').innerHTML = '';
-            document.getElementById('refreshData').style.marginLeft = 'auto';
+            this.deselect(deselectedEdge);
           }
           i++;
         }
       }
     };
+  }
+
+  deselect(deselected) {
+    if (!isUndefined(deselected)) {
+      this.setState({
+        loadAgain: false,
+        showContextMenu: false,
+        selectedNodeDetails: '',
+        actions: '',
+        selectedNode: '',
+        selectedNodesForExtendingGraph: []
+      });
+      document.getElementById('actions').innerHTML = '';
+      document.getElementById('refreshData').style.marginLeft = 'auto';
+    }
   }
 
   loadContextMenu(network, contextMenuType) {
