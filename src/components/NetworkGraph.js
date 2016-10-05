@@ -591,6 +591,7 @@ class NetworkGraph extends React.Component {
     this.createNetworkGraph = this.createNetworkGraph.bind(this);
     this.deselectNode = this.deselectNode.bind(this);
     this.deselectEdge = this.deselectEdge.bind(this);
+    this.setHoverBlurNodeImage = this.setHoverBlurNodeImage.bind(this);
 
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.getContextMenu = this.getContextMenu.bind(this);
@@ -668,48 +669,40 @@ class NetworkGraph extends React.Component {
 
     network.on('hoverNode', function(params) {
       let hoverNode = params.node,
-        node = network.body.nodes[hoverNode],
-        selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
-
-      if (!isUndefined(nodeObjects[hoverNode])) {
-        node.setOptions({
-          image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
-        });
-
-        for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-          if (selectedNodesForExtendingGraph[i].nodeID === hoverNode) {
-            node.setOptions({
-              image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
-            });
-          }
-        }
-      }
+        node = network.body.nodes[hoverNode];
+      node = that.setHoverBlurNodeImage('hover', hoverNode, node);
     });
 
     network.on('blurNode', function(params) {
       let blurNode = params.node,
-        node = network.body.nodes[blurNode],
-        selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
-
-      if (!isUndefined(nodeObjects[blurNode])) {
-        node.setOptions({
-          image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
-        });
-
-        for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-          if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
-            node.setOptions({
-              image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
-            });
-          }
-        }
-      }
+        node = network.body.nodes[blurNode];
+      node = that.setHoverBlurNodeImage('blur', blurNode, node);
     });
 
     document.getElementsByClassName('vis-up')[0].style.visibility = 'hidden';
     document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
     document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
     document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
+  }
+
+  setHoverBlurNodeImage(event, nodeID, node) {
+    let selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
+
+    if (!isUndefined(nodeObjects[nodeID])) {
+      node.setOptions({
+        image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status,
+          event === 'hover' ? 'HOVER' : 'INACTIVE')
+      });
+
+      for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
+        if (selectedNodesForExtendingGraph[i].nodeID === nodeID) {
+          node.setOptions({
+            image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
+          });
+        }
+      }
+    }
+    return node;
   }
 
   deselectNode(network) {
