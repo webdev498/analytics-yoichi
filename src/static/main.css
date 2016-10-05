@@ -53,16 +53,3 @@
        url('fonts/Open-Sans-700/Open-Sans-700.ttf') format('truetype'),
        url('fonts/Open-Sans-700/Open-Sans-700.svg#OpenSans') format('svg');
 }
-
-body {
-  background-color: #e5e5ea;
-}
-
-.login {
-  float: none;
-  margin: 0 auto;
-}
-
-.btn-primary {
-  color: #3f51b5;
-}

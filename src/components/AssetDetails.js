@@ -1,9 +1,11 @@
 import React, {PropTypes} from 'react';
 
 import AssetWidget from 'components/AssetWidget';
+import RadarChart from 'components/RadarChart';
 import {formatBytes, getCountryNameByCountryCode} from 'utils/utils';
 import ScoreWidget from 'components/ScoreWidget';
 import FontIcon from 'material-ui/FontIcon';
+import {Colors} from 'theme/colors';
 
 const styles = {
   assetWidget: {
@@ -15,8 +17,30 @@ const styles = {
     height: '45px',
     width: '45px',
     lineHeight: '45px',
-    fontSize: '20px',
-    marginTop: '33px'
+    fontSize: '20px'
+  },
+  scoreDetails: {
+    display: 'flex',
+    marginTop: '33px',
+    cursor: 'pointer'
+  },
+  scoreDesc: {
+    marginLeft: '15px',
+    display: 'inline-flex',
+    width: '175px'
+  },
+  scoreIcon: {
+    marginTop: 0,
+    lineHeight: '12px',
+    height: '12px',
+    width: '24px',
+    marginLeft: 'auto'
+  },
+  chart: {
+    position: 'absolute',
+    backgroundColor: Colors.cloud,
+    left: 0,
+    right: 0
   },
   list: {
     listStyleType: 'none',
@@ -94,6 +118,13 @@ function getArrowIcon(change) {
 class AssetDetail extends React.Component {
   static propTypes = {
     data: PropTypes.object
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      chartOpen: false
+    };
   }
 
   getValue(data) {
@@ -244,19 +275,71 @@ class AssetDetail extends React.Component {
     return details.map((report, index) => this.getElement(report, index));
   }
 
+  toggleRadarChart() {
+    return () => {
+      if (this.state.chartOpen) {
+        this.setState({chartOpen: false});
+      }
+      else {
+        this.setState({chartOpen: true});
+      }
+    };
+  }
+
   render() {
     let {data} = this.props;
     if (!data) return null;
 
-    const {assetDetail, assetReports} = data;
+    const {assetDetail, assetReports} = data,
+      radarChartProps = {
+        'chartOptions': {
+          labelFontSize: 8,
+          'bgColor': Colors.smoke,
+          labelDisplay: 'STAGGER'
+        },
+        'attributes': {
+          'chartWidth': '100%',
+          'chartHeight': '240',
+          'style': styles.chart,
+          id: 'score-justification'
+        },
+        data: assetDetail.risk.scoreDetails
+      };
+
+    let chartWrapStyle = {
+        height: 0,
+        opacity: 0,
+        marginTop: 0,
+        transition: 'height .3s, opacity .3s, margin .3s'
+      },
+      listStyle = styles.list,
+      iconStyle = {...styles.icon, ...styles.scoreIcon, transition: 'transform .3s'};
+
+    if (this.state.chartOpen) {
+      chartWrapStyle = Object.assign({}, chartWrapStyle, {height: '220px', opacity: 1, marginTop: '15px'});
+      listStyle = Object.assign({}, styles.list);
+      iconStyle = Object.assign({}, iconStyle, {transform: 'rotate(180deg)'});
+    }
 
     return (
       <div style={styles.card}>
         <AssetWidget data={assetDetail} style={{padding: 0}} headingStyle={styles.assetWidget} />
 
-        <ScoreWidget scoreValue={assetDetail.risk.score} style={styles.rankScore} />
+        <div style={styles.scoreDetails} onClick={this.toggleRadarChart()}>
+          <ScoreWidget scoreValue={assetDetail.risk.score} style={styles.rankScore} />
+          <div style={styles.scoreDesc}>
+            <h3 style={{...styles.title, ...styles.scoreTitle}}>Score</h3>
+            <FontIcon style={iconStyle} className='material-icons'>
+              arrow_drop_down
+            </FontIcon>
+          </div>
+        </div>
 
-        <ul style={styles.list}>
+        <div style={chartWrapStyle}>
+          <RadarChart {...radarChartProps} />
+        </div>
+
+        <ul style={listStyle}>
           {this.getReports(assetReports)}
         </ul>
       </div>
