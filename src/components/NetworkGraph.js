@@ -54,6 +54,10 @@ let nodeObjects = {},
   },
   physicsFalse = {
     physics: false
+  },
+  emptyNodesEdges = {
+    nodes: [],
+    edges: []
   };
 
 function createNodeObject(dataNode) {
@@ -544,10 +548,6 @@ class NetworkGraph extends React.Component {
     super(props);
     const {duration, params} = this.props,
       alertDate = params.date;
-    let emptyNodesEdges = {
-      nodes: [],
-      edges: []
-    };
 
     this.state = {
       nodes: [],
@@ -579,8 +579,7 @@ class NetworkGraph extends React.Component {
 
     this.extendGraph = this.extendGraph.bind(this);
 
-    this.undoGraph = this.undoGraph.bind(this);
-    this.resetGraph = this.resetGraph.bind(this);
+    this.undoOrResetGraph = this.undoOrResetGraph.bind(this);
   }
 
   loadNetworkGraph(data, loadAgain, duration) {
@@ -1187,8 +1186,8 @@ class NetworkGraph extends React.Component {
             return;
           }
 
-          document.getElementById('undo').onclick = that.undoGraph(network);
-          document.getElementById('reset').onclick = that.resetGraph(network);
+          document.getElementById('undo').onclick = that.undoOrResetGraph(network, 'undo');
+          document.getElementById('reset').onclick = that.undoOrResetGraph(network, 'reset');
         }
       );
 
@@ -1255,21 +1254,22 @@ class NetworkGraph extends React.Component {
     );
   }
 
-  undoGraph(network) {
+  undoOrResetGraph(network, action) {
     return (event) => {
-      let previousNodesEdges = this.state.previousNodesEdges;
+      let nodesEdges = (action === 'undo') ? this.state.previousNodesEdges
+        : this.state.originalNodesEdges,
+        nodes = (action === 'undo') ? nodesEdges.nodes[undoGraphCount] : nodesEdges.nodes,
+        edges = (action === 'undo') ? nodesEdges.edges[undoGraphCount] : nodesEdges.edges;
 
-      if (!isUndefined(previousNodesEdges.nodes) &&
-        !isUndefined(previousNodesEdges.edges)) {
-        if (!isUndefined(previousNodesEdges.nodes[undoGraphCount]) &&
-          !isUndefined(previousNodesEdges.edges[undoGraphCount])) {
-          let updatedNodes = Object.assign([], previousNodesEdges.nodes[undoGraphCount]),
-            updatedEdges = Object.assign([], previousNodesEdges.edges[undoGraphCount]);
+      if (!isUndefined(nodesEdges.nodes) && !isUndefined(nodesEdges.edges)) {
+        if (!isUndefined(nodes) &&
+          !isUndefined(edges)) {
+          let updatedNodes = Object.assign([], nodes),
+            updatedEdges = Object.assign([], edges);
 
-          network.setData({nodes: previousNodesEdges.nodes[undoGraphCount],
-            edges: previousNodesEdges.edges[undoGraphCount]});
+          network.setData({nodes: nodes, edges: edges});
 
-          if (previousNodesEdges.nodes[undoGraphCount].length <= 10) {
+          if (nodes.length <= 10) {
             network.setOptions(physicsFalse);
           }
           else {
@@ -1278,11 +1278,20 @@ class NetworkGraph extends React.Component {
 
           updateNodeAndEdgeObjects(updatedNodes, updatedEdges);
 
-          let tempNodesArray = Object.assign([], previousNodesEdges.nodes),
-            tempEdgesArray = Object.assign([], previousNodesEdges.edges);
+          let previousNodesEdges = emptyNodesEdges;
 
-          tempNodesArray.splice(undoGraphCount, 1);
-          tempEdgesArray.splice(undoGraphCount, 1);
+          if (action === 'undo') {
+            let tempNodesArray = Object.assign([], nodesEdges.nodes),
+              tempEdgesArray = Object.assign([], nodesEdges.edges);
+
+            tempNodesArray.splice(undoGraphCount, 1);
+            tempEdgesArray.splice(undoGraphCount, 1);
+
+            previousNodesEdges = {
+              nodes: Object.assign([], tempNodesArray),
+              edges: Object.assign([], tempEdgesArray)
+            };
+          }
 
           this.setState({
             loadAgain: false,
@@ -1295,58 +1304,17 @@ class NetworkGraph extends React.Component {
             actions: '',
             selectedNode: '',
             selectedNodesForExtendingGraph: [],
-            previousNodesEdges: {
-              nodes: Object.assign([], tempNodesArray),
-              edges: Object.assign([], tempEdgesArray)
-            }
+            previousNodesEdges: previousNodesEdges
           });
 
           document.getElementById('actions').innerHTML = '';
-          undoGraphCount--;
-        }
-      }
-    };
-  }
-
-  resetGraph(network) {
-    return (event) => {
-      let originalNodesEdges = this.state.originalNodesEdges;
-      if (!isUndefined(originalNodesEdges.nodes) &&
-        !isUndefined(originalNodesEdges.edges)) {
-        let updatedNodes = Object.assign([], originalNodesEdges.nodes),
-          updatedEdges = Object.assign([], originalNodesEdges.edges);
-
-        network.setData({nodes: originalNodesEdges.nodes,
-          edges: originalNodesEdges.edges});
-
-        if (originalNodesEdges.nodes.length <= 10) {
-          network.setOptions(physicsFalse);
-        }
-        else {
-          network.setOptions(physicsTrue);
-        }
-
-        updateNodeAndEdgeObjects(updatedNodes, updatedEdges);
-
-        this.setState({
-          loadAgain: false,
-          nodesListStatus: 'extended',
-          nodes: updatedNodes,
-          edges: updatedEdges,
-          isFetching: false,
-          showContextMenu: false,
-          selectedNodeDetails: '',
-          actions: '',
-          selectedNode: '',
-          selectedNodesForExtendingGraph: [],
-          previousNodesEdges: {
-            nodes: [],
-            edges: []
+          if (action === 'undo') {
+            undoGraphCount--;
           }
-        });
-
-        document.getElementById('actions').innerHTML = '';
-        undoGraphCount = 0;
+          else {
+            undoGraphCount = 0;
+          }
+        }
       }
     };
   }
