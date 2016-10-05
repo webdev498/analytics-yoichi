@@ -758,9 +758,13 @@ class NetworkGraph extends React.Component {
           }
 
           document.getElementById('actions').innerHTML = '';
-          $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
+          let test = this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt);
+          console.log(test);
+          document.getElementById('actions').innerHTML =
+            this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt);
+          // $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
 
-          $('#contextualMenu').animate({width: '259px'});
+          document.getElementById('actionPerformed').style.width = '259px';
           document.getElementById('rightArrow').style.display = 'block';
           document.getElementById('contextualMenuContents').style.display = 'block';
           // This is needed when we add search text box in contextual menu. Currently, it is commented.
@@ -801,10 +805,13 @@ class NetworkGraph extends React.Component {
             }
           }
 
-          document.getElementById('actions').innerHTML = '';
-          $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
+          let test = this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt);
+          console.log(test);
+          document.getElementById('actions').innerHTML =
+            this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt);
+          // $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
 
-          $('#contextualMenu').animate({width: '259px'});
+          document.getElementById('actionPerformed').style.width = '259px';
           document.getElementById('rightArrow').style.display = 'block';
           document.getElementById('contextualMenuContents').style.display = 'block';
           // This is needed when we add search text box in contextual menu. Currently, it is commented.
@@ -996,9 +1003,21 @@ class NetworkGraph extends React.Component {
           selectedNodesForExtendingGraph[i].timeWindow === timeWindow) {
           let position = getPosition(document.getElementById(actionId));
           document.getElementById('actionPerformed').innerHTML = 'You have already performed this action.';
-          $('#actionPerformed').css('top', position.y - 85);
-          $('#actionPerformed').fadeIn('slow');
-          $('#actionPerformed').fadeOut(3000);
+          document.getElementById('actionPerformed').style.top = (position.y - 85) + 'px';
+          ANIMATIONS.fadeIn(document.getElementById('actionPerformed'), {
+            duration: 2,
+            complete: function() {
+              document.getElementById('actionPerformed').style.display = 'block';
+
+              ANIMATIONS.fadeOut(document.getElementById('actionPerformed'), {
+                duration: 3000,
+                complete: function() {
+                  document.getElementById('actionPerformed').style.display = 'none';
+                }
+              });
+            }
+          });
+
           that.setState({
             isFetching: false
           });
@@ -1026,9 +1045,21 @@ class NetworkGraph extends React.Component {
             let position = getPosition(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
               'No additional results found.';
-            $('#actionPerformed').css('top', position.y - 85);
-            $('#actionPerformed').fadeIn('slow');
-            $('#actionPerformed').fadeOut(3000);
+            document.getElementById('actionPerformed').style.top = (position.y - 85) + 'px';
+            ANIMATIONS.fadeIn(document.getElementById('actionPerformed'), {
+              duration: 2,
+              complete: function() {
+                document.getElementById('actionPerformed').style.display = 'block';
+
+                ANIMATIONS.fadeOut(document.getElementById('actionPerformed'), {
+                  duration: 3000,
+                  complete: function() {
+                    document.getElementById('actionPerformed').style.display = 'none';
+                  }
+                });
+              }
+            });
+
             that.setState({
               isFetching: false
             });
@@ -1119,9 +1150,21 @@ class NetworkGraph extends React.Component {
             let position = getPosition(document.getElementById(actionId));
             document.getElementById('actionPerformed').innerHTML =
               'No additional results found.';
-            $('#actionPerformed').css('top', position.y - 85);
-            $('#actionPerformed').fadeIn('slow');
-            $('#actionPerformed').fadeOut(3000);
+            document.getElementById('actionPerformed').style.top = (position.y - 85) + 'px';
+            ANIMATIONS.fadeIn(document.getElementById('actionPerformed'), {
+              duration: 2,
+              complete: function() {
+                document.getElementById('actionPerformed').style.display = 'block';
+
+                ANIMATIONS.fadeOut(document.getElementById('actionPerformed'), {
+                  duration: 3000,
+                  complete: function() {
+                    document.getElementById('actionPerformed').style.display = 'none';
+                  }
+                });
+              }
+            });
+
             that.setState({
               isFetching: false
             });
