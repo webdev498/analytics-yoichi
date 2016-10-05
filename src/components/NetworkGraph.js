@@ -595,6 +595,7 @@ class NetworkGraph extends React.Component {
     this.setHoverBlurNodeImage = this.setHoverBlurNodeImage.bind(this);
 
     this.loadContextMenu = this.loadContextMenu.bind(this);
+    this.loadNodeEdgeContextMenu = this.loadNodeEdgeContextMenu.bind(this);
     this.getContextMenu = this.getContextMenu.bind(this);
 
     this.extendGraph = this.extendGraph.bind(this);
@@ -766,40 +767,49 @@ class NetworkGraph extends React.Component {
       };
       this.setState(listHTML);
 
-      if (contextMenuType === 'node' && network.getSelection().nodes.length > 0) {
-        let SelectedNodeIDs = network.getSelection(),
-          selectedNodeDetails = '',
-          nodeType = '',
-          nodeID = SelectedNodeIDs.nodes[0],
-          selectedNodesForExtendingGraph = [];
+      let SelectedIDs = network.getSelection(),
+        selected = '';
 
+      if (contextMenuType === 'node' && network.getSelection().nodes.length > 0) {
+        selected = 'node';
+      }
+      if (contextMenuType === 'edge' && network.getSelection().edges.length > 0) {
+        selected = 'edge';
+      }
+
+      this.loadNodeEdgeContextMenu(selected, SelectedIDs, network);
+    };
+  }
+
+  loadNodeEdgeContextMenu(selected, SelectedIDs, network) {
+    const {state} = this;
+    let nodeType = '',
+      edgeType = '',
+      nodeID = SelectedIDs.nodes[0],
+      edgeID = SelectedIDs.edges[0],
+      selectedNodeDetails = '',
+      selectedNodesForExtendingGraph = [];
+
+    switch (selected) {
+      case 'node':
         if (!isUndefined(nodeID)) {
-          for (let i = 0; i < this.state.nodes.length; i++) {
-            let node = network.body.nodes[this.state.nodes[i].id];
-            if (this.state.nodes[i].id === nodeID) {
-              selectedNodeDetails += this.state.nodes[i].nodeDetails;
-              nodeType = this.state.nodes[i].type;
+          for (let i = 0; i < state.nodes.length; i++) {
+            let node = network.body.nodes[state.nodes[i].id];
+            if (state.nodes[i].id === nodeID) {
+              selectedNodeDetails += state.nodes[i].nodeDetails;
+              nodeType = state.nodes[i].type;
               node.setOptions({
-                image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'SELECTED')
+                image: getIcon(state.nodes[i].type, state.nodes[i].status, 'SELECTED')
               });
             }
             else {
               node.setOptions({
-                image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'INACTIVE')
+                image: getIcon(state.nodes[i].type, state.nodes[i].status, 'INACTIVE')
               });
             }
           }
 
-          document.getElementById('actions').innerHTML = '';
-          this.getContextMenu(contextMenuType, network, nodeID, nodeType);
-          document.getElementById('actionPerformed').style.width = actionPerformed.width;
-          document.getElementById('rightArrow').style.display = 'block';
-          document.getElementById('contextualMenuContents').style.display = 'block';
-          // This is needed when we add search text box in contextual menu. Currently, it is commented.
-          // document.getElementById('searchNetworkNode').style.display = 'block';
-          document.getElementById('expandCM').style.display = 'none';
-
-          document.getElementById('refreshData').style.marginLeft = refreshData.marginLeft;
+          this.getContextMenu(selected, network, nodeID, nodeType);
 
           selectedNodesForExtendingGraph.push({
             nodeID: nodeID,
@@ -810,38 +820,23 @@ class NetworkGraph extends React.Component {
           let states = {
             loadAgain: false,
             selectedNodeDetails: selectedNodeDetails,
-            selectedNode: nodeID,
             showContextMenu: true,
+            selectedNode: nodeID,
             selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
           };
           this.setState(states);
         }
-      }
-
-      if (contextMenuType === 'edge' && network.getSelection().edges.length > 0) {
-        let SelectedNodeIDs = network.getSelection(),
-          selectedNodeDetails = '',
-          nodeType = '',
-          nodeID = SelectedNodeIDs.edges[0];
-
-        if (!isUndefined(nodeID)) {
-          for (let i = 0; i < this.state.edges.length; i++) {
-            if (this.state.edges[i].id === nodeID) {
-              selectedNodeDetails += this.state.edges[i].edgeDetails;
-              nodeType = this.state.edges[i].type;
+        break;
+      case 'edge':
+        if (!isUndefined(edgeID)) {
+          for (let i = 0; i < state.edges.length; i++) {
+            if (state.edges[i].id === edgeID) {
+              selectedNodeDetails += state.edges[i].edgeDetails;
+              edgeType = state.edges[i].type;
             }
           }
 
-          document.getElementById('actions').innerHTML = '';
-          this.getContextMenu(contextMenuType, network, nodeID, nodeType);
-          document.getElementById('actionPerformed').style.width = '259px';
-          document.getElementById('rightArrow').style.display = 'block';
-          document.getElementById('contextualMenuContents').style.display = 'block';
-          // This is needed when we add search text box in contextual menu. Currently, it is commented.
-          // document.getElementById('searchNetworkNode').style.display = 'block';
-          document.getElementById('expandCM').style.display = 'none';
-
-          document.getElementById('refreshData').style.marginLeft = '735px';
+          this.getContextMenu(selected, network, edgeID, edgeType);
 
           let states = {
             loadAgain: false,
@@ -850,11 +845,14 @@ class NetworkGraph extends React.Component {
           };
           this.setState(states);
         }
-      }
-    };
+        break;
+      default:
+        break;
+    }
   }
 
   getContextMenu(contextMenuType, network, nodeID, nodeType) {
+    document.getElementById('actions').innerHTML = '';
     let table = document.createElement('table');
     table.border = '0';
     table.width = '259';
@@ -1007,6 +1005,13 @@ class NetworkGraph extends React.Component {
     this.setState(listHTML);
 
     document.getElementById('actions').appendChild(table);
+    document.getElementById('actionPerformed').style.width = actionPerformed.width;
+    document.getElementById('rightArrow').style.display = 'block';
+    document.getElementById('contextualMenuContents').style.display = 'block';
+    // This is needed when we add search text box in contextual menu. Currently, it is commented.
+    // document.getElementById('searchNetworkNode').style.display = 'block';
+    document.getElementById('expandCM').style.display = 'none';
+    document.getElementById('refreshData').style.marginLeft = refreshData.marginLeft;
   }
 
   extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId, actionLabel,
