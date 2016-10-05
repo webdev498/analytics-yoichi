@@ -596,7 +596,8 @@ class NetworkGraph extends React.Component {
 
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.loadNodeEdgeContextMenu = this.loadNodeEdgeContextMenu.bind(this);
-    this.getContextMenu = this.getContextMenu.bind(this);
+    // this.getContextMenu = this.getContextMenu.bind(this);
+    this.setActions = this.setActions.bind(this);
 
     this.extendGraph = this.extendGraph.bind(this);
 
@@ -635,6 +636,8 @@ class NetworkGraph extends React.Component {
       };
       const actionsData = this.context.store.getState().actions;
       this.state.actionsData = getActionsByTypes(actionsData.list.actions);
+
+      console.log('actions', this.state.actionsData);
 
       networkData = {
         nodes: nodesEdges.nodes,
@@ -809,7 +812,7 @@ class NetworkGraph extends React.Component {
             }
           }
 
-          this.getContextMenu(selected, network, nodeID, nodeType);
+          this.ContextualMenu.getContextMenu(selected, network, nodeID, nodeType);
 
           selectedNodesForExtendingGraph.push({
             nodeID: nodeID,
@@ -836,7 +839,7 @@ class NetworkGraph extends React.Component {
             }
           }
 
-          this.getContextMenu(selected, network, edgeID, edgeType);
+          this.ContextualMenu.getContextMenu(selected, network, edgeID, edgeType);
 
           let states = {
             loadAgain: false,
@@ -851,7 +854,7 @@ class NetworkGraph extends React.Component {
     }
   }
 
-  getContextMenu(contextMenuType, network, nodeID, nodeType) {
+  /*getContextMenu(contextMenuType, network, nodeID, nodeType) {
     document.getElementById('actions').innerHTML = '';
     let table = document.createElement('table');
     table.border = '0';
@@ -1012,6 +1015,14 @@ class NetworkGraph extends React.Component {
     // document.getElementById('searchNetworkNode').style.display = 'block';
     document.getElementById('expandCM').style.display = 'none';
     document.getElementById('refreshData').style.marginLeft = refreshData.marginLeft;
+  }*/
+
+  setActions(table) {
+    let listHTML = {
+      'loadAgain': false,
+      'actions': '<ul>' + table + '</ul>'
+    };
+    this.setState(listHTML);
   }
 
   extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId, actionLabel,
@@ -1225,19 +1236,19 @@ class NetworkGraph extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props, state} = this;
 
     let assetData;
     if (props.data && !Array.isArray(props.data)) {
       assetData = generateDataFromAssetDetails(props.data);
     }
 
-    let undoResetStyle = {display: this.state.showUndoResetButtons ? 'block' : 'none'};
+    let undoResetStyle = {display: state.showUndoResetButtons ? 'block' : 'none'};
 
     return (
       <div style={{display: 'flex'}}>
-        {this.state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
-          text={this.state.loaderText} /> : null}
+        {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
+          text={state.loaderText} /> : null}
         <div ref={(ref) => this.networkGraph = ref} style={{...style.networkGraph,
           ...{
             width: '1100px'
@@ -1245,14 +1256,31 @@ class NetworkGraph extends React.Component {
           id='networkGraph'>
           {
             assetData
-            ? this.loadNetworkGraph(assetData, this.state.loadAgain, props.duration)
-            : this.loadNetworkGraph(props.data, this.state.loadAgain, props.duration)
+            ? this.loadNetworkGraph(assetData, state.loadAgain, props.duration)
+            : this.loadNetworkGraph(props.data, state.loadAgain, props.duration)
           }
         </div>
 
-        <ContextualMenu
-          showContextMenu={this.state.showContextMenu}
-          selectedDetails={this.state.selectedNodeDetails} />
+        {
+          state.actionsData && state.actionsData.length > 0
+          ? <ContextualMenu
+            ref={(ref) => this.ContextualMenu = ref}
+            showContextMenu={state.showContextMenu}
+            nodeObjects={nodeObjects}
+            edgeObjects={edgeObjects}
+            selectedDetails={state.selectedNodeDetails}
+            setActions={this.setActions}
+            actions={state.actionsData}
+            extendGraph={this.extendGraph} />
+          : null
+        }
+
+        {/*<ContextualMenu
+          ref={(ref) => this.ContextualMenu = ref}
+          showContextMenu={state.showContextMenu}
+          selectedDetails={state.selectedNodeDetails}
+          setActions={this.setActions}
+          actions={state.actionsData} />*/}
 
         <div id='undoGraph' style={{...style.undoGraph, ...undoResetStyle}}>
           <img id='undo' src='/img/undo.png' />
