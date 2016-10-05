@@ -54,16 +54,12 @@ export const AxisColor = '#DADADA';
 export const DefaultGraphPaletteColors =
   '#2bd8d0,#3ad7c9,#46d6c4,#57d5bd,#67d3b6,#79d2ae,#8ad1a7,#9acfa0,#a8ce9a,#b2cd96';
 
-// export const DefaultTimelineGraphPaletteColors = ['#F16B76', '#fcc875', '#ef5976'];
-
 export const TimelineBarColors = [
   '#2AD8D0',
   '#CAEDEB'
 ];
 
 export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
-
-export const NetworkGraphBGColor = '#F7F7F9';
 
 export const NetworkNodeLabelColor = '#F2F2F4';
 
@@ -85,17 +81,15 @@ export const Colors = {
   slider: SliderColor,
   white: WhiteColor,
   black: BlackColor,
-  areaSparkLineChartColor: AreaSparkLineChartColor,
-  durationWidgetColor: DurationWidgetColor,
-  subHeadingBGColor: SubHeadingBGColor,
-  defaultGraphPaletteColors: DefaultGraphPaletteColors,
-  defaultCanvasBGColors: DefaultCanvasBGColors,
-  worldmapLegendsColor: WorldmapLegendsColor,
-  axisColor: AxisColor,
-  // defaultTimelineGraphPaletteColors: DefaultTimelineGraphPaletteColors
-  timelineBarColors: TimelineBarColors,
-  networkGraphBGColor: NetworkGraphBGColor,
-  networkNodeLabelColor: NetworkNodeLabelColor
+  areaSparkLineChart: AreaSparkLineChartColor,
+  durationWidget: DurationWidgetColor,
+  subHeadingBG: SubHeadingBGColor,
+  defaultGraphPalette: DefaultGraphPaletteColors,
+  defaultCanvasBG: DefaultCanvasBGColors,
+  worldmapLegends: WorldmapLegendsColor,
+  axis: AxisColor,
+  timelineBar: TimelineBarColors,
+  networkNodeLabel: NetworkNodeLabelColor
 };
 
 export const PrimaryPalette = {

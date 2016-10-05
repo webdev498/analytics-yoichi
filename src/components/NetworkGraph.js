@@ -81,7 +81,7 @@ function createNodeObject(dataNode) {
   };
   nodeObject.shape = 'image';
   nodeObject.color = {
-    color: Colors.networkNodeLabelColor,
+    color: Colors.networkNodeLabel,
     highlight: Colors.turquoise
   };
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');

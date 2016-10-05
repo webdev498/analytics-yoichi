@@ -23,7 +23,7 @@ export function generateDataSource(chartProperties, duration) {
   dataSet.push(dataSeries);
 
   dataSourceObject.chart = Object.assign({
-    'paletteColors': Colors.areaSparkLineChartColor.area,
+    'paletteColors': Colors.areaSparkLineChart.area,
     'showBorder': '0',
     'showCanvasBorder': '0',
     'usePlotGradientColor': '0',
@@ -34,7 +34,7 @@ export function generateDataSource(chartProperties, duration) {
     'showYAxisValues': '0',
     'showAlternateHGridColor': '0',
     'showPlotBorder': '1',
-    'plotBorderColor': Colors.areaSparkLineChartColor.border,
+    'plotBorderColor': Colors.areaSparkLineChart.border,
     'plotBorderThickness': '1',
     'anchorradius': '0',
     'bgAlpha': '0',

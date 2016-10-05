@@ -300,7 +300,7 @@ export function generateDataSource(rawData, chartOptions, chartData, chart) {
 
   const dataSourceObject = {
     chart: Object.assign({
-      'paletteColors': Colors.defaultGraphPaletteColors,
+      'paletteColors': Colors.defaultGraphPalette,
       'bgColor': Colors.white,
       'showBorder': '0',
       'showCanvasBorder': '0',

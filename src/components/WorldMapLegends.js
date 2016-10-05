@@ -23,8 +23,8 @@ class WorldMapLegends extends React.Component {
           width: '20px',
           height: '12px'
         },
-        'secureColors': Colors.worldmapLegendsColor.secure,
-        'maliciousColors': Colors.worldmapLegendsColor.malicious
+        'secureColors': Colors.worldmapLegends.secure,
+        'maliciousColors': Colors.worldmapLegends.malicious
       },
       legendWidth = {
         width: props.style.width
