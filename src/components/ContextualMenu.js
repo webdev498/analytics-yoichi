@@ -6,55 +6,60 @@ import {
 } from 'utils/utils';
 
 const style = {
-  contextualMenu: {
-    width: '259px',
-    backgroundColor: '#898E9B',
-    position: 'absolute',
-    top: '0px',
-    right: '0px',
-    bottom: '0px'
+    contextualMenu: {
+      width: '259px',
+      backgroundColor: '#898E9B',
+      position: 'absolute',
+      top: '0px',
+      right: '0px',
+      bottom: '0px'
+    },
+    searchTextBox: {
+      backgroundColor: '#646A7D',
+      padding: '10px',
+      border: '0px',
+      width: '211px',
+      height: '40px',
+      color: '#B8BBC3',
+      fontFamily: 'Open Sans',
+      marginTop: '28px',
+      marginLeft: '24px',
+      marginRight: '24px'
+    },
+    selectedDetails: {
+      marginTop: '28px',
+      marginBottom: '28px',
+      marginLeft: '24px',
+      marginRight: '24px',
+      width: '90%',
+      color: '#24293D',
+      fontSize: '12pt',
+      fontFamily: 'Open Sans',
+      overflowWrap: 'break-word',
+      paddingRight: '20px'
+    },
+    actionPerformed: {
+      top: 0,
+      right: '259px',
+      fontSize: '12pt',
+      position: 'absolute',
+      padding: '20px',
+      backgroundColor: '#DADADE',
+      color: '#24293D',
+      display: 'none'
+    }
   },
-  searchTextBox: {
-    backgroundColor: '#646A7D',
-    padding: '10px',
-    border: '0px',
-    width: '211px',
-    height: '40px',
-    color: '#B8BBC3',
-    fontFamily: 'Open Sans',
-    marginTop: '28px',
-    marginLeft: '24px',
-    marginRight: '24px'
-  },
-  selectedDetails: {
-    marginTop: '28px',
-    marginBottom: '28px',
-    marginLeft: '24px',
-    marginRight: '24px',
-    width: '90%',
-    color: '#24293D',
-    fontSize: '12pt',
-    fontFamily: 'Open Sans',
-    overflowWrap: 'break-word',
-    paddingRight: '20px'
-  },
-  actionPerformed: {
-    top: 0,
-    right: '259px',
-    fontSize: '12pt',
-    position: 'absolute',
-    padding: '20px',
-    backgroundColor: '#DADADE',
-    color: '#24293D',
-    display: 'none'
-  }
-};
-
-let actionPerformed = {
+  actionPerformed = {
     width: '259px'
   },
   refreshData = {
     marginLeft: '735px'
+  },
+  actionTable = {
+    border: '0',
+    width: '259',
+    cellPadding: '10',
+    cellSpacing: '10'
   };
 
 function checkForUserInputs(parameters) {
@@ -71,6 +76,17 @@ function checkForUserInputs(parameters) {
   return userInputParameters;
 }
 
+function updateDOM(table) {
+  document.getElementById('actions').appendChild(table);
+  document.getElementById('actionPerformed').style.width = actionPerformed.width;
+  document.getElementById('rightArrow').style.display = 'block';
+  document.getElementById('contextualMenuContents').style.display = 'block';
+  // This is needed when we add search text box in contextual menu. Currently, it is commented.
+  // document.getElementById('searchNetworkNode').style.display = 'block';
+  document.getElementById('expandCM').style.display = 'none';
+  document.getElementById('refreshData').style.marginLeft = refreshData.marginLeft;
+}
+
 class ContextualMenu extends React.Component {
   static propTypes = {
     actions: PropTypes.array
@@ -83,178 +99,46 @@ class ContextualMenu extends React.Component {
     this.getContextMenu = this.getContextMenu.bind(this);
   }
 
-  getContextMenu(contextMenuType, network, nodeID, nodeType) {
+  getContextMenu(sourceDetails) {
     let {props} = this,
-      {nodeObjects, edgeObjects} = props;
+      {nodeObjects} = props,
+      actionsData = props.actions,
+      actions = [],
+      {itemId, itemType} = sourceDetails;
 
     document.getElementById('actions').innerHTML = '';
     let table = document.createElement('table');
-    table.border = '0';
-    table.width = '259';
-    table.cellPadding = '10';
-    table.cellSpacing = '10';
-
-    let actionsData = this.props.actions, // this.state.actionsData,
-      actionsList = [];
+    table.border = actionTable.border;
+    table.width = actionTable.width;
+    table.cellPadding = actionTable.cellPadding;
+    table.cellSpacing = actionTable.cellSpacing;
 
     for (let i = 0; i < actionsData.length; i++) {
-      if ((actionsData[i].nodeType).toLowerCase() === nodeType.toLowerCase()) {
-        actionsList = Object.assign(actionsList, actionsData[i].actions);
+      if ((actionsData[i].nodeType).toLowerCase() === itemType.toLowerCase()) {
+        actions = Object.assign(actions, actionsData[i].actions);
       }
     }
 
     // Append the actions associated with nodes
-    if (!isUndefined(nodeObjects[nodeID]) && !isUndefined(nodeObjects[nodeID].actions) &&
-      nodeObjects[nodeID].actions.length > 0) {
-      actionsList = Object.assign(actionsList, nodeObjects[nodeID].actions);
+    if (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].actions) &&
+      nodeObjects[itemId].actions.length > 0) {
+      actions = Object.assign(actions, nodeObjects[itemId].actions);
     }
 
-    for (let j = 0; j < actionsList.length; j++) {
-      /*let parameters = actionsList[j].parameters,
-        parametersToApi = [],
-        userInputParameters = [],
-        linkValueForFullMalwareReport = '';
-
-      if (!isUndefined(parameters.length)) {
-        for (let k = 0; k < parameters.length; k++) {
-          let tempObj = {};
-          if (parameters[k].userInput === false && parameters[k].name !== 'link') {
-            tempObj.name = parameters[k].name;
-            if (!isUndefined(parameters[k].value)) {
-              tempObj.value = parameters[k].value;
-            }
-            else {
-              if (parameters[k].name === 'id') {
-                tempObj.value = nodeID;
-              }
-              else if (parameters[k].name === 'type') {
-                tempObj.value = nodeType;
-              }
-              else if (parameters[k].name === 'date') {
-                tempObj.value = this.state.alertDate;
-              }
-              else if (parameters[k].name === 'ip' && (nodeType.toLowerCase() === 'internal_ip' ||
-                nodeType.toLowerCase() === 'external_ip')) {
-                tempObj.value = nodeID;
-              }
-              else if (parameters[k].name === 'source.id') {
-                if (!isUndefined(edgeObjects[nodeID])) {
-                  tempObj.value = edgeObjects[nodeID].from;
-                }
-                else {
-                  tempObj.value = '';
-                }
-              }
-              else if (parameters[k].name === 'target.id') {
-                if (!isUndefined(edgeObjects[nodeID])) {
-                  tempObj.value = edgeObjects[nodeID].to;
-                }
-                else {
-                  tempObj.value = '';
-                }
-              }
-              else if ((parameters[k].name).indexOf('metadata') > -1) {
-                let paramName = (parameters[k].name).replace('metadata.', ''),
-                  metadataValue = nodeObjects[nodeID].metadata[paramName];
-                tempObj.value = (!isUndefined(metadataValue)) ? metadataValue : '';
-              }
-              else {
-                tempObj.value = '';
-              }
-            }
-
-            tempObj.userInput = false;
-            parametersToApi.push(tempObj);
-          }
-          if (parameters[k].userInput === true) {
-            tempObj.name = parameters[k].name;
-            tempObj.id = parameters[k].name + j;
-            tempObj.value = '';
-            tempObj.userInput = true;
-            parametersToApi.push(tempObj);
-          }
-          if (parameters[k].name === 'link') {
-            linkValueForFullMalwareReport = !isUndefined(parameters[k].value)
-            ? parameters[k].value : '';
-          }
-        }
-
-        userInputParameters = checkForUserInputs(parameters);
-      }*/
-
-      let parameters = this.generateParameters(actionsList[j].parameters, j, nodeID, nodeType),
-        {parametersToApi, userInputParameters, linkValueForFullMalwareReport} = parameters;
-
-      let tr = document.createElement('tr'),
-        td1 = document.createElement('td'),
-        reportId = (!isUndefined(actionsList[j].reportId)) ? actionsList[j].reportId
-        : (!isUndefined(actionsList[j].name) ? actionsList[j].name : ''),
-        actionType = (!isUndefined(actionsList[j].actionType)) ? actionsList[j].actionType : '';
-
-      td1.appendChild(document.createTextNode(actionsList[j].label));
-      td1.id = 'action' + j;
-      td1.onclick = props.extendGraph(contextMenuType, network, nodeID, nodeType,
-        reportId, parametersToApi, actionsList.length, 'action' + j, actionsList[j].label,
-        linkValueForFullMalwareReport);
-
-      let td2 = document.createElement('td');
-      if (userInputParameters.length > 0) {
-        td2.id = 'downarrow' + j;
-        td2.style = 'padding-left:0px;';
-        let downArrow = document.createElement('img');
-        downArrow.src = '/img/downarrow.png';
-        td2.appendChild(downArrow);
-      }
-      else {
-        td1.colSpan = '2';
-      }
-
-      tr.appendChild(td1);
-
-      if (userInputParameters.length > 0) {
-        tr.appendChild(td2);
-      }
-
-      table.appendChild(tr);
-
-      if (userInputParameters.length > 0) {
-        for (let p = 0; p < userInputParameters.length; p++) {
-          let trUserInput = document.createElement('tr');
-          let tdUserInput = document.createElement('td');
-          tdUserInput.style = 'cursor:auto;';
-          tdUserInput.appendChild(document.createTextNode(
-            firstCharCapitalize(userInputParameters[p].name + ' :')));
-          let inputParameter = document.createElement('input');
-          inputParameter.setAttribute('type', 'text');
-          inputParameter.setAttribute('style', 'color:black;');
-          inputParameter.setAttribute('placeholder', userInputParameters[p].name);
-          inputParameter.setAttribute('name', userInputParameters[p].name + j);
-          inputParameter.setAttribute('id', userInputParameters[p].name + j);
-          tdUserInput.appendChild(inputParameter);
-          trUserInput.appendChild(tdUserInput);
-          table.appendChild(trUserInput);
-        }
-      }
+    for (let j = 0; j < actions.length; j++) {
+      let parameters = this.generateParameters(actions[j].parameters, j, itemId, itemType);
+      table = this.createHTML(actions, table, j, parameters, sourceDetails);
     }
-
     props.setActions(table.innerHTML);
-
-    document.getElementById('actions').appendChild(table);
-    document.getElementById('actionPerformed').style.width = actionPerformed.width;
-    document.getElementById('rightArrow').style.display = 'block';
-    document.getElementById('contextualMenuContents').style.display = 'block';
-    // This is needed when we add search text box in contextual menu. Currently, it is commented.
-    // document.getElementById('searchNetworkNode').style.display = 'block';
-    document.getElementById('expandCM').style.display = 'none';
-    document.getElementById('refreshData').style.marginLeft = refreshData.marginLeft;
+    updateDOM(table);
   }
 
-  generateParameters(parameters, index, nodeID, nodeType) {
+  generateParameters(parameters, index, itemId, itemType) {
     let {props} = this,
       {nodeObjects, edgeObjects} = props,
       parametersToApi = [],
       userInputParameters = [],
-      linkValueForFullMalwareReport = '';
+      fullMalwareReportLink = '';
 
     if (!isUndefined(parameters.length)) {
       for (let k = 0; k < parameters.length; k++) {
@@ -266,29 +150,29 @@ class ContextualMenu extends React.Component {
           }
           else {
             if (parameters[k].name === 'id') {
-              tempObj.value = nodeID;
+              tempObj.value = itemId;
             }
             else if (parameters[k].name === 'type') {
-              tempObj.value = nodeType;
+              tempObj.value = itemType;
             }
             else if (parameters[k].name === 'date') {
-              tempObj.value = this.state.alertDate;
+              tempObj.value = props.alertDate;
             }
-            else if (parameters[k].name === 'ip' && (nodeType.toLowerCase() === 'internal_ip' ||
-              nodeType.toLowerCase() === 'external_ip')) {
-              tempObj.value = nodeID;
+            else if (parameters[k].name === 'ip' && (itemType.toLowerCase() === 'internal_ip' ||
+              itemType.toLowerCase() === 'external_ip')) {
+              tempObj.value = itemId;
             }
             else if (parameters[k].name === 'source.id') {
-              if (!isUndefined(edgeObjects[nodeID])) {
-                tempObj.value = edgeObjects[nodeID].from;
+              if (!isUndefined(edgeObjects[itemId])) {
+                tempObj.value = edgeObjects[itemId].from;
               }
               else {
                 tempObj.value = '';
               }
             }
             else if (parameters[k].name === 'target.id') {
-              if (!isUndefined(edgeObjects[nodeID])) {
-                tempObj.value = edgeObjects[nodeID].to;
+              if (!isUndefined(edgeObjects[itemId])) {
+                tempObj.value = edgeObjects[itemId].to;
               }
               else {
                 tempObj.value = '';
@@ -296,7 +180,7 @@ class ContextualMenu extends React.Component {
             }
             else if ((parameters[k].name).indexOf('metadata') > -1) {
               let paramName = (parameters[k].name).replace('metadata.', ''),
-                metadataValue = nodeObjects[nodeID].metadata[paramName];
+                metadataValue = nodeObjects[itemId].metadata[paramName];
               tempObj.value = (!isUndefined(metadataValue)) ? metadataValue : '';
             }
             else {
@@ -315,7 +199,7 @@ class ContextualMenu extends React.Component {
           parametersToApi.push(tempObj);
         }
         if (parameters[k].name === 'link') {
-          linkValueForFullMalwareReport = !isUndefined(parameters[k].value)
+          fullMalwareReportLink = !isUndefined(parameters[k].value)
           ? parameters[k].value : '';
         }
       }
@@ -325,8 +209,73 @@ class ContextualMenu extends React.Component {
     return {
       parametersToApi: parametersToApi,
       userInputParameters: userInputParameters,
-      linkValueForFullMalwareReport: linkValueForFullMalwareReport
+      fullMalwareReportLink: fullMalwareReportLink
     };
+  }
+
+  createHTML(actions, table, index, parameters, sourceDetails) {
+    let {props} = this,
+      {parametersToApi, userInputParameters, fullMalwareReportLink} = parameters;
+
+    let tr = document.createElement('tr'),
+      td1 = document.createElement('td'),
+      reportId = (!isUndefined(actions[index].reportId)) ? actions[index].reportId
+      : (!isUndefined(actions[index].name) ? actions[index].name : ''),
+      actionType = (!isUndefined(actions[index].actionType)) ? actions[index].actionType : '';
+
+    let actionDetails = {
+      reportId: reportId,
+      parameters: parametersToApi,
+      actionCount: actions.length,
+      actionId: 'action' + index,
+      actionLabel: actions[index].label,
+      fullMalwareReportLink: fullMalwareReportLink
+    };
+
+    td1.appendChild(document.createTextNode(actions[index].label));
+    td1.id = 'action' + index;
+    td1.onclick = props.doAction(sourceDetails, actionDetails);
+
+    let td2 = document.createElement('td');
+    if (userInputParameters.length > 0) {
+      td2.id = 'downarrow' + index;
+      td2.style = 'padding-left:0px;';
+      let downArrow = document.createElement('img');
+      downArrow.src = '/img/downarrow.png';
+      td2.appendChild(downArrow);
+    }
+    else {
+      td1.colSpan = '2';
+    }
+
+    tr.appendChild(td1);
+
+    if (userInputParameters.length > 0) {
+      tr.appendChild(td2);
+    }
+
+    table.appendChild(tr);
+
+    if (userInputParameters.length > 0) {
+      for (let p = 0; p < userInputParameters.length; p++) {
+        let trUserInput = document.createElement('tr');
+        let tdUserInput = document.createElement('td');
+        tdUserInput.style = 'cursor:auto;';
+        tdUserInput.appendChild(document.createTextNode(
+          firstCharCapitalize(userInputParameters[p].name + ' :')));
+        let inputParameter = document.createElement('input');
+        inputParameter.setAttribute('type', 'text');
+        inputParameter.setAttribute('style', 'color:black;');
+        inputParameter.setAttribute('placeholder', userInputParameters[p].name);
+        inputParameter.setAttribute('name', userInputParameters[p].name + index);
+        inputParameter.setAttribute('id', userInputParameters[p].name + index);
+        tdUserInput.appendChild(inputParameter);
+        trUserInput.appendChild(tdUserInput);
+        table.appendChild(trUserInput);
+      }
+    }
+
+    return table;
   }
 
   collapseExpand(action) {

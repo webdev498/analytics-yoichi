@@ -812,7 +812,14 @@ class NetworkGraph extends React.Component {
             }
           }
 
-          this.ContextualMenu.getContextMenu(selected, network, nodeID, nodeType);
+          let sourceDetails = {
+            contextMenuType: selected,
+            network: network,
+            itemId: nodeID,
+            itemType: nodeType
+          };
+
+          this.ContextualMenu.getContextMenu(sourceDetails);
 
           selectedNodesForExtendingGraph.push({
             nodeID: nodeID,
@@ -839,7 +846,14 @@ class NetworkGraph extends React.Component {
             }
           }
 
-          this.ContextualMenu.getContextMenu(selected, network, edgeID, edgeType);
+          let sourceDetails = {
+            contextMenuType: selected,
+            network: network,
+            itemId: edgeID,
+            itemType: edgeType
+          };
+
+          this.ContextualMenu.getContextMenu(sourceDetails);
 
           let states = {
             loadAgain: false,
@@ -881,7 +895,7 @@ class NetworkGraph extends React.Component {
       let parameters = actionsList[j].parameters,
         parametersToApi = [],
         userInputParameters = [],
-        linkValueForFullMalwareReport = '';
+        fullMalwareReportLink = '';
 
       if (!isUndefined(parameters.length)) {
         for (let k = 0; k < parameters.length; k++) {
@@ -942,7 +956,7 @@ class NetworkGraph extends React.Component {
             parametersToApi.push(tempObj);
           }
           if (parameters[k].name === 'link') {
-            linkValueForFullMalwareReport = !isUndefined(parameters[k].value)
+            fullMalwareReportLink = !isUndefined(parameters[k].value)
             ? parameters[k].value : '';
           }
         }
@@ -959,7 +973,7 @@ class NetworkGraph extends React.Component {
       td1.id = 'action' + j;
       td1.onclick = this.extendGraph(contextMenuType, network, nodeID, nodeType,
         reportId, parametersToApi, actionsList.length, 'action' + j, actionsList[j].label,
-        linkValueForFullMalwareReport);
+        fullMalwareReportLink);
 
       let td2 = document.createElement('td');
       if (userInputParameters.length > 0) {
@@ -1025,10 +1039,13 @@ class NetworkGraph extends React.Component {
     this.setState(listHTML);
   }
 
-  extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId, actionLabel,
-    linkValueForFullMalwareReport) {
+  extendGraph(sourceDetails, actionDetails) {
     const that = this;
     return (event) => {
+      let {contextMenuType, network, itemId} = sourceDetails,
+        nodeID = itemId,
+        {reportId, parameters, actionsCount, actionId, actionLabel, fullMalwareReportLink} = actionDetails;
+
       this.setState({
         isFetching: true,
         loaderText: actionLabel
@@ -1062,8 +1079,8 @@ class NetworkGraph extends React.Component {
         }
       }
 
-      if (linkValueForFullMalwareReport !== '') {
-        window.open(baseUrl + linkValueForFullMalwareReport);
+      if (fullMalwareReportLink !== '') {
+        window.open(baseUrl + fullMalwareReportLink);
       }
 
       const extendedNodes = fetchExtendedNodes(reportId, timeWindow, parameters);
@@ -1268,10 +1285,11 @@ class NetworkGraph extends React.Component {
             showContextMenu={state.showContextMenu}
             nodeObjects={nodeObjects}
             edgeObjects={edgeObjects}
+            alertDate={this.state.alertDate}
             selectedDetails={state.selectedNodeDetails}
-            setActions={this.setActions}
             actions={state.actionsData}
-            extendGraph={this.extendGraph} />
+            setActions={this.setActions}
+            doAction={this.extendGraph} />
           : null
         }
 
