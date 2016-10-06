@@ -654,11 +654,23 @@ class NetworkGraph extends React.Component {
     nodeObjects = {};
     edgeObjects = {};
 
+    let networkData = this.getGraphAndActions(data);
+
+    if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
+      if (networkData.nodes.length > 0) {
+        this.createNetworkGraph(networkData);
+      }
+      else {
+        document.getElementById('networkGraph').innerHTML = 'No additional results were found.';
+      }
+    }
+  }
+
+  getGraphAndActions(data) {
     let networkData = {
       nodes: [],
       edges: []
     };
-
     if (this.state.nodesListStatus === 'default') {
       let nodesEdges = getNodesEdges(data[0]);
       this.state.nodes = nodesEdges.nodes;
@@ -675,15 +687,7 @@ class NetworkGraph extends React.Component {
         edges: nodesEdges.edges
       };
     }
-
-    if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
-      if (networkData.nodes.length > 0) {
-        this.createNetworkGraph(networkData);
-      }
-      else {
-        document.getElementById('networkGraph').innerHTML = 'No additional results were found.';
-      }
-    }
+    return networkData;
   }
 
   createNetworkGraph(networkData) {
