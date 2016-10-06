@@ -85,6 +85,28 @@ function updateDOM(table) {
   document.getElementById('refreshData').style.marginLeft = refreshData.marginLeft;
 }
 
+function displayTextBoxForInputParam(table, userInputParameters, index) {
+  if (userInputParameters.length > 0) {
+    for (let p = 0; p < userInputParameters.length; p++) {
+      let trUserInput = document.createElement('tr');
+      let tdUserInput = document.createElement('td');
+      tdUserInput.style = 'cursor:auto;';
+      tdUserInput.appendChild(document.createTextNode(
+        firstCharCapitalize(userInputParameters[p].name + ' :')));
+      let inputParameter = document.createElement('input');
+      inputParameter.setAttribute('type', 'text');
+      inputParameter.setAttribute('style', 'color:black;');
+      inputParameter.setAttribute('placeholder', userInputParameters[p].name);
+      inputParameter.setAttribute('name', userInputParameters[p].name + index);
+      inputParameter.setAttribute('id', userInputParameters[p].name + index);
+      tdUserInput.appendChild(inputParameter);
+      trUserInput.appendChild(tdUserInput);
+      table.appendChild(trUserInput);
+    }
+  }
+  return table;
+}
+
 class ContextualMenu extends React.Component {
   static propTypes = {
     actions: PropTypes.array
@@ -236,16 +258,15 @@ class ContextualMenu extends React.Component {
       td1 = document.createElement('td'),
       reportId = (!isUndefined(actions[index].reportId)) ? actions[index].reportId
       : (!isUndefined(actions[index].name) ? actions[index].name : ''),
-      actionType = (!isUndefined(actions[index].actionType)) ? actions[index].actionType : '';
-
-    let actionDetails = {
-      reportId: reportId,
-      parameters: parametersToApi,
-      actionCount: actions.length,
-      actionId: 'action' + index,
-      actionLabel: actions[index].label,
-      fullMalwareReportLink: fullMalwareReportLink
-    };
+      actionType = (!isUndefined(actions[index].actionType)) ? actions[index].actionType : '',
+      actionDetails = {
+        reportId: reportId,
+        parameters: parametersToApi,
+        actionCount: actions.length,
+        actionId: 'action' + index,
+        actionLabel: actions[index].label,
+        fullMalwareReportLink: fullMalwareReportLink
+      };
 
     td1.appendChild(document.createTextNode(actions[index].label));
     td1.id = 'action' + index;
@@ -271,24 +292,7 @@ class ContextualMenu extends React.Component {
 
     table.appendChild(tr);
 
-    if (userInputParameters.length > 0) {
-      for (let p = 0; p < userInputParameters.length; p++) {
-        let trUserInput = document.createElement('tr');
-        let tdUserInput = document.createElement('td');
-        tdUserInput.style = 'cursor:auto;';
-        tdUserInput.appendChild(document.createTextNode(
-          firstCharCapitalize(userInputParameters[p].name + ' :')));
-        let inputParameter = document.createElement('input');
-        inputParameter.setAttribute('type', 'text');
-        inputParameter.setAttribute('style', 'color:black;');
-        inputParameter.setAttribute('placeholder', userInputParameters[p].name);
-        inputParameter.setAttribute('name', userInputParameters[p].name + index);
-        inputParameter.setAttribute('id', userInputParameters[p].name + index);
-        tdUserInput.appendChild(inputParameter);
-        trUserInput.appendChild(tdUserInput);
-        table.appendChild(trUserInput);
-      }
-    }
+    displayTextBoxForInputParam(table, userInputParameters, index);
 
     return table;
   }
