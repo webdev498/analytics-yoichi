@@ -523,20 +523,6 @@ function isNodeOrEdgeAlreadyExists(array, id) {
   return exists;
 }
 
-function checkForUserInputs(parameters) {
-  let userInputParameters = [];
-  if (!isUndefined(parameters.length)) {
-    for (let k = 0; k < parameters.length; k++) {
-      let tempObj = {};
-      if (parameters[k].userInput === true) {
-        tempObj.name = parameters[k].name;
-        userInputParameters.push(tempObj);
-      }
-    }
-  }
-  return userInputParameters;
-}
-
 function addNewlines(str) {
   let char = 15;
   if (str.length > char) {
@@ -635,7 +621,10 @@ class NetworkGraph extends React.Component {
 
     this.loadGraph = this.loadGraph.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
+    this.fetchExtendedNodes = this.fetchExtendedNodes.bind(this);
+    this.updateGraph = this.updateGraph.bind(this);
     this.undoOrResetGraph = this.undoOrResetGraph.bind(this);
+    this.isGraphExtended = this.isGraphExtended.bind(this);
   }
 
   loadNetworkGraph(data, loadAgain, duration) {
@@ -910,7 +899,6 @@ class NetworkGraph extends React.Component {
   }
 
   extendGraph(sourceDetails, actionDetails) {
-    const that = this;
     return (event) => {
       let {contextMenuType, network, itemId} = sourceDetails,
         nodeID = itemId,
@@ -920,14 +908,14 @@ class NetworkGraph extends React.Component {
         isFetching: true,
         loaderText: actionLabel
       });
-      let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
+      let selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
         if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
           selectedNodesForExtendingGraph[i].reportId === reportId &&
           selectedNodesForExtendingGraph[i].timeWindow === timeWindow) {
           let message = 'You have already performed this action.';
           displayNotificationMessage(message, actionId);
-          that.setState({
+          this.setState({
             isFetching: false
           });
           return;
@@ -938,123 +926,181 @@ class NetworkGraph extends React.Component {
         window.open(baseUrl + fullMalwareReportLink);
       }
 
-      const extendedNodes = fetchExtendedNodes(reportId, timeWindow, parameters);
-      if (!extendedNodes) {
-        this.setState({
-          isFetching: false
-        });
-        return;
-      }
-      extendedNodes.then(
-        function(json) {
-          let nodes = that.state.nodes,
-            edges = that.state.edges;
+      let details = {
+        network: network,
+        actionId: actionId,
+        reportId: reportId,
+        nodeID: nodeID,
+        timeWindow: timeWindow,
+        parameters: parameters,
+        selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
+        contextMenuType: contextMenuType,
+        actionsCount: actionsCount
+      };
 
-          if (isUndefined(json[0])) {
-            let message = 'No additional results found.';
-            displayNotificationMessage(message, actionId);
-            that.setState({
-              isFetching: false
-            });
-            return;
-          }
-
-          if (that.state.previousNodesEdges.nodes.length > 0) {
-            undoGraphCount++;
-          }
-          else {
-            undoGraphCount = 0;
-          }
-
-          let nodesPrevious = [],
-            edgesPrevious = [];
-
-          nodesPrevious.push(Object.assign([], nodes));
-          edgesPrevious.push(Object.assign([], edges));
-
-          let nodesEdges = getNodesEdges(json[0]),
-            isGraphExtended = false;
-
-          for (let i = 0; i < nodesEdges.nodes.length; i++) {
-            if (isNodeOrEdgeAlreadyExists(nodes, nodesEdges.nodes[i].id) === false) {
-              nodes.push(nodesEdges.nodes[i]);
-              nodeObjects[nodesEdges.nodes[i].id] = nodesEdges.nodes[i];
-              isGraphExtended = true;
-            }
-          }
-
-          for (let i = 0; i < nodesEdges.edges.length; i++) {
-            if (isNodeOrEdgeAlreadyExists(edges, nodesEdges.edges[i].id) === false) {
-              edges.push(nodesEdges.edges[i]);
-              edgeObjects[nodesEdges.edges[i].to] = nodesEdges.edges[i];
-              edgeObjects[nodesEdges.edges[i].id] = nodesEdges.edges[i];
-              isGraphExtended = true;
-            }
-          }
-
-          selectedNodesForExtendingGraph.push({
-            'nodeID': nodeID,
-            'reportId': reportId,
-            'timeWindow': timeWindow
-          });
-
-          network.setData({nodes: nodes, edges: edges});
-
-          if (!isGraphExtended) {
-            nodesPrevious = [];
-            edgesPrevious = [];
-            undoGraphCount--;
-          }
-
-          that.setState({
-            'loadAgain': false,
-            'nodesListStatus': 'extended',
-            'nodes': Object.assign([], nodes),
-            'edges': Object.assign([], edges),
-            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
-            isFetching: false,
-            loaderText: '',
-            previousNodesEdges: {
-              nodes: (nodesPrevious.length > 0) ? that.state.previousNodesEdges.nodes.concat(nodesPrevious)
-                : that.state.previousNodesEdges.nodes,
-              edges: (edgesPrevious.length > 0) ? that.state.previousNodesEdges.edges.concat(edgesPrevious)
-                : that.state.previousNodesEdges.edges
-            },
-            showUndoResetButtons: true
-          });
-
-          if (nodes.length <= 10) {
-            network.setOptions(physicsFalse);
-          }
-          else {
-            network.setOptions(physicsTrue);
-          }
-
-          if (contextMenuType === 'node') {
-            let node = network.body.nodes[nodeID];
-            if (nodeObjects[nodeID] !== undefined) {
-              node.setOptions({
-                image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
-              });
-            }
-          }
-
-          if (!isGraphExtended) {
-            let message = 'No additional results found.';
-            displayNotificationMessage(message, actionId);
-            that.setState({
-              isFetching: false
-            });
-            return;
-          }
-
-          document.getElementById('undo').onclick = that.undoOrResetGraph(network, 'undo');
-          document.getElementById('reset').onclick = that.undoOrResetGraph(network, 'reset');
-        }
-      );
-
-      displayActionAsSelected(actionsCount, actionId);
+      this.fetchExtendedNodes(details);
     };
+  }
+
+  fetchExtendedNodes(details) {
+    let {
+      network,
+      actionId,
+      reportId,
+      nodeID,
+      timeWindow,
+      parameters,
+      selectedNodesForExtendingGraph,
+      contextMenuType,
+      actionsCount
+    } = details;
+
+    const extendedNodes = fetchExtendedNodes(reportId, timeWindow, parameters),
+      that = this;
+    if (!extendedNodes) {
+      this.setState({
+        isFetching: false
+      });
+      return;
+    }
+
+    extendedNodes.then(
+      function(json) {
+        let graphDetails = {
+          extendedNodes: json,
+          network: network,
+          actionId: actionId,
+          selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
+          nodeID: nodeID,
+          reportId: reportId,
+          contextMenuType: contextMenuType
+        };
+        that.updateGraph(graphDetails);
+      }
+    );
+
+    displayActionAsSelected(actionsCount, actionId);
+  }
+
+  updateGraph(details) {
+    let {
+        extendedNodes,
+        network,
+        actionId,
+        selectedNodesForExtendingGraph,
+        nodeID,
+        reportId,
+        contextMenuType
+      } = details,
+      {state} = this,
+      nodes = state.nodes,
+      edges = state.edges;
+
+    if (isUndefined(extendedNodes[0])) {
+      let message = 'No additional results found.';
+      displayNotificationMessage(message, actionId);
+      this.setState({
+        isFetching: false
+      });
+      return;
+    }
+
+    if (state.previousNodesEdges.nodes.length > 0) {
+      undoGraphCount++;
+    }
+    else {
+      undoGraphCount = 0;
+    }
+
+    let nodesPrevious = [],
+      edgesPrevious = [];
+
+    nodesPrevious.push(Object.assign([], nodes));
+    edgesPrevious.push(Object.assign([], edges));
+
+    let isGraphExtended = this.isGraphExtended(nodes, edges, extendedNodes);
+
+    selectedNodesForExtendingGraph.push({
+      'nodeID': nodeID,
+      'reportId': reportId,
+      'timeWindow': timeWindow
+    });
+
+    network.setData({nodes: nodes, edges: edges});
+
+    if (!isGraphExtended) {
+      nodesPrevious = [];
+      edgesPrevious = [];
+      undoGraphCount--;
+    }
+
+    this.setState({
+      loadAgain: false,
+      nodesListStatus: 'extended',
+      nodes: Object.assign([], nodes),
+      edges: Object.assign([], edges),
+      selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
+      isFetching: false,
+      loaderText: '',
+      previousNodesEdges: {
+        nodes: (nodesPrevious.length > 0) ? state.previousNodesEdges.nodes.concat(nodesPrevious)
+          : state.previousNodesEdges.nodes,
+        edges: (edgesPrevious.length > 0) ? state.previousNodesEdges.edges.concat(edgesPrevious)
+          : state.previousNodesEdges.edges
+      },
+      showUndoResetButtons: true
+    });
+
+    if (nodes.length <= 10) {
+      network.setOptions(physicsFalse);
+    }
+    else {
+      network.setOptions(physicsTrue);
+    }
+
+    if (contextMenuType === 'node') {
+      let node = network.body.nodes[nodeID];
+      if (nodeObjects[nodeID] !== undefined) {
+        node.setOptions({
+          image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
+        });
+      }
+    }
+
+    if (!isGraphExtended) {
+      let message = 'No additional results found.';
+      displayNotificationMessage(message, actionId);
+      this.setState({
+        isFetching: false
+      });
+      return;
+    }
+
+    document.getElementById('undo').onclick = this.undoOrResetGraph(network, 'undo');
+    document.getElementById('reset').onclick = this.undoOrResetGraph(network, 'reset');
+  }
+
+  isGraphExtended(nodes, edges, extendedNodes) {
+    let isGraphExtended = false,
+      nodesEdges = getNodesEdges(extendedNodes[0]);
+
+    for (let i = 0; i < nodesEdges.nodes.length; i++) {
+      if (isNodeOrEdgeAlreadyExists(nodes, nodesEdges.nodes[i].id) === false) {
+        nodes.push(nodesEdges.nodes[i]);
+        nodeObjects[nodesEdges.nodes[i].id] = nodesEdges.nodes[i];
+        isGraphExtended = true;
+      }
+    }
+
+    for (let i = 0; i < nodesEdges.edges.length; i++) {
+      if (isNodeOrEdgeAlreadyExists(edges, nodesEdges.edges[i].id) === false) {
+        edges.push(nodesEdges.edges[i]);
+        edgeObjects[nodesEdges.edges[i].to] = nodesEdges.edges[i];
+        edgeObjects[nodesEdges.edges[i].id] = nodesEdges.edges[i];
+        isGraphExtended = true;
+      }
+    }
+    return isGraphExtended;
   }
 
   render() {
