@@ -624,6 +624,7 @@ class NetworkGraph extends React.Component {
 
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
     this.createNetworkGraph = this.createNetworkGraph.bind(this);
+    this.getGraphAndActions = this.getGraphAndActions.bind(this);
     this.deselectNode = this.deselectNode.bind(this);
     this.deselectEdge = this.deselectEdge.bind(this);
     this.deselect = this.deselect.bind(this);
