@@ -560,21 +560,27 @@ function displayActionAsSelected(actionsCount, actionId) {
 
 function displayNotificationMessage(message, actionId) {
   let position = getPosition(document.getElementById(actionId));
-  document.getElementById('actionPerformed').innerHTML = message;
-  document.getElementById('actionPerformed').style.top = (position.y - 85) + 'px';
-  ANIMATIONS.fadeIn(document.getElementById('actionPerformed'), {
+  document.getElementById('notification-message').innerHTML = message;
+  document.getElementById('notification-message').style.top = (position.y - 85) + 'px';
+  ANIMATIONS.fadeIn(document.getElementById('notification-message'), {
     duration: 2,
     complete: function() {
-      document.getElementById('actionPerformed').style.display = 'block';
+      document.getElementById('notification-message').style.display = 'block';
 
-      ANIMATIONS.fadeOut(document.getElementById('actionPerformed'), {
+      ANIMATIONS.fadeOut(document.getElementById('notification-message'), {
         duration: 3000,
         complete: function() {
-          document.getElementById('actionPerformed').style.display = 'none';
+          document.getElementById('notification-message').style.display = 'none';
         }
       });
     }
   });
+}
+
+function openFullMalwareReport(fullMalwareReportLink) {
+  if (fullMalwareReportLink !== '') {
+    window.open(baseUrl + fullMalwareReportLink);
+  }
 }
 
 class NetworkGraph extends React.Component {
@@ -603,7 +609,6 @@ class NetworkGraph extends React.Component {
       selectedNode: '',
       selectedNodesForExtendingGraph: [],
       actionsData: [],
-      actions: '',
       loaderText: '',
       loadAgain: true
     };
@@ -618,6 +623,8 @@ class NetworkGraph extends React.Component {
 
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.loadNodeEdgeContextMenu = this.loadNodeEdgeContextMenu.bind(this);
+    this.loadNodeContextMenu = this.loadNodeContextMenu.bind(this);
+    this.loadEdgeContextMenu = this.loadEdgeContextMenu.bind(this);
 
     this.loadGraph = this.loadGraph.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
@@ -651,7 +658,7 @@ class NetworkGraph extends React.Component {
         this.createNetworkGraph(networkData);
       }
       else {
-        document.getElementById('networkGraph').innerHTML = 'No additional results were found.';
+        document.getElementById('network-graph').innerHTML = 'No additional results were found.';
       }
     }
   }
@@ -794,7 +801,7 @@ class NetworkGraph extends React.Component {
       };
       this.setState(listHTML);
 
-      let SelectedIDs = network.getSelection(),
+      let selectedIDs = network.getSelection(),
         selected = '';
 
       if (contextMenuType === 'node' && network.getSelection().nodes.length > 0) {
@@ -804,91 +811,118 @@ class NetworkGraph extends React.Component {
         selected = 'edge';
       }
 
-      this.loadNodeEdgeContextMenu(selected, SelectedIDs, network);
+      this.loadNodeEdgeContextMenu(selected, selectedIDs, network);
     };
   }
 
-  loadNodeEdgeContextMenu(selected, SelectedIDs, network) {
-    const {state} = this;
+  loadNodeEdgeContextMenu(selected, selectedIDs, network) {
     let nodeType = '',
       edgeType = '',
-      nodeID = SelectedIDs.nodes[0],
-      edgeID = SelectedIDs.edges[0],
+      nodeID = selectedIDs.nodes[0],
+      edgeID = selectedIDs.edges[0],
       selectedNodeDetails = '',
       selectedNodesForExtendingGraph = [];
 
     switch (selected) {
       case 'node':
-        if (!isUndefined(nodeID)) {
-          for (let i = 0; i < state.nodes.length; i++) {
-            let node = network.body.nodes[state.nodes[i].id];
-            if (state.nodes[i].id === nodeID) {
-              selectedNodeDetails += state.nodes[i].nodeDetails;
-              nodeType = state.nodes[i].type;
-              node.setOptions({
-                image: getIcon(state.nodes[i].type, state.nodes[i].status, 'SELECTED')
-              });
-            }
-            else {
-              node.setOptions({
-                image: getIcon(state.nodes[i].type, state.nodes[i].status, 'INACTIVE')
-              });
-            }
-          }
-
-          let sourceDetails = {
-            contextMenuType: selected,
-            network: network,
-            itemId: nodeID,
-            itemType: nodeType
-          };
-
-          this.ContextualMenu.getContextMenu(sourceDetails);
-
-          selectedNodesForExtendingGraph.push({
-            nodeID: nodeID,
-            reportId: '',
-            timeWindow: timeWindow
-          });
-
-          let states = {
-            loadAgain: false,
-            selectedNodeDetails: selectedNodeDetails,
-            showContextMenu: true,
-            selectedNode: nodeID,
-            selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
-          };
-          this.setState(states);
-        }
+        let nodeDetails = {
+          network: network,
+          nodeID: nodeID,
+          nodeType: nodeType,
+          selectedNodeDetails: selectedNodeDetails,
+          selected: selected,
+          selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
+        };
+        this.loadNodeContextMenu(nodeDetails);
         break;
       case 'edge':
-        if (!isUndefined(edgeID)) {
-          for (let i = 0; i < state.edges.length; i++) {
-            if (state.edges[i].id === edgeID) {
-              selectedNodeDetails += state.edges[i].edgeDetails;
-              edgeType = state.edges[i].type;
-            }
-          }
-
-          let sourceDetails = {
-            contextMenuType: selected,
-            network: network,
-            itemId: edgeID,
-            itemType: edgeType
-          };
-
-          this.ContextualMenu.getContextMenu(sourceDetails);
-
-          let states = {
-            loadAgain: false,
-            selectedNodeDetails: selectedNodeDetails,
-            showContextMenu: true
-          };
-          this.setState(states);
-        }
+        let edgeDetails = {
+          network: network,
+          edgeID: edgeID,
+          edgeType: edgeType,
+          selectedNodeDetails: selectedNodeDetails,
+          selected: selected
+        };
+        this.loadEdgeContextMenu(edgeDetails);
         break;
       default:
         break;
+    }
+  }
+
+  loadNodeContextMenu(nodeDetails) {
+    let {network, nodeID, nodeType, selectedNodeDetails, selected, selectedNodesForExtendingGraph} = nodeDetails,
+      {state} = this;
+    if (!isUndefined(nodeID)) {
+      for (let i = 0; i < state.nodes.length; i++) {
+        let node = network.body.nodes[state.nodes[i].id];
+        if (state.nodes[i].id === nodeID) {
+          selectedNodeDetails += state.nodes[i].nodeDetails;
+          nodeType = state.nodes[i].type;
+          node.setOptions({
+            image: getIcon(state.nodes[i].type, state.nodes[i].status, 'SELECTED')
+          });
+        }
+        else {
+          node.setOptions({
+            image: getIcon(state.nodes[i].type, state.nodes[i].status, 'INACTIVE')
+          });
+        }
+      }
+
+      let sourceDetails = {
+        contextMenuType: selected,
+        network: network,
+        itemId: nodeID,
+        itemType: nodeType
+      };
+
+      this.ContextualMenu.getContextMenu(sourceDetails);
+
+      selectedNodesForExtendingGraph.push({
+        nodeID: nodeID,
+        reportId: '',
+        timeWindow: timeWindow
+      });
+
+      let states = {
+        loadAgain: false,
+        selectedNodeDetails: selectedNodeDetails,
+        showContextMenu: true,
+        selectedNode: nodeID,
+        selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
+      };
+      this.setState(states);
+    }
+  }
+
+  loadEdgeContextMenu(edgeDetails) {
+    let {network, edgeID, edgeType, selectedNodeDetails, selected} = edgeDetails,
+      {state} = this;
+
+    if (!isUndefined(edgeID)) {
+      for (let i = 0; i < state.edges.length; i++) {
+        if (state.edges[i].id === edgeID) {
+          selectedNodeDetails += state.edges[i].edgeDetails;
+          edgeType = state.edges[i].type;
+        }
+      }
+
+      let sourceDetails = {
+        contextMenuType: selected,
+        network: network,
+        itemId: edgeID,
+        itemType: edgeType
+      };
+
+      this.ContextualMenu.getContextMenu(sourceDetails);
+
+      let states = {
+        loadAgain: false,
+        selectedNodeDetails: selectedNodeDetails,
+        showContextMenu: true
+      };
+      this.setState(states);
     }
   }
 
@@ -922,9 +956,7 @@ class NetworkGraph extends React.Component {
         }
       }
 
-      if (fullMalwareReportLink !== '') {
-        window.open(baseUrl + fullMalwareReportLink);
-      }
+      openFullMalwareReport(fullMalwareReportLink);
 
       let details = {
         network: network,
@@ -1103,65 +1135,6 @@ class NetworkGraph extends React.Component {
     return isGraphExtended;
   }
 
-  render() {
-    const {props, state} = this;
-
-    let assetData;
-    if (props.data && !Array.isArray(props.data)) {
-      assetData = generateDataFromAssetDetails(props.data);
-    }
-
-    let undoResetStyle = {display: state.showUndoResetButtons ? 'block' : 'none'};
-
-    return (
-      <div style={{display: 'flex'}}>
-        {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
-          text={state.loaderText} /> : null}
-        <div ref={(ref) => this.networkGraph = ref} style={{...style.networkGraph,
-          ...{
-            width: '1100px'
-          }}}
-          id='networkGraph'>
-          {
-            assetData
-            ? this.loadNetworkGraph(assetData, state.loadAgain, props.duration)
-            : this.loadNetworkGraph(props.data, state.loadAgain, props.duration)
-          }
-        </div>
-
-        {
-          state.actionsData && state.actionsData.length > 0
-          ? <ContextualMenu
-            ref={(ref) => this.ContextualMenu = ref}
-            showContextMenu={state.showContextMenu}
-            nodeObjects={nodeObjects}
-            edgeObjects={edgeObjects}
-            alertDate={this.state.alertDate}
-            selectedDetails={state.selectedNodeDetails}
-            actions={state.actionsData}
-            loadParent={this.loadGraph}
-            doAction={this.extendGraph} />
-          : null
-        }
-
-        {/*<ContextualMenu
-          ref={(ref) => this.ContextualMenu = ref}
-          showContextMenu={state.showContextMenu}
-          selectedDetails={state.selectedNodeDetails}
-          setActions={this.setActions}
-          actions={state.actionsData} />*/}
-
-        <div id='undoGraph' style={{...style.undoGraph, ...undoResetStyle}}>
-          <img id='undo' src='/img/undo.png' />
-        </div>
-
-        <div id='resetGraph' style={{...style.resetGraph, ...undoResetStyle}}>
-          <img id='reset' src='/img/reset.png' />
-        </div>
-      </div>
-    );
-  }
-
   undoOrResetGraph(network, action) {
     return (event) => {
       let nodesEdges = (action === 'undo') ? this.state.previousNodesEdges
@@ -1225,6 +1198,58 @@ class NetworkGraph extends React.Component {
         }
       }
     };
+  }
+
+  render() {
+    const {props, state} = this;
+
+    let assetData;
+    if (props.data && !Array.isArray(props.data)) {
+      assetData = generateDataFromAssetDetails(props.data);
+    }
+
+    let undoResetStyle = {display: state.showUndoResetButtons ? 'block' : 'none'};
+
+    return (
+      <div style={{display: 'flex'}}>
+        {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
+          text={state.loaderText} /> : null}
+        <div ref={(ref) => this.networkGraph = ref} style={{...style.networkGraph,
+          ...{
+            width: '1100px'
+          }}}
+          id='network-graph'>
+          {
+            assetData
+            ? this.loadNetworkGraph(assetData, state.loadAgain, props.duration)
+            : this.loadNetworkGraph(props.data, state.loadAgain, props.duration)
+          }
+        </div>
+
+        {
+          state.actionsData && state.actionsData.length > 0
+          ? <ContextualMenu
+            ref={(ref) => this.ContextualMenu = ref}
+            showContextMenu={state.showContextMenu}
+            nodeObjects={nodeObjects}
+            edgeObjects={edgeObjects}
+            alertDate={this.state.alertDate}
+            selectedDetails={state.selectedNodeDetails}
+            actions={state.actionsData}
+            loadParent={this.loadGraph}
+            doAction={this.extendGraph} />
+          : null
+        }
+
+        <div id='undoGraph' style={{...style.undoGraph, ...undoResetStyle}}>
+          <img id='undo' src='/img/undo.png' />
+        </div>
+
+        <div id='resetGraph' style={{...style.resetGraph, ...undoResetStyle}}>
+          <img id='reset' src='/img/reset.png' />
+        </div>
+      </div>
+    );
   }
 }
 
