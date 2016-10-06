@@ -88,12 +88,7 @@ function createNodeObject(dataNode) {
     highlight: Colors.turquoise
   };
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-
-  let actions = [];
-  if (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) {
-    actions = dataNode.actions;
-  }
-  nodeObject.actions = actions;
+  nodeObject.actions = (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [];
 
   return nodeObject;
 }
@@ -234,9 +229,9 @@ function handleMetaData(metadata, nodeObject) {
 function handleReputationMetaData(parameters) {
   let {values, nodeStatus, nodeObject, newLine} = parameters,
     {newLine1, newLine2} = newLine,
-    value1 = '',
-    value2 = '',
-    value5 = '';
+    label = '',
+    title = '',
+    nodeDetails = '';
 
   if (!isUndefined(values)) {
     if (!isUndefined(values.reputation)) {
@@ -246,14 +241,14 @@ function handleReputationMetaData(parameters) {
             newLine2: newLine2
           },
           value = {
-            value1: value1,
-            value2: value2,
-            value5: value5
+            label: label,
+            title: title,
+            nodeDetails: nodeDetails
           },
           reputationText = createReputationText(values.reputation, newLine, value);
-        value1 = reputationText.value1;
-        value2 = reputationText.value2;
-        value5 = reputationText.value5;
+        label = reputationText.label;
+        title = reputationText.title;
+        nodeDetails = reputationText.nodeDetails;
       }
     }
 
@@ -262,29 +257,24 @@ function handleReputationMetaData(parameters) {
         newLine2: newLine2
       },
       value = {
-        value1: value1,
-        value2: value2,
-        value5: value5
+        label: label,
+        title: title,
+        nodeDetails: nodeDetails
       },
       reputationText = parseReputationText(values, newLine, value);
-    value1 = reputationText.value1;
-    value2 = reputationText.value2;
-    value5 = reputationText.value5;
+    label = reputationText.label;
+    title = reputationText.title;
+    nodeDetails = reputationText.nodeDetails;
   }
-  if (value1 !== '') {
-    nodeObject.label += newLine1 + value1;
-    nodeObject.title += newLine2 + value2;
-    nodeObject.nodeDetails += newLine2 + value5;
 
-    if (value1.indexOf('Scanning Host') > -1) {
-      nodeStatus = 'scan';
-    }
-    else {
-      nodeStatus = 'malicious';
-    }
-  }
-  else {
-    nodeStatus = 'safe';
+  nodeStatus = 'safe';
+
+  if (label !== '') {
+    nodeObject.label += newLine1 + label;
+    nodeObject.title += newLine2 + title;
+    nodeObject.nodeDetails += newLine2 + nodeDetails;
+
+    nodeStatus = (label.indexOf('Scanning Host') > -1) ? 'scan' : 'malicious';
   }
 
   return {
@@ -294,55 +284,38 @@ function handleReputationMetaData(parameters) {
 }
 
 function createReputationText(values, newLine, value) {
-  let {value1, value2, value5} = value,
-    value3 = '',
-    value4 = '',
+  let {label, title, nodeDetails} = value,
+    value1 = '',
+    value2 = '',
     {newLine1, newLine2} = newLine,
     newLine3 = ',\n  ',
     newLine4 = ',<br />';
   for (let i = 0; i < values.length; i++) {
-    if (value1 === '') {
-      newLine1 = '';
-      newLine2 = '';
-    }
-    else {
-      newLine1 = '\n  ';
-      newLine2 = '<br />';
-    }
-    if (value3 === '') {
-      newLine3 = '';
-      newLine4 = '';
-    }
-    else {
-      newLine3 = ',\n  ';
-      newLine4 = ',<br />';
-    }
-    value3 += newLine3 + values[i];
-    value4 += newLine4 + values[i];
+    newLine1 = (label === '') ? '' : '\n  ';
+    newLine2 = (label === '') ? '' : '<br />';
+    newLine3 = (value1 === '') ? '' : ',\n  ';
+    newLine4 = (value1 === '') ? '' : ',<br />';
+    value1 += newLine3 + values[i];
+    value2 += newLine4 + values[i];
   }
-  value1 += newLine1 + 'Reputation: ' + value3;
-  value2 += newLine2 + '<b>Reputation:</b> ' + value4;
-  value5 += newLine2 + 'Reputation: ' + value4;
+  label += newLine1 + 'Reputation: ' + value1;
+  title += newLine2 + '<b>Reputation:</b> ' + value2;
+  nodeDetails += newLine2 + 'Reputation: ' + value2;
   return {
-    value1: value1,
-    value2: value2,
-    value5: value5
+    label: label,
+    title: title,
+    nodeDetails: nodeDetails
   };
 }
 
 function parseReputationText(values, newLine, value) {
-  let {value1, value2, value5} = value,
+  let {label, title, nodeDetails} = value,
     {newLine1, newLine2} = newLine;
 
   for (let i = 0; i < values.length; i++) {
-    if (value1 === '') {
-      newLine1 = '';
-      newLine2 = '';
-    }
-    else {
-      newLine1 = '\n  ';
-      newLine2 = '<br />';
-    }
+    newLine1 = (label === '') ? '' : '\n  ';
+    newLine2 = (label === '') ? '' : '<br />';
+
     for (let valueType in values[i]) {
       if (valueType === 'reputation') {
         if ((values[i][valueType]).length > 0) {
@@ -351,28 +324,28 @@ function parseReputationText(values, newLine, value) {
               newLine2: newLine2
             },
             value = {
-              value1: value1,
-              value2: value2,
-              value5: value5
+              label: label,
+              title: title,
+              nodeDetails: nodeDetails
             },
             reputationText = createReputationText(values[i][valueType], newLine, value);
-          value1 = reputationText.value1;
-          value2 = reputationText.value2;
-          value5 = reputationText.value5;
+          label = reputationText.label;
+          title = reputationText.title;
+          nodeDetails = reputationText.nodeDetails;
         }
       }
       else {
-        value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
+        title += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
           values[i][valueType] + '<br />';
-        value5 += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
+        nodeDetails += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
           values[i][valueType] + '<br />';
       }
     }
   }
   return {
-    value1: value1,
-    value2: value2,
-    value5: value5
+    label: label,
+    title: title,
+    nodeDetails: nodeDetails
   };
 }
 

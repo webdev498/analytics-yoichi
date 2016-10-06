@@ -105,6 +105,7 @@ class ContextualMenu extends React.Component {
 
     this.collapseExpand = this.collapseExpand.bind(this);
     this.getContextMenu = this.getContextMenu.bind(this);
+    this.displayActions = this.displayActions.bind(this);
     this.generateParameters = this.generateParameters.bind(this);
     this.createHTML = this.createHTML.bind(this);
   }
@@ -135,6 +136,13 @@ class ContextualMenu extends React.Component {
       actions = Object.assign(actions, nodeObjects[itemId].actions);
     }
 
+    table = this.displayActions(actions, sourceDetails, table);
+    props.loadParent(false);
+    updateDOM(table);
+  }
+
+  displayActions(actions, sourceDetails, table) {
+    let {itemId, itemType} = sourceDetails;
     for (let j = 0; j < actions.length; j++) {
       let details = {
           parameters: actions[j].parameters,
@@ -153,8 +161,7 @@ class ContextualMenu extends React.Component {
       };
       table = this.createHTML(details);
     }
-    props.loadParent(false);
-    updateDOM(table);
+    return table;
   }
 
   generateParameters(details) {
@@ -249,7 +256,6 @@ class ContextualMenu extends React.Component {
       td1 = document.createElement('td'),
       reportId = (!isUndefined(actions[index].reportId)) ? actions[index].reportId
       : (!isUndefined(actions[index].name) ? actions[index].name : ''),
-      actionType = (!isUndefined(actions[index].actionType)) ? actions[index].actionType : '',
       actionDetails = {
         reportId: reportId,
         parameters: parametersToApi,
