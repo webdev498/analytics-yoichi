@@ -65,10 +65,10 @@ const style = {
 function checkForUserInputs(parameters) {
   let userInputParameters = [];
   if (!isUndefined(parameters.length)) {
-    for (let k = 0; k < parameters.length; k++) {
+    for (let i = 0; i < parameters.length; i++) {
       let tempObj = {};
-      if (parameters[k].userInput === true) {
-        tempObj.name = parameters[k].name;
+      if (parameters[i].userInput === true) {
+        tempObj.name = parameters[i].name;
         userInputParameters.push(tempObj);
       }
     }
@@ -126,43 +126,59 @@ class ContextualMenu extends React.Component {
     }
 
     for (let j = 0; j < actions.length; j++) {
-      let parameters = this.generateParameters(actions[j].parameters, j, itemId, itemType);
-      table = this.createHTML(actions, table, j, parameters, sourceDetails);
+      let details = {
+          parameters: actions[j].parameters,
+          index: j,
+          itemId: itemId,
+          itemType: itemType
+        },
+        parameters = this.generateParameters(details);
+
+      details = {
+        actions: actions,
+        table: table,
+        index: j,
+        parameters: parameters,
+        sourceDetails: sourceDetails
+      };
+      table = this.createHTML(details);
     }
-    props.setActions(table.innerHTML);
+    props.loadParent(false);
     updateDOM(table);
   }
 
-  generateParameters(parameters, index, itemId, itemType) {
+  generateParameters(details) {
     let {props} = this,
       {nodeObjects, edgeObjects} = props,
+      {parameters, index, itemId, itemType} = details,
       parametersToApi = [],
       userInputParameters = [],
       fullMalwareReportLink = '';
 
     if (!isUndefined(parameters.length)) {
-      for (let k = 0; k < parameters.length; k++) {
-        let tempObj = {};
-        if (parameters[k].userInput === false && parameters[k].name !== 'link') {
-          tempObj.name = parameters[k].name;
-          if (!isUndefined(parameters[k].value)) {
-            tempObj.value = parameters[k].value;
+      for (let i = 0; i < parameters.length; i++) {
+        let tempObj = {},
+          parameter = parameters[i];
+        if (parameter.userInput === false && parameter.name !== 'link') {
+          tempObj.name = parameter.name;
+          if (!isUndefined(parameter.value)) {
+            tempObj.value = parameter.value;
           }
           else {
-            if (parameters[k].name === 'id') {
+            if (parameter.name === 'id') {
               tempObj.value = itemId;
             }
-            else if (parameters[k].name === 'type') {
+            else if (parameter.name === 'type') {
               tempObj.value = itemType;
             }
-            else if (parameters[k].name === 'date') {
+            else if (parameter.name === 'date') {
               tempObj.value = props.alertDate;
             }
-            else if (parameters[k].name === 'ip' && (itemType.toLowerCase() === 'internal_ip' ||
+            else if (parameter.name === 'ip' && (itemType.toLowerCase() === 'internal_ip' ||
               itemType.toLowerCase() === 'external_ip')) {
               tempObj.value = itemId;
             }
-            else if (parameters[k].name === 'source.id') {
+            else if (parameter.name === 'source.id') {
               if (!isUndefined(edgeObjects[itemId])) {
                 tempObj.value = edgeObjects[itemId].from;
               }
@@ -170,7 +186,7 @@ class ContextualMenu extends React.Component {
                 tempObj.value = '';
               }
             }
-            else if (parameters[k].name === 'target.id') {
+            else if (parameter.name === 'target.id') {
               if (!isUndefined(edgeObjects[itemId])) {
                 tempObj.value = edgeObjects[itemId].to;
               }
@@ -178,8 +194,8 @@ class ContextualMenu extends React.Component {
                 tempObj.value = '';
               }
             }
-            else if ((parameters[k].name).indexOf('metadata') > -1) {
-              let paramName = (parameters[k].name).replace('metadata.', ''),
+            else if ((parameter.name).indexOf('metadata') > -1) {
+              let paramName = (parameter.name).replace('metadata.', ''),
                 metadataValue = nodeObjects[itemId].metadata[paramName];
               tempObj.value = (!isUndefined(metadataValue)) ? metadataValue : '';
             }
@@ -191,16 +207,16 @@ class ContextualMenu extends React.Component {
           tempObj.userInput = false;
           parametersToApi.push(tempObj);
         }
-        if (parameters[k].userInput === true) {
-          tempObj.name = parameters[k].name;
-          tempObj.id = parameters[k].name + index;
+        if (parameter.userInput === true) {
+          tempObj.name = parameter.name;
+          tempObj.id = parameter.name + index;
           tempObj.value = '';
           tempObj.userInput = true;
           parametersToApi.push(tempObj);
         }
-        if (parameters[k].name === 'link') {
-          fullMalwareReportLink = !isUndefined(parameters[k].value)
-          ? parameters[k].value : '';
+        if (parameter.name === 'link') {
+          fullMalwareReportLink = !isUndefined(parameter.value)
+          ? parameter.value : '';
         }
       }
 
@@ -213,8 +229,9 @@ class ContextualMenu extends React.Component {
     };
   }
 
-  createHTML(actions, table, index, parameters, sourceDetails) {
+  createHTML(details) {
     let {props} = this,
+      {actions, table, index, parameters, sourceDetails} = details,
       {parametersToApi, userInputParameters, fullMalwareReportLink} = parameters;
 
     let tr = document.createElement('tr'),
