@@ -65,6 +65,12 @@ export const NetworkNodeLabelColor = '#F2F2F4';
 
 export const LineChartPallete = `${CherryColor},${CoralColor},${MustardColor},${SeafoamColor},${TurquoiseColor}`;
 
+export const contextBGColor = '#898E9B';
+
+export const selectedActionBGColor = '#979BA7';
+
+export const notificationMessageBGColor = '#DADADE';
+
 export const Colors = {
   garnet: GarnetColor,
   grape: GrapeColor,
@@ -89,7 +95,10 @@ export const Colors = {
   worldmapLegends: WorldmapLegendsColor,
   axis: AxisColor,
   timelineBar: TimelineBarColors,
-  networkNodeLabel: NetworkNodeLabelColor
+  networkNodeLabel: NetworkNodeLabelColor,
+  contextBG: contextBGColor,
+  selectedActionBG: selectedActionBGColor,
+  notificationMessageBG: notificationMessageBGColor
 };
 
 export const PrimaryPalette = {

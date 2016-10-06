@@ -36,7 +36,7 @@ const style = {
     position: 'absolute',
     top: '350px',
     display: 'flex',
-    backgroundColor: '#898E9B',
+    backgroundColor: Colors.contextBG,
     padding: '20px',
     left: '300px',
     width: '350px'
@@ -542,10 +542,10 @@ function displayActionAsSelected(actionsCount, actionId) {
     let downarrowId = 'downarrow' + j;
 
     if (tempId === actionId) {
-      document.getElementById(tempId).style.backgroundColor = '#979BA7';
+      document.getElementById(tempId).style.backgroundColor = Colors.selectedActionBG;
       if (document.getElementById(downarrowId) !== undefined &&
         document.getElementById(downarrowId) !== null) {
-        document.getElementById(downarrowId).style.backgroundColor = '#979BA7';
+        document.getElementById(downarrowId).style.backgroundColor = Colors.selectedActionBG;
       }
     }
     else {

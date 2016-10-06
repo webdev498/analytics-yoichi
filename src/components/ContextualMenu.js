@@ -8,23 +8,11 @@ import {
 const style = {
     contextualMenu: {
       width: '259px',
-      backgroundColor: '#898E9B',
+      backgroundColor: Colors.contextBG,
       position: 'absolute',
       top: '0px',
       right: '0px',
       bottom: '0px'
-    },
-    searchTextBox: {
-      backgroundColor: '#646A7D',
-      padding: '10px',
-      border: '0px',
-      width: '211px',
-      height: '40px',
-      color: '#B8BBC3',
-      fontFamily: 'Open Sans',
-      marginTop: '28px',
-      marginLeft: '24px',
-      marginRight: '24px'
     },
     selectedDetails: {
       marginTop: '28px',
@@ -32,7 +20,7 @@ const style = {
       marginLeft: '24px',
       marginRight: '24px',
       width: '90%',
-      color: '#24293D',
+      color: Colors.garnet,
       fontSize: '12pt',
       fontFamily: 'Open Sans',
       overflowWrap: 'break-word',
@@ -44,8 +32,8 @@ const style = {
       fontSize: '12pt',
       position: 'absolute',
       padding: '20px',
-      backgroundColor: '#DADADE',
-      color: '#24293D',
+      backgroundColor: Colors.notificationMessageBG,
+      color: Colors.garnet,
       display: 'none'
     }
   },
@@ -265,7 +253,7 @@ class ContextualMenu extends React.Component {
       actionDetails = {
         reportId: reportId,
         parameters: parametersToApi,
-        actionCount: actions.length,
+        actionsCount: actions.length,
         actionId: 'action' + index,
         actionLabel: actions[index].label,
         fullMalwareReportLink: fullMalwareReportLink
@@ -303,13 +291,13 @@ class ContextualMenu extends React.Component {
   collapseExpand(action) {
     return (event) => {
       if (action === 'collapse') {
-        document.getElementById('contextualMenu').style.width = '0px';
+        document.getElementById('contextual-menu').style.width = '0px';
         document.getElementById('right-arrow').style.display = 'none';
         document.getElementById('contextual-menu-contents').style.display = 'none';
         document.getElementById('expand-contextual-menu').style.display = 'block';
       }
       if (action === 'expand') {
-        document.getElementById('contextualMenu').style.width = '259px';
+        document.getElementById('contextual-menu').style.width = '259px';
         document.getElementById('right-arrow').style.display = 'block';
         document.getElementById('contextual-menu-contents').style.display = 'block';
         document.getElementById('expand-contextual-menu').style.display = 'none';
@@ -326,12 +314,6 @@ class ContextualMenu extends React.Component {
       <div>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...style.contextualMenu, ...contextMenuStyle}} id='contextual-menu'>
-          { /*
-            // This is needed when we add search text box in contextual menu. Currently, it is commented.
-            <input type='text' id='search-network-node'
-              style={{...style.searchTextBox}}
-              placeholder='Search' /> */ }
-
           <div style={{
             height: '650px',
             overflowX: 'hidden',
