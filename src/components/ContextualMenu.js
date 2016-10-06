@@ -117,6 +117,8 @@ class ContextualMenu extends React.Component {
 
     this.collapseExpand = this.collapseExpand.bind(this);
     this.getContextMenu = this.getContextMenu.bind(this);
+    this.generateParameters = this.generateParameters.bind(this);
+    this.createHTML = this.createHTML.bind(this);
   }
 
   getContextMenu(sourceDetails) {
@@ -168,9 +170,7 @@ class ContextualMenu extends React.Component {
   }
 
   generateParameters(details) {
-    let {props} = this,
-      {nodeObjects, edgeObjects} = props,
-      {parameters, index, itemId, itemType} = details,
+    let {parameters, index, itemId, itemType} = details,
       parametersToApi = [],
       userInputParameters = [],
       fullMalwareReportLink = '';
@@ -181,48 +181,7 @@ class ContextualMenu extends React.Component {
           parameter = parameters[i];
         if (parameter.userInput === false && parameter.name !== 'link') {
           tempObj.name = parameter.name;
-          if (!isUndefined(parameter.value)) {
-            tempObj.value = parameter.value;
-          }
-          else {
-            if (parameter.name === 'id') {
-              tempObj.value = itemId;
-            }
-            else if (parameter.name === 'type') {
-              tempObj.value = itemType;
-            }
-            else if (parameter.name === 'date') {
-              tempObj.value = props.alertDate;
-            }
-            else if (parameter.name === 'ip' && (itemType.toLowerCase() === 'internal_ip' ||
-              itemType.toLowerCase() === 'external_ip')) {
-              tempObj.value = itemId;
-            }
-            else if (parameter.name === 'source.id') {
-              if (!isUndefined(edgeObjects[itemId])) {
-                tempObj.value = edgeObjects[itemId].from;
-              }
-              else {
-                tempObj.value = '';
-              }
-            }
-            else if (parameter.name === 'target.id') {
-              if (!isUndefined(edgeObjects[itemId])) {
-                tempObj.value = edgeObjects[itemId].to;
-              }
-              else {
-                tempObj.value = '';
-              }
-            }
-            else if ((parameter.name).indexOf('metadata') > -1) {
-              let paramName = (parameter.name).replace('metadata.', ''),
-                metadataValue = nodeObjects[itemId].metadata[paramName];
-              tempObj.value = (!isUndefined(metadataValue)) ? metadataValue : '';
-            }
-            else {
-              tempObj.value = '';
-            }
-          }
+          tempObj.value = this.getParameterValue(parameter.name, parameter.value, itemId, itemType);
 
           tempObj.userInput = false;
           parametersToApi.push(tempObj);
@@ -247,6 +206,50 @@ class ContextualMenu extends React.Component {
       userInputParameters: userInputParameters,
       fullMalwareReportLink: fullMalwareReportLink
     };
+  }
+
+  getParameterValue(name, value, itemId, itemType) {
+    if (isUndefined(value)) {
+      let {props} = this,
+        {nodeObjects, edgeObjects} = props,
+        parameterName = ((name).indexOf('metadata') > -1) ? 'metadata' : name;
+
+      value = '';
+      switch (parameterName) {
+        case 'id':
+          value = itemId;
+          break;
+        case 'type':
+          value = itemType;
+          break;
+        case 'date':
+          value = props.alertDate;
+          break;
+        case 'ip':
+          if (itemType.toLowerCase() === 'internal_ip' || itemType.toLowerCase() === 'external_ip') {
+            value = itemId;
+          }
+          break;
+        case 'source.id':
+          if (!isUndefined(edgeObjects[itemId])) {
+            value = edgeObjects[itemId].from;
+          }
+          break;
+        case 'target.id':
+          if (!isUndefined(edgeObjects[itemId])) {
+            value = edgeObjects[itemId].to;
+          }
+          break;
+        case 'metadata':
+          let paramName = (name).replace('metadata.', ''),
+            metadataValue = nodeObjects[itemId].metadata[paramName];
+          value = (!isUndefined(metadataValue)) ? metadataValue : '';
+          break;
+        default:
+          break;
+      }
+    }
+    return value;
   }
 
   createHTML(details) {
