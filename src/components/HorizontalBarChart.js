@@ -44,7 +44,6 @@ export function generateDataArray(parameters) {
     secureConnectionsValues = [],
     maliciousConnectionsValues = [];
 
-  console.log(parameters);
   if (columnIndexArray.length !== 0) {
     for (let d = 0, rowsLen = rowsArray.length; d < rowsLen; d++) {
       let labelExists = 0,
