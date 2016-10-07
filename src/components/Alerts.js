@@ -42,12 +42,14 @@ class Alerts extends React.Component {
       }
 
       alertStyle = {
-        borderLeft: '5px solid ' + borderColor
+        borderLeft: '5px solid ' + borderColor,
+        paddingLeft: '10px'
       };
     }
     else {
       alertStyle = {
-        borderLeft: '1px solid #cbcbd1'
+        borderLeft: '1px solid #cbcbd1',
+        paddingLeft: '14px'
       };
     }
 
