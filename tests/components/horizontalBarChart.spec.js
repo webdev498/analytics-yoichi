@@ -72,8 +72,17 @@ describe('HorizontalBarChart Component: ', function() {
         'secureConnectionsValues': [],
         'maliciousConnectionsValues': []
       };
+    let parameters = {
+      columnIndexArray: columnIndexArray,
+      rowsArray: rowsArray,
+      displayTopFive: displayTopFive,
+      orgDataset: orgDataset,
+      connection: connection,
+      numberSuffix: '',
+      singleLineCharacters: '15'
+    };
     expect(
-      generateDataArray(columnIndexArray, rowsArray, displayTopFive, orgDataset, connection)
+      generateDataArray(parameters)
     ).to.deep.equal(dataArray);
   });
 
