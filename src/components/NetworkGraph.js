@@ -8,6 +8,7 @@ import {
   isNull
 } from 'utils/utils';
 import Cookies from 'cookies-js';
+import vis from 'vis';
 import {baseUrl, networkGraphDefaultOptions} from 'config';
 // Loader will get removed after started using fetchApiData function from props object
 import Loader from '../components/Loader';
@@ -20,14 +21,14 @@ const style = {
   },
   undoGraph: {
     top: '560px',
-    left: '35px',
+    left: '33px',
     position: 'absolute',
     cursor: 'pointer',
     display: 'none'
   },
   resetGraph: {
     top: '530px',
-    left: '35px',
+    left: '33px',
     position: 'absolute',
     cursor: 'pointer',
     display: 'none'
