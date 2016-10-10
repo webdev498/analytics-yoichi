@@ -44,9 +44,7 @@ const style = {
   }
 };
 
-let nodeObjects = {},
-  edgeObjects = {},
-  timeWindow = '1h',
+let timeWindow = '1h',
   undoGraphCount = 0,
   physicsTrue = {
     physics: {
@@ -129,43 +127,6 @@ function createEdgeObject(dataEdge) {
     edgeObject.dashes = true;
   }
   return edgeObject;
-}
-
-function getNodesEdges(data) {
-  let nodes = [],
-    edges = [],
-    dataNodes = data.nodes,
-    dataEdges = data.edges;
-
-  if (!isUndefined(dataNodes)) {
-    for (let i = 0; i < dataNodes.length; i++) {
-      let dataNode = dataNodes[i];
-
-      if (isUndefined(nodeObjects[dataNode.id])) {
-        let nodeObject = createNodeObject(dataNode);
-        nodes.push(nodeObject);
-        nodeObjects[dataNode.id] = nodeObject;
-      }
-    }
-  }
-
-  if (!isUndefined(dataEdges)) {
-    for (let i = 0; i < dataEdges.length; i++) {
-      let dataEdge = dataEdges[i];
-
-      if (isUndefined(edgeObjects[dataEdge.id])) {
-        let edgeObject = createEdgeObject(dataEdge);
-        edges.push(edgeObject);
-        edgeObjects[dataEdge.target] = edgeObject;
-        edgeObjects[edgeObject.id] = edgeObject;
-      }
-    }
-  }
-
-  return {
-    'nodes': nodes,
-    'edges': edges
-  };
 }
 
 function handleMetaData(metadata, nodeObject) {
@@ -362,34 +323,6 @@ function getIcon(nodeType, nodeStatus, nodeAction) {
   }
 }
 
-function updateNodeAndEdgeObjects(updatedNodes, updatedEdges) {
-  let tempNodeObjects = {},
-    tempEdgeObjects = {};
-
-  for (let key in nodeObjects) {
-    if (!isUndefined(updatedNodes.length)) {
-      for (let i = 0; i < updatedNodes.length; i++) {
-        if (updatedNodes[i].id === key) {
-          tempNodeObjects[key] = nodeObjects[key];
-          tempEdgeObjects[key] = edgeObjects[key];// Remove other targets from edgeObjects
-        }
-      }
-    }
-  }
-  nodeObjects = Object.assign({}, tempNodeObjects);
-
-  for (let key in edgeObjects) {
-    if (!isUndefined(updatedEdges.length)) {
-      for (let i = 0; i < updatedEdges.length; i++) {
-        if (updatedEdges[i].id === key) {
-          tempEdgeObjects[key] = edgeObjects[key];
-        }
-      }
-    }
-  }
-  edgeObjects = Object.assign({}, tempEdgeObjects);
-}
-
 function generateDataFromAssetDetails(data) {
   const assetData = [];
   const nodes = [];
@@ -568,6 +501,9 @@ class NetworkGraph extends React.Component {
     const {duration, params} = this.props,
       alertDate = params.date;
 
+    this.nodeObjects = {};
+    this.edgeObjects = {};
+
     this.state = {
       nodes: [],
       edges: [],
@@ -587,6 +523,7 @@ class NetworkGraph extends React.Component {
       loadAgain: true
     };
 
+    this.getNodesEdges = this.getNodesEdges.bind(this);
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
     this.createNetworkGraph = this.createNetworkGraph.bind(this);
     this.getGraphAndActions = this.getGraphAndActions.bind(this);
@@ -606,6 +543,72 @@ class NetworkGraph extends React.Component {
     this.updateGraph = this.updateGraph.bind(this);
     this.undoOrResetGraph = this.undoOrResetGraph.bind(this);
     this.isGraphExtended = this.isGraphExtended.bind(this);
+    this.updateNodeAndEdgeObjects = this.updateNodeAndEdgeObjects.bind(this);
+  }
+
+  getNodesEdges(data) {
+    let nodes = [],
+      edges = [],
+      dataNodes = data.nodes,
+      dataEdges = data.edges;
+
+    if (!isUndefined(dataNodes)) {
+      for (let i = 0; i < dataNodes.length; i++) {
+        let dataNode = dataNodes[i];
+
+        if (isUndefined(this.nodeObjects[dataNode.id])) {
+          let nodeObject = createNodeObject(dataNode);
+          nodes.push(nodeObject);
+          this.nodeObjects[dataNode.id] = nodeObject;
+        }
+      }
+    }
+
+    if (!isUndefined(dataEdges)) {
+      for (let i = 0; i < dataEdges.length; i++) {
+        let dataEdge = dataEdges[i];
+
+        if (isUndefined(this.edgeObjects[dataEdge.id])) {
+          let edgeObject = createEdgeObject(dataEdge);
+          edges.push(edgeObject);
+          this.edgeObjects[dataEdge.target] = edgeObject;
+          this.edgeObjects[edgeObject.id] = edgeObject;
+        }
+      }
+    }
+
+    return {
+      'nodes': nodes,
+      'edges': edges
+    };
+  }
+
+  updateNodeAndEdgeObjects(updatedNodes, updatedEdges) {
+    let tempNodeObjects = {},
+      tempEdgeObjects = {};
+
+    for (let key in this.nodeObjects) {
+      if (!isUndefined(updatedNodes.length)) {
+        for (let i = 0; i < updatedNodes.length; i++) {
+          if (updatedNodes[i].id === key) {
+            tempNodeObjects[key] = this.nodeObjects[key];
+            tempEdgeObjects[key] = this.edgeObjects[key];// Remove other targets from edgeObjects
+          }
+        }
+      }
+    }
+    this.nodeObjects = Object.assign({}, tempNodeObjects);
+
+    for (let key in this.edgeObjects) {
+      if (!isUndefined(updatedEdges.length)) {
+        for (let i = 0; i < updatedEdges.length; i++) {
+          if (updatedEdges[i].id === key) {
+            tempEdgeObjects[key] = this.edgeObjects[key];
+          }
+        }
+      }
+    }
+    this.edgeObjects = Object.assign({}, tempEdgeObjects);
   }
 
   loadNetworkGraph(data, loadAgain, duration) {
@@ -622,8 +625,8 @@ class NetworkGraph extends React.Component {
       return;
     }
 
-    nodeObjects = {};
-    edgeObjects = {};
+    // nodeObjects = {};
+    // edgeObjects = {};
 
     let networkData = this.getGraphAndActions(data);
 
@@ -643,7 +646,7 @@ class NetworkGraph extends React.Component {
       edges: []
     };
     if (this.state.nodesListStatus === 'default') {
-      let nodesEdges = getNodesEdges(data[0]);
+      let nodesEdges = this.getNodesEdges(data[0]);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       this.state.originalNodesEdges = {
@@ -699,16 +702,16 @@ class NetworkGraph extends React.Component {
   setHoverBlurNodeImage(event, nodeID, node) {
     let selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
 
-    if (!isUndefined(nodeObjects[nodeID])) {
+    if (!isUndefined(this.nodeObjects[nodeID])) {
       node.setOptions({
-        image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status,
+        image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status,
           event === 'hover' ? 'HOVER' : 'INACTIVE')
       });
 
       for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
         if (selectedNodesForExtendingGraph[i].nodeID === nodeID) {
           node.setOptions({
-            image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
+            image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status, 'SELECTED')
           });
         }
       }
@@ -719,8 +722,8 @@ class NetworkGraph extends React.Component {
   deselectNode(network) {
     return (event) => {
       let i = 0;
-      for (let nodeObject in nodeObjects) {
-        let deselectedNode = nodeObjects[nodeObject],
+      for (let nodeObject in this.nodeObjects) {
+        let deselectedNode = this.nodeObjects[nodeObject],
           node = network.body.nodes[deselectedNode.id];
 
         if (!isUndefined(deselectedNode)) {
@@ -740,8 +743,8 @@ class NetworkGraph extends React.Component {
   deselectEdge() {
     return (event) => {
       let i = 0;
-      for (let edgeObject in edgeObjects) {
-        let deselectedEdge = edgeObjects[edgeObject];
+      for (let edgeObject in this.edgeObjects) {
+        let deselectedEdge = this.edgeObjects[edgeObject];
 
         if (!isUndefined(deselectedEdge)) {
           if (i === 0) {
@@ -1066,9 +1069,9 @@ class NetworkGraph extends React.Component {
 
     if (contextMenuType === 'node') {
       let node = network.body.nodes[nodeID];
-      if (nodeObjects[nodeID] !== undefined) {
+      if (this.nodeObjects[nodeID] !== undefined) {
         node.setOptions({
-          image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
+          image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status, 'SELECTED')
         });
       }
     }
@@ -1088,12 +1091,12 @@ class NetworkGraph extends React.Component {
 
   isGraphExtended(nodes, edges, extendedNodes) {
     let isGraphExtended = false,
-      nodesEdges = getNodesEdges(extendedNodes[0]);
+      nodesEdges = this.getNodesEdges(extendedNodes[0]);
 
     for (let i = 0; i < nodesEdges.nodes.length; i++) {
       if (isNodeOrEdgeAlreadyExists(nodes, nodesEdges.nodes[i].id) === false) {
         nodes.push(nodesEdges.nodes[i]);
-        nodeObjects[nodesEdges.nodes[i].id] = nodesEdges.nodes[i];
+        this.nodeObjects[nodesEdges.nodes[i].id] = nodesEdges.nodes[i];
         isGraphExtended = true;
       }
     }
@@ -1101,8 +1104,8 @@ class NetworkGraph extends React.Component {
     for (let i = 0; i < nodesEdges.edges.length; i++) {
       if (isNodeOrEdgeAlreadyExists(edges, nodesEdges.edges[i].id) === false) {
         edges.push(nodesEdges.edges[i]);
-        edgeObjects[nodesEdges.edges[i].to] = nodesEdges.edges[i];
-        edgeObjects[nodesEdges.edges[i].id] = nodesEdges.edges[i];
+        this.edgeObjects[nodesEdges.edges[i].to] = nodesEdges.edges[i];
+        this.edgeObjects[nodesEdges.edges[i].id] = nodesEdges.edges[i];
         isGraphExtended = true;
       }
     }
@@ -1131,7 +1134,7 @@ class NetworkGraph extends React.Component {
             network.setOptions(physicsTrue);
           }
 
-          updateNodeAndEdgeObjects(updatedNodes, updatedEdges);
+          this.updateNodeAndEdgeObjects(updatedNodes, updatedEdges);
 
           let previousNodesEdges = emptyNodesEdges;
 
@@ -1205,8 +1208,8 @@ class NetworkGraph extends React.Component {
           ? <ContextualMenu
             ref={(ref) => this.ContextualMenu = ref}
             showContextMenu={state.showContextMenu}
-            nodeObjects={nodeObjects}
-            edgeObjects={edgeObjects}
+            nodeObjects={this.nodeObjects}
+            edgeObjects={this.edgeObjects}
             alertDate={this.state.alertDate}
             selectedDetails={state.selectedNodeDetails}
             actions={state.actionsData}
