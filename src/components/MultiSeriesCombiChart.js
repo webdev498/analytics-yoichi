@@ -311,8 +311,8 @@ export function generateChartDataSource(rawData, props) {
       'chartBottomMargin': '0',
       'baseFont': 'Open Sans, sans-serif',
       'baseFontColor': Colors.pebble,
-      'paletteColors': Colors.defaultGraphPaletteColors,
-      'xAxisLineColor': Colors.axisColor
+      'paletteColors': Colors.defaultGraphPalette,
+      'xAxisLineColor': Colors.axis
     }, chartOptions),
     'annotations': {'groups': [{'items': annotationItems}]}
   };

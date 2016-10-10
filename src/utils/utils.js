@@ -182,6 +182,15 @@ export function isUndefined(value) {
   }
 }
 
+export function isNull(value) {
+  if (value === null) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
 function addZero(x, n) {
   while (x.toString().length < n) {
     x = '0' + x;
@@ -593,4 +602,12 @@ export function whatIsIt(object) {
   else {
     return 'unknown';
   }
+}
+
+export function getPosition(el) {
+  // yay readability
+  for (var lx = 0, ly = 0;
+    el != null;
+    lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
+  return {x: lx, y: ly};
 }

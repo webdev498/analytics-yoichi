@@ -19,13 +19,13 @@ class DurationWidget extends React.Component {
     let timeValue = this.convertTime(),
       style = {
         'hour': {
-          backgroundColor: Colors.durationWidgetColor.hour
+          backgroundColor: Colors.durationWidget.hour
         },
         'min': {
-          backgroundColor: Colors.durationWidgetColor.min
+          backgroundColor: Colors.durationWidget.min
         },
         'sec': {
-          backgroundColor: Colors.durationWidgetColor.sec
+          backgroundColor: Colors.durationWidget.sec
         }
       };
     return (

@@ -131,7 +131,7 @@ class TimelineBar extends React.Component {
                 height: timelineBarHeight + 'px',
                 width: timelineBarWidth + 'px',
                 fontSize: '11px',
-                backgroundColor: Colors.timelineBarColors[1], // getTimelineColor((event[0].type).toLowerCase()),
+                backgroundColor: Colors.timelineBar[1], // getTimelineColor((event[0].type).toLowerCase()),
                 // marginTop: (index === 0) ? 0 : ((prevTimestamp - currentTimestamp) === prevMarginTop
                 //   ? 2 : ((prevTimestamp - currentTimestamp) / 10000))
                 marginTop: (index === 0) ? 0 : 7

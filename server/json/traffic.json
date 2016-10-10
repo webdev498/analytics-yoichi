@@ -184,7 +184,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+              "reportId": "taf_stats_histogram"
             },
             "queryParams": {
               "window": ""
@@ -249,7 +249,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+              "reportId": "taf_stats_histogram"
             },
             "queryParams": {
               "window": ""
@@ -314,7 +314,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+              "reportId": "taf_stats_histogram"
             },
             "queryParams": {
               "window": ""
@@ -363,7 +363,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+              "reportId": "taf_connections_by_protocol"
             },
             "queryParams": {
               "window": ""
