@@ -64,7 +64,12 @@
         },
         "id": "2",
         "type": "MetricsCard",
-        "title": "High Priority Malware"
+        "title": "High Priority Malware",
+        "clickData": {
+          "tableId": "RecentAlerts",
+          "filterText": "malware",
+          "page": "/alerts"
+        }
       },
       {
         "meta": {
