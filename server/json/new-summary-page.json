@@ -213,7 +213,7 @@
             {
               "reportId": "taf_top_entity_with_alerts",
               "columns": [
-                "destination.ip"
+                "destination.name"
               ],
               "axis": "x"
             },

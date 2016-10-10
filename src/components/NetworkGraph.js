@@ -4,7 +4,8 @@ import $ from 'jquery';
 import {
   firstCharCapitalize,
   getCountryNameByCountryCode,
-  whatIsIt
+  whatIsIt,
+  isUndefined
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import {baseUrl, networkGraphDefaultOptions} from 'config';
@@ -1342,25 +1343,31 @@ class NetworkGraph extends React.Component {
             });
           }
 
+          let tempNodeObjects = {},
+            tempEdgeObjects = {};
+
           for (let key in nodeObjects) {
-            if (updatedNodes.length !== undefined) {
+            if (!isUndefined(updatedNodes.length)) {
               for (let i = 0; i < updatedNodes.length; i++) {
-                if (updatedNodes[i].id !== key) {
-                  delete nodeObjects[key];
+                if (updatedNodes[i].id === key) {
+                  tempNodeObjects[key] = nodeObjects[key];
+                  tempEdgeObjects[key] = edgeObjects[key];// Remove other targets from edgeObjects
                 }
               }
             }
           }
+          nodeObjects = Object.assign({}, tempNodeObjects);
 
           for (let key in edgeObjects) {
-            if (updatedEdges.length !== undefined) {
+            if (!isUndefined(updatedEdges.length)) {
               for (let i = 0; i < updatedEdges.length; i++) {
-                if (updatedEdges[i].id !== key) {
-                  delete edgeObjects[key];
+                if (updatedEdges[i].id === key) {
+                  tempEdgeObjects[key] = edgeObjects[key];
                 }
               }
             }
           }
+          edgeObjects = Object.assign({}, tempEdgeObjects);
 
           let tempNodesArray = Object.assign([], previousNodesEdges.nodes),
             tempEdgesArray = Object.assign([], previousNodesEdges.edges);
@@ -1434,25 +1441,31 @@ class NetworkGraph extends React.Component {
           });
         }
 
+        let tempNodeObjects = {},
+          tempEdgeObjects = {};
+
         for (let key in nodeObjects) {
-          if (updatedNodes.length !== undefined) {
+          if (!isUndefined(updatedNodes.length)) {
             for (let i = 0; i < updatedNodes.length; i++) {
-              if (updatedNodes[i].id !== key) {
-                delete nodeObjects[key];
+              if (updatedNodes[i].id === key) {
+                tempNodeObjects[key] = nodeObjects[key];
+                tempEdgeObjects[key] = edgeObjects[key];// Remove other targets from edgeObjects
               }
             }
           }
         }
+        nodeObjects = Object.assign({}, tempNodeObjects);
 
         for (let key in edgeObjects) {
-          if (updatedEdges.length !== undefined) {
+          if (!isUndefined(updatedEdges.length)) {
             for (let i = 0; i < updatedEdges.length; i++) {
-              if (updatedEdges[i].id !== key) {
-                delete edgeObjects[key];
+              if (updatedEdges[i].id === key) {
+                tempEdgeObjects[key] = edgeObjects[key];
               }
             }
           }
         }
+        edgeObjects = Object.assign({}, tempEdgeObjects);
 
         this.setState({
           'loadAgain': false,

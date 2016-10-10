@@ -40,6 +40,10 @@
             <directory>${basedir}/server</directory>
             <outputDirectory>server</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>${basedir}/node_modules</directory>
+            <outputDirectory>node_modules</outputDirectory>
+        </fileSet>
     </fileSets>
     <files>
         <file>
