@@ -31,28 +31,60 @@ function getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftR
 
 class PaginationWidget extends React.Component {
   static propTypes = {
-    Size: PropTypes.number,
+    size: PropTypes.number,
     currentPage: PropTypes.number,
     maxNumbersOnLeftRight: PropTypes.number,
-    onPageChanged: PropTypes.func,
-    onPrevPageChanged: PropTypes.func,
-    onNextPageChanged: PropTypes.func
+    fetchData: PropTypes.func,
+    type: PropTypes.string
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.onPageChanged = this.onPageChanged.bind(this);
+    this.onPrevPageChanged = this.onPrevPageChanged.bind(this);
+    this.onNextPageChanged = this.onNextPageChanged.bind(this);
+  }
+
+  onPageChanged(pageNumber) {
+    const {props} = this;
+    return (event) => {
+      props.fetchData(pageNumber, props.type);
+    };
+  }
+
+  onPrevPageChanged(pageNumber) {
+    const {props} = this;
+    return (event) => {
+      if ((parseInt(pageNumber) - 1) > 0) {
+        props.fetchData(pageNumber - 1, props.type);
+      }
+    };
+  }
+
+  onNextPageChanged(pageNumber, pageSize) {
+    const {props} = this;
+    return (event) => {
+      if ((parseInt(pageNumber) + 1) <= pageSize) {
+        props.fetchData(pageNumber + 1, props.type);
+      }
+    };
   }
 
   render() {
     let li = [],
-      pageCount = this.props.Size,
+      pageCount = this.props.size,
       currentPage = this.props.currentPage,
       maxNumbersOnLeftRight = this.props.maxNumbersOnLeftRight,
       limits = getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftRight),
       start = limits.start,
       end = limits.end;
 
-    if (pageCount > 0 && start > 0 && end > 0) {
+    if (pageCount > 1 && start > 0 && end > 0) {
       for (let i = start; i <= end; i++) {
         if (i === start) {
           li.push(<li key='Prev'>
-            <button onClick={this.props.onPrevPageChanged.bind(null, this.props.currentPage)}>Prev</button>
+            <button onClick={this.onPrevPageChanged(this.props.currentPage)}>Prev</button>
           </li>);
         }
 
@@ -60,12 +92,12 @@ class PaginationWidget extends React.Component {
           li.push(<li key={i} className='active'><button>{i}</button></li>);
         }
         else {
-          li.push(<li key={i} ><button onClick={this.props.onPageChanged.bind(null, i)}>{i}</button></li>);
+          li.push(<li key={i} ><button onClick={this.onPageChanged(i)}>{i}</button></li>);
         }
 
         if (i === end) {
           li.push(<li key='Next'>
-            <button onClick={this.props.onNextPageChanged.bind(null, this.props.currentPage, pageCount)}>Next</button>
+            <button onClick={this.onNextPageChanged(this.props.currentPage, pageCount)}>Next</button>
           </li>);
         }
       }

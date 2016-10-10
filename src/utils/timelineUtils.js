@@ -21,7 +21,7 @@ export function fetchData(parameters, type, options) {
   let apiUrl = '';
 
   if (type === 'traffic') {
-    apiUrl = baseUrl + '/api/alert/' + parameters.timelineType + '?window=' + parameters.duration +
+    apiUrl = baseUrl + '/api/alert/' + parameters.type + '?window=' + parameters.duration +
       '&date=' + parameters.alertDate + '&filter=' + encodeURI(parameters.filter) + '&count=' + parameters.pageSize +
       '&from=' + parameters.pageNumber;
   }

@@ -6,10 +6,10 @@ import {
 } from 'utils/timelineUtils';
 
 let alertStyle = {
-  border: '1px solid #cbcbd1'
+  border: '1px solid ' + Colors.smoke
 };
 
-class TrafficEvents extends React.Component {
+class TimelineCard extends React.Component {
   constructor(props) {
     super(props);
     this.handleRankAlertClick = this.handleRankAlertClick.bind(this);
@@ -28,30 +28,35 @@ class TrafficEvents extends React.Component {
 
   render() {
     const {props} = this;
-    if (props.data.type.toLowerCase() === 'alert' || props.data.type.toLowerCase() === 'rank_alert') {
-      let borderColor = Colors.cherry,
-        score = props.data.data[props.data.type].score;
-      if (score >= 65) {
-        borderColor = Colors.cherry;
-      }
-      if (score < 65 && score >= 35) {
-        borderColor = Colors.coral;
-      }
-      if (score < 35) {
-        borderColor = Colors.mustard;
-      }
+    let cardType = (props.data.type.toLowerCase() === 'alert' || props.data.type.toLowerCase() === 'rank_alert')
+      ? 'alert' : 'other';
+    switch (cardType) {
+      case 'alert':
+        let borderColor = Colors.cherry,
+          score = props.data.data[props.data.type].score;
+        if (score >= 65) {
+          borderColor = Colors.cherry;
+        }
+        if (score < 65 && score >= 35) {
+          borderColor = Colors.coral;
+        }
+        if (score < 35) {
+          borderColor = Colors.mustard;
+        }
 
-      alertStyle = {
-        borderLeft: '5px solid ' + borderColor,
-        paddingLeft: '10px'
-      };
+        alertStyle = {
+          borderLeft: '5px solid ' + borderColor,
+          paddingLeft: '10px'
+        };
+        break;
+      default:
+        alertStyle = {
+          borderLeft: '1px solid ' + Colors.smoke,
+          paddingLeft: '14px'
+        };
+        break;
     }
-    else {
-      alertStyle = {
-        borderLeft: '1px solid #cbcbd1',
-        paddingLeft: '14px'
-      };
-    }
+
     return (
       <Card style={Object.assign({
         boxShadow: '1px 1px 0 #cccccc',
@@ -59,7 +64,7 @@ class TrafficEvents extends React.Component {
         height: 'auto',
         width: '450px',
         backgroundColor: Colors.white,
-        border: '1px solid #cbcbd1',
+        border: '1px solid ' + Colors.smoke,
         fontSize: '14px',
         cursor: 'pointer',
         overflowWrap: 'break-word',
@@ -70,4 +75,4 @@ class TrafficEvents extends React.Component {
   }
 }
 
-export default TrafficEvents;
+export default TimelineCard;
