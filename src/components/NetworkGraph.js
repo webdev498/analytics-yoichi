@@ -1214,7 +1214,6 @@ class NetworkGraph extends React.Component {
             doAction={this.extendGraph} />
           : null
         }
-        edgeObjects = Object.assign({}, tempEdgeObjects);
 
         <div id='undoGraph' style={{...style.undoGraph, ...undoResetStyle}}>
           <img id='undo' src='/img/undo.png' />

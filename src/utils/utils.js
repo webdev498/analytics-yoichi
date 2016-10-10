@@ -224,13 +224,14 @@ export function formatDate(date) {
 // function to format Date In Local TimeZone
 export function formatDateInLocalTimeZone(value) {
   let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
-    localDateTime = moment.utc(value1).toDate(),
-    localDate = moment(localDateTime).format('DD MMM YYYY'),
-    localTime = moment(localDateTime).format('HH:mm:ss.SSS');
-  return {
-    date: localDate,
-    time: localTime
-  };
+    dateTime = {
+      date: '',
+      time: ''
+    },
+    localDateTime = moment.utc(value1).toDate();
+  dateTime.date = moment(localDateTime).format('DD MMM YYYY');
+  dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
+  return dateTime;
 }
 
 // Function to get from and to dates for the specific time window
