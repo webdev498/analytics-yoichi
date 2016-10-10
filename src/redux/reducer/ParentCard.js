@@ -81,14 +81,14 @@ export default function APIDataReducer(state = initialState, action) {
       return state.deleteIn(['components', id]);
     }
     case PARENT_CARD_EVENT: {
-      const {id, callback} = action;
+      const {id, eventData} = action;
 
       if (state.hasIn(['components', id])) {
         return state.updateIn(['components', id], value => {
-          return value.set('action', callback);
+          const newValue = value.set('eventData', eventData);
+          return newValue;
         });
       }
-
       return state;
     }
     default: {
