@@ -60,67 +60,65 @@ let timeWindow = '1h',
   };
 
 function createNodeObject(dataNode) {
-  let nodeObject = {};
-
-  nodeObject.id = dataNode.id;
-  nodeObject.type = dataNode.type;
-  nodeObject.label = '  ' + dataNode.id;
-  nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-  nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-  nodeObject.actions = (!isUndefined(dataNode.actions)) ? dataNode.actions : [];
+  let nodeObject = {
+    id: dataNode.id,
+    type: dataNode.type,
+    label: '  ' + dataNode.id,
+    title: '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id,
+    nodeDetails: firstCharCapitalize(dataNode.type) + ': ' + dataNode.id,
+    actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
+    borderWidth: '0',
+    font: {
+      face: 'Open Sans',
+      color: Colors.pebble,
+      size: '11',
+      align: 'left'
+    },
+    shape: 'image',
+    color: {
+      color: Colors.networkNodeLabel,
+      highlight: Colors.turquoise
+    }
+  };
 
   let metaDataObject = handleMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
-
   nodeObject = metaDataObject.nodeObject;
-
-  nodeObject.borderWidth = '0';
-  nodeObject.font = {
-    face: 'Open Sans',
-    color: Colors.pebble,
-    size: '11',
-    align: 'left'
-  };
-  nodeObject.shape = 'image';
-  nodeObject.color = {
-    color: Colors.networkNodeLabel,
-    highlight: Colors.turquoise
-  };
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-  nodeObject.actions = (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [];
 
   return nodeObject;
 }
 
 function createEdgeObject(dataEdge) {
-  let edgeObject = {};
-  edgeObject.id = dataEdge.id;
-  edgeObject.type = dataEdge.type;
-  edgeObject.from = dataEdge.source;
-  edgeObject.to = dataEdge.target;
-  edgeObject.arrows = {
-    to: {
-      scaleFactor: 0.5
+  let edgeObject = {
+    id: dataEdge.id,
+    type: dataEdge.type,
+    from: dataEdge.source,
+    to: dataEdge.target,
+    arrows: {
+      to: {
+        scaleFactor: 0.5
+      },
+      arrowStrikethrough: false
     },
-    arrowStrikethrough: false
-  };
-  edgeObject.label = dataEdge.label + '\n\n\n';
-  edgeObject.edgeDetails = 'Edge Type: ' + dataEdge.label;
-  edgeObject.edgeDetails += '<br/>Source: ' + dataEdge.source;
-  edgeObject.edgeDetails += '<br/>Target: ' + dataEdge.target;
-  edgeObject.font = {
-    face: 'Open Sans',
-    color: Colors.pebble,
-    size: '11',
-    align: 'left'
-  };
-  edgeObject.length = 1000;
-  edgeObject.smooth = {
-    type: 'discrete'
-  };
-  edgeObject.color = {
-    color: Colors.pebble,
-    highlight: Colors.turquoise
+    label: dataEdge.label + '\n\n\n',
+    font: {
+      face: 'Open Sans',
+      color: Colors.pebble,
+      size: '11',
+      align: 'left'
+    },
+    length: 1000,
+    smooth: {
+      type: 'discrete'
+    },
+    color: {
+      color: Colors.pebble,
+      highlight: Colors.turquoise
+    },
+    edgeDetails: 'Edge Type: ' + dataEdge.label +
+      '<br/>Source: ' + dataEdge.source +
+      '<br/>Target: ' + dataEdge.target
   };
 
   if (dataEdge.type === 'ioc') {
