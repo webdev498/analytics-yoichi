@@ -21,7 +21,7 @@ const style = {
       marginRight: '24px',
       width: '90%',
       color: Colors.garnet,
-      fontSize: '12pt',
+      fontSize: '16px',
       fontFamily: 'Open Sans',
       overflowWrap: 'break-word',
       paddingRight: '20px'
@@ -29,7 +29,7 @@ const style = {
     notificationMessage: {
       top: 0,
       right: '259px',
-      fontSize: '12pt',
+      fontSize: '16px',
       position: 'absolute',
       padding: '20px',
       backgroundColor: Colors.notificationMessageBG,
