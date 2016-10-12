@@ -20,7 +20,7 @@ class TimelineCard extends React.Component {
 
     return () => {
       if (props.data.type.toLowerCase() === 'rank_alert') {
-        const url = `/alert-new/${props.data.id}/${props.data.date}`;
+        const url = `/alert/${props.data.id}/${props.data.date}`;
         props.updateRoute(url);
       }
     };

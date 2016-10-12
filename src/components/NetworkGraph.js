@@ -250,14 +250,22 @@ function createReputationText(values, newLine, value) {
     {newLine1, newLine2} = newLine,
     newLine3 = ',\n  ',
     newLine4 = ',<br />';
-  for (let i = 0; i < values.length; i++) {
+  values.forEach((key) => {
     newLine1 = (label === '') ? '' : '\n  ';
     newLine2 = (label === '') ? '' : '<br />';
     newLine3 = (value1 === '') ? '' : ',\n  ';
     newLine4 = (value1 === '') ? '' : ',<br />';
-    value1 += newLine3 + values[i];
-    value2 += newLine4 + values[i];
-  }
+    value1 += newLine3 + key;
+    value2 += newLine4 + key;
+  });
+  // for (let i = 0; i < values.length; i++) {
+  //   newLine1 = (label === '') ? '' : '\n  ';
+  //   newLine2 = (label === '') ? '' : '<br />';
+  //   newLine3 = (value1 === '') ? '' : ',\n  ';
+  //   newLine4 = (value1 === '') ? '' : ',<br />';
+  //   value1 += newLine3 + values[i];
+  //   value2 += newLine4 + values[i];
+  // }
   label += newLine1 + 'Reputation: ' + value1;
   title += newLine2 + '<b>Reputation:</b> ' + value2;
   nodeDetails += newLine2 + 'Reputation: ' + value2;
