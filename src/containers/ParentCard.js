@@ -396,13 +396,13 @@ class ParentCard extends React.Component {
     const {props} = this;
     let statusText;
 
-    // try {
-    //   statusText = props.errorData.response.statusText;
-    // }
-    // catch (ex) {
-    //   console.log(ex, props.errorData);
-    //   statusText = 'Some error occured';
-    // }
+    try {
+      statusText = props.errorData.response.statusText;
+    }
+    catch (ex) {
+      console.log(ex, props.errorData);
+      statusText = 'Some error occured';
+    }
 
     return (
       <div style={styles.error}>

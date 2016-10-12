@@ -69,6 +69,8 @@ export function getDetails(row) {
       return getRankAlert(row);
     case 'winevent':
       return getWinEvent(row);
+    case 'anomaly':
+      return getAnomaly(row);
     default:
       return null; // getOther(row.data[row.type]);
   }
@@ -251,6 +253,15 @@ function getReport(row) {
         {checkForNANUndefined(data.report.score, 'Score', true)}
         {checkForNANUndefined(data.report.file.mimeType, 'MIME Type', false)}
       </div>
+    </div>
+  );
+}
+
+function getAnomaly(row) {
+  return (
+    <div>
+      {getSourceDestination(row)}
+      {getEventType(row)}
     </div>
   );
 }
