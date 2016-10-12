@@ -16,18 +16,18 @@ import ContextualMenu from '../components/ContextualMenu';
 
 const style = {
   networkGraph: {
-    'height': '600px',
+    'height': '1200px',
     'width': '100%'
   },
   undoGraph: {
-    top: '560px',
+    bottom: '148px',
     left: '33px',
     position: 'absolute',
     cursor: 'pointer',
     display: 'none'
   },
   resetGraph: {
-    top: '530px',
+    bottom: '180px',
     left: '33px',
     position: 'absolute',
     cursor: 'pointer',
@@ -660,9 +660,19 @@ class NetworkGraph extends React.Component {
   }
 
   createNetworkGraph(networkData) {
-    const that = this;
-    let options = networkGraphDefaultOptions,
+    const that = this,
+      {props} = this,
+      {attributes} = props;
+
+    let options = Object.assign(networkGraphDefaultOptions,
+      {
+        height: (!isUndefined(attributes.canvasStyle.height))
+          ? attributes.canvasStyle.height
+          : networkGraphDefaultOptions.height
+      }),
       network = new vis.Network(this.networkGraph, networkData, options);
+
+    console.log(options, attributes.canvasStyle.height);
 
     if (networkData.nodes.length <= 10) {
       network.setOptions(physicsFalse);
@@ -1185,10 +1195,7 @@ class NetworkGraph extends React.Component {
       <div style={{display: 'flex'}}>
         {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
           text={state.loaderText} /> : null}
-        <div ref={(ref) => this.networkGraph = ref} style={{...style.networkGraph,
-          ...{
-            width: '1100px'
-          }}}
+        <div ref={(ref) => this.networkGraph = ref} style={props.attributes.canvasStyle}
           id='network-graph'>
           {
             assetData
@@ -1208,7 +1215,8 @@ class NetworkGraph extends React.Component {
             selectedDetails={state.selectedNodeDetails}
             actions={state.actionsData}
             loadParent={this.loadGraph}
-            doAction={this.extendGraph} />
+            doAction={this.extendGraph}
+            style={props.attributes.canvasStyle} />
           : null
         }
 
