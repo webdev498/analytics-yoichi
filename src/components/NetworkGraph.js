@@ -15,10 +15,6 @@ import Loader from '../components/Loader';
 import ContextualMenu from '../components/ContextualMenu';
 
 const style = {
-  networkGraph: {
-    'height': '1200px',
-    'width': '100%'
-  },
   undoGraph: {
     bottom: '148px',
     left: '33px',
