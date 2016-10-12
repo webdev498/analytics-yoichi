@@ -668,8 +668,6 @@ class NetworkGraph extends React.Component {
       }),
       network = new vis.Network(this.networkGraph, networkData, options);
 
-    console.log(options, attributes.canvasStyle.height);
-
     if (networkData.nodes.length <= 10) {
       network.setOptions(physicsFalse);
     }
