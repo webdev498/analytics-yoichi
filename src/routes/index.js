@@ -21,12 +21,10 @@ export default (store) => {
 
       { /* Routes requiring login */ }
       <Route onEnter={requireLogin} component={CoreLayout}>
-      { /* <Route component={CoreLayout}> */ }
         <Redirect from='dashboard' to='/' />
         <IndexRoute />
         <Route path='alerts' />
         <Route path='alert/:alertId/:date' />
-        <Route path='alert-new/:alertId/:date' />
         <Route path='country' />
         <Route path='traffic' />
         <Route path='assets' />
