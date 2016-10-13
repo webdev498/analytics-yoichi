@@ -55,39 +55,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
 
 /*******************************************/
 
-div.contextMenu {
-  /*position:absolute;
-  top:0px;
-  left:0px;*/
-  /*background-color: $WhiteColor;*/
-  /*border: 1px solid $GrapeColor;*/
-  /*border-bottom: 0px;*/
-}
-
-div.contextMenu ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-div.contextMenu ul li {
-  /*display: block;*/
-  /*border-bottom: 1px solid gray;*/
-  padding-left: 28px;
-  padding-right: 28px;
-  padding-bottom: 14px;
-  font-size: 16px;
-  cursor: pointer;
-  color: $WhiteColor;
-}
-
-div.contextMenu ul li:hover {
-  /*background-color: $CoralColorShade1;*/
-}
-
 div.contextMenu table tr td {
-  /*display: block;*/
-  /*border-bottom: 1px solid gray;*/
   padding-left: 26px;
   padding-right: 26px;
   padding-top: 14px;
@@ -96,6 +64,16 @@ div.contextMenu table tr td {
   cursor: pointer;
   color: $WhiteColor;
   font-weight: lighter;
+}
+
+div.contextMenu div ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.contextMenu div li {
+  list-style: none;
 }
 
 .scrollbarStyle::-webkit-scrollbar {
