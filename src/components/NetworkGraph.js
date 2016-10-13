@@ -247,14 +247,16 @@ function createReputationText(values, newLine, value) {
     newLine3 = ',\n  ',
     newLine4 = ',<br />';
 
-  values.forEach((data) => {
-    newLine1 = (label === '') ? '' : '\n  ';
-    newLine2 = (label === '') ? '' : '<br />';
-    newLine3 = (value1 === '') ? '' : ',\n  ';
-    newLine4 = (value1 === '') ? '' : ',<br />';
-    value1 += newLine3 + data;
-    value2 += newLine4 + data;
-  });
+  if (!values) {
+    values.forEach((data) => {
+      newLine1 = (label === '') ? '' : '\n  ';
+      newLine2 = (label === '') ? '' : '<br />';
+      newLine3 = (value1 === '') ? '' : ',\n  ';
+      newLine4 = (value1 === '') ? '' : ',<br />';
+      value1 += newLine3 + data;
+      value2 += newLine4 + data;
+    });
+  }
 
   label += newLine1 + 'Reputation: ' + value1;
   title += newLine2 + '<b>Reputation:</b> ' + value2;
@@ -270,36 +272,38 @@ function parseReputationText(values, newLine, value) {
   let {label, title, nodeDetails} = value,
     {newLine1, newLine2} = newLine;
 
-  values.forEach((data) => {
-    newLine1 = (label === '') ? '' : '\n  ';
-    newLine2 = (label === '') ? '' : '<br />';
+  if (!values) {
+    values.forEach((data) => {
+      newLine1 = (label === '') ? '' : '\n  ';
+      newLine2 = (label === '') ? '' : '<br />';
 
-    for (let valueType in data) {
-      if (valueType === 'reputation') {
-        if ((data[valueType]).length > 0) {
-          let newLine = {
-              newLine1: newLine1,
-              newLine2: newLine2
-            },
-            value = {
-              label: label,
-              title: title,
-              nodeDetails: nodeDetails
-            },
-            reputationText = createReputationText(data[valueType], newLine, value);
-          label = reputationText.label;
-          title = reputationText.title;
-          nodeDetails = reputationText.nodeDetails;
+      for (let valueType in data) {
+        if (valueType === 'reputation') {
+          if ((data[valueType]).length > 0) {
+            let newLine = {
+                newLine1: newLine1,
+                newLine2: newLine2
+              },
+              value = {
+                label: label,
+                title: title,
+                nodeDetails: nodeDetails
+              },
+              reputationText = createReputationText(data[valueType], newLine, value);
+            label = reputationText.label;
+            title = reputationText.title;
+            nodeDetails = reputationText.nodeDetails;
+          }
+        }
+        else {
+          title += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
+            data[valueType] + '<br />';
+          nodeDetails += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
+            data[valueType] + '<br />';
         }
       }
-      else {
-        title += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-          data[valueType] + '<br />';
-        nodeDetails += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
-          data[valueType] + '<br />';
-      }
-    }
-  });
+    });
+  }
   return {
     label: label,
     title: title,
@@ -342,40 +346,48 @@ function getActionsByTypes(actionsData) {
   let nodeTypes = [],
     lookup = {},
     actions = [];
-  actionsData.forEach((action) => {
-    let types = action.types;
-    types.forEach((type) => {
-      if (!(type in lookup)) {
-        lookup[type] = 1;
-        const obj = {
-          type: type
-        };
-
-        nodeTypes.push(obj);
-      }
-    });
-  });
-
-  nodeTypes.forEach((node) => {
-    let actionObject = {},
-      nodeType = (node.type).toLowerCase();
-    actionObject.nodeType = nodeType;
-    actionObject.actions = [];
-
+  if (!actionsData) {
     actionsData.forEach((action) => {
-      if ((action.types).indexOf(nodeType) > -1) {
-        let tempObj = {
-          reportId: action.name,
-          targetType: action.targetType,
-          label: action.label,
-          parameters: action.parameters
-        };
-        actionObject.actions.push(tempObj);
+      let types = action.types;
+      if (!types) {
+        types.forEach((type) => {
+          if (!(type in lookup)) {
+            lookup[type] = 1;
+            const obj = {
+              type: type
+            };
+
+            nodeTypes.push(obj);
+          }
+        });
       }
     });
+  }
 
-    actions.push(actionObject);
-  });
+  if (!nodeTypes) {
+    nodeTypes.forEach((node) => {
+      let actionObject = {},
+        nodeType = (node.type).toLowerCase();
+      actionObject.nodeType = nodeType;
+      actionObject.actions = [];
+
+      if (!actionsData) {
+        actionsData.forEach((action) => {
+          if ((action.types).indexOf(nodeType) > -1) {
+            let tempObj = {
+              reportId: action.name,
+              targetType: action.targetType,
+              label: action.label,
+              parameters: action.parameters
+            };
+            actionObject.actions.push(tempObj);
+          }
+        });
+      }
+
+      actions.push(actionObject);
+    });
+  }
 
   return actions;
 }
@@ -383,14 +395,16 @@ function getActionsByTypes(actionsData) {
 function fetchExtendedNodes(reportId, duration, parameters) {
   let otherParameters = '';
   if (!isUndefined(parameters) && !isUndefined(parameters.length)) {
-    parameters.forEach((parameter) => {
-      if (parameter.userInput === true) {
-        otherParameters += '&' + parameter.name + '=' + document.getElementById(parameter.id).value;
-      }
-      else {
-        otherParameters += '&' + parameter.name + '=' + parameter.value;
-      }
-    });
+    if (!parameters) {
+      parameters.forEach((parameter) => {
+        if (parameter.userInput === true) {
+          otherParameters += '&' + parameter.name + '=' + document.getElementById(parameter.id).value;
+        }
+        else {
+          otherParameters += '&' + parameter.name + '=' + parameter.value;
+        }
+      });
+    }
   }
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
@@ -418,11 +432,13 @@ function fetchExtendedNodes(reportId, duration, parameters) {
 
 function isNodeOrEdgeAlreadyExists(array, id) {
   let exists = false;
-  array.forEach((value) => {
-    if (value.id === id) {
-      exists = true;
-    }
-  });
+  if (!array) {
+    array.forEach((value) => {
+      if (value.id === id) {
+        exists = true;
+      }
+    });
+  }
   return exists;
 }
 
@@ -580,7 +596,7 @@ class NetworkGraph extends React.Component {
       tempEdgeObjects = {};
 
     for (let key in this.nodeObjects) {
-      if (!isUndefined(updatedNodes.length)) {
+      if (!updatedNodes) {
         updatedNodes.forEach((updatedNode) => {
           if (updatedNode.id === key) {
             tempNodeObjects[key] = this.nodeObjects[key];
@@ -593,7 +609,7 @@ class NetworkGraph extends React.Component {
     this.nodeObjects = Object.assign({}, tempNodeObjects);
 
     for (let key in this.edgeObjects) {
-      if (!isUndefined(updatedEdges.length)) {
+      if (!updatedEdges) {
         updatedEdges.forEach((updatedEdge) => {
           if (updatedEdge.id === key) {
             tempNodeObjects[key] = this.nodeObjects[key];
@@ -706,13 +722,15 @@ class NetworkGraph extends React.Component {
         image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status,
           event === 'hover' ? 'HOVER' : 'INACTIVE')
       });
-      selectedNodesForExtendingGraph.forEach((selectedNode) => {
-        if (selectedNode.nodeID === nodeID) {
-          node.setOptions({
-            image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status, 'SELECTED')
-          });
-        }
-      });
+      if (!selectedNodesForExtendingGraph) {
+        selectedNodesForExtendingGraph.forEach((selectedNode) => {
+          if (selectedNode.nodeID === nodeID) {
+            node.setOptions({
+              image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status, 'SELECTED')
+            });
+          }
+        });
+      }
     }
     return node;
   }
@@ -918,17 +936,19 @@ class NetworkGraph extends React.Component {
         loaderText: actionLabel
       });
       let selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
-      selectedNodesForExtendingGraph.forEach((selectedNode) => {
-        if (selectedNode.nodeID === nodeID && selectedNode.reportId === reportId &&
-          selectedNode.timeWindow === timeWindow) {
-          let message = 'You have already performed this action.';
-          displayNotificationMessage(message, actionId);
-          this.setState({
-            isFetching: false
-          });
-          return;
-        }
-      });
+      if (!selectedNodesForExtendingGraph) {
+        selectedNodesForExtendingGraph.forEach((selectedNode) => {
+          if (selectedNode.nodeID === nodeID && selectedNode.reportId === reportId &&
+            selectedNode.timeWindow === timeWindow) {
+            let message = 'You have already performed this action.';
+            displayNotificationMessage(message, actionId);
+            this.setState({
+              isFetching: false
+            });
+            return;
+          }
+        });
+      }
 
       openFullMalwareReport(fullMalwareReportLink);
 
@@ -1090,22 +1110,26 @@ class NetworkGraph extends React.Component {
     let isGraphExtended = false,
       nodesEdges = this.getNodesEdges(extendedNodes[0]);
 
-    nodesEdges.nodes.forEach((node) => {
-      if (isNodeOrEdgeAlreadyExists(nodes, node.id) === false) {
-        nodes.push(node);
-        this.nodeObjects[node.id] = node;
-        isGraphExtended = true;
-      }
-    });
+    if (!nodesEdges.nodes) {
+      nodesEdges.nodes.forEach((node) => {
+        if (isNodeOrEdgeAlreadyExists(nodes, node.id) === false) {
+          nodes.push(node);
+          this.nodeObjects[node.id] = node;
+          isGraphExtended = true;
+        }
+      });
+    }
 
-    nodesEdges.edges.forEach((edge) => {
-      if (isNodeOrEdgeAlreadyExists(edges, edge.id) === false) {
-        edges.push(edge);
-        this.edgeObjects[edge.to] = edge;
-        this.edgeObjects[edge.id] = edge;
-        isGraphExtended = true;
-      }
-    });
+    if (!nodesEdges.edges) {
+      nodesEdges.edges.forEach((edge) => {
+        if (isNodeOrEdgeAlreadyExists(edges, edge.id) === false) {
+          edges.push(edge);
+          this.edgeObjects[edge.to] = edge;
+          this.edgeObjects[edge.id] = edge;
+          isGraphExtended = true;
+        }
+      });
+    }
 
     return isGraphExtended;
   }

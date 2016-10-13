@@ -315,7 +315,7 @@ class ContextualMenu extends React.Component {
     const {props} = this;
 
     let contextMenuStyle = {display: props.showContextMenu ? 'block' : 'none'},
-      height = '650px';//This is default height
+      height = '650px';// This is default height
 
     if (!isUndefined(props.style.height)) {
       height = (props.style.height).replace('px', '');
