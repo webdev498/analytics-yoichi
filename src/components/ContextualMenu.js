@@ -5,7 +5,7 @@ import {
   firstCharCapitalize
 } from 'utils/utils';
 
-const styles = {
+const style = {
     contextualMenu: {
       width: '259px',
       backgroundColor: Colors.contextBG,
@@ -326,17 +326,17 @@ class ContextualMenu extends React.Component {
     return (
       <div>
         <div ref={(ref) => this.contextualMenu = ref}
-          style={{...styles.contextualMenu, ...contextMenuStyle}} id='contextual-menu'>
+          style={{...style.contextualMenu, ...contextMenuStyle}} id='contextual-menu'>
           <div style={{
             height: height,
             overflowX: 'hidden',
             overflowY: 'auto'
           }} className='contextMenu scrollbarStyle' id='contextual-menu-contents'>
             <div
-              style={{...styles.selectedDetails}}>
+              style={{...style.selectedDetails}}>
               {props.selectedDetails}
             </div>
-            <div id='actions' />
+            <div id='actions'></div>
           </div>
 
           <div id='collapse-contextual-menu' style={{
@@ -357,7 +357,7 @@ class ContextualMenu extends React.Component {
           <img id='left-arrow' src='/img/menu.png' onClick={this.collapseExpand('expand')} />
         </div>
 
-        <div style={{...styles.notificationMessage}} id='notification-message' />
+        <div style={{...style.notificationMessage}} id='notification-message'></div>
       </div>
     );
   }
