@@ -105,7 +105,7 @@ const styles = {
   }
 };
 
-class ParentCard extends React.Component {
+export class ParentCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
