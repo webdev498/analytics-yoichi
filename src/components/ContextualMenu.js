@@ -334,7 +334,6 @@ class ContextualMenu extends React.Component {
           }} className='contextMenu scrollbarStyle' id='contextual-menu-contents'>
             <div
               style={{...style.selectedDetails}}>
-              { /* dangerouslySetInnerHTML={{__html: props.selectedDetails}}> */ }
               {props.selectedDetails}
             </div>
             <div id='actions'></div>

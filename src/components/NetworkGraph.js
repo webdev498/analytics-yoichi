@@ -5,7 +5,9 @@ import {
   getCountryNameByCountryCode,
   getPosition,
   isUndefined,
-  isNull
+  isNull,
+  whatIsIt,
+  formatDateInLocalTimeZone
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import vis from 'vis';
@@ -158,7 +160,16 @@ function handleMetaData(metadata, nodeObject) {
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[metadata[metadataType]];
           nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
-             {getCountryNameByCountryCode[metadata[metadataType]]}</li>);
+            &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
+          break;
+        case 'date':
+          let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
+          nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
+            dateTime.date + ' ' + dateTime.time;
+          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            dateTime.date + ' ' + dateTime.time;
+          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
+            &nbsp;{dateTime.date} {dateTime.time}</li>);
           break;
         case 'displayname':
           nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
@@ -172,7 +183,7 @@ function handleMetaData(metadata, nodeObject) {
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             metadata[metadataType];
           nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
-             {metadata[metadataType]}</li>);
+            &nbsp;{metadata[metadataType]}</li>);
           break;
       }
     }
@@ -194,7 +205,7 @@ function handleReputationMetaData(parameters) {
     nodeDetails = '';
 
   if (!isUndefined(values)) {
-    if (!isUndefined(values.reputation) && (values.reputation).length > 0) {console.log('test1');
+    if (!isUndefined(values.reputation) && (values.reputation).length > 0 && whatIsIt(values.reputation) === 'Array') {
       let newLine = {
           newLine1: newLine1,
           newLine2: newLine2
@@ -210,27 +221,37 @@ function handleReputationMetaData(parameters) {
       nodeDetails = reputationText.nodeDetails;
     }
 
-    let newLine = {
-        newLine1: newLine1,
-        newLine2: newLine2
-      },
-      value = {
-        label: label,
-        title: title,
-        nodeDetails: nodeDetails
-      },
-      reputationText = parseReputationText(values, newLine, value);
-    label = reputationText.label;
-    title = reputationText.title;
-    nodeDetails = reputationText.nodeDetails;
+    if (!isUndefined(values[0]) && !isUndefined(values[0].reputation) &&
+      whatIsIt(values[0].reputation) === 'Array') {
+      let newLine = {
+          newLine1: newLine1,
+          newLine2: newLine2
+        },
+        value = {
+          label: label,
+          title: title,
+          nodeDetails: nodeDetails
+        },
+        reputationText = parseReputationText(values, newLine, value);
+      label = reputationText.label;
+      title = reputationText.title;
+      nodeDetails = reputationText.nodeDetails;
+    }
   }
-  console.log(nodeDetails);
   nodeStatus = 'safe';
 
   if (label !== '') {
     nodeObject.label += newLine1 + label;
     nodeObject.title += newLine2 + title;
-    nodeObject.nodeDetails.push(<li>{nodeDetails}</li>);
+    if (nodeDetails.indexOf('<br />') > -1) {
+      let tempNodeDetails = nodeDetails.split('<br />');
+      tempNodeDetails.forEach((nodeDetail) => {
+        nodeObject.nodeDetails.push(<li>{nodeDetail}</li>);
+      });
+    }
+    else {
+      nodeObject.nodeDetails.push(<li>{nodeDetails}</li>);
+    }
 
     nodeStatus = (label.indexOf('Scanning Host') > -1) ? 'scan' : 'malicious';
   }
@@ -268,42 +289,40 @@ function createReputationText(values, newLine, value) {
   };
 }
 
-function parseReputationText(values, newLine, value) {console.log('test3');
+function parseReputationText(values, newLine, value) {
   let {label, title, nodeDetails} = value,
     {newLine1, newLine2} = newLine;
 
-  if (!values) {console.log('test2');
-    values.forEach((data) => {
-      newLine1 = (label === '') ? '' : '\n  ';
-      newLine2 = (label === '') ? '' : '<br />';
+  values.forEach((data) => {
+    newLine1 = (label === '') ? '' : '\n  ';
+    newLine2 = (label === '') ? '' : '<br />';
 
-      for (let valueType in data) {
-        if (valueType === 'reputation') {
-          if ((data[valueType]).length > 0) {
-            let newLine = {
-                newLine1: newLine1,
-                newLine2: newLine2
-              },
-              value = {
-                label: label,
-                title: title,
-                nodeDetails: nodeDetails
-              },
-              reputationText = createReputationText(data[valueType], newLine, value);
-            label = reputationText.label;
-            title = reputationText.title;
-            nodeDetails = reputationText.nodeDetails;
-          }
-        }
-        else {
-          title += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-            data[valueType] + '<br />';
-          nodeDetails += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
-            data[valueType] + '<br />';
+    for (let valueType in data) {
+      if (valueType === 'reputation') {
+        if ((data[valueType]).length > 0) {
+          let newLine = {
+              newLine1: newLine1,
+              newLine2: newLine2
+            },
+            value = {
+              label: label,
+              title: title,
+              nodeDetails: nodeDetails
+            },
+            reputationText = createReputationText(data[valueType], newLine, value);
+          label = reputationText.label;
+          title = reputationText.title;
+          nodeDetails = reputationText.nodeDetails;
         }
       }
-    });
-  }
+      else {
+        title += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
+          data[valueType] + '<br />';
+        nodeDetails += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
+          data[valueType] + '<br />';
+      }
+    }
+  });
   return {
     label: label,
     title: title,
@@ -649,9 +668,7 @@ class NetworkGraph extends React.Component {
         edges: Object.assign([], nodesEdges.edges)
       };
       const actionsData = this.context.store.getState().actions;
-      console.log(actionsData);
       this.state.actionsData = getActionsByTypes(actionsData.list.actions);
-      console.log(this.state.actionsData);
 
       networkData = {
         nodes: nodesEdges.nodes,
