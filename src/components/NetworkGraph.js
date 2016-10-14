@@ -628,7 +628,7 @@ class NetworkGraph extends React.Component {
     this.edgeObjects = Object.assign({}, tempEdgeObjects);
   }
 
-  loadNetworkGraph(data, loadAgain, duration, type) {
+  loadNetworkGraph(data, loadAgain, duration) {
     if (timeWindow !== duration) {
       timeWindow = duration;
       return;
@@ -647,9 +647,7 @@ class NetworkGraph extends React.Component {
     if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
       if (networkData.nodes.length > 0) {
         this.createNetworkGraph(networkData);
-        if (type === 'asset') {
-          this.state.loadAgain = false;
-        }
+        this.state.loadAgain = false;
       }
       else {
         document.getElementById('network-graph').innerHTML = 'No additional results were found.';
@@ -1227,8 +1225,8 @@ class NetworkGraph extends React.Component {
           id='network-graph'>
           {
             assetData
-            ? this.loadNetworkGraph(assetData, state.loadAgain, props.duration, 'asset')
-            : this.loadNetworkGraph(props.data, state.loadAgain, props.duration, 'alert')
+            ? this.loadNetworkGraph(assetData, state.loadAgain, props.duration)
+            : this.loadNetworkGraph(props.data, state.loadAgain, props.duration)
           }
         </div>
         {
