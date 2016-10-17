@@ -2,15 +2,15 @@ const fs = require('fs');
 const path = require('path');
 
 const readFileThunk = function(src) {
-  return new Promise(function (resolve, reject) {
-    fs.readFile(src, {}, function (err, data) {
-      if(err) return reject(err);
+  return new Promise(function(resolve, reject) {
+    fs.readFile(src, {}, function(err, data) {
+      if (err) return reject(err);
       resolve(data);
     });
   });
-}
+};
 
-export default async function layoutRoutes (ctx, next) {
+export default async function layoutRoutes(ctx, next) {
   const reqPath = ctx.request.path;
   const layout = reqPath.split('/')[4];
 
