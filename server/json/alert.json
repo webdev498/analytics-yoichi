@@ -76,6 +76,10 @@
           "style": {
             "width": "100%"
           },
+          "canvasStyle": {
+            "height": "600px",
+            "width": "100%"
+          },
           "id": "NetworkGraph"
         },
         "id": "network-graph",

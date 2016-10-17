@@ -314,20 +314,27 @@ class ContextualMenu extends React.Component {
   render() {
     const {props} = this;
 
-    let contextMenuStyle = {display: props.showContextMenu ? 'block' : 'none'};
+    let contextMenuStyle = {display: props.showContextMenu ? 'block' : 'none'},
+      height = '650px';// This is default height
+
+    if (!isUndefined(props.style.height)) {
+      height = (props.style.height).replace('px', '');
+      height = parseInt(height) + 50;
+      height = height + 'px';
+    }
 
     return (
       <div>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...style.contextualMenu, ...contextMenuStyle}} id='contextual-menu'>
           <div style={{
-            height: '650px',
+            height: height,
             overflowX: 'hidden',
             overflowY: 'auto'
           }} className='contextMenu scrollbarStyle' id='contextual-menu-contents'>
             <div
-              style={{...style.selectedDetails}}
-              dangerouslySetInnerHTML={{__html: props.selectedDetails}}>
+              style={{...style.selectedDetails}}>
+              {props.selectedDetails}
             </div>
             <div id='actions'></div>
           </div>
