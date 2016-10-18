@@ -372,7 +372,8 @@
             "queryParams": {
               "window": "",
               "count": 10,
-              "from": 0
+              "from": 0,
+              "asset": "assetId:pathParam"
             },
             "pathParams": {
               "reportId": "taf_alert_by_asset"
