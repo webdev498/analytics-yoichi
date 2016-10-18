@@ -8,7 +8,6 @@ import {
 
 let style = {
   card: {
-    width: '675px',
     paddingBottom: '25px'
   }
 };
