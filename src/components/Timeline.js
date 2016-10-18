@@ -8,7 +8,8 @@ import {
 
 let style = {
   card: {
-    width: '675px'
+    width: '675px',
+    paddingBottom: '25px'
   }
 };
 
@@ -38,7 +39,6 @@ class Timeline extends React.Component {
       pageNumber: 1
     };
 
-    this.setRows = this.setRows.bind(this);
     this.displayCard = this.displayCard.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.getApiObj = this.getApiObj.bind(this);
@@ -70,8 +70,7 @@ class Timeline extends React.Component {
     state.nextPageStart = data.next;
     state.rows = data.normalizeData;
 
-    if (state.filter === '' && data.options !== undefined &&
-      data.options.customParams !== undefined && data.options.customParams !== null) {
+    if (state.filter === '' && data.options && data.options.customParams) {
       state.filter = data.options.customParams.filter;
     }
   }
@@ -92,7 +91,7 @@ class Timeline extends React.Component {
               return (
                 <div style={{display: 'flex'}} key={barId}>
                   <div style={{width: '120px'}}>
-                    <span style={{fontSize: '9pt', fontWeight: '600'}}>
+                    <span style={{fontSize: '12px', fontWeight: '600'}}>
                       {dateTime.date}<br />{dateTime.time}
                     </span>
                   </div>
@@ -110,20 +109,19 @@ class Timeline extends React.Component {
     const {props} = this,
       {params} = props;
 
-    if (!isUndefined(pageNumber)) {
-      const api = this.getApiObj(pageNumber, type);
-      props.fetchApiData(props.id, api, params);
-      this.pagination = {
-        isPaginated: true,
-        pageNumber: pageNumber
-      };
-    }
+    const api = this.getApiObj(pageNumber, type),
+      options = props.options ? props.options : {};
+    props.fetchApiData(props.id, api, params, options);
+    this.pagination = {
+      isPaginated: true,
+      pageNumber: pageNumber
+    };
   }
 
   getApiObj(pageNumber, type) {
     const {state, props} = this,
       {params, attributes, meta} = props;
-    let apiPath = (type === 'traffic') ? '/api/alert/traffic' : '/api/analytics/reporting/execute/{reportId}',
+    let apiPath = (type === 'traffic') ? '/api/alert/traffic' : meta.api.path,
       pathParams = (type === 'traffic') ? {} : {
         reportId: meta.api.pathParams.reportId
       },
@@ -161,10 +159,8 @@ class Timeline extends React.Component {
         {
           (state.rows.length > 0)
             ? <div>
-              <div>
-                {this.displayCard()}
-              </div>
-              <div style={{padding: '15px'}} />
+              {this.displayCard()}
+
               <PaginationWidget size={state.totalPage}
                 currentPage={state.currentPage}
                 maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}

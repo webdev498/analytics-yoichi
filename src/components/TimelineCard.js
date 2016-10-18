@@ -5,13 +5,15 @@ import {
   whatIsIt
 } from 'utils/utils';
 
-let alertStyle = {
+let styles = {
+  alert: {
     border: '1px solid ' + Colors.smoke
   },
-  listItemStyle = {
+  listItem: {
     fontSize: '13px',
     color: Colors.grape
-  };
+  }
+};
 
 function getSource(source) {
   if (source) {
@@ -71,26 +73,24 @@ class TimelineCard extends React.Component {
     if (!data) {
       return;
     }
-    let i = 0;
+
     return (
-      Object.keys(data).map(function(key) {
-        let fontWeight = (i === 0) ? '600' : 'lighter',
+      Object.keys(data).map(function(key, index) {
+        let fontWeight = (index === 0) ? '600' : 'lighter',
           anomalyType = (data.Type === 'Anomaly' && key === 'Type');
 
         if (key !== 'Date' && key !== 'id' && !anomalyType) {
           if (whatIsIt(data[key]) === 'String') {
-            i++;
             return (
-              <li style={{...listItemStyle, ...{fontWeight: fontWeight}}}>
+              <li style={{...styles.listItem, fontWeight}}>
                 {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
               </li>
             );
           }
           if (key === 'sourceDest' && whatIsIt(data[key]) === 'Object') {
             let sourceDest = data[key];
-            i++;
             return (
-              <li style={{...listItemStyle, ...{fontWeight: fontWeight}}}>
+              <li style={{...styles.listItem, fontWeight}}>
                 {sourceDest.source ? getSource(sourceDest.source) : null}
                 {sourceDest.dest ? getDestinaton(sourceDest.dest) : null}
               </li>
@@ -130,13 +130,13 @@ class TimelineCard extends React.Component {
           borderColor = Colors.mustard;
         }
 
-        alertStyle = {
+        styles.alert = {
           borderLeft: '5px solid ' + borderColor,
           paddingLeft: '10px'
         };
         break;
       default:
-        alertStyle = {
+        styles.alert = {
           borderLeft: '1px solid ' + Colors.smoke,
           paddingLeft: '14px'
         };
@@ -154,8 +154,8 @@ class TimelineCard extends React.Component {
         fontSize: '14px',
         cursor: 'pointer',
         overflowWrap: 'break-word',
-        marginBottom: '20px'}, alertStyle)} key={props.id} onClick={this.handleRankAlertClick()}>
-        <ul className='noListStyle'>{this.getDetails(props.data)}</ul>
+        marginBottom: '20px'}, styles.alert)} key={props.id} onClick={this.handleRankAlertClick()}>
+        <ul className='no-list-style'>{this.getDetails(props.data)}</ul>
       </Card>
     );
   }

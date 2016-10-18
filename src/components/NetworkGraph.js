@@ -119,9 +119,13 @@ function createEdgeObject(dataEdge) {
     edgeDetails: []
   };
 
-  edgeObject.edgeDetails.push(<ul className='noListStyle'><li>Edge Type: {dataEdge.label}</li>
-    <li>Source: {dataEdge.source}</li>
-    <li>Target: {dataEdge.target}</li></ul>);
+  edgeObject.edgeDetails.push(
+    <ul className='no-list-style'>
+      <li>Edge Type: {dataEdge.label}</li>
+      <li>Source: {dataEdge.source}</li>
+      <li>Target: {dataEdge.target}</li>
+    </ul>
+  );
 
   if (dataEdge.type === 'ioc') {
     edgeObject.dashes = true;
