@@ -1,19 +1,16 @@
 import React, {PropTypes} from 'react';
 import PaginationWidget from 'components/PaginationWidget';
 import TimelineCard from '../components/TimelineCard';
-import Loader from '../components/Loader';
 import {
   formatDateInLocalTimeZone,
   isUndefined
 } from 'utils/utils';
-import {fetchData} from 'utils/timelineUtils';
 
-let timeWindow = '1h',
-  style = {
-    card: {
-      width: '675px'
-    }
-  };
+let style = {
+  card: {
+    width: '675px'
+  }
+};
 
 class Timeline extends React.Component {
   static propTypes = {
@@ -28,67 +25,66 @@ class Timeline extends React.Component {
     super(props);
 
     this.state = {
-      'selectedMin': 0,
-      'selectedMax': 55,
       'totalCount': 0,
       'totalPage': 0,
       'currentPage': 1,
       'filter': '',
       'rows': [],
-      'nextPageStart': 0,
-      'isFetching': false
+      'nextPageStart': 0
     };
 
-    this.displayData = this.displayData.bind(this);
-    this.getRows = this.getRows.bind(this);
-    this.displayEvents = this.displayEvents.bind(this);
+    this.pagination = {
+      isPaginated: false,
+      pageNumber: 1
+    };
+
+    this.setRows = this.setRows.bind(this);
+    this.displayCard = this.displayCard.bind(this);
     this.fetchData = this.fetchData.bind(this);
+    this.getApiObj = this.getApiObj.bind(this);
   }
 
-  displayData(id, data) {
+  componentDidMount() {
     const {props} = this;
-
-    return (
-      <TimelineCard id={id} data={data} updateRoute={props.updateRoute} />
-    );
+    if (!props.data) {
+      return;
+    }
+    this.setRows(props);
   }
 
-  getRows() {
-    const {props, state} = this;
-    if (state.rows.length === 0 || timeWindow !== props.duration) {
-      if (!props.data) {
-        return;
-      }
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.data) {
+      return;
+    }
+    this.setRows(nextProps);
+    this.pagination.isPaginated = false;
+  }
 
-      state.totalCount = props.data.total;
-      state.totalPage = Math.ceil(props.data.total / props.attributes.noOfEventsPerPage);
-      state.currentPage = 1;
-      state.nextPageStart = props.data.next;
-      state.rows = props.data.rows;
-      timeWindow = props.duration;
+  setRows(props) {
+    const {state} = this,
+      {data, attributes} = props;
 
-      if (state.filter === '' && props.data.options !== undefined &&
-        props.data.options.customParams !== undefined) {
-        state.filter = props.data.options.customParams.filter;
-      }
+    state.totalCount = data.total;
+    state.totalPage = Math.ceil(data.total / attributes.noOfEventsPerPage);
+    state.currentPage = (this.pagination.isPaginated) ? this.pagination.pageNumber : 1;
+    state.nextPageStart = data.next;
+    state.rows = data.normalizeData;
 
-      if (state.rows.length === 0) {
-        return (
-          <div>No additional results were found.</div>
-        );
-      }
+    if (state.filter === '' && data.options !== undefined &&
+      data.options.customParams !== undefined && data.options.customParams !== null) {
+      state.filter = data.options.customParams.filter;
     }
   }
 
-  displayEvents(selectedMin, selectedMax) {
+  displayCard() {
     const rows = this.state.rows,
-      that = this;
+      {props} = this;
 
     return (
       <div style={style.card}>
         {
           rows.map(function(event, index) {
-            let dateString = event[0].date,
+            let dateString = event.Date,
               barId = 'bar' + index;
 
             if (dateString !== '') {
@@ -96,11 +92,11 @@ class Timeline extends React.Component {
               return (
                 <div style={{display: 'flex'}} key={barId}>
                   <div style={{width: '120px'}}>
-                    <span style={{fontSize: '9pt', fontWeight: '600'}}>{dateTime.date}
-                      <br />{dateTime.time}</span>
+                    <span style={{fontSize: '9pt', fontWeight: '600'}}>
+                      {dateTime.date}<br />{dateTime.time}
+                    </span>
                   </div>
-
-                  {that.displayData(barId, event[0])}
+                  <TimelineCard id={barId} data={event} updateRoute={props.updateRoute} />
                 </div>
               );
             }
@@ -111,63 +107,62 @@ class Timeline extends React.Component {
   }
 
   fetchData(pageNumber, type) {
-    const {state, props} = this,
-      {params, attributes} = props;
+    const {props} = this,
+      {params} = props;
+
     if (!isUndefined(pageNumber)) {
-      let parameters = {},
-        pageSize = props.attributes.noOfEventsPerPage;
-      if (type === 'traffic') {
-        parameters = {
-          pageNumber: (pageNumber - 1) * pageSize,
-          type: attributes.type,
-          duration: timeWindow,
-          alertDate: params.date,
-          filter: state.filter,
-          pageSize: pageSize
-        };
-      }
+      const api = this.getApiObj(pageNumber, type);
+      props.fetchApiData(props.id, api, params);
+      this.pagination = {
+        isPaginated: true,
+        pageNumber: pageNumber
+      };
+    }
+  }
 
-      if (type === 'alert') {
-        parameters = {
-          pageNumber: (pageNumber - 1) * pageSize,
-          pageSize: pageSize,
-          duration: timeWindow,
-          reportId: 'taf_alert_by_asset' // kept this hardcoded for now.
-          // Later, I will have to use fetchApiData function from props object
-        };
-      }
+  getApiObj(pageNumber, type) {
+    const {state, props} = this,
+      {params, attributes, meta} = props;
+    let apiPath = (type === 'traffic') ? '/api/alert/traffic' : '/api/analytics/reporting/execute/{reportId}',
+      pathParams = (type === 'traffic') ? {} : {
+        reportId: meta.api.pathParams.reportId
+      },
+      queryParams = {
+        window: '',
+        count: attributes.noOfEventsPerPage,
+        from: (pageNumber - 1) * attributes.noOfEventsPerPage
+      };
 
-      const fetchedData = fetchData(parameters, type, props.data.options);
-
-      this.setState({
-        'isFetching': true
-      });
-
-      fetchedData.then(json => {
-        this.setState({
-          'isFetching': false,
-          'currentPage': pageNumber,
-          'rows': json.rows,
-          'nextPageStart': json.next,
-          'selectedMin': 0,
-          'selectedMax': 55
-        });
+    if (type === 'traffic') {
+      queryParams = Object.assign(queryParams, {
+        date: params.date,
+        filter: state.filter
       });
     }
+
+    return {
+      path: apiPath,
+      pathParams: pathParams,
+      queryParams: queryParams
+    };
   }
 
   render() {
     const {state, props} = this,
       {attributes} = props;
+
     return (
       <div>
-        {this.getRows()}
-        {state.isFetching ? <Loader /> : null}
+        {
+          (!isUndefined(state.rows) && state.rows.length === 0)
+          ? <div>No additional results were found.</div>
+          : null
+        }
         {
           (state.rows.length > 0)
             ? <div>
               <div>
-                {this.displayEvents(state.selectedMin, state.selectedMax)}
+                {this.displayCard()}
               </div>
               <div style={{padding: '15px'}} />
               <PaginationWidget size={state.totalPage}

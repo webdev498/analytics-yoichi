@@ -389,7 +389,6 @@
           "displaySelectedRows": true,
           "noOfEventsPerPage": 10,
           "maxNumbersOnLeftRightPagination": 4,
-          "topMarginLag": 1030,
           "style": {
             "width": "65%",
             "backgroundColor": "#F7F7F9"
