@@ -144,12 +144,6 @@ export class ParentCard extends React.Component {
       return;
     }
 
-    // TODO find a non hacky way to do this.
-    if (props.type === 'AlertDetails') {
-      api.queryParams.date = props.params.date;
-      api.pathParams = Object.assign({}, api.pathParams, props.params);
-    }
-
     props.fetchApiData(props.id, api, props.params);
   }
 
@@ -448,6 +442,7 @@ export class ParentCard extends React.Component {
 }
 
 ParentCard.contextTypes = {
+  muiTheme: React.PropTypes.object,
   store: React.PropTypes.object
 };
 
