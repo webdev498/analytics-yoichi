@@ -124,15 +124,30 @@ class TimelineCard extends React.Component {
     switch (cardType) {
       case 'alert':
         let borderColor = Colors.cherry,
-          score = props.data.Score;
-        if (score >= 65) {
-          borderColor = Colors.cherry;
+          score = props.data.Score,
+          severity = props.data.Severity;
+
+        if (score) {
+          if (score >= 65) {
+            borderColor = Colors.cherry;
+          }
+          if (score < 65 && score >= 35) {
+            borderColor = Colors.coral;
+          }
+          if (score < 35) {
+            borderColor = Colors.mustard;
+          }
         }
-        if (score < 65 && score >= 35) {
-          borderColor = Colors.coral;
-        }
-        if (score < 35) {
-          borderColor = Colors.mustard;
+        if (severity) {
+          if (severity.toLowerCase() === 'high') {
+            borderColor = Colors.cherry;
+          }
+          if (severity.toLowerCase() === 'medium') {
+            borderColor = Colors.coral;
+          }
+          if (severity.toLowerCase() === 'low') {
+            borderColor = Colors.mustard;
+          }
         }
 
         styles.alert = {
