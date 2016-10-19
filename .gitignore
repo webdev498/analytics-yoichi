@@ -13,7 +13,10 @@ target
 .project
 
 src/static/bower_components
-env.js
 src/layout.js
+
+# Environment files
+src/static/env.js
+serverEnv.js
 
 *.json.gzip
