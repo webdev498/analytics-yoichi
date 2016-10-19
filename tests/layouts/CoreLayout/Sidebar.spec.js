@@ -38,7 +38,7 @@ const links = [
   }
 ];
 
-describe('Page Sidebar', () => {
+describe('<Sidebar />', () => {
   let component, props;
 
   beforeEach(function() {

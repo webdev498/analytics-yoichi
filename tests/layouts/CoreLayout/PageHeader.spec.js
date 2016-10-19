@@ -64,7 +64,7 @@ function setupPageHeaderShallow(auth = {user: null}, showKibana = false) {
   };
 }
 
-describe('PageHeader component', () => {
+describe('<PageHeader />', () => {
   it('should layout Material UI\'s AppBar', () => {
     const {component} = setupPageHeader();
     expect(component.type).to.equal(AppBar);
