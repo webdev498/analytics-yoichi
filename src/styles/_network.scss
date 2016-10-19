@@ -18,17 +18,14 @@ div.vis-network-tooltip {
   pointer-events: none;
 }
 div.vis-network div.vis-navigation div.vis-button:hover {
-  /*box-shadow: 0 0 3px 3px rgba(56, 207, 21, 0.30);*/
 }
 
 div.vis-network div.vis-navigation div.vis-button:active {
-  /*box-shadow: 0 0 1px 3px rgba(56, 207, 21, 0.95);*/
 }
 
 div.vis-network div.vis-navigation div.vis-button.vis-zoomIn {
   background-image: url("../static/img/plus.png");
   bottom:56px;
-  /*right:15px;*/
   position: absolute;
   height: 30px;
   width: 30px;
@@ -37,7 +34,6 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomIn {
 div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
   background-image: url("../static/img/minus.png");
   bottom:25px;
-  /*right:55px;*/
   position: absolute;
   height: 30px;
   width: 30px;
@@ -46,7 +42,6 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
   background-image: url("../static/img/zoomExtends.png");
   bottom:87px;
-  /*right:15px;*/
   position: absolute;
   height: 30px;
   width: 30px;
@@ -55,39 +50,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
 
 /*******************************************/
 
-div.contextMenu {
-  /*position:absolute;
-  top:0px;
-  left:0px;*/
-  /*background-color: $WhiteColor;*/
-  /*border: 1px solid $GrapeColor;*/
-  /*border-bottom: 0px;*/
-}
-
-div.contextMenu ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-div.contextMenu ul li {
-  /*display: block;*/
-  /*border-bottom: 1px solid gray;*/
-  padding-left: 28px;
-  padding-right: 28px;
-  padding-bottom: 14px;
-  font-size: 16px;
-  cursor: pointer;
-  color: $WhiteColor;
-}
-
-div.contextMenu ul li:hover {
-  /*background-color: $CoralColorShade1;*/
-}
-
 div.contextMenu table tr td {
-  /*display: block;*/
-  /*border-bottom: 1px solid gray;*/
   padding-left: 26px;
   padding-right: 26px;
   padding-top: 14px;
@@ -96,6 +59,16 @@ div.contextMenu table tr td {
   cursor: pointer;
   color: $WhiteColor;
   font-weight: lighter;
+}
+
+ul.no-list-style {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.contextMenu div li {
+  list-style: none;
 }
 
 .scrollbarStyle::-webkit-scrollbar {

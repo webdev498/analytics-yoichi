@@ -62,6 +62,10 @@
           "style": {
             "width": "80%"
           },
+          "canvasStyle": {
+            "height": "600px",
+            "width": "100%"
+          },
           "id": "NetworkGraph"
         }
       }
@@ -377,7 +381,8 @@
             },
             "pathParams": {
               "reportId": "taf_alert_by_asset"
-            }
+            },
+            "loadOnce": true
           },
           "title": "Timeline"
         },
@@ -386,7 +391,6 @@
           "displaySelectedRows": true,
           "noOfEventsPerPage": 10,
           "maxNumbersOnLeftRightPagination": 4,
-          "topMarginLag": 1030,
           "style": {
             "width": "65%",
             "backgroundColor": "#F7F7F9"

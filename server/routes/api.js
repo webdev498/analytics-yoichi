@@ -7,6 +7,8 @@ import KoaRouter from 'koa-router';
 import {serverBaseUrl, timeoutDuration} from '../../serverEnv';
 import layoutRoutes from './layouts';
 
+import timeline from '../components/Timeline';
+
 const router = new KoaRouter({
   prefix: '/api'
 });
@@ -57,11 +59,16 @@ router
     }
   );
 
+  ctx.tempData = res;
+  await next();
+
   ctx.set('content-type', res.headers.get('content-type'));
   ctx.status = res.status;
   ctx.statusText = res.statusText;
-  ctx.body = res.body;
+  ctx.body = ctx.normalizeData || res.body;
 })
+.get('/alert/traffic', timeline)
+.get('/analytics/reporting/execute/taf_alert_by_asset', timeline)
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);

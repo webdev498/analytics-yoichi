@@ -5,7 +5,9 @@ import {
   getCountryNameByCountryCode,
   getPosition,
   isUndefined,
-  isNull
+  isNull,
+  whatIsIt,
+  formatDateInLocalTimeZone
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import vis from 'vis';
@@ -15,19 +17,15 @@ import Loader from '../components/Loader';
 import ContextualMenu from '../components/ContextualMenu';
 
 const style = {
-  networkGraph: {
-    'height': '600px',
-    'width': '100%'
-  },
   undoGraph: {
-    top: '560px',
+    bottom: '148px',
     left: '33px',
     position: 'absolute',
     cursor: 'pointer',
     display: 'none'
   },
   resetGraph: {
-    top: '530px',
+    bottom: '180px',
     left: '33px',
     position: 'absolute',
     cursor: 'pointer',
@@ -65,7 +63,7 @@ function createNodeObject(dataNode) {
     type: dataNode.type,
     label: '  ' + dataNode.id,
     title: '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id,
-    nodeDetails: firstCharCapitalize(dataNode.type) + ': ' + dataNode.id,
+    nodeDetails: [],
     actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
     borderWidth: '0',
     font: {
@@ -80,6 +78,8 @@ function createNodeObject(dataNode) {
       highlight: Colors.turquoise
     }
   };
+
+  nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {dataNode.id}</li>);
 
   let metaDataObject = handleMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
@@ -116,10 +116,16 @@ function createEdgeObject(dataEdge) {
       color: Colors.pebble,
       highlight: Colors.turquoise
     },
-    edgeDetails: 'Edge Type: ' + dataEdge.label +
-      '<br/>Source: ' + dataEdge.source +
-      '<br/>Target: ' + dataEdge.target
+    edgeDetails: []
   };
+
+  edgeObject.edgeDetails.push(
+    <ul className='no-list-style'>
+      <li>Edge Type: {dataEdge.label}</li>
+      <li>Source: {dataEdge.source}</li>
+      <li>Target: {dataEdge.target}</li>
+    </ul>
+  );
 
   if (dataEdge.type === 'ioc') {
     edgeObject.dashes = true;
@@ -157,12 +163,21 @@ function handleMetaData(metadata, nodeObject) {
             getCountryNameByCountryCode[metadata[metadataType]];
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[metadata[metadataType]];
-          nodeObject.nodeDetails += newLine2 + firstCharCapitalize(metadataType) + ': ' +
-            getCountryNameByCountryCode[metadata[metadataType]];
+          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
+            &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
+          break;
+        case 'date':
+          let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
+          nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
+            dateTime.date + ' ' + dateTime.time;
+          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            dateTime.date + ' ' + dateTime.time;
+          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
+            &nbsp;{dateTime.date} {dateTime.time}</li>);
           break;
         case 'displayname':
           nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
-          nodeObject.nodeDetails += newLine2 + 'Name: ' + metadata[metadataType];
+          nodeObject.nodeDetails.push(<li>Name: {metadata[metadataType]}</li>);
           break;
         default:
           if (metadataTypeLower === 'title') {
@@ -171,8 +186,8 @@ function handleMetaData(metadata, nodeObject) {
           }
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             metadata[metadataType];
-          nodeObject.nodeDetails += newLine2 + firstCharCapitalize(metadataType) + ': ' +
-            metadata[metadataType];
+          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
+            &nbsp;{metadata[metadataType]}</li>);
           break;
       }
     }
@@ -194,45 +209,53 @@ function handleReputationMetaData(parameters) {
     nodeDetails = '';
 
   if (!isUndefined(values)) {
-    if (!isUndefined(values.reputation)) {
-      if ((values.reputation).length > 0) {
-        let newLine = {
-            newLine1: newLine1,
-            newLine2: newLine2
-          },
-          value = {
-            label: label,
-            title: title,
-            nodeDetails: nodeDetails
-          },
-          reputationText = createReputationText(values.reputation, newLine, value);
-        label = reputationText.label;
-        title = reputationText.title;
-        nodeDetails = reputationText.nodeDetails;
-      }
+    if (!isUndefined(values.reputation) && (values.reputation).length > 0 && whatIsIt(values.reputation) === 'Array') {
+      let newLine = {
+          newLine1: newLine1,
+          newLine2: newLine2
+        },
+        value = {
+          label: label,
+          title: title,
+          nodeDetails: nodeDetails
+        },
+        reputationText = createReputationText(values.reputation, newLine, value);
+      label = reputationText.label;
+      title = reputationText.title;
+      nodeDetails = reputationText.nodeDetails;
     }
 
-    let newLine = {
-        newLine1: newLine1,
-        newLine2: newLine2
-      },
-      value = {
-        label: label,
-        title: title,
-        nodeDetails: nodeDetails
-      },
-      reputationText = parseReputationText(values, newLine, value);
-    label = reputationText.label;
-    title = reputationText.title;
-    nodeDetails = reputationText.nodeDetails;
+    if (!isUndefined(values[0]) && !isUndefined(values[0].reputation) &&
+      whatIsIt(values[0].reputation) === 'Array') {
+      let newLine = {
+          newLine1: newLine1,
+          newLine2: newLine2
+        },
+        value = {
+          label: label,
+          title: title,
+          nodeDetails: nodeDetails
+        },
+        reputationText = parseReputationText(values, newLine, value);
+      label = reputationText.label;
+      title = reputationText.title;
+      nodeDetails = reputationText.nodeDetails;
+    }
   }
-
   nodeStatus = 'safe';
 
   if (label !== '') {
     nodeObject.label += newLine1 + label;
     nodeObject.title += newLine2 + title;
-    nodeObject.nodeDetails += newLine2 + nodeDetails;
+    if (nodeDetails.indexOf('<br />') > -1) {
+      let tempNodeDetails = nodeDetails.split('<br />');
+      tempNodeDetails.forEach((nodeDetail) => {
+        nodeObject.nodeDetails.push(<li>{nodeDetail}</li>);
+      });
+    }
+    else {
+      nodeObject.nodeDetails.push(<li>{nodeDetails}</li>);
+    }
 
     nodeStatus = (label.indexOf('Scanning Host') > -1) ? 'scan' : 'malicious';
   }
@@ -250,22 +273,16 @@ function createReputationText(values, newLine, value) {
     {newLine1, newLine2} = newLine,
     newLine3 = ',\n  ',
     newLine4 = ',<br />';
-  values.forEach((key) => {
+
+  values.forEach((data) => {
     newLine1 = (label === '') ? '' : '\n  ';
     newLine2 = (label === '') ? '' : '<br />';
     newLine3 = (value1 === '') ? '' : ',\n  ';
     newLine4 = (value1 === '') ? '' : ',<br />';
-    value1 += newLine3 + key;
-    value2 += newLine4 + key;
+    value1 += newLine3 + data;
+    value2 += newLine4 + data;
   });
-  // for (let i = 0; i < values.length; i++) {
-  //   newLine1 = (label === '') ? '' : '\n  ';
-  //   newLine2 = (label === '') ? '' : '<br />';
-  //   newLine3 = (value1 === '') ? '' : ',\n  ';
-  //   newLine4 = (value1 === '') ? '' : ',<br />';
-  //   value1 += newLine3 + values[i];
-  //   value2 += newLine4 + values[i];
-  // }
+
   label += newLine1 + 'Reputation: ' + value1;
   title += newLine2 + '<b>Reputation:</b> ' + value2;
   nodeDetails += newLine2 + 'Reputation: ' + value2;
@@ -280,13 +297,13 @@ function parseReputationText(values, newLine, value) {
   let {label, title, nodeDetails} = value,
     {newLine1, newLine2} = newLine;
 
-  for (let i = 0; i < values.length; i++) {
+  values.forEach((data) => {
     newLine1 = (label === '') ? '' : '\n  ';
     newLine2 = (label === '') ? '' : '<br />';
 
-    for (let valueType in values[i]) {
+    for (let valueType in data) {
       if (valueType === 'reputation') {
-        if ((values[i][valueType]).length > 0) {
+        if ((data[valueType]).length > 0) {
           let newLine = {
               newLine1: newLine1,
               newLine2: newLine2
@@ -296,7 +313,7 @@ function parseReputationText(values, newLine, value) {
               title: title,
               nodeDetails: nodeDetails
             },
-            reputationText = createReputationText(values[i][valueType], newLine, value);
+            reputationText = createReputationText(data[valueType], newLine, value);
           label = reputationText.label;
           title = reputationText.title;
           nodeDetails = reputationText.nodeDetails;
@@ -304,12 +321,12 @@ function parseReputationText(values, newLine, value) {
       }
       else {
         title += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-          values[i][valueType] + '<br />';
+          data[valueType] + '<br />';
         nodeDetails += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
-          values[i][valueType] + '<br />';
+          data[valueType] + '<br />';
       }
     }
-  }
+  });
   return {
     label: label,
     title: title,
@@ -352,9 +369,9 @@ function getActionsByTypes(actionsData) {
   let nodeTypes = [],
     lookup = {},
     actions = [];
-  for (let i = 0; i < actionsData.length; i++) {
-    for (let j = 0; j < actionsData[i].types.length; j++) {
-      let type = actionsData[i].types[j];
+  actionsData.forEach((action) => {
+    let types = action.types;
+    types.forEach((type) => {
       if (!(type in lookup)) {
         lookup[type] = 1;
         const obj = {
@@ -363,29 +380,29 @@ function getActionsByTypes(actionsData) {
 
         nodeTypes.push(obj);
       }
-    }
-  }
+    });
+  });
 
-  for (let i = 0; i < nodeTypes.length; i++) {
+  nodeTypes.forEach((node) => {
     let actionObject = {},
-      nodeType = (nodeTypes[i].type).toLowerCase();
+      nodeType = (node.type).toLowerCase();
     actionObject.nodeType = nodeType;
     actionObject.actions = [];
 
-    for (let j = 0; j < actionsData.length; j++) {
-      if ((actionsData[j].types).indexOf(nodeType) > -1) {
+    actionsData.forEach((action) => {
+      if ((action.types).indexOf(nodeType) > -1) {
         let tempObj = {
-          reportId: actionsData[j].name,
-          targetType: actionsData[j].targetType,
-          label: actionsData[j].label,
-          parameters: actionsData[j].parameters
+          reportId: action.name,
+          targetType: action.targetType,
+          label: action.label,
+          parameters: action.parameters
         };
         actionObject.actions.push(tempObj);
       }
-    }
+    });
 
     actions.push(actionObject);
-  }
+  });
 
   return actions;
 }
@@ -393,14 +410,14 @@ function getActionsByTypes(actionsData) {
 function fetchExtendedNodes(reportId, duration, parameters) {
   let otherParameters = '';
   if (!isUndefined(parameters) && !isUndefined(parameters.length)) {
-    for (let i = 0; i < parameters.length; i++) {
-      if (parameters[i].userInput === true) {
-        otherParameters += '&' + parameters[i].name + '=' + document.getElementById(parameters[i].id).value;
+    parameters.forEach((parameter) => {
+      if (parameter.userInput === true) {
+        otherParameters += '&' + parameter.name + '=' + document.getElementById(parameter.id).value;
       }
       else {
-        otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
+        otherParameters += '&' + parameter.name + '=' + parameter.value;
       }
-    }
+    });
   }
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
@@ -428,11 +445,11 @@ function fetchExtendedNodes(reportId, duration, parameters) {
 
 function isNodeOrEdgeAlreadyExists(array, id) {
   let exists = false;
-  for (let i = 0; i < array.length; i++) {
-    if (array[i].id === id) {
+  array.forEach((value) => {
+    if (value.id === id) {
       exists = true;
     }
-  }
+  });
   return exists;
 }
 
@@ -559,28 +576,24 @@ class NetworkGraph extends React.Component {
       dataEdges = data.edges;
 
     if (!isUndefined(dataNodes)) {
-      for (let i = 0; i < dataNodes.length; i++) {
-        let dataNode = dataNodes[i];
-
+      dataNodes.forEach((dataNode) => {
         if (isUndefined(this.nodeObjects[dataNode.id])) {
           let nodeObject = createNodeObject(dataNode);
           nodes.push(nodeObject);
           this.nodeObjects[dataNode.id] = nodeObject;
         }
-      }
+      });
     }
 
     if (!isUndefined(dataEdges)) {
-      for (let i = 0; i < dataEdges.length; i++) {
-        let dataEdge = dataEdges[i];
-
+      dataEdges.forEach((dataEdge) => {
         if (isUndefined(this.edgeObjects[dataEdge.id])) {
           let edgeObject = createEdgeObject(dataEdge);
           edges.push(edgeObject);
           this.edgeObjects[dataEdge.target] = edgeObject;
           this.edgeObjects[edgeObject.id] = edgeObject;
         }
-      }
+      });
     }
 
     return {
@@ -594,24 +607,26 @@ class NetworkGraph extends React.Component {
       tempEdgeObjects = {};
 
     for (let key in this.nodeObjects) {
-      if (!isUndefined(updatedNodes.length)) {
-        for (let i = 0; i < updatedNodes.length; i++) {
-          if (updatedNodes[i].id === key) {
+      if (!isUndefined(updatedNodes)) {
+        updatedNodes.forEach((updatedNode) => {
+          if (updatedNode.id === key) {
             tempNodeObjects[key] = this.nodeObjects[key];
             tempEdgeObjects[key] = this.edgeObjects[key];// Remove other targets from edgeObjects
           }
-        }
+        });
       }
     }
+
     this.nodeObjects = Object.assign({}, tempNodeObjects);
 
     for (let key in this.edgeObjects) {
-      if (!isUndefined(updatedEdges.length)) {
-        for (let i = 0; i < updatedEdges.length; i++) {
-          if (updatedEdges[i].id === key) {
-            tempEdgeObjects[key] = this.edgeObjects[key];
+      if (!isUndefined(updatedEdges)) {
+        updatedEdges.forEach((updatedEdge) => {
+          if (updatedEdge.id === key) {
+            tempNodeObjects[key] = this.nodeObjects[key];
+            tempEdgeObjects[key] = this.edgeObjects[key];// Remove other targets from edgeObjects
           }
-        }
+        });
       }
     }
     this.edgeObjects = Object.assign({}, tempEdgeObjects);
@@ -631,14 +646,12 @@ class NetworkGraph extends React.Component {
       return;
     }
 
-    // nodeObjects = {};
-    // edgeObjects = {};
-
     let networkData = this.getGraphAndActions(data);
 
     if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
       if (networkData.nodes.length > 0) {
         this.createNetworkGraph(networkData);
+        this.state.loadAgain = false;
       }
       else {
         document.getElementById('network-graph').innerHTML = 'No additional results were found.';
@@ -671,8 +684,16 @@ class NetworkGraph extends React.Component {
   }
 
   createNetworkGraph(networkData) {
-    const that = this;
-    let options = networkGraphDefaultOptions,
+    const that = this,
+      {props} = this,
+      {attributes} = props;
+
+    let options = Object.assign(networkGraphDefaultOptions,
+      {
+        height: (!isUndefined(attributes.canvasStyle.height))
+          ? attributes.canvasStyle.height
+          : networkGraphDefaultOptions.height
+      }),
       network = new vis.Network(this.networkGraph, networkData, options);
 
     if (networkData.nodes.length <= 10) {
@@ -713,13 +734,14 @@ class NetworkGraph extends React.Component {
         image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status,
           event === 'hover' ? 'HOVER' : 'INACTIVE')
       });
-
-      for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-        if (selectedNodesForExtendingGraph[i].nodeID === nodeID) {
-          node.setOptions({
-            image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status, 'SELECTED')
-          });
-        }
+      if (!isUndefined(selectedNodesForExtendingGraph)) {
+        selectedNodesForExtendingGraph.forEach((selectedNode) => {
+          if (selectedNode.nodeID === nodeID) {
+            node.setOptions({
+              image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status, 'SELECTED')
+            });
+          }
+        });
       }
     }
     return node;
@@ -803,7 +825,7 @@ class NetworkGraph extends React.Component {
       edgeType = '',
       nodeID = selectedIDs.nodes[0],
       edgeID = selectedIDs.edges[0],
-      selectedNodeDetails = '',
+      selectedNodeDetails = [],
       selectedNodesForExtendingGraph = [];
 
     switch (selected) {
@@ -837,21 +859,21 @@ class NetworkGraph extends React.Component {
     let {network, nodeID, nodeType, selectedNodeDetails, selected, selectedNodesForExtendingGraph} = nodeDetails,
       {state} = this;
     if (!isUndefined(nodeID)) {
-      for (let i = 0; i < state.nodes.length; i++) {
-        let node = network.body.nodes[state.nodes[i].id];
-        if (state.nodes[i].id === nodeID) {
-          selectedNodeDetails += state.nodes[i].nodeDetails;
-          nodeType = state.nodes[i].type;
+      state.nodes.forEach((nodeObject) => {
+        let node = network.body.nodes[nodeObject.id];
+        if (nodeObject.id === nodeID) {
+          selectedNodeDetails.push(nodeObject.nodeDetails);
+          nodeType = nodeObject.type;
           node.setOptions({
-            image: getIcon(state.nodes[i].type, state.nodes[i].status, 'SELECTED')
+            image: getIcon(nodeObject.type, nodeObject.status, 'SELECTED')
           });
         }
         else {
           node.setOptions({
-            image: getIcon(state.nodes[i].type, state.nodes[i].status, 'INACTIVE')
+            image: getIcon(nodeObject.type, nodeObject.status, 'INACTIVE')
           });
         }
-      }
+      });
 
       let sourceDetails = {
         contextMenuType: selected,
@@ -884,12 +906,12 @@ class NetworkGraph extends React.Component {
       {state} = this;
 
     if (!isUndefined(edgeID)) {
-      for (let i = 0; i < state.edges.length; i++) {
-        if (state.edges[i].id === edgeID) {
-          selectedNodeDetails += state.edges[i].edgeDetails;
-          edgeType = state.edges[i].type;
+      state.edges.forEach((edgeObject) => {
+        if (edgeObject.id === edgeID) {
+          selectedNodeDetails.push(edgeObject.edgeDetails);
+          edgeType = edgeObject.type;
         }
-      }
+      });
 
       let sourceDetails = {
         contextMenuType: selected,
@@ -926,17 +948,18 @@ class NetworkGraph extends React.Component {
         loaderText: actionLabel
       });
       let selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
-      for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-        if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
-          selectedNodesForExtendingGraph[i].reportId === reportId &&
-          selectedNodesForExtendingGraph[i].timeWindow === timeWindow) {
-          let message = 'You have already performed this action.';
-          displayNotificationMessage(message, actionId);
-          this.setState({
-            isFetching: false
-          });
-          return;
-        }
+      if (!isUndefined(selectedNodesForExtendingGraph)) {
+        selectedNodesForExtendingGraph.forEach((selectedNode) => {
+          if (selectedNode.nodeID === nodeID && selectedNode.reportId === reportId &&
+            selectedNode.timeWindow === timeWindow) {
+            let message = 'You have already performed this action.';
+            displayNotificationMessage(message, actionId);
+            this.setState({
+              isFetching: false
+            });
+            return;
+          }
+        });
       }
 
       openFullMalwareReport(fullMalwareReportLink);
@@ -1099,22 +1122,27 @@ class NetworkGraph extends React.Component {
     let isGraphExtended = false,
       nodesEdges = this.getNodesEdges(extendedNodes[0]);
 
-    for (let i = 0; i < nodesEdges.nodes.length; i++) {
-      if (isNodeOrEdgeAlreadyExists(nodes, nodesEdges.nodes[i].id) === false) {
-        nodes.push(nodesEdges.nodes[i]);
-        this.nodeObjects[nodesEdges.nodes[i].id] = nodesEdges.nodes[i];
-        isGraphExtended = true;
-      }
+    if (!isUndefined(nodesEdges.nodes)) {
+      nodesEdges.nodes.forEach((node) => {
+        if (isNodeOrEdgeAlreadyExists(nodes, node.id) === false) {
+          nodes.push(node);
+          this.nodeObjects[node.id] = node;
+          isGraphExtended = true;
+        }
+      });
     }
 
-    for (let i = 0; i < nodesEdges.edges.length; i++) {
-      if (isNodeOrEdgeAlreadyExists(edges, nodesEdges.edges[i].id) === false) {
-        edges.push(nodesEdges.edges[i]);
-        this.edgeObjects[nodesEdges.edges[i].to] = nodesEdges.edges[i];
-        this.edgeObjects[nodesEdges.edges[i].id] = nodesEdges.edges[i];
-        isGraphExtended = true;
-      }
+    if (!isUndefined(nodesEdges.edges)) {
+      nodesEdges.edges.forEach((edge) => {
+        if (isNodeOrEdgeAlreadyExists(edges, edge.id) === false) {
+          edges.push(edge);
+          this.edgeObjects[edge.to] = edge;
+          this.edgeObjects[edge.id] = edge;
+          isGraphExtended = true;
+        }
+      });
     }
+
     return isGraphExtended;
   }
 
@@ -1164,7 +1192,7 @@ class NetworkGraph extends React.Component {
             edges: updatedEdges,
             isFetching: false,
             showContextMenu: false,
-            selectedNodeDetails: '',
+            selectedNodeDetails: [],
             actions: '',
             selectedNode: '',
             selectedNodesForExtendingGraph: [],
@@ -1197,10 +1225,7 @@ class NetworkGraph extends React.Component {
       <div style={{display: 'flex'}}>
         {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
           text={state.loaderText} /> : null}
-        <div ref={(ref) => this.networkGraph = ref} style={{...style.networkGraph,
-          ...{
-            width: '1100px'
-          }}}
+        <div ref={(ref) => this.networkGraph = ref} style={props.attributes.canvasStyle}
           id='network-graph'>
           {
             assetData
@@ -1208,7 +1233,6 @@ class NetworkGraph extends React.Component {
             : this.loadNetworkGraph(props.data, state.loadAgain, props.duration)
           }
         </div>
-
         {
           state.actionsData && state.actionsData.length > 0
           ? <ContextualMenu
@@ -1220,7 +1244,8 @@ class NetworkGraph extends React.Component {
             selectedDetails={state.selectedNodeDetails}
             actions={state.actionsData}
             loadParent={this.loadGraph}
-            doAction={this.extendGraph} />
+            doAction={this.extendGraph}
+            style={props.attributes.canvasStyle} />
           : null
         }
 
