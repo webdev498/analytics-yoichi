@@ -184,8 +184,8 @@ input:focus {
 }
 .pagination > li > button, .pagination > li > span {
   background-color: transparent;
-  border: 0px solid #ddd;
-  color: $CloudColorShade1;
+  border: 0px;
+  color: $PebbleColor;
   float: left;
   line-height: 1.42857;
   margin-left: -1px;
@@ -194,9 +194,9 @@ input:focus {
   text-decoration: none;
 }
 .pagination > .active > button, .pagination > .active > button:focus, .pagination > .active > button:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-  background-color: $WhiteColor;
-  border-color: $WhiteColor;
-  color: $PebbleColor;
+  background-color: $CloudColorShade6;
+  border-color: $CloudColorShade6;
+  color: $CloudColorShade7;
   cursor: default;
   z-index: 3;
 }
