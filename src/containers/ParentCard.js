@@ -213,7 +213,7 @@ export class ParentCard extends React.Component {
         }
       });
 
-      const updatedApi = Object.assign({}, api, {queryParams: queryParams});
+      const updatedApi = Object.assign({}, api, {queryParams});
       fetchApiData(id, updatedApi, params, {customParams});
     }
   }
