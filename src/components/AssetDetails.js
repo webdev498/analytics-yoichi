@@ -25,9 +25,9 @@ const styles = {
     cursor: 'pointer'
   },
   scoreDesc: {
-    marginLeft: '15px',
+    paddingLeft: '15px',
     display: 'inline-flex',
-    width: '175px'
+    flexGrow: 1
   },
   scoreIcon: {
     marginTop: 0,
