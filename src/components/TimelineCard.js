@@ -2,25 +2,111 @@ import React from 'react';
 import Card from 'material-ui/Card/Card';
 import {Colors} from 'theme/colors';
 import {
-  getDetails
-} from 'utils/timelineUtils';
+  whatIsIt
+} from 'utils/utils';
 
-let alertStyle = {
-  border: '1px solid ' + Colors.smoke
+let styles = {
+  alert: {
+    border: '1px solid ' + Colors.smoke
+  },
+  listItem: {
+    fontSize: '13px',
+    color: Colors.grape
+  }
 };
+
+function getSource(source) {
+  if (source) {
+    if (source.ip) {
+      return (
+        <span>
+          <span> {source.ip} </span>
+          {
+            source.country
+            ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()}></span>
+            : null
+          }
+          {
+            source.port > 0
+            ? <span> on Port {source.port}</span>
+            : null
+          }
+        </span>
+      );
+    }
+  }
+  return null;
+}
+
+function getDestinaton(dest) {
+  if (dest) {
+    if (dest.ip) {
+      return (
+        <span>
+          <span> connected to {dest.ip} </span>
+          {
+            dest.country
+            ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()}></span>
+            : null
+          }
+          {
+            dest.port > 0
+            ? <span> on Port {dest.port}</span>
+            : null
+          }
+        </span>
+      );
+    }
+  }
+
+  return null;
+}
 
 class TimelineCard extends React.Component {
   constructor(props) {
     super(props);
+    this.getDetails = this.getDetails.bind(this);
     this.handleRankAlertClick = this.handleRankAlertClick.bind(this);
+  }
+
+  getDetails(data) {
+    if (!data) {
+      return;
+    }
+
+    return (
+      Object.keys(data).map(function(key, index) {
+        let fontWeight = (index === 0) ? '600' : 'lighter',
+          anomalyType = (data.Type === 'Anomaly' && key === 'Type');
+
+        if (key !== 'Date' && key !== 'id' && !anomalyType) {
+          if (whatIsIt(data[key]) === 'String') {
+            return (
+              <li style={{...styles.listItem, fontWeight}}>
+                {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
+              </li>
+            );
+          }
+          if (key === 'sourceDest' && whatIsIt(data[key]) === 'Object') {
+            let sourceDest = data[key];
+            return (
+              <li style={{...styles.listItem, fontWeight}}>
+                {sourceDest.source ? getSource(sourceDest.source) : null}
+                {sourceDest.dest ? getDestinaton(sourceDest.dest) : null}
+              </li>
+            );
+          }
+        }
+      })
+    );
   }
 
   handleRankAlertClick() {
     const {props} = this;
 
     return () => {
-      if (props.data.type.toLowerCase() === 'rank_alert') {
-        const url = `/alert/${props.data.id}/${props.data.date}`;
+      if (props.data.Type === 'Rank Alert') {
+        const url = `/alert/${props.data.id}/${props.data.Date}`;
         props.updateRoute(url);
       }
     };
@@ -28,12 +114,12 @@ class TimelineCard extends React.Component {
 
   render() {
     const {props} = this;
-    let cardType = (props.data.type.toLowerCase() === 'alert' || props.data.type.toLowerCase() === 'rank_alert')
+    let cardType = (props.data.Type === 'Alert' || props.data.Type === 'Rank Alert')
       ? 'alert' : 'other';
     switch (cardType) {
       case 'alert':
         let borderColor = Colors.cherry,
-          score = props.data.data[props.data.type].score;
+          score = props.data.Score;
         if (score >= 65) {
           borderColor = Colors.cherry;
         }
@@ -44,13 +130,13 @@ class TimelineCard extends React.Component {
           borderColor = Colors.mustard;
         }
 
-        alertStyle = {
+        styles.alert = {
           borderLeft: '5px solid ' + borderColor,
           paddingLeft: '10px'
         };
         break;
       default:
-        alertStyle = {
+        styles.alert = {
           borderLeft: '1px solid ' + Colors.smoke,
           paddingLeft: '14px'
         };
@@ -68,8 +154,8 @@ class TimelineCard extends React.Component {
         fontSize: '14px',
         cursor: 'pointer',
         overflowWrap: 'break-word',
-        marginBottom: '20px'}, alertStyle)} key={props.id} onClick={this.handleRankAlertClick()}>
-          {getDetails(props.data)}
+        marginBottom: '20px'}, styles.alert)} key={props.id} onClick={this.handleRankAlertClick()}>
+        <ul className='no-list-style'>{this.getDetails(props.data)}</ul>
       </Card>
     );
   }

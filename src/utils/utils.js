@@ -561,22 +561,6 @@ export function parseQuery(qstr) {
   return query;
 }
 
-export function getEventTypeString(typeName) {
-  let typeString = '';
-  if (typeName.indexOf('conn') > -1) typeString = 'Connection';
-  else if (typeName.indexOf('ssh') > -1) typeString = 'SSH';
-  else if (typeName.indexOf('dns') > -1) typeString = 'DNS';
-  else if (typeName.indexOf('http') > -1) typeString = 'HTTP';
-  else if (typeName.indexOf('ssl') > -1) typeString = 'SSL';
-  else if (typeName.indexOf('files') > -1) typeString = 'File';
-  else if (typeName.indexOf('rank_alert') > -1) typeString = 'Rank Alert';
-  else if (typeName.indexOf('alert') > -1) typeString = 'Alert';
-  else if (typeName.indexOf('sysmon') > -1) typeString = 'Sysmon';
-  else if (typeName.indexOf('report') > -1) typeString = 'Report';
-  else typeString = 'Other';
-  return typeString;
-}
-
 let stringConstructor = 'test'.constructor;
 let arrayConstructor = [].constructor;
 let objectConstructor = {}.constructor;

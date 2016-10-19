@@ -43,9 +43,9 @@
                   "window": "",
                   "filter": "data.rank_alert.trafficFilter$customParam",
                   "date": "date:pathParam"
-                }
-              },
-              "loadOnce": true
+                },
+                "loadOnce": true
+              }
             }
           ]
         },
