@@ -23,7 +23,7 @@ function getSource(source) {
           <span> {source.ip} </span>
           {
             source.country
-            ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()}></span>
+            ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()} />
             : null
           }
           {
@@ -46,7 +46,7 @@ function getDestinaton(dest) {
           <span> connected to {dest.ip} </span>
           {
             dest.country
-            ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()}></span>
+            ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()} />
             : null
           }
           {
@@ -82,7 +82,7 @@ class TimelineCard extends React.Component {
         if (key !== 'Date' && key !== 'id' && !anomalyType) {
           if (whatIsIt(data[key]) === 'String') {
             return (
-              <li style={{...styles.listItem, fontWeight}}>
+              <li style={{...styles.listItem, fontWeight}} key={`desc${index}`}>
                 {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
               </li>
             );
@@ -90,7 +90,7 @@ class TimelineCard extends React.Component {
           if (key === 'sourceDest' && whatIsIt(data[key]) === 'Object') {
             let sourceDest = data[key];
             return (
-              <li style={{...styles.listItem, fontWeight}}>
+              <li style={{...styles.listItem, fontWeight}} key={`desc${index}`}>
                 {sourceDest.source ? getSource(sourceDest.source) : null}
                 {sourceDest.dest ? getDestinaton(sourceDest.dest) : null}
               </li>
