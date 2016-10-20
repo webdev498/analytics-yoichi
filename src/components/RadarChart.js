@@ -5,7 +5,10 @@ const chart = {
   'theme': 'fint',
   'radarfillcolor': '#ffffff',
   'baseFont': 'Open Sans, sans-serif',
-  'divLineAlpha': '50'
+  'divLineAlpha': '20',
+  'showBorder': '0',
+  'showShadow': '0',
+  'showCanvasBorder': '0'
 };
 class RadarChart extends React.Component {
   getDataSource() {
