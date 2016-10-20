@@ -5,19 +5,17 @@ const chart = {
   'theme': 'fint',
   'radarfillcolor': '#ffffff',
   'baseFont': 'Open Sans, sans-serif',
-  'divLineAlpha': 50
-
+  'divLineAlpha': '50'
 };
 class RadarChart extends React.Component {
   getDataSource() {
     const {props} = this,
       {data, chartOptions} = props;
 
-    console.log('data', data);
-
     const category = data.map(val => ({label: val.message}));
     const datasetArr = data.map(val => ({value: val.contribution}));
 
+    console.log(category);
     const dataset = [{seriesname: '', data: datasetArr}];
     const categories = [{category}];
 
@@ -31,7 +29,8 @@ class RadarChart extends React.Component {
   renderChart() {
     const {props} = this;
     const dataSource = this.getDataSource();
-    console.log(dataSource);
+
+    console.log(dataSource.chart);
     FusionCharts.ready(function() {
       var fusioncharts = new FusionCharts({
         type: 'radar',

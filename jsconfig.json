@@ -2,10 +2,13 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "target": "ES6",
-    "module": "es6"
+    "module": "commonjs",
+		"allowSyntheticDefaultImports": true
   },
   "exclude": [
     "node_module",
-    "dist"
+    "dist",
+    "src/static/bower_components",
+    "src/static/other_components"
   ]
 }

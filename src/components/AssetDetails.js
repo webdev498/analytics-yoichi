@@ -295,7 +295,11 @@ class AssetDetail extends React.Component {
         'chartOptions': {
           labelFontSize: 8,
           'bgColor': Colors.smoke,
-          labelDisplay: 'STAGGER'
+          'labelPadding': 2,
+          'chartLeftMargin': 0,
+          'chartRightMargin': 0,
+          'chartTopMargin': 0,
+          'chartBottomMargin': 0
         },
         'attributes': {
           'chartWidth': '100%',
