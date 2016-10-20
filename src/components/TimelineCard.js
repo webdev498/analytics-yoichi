@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from 'material-ui/Card/Card';
+import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
 import {
   whatIsIt
@@ -63,6 +64,10 @@ function getDestinaton(dest) {
 class TimelineCard extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      selectedAnomalyId: ''
+    };
     this.getDetails = this.getDetails.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
   }
@@ -72,20 +77,32 @@ class TimelineCard extends React.Component {
       return;
     }
 
+    let i = 0; // I need to use "i" instead of "index",
+    // Becasue we are not displaying all attributes in this same list only.
+    // See below where I am incrementing "i". But "index" is always getting increament.
+
     return (
       Object.keys(data).map(function(key, index) {
-        let fontWeight = (index === 0) ? '600' : 'lighter',
+        let fontWeight = (i === 0) ? '600' : 'lighter',
           anomalyType = (data.Type === 'Anomaly' && key === 'Type');
 
         if (key !== 'Date' && key !== 'id' && !anomalyType) {
           if (whatIsIt(data[key]) === 'String') {
+            i++;
             return (
               <li style={{...styles.listItem, fontWeight}}>
                 {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
+                {console.log(data.Type, i)}
+                {
+                  (data.Type === 'Anomaly' && i === 1)
+                  ? null // here right arrow icon will come. Rose will send this icon tomorrow.
+                  : null
+                }
               </li>
             );
           }
           if (key === 'sourceDest' && whatIsIt(data[key]) === 'Object') {
+            i++;
             let sourceDest = data[key];
             return (
               <li style={{...styles.listItem, fontWeight}}>
@@ -109,7 +126,18 @@ class TimelineCard extends React.Component {
           props.updateRoute(url);
           break;
         case 'Anomaly':
-          // here code will come for anomaly card click.
+          if (this.state.selectedAnomalyId !== '' && this.state.selectedAnomalyId === props.data.id) {
+            props.setAnomalyId('');
+            this.setState({
+              selectedAnomalyId: ''
+            });
+          }
+          else {
+            props.setAnomalyId(props.data.id);
+            this.setState({
+              selectedAnomalyId: props.data.id
+            });
+          }
           break;
         default:
           break;
@@ -121,6 +149,7 @@ class TimelineCard extends React.Component {
     const {props} = this;
     let cardType = (props.data.Type === 'Alert' || props.data.Type === 'Rank Alert')
       ? 'alert' : 'other';
+    console.log(props);
     switch (cardType) {
       case 'alert':
         let borderColor = Colors.cherry,
@@ -171,7 +200,9 @@ class TimelineCard extends React.Component {
         paddingRight: '18px',
         height: 'auto',
         width: '450px',
-        backgroundColor: Colors.white,
+        backgroundColor: ((this.state.selectedAnomalyId !== '' && this.state.selectedAnomalyId === props.data.id) ||
+          (props.card === 'anomaly_event_card'))
+          ? Colors.cloud : Colors.white,
         fontSize: '14px',
         cursor: 'pointer',
         overflowWrap: 'break-word',

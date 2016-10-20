@@ -1,17 +1,12 @@
 import React, {PropTypes} from 'react';
 import PaginationWidget from 'components/PaginationWidget';
-import TimelineCard from '../components/TimelineCard';
+import TimelineCard from 'components/TimelineCard';
+import ParentCard from 'containers/ParentCard';
 import {Colors} from 'theme/colors';
 import {
   formatDateInLocalTimeZone,
   isUndefined
 } from 'utils/utils';
-
-let style = {
-  card: {
-    paddingBottom: '25px'
-  }
-};
 
 class Timeline extends React.Component {
   static propTypes = {
@@ -31,7 +26,8 @@ class Timeline extends React.Component {
       'currentPage': 1,
       'filter': '',
       'rows': [],
-      'nextPageStart': 0
+      'nextPageStart': 0,
+      'selectedAnomalyId': ''
     };
 
     this.pagination = {
@@ -39,9 +35,23 @@ class Timeline extends React.Component {
       pageNumber: 1
     };
 
+    this.style = {
+      card: {
+        paddingBottom: '25px'
+      }
+    };
+
+    this.style.card = ((props.id).indexOf('timeline') > -1) ? this.style.card : {};
+
+    this.anomalyEventsParams = {
+      meta: {},
+      attributes: {}
+    };
+
     this.displayCard = this.displayCard.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.getApiObj = this.getApiObj.bind(this);
+    this.setAnomalyId = this.setAnomalyId.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +60,7 @@ class Timeline extends React.Component {
       return;
     }
     this.setRows(props);
+    this.state.selectedAnomalyId = '';
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,6 +69,7 @@ class Timeline extends React.Component {
     }
     this.setRows(nextProps);
     this.pagination.isPaginated = false;
+    this.state.selectedAnomalyId = '';
   }
 
   setRows(props) {
@@ -75,32 +87,92 @@ class Timeline extends React.Component {
     }
   }
 
+  setAnomalyId(anomalyId) {
+    if (!isUndefined(anomalyId)) {
+      this.setState({
+        selectedAnomalyId: anomalyId
+      });
+      this.anomalyEventsParams = {
+        meta: {
+          showHeader: false,
+          api: {
+            path: '/api/anomaly/{anomalyId}/events',
+            pathParams: {
+              anomalyId: anomalyId
+            },
+            queryParams: {
+              window: ''
+            }
+          },
+          title: ''
+        },
+        attributes: {
+          type: 'traffic',
+          displaySelectedRows: true,
+          noOfEventsPerPage: 8,
+          maxNumbersOnLeftRightPagination: 4,
+          style: {
+            width: '100%',
+            height: '100%'
+          },
+          id: 'timeline-anomaly-events'
+        }
+      };
+    }
+  }
+
   displayCard() {
     const rows = this.state.rows,
-      {props} = this;
+      {props} = this,
+      that = this;
 
     return (
-      <div style={style.card}>
+      <div style={this.style.card}>
         {
           rows.map(function(event, index) {
             let dateString = event.Date,
-              barId = 'bar' + index;
+              barId = 'bar' + index,
+              card = ((that.props.id).indexOf('timeline') > -1) ? 'timeline_card' : 'anomaly_event_card',
+              backgroundColor = (card === 'timeline_card') ? {} : {backgroundColor: Colors.contextBG},
+              padding = (card === 'timeline_card') ? {} : {padding: '0px 15px 0px 15px'};
+
+            padding = (card === 'anomaly_event_card' && index === 0) ? {padding: '15px 15px 0px 15px'} : padding;
 
             if (dateString !== '') {
-              let dateTime = formatDateInLocalTimeZone(dateString);
               return (
-                <div style={{display: 'flex'}} key={barId}>
-                  <div style={{width: '110px', paddingTop: '22px'}}>
-                    <span style={{fontSize: '12px', fontWeight: 'lighter', Color: Colors.grape}}>
-                      {dateTime.date}<br />{dateTime.time}
-                    </span>
-                  </div>
-                  <TimelineCard id={barId} data={event} updateRoute={props.updateRoute} />
+                <div style={{...{display: 'flex'}, ...backgroundColor, ...padding}} key={barId}>
+                  {card === 'timeline_card' ? that.displayDate(dateString, card) : null}
+                  <TimelineCard
+                    id={barId}
+                    data={event}
+                    updateRoute={props.updateRoute}
+                    setAnomalyId={that.setAnomalyId}
+                    card={card} />
+                  {card === 'anomaly_event_card' ? that.displayDate(dateString, card) : null}
                 </div>
               );
             }
           })
         }
+      </div>
+    );
+  }
+
+  displayDate(dateString, card) {
+    let dateTime = formatDateInLocalTimeZone(dateString);
+    return (
+      <div style={{
+        width: '85px',
+        paddingTop: '22px',
+        paddingLeft: (card === 'timeline_card') ? '0px' : '10px'
+      }}>
+        <span style={{
+          fontSize: '12px',
+          fontWeight: 'lighter',
+          color: (card === 'timeline_card') ? Colors.grape : Colors.white
+        }}>
+          {dateTime.date}<br />{dateTime.time}
+        </span>
       </div>
     );
   }
@@ -145,14 +217,45 @@ class Timeline extends React.Component {
     };
   }
 
+  displayAnomalyEvents() {
+    const {state, props} = this;
+    return (
+      <div style={{
+        top: '0px',
+        right: '0px',
+        position: 'absolute',
+        width: '350px',
+        height: '100%',
+        overflowY: 'scroll',
+        overflowX: 'hidden'
+      }} className='scrollbar'>
+        <ParentCard
+          id={state.selectedAnomalyId}
+          meta={this.anomalyEventsParams.meta}
+          params={props.params}
+          attributes={this.anomalyEventsParams.attributes}>
+          <Timeline />
+        </ParentCard>
+        <div id='collapse-anomaly-events' style={{
+          marginLeft: '24px',
+          marginBottom: '24px',
+          marginTop: '10px'
+        }}>
+          <img id='right-arrow' src='/img/rightArrow.png' />
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const {state, props} = this,
-      {attributes} = props;
+      {attributes} = props,
+      card = ((props.id).indexOf('timeline') > -1) ? 'timeline_card' : 'anomaly_event_card';
 
     return (
       <div>
         {
-          (!isUndefined(state.rows) && state.rows.length === 0)
+          (!isUndefined(state.rows) && state.rows.length === 0 && card === 'timeline_card')
           ? <div>No additional results were found.</div>
           : null
         }
@@ -166,6 +269,11 @@ class Timeline extends React.Component {
                 maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}
                 fetchData={this.fetchData}
                 type={attributes.type} />
+              {
+                state.selectedAnomalyId !== ''
+                ? this.displayAnomalyEvents()
+                : null
+              }
             </div>
           : null
         }
