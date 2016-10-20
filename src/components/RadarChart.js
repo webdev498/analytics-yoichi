@@ -15,10 +15,9 @@ class RadarChart extends React.Component {
     const {props} = this,
       {data, chartOptions} = props;
 
-    const category = data.map(val => ({label: val.message}));
-    const datasetArr = data.map(val => ({value: val.contribution}));
+    const category = data.map(val => ({label: val.message.split(' ').join('{br}')}));
+    const datasetArr = data.map(val => ({value: Math.round(val.contribution)}));
 
-    console.log(category);
     const dataset = [{seriesname: '', data: datasetArr}];
     const categories = [{category}];
 
@@ -33,7 +32,6 @@ class RadarChart extends React.Component {
     const {props} = this;
     const dataSource = this.getDataSource();
 
-    console.log(dataSource.chart);
     FusionCharts.ready(function() {
       var fusioncharts = new FusionCharts({
         type: 'radar',

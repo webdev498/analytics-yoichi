@@ -298,8 +298,13 @@ class AssetDetail extends React.Component {
           'labelPadding': 2,
           'chartLeftMargin': 0,
           'chartRightMargin': 0,
-          'chartTopMargin': 0,
-          'chartBottomMargin': 0
+          'chartBottomMargin': 0,
+          'canvasBottomMargin': '0',
+          'canvasRightMargin': '0',
+          'canvasLeftMargin': '0',
+          'canvasTopMargin': '0',
+          'showLimits': '0',
+          'showDivLineValues': 0
         },
         'attributes': {
           'chartWidth': '100%',
