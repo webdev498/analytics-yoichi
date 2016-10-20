@@ -96,7 +96,14 @@ function getTimeRangeItems() {
 export class PageHeader extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: 1, showMenu: false};
+    let value = 1;
+    TimeRanges.forEach((range, index) => {
+      if (range.param === props.duration) {
+        value = index + 1;
+      }
+    });
+
+    this.state = {value, showMenu: false};
     this.toggleMenu = this.toggleMenu.bind(this);
     this.handleTimeChange = this.handleTimeChange.bind(this);
   }
@@ -107,7 +114,8 @@ export class PageHeader extends React.Component {
     hideKibana: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     showKibana: PropTypes.bool.isRequired,
-    params: PropTypes.object.isRequired
+    params: PropTypes.object.isRequired,
+    duration: PropTypes.string.isRequired
   }
 
   getChildContext() {
@@ -209,7 +217,7 @@ PageHeader.childContextTypes = {
 };
 
 function mapStateToProps(state) {
-  return { auth: state.auth };
+  return { auth: state.auth, duration: state.apiData.get('duration') };
 }
 
 export default connect(mapStateToProps, {
