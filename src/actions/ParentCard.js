@@ -112,10 +112,11 @@ function getUrl(api, duration, routerParams) {
 function callApi(api, duration, params, options) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
+  const headers = (api && api.headers) || {};
   const defaultHeaders = Object.assign({
     'Authorization': `${tokenType} ${accessToken}`,
     'Content-Type': 'application/json'
-  }, api.headers);
+  }, headers);
 
   const body = options && JSON.stringify(options.body);
   return fetch(getUrl(api, duration, params), {
