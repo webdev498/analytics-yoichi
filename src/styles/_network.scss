@@ -5,18 +5,13 @@ div.vis-network-tooltip {
   white-space: nowrap;
 
   font-family: 'Open Sans';
-  font-size:14px;
-  color:#000000;
-  background-color: #f5f4ed;
-
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  border: 1px solid #808074;
-
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  color: #24293D;
+  background-color: $CloudColor;
+  border: 0px;
   pointer-events: none;
 }
+
 div.vis-network div.vis-navigation div.vis-button:hover {
 }
 
@@ -25,7 +20,7 @@ div.vis-network div.vis-navigation div.vis-button:active {
 
 div.vis-network div.vis-navigation div.vis-button.vis-zoomIn {
   background-image: url("../static/img/plus.png");
-  bottom:56px;
+  bottom: 30px;
   position: absolute;
   height: 30px;
   width: 30px;
@@ -33,7 +28,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomIn {
 }
 div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
   background-image: url("../static/img/minus.png");
-  bottom:25px;
+  bottom: 0px;
   position: absolute;
   height: 30px;
   width: 30px;
@@ -41,7 +36,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
 }
 div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
   background-image: url("../static/img/zoomExtends.png");
-  bottom:87px;
+  bottom: 60px;
   position: absolute;
   height: 30px;
   width: 30px;
@@ -50,7 +45,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
 
 /*******************************************/
 
-div.contextMenu table tr td {
+div.context-menu table tr td {
   padding-left: 26px;
   padding-right: 26px;
   padding-top: 14px;
@@ -67,20 +62,20 @@ ul.no-list-style {
   padding: 0;
 }
 
-div.contextMenu div li {
+div.context-menu div li {
   list-style: none;
 }
 
-.scrollbarStyle::-webkit-scrollbar {
+.scrollbar::-webkit-scrollbar {
     width: 12px;
 }
 
-.scrollbarStyle::-webkit-scrollbar-track {
+.scrollbar::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     border-radius: 10px;
 }
 
-.scrollbarStyle::-webkit-scrollbar-thumb {
+.scrollbar::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }

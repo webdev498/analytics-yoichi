@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import PaginationWidget from 'components/PaginationWidget';
 import TimelineCard from '../components/TimelineCard';
+import {Colors} from 'theme/colors';
 import {
   formatDateInLocalTimeZone,
   isUndefined
@@ -105,8 +106,8 @@ class Timeline extends React.Component {
               let dateTime = formatDateInLocalTimeZone(dateString);
               return (
                 <div style={{display: 'flex'}} key={barId}>
-                  <div style={{width: '120px'}}>
-                    <span style={{fontSize: '12px', fontWeight: '600'}}>
+                  <div style={{width: '110px', paddingTop: '22px'}}>
+                    <span style={{fontSize: '12px', fontWeight: 'lighter', Color: Colors.grape}}>
                       {dateTime.date}<br />{dateTime.time}
                     </span>
                   </div>

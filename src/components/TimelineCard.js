@@ -6,9 +6,7 @@ import {
 } from 'utils/utils';
 
 let styles = {
-  alert: {
-    border: '1px solid ' + Colors.smoke
-  },
+  alert: {},
   listItem: {
     fontSize: '13px',
     color: Colors.grape
@@ -66,7 +64,7 @@ class TimelineCard extends React.Component {
   constructor(props) {
     super(props);
     this.getDetails = this.getDetails.bind(this);
-    this.handleRankAlertClick = this.handleRankAlertClick.bind(this);
+    this.handleCardClick = this.handleCardClick.bind(this);
   }
 
   getDetails(data) {
@@ -101,13 +99,20 @@ class TimelineCard extends React.Component {
     );
   }
 
-  handleRankAlertClick() {
+  handleCardClick() {
     const {props} = this;
 
     return () => {
-      if (props.data.Type === 'Rank Alert') {
-        const url = `/alert/${props.data.id}/${props.data.Date}`;
-        props.updateRoute(url);
+      switch (props.data.Type) {
+        case 'Rank Alert':
+          const url = `/alert/${props.data.id}/${props.data.Date}`;
+          props.updateRoute(url);
+          break;
+        case 'Anomaly':
+          // here code will come for anomaly card click.
+          break;
+        default:
+          break;
       }
     };
   }
@@ -119,42 +124,58 @@ class TimelineCard extends React.Component {
     switch (cardType) {
       case 'alert':
         let borderColor = Colors.cherry,
-          score = props.data.Score;
-        if (score >= 65) {
-          borderColor = Colors.cherry;
+          score = props.data.Score,
+          severity = props.data.Severity;
+
+        if (score) {
+          if (score >= 65) {
+            borderColor = Colors.cherry;
+          }
+          if (score < 65 && score >= 35) {
+            borderColor = Colors.coral;
+          }
+          if (score < 35) {
+            borderColor = Colors.mustard;
+          }
         }
-        if (score < 65 && score >= 35) {
-          borderColor = Colors.coral;
-        }
-        if (score < 35) {
-          borderColor = Colors.mustard;
+        if (severity) {
+          if (severity.toLowerCase() === 'high') {
+            borderColor = Colors.cherry;
+          }
+          if (severity.toLowerCase() === 'medium') {
+            borderColor = Colors.coral;
+          }
+          if (severity.toLowerCase() === 'low') {
+            borderColor = Colors.mustard;
+          }
         }
 
         styles.alert = {
           borderLeft: '5px solid ' + borderColor,
-          paddingLeft: '10px'
+          paddingLeft: '18px'
         };
         break;
       default:
         styles.alert = {
-          borderLeft: '1px solid ' + Colors.smoke,
-          paddingLeft: '14px'
+          paddingLeft: '22px'
         };
         break;
     }
 
     return (
       <Card style={Object.assign({
-        boxShadow: '1px 1px 0 #cccccc',
-        padding: '10px',
+        boxShadow: '0px',
+        paddingTop: '22px',
+        paddingBottom: '22px',
+        paddingLeft: '18px',
+        paddingRight: '18px',
         height: 'auto',
         width: '450px',
         backgroundColor: Colors.white,
-        border: '1px solid ' + Colors.smoke,
         fontSize: '14px',
         cursor: 'pointer',
         overflowWrap: 'break-word',
-        marginBottom: '20px'}, styles.alert)} key={props.id} onClick={this.handleRankAlertClick()}>
+        marginBottom: '20px'}, styles.alert)} key={props.id} onClick={this.handleCardClick()}>
         <ul className='no-list-style'>{this.getDetails(props.data)}</ul>
       </Card>
     );

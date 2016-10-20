@@ -15,10 +15,7 @@ const style = {
       bottom: '0px'
     },
     selectedDetails: {
-      marginTop: '28px',
-      marginBottom: '28px',
-      marginLeft: '24px',
-      marginRight: '24px',
+      margin: '0px 24px',
       width: '90%',
       color: Colors.garnet,
       fontSize: '16px',
@@ -330,8 +327,9 @@ class ContextualMenu extends React.Component {
           <div style={{
             height: height,
             overflowX: 'hidden',
-            overflowY: 'auto'
-          }} className='contextMenu scrollbarStyle' id='contextual-menu-contents'>
+            overflowY: 'auto',
+            marginTop: '35px'
+          }} className='context-menu scrollbar' id='contextual-menu-contents'>
             <div
               style={{...style.selectedDetails}}>
               {props.selectedDetails}

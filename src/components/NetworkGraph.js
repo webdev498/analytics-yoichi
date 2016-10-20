@@ -18,14 +18,14 @@ import ContextualMenu from '../components/ContextualMenu';
 
 const style = {
   undoGraph: {
-    bottom: '148px',
+    bottom: '118px',
     left: '33px',
     position: 'absolute',
     cursor: 'pointer',
     display: 'none'
   },
   resetGraph: {
-    bottom: '180px',
+    bottom: '148px',
     left: '33px',
     position: 'absolute',
     cursor: 'pointer',

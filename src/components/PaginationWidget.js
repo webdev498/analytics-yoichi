@@ -84,7 +84,7 @@ class PaginationWidget extends React.Component {
       for (let i = start; i <= end; i++) {
         if (i === start) {
           li.push(<li key='Prev'>
-            <button onClick={this.onPrevPageChanged(this.props.currentPage)}>Prev</button>
+            <button onClick={this.onPrevPageChanged(this.props.currentPage)}>&lt;&lt;</button>
           </li>);
         }
 
@@ -97,7 +97,7 @@ class PaginationWidget extends React.Component {
 
         if (i === end) {
           li.push(<li key='Next'>
-            <button onClick={this.onNextPageChanged(this.props.currentPage, pageCount)}>Next</button>
+            <button onClick={this.onNextPageChanged(this.props.currentPage, pageCount)}>&gt;&gt;</button>
           </li>);
         }
       }
