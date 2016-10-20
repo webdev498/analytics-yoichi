@@ -64,7 +64,12 @@
         },
         "id": "2",
         "type": "MetricsCard",
-        "title": "High Priority Malware"
+        "title": "High Priority Malware",
+        "clickData": {
+          "tableId": "RecentAlerts",
+          "filterText": "malware",
+          "page": "/alerts"
+        }
       },
       {
         "meta": {
@@ -184,7 +189,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+              "reportId": "taf_stats_histogram"
             },
             "queryParams": {
               "window": ""
@@ -249,7 +254,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+              "reportId": "taf_stats_histogram"
             },
             "queryParams": {
               "window": ""
@@ -314,7 +319,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+              "reportId": "taf_stats_histogram"
             },
             "queryParams": {
               "window": ""
@@ -363,7 +368,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_stats_histogram,taf_connections_by_protocol"
+              "reportId": "taf_connections_by_protocol"
             },
             "queryParams": {
               "window": ""

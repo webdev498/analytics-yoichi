@@ -36,16 +36,13 @@ export function getCountryIDByCountryCode(countryCode) {
 
 // Function to convert milliseconds to time
 export function msToTime(duration) {
-  let milliseconds = parseInt((duration % 1000) / 100),
-    seconds = parseInt((duration / 1000) % 60),
+  let seconds = parseInt((duration / 1000) % 60),
     minutes = parseInt((duration / (1000 * 60)) % 60),
     hours = parseInt((duration / (1000 * 60 * 60)) % 24);
 
   hours = (hours < 10) ? '0' + hours : hours;
   minutes = (minutes < 10) ? '0' + minutes : minutes;
   seconds = (seconds < 10) ? '0' + seconds : seconds;
-
-  milliseconds = (milliseconds > 0) ? ': ' + milliseconds : '';
 
   return {
     'timeArray': [hours, minutes, seconds],
@@ -182,6 +179,15 @@ export function isUndefined(value) {
   }
 }
 
+export function isNull(value) {
+  if (value === null) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
 function addZero(x, n) {
   while (x.toString().length < n) {
     x = '0' + x;
@@ -215,13 +221,14 @@ export function formatDate(date) {
 // function to format Date In Local TimeZone
 export function formatDateInLocalTimeZone(value) {
   let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
-    localDateTime = moment.utc(value1).toDate(),
-    localDate = moment(localDateTime).format('DD MMM YYYY'),
-    localTime = moment(localDateTime).format('HH:mm:ss.SSS');
-  return {
-    date: localDate,
-    time: localTime
-  };
+    dateTime = {
+      date: '',
+      time: ''
+    },
+    localDateTime = moment.utc(value1).toDate();
+  dateTime.date = moment(localDateTime).format('DD MMM YYYY');
+  dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
+  return dateTime;
 }
 
 // Function to get from and to dates for the specific time window
@@ -554,22 +561,6 @@ export function parseQuery(qstr) {
   return query;
 }
 
-export function getEventTypeString(typeName) {
-  let typeString = '';
-  if (typeName.indexOf('conn') > -1) typeString = 'Connection';
-  else if (typeName.indexOf('ssh') > -1) typeString = 'SSH';
-  else if (typeName.indexOf('dns') > -1) typeString = 'DNS';
-  else if (typeName.indexOf('http') > -1) typeString = 'HTTP';
-  else if (typeName.indexOf('ssl') > -1) typeString = 'SSL';
-  else if (typeName.indexOf('files') > -1) typeString = 'File';
-  else if (typeName.indexOf('rank_alert') > -1) typeString = 'Rank Alert';
-  else if (typeName.indexOf('alert') > -1) typeString = 'Alert';
-  else if (typeName.indexOf('sysmon') > -1) typeString = 'Sysmon';
-  else if (typeName.indexOf('report') > -1) typeString = 'Report';
-  else typeString = 'Other';
-  return typeString;
-}
-
 let stringConstructor = 'test'.constructor;
 let arrayConstructor = [].constructor;
 let objectConstructor = {}.constructor;
@@ -593,4 +584,12 @@ export function whatIsIt(object) {
   else {
     return 'unknown';
   }
+}
+
+export function getPosition(el) {
+  // yay readability
+  for (var lx = 0, ly = 0;
+    el != null;
+    lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
+  return {x: lx, y: ly};
 }

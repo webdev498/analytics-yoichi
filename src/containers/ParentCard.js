@@ -5,7 +5,7 @@ import Card from 'material-ui/Card/Card';
 import FontIcon from 'material-ui/FontIcon';
 import Loader from '../components/Loader';
 
-import {fetchApiData, removeComponent} from 'actions/ParentCard';
+import {fetchApiData, removeComponent, broadcastEvent} from 'actions/ParentCard';
 import {Colors} from 'theme/colors';
 import {updateRoute} from 'actions/core';
 
@@ -105,7 +105,7 @@ const styles = {
   }
 };
 
-class ParentCard extends React.Component {
+export class ParentCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -142,12 +142,6 @@ class ParentCard extends React.Component {
       });
 
       return;
-    }
-
-    // TODO find a non hacky way to do this.
-    if (props.type === 'AlertDetails') {
-      api.queryParams.date = props.params.date;
-      api.pathParams = Object.assign({}, api.pathParams, props.params);
     }
 
     props.fetchApiData(props.id, api, props.params);
@@ -219,13 +213,13 @@ class ParentCard extends React.Component {
         }
       });
 
-      const updatedApi = Object.assign({}, api, {queryParams: queryParams});
+      const updatedApi = Object.assign({}, api, {queryParams});
       fetchApiData(id, updatedApi, params, {customParams});
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const {data} = nextProps;
+    const {data, eventData} = nextProps;
     let {meta: {fetchDataFor}} = nextProps;
     if (data && fetchDataFor) {
       if (!Array.isArray(fetchDataFor)) {
@@ -235,6 +229,24 @@ class ParentCard extends React.Component {
       fetchDataFor.forEach(apiObj => {
         this.callApi(apiObj, nextProps);
       });
+    }
+
+    if (eventData) {
+      const {type, data} = eventData;
+
+      if (type === 'updateSearch') {
+        this.myTextInput.value = data;
+        this.setState({
+          search: data,
+          clearIconStyle: {
+            color: Colors.white,
+            background: Colors.smoke
+          },
+          searchTextStyle: {
+            paddingLeft: '53px'
+          }
+        });
+      }
     }
   }
 
@@ -393,6 +405,10 @@ class ParentCard extends React.Component {
     );
   }
 
+  handleMalwareClick() {
+
+  }
+
   render() {
     const {props} = this;
 
@@ -426,6 +442,7 @@ class ParentCard extends React.Component {
 }
 
 ParentCard.contextTypes = {
+  muiTheme: React.PropTypes.object,
   store: React.PropTypes.object
 };
 
@@ -435,7 +452,8 @@ function mapStateToProps(state, ownProps) {
   let data = null,
     isFetching = false,
     isError = false,
-    errorData = null;
+    errorData = null,
+    eventData = null;
 
   if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
@@ -444,6 +462,7 @@ function mapStateToProps(state, ownProps) {
     isFetching = propsById.get('isFetching');
     isError = propsById.get('isError');
     errorData = propsById.get('errorData');
+    eventData = propsById.get('eventData');
   }
 
   const duration = apiData.get('duration');
@@ -453,10 +472,11 @@ function mapStateToProps(state, ownProps) {
     isFetching,
     isError,
     errorData,
-    duration
+    duration,
+    eventData
   };
 }
 
 export default connect(mapStateToProps, {
-  fetchApiData, updateRoute, removeComponent
+  fetchApiData, updateRoute, removeComponent, broadcastEvent
 })(ParentCard);

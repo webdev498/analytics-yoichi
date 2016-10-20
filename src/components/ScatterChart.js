@@ -65,12 +65,12 @@ export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
     'chartRightMargin': '0',
     'chartBottomMargin': '0',
     'numVDivLines': '10',
-    'canvasBgColor': Colors.defaultCanvasBGColors,
+    'canvasBgColor': Colors.defaultCanvasBG,
     'canvasbgAlpha': '100',
     'canvasBgRatio': '30,70',
     'canvasBgAngle': '280',
-    'xAxisLineColor': Colors.axisColor,
-    'yaxislinecolor': Colors.axisColor
+    'xAxisLineColor': Colors.axis,
+    'yaxislinecolor': Colors.axis
   }, chartOptions);
 
   if (dataSet.length > 0) {

@@ -1,47 +1,350 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
-import $ from 'jquery';
 import {
   firstCharCapitalize,
   getCountryNameByCountryCode,
-  whatIsIt
+  getPosition,
+  isUndefined,
+  isNull,
+  whatIsIt,
+  formatDateInLocalTimeZone
 } from 'utils/utils';
 import Cookies from 'cookies-js';
+import vis from 'vis';
 import {baseUrl, networkGraphDefaultOptions} from 'config';
+// Loader will get removed after started using fetchApiData function from props object
 import Loader from '../components/Loader';
+import ContextualMenu from '../components/ContextualMenu';
 
 const style = {
-  searchTextBox: {
-    backgroundColor: '#646A7D',
-    padding: '10px',
-    border: '0px',
-    // margin: '5%',
-    width: '211px',
-    height: '40px',
-    color: '#B8BBC3',
-    fontFamily: 'Open Sans',
-    marginTop: '28px',
-    marginLeft: '24px',
-    marginRight: '24px'
+  undoGraph: {
+    bottom: '148px',
+    left: '33px',
+    position: 'absolute',
+    cursor: 'pointer',
+    display: 'none'
   },
-  selectedNodeDetails: {
-    marginTop: '28px',
-    marginBottom: '28px',
-    marginLeft: '24px',
-    marginRight: '24px',
-    width: '90%',
-    color: '#24293D',
-    fontSize: '12pt',
-    fontFamily: 'Open Sans',
-    overflowWrap: 'break-word',
-    paddingRight: '20px'
+  resetGraph: {
+    bottom: '180px',
+    left: '33px',
+    position: 'absolute',
+    cursor: 'pointer',
+    display: 'none'
+  },
+  loader: {
+    position: 'absolute',
+    top: '350px',
+    display: 'flex',
+    backgroundColor: Colors.contextBG,
+    padding: '20px',
+    left: '300px',
+    width: '350px'
   }
 };
 
-let nodeObjects = {},
-  edgeObjects = {},
-  timeWindow = '1h',
-  undoGraphCount = 0;
+let timeWindow = '1h',
+  undoGraphCount = 0,
+  physicsTrue = {
+    physics: {
+      'stabilization': true
+    }
+  },
+  physicsFalse = {
+    physics: false
+  },
+  emptyNodesEdges = {
+    nodes: [],
+    edges: []
+  };
+
+function createNodeObject(dataNode) {
+  let nodeObject = {
+    id: dataNode.id,
+    type: dataNode.type,
+    label: '  ' + dataNode.id,
+    title: '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id,
+    nodeDetails: [],
+    actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
+    borderWidth: '0',
+    font: {
+      face: 'Open Sans',
+      color: Colors.pebble,
+      size: '11',
+      align: 'left'
+    },
+    shape: 'image',
+    color: {
+      color: Colors.networkNodeLabel,
+      highlight: Colors.turquoise
+    }
+  };
+
+  nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {dataNode.id}</li>);
+
+  let metaDataObject = handleMetaData(dataNode.metadata, nodeObject),
+    nodeStatus = metaDataObject.nodeStatus;
+  nodeObject = metaDataObject.nodeObject;
+  nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
+
+  return nodeObject;
+}
+
+function createEdgeObject(dataEdge) {
+  let edgeObject = {
+    id: dataEdge.id,
+    type: dataEdge.type,
+    from: dataEdge.source,
+    to: dataEdge.target,
+    arrows: {
+      to: {
+        scaleFactor: 0.5
+      },
+      arrowStrikethrough: false
+    },
+    label: dataEdge.label + '\n\n\n',
+    font: {
+      face: 'Open Sans',
+      color: Colors.pebble,
+      size: '11',
+      align: 'left'
+    },
+    length: 1000,
+    smooth: {
+      type: 'discrete'
+    },
+    color: {
+      color: Colors.pebble,
+      highlight: Colors.turquoise
+    },
+    edgeDetails: []
+  };
+
+  edgeObject.edgeDetails.push(
+    <ul className='no-list-style'>
+      <li>Edge Type: {dataEdge.label}</li>
+      <li>Source: {dataEdge.source}</li>
+      <li>Target: {dataEdge.target}</li>
+    </ul>
+  );
+
+  if (dataEdge.type === 'ioc') {
+    edgeObject.dashes = true;
+  }
+  return edgeObject;
+}
+
+function handleMetaData(metadata, nodeObject) {
+  let nodeStatus = 'safe';
+  nodeObject.metadata = metadata;
+  for (let metadataType in metadata) {
+    let metadataTypeLower = metadataType.toLowerCase(),
+      newLine1 = '\n  ',
+      newLine2 = '<br />';
+
+    if (metadataTypeLower !== 'coordinates') {
+      switch (metadataTypeLower) {
+        case 'reputation':
+          let parameters = {
+              values: metadata[metadataType],
+              nodeStatus: nodeStatus,
+              nodeObject: nodeObject,
+              newLine: {
+                newLine1: newLine1,
+                newLine2: newLine2
+              }
+            },
+            tempObject = handleReputationMetaData(parameters);
+
+          nodeObject = tempObject.nodeObject;
+          nodeStatus = tempObject.nodeStatus;
+          break;
+        case 'country':
+          nodeObject.label += newLine1 +
+            getCountryNameByCountryCode[metadata[metadataType]];
+          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            getCountryNameByCountryCode[metadata[metadataType]];
+          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
+            &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
+          break;
+        case 'date':
+          let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
+          nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
+            dateTime.date + ' ' + dateTime.time;
+          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            dateTime.date + ' ' + dateTime.time;
+          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
+            &nbsp;{dateTime.date} {dateTime.time}</li>);
+          break;
+        case 'displayname':
+          nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
+          nodeObject.nodeDetails.push(<li>Name: {metadata[metadataType]}</li>);
+          break;
+        default:
+          if (metadataTypeLower === 'title') {
+            nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
+              addNewlines(metadata[metadataType]);
+          }
+          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            metadata[metadataType];
+          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
+            &nbsp;{metadata[metadataType]}</li>);
+          break;
+      }
+    }
+  }
+
+  nodeObject.status = nodeStatus;
+
+  return {
+    nodeObject: nodeObject,
+    nodeStatus: nodeStatus
+  };
+}
+
+function handleReputationMetaData(parameters) {
+  let {values, nodeStatus, nodeObject, newLine} = parameters,
+    {newLine1, newLine2} = newLine,
+    label = '',
+    title = '',
+    nodeDetails = '';
+
+  if (!isUndefined(values)) {
+    if (!isUndefined(values.reputation) && (values.reputation).length > 0 && whatIsIt(values.reputation) === 'Array') {
+      let newLine = {
+          newLine1: newLine1,
+          newLine2: newLine2
+        },
+        value = {
+          label: label,
+          title: title,
+          nodeDetails: nodeDetails
+        },
+        reputationText = createReputationText(values.reputation, newLine, value);
+      label = reputationText.label;
+      title = reputationText.title;
+      nodeDetails = reputationText.nodeDetails;
+    }
+
+    if (!isUndefined(values[0]) && !isUndefined(values[0].reputation) &&
+      whatIsIt(values[0].reputation) === 'Array') {
+      let newLine = {
+          newLine1: newLine1,
+          newLine2: newLine2
+        },
+        value = {
+          label: label,
+          title: title,
+          nodeDetails: nodeDetails
+        },
+        reputationText = parseReputationText(values, newLine, value);
+      label = reputationText.label;
+      title = reputationText.title;
+      nodeDetails = reputationText.nodeDetails;
+    }
+  }
+  nodeStatus = 'safe';
+
+  if (label !== '') {
+    nodeObject.label += newLine1 + label;
+    nodeObject.title += newLine2 + title;
+    if (nodeDetails.indexOf('<br />') > -1) {
+      let tempNodeDetails = nodeDetails.split('<br />');
+      tempNodeDetails.forEach((nodeDetail) => {
+        nodeObject.nodeDetails.push(<li>{nodeDetail}</li>);
+      });
+    }
+    else {
+      nodeObject.nodeDetails.push(<li>{nodeDetails}</li>);
+    }
+
+    nodeStatus = (label.indexOf('Scanning Host') > -1) ? 'scan' : 'malicious';
+  }
+
+  return {
+    nodeObject: nodeObject,
+    nodeStatus: nodeStatus
+  };
+}
+
+function createReputationText(values, newLine, value) {
+  let {label, title, nodeDetails} = value,
+    value1 = '',
+    value2 = '',
+    {newLine1, newLine2} = newLine,
+    newLine3 = ',\n  ',
+    newLine4 = ',<br />';
+
+  values.forEach((data) => {
+    newLine1 = (label === '') ? '' : '\n  ';
+    newLine2 = (label === '') ? '' : '<br />';
+    newLine3 = (value1 === '') ? '' : ',\n  ';
+    newLine4 = (value1 === '') ? '' : ',<br />';
+    value1 += newLine3 + data;
+    value2 += newLine4 + data;
+  });
+
+  label += newLine1 + 'Reputation: ' + value1;
+  title += newLine2 + '<b>Reputation:</b> ' + value2;
+  nodeDetails += newLine2 + 'Reputation: ' + value2;
+  return {
+    label: label,
+    title: title,
+    nodeDetails: nodeDetails
+  };
+}
+
+function parseReputationText(values, newLine, value) {
+  let {label, title, nodeDetails} = value,
+    {newLine1, newLine2} = newLine;
+
+  values.forEach((data) => {
+    newLine1 = (label === '') ? '' : '\n  ';
+    newLine2 = (label === '') ? '' : '<br />';
+
+    for (let valueType in data) {
+      if (valueType === 'reputation') {
+        if ((data[valueType]).length > 0) {
+          let newLine = {
+              newLine1: newLine1,
+              newLine2: newLine2
+            },
+            value = {
+              label: label,
+              title: title,
+              nodeDetails: nodeDetails
+            },
+            reputationText = createReputationText(data[valueType], newLine, value);
+          label = reputationText.label;
+          title = reputationText.title;
+          nodeDetails = reputationText.nodeDetails;
+        }
+      }
+      else {
+        title += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
+          data[valueType] + '<br />';
+        nodeDetails += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
+          data[valueType] + '<br />';
+      }
+    }
+  });
+  return {
+    label: label,
+    title: title,
+    nodeDetails: nodeDetails
+  };
+}
+
+function getIcon(nodeType, nodeStatus, nodeAction) {
+  nodeType = nodeType.toLowerCase();
+  const iconPath = '/img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
+
+  if (nodeType !== '') {
+    return iconPath;
+  }
+  else {
+    return '/img/inactive.png';
+  }
+}
 
 function generateDataFromAssetDetails(data) {
   const assetData = [];
@@ -62,263 +365,13 @@ function generateDataFromAssetDetails(data) {
   return assetData;
 }
 
-function createReputationText(values, newLine1, newLine2, value1, value2, value5) {
-  let value3 = '',
-    value4 = '',
-    newLine3 = ',\n  ',
-    newLine4 = ',<br />';
-  for (let rv = 0; rv < values.length; rv++) {
-    if (value1 === '') {
-      newLine1 = '';
-      newLine2 = '';
-    }
-    else {
-      newLine1 = '\n  ';
-      newLine2 = '<br />';
-    }
-    if (value3 === '') {
-      newLine3 = '';
-      newLine4 = '';
-    }
-    else {
-      newLine3 = ',\n  ';
-      newLine4 = ',<br />';
-    }
-    value3 += newLine3 + values[rv];
-    value4 += newLine4 + values[rv];
-  }
-  value1 += newLine1 + 'Reputation: ' + value3;
-  value2 += newLine2 + '<b>Reputation:</b> ' + value4;
-  value5 += newLine2 + 'Reputation: ' + value4;
-  return {
-    value1: value1,
-    value2: value2,
-    value5: value5
-  };
-}
-
-function parseReputationText(values, newLine1, newLine2, value1, value2, value5) {
-  for (let v = 0; v < values.length; v++) {
-    if (value1 === '') {
-      newLine1 = '';
-      newLine2 = '';
-    }
-    else {
-      newLine1 = '\n  ';
-      newLine2 = '<br />';
-    }
-    for (let valueType in values[v]) {
-      if (valueType === 'reputation') {
-        let reputationText = createReputationText(values[v][valueType], newLine1, newLine2, value1, value2, value5);
-        value1 = reputationText.value1;
-        value2 = reputationText.value2;
-        value5 = reputationText.value5;
-      }
-      else {
-        // value1 += newLine1 + firstCharCapitalize(valueType) + ' Reputation: ' + values[v][valueType];
-        value2 += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-          values[v][valueType] + '<br />';
-        value5 += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
-          values[v][valueType] + '<br />';
-      }
-    }
-  }
-  return {
-    value1: value1,
-    value2: value2,
-    value5: value5
-  };
-}
-
-function createNodeObject(dataNode, nodeObject, nodeStatus) {
-  nodeObject.id = dataNode.id;
-  nodeObject.type = dataNode.type;
-  // nodeObject.label = '\n  ' + firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-  nodeObject.label = '  ' + dataNode.id;
-  nodeObject.title = '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id;
-  nodeObject.nodeDetails = firstCharCapitalize(dataNode.type) + ': ' + dataNode.id;
-  nodeObject.actions = (dataNode.actions !== undefined) ? dataNode.actions : [];
-  nodeObject.metadata = dataNode.metadata;
-  for (let metadataType in dataNode.metadata) {
-    let metadataTypeLower = metadataType.toLowerCase();
-    if (metadataTypeLower !== 'coordinates') {
-      switch (metadataTypeLower) {
-        case 'reputation':
-          let values = dataNode.metadata[metadataType],
-            value1 = '',
-            value2 = '',
-            value5 = '',
-            newLine1 = '\n  ',
-            newLine2 = '<br />';
-
-          if (values !== undefined) {
-            if (values.reputation !== undefined) {
-              let reputationText = createReputationText(values.reputation,
-                newLine1, newLine2, value1, value2, value5);
-              value1 = reputationText.value1;
-              value2 = reputationText.value2;
-              value5 = reputationText.value5;
-            }
-
-            let reputationText = parseReputationText(values, newLine1, newLine2, value1, value2, value5);
-            value1 = reputationText.value1;
-            value2 = reputationText.value2;
-            value5 = reputationText.value5;
-          }
-          if (value1 !== '') {
-            nodeObject.label += '\n  ' + value1;
-            nodeObject.title += '<br />' + value2;
-            nodeObject.nodeDetails += '<br />' + value5;
-
-            if (value1.indexOf('Scanning Host') > -1) {
-              nodeStatus = 'scan';
-            }
-            else {
-              nodeStatus = 'malicious';
-            }
-          }
-          else {
-            nodeStatus = 'safe';
-          }
-          break;
-        case 'country':
-          nodeObject.label += '\n  ' +
-            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-          nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-          nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-            getCountryNameByCountryCode[dataNode.metadata[metadataType]];
-          break;
-        case 'displayname':
-          // nodeObject.label += '\n  Name: ' + dataNode.metadata[metadataType];
-          nodeObject.title += '<br /><b>Name:</b> ' + dataNode.metadata[metadataType];
-          nodeObject.nodeDetails += '<br />Name: ' + dataNode.metadata[metadataType];
-          break;
-        default:
-          if (metadataTypeLower === 'title') {
-            nodeObject.label += '\n  ' + firstCharCapitalize(metadataType) + ': ' +
-              addNewlines(dataNode.metadata[metadataType]);
-          }
-          nodeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            dataNode.metadata[metadataType];
-          nodeObject.nodeDetails += '<br />' + firstCharCapitalize(metadataType) + ': ' +
-            dataNode.metadata[metadataType];
-          break;
-      }
-    }
-  }
-  nodeObject.borderWidth = '0';
-  nodeObject.font = {
-    'face': 'Open Sans',
-    'color': Colors.pebble,
-    'size': '11',
-    'align': 'left'
-  };
-  nodeObject.shape = 'image';
-  nodeObject.color = {};
-  nodeObject.color.color = '#F2F2F4';
-  nodeObject.color.highlight = Colors.turquoise;
-  nodeObject.status = nodeStatus;
-  nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-  let actions = [];
-  if (dataNode.actions !== null && dataNode.actions !== undefined) {
-    actions = dataNode.actions;
-  }
-  nodeObject.actions = actions;
-
-  return nodeObject;
-}
-
-function getNodesEdges(data) {
-  let nodes = [],
-    edges = [],
-    dataNodes = data.nodes,
-    dataEdges = data.edges;
-
-  if (dataNodes !== undefined) {
-    for (let i = 0; i < dataNodes.length; i++) {
-      let dataNode = dataNodes[i],
-        nodeObject = {},
-        nodeStatus = 'safe';
-
-      if (nodeObjects[dataNode.id] === undefined) {
-        nodeObject = createNodeObject(dataNode, nodeObject, nodeStatus);
-        nodes.push(nodeObject);
-        nodeObjects[dataNode.id] = nodeObject;
-      }
-    }
-  }
-
-  if (dataEdges !== undefined) {
-    for (let i = 0; i < dataEdges.length; i++) {
-      let dataEdge = dataEdges[i],
-        edgeObject = {};
-
-      if (edgeObjects[dataEdge.id] === undefined) {
-        edgeObject.id = dataEdge.id;
-        edgeObject.type = dataEdge.type;
-        edgeObject.from = dataEdge.source;
-        edgeObject.to = dataEdge.target;
-        edgeObject.arrows = {
-          'to': {
-            'scaleFactor': 0.5
-          },
-          'arrowStrikethrough': false
-        };
-        edgeObject.label = dataEdge.label + '\n\n\n';
-        edgeObject.edgeDetails = 'Edge Type: ' + dataEdge.label;
-        edgeObject.edgeDetails += '<br/>Source: ' + dataEdge.source;
-        edgeObject.edgeDetails += '<br/>Target: ' + dataEdge.target;
-        edgeObject.font = {
-          'face': 'Open Sans',
-          'color': Colors.pebble,
-          'size': '11',
-          'align': 'left'
-        };
-        edgeObject.length = 1000;
-        edgeObject.smooth = {
-          type: 'discrete'
-        };
-        edgeObject.color = {};
-        edgeObject.color.color = Colors.pebble;
-        edgeObject.color.highlight = Colors.turquoise;
-
-        if (dataEdge.type === 'ioc') {
-          edgeObject.dashes = true;
-        }
-
-        edges.push(edgeObject);
-        edgeObjects[dataEdge.target] = edgeObject;
-        edgeObjects[edgeObject.id] = edgeObject;
-      }
-    }
-  }
-
-  return {
-    'nodes': nodes,
-    'edges': edges
-  };
-}
-
-function getIcon(nodeType, nodeStatus, nodeAction) {
-  nodeType = nodeType.toLowerCase();
-  const iconPath = '/img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
-
-  if (nodeType !== '') {
-    return iconPath;
-  }
-  else {
-    return '/img/inactive.png';
-  }
-}
-
 function getActionsByTypes(actionsData) {
   let nodeTypes = [],
     lookup = {},
     actions = [];
-  for (let i = 0; i < actionsData.length; i++) {
-    for (let j = 0; j < actionsData[i].types.length; j++) {
-      let type = actionsData[i].types[j];
+  actionsData.forEach((action) => {
+    let types = action.types;
+    types.forEach((type) => {
       if (!(type in lookup)) {
         lookup[type] = 1;
         const obj = {
@@ -327,44 +380,44 @@ function getActionsByTypes(actionsData) {
 
         nodeTypes.push(obj);
       }
-    }
-  }
+    });
+  });
 
-  for (let i = 0; i < nodeTypes.length; i++) {
+  nodeTypes.forEach((node) => {
     let actionObject = {},
-      nodeType = (nodeTypes[i].type).toLowerCase();
+      nodeType = (node.type).toLowerCase();
     actionObject.nodeType = nodeType;
     actionObject.actions = [];
 
-    for (let j = 0; j < actionsData.length; j++) {
-      if ((actionsData[j].types).indexOf(nodeType) > -1) {
+    actionsData.forEach((action) => {
+      if ((action.types).indexOf(nodeType) > -1) {
         let tempObj = {
-          reportId: actionsData[j].name,
-          targetType: actionsData[j].targetType,
-          label: actionsData[j].label,
-          parameters: actionsData[j].parameters
+          reportId: action.name,
+          targetType: action.targetType,
+          label: action.label,
+          parameters: action.parameters
         };
         actionObject.actions.push(tempObj);
       }
-    }
+    });
 
     actions.push(actionObject);
-  }
+  });
 
   return actions;
 }
 
 function fetchExtendedNodes(reportId, duration, parameters) {
   let otherParameters = '';
-  if (parameters !== undefined && parameters.length !== undefined) {
-    for (let i = 0; i < parameters.length; i++) {
-      if (parameters[i].userInput === true) {
-        otherParameters += '&' + parameters[i].name + '=' + $('#' + parameters[i].id).val();
+  if (!isUndefined(parameters) && !isUndefined(parameters.length)) {
+    parameters.forEach((parameter) => {
+      if (parameter.userInput === true) {
+        otherParameters += '&' + parameter.name + '=' + document.getElementById(parameter.id).value;
       }
       else {
-        otherParameters += '&' + parameters[i].name + '=' + parameters[i].value;
+        otherParameters += '&' + parameter.name + '=' + parameter.value;
       }
-    }
+    });
   }
   const accessToken = Cookies.get('access_token'),
     tokenType = Cookies.get('token_type'),
@@ -392,26 +445,12 @@ function fetchExtendedNodes(reportId, duration, parameters) {
 
 function isNodeOrEdgeAlreadyExists(array, id) {
   let exists = false;
-  for (let i = 0; i < array.length; i++) {
-    if (array[i].id === id) {
+  array.forEach((value) => {
+    if (value.id === id) {
       exists = true;
     }
-  }
+  });
   return exists;
-}
-
-function checkForUserInputs(parameters) {
-  let userInputParameters = [];
-  if (parameters.length !== undefined) {
-    for (let k = 0; k < parameters.length; k++) {
-      let tempObj = {};
-      if (parameters[k].userInput === true) {
-        tempObj.name = parameters[k].name;
-        userInputParameters.push(tempObj);
-      }
-    }
-  }
-  return userInputParameters;
 }
 
 function addNewlines(str) {
@@ -419,9 +458,7 @@ function addNewlines(str) {
   if (str.length > char) {
     let result = '';
     while (str.length > 0) {
-      // let last = str.lastIndexOf(' ');
-      // console.log(last, str);
-      result += str.substring(0, char) + '\n  '; // Math.min(char, last)
+      result += str.substring(0, char) + '\n  ';
       str = str.substring(char);
     }
     return result;
@@ -429,96 +466,170 @@ function addNewlines(str) {
   return str;
 }
 
-function getPos(el) {
-  // yay readability
-  for (var lx = 0, ly = 0;
-    el != null;
-    lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
-  return {x: lx, y: ly};
+function displayActionAsSelected(actionsCount, actionId) {
+  for (let j = 0; j < actionsCount; j++) {
+    let tempId = 'action' + j;
+    let downarrowId = 'downarrow' + j;
+
+    if (tempId === actionId) {
+      document.getElementById(tempId).style.backgroundColor = Colors.selectedActionBG;
+      if (document.getElementById(downarrowId) !== undefined &&
+        document.getElementById(downarrowId) !== null) {
+        document.getElementById(downarrowId).style.backgroundColor = Colors.selectedActionBG;
+      }
+    }
+    else {
+      document.getElementById(tempId).style.backgroundColor = 'transparent';
+      if (document.getElementById(downarrowId) !== undefined &&
+        document.getElementById(downarrowId) !== null) {
+        document.getElementById(downarrowId).style.backgroundColor = 'transparent';
+      }
+    }
+  }
+}
+
+function displayNotificationMessage(message, actionId) {
+  let position = getPosition(document.getElementById(actionId));
+  document.getElementById('notification-message').innerHTML = message;
+  document.getElementById('notification-message').style.top = (position.y - 85) + 'px';
+  ANIMATIONS.fadeIn(document.getElementById('notification-message'), {
+    duration: 2,
+    complete: function() {
+      document.getElementById('notification-message').style.display = 'block';
+
+      ANIMATIONS.fadeOut(document.getElementById('notification-message'), {
+        duration: 3000,
+        complete: function() {
+          document.getElementById('notification-message').style.display = 'none';
+        }
+      });
+    }
+  });
+}
+
+function openFullMalwareReport(fullMalwareReportLink) {
+  if (fullMalwareReportLink !== '') {
+    window.open(baseUrl + fullMalwareReportLink);
+  }
 }
 
 class NetworkGraph extends React.Component {
+  static propTypes = {
+    duration: PropTypes.string,
+    params: PropTypes.object
+  }
+
   constructor(props) {
     super(props);
-    const {duration} = this.props,
-      alertDate = this.props.params.date;
+    const {duration, params} = this.props,
+      alertDate = params.date;
+
+    this.nodeObjects = {};
+    this.edgeObjects = {};
 
     this.state = {
       nodes: [],
       edges: [],
-      style: {
-        'networkGraph': {
-          'height': '600px',
-          'width': '100%'
-        },
-        'contextualMenu': {
-          width: '259px',
-          // height: '520px',
-          backgroundColor: '#898E9B', // '#6B7282',
-          // opacity: '0.8',
-          display: 'none',
-          position: 'absolute',
-          // left: '830px'
-          top: '0px',
-          right: '0px',
-          bottom: '0px'
-        }
-      },
-      selectedNodeDetails: '',
-      selectedNode: '',
-      loadAgain: true,
-      nodesListStatus: 'default',
-      actionsData: [],
-      actions: '',
+      previousNodesEdges: emptyNodesEdges,
+      originalNodesEdges: emptyNodesEdges,
       duration: duration,
       alertDate: alertDate,
+      isFetching: false, // This flag will get removed after started using fetchApiData function from props object
+      showContextMenu: false,
+      showUndoResetButtons: false,
+      nodesListStatus: 'default',
+      selectedNodeDetails: '',
+      selectedNode: '',
       selectedNodesForExtendingGraph: [],
-      zoomScale: '100%',
-      isFetching: false,
-      actionPerformed: {
-        top: 0,
-        right: '259px',
-        fontSize: '12pt',
-        position: 'absolute',
-        padding: '20px',
-        backgroundColor: '#DADADE',
-        color: '#24293D',
-        display: 'none'
-      },
-      previousNodesEdges: {
-        nodes: [],
-        edges: []
-      },
-      originalNodesEdges: {
-        nodes: [],
-        edges: []
-      },
-      undoGraphStyle: {
-        top: '560px',
-        left: '35px',
-        position: 'absolute',
-        cursor: 'pointer',
-        display: 'none'
-      },
-      resetGraphStyle: {
-        top: '530px',
-        left: '35px',
-        position: 'absolute',
-        cursor: 'pointer',
-        display: 'none'
-      },
+      actionsData: [],
       loaderText: '',
-      loaderStyle: {
-      }
+      loadAgain: true
     };
 
+    this.getNodesEdges = this.getNodesEdges.bind(this);
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
-    this.getContextMenu = this.getContextMenu.bind(this);
+    this.createNetworkGraph = this.createNetworkGraph.bind(this);
+    this.getGraphAndActions = this.getGraphAndActions.bind(this);
+    this.deselectNode = this.deselectNode.bind(this);
+    this.deselectEdge = this.deselectEdge.bind(this);
+    this.deselect = this.deselect.bind(this);
+    this.setHoverBlurNodeImage = this.setHoverBlurNodeImage.bind(this);
+
     this.loadContextMenu = this.loadContextMenu.bind(this);
+    this.loadNodeEdgeContextMenu = this.loadNodeEdgeContextMenu.bind(this);
+    this.loadNodeContextMenu = this.loadNodeContextMenu.bind(this);
+    this.loadEdgeContextMenu = this.loadEdgeContextMenu.bind(this);
+
+    this.loadGraph = this.loadGraph.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
-    this.collapseExpandCM = this.collapseExpandCM.bind(this);
-    this.undoGraph = this.undoGraph.bind(this);
-    this.resetGraph = this.resetGraph.bind(this);
+    this.fetchExtendedNodes = this.fetchExtendedNodes.bind(this);
+    this.updateGraph = this.updateGraph.bind(this);
+    this.undoOrResetGraph = this.undoOrResetGraph.bind(this);
+    this.isGraphExtended = this.isGraphExtended.bind(this);
+    this.updateNodeAndEdgeObjects = this.updateNodeAndEdgeObjects.bind(this);
+  }
+
+  getNodesEdges(data) {
+    let nodes = [],
+      edges = [],
+      dataNodes = data.nodes,
+      dataEdges = data.edges;
+
+    if (!isUndefined(dataNodes)) {
+      dataNodes.forEach((dataNode) => {
+        if (isUndefined(this.nodeObjects[dataNode.id])) {
+          let nodeObject = createNodeObject(dataNode);
+          nodes.push(nodeObject);
+          this.nodeObjects[dataNode.id] = nodeObject;
+        }
+      });
+    }
+
+    if (!isUndefined(dataEdges)) {
+      dataEdges.forEach((dataEdge) => {
+        if (isUndefined(this.edgeObjects[dataEdge.id])) {
+          let edgeObject = createEdgeObject(dataEdge);
+          edges.push(edgeObject);
+          this.edgeObjects[dataEdge.target] = edgeObject;
+          this.edgeObjects[edgeObject.id] = edgeObject;
+        }
+      });
+    }
+
+    return {
+      'nodes': nodes,
+      'edges': edges
+    };
+  }
+
+  updateNodeAndEdgeObjects(updatedNodes, updatedEdges) {
+    let tempNodeObjects = {},
+      tempEdgeObjects = {};
+
+    for (let key in this.nodeObjects) {
+      if (!isUndefined(updatedNodes)) {
+        updatedNodes.forEach((updatedNode) => {
+          if (updatedNode.id === key) {
+            tempNodeObjects[key] = this.nodeObjects[key];
+            tempEdgeObjects[key] = this.edgeObjects[key];// Remove other targets from edgeObjects
+          }
+        });
+      }
+    }
+
+    this.nodeObjects = Object.assign({}, tempNodeObjects);
+
+    for (let key in this.edgeObjects) {
+      if (!isUndefined(updatedEdges)) {
+        updatedEdges.forEach((updatedEdge) => {
+          if (updatedEdge.id === key) {
+            tempNodeObjects[key] = this.nodeObjects[key];
+            tempEdgeObjects[key] = this.edgeObjects[key];// Remove other targets from edgeObjects
+          }
+        });
+      }
+    }
+    this.edgeObjects = Object.assign({}, tempEdgeObjects);
   }
 
   loadNetworkGraph(data, loadAgain, duration) {
@@ -535,16 +646,26 @@ class NetworkGraph extends React.Component {
       return;
     }
 
-    nodeObjects = {};
-    edgeObjects = {};
+    let networkData = this.getGraphAndActions(data);
 
+    if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
+      if (networkData.nodes.length > 0) {
+        this.createNetworkGraph(networkData);
+        this.state.loadAgain = false;
+      }
+      else {
+        document.getElementById('network-graph').innerHTML = 'No additional results were found.';
+      }
+    }
+  }
+
+  getGraphAndActions(data) {
     let networkData = {
       nodes: [],
       edges: []
     };
-
-    if (this.state.nodesListStatus === 'default') { //  || timeWindow !== duration
-      let nodesEdges = getNodesEdges(data[0]);
+    if (this.state.nodesListStatus === 'default') {
+      let nodesEdges = this.getNodesEdges(data[0]);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       this.state.originalNodesEdges = {
@@ -559,933 +680,584 @@ class NetworkGraph extends React.Component {
         edges: nodesEdges.edges
       };
     }
+    return networkData;
+  }
 
-    if (this.networkGraph !== null && this.networkGraph !== undefined) {
-      let options = networkGraphDefaultOptions;
+  createNetworkGraph(networkData) {
+    const that = this,
+      {props} = this,
+      {attributes} = props;
 
-      // create a network
-      if (networkData.nodes.length > 0) {
-        const that = this;
+    let options = Object.assign(networkGraphDefaultOptions,
+      {
+        height: (!isUndefined(attributes.canvasStyle.height))
+          ? attributes.canvasStyle.height
+          : networkGraphDefaultOptions.height
+      }),
+      network = new vis.Network(this.networkGraph, networkData, options);
 
-        let network = new vis.Network(this.networkGraph, networkData, options);
+    if (networkData.nodes.length <= 10) {
+      network.setOptions(physicsFalse);
+    }
+    else {
+      network.setOptions(physicsTrue);
+    }
 
-        if (networkData.nodes.length <= 10) {
-          network.setOptions({
-            physics: false
-          });
-        }
-        else {
-          network.setOptions({
-            physics: {
-              // 'barnesHut': {
-              //   'avoidOverlap': 1
-              // },
-              'stabilization': true
-            }
-          });
-        }
+    network.on('selectNode', this.loadContextMenu(network, 'node'));
+    network.on('selectEdge', this.loadContextMenu(network, 'edge'));
+    network.on('deselectNode', this.deselectNode(network));
+    network.on('deselectEdge', this.deselectEdge());
 
-        network.on('selectNode', this.loadContextMenu(network, 'node'));
-        network.on('selectEdge', this.loadContextMenu(network, 'edge'));
+    network.on('hoverNode', function(params) {
+      let hoverNode = params.node,
+        node = network.body.nodes[hoverNode];
+      node = that.setHoverBlurNodeImage('hover', hoverNode, node);
+    });
 
-        network.on('deselectNode', function(params) {
-          let i = 0;
-          for (let nodeObject in nodeObjects) {
-            let deselectedNode = nodeObjects[nodeObject], // params.previousSelection.nodes[0],
-              node = network.body.nodes[deselectedNode.id];
+    network.on('blurNode', function(params) {
+      let blurNode = params.node,
+        node = network.body.nodes[blurNode];
+      node = that.setHoverBlurNodeImage('blur', blurNode, node);
+    });
 
-            if (deselectedNode !== undefined) {
-              node.setOptions({
-                image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
-              });
+    document.getElementsByClassName('vis-up')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
+  }
 
-              if (i === 0) {
-                that.setState({
-                  'loadAgain': false,
-                  style: {
-                    'networkGraph': {
-                      'height': '600px',
-                      'width': '100%'
-                    },
-                    'contextualMenu': {
-                      width: '259px',
-                      backgroundColor: '#898E9B', // '#6B7282',
-                      // opacity: '0.8',
-                      display: 'none',
-                      position: 'absolute',
-                      top: '0px',
-                      right: '0px',
-                      bottom: '0px'
-                    }
-                  },
-                  selectedNodeDetails: '',
-                  actions: '',
-                  selectedNode: '',
-                  selectedNodesForExtendingGraph: []
-                });
-                document.getElementById('actions').innerHTML = '';
-                document.getElementById('refreshData').style.marginLeft = 'auto';
-              }
-              i++;
-            }
-          }
-        });
+  setHoverBlurNodeImage(event, nodeID, node) {
+    let selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
 
-        network.on('deselectEdge', function(params) {
-          let i = 0;
-          for (let edgeObject in edgeObjects) {
-            let deselectedEdge = edgeObjects[edgeObject];
-            // let edge = network.body.edges[deselectedEdge.id];
-
-            if (deselectedEdge !== undefined) {
-              if (i === 0) {
-                that.setState({
-                  'loadAgain': false,
-                  style: {
-                    'networkGraph': {
-                      'height': '600px',
-                      'width': '100%'
-                    },
-                    'contextualMenu': {
-                      width: '259px',
-                      backgroundColor: '#898E9B', // '#6B7282',
-                      // opacity: '0.8',
-                      display: 'none',
-                      position: 'absolute',
-                      top: '0px',
-                      right: '0px',
-                      bottom: '0px'
-                    }
-                  },
-                  selectedNodeDetails: '',
-                  actions: '',
-                  selectedNode: '',
-                  selectedNodesForExtendingGraph: []
-                });
-                document.getElementById('actions').innerHTML = '';
-                document.getElementById('refreshData').style.marginLeft = 'auto';
-              }
-              i++;
-            }
-          }
-        });
-
-        network.on('hoverNode', function(params) {
-          let hoverNode = params.node,
-            // selectedNodes = network.getSelection().nodes,
-            node = network.body.nodes[hoverNode],
-            selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
-
-          if (nodeObjects[hoverNode] !== undefined) {
+    if (!isUndefined(this.nodeObjects[nodeID])) {
+      node.setOptions({
+        image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status,
+          event === 'hover' ? 'HOVER' : 'INACTIVE')
+      });
+      if (!isUndefined(selectedNodesForExtendingGraph)) {
+        selectedNodesForExtendingGraph.forEach((selectedNode) => {
+          if (selectedNode.nodeID === nodeID) {
             node.setOptions({
-              image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'HOVER')
+              image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status, 'SELECTED')
             });
-
-            for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-              if (selectedNodesForExtendingGraph[i].nodeID === hoverNode) {
-                node.setOptions({
-                  image: getIcon(nodeObjects[hoverNode].type, nodeObjects[hoverNode].status, 'SELECTED')
-                });
-              }
-            }
           }
         });
+      }
+    }
+    return node;
+  }
 
-        network.on('blurNode', function(params) {
-          let blurNode = params.node,
-            // selectedNodes = network.getSelection().nodes,
-            node = network.body.nodes[blurNode],
-            selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
+  deselectNode(network) {
+    return (event) => {
+      let i = 0;
+      for (let nodeObject in this.nodeObjects) {
+        let deselectedNode = this.nodeObjects[nodeObject],
+          node = network.body.nodes[deselectedNode.id];
 
-          if (nodeObjects[blurNode] !== undefined) {
-            node.setOptions({
-              image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'INACTIVE')
-            });
+        if (!isUndefined(deselectedNode)) {
+          node.setOptions({
+            image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
+          });
 
-            for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-              if (selectedNodesForExtendingGraph[i].nodeID === blurNode) {
-                node.setOptions({
-                  image: getIcon(nodeObjects[blurNode].type, nodeObjects[blurNode].status, 'SELECTED')
-                });
-              }
-            }
+          if (i === 0) {
+            this.deselect(deselectedNode);
           }
-        });
-
-        // network.on('zoom', function(params) {
-        //   that.setState({
-        //     'zoomScale': parseInt(params.scale * 100) + '%'
-        //   });
-        // });
-
-        $('.vis-up').hide();
-        $('.vis-down').hide();
-        $('.vis-left').hide();
-        $('.vis-right').hide();
+          i++;
+        }
       }
-      else {
-        document.getElementById('networkGraph').innerHTML = 'No additional results were found.';
+    };
+  }
+
+  deselectEdge() {
+    return (event) => {
+      let i = 0;
+      for (let edgeObject in this.edgeObjects) {
+        let deselectedEdge = this.edgeObjects[edgeObject];
+
+        if (!isUndefined(deselectedEdge)) {
+          if (i === 0) {
+            this.deselect(deselectedEdge);
+          }
+          i++;
+        }
       }
+    };
+  }
+
+  deselect(deselected) {
+    if (!isUndefined(deselected)) {
+      this.setState({
+        loadAgain: false,
+        showContextMenu: false,
+        selectedNodeDetails: '',
+        actions: '',
+        selectedNode: '',
+        selectedNodesForExtendingGraph: []
+      });
+      document.getElementById('actions').innerHTML = '';
+      document.getElementById('refreshData').style.marginLeft = 'auto';
     }
   }
 
   loadContextMenu(network, contextMenuType) {
     return (event) => {
       let listHTML = {
-        'loadAgain': false,
-        'actions': ''
+        loadAgain: false
       };
       this.setState(listHTML);
+
+      let selectedIDs = network.getSelection(),
+        selected = '';
 
       if (contextMenuType === 'node' && network.getSelection().nodes.length > 0) {
-        let SelectedNodeIDs = network.getSelection(),
-          selectedNodeDetails = '',
-          nodeType = '',
-          nodeID = SelectedNodeIDs.nodes[0],
-          selectedNodesForExtendingGraph = []; // this.state.selectedNodesForExtendingGraph;
-
-        let nodeAt = network.getBoundingBox(nodeID);
-
-        if (nodeID !== undefined) {
-          for (let i = 0; i < this.state.nodes.length; i++) {
-            let node = network.body.nodes[this.state.nodes[i].id];
-            if (this.state.nodes[i].id === nodeID) {
-              // console.log('Selected Node Id:', this.state.nodes[i]);
-              selectedNodeDetails += this.state.nodes[i].nodeDetails;
-              nodeType = this.state.nodes[i].type;
-              node.setOptions({
-                image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'SELECTED')
-              });
-            }
-            else {
-              node.setOptions({
-                image: getIcon(this.state.nodes[i].type, this.state.nodes[i].status, 'INACTIVE')
-              });
-            }
-          }
-
-          document.getElementById('actions').innerHTML = '';
-          $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
-
-          $('#contextualMenu').animate({width: '259px'});
-          document.getElementById('rightArrow').style.display = 'block';
-          document.getElementById('contextualMenuContents').style.display = 'block';
-          // document.getElementById('searchNetworkNode').style.display = 'block';
-          document.getElementById('expandCM').style.display = 'none';
-
-          document.getElementById('refreshData').style.marginLeft = '735px';
-
-          selectedNodesForExtendingGraph.push({
-            'nodeID': nodeID,
-            'reportId': '',
-            'timeWindow': timeWindow
-          });
-
-          let statesJSON = {
-            'loadAgain': false,
-            'selectedNodeDetails': selectedNodeDetails,
-            selectedNode: nodeID,
-            style: {
-              'networkGraph': {
-                'height': '600px',
-                'width': '100%'
-              },
-              'contextualMenu': {
-                width: '259px',
-                // height: '520px',
-                backgroundColor: '#898E9B', // '#6B7282',
-                // opacity: '0.8',
-                position: 'absolute',
-                // left: '830px'
-                top: '0px',
-                right: '0px',
-                bottom: '0px'
-              }
-            },
-            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph
-          };
-          this.setState(statesJSON);
-        }
+        selected = 'node';
       }
-
       if (contextMenuType === 'edge' && network.getSelection().edges.length > 0) {
-        let SelectedNodeIDs = network.getSelection(),
-          selectedNodeDetails = '',
-          nodeType = '',
-          nodeID = SelectedNodeIDs.edges[0];
-
-        let nodeAt = network.getBoundingBox(nodeID);
-        // console.log('edge', nodeID);
-        if (nodeID !== undefined) {
-          for (let i = 0; i < this.state.edges.length; i++) {
-            let node = network.body.edges[this.state.edges[i].id];
-            if (this.state.edges[i].id === nodeID) {
-              selectedNodeDetails += this.state.edges[i].edgeDetails;
-              nodeType = this.state.edges[i].type;
-            }
-          }
-
-          document.getElementById('actions').innerHTML = '';
-          $('#actions').append(this.getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt));
-
-          $('#contextualMenu').animate({width: '259px'});
-          document.getElementById('rightArrow').style.display = 'block';
-          document.getElementById('contextualMenuContents').style.display = 'block';
-          // document.getElementById('searchNetworkNode').style.display = 'block';
-          document.getElementById('expandCM').style.display = 'none';
-
-          document.getElementById('refreshData').style.marginLeft = '735px';
-
-          let statesJSON = {
-            'loadAgain': false,
-            'selectedNodeDetails': selectedNodeDetails,
-            style: {
-              'networkGraph': {
-                'height': '600px',
-                'width': '100%'
-              },
-              'contextualMenu': {
-                width: '259px',
-                backgroundColor: '#898E9B',
-                position: 'absolute',
-                top: '0px',
-                right: '0px',
-                bottom: '0px'
-              }
-            }
-          };
-          this.setState(statesJSON);
-        }
+        selected = 'edge';
       }
+
+      this.loadNodeEdgeContextMenu(selected, selectedIDs, network);
     };
   }
 
-  getContextMenu(contextMenuType, network, nodeID, nodeType, nodeAt) {
-    return (event) => {
-      let table = document.createElement('table');
-      table.border = '0';
-      table.width = '259';
-      table.cellPadding = '10';
-      table.cellSpacing = '10';
+  loadNodeEdgeContextMenu(selected, selectedIDs, network) {
+    let nodeType = '',
+      edgeType = '',
+      nodeID = selectedIDs.nodes[0],
+      edgeID = selectedIDs.edges[0],
+      selectedNodeDetails = [],
+      selectedNodesForExtendingGraph = [];
 
-      let actionsData = this.state.actionsData,
-        actionsList = [];
-
-      for (let i = 0; i < actionsData.length; i++) {
-        if ((actionsData[i].nodeType).toLowerCase() === nodeType.toLowerCase()) {
-          actionsList = Object.assign(actionsList, actionsData[i].actions);
-        }
-      }
-
-      // Append the actions associated with nodes
-      if (nodeObjects[nodeID] !== undefined && nodeObjects[nodeID].actions !== undefined &&
-        nodeObjects[nodeID].actions.length > 0) {
-        actionsList = Object.assign(actionsList, nodeObjects[nodeID].actions);
-      }
-
-      for (let j = 0; j < actionsList.length; j++) {
-        let parameters = actionsList[j].parameters,
-          parametersToApi = [],
-          userInputParameters = [],
-          linkValueForFullMalwareReport = '';
-
-        if (parameters.length !== undefined) {
-          for (let k = 0; k < parameters.length; k++) {
-            let tempObj = {};
-            if (parameters[k].userInput === false && parameters[k].name !== 'link') {
-              tempObj.name = parameters[k].name;
-              if (parameters[k].value !== undefined) {
-                tempObj.value = parameters[k].value;
-              }
-              else {
-                if (parameters[k].name === 'id') {
-                  tempObj.value = nodeID;
-                }
-                else if (parameters[k].name === 'type') {
-                  tempObj.value = nodeType;
-                }
-                else if (parameters[k].name === 'date') {
-                  tempObj.value = this.state.alertDate;
-                }
-                else if (parameters[k].name === 'ip' && (nodeType.toLowerCase() === 'internal_ip' ||
-                  nodeType.toLowerCase() === 'external_ip')) {
-                  tempObj.value = nodeID;
-                }
-                else if (parameters[k].name === 'source.id') {
-                  if (edgeObjects[nodeID] !== undefined) {
-                    tempObj.value = edgeObjects[nodeID].from;
-                  }
-                  else {
-                    tempObj.value = '';
-                  }
-                }
-                else if (parameters[k].name === 'target.id') {
-                  if (edgeObjects[nodeID] !== undefined) {
-                    tempObj.value = edgeObjects[nodeID].to;
-                  }
-                  else {
-                    tempObj.value = '';
-                  }
-                }
-                else if ((parameters[k].name).indexOf('metadata') > -1) {
-                  let paramName = (parameters[k].name).replace('metadata.', ''),
-                    metadataValue = nodeObjects[nodeID].metadata[paramName];
-                  tempObj.value = (metadataValue !== undefined) ? metadataValue : '';
-                }
-                else {
-                  tempObj.value = '';
-                }
-              }
-
-              tempObj.userInput = false;
-              parametersToApi.push(tempObj);
-            }
-            if (parameters[k].userInput === true) {
-              tempObj.name = parameters[k].name;
-              tempObj.id = parameters[k].name + j;
-              tempObj.value = '';
-              tempObj.userInput = true;
-              parametersToApi.push(tempObj);
-            }
-            if (parameters[k].name === 'link') {
-              linkValueForFullMalwareReport = parameters[k].value !== undefined
-              ? parameters[k].value : '';
-            }
-          }
-
-          userInputParameters = checkForUserInputs(parameters);
-        }
-        let tr = document.createElement('tr'),
-          td1 = document.createElement('td'),
-          reportId = (actionsList[j].reportId !== undefined) ? actionsList[j].reportId
-          : (actionsList[j].name !== undefined ? actionsList[j].name : ''),
-          actionType = (actionsList[j].actionType !== undefined) ? actionsList[j].actionType : '';
-
-        td1.appendChild(document.createTextNode(actionsList[j].label));
-        td1.id = 'action' + j;
-        td1.onclick = this.extendGraph(contextMenuType, network, nodeID, nodeType,
-          reportId, parametersToApi, actionsList.length, 'action' + j, actionsList[j].label,
-          linkValueForFullMalwareReport);
-        tr.appendChild(td1);
-
-        if (userInputParameters.length > 0) {
-          let td2 = document.createElement('td');
-          let downArrow = document.createElement('img');
-          downArrow.src = '/img/downarrow.png';
-          // td1.onclick = this.displayUserInputParameter(userInputParameters[p].name + j);
-          td2.appendChild(downArrow);
-          tr.appendChild(td2);
-        }
-
-        table.appendChild(tr);
-
-        if (userInputParameters.length > 0) {
-          for (let p = 0; p < userInputParameters.length; p++) {
-            let trUserInput = document.createElement('tr');
-            let tdUserInput = document.createElement('td');
-            tdUserInput.style = 'cursor:auto;';
-            tdUserInput.appendChild(document.createTextNode(
-              firstCharCapitalize(userInputParameters[p].name + ' :')));
-            // let newLine = document.createElement('br');
-            // tdUserInput.appendChild(newLine);
-            let inputParameter = document.createElement('input');
-            inputParameter.setAttribute('type', 'text');
-            inputParameter.setAttribute('style', 'color:black;');
-            inputParameter.setAttribute('placeholder', userInputParameters[p].name);
-            inputParameter.setAttribute('name', userInputParameters[p].name + j);
-            inputParameter.setAttribute('id', userInputParameters[p].name + j);
-            tdUserInput.appendChild(inputParameter);
-            trUserInput.appendChild(tdUserInput);
-            table.appendChild(trUserInput);
-          }
-        }
-      }
-
-      let listHTML = {
-        'loadAgain': false,
-        'actions': '<ul>' + table.innerHTML + '</ul>'
-      };
-      this.setState(listHTML);
-
-      return table;
-    };
+    switch (selected) {
+      case 'node':
+        let nodeDetails = {
+          network: network,
+          nodeID: nodeID,
+          nodeType: nodeType,
+          selectedNodeDetails: selectedNodeDetails,
+          selected: selected,
+          selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
+        };
+        this.loadNodeContextMenu(nodeDetails);
+        break;
+      case 'edge':
+        let edgeDetails = {
+          network: network,
+          edgeID: edgeID,
+          edgeType: edgeType,
+          selectedNodeDetails: selectedNodeDetails,
+          selected: selected
+        };
+        this.loadEdgeContextMenu(edgeDetails);
+        break;
+      default:
+        break;
+    }
   }
 
-  extendGraph(contextMenuType, network, nodeID, nodeType, reportId, parameters, actionsCount, actionId, actionLabel,
-    linkValueForFullMalwareReport) {
-    const that = this;
-    return (event) => {
-      this.setState({
-        isFetching: true,
-        loaderText: actionLabel,
-        loaderStyle: {
-          position: 'absolute',
-          top: '350px',
-          display: 'flex',
-          backgroundColor: '#898E9B',
-          padding: '20px',
-          left: '300px',
-          width: '350px'
+  loadNodeContextMenu(nodeDetails) {
+    let {network, nodeID, nodeType, selectedNodeDetails, selected, selectedNodesForExtendingGraph} = nodeDetails,
+      {state} = this;
+    if (!isUndefined(nodeID)) {
+      state.nodes.forEach((nodeObject) => {
+        let node = network.body.nodes[nodeObject.id];
+        if (nodeObject.id === nodeID) {
+          selectedNodeDetails.push(nodeObject.nodeDetails);
+          nodeType = nodeObject.type;
+          node.setOptions({
+            image: getIcon(nodeObject.type, nodeObject.status, 'SELECTED')
+          });
+        }
+        else {
+          node.setOptions({
+            image: getIcon(nodeObject.type, nodeObject.status, 'INACTIVE')
+          });
         }
       });
-      let selectedNodesForExtendingGraph = that.state.selectedNodesForExtendingGraph;
-      for (let i = 0; i < selectedNodesForExtendingGraph.length; i++) {
-        if (selectedNodesForExtendingGraph[i].nodeID === nodeID &&
-          selectedNodesForExtendingGraph[i].reportId === reportId &&
-          selectedNodesForExtendingGraph[i].timeWindow === timeWindow) {
-          let position = getPos(document.getElementById(actionId));
-          document.getElementById('actionPerformed').innerHTML = 'You have already performed this action.';
-          $('#actionPerformed').css('top', position.y - 85);
-          $('#actionPerformed').fadeIn('slow');
-          $('#actionPerformed').fadeOut(3000);
-          that.setState({
-            isFetching: false
-          });
-          return;
+
+      let sourceDetails = {
+        contextMenuType: selected,
+        network: network,
+        itemId: nodeID,
+        itemType: nodeType
+      };
+
+      this.ContextualMenu.getContextMenu(sourceDetails);
+
+      selectedNodesForExtendingGraph.push({
+        nodeID: nodeID,
+        reportId: '',
+        timeWindow: timeWindow
+      });
+
+      let states = {
+        loadAgain: false,
+        selectedNodeDetails: selectedNodeDetails,
+        showContextMenu: true,
+        selectedNode: nodeID,
+        selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
+      };
+      this.setState(states);
+    }
+  }
+
+  loadEdgeContextMenu(edgeDetails) {
+    let {network, edgeID, edgeType, selectedNodeDetails, selected} = edgeDetails,
+      {state} = this;
+
+    if (!isUndefined(edgeID)) {
+      state.edges.forEach((edgeObject) => {
+        if (edgeObject.id === edgeID) {
+          selectedNodeDetails.push(edgeObject.edgeDetails);
+          edgeType = edgeObject.type;
         }
-      }
+      });
 
-      if (linkValueForFullMalwareReport !== '') {
-        window.open(baseUrl + linkValueForFullMalwareReport);
-      }
+      let sourceDetails = {
+        contextMenuType: selected,
+        network: network,
+        itemId: edgeID,
+        itemType: edgeType
+      };
 
-      const extendedNodes = fetchExtendedNodes(reportId, timeWindow, parameters);
-      if (!extendedNodes) {
-        this.setState({
-          isFetching: false
-        });
-        return;
-      }
-      extendedNodes.then(
-        function(json) {
-          let nodes = that.state.nodes,
-            edges = that.state.edges;
+      this.ContextualMenu.getContextMenu(sourceDetails);
 
-          if (json[0] === undefined) {
-            let position = getPos(document.getElementById(actionId));
-            document.getElementById('actionPerformed').innerHTML =
-              'No additional results found.';
-            $('#actionPerformed').css('top', position.y - 85);
-            $('#actionPerformed').fadeIn('slow');
-            $('#actionPerformed').fadeOut(3000);
-            that.setState({
+      let states = {
+        loadAgain: false,
+        selectedNodeDetails: selectedNodeDetails,
+        showContextMenu: true
+      };
+      this.setState(states);
+    }
+  }
+
+  loadGraph(load) {
+    this.setState({
+      'loadAgain': load
+    });
+  }
+
+  extendGraph(sourceDetails, actionDetails) {
+    return (event) => {
+      let {contextMenuType, network, itemId} = sourceDetails,
+        nodeID = itemId,
+        {reportId, parameters, actionsCount, actionId, actionLabel, fullMalwareReportLink} = actionDetails;
+
+      this.setState({
+        isFetching: true,
+        loaderText: actionLabel
+      });
+      let selectedNodesForExtendingGraph = this.state.selectedNodesForExtendingGraph;
+      if (!isUndefined(selectedNodesForExtendingGraph)) {
+        selectedNodesForExtendingGraph.forEach((selectedNode) => {
+          if (selectedNode.nodeID === nodeID && selectedNode.reportId === reportId &&
+            selectedNode.timeWindow === timeWindow) {
+            let message = 'You have already performed this action.';
+            displayNotificationMessage(message, actionId);
+            this.setState({
               isFetching: false
             });
             return;
           }
+        });
+      }
 
-          if (that.state.previousNodesEdges.nodes.length > 0) {
-            undoGraphCount++;
+      openFullMalwareReport(fullMalwareReportLink);
+
+      let details = {
+        network: network,
+        actionId: actionId,
+        reportId: reportId,
+        nodeID: nodeID,
+        timeWindow: timeWindow,
+        parameters: parameters,
+        selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
+        contextMenuType: contextMenuType,
+        actionsCount: actionsCount
+      };
+
+      this.fetchExtendedNodes(details);
+    };
+  }
+
+  fetchExtendedNodes(details) {
+    let {
+      network,
+      actionId,
+      reportId,
+      nodeID,
+      timeWindow,
+      parameters,
+      selectedNodesForExtendingGraph,
+      contextMenuType,
+      actionsCount
+    } = details;
+
+    const extendedNodes = fetchExtendedNodes(reportId, timeWindow, parameters),
+      that = this;
+    if (!extendedNodes) {
+      this.setState({
+        isFetching: false
+      });
+      return;
+    }
+
+    extendedNodes.then(
+      function(json) {
+        let graphDetails = {
+          extendedNodes: json,
+          network: network,
+          actionId: actionId,
+          selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
+          nodeID: nodeID,
+          reportId: reportId,
+          contextMenuType: contextMenuType
+        };
+        that.updateGraph(graphDetails);
+      }
+    );
+
+    displayActionAsSelected(actionsCount, actionId);
+  }
+
+  updateGraph(details) {
+    let {
+        extendedNodes,
+        network,
+        actionId,
+        selectedNodesForExtendingGraph,
+        nodeID,
+        reportId,
+        contextMenuType
+      } = details,
+      {state} = this,
+      nodes = state.nodes,
+      edges = state.edges;
+
+    if (isUndefined(extendedNodes[0])) {
+      let message = 'No additional results found.';
+      displayNotificationMessage(message, actionId);
+      this.setState({
+        isFetching: false
+      });
+      return;
+    }
+
+    if (state.previousNodesEdges.nodes.length > 0) {
+      undoGraphCount++;
+    }
+    else {
+      undoGraphCount = 0;
+    }
+
+    let nodesPrevious = [],
+      edgesPrevious = [];
+
+    nodesPrevious.push(Object.assign([], nodes));
+    edgesPrevious.push(Object.assign([], edges));
+
+    let isGraphExtended = this.isGraphExtended(nodes, edges, extendedNodes);
+
+    selectedNodesForExtendingGraph.push({
+      'nodeID': nodeID,
+      'reportId': reportId,
+      'timeWindow': timeWindow
+    });
+
+    network.setData({nodes: nodes, edges: edges});
+
+    if (!isGraphExtended) {
+      nodesPrevious = [];
+      edgesPrevious = [];
+      undoGraphCount--;
+    }
+
+    this.setState({
+      loadAgain: false,
+      nodesListStatus: 'extended',
+      nodes: Object.assign([], nodes),
+      edges: Object.assign([], edges),
+      selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
+      isFetching: false,
+      loaderText: '',
+      previousNodesEdges: {
+        nodes: (nodesPrevious.length > 0) ? state.previousNodesEdges.nodes.concat(nodesPrevious)
+          : state.previousNodesEdges.nodes,
+        edges: (edgesPrevious.length > 0) ? state.previousNodesEdges.edges.concat(edgesPrevious)
+          : state.previousNodesEdges.edges
+      },
+      showUndoResetButtons: true
+    });
+
+    if (nodes.length <= 10) {
+      network.setOptions(physicsFalse);
+    }
+    else {
+      network.setOptions(physicsTrue);
+    }
+
+    if (contextMenuType === 'node') {
+      let node = network.body.nodes[nodeID];
+      if (this.nodeObjects[nodeID] !== undefined) {
+        node.setOptions({
+          image: getIcon(this.nodeObjects[nodeID].type, this.nodeObjects[nodeID].status, 'SELECTED')
+        });
+      }
+    }
+
+    if (!isGraphExtended) {
+      let message = 'No additional results found.';
+      displayNotificationMessage(message, actionId);
+      this.setState({
+        isFetching: false
+      });
+      return;
+    }
+
+    document.getElementById('undo').onclick = this.undoOrResetGraph(network, 'undo');
+    document.getElementById('reset').onclick = this.undoOrResetGraph(network, 'reset');
+  }
+
+  isGraphExtended(nodes, edges, extendedNodes) {
+    let isGraphExtended = false,
+      nodesEdges = this.getNodesEdges(extendedNodes[0]);
+
+    if (!isUndefined(nodesEdges.nodes)) {
+      nodesEdges.nodes.forEach((node) => {
+        if (isNodeOrEdgeAlreadyExists(nodes, node.id) === false) {
+          nodes.push(node);
+          this.nodeObjects[node.id] = node;
+          isGraphExtended = true;
+        }
+      });
+    }
+
+    if (!isUndefined(nodesEdges.edges)) {
+      nodesEdges.edges.forEach((edge) => {
+        if (isNodeOrEdgeAlreadyExists(edges, edge.id) === false) {
+          edges.push(edge);
+          this.edgeObjects[edge.to] = edge;
+          this.edgeObjects[edge.id] = edge;
+          isGraphExtended = true;
+        }
+      });
+    }
+
+    return isGraphExtended;
+  }
+
+  undoOrResetGraph(network, action) {
+    return (event) => {
+      let nodesEdges = (action === 'undo') ? this.state.previousNodesEdges
+        : this.state.originalNodesEdges,
+        nodes = (action === 'undo') ? nodesEdges.nodes[undoGraphCount] : nodesEdges.nodes,
+        edges = (action === 'undo') ? nodesEdges.edges[undoGraphCount] : nodesEdges.edges;
+
+      if (!isUndefined(nodesEdges.nodes) && !isUndefined(nodesEdges.edges)) {
+        if (!isUndefined(nodes) &&
+          !isUndefined(edges)) {
+          let updatedNodes = Object.assign([], nodes),
+            updatedEdges = Object.assign([], edges);
+
+          network.setData({nodes: nodes, edges: edges});
+
+          if (nodes.length <= 10) {
+            network.setOptions(physicsFalse);
+          }
+          else {
+            network.setOptions(physicsTrue);
+          }
+
+          this.updateNodeAndEdgeObjects(updatedNodes, updatedEdges);
+
+          let previousNodesEdges = emptyNodesEdges;
+
+          if (action === 'undo') {
+            let tempNodesArray = Object.assign([], nodesEdges.nodes),
+              tempEdgesArray = Object.assign([], nodesEdges.edges);
+
+            tempNodesArray.splice(undoGraphCount, 1);
+            tempEdgesArray.splice(undoGraphCount, 1);
+
+            previousNodesEdges = {
+              nodes: Object.assign([], tempNodesArray),
+              edges: Object.assign([], tempEdgesArray)
+            };
+          }
+
+          this.setState({
+            loadAgain: false,
+            nodesListStatus: 'extended',
+            nodes: updatedNodes,
+            edges: updatedEdges,
+            isFetching: false,
+            showContextMenu: false,
+            selectedNodeDetails: [],
+            actions: '',
+            selectedNode: '',
+            selectedNodesForExtendingGraph: [],
+            previousNodesEdges: previousNodesEdges
+          });
+
+          document.getElementById('actions').innerHTML = '';
+          if (action === 'undo') {
+            undoGraphCount--;
           }
           else {
             undoGraphCount = 0;
           }
-
-          let nodesPrevious = [],
-            edgesPrevious = [];
-
-          nodesPrevious.push(Object.assign([], nodes));
-          edgesPrevious.push(Object.assign([], edges));
-
-          let nodesEdges = getNodesEdges(json[0]),
-            isGraphExtended = false;
-
-          for (let i = 0; i < nodesEdges.nodes.length; i++) {
-            if (isNodeOrEdgeAlreadyExists(nodes, nodesEdges.nodes[i].id) === false) {
-              nodes.push(nodesEdges.nodes[i]);
-              nodeObjects[nodesEdges.nodes[i].id] = nodesEdges.nodes[i];
-              isGraphExtended = true;
-            }
-          }
-
-          for (let i = 0; i < nodesEdges.edges.length; i++) {
-            if (isNodeOrEdgeAlreadyExists(edges, nodesEdges.edges[i].id) === false) {
-              edges.push(nodesEdges.edges[i]);
-              edgeObjects[nodesEdges.edges[i].to] = nodesEdges.edges[i];
-              edgeObjects[nodesEdges.edges[i].id] = nodesEdges.edges[i];
-              isGraphExtended = true;
-            }
-          }
-
-          selectedNodesForExtendingGraph.push({
-            'nodeID': nodeID,
-            'reportId': reportId,
-            'timeWindow': timeWindow
-          });
-
-          network.setData({nodes: nodes, edges: edges});
-
-          if (!isGraphExtended) {
-            nodesPrevious = [];
-            edgesPrevious = [];
-            undoGraphCount--;
-          }
-
-          that.setState({
-            'loadAgain': false,
-            'nodesListStatus': 'extended',
-            'nodes': Object.assign([], nodes),
-            'edges': Object.assign([], edges),
-            'selectedNodesForExtendingGraph': selectedNodesForExtendingGraph,
-            isFetching: false,
-            loaderText: '',
-            loaderStyle: {
-            },
-            previousNodesEdges: {
-              nodes: (nodesPrevious.length > 0) ? that.state.previousNodesEdges.nodes.concat(nodesPrevious)
-                : that.state.previousNodesEdges.nodes,
-              edges: (edgesPrevious.length > 0) ? that.state.previousNodesEdges.edges.concat(edgesPrevious)
-                : that.state.previousNodesEdges.edges
-            },
-            undoGraphStyle: {
-              top: '560px',
-              left: '35px',
-              position: 'absolute',
-              cursor: 'pointer'
-            },
-            resetGraphStyle: {
-              top: '530px',
-              left: '35px',
-              position: 'absolute',
-              cursor: 'pointer'
-            }
-          });
-
-          if (nodes.length <= 10) {
-            network.setOptions({
-              physics: false
-            });
-          }
-          else {
-            network.setOptions({
-              physics: {
-                // 'barnesHut': {
-                //   'avoidOverlap': 1
-                // },
-                'stabilization': true
-              }
-            });
-          }
-
-          if (contextMenuType === 'node') {
-            let node = network.body.nodes[nodeID];
-            if (nodeObjects[nodeID] !== undefined) {
-              node.setOptions({
-                image: getIcon(nodeObjects[nodeID].type, nodeObjects[nodeID].status, 'SELECTED')
-              });
-            }
-          }
-
-          if (contextMenuType === 'edge') {
-          }
-
-          if (!isGraphExtended) {
-            let position = getPos(document.getElementById(actionId));
-            document.getElementById('actionPerformed').innerHTML =
-              'No additional results found.';
-            $('#actionPerformed').css('top', position.y - 85);
-            $('#actionPerformed').fadeIn('slow');
-            $('#actionPerformed').fadeOut(3000);
-            that.setState({
-              isFetching: false
-            });
-            return;
-          }
-
-          document.getElementById('undo').onclick = that.undoGraph(network);
-          document.getElementById('reset').onclick = that.resetGraph(network);
-        }
-      );
-
-      for (let j = 0; j < actionsCount; j++) {
-        let tempId = 'action' + j;
-
-        if (tempId === actionId) {
-          document.getElementById(tempId).style.backgroundColor = '#979BA7';
-        }
-        else {
-          document.getElementById(tempId).style.backgroundColor = 'transparent';
         }
       }
     };
   }
 
   render() {
-    const {props} = this;
+    const {props, state} = this;
 
     let assetData;
     if (props.data && !Array.isArray(props.data)) {
       assetData = generateDataFromAssetDetails(props.data);
     }
 
+    let undoResetStyle = {display: state.showUndoResetButtons ? 'block' : 'none'};
+
     return (
       <div style={{display: 'flex'}}>
-        {this.state.isFetching ? <Loader style={{}} loaderStyle={this.state.loaderStyle}
-          text={this.state.loaderText} /> : null}
-        <div ref={(ref) => this.networkGraph = ref} style={{...this.state.style.networkGraph,
-          ...{
-            width: '1100px'
-          }}}
-          id='networkGraph'>
+        {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
+          text={state.loaderText} /> : null}
+        <div ref={(ref) => this.networkGraph = ref} style={props.attributes.canvasStyle}
+          id='network-graph'>
           {
             assetData
-            ? this.loadNetworkGraph(assetData, this.state.loadAgain, props.duration)
-            : this.loadNetworkGraph(props.data, this.state.loadAgain, props.duration)
+            ? this.loadNetworkGraph(assetData, state.loadAgain, props.duration)
+            : this.loadNetworkGraph(props.data, state.loadAgain, props.duration)
           }
         </div>
-        <div ref={(ref) => this.contextualMenu = ref}
-          style={{...this.state.style.contextualMenu}} id='contextualMenu'>
-          { /* <input type='text' id='searchNetworkNode'
-            style={{...style.searchTextBox}}
-            placeholder='Search' /> */ }
+        {
+          state.actionsData && state.actionsData.length > 0
+          ? <ContextualMenu
+            ref={(ref) => this.ContextualMenu = ref}
+            showContextMenu={state.showContextMenu}
+            nodeObjects={this.nodeObjects}
+            edgeObjects={this.edgeObjects}
+            alertDate={this.state.alertDate}
+            selectedDetails={state.selectedNodeDetails}
+            actions={state.actionsData}
+            loadParent={this.loadGraph}
+            doAction={this.extendGraph}
+            style={props.attributes.canvasStyle} />
+          : null
+        }
 
-          <div style={{
-            height: '650px', // '570px',
-            overflowX: 'hidden',
-            overflowY: 'auto'
-          }} className='contextMenu scrollbarStyle' id='contextualMenuContents'>
-            <div
-              style={{...style.selectedNodeDetails}}
-              dangerouslySetInnerHTML={{__html: this.state.selectedNodeDetails}}>
-            </div>
-            <div id='actions'></div>
-          </div>
-
-          <div id='collapseExpandCM' style={{
-            marginLeft: '24px',
-            marginBottom: '24px',
-            marginTop: '10px'
-          }}>
-            <img id='rightArrow' src='/img/rightArrow.png' onClick={this.collapseExpandCM('collapse')} />
-          </div>
-        </div>
-
-        <div id='expandCM' style={{
-          bottom: '25px',
-          right: '24px',
-          position: 'absolute',
-          display: 'none'
-        }}>
-          <img id='leftArrow' src='/img/menu.png' onClick={this.collapseExpandCM('expand')} />
-        </div>
-
-        <div id='undoGraph' style={this.state.undoGraphStyle}>
+        <div id='undoGraph' style={{...style.undoGraph, ...undoResetStyle}}>
           <img id='undo' src='/img/undo.png' />
         </div>
 
-        <div id='resetGraph' style={this.state.resetGraphStyle}>
+        <div id='resetGraph' style={{...style.resetGraph, ...undoResetStyle}}>
           <img id='reset' src='/img/reset.png' />
         </div>
-
-        <div style={this.state.actionPerformed} id='actionPerformed'></div>
-
-        <div style={{
-          bottom: '20px',
-          fontSize: '12px',
-          left: '35px',
-          position: 'absolute',
-          backgroundColor: Colors.white
-        }}>{ /* {this.state.zoomScale}*/}</div>
       </div>
     );
-  }
-
-  collapseExpandCM(action) {
-    return (event) => {
-      if (action === 'collapse') {
-        $('#contextualMenu').animate({width: '0px'});
-        document.getElementById('rightArrow').style.display = 'none';
-        document.getElementById('contextualMenuContents').style.display = 'none';
-        // document.getElementById('searchNetworkNode').style.display = 'none';
-        document.getElementById('expandCM').style.display = 'block';
-      }
-      if (action === 'expand') {
-        $('#contextualMenu').animate({width: '259px'});
-        document.getElementById('rightArrow').style.display = 'block';
-        document.getElementById('contextualMenuContents').style.display = 'block';
-        // document.getElementById('searchNetworkNode').style.display = 'block';
-        document.getElementById('expandCM').style.display = 'none';
-      }
-    };
-  }
-
-  undoGraph(network) {
-    return (event) => {
-      let previousNodesEdges = this.state.previousNodesEdges;
-      if (previousNodesEdges.nodes !== undefined &&
-        previousNodesEdges.edges !== undefined) {
-        if (previousNodesEdges.nodes[undoGraphCount] !== undefined &&
-          previousNodesEdges.edges[undoGraphCount] !== undefined) {
-          let updatedNodes = Object.assign([], previousNodesEdges.nodes[undoGraphCount]),
-            updatedEdges = Object.assign([], previousNodesEdges.edges[undoGraphCount]);
-
-          network.setData({nodes: previousNodesEdges.nodes[undoGraphCount],
-            edges: previousNodesEdges.edges[undoGraphCount]});
-
-          if (previousNodesEdges.nodes[undoGraphCount].length <= 10) {
-            network.setOptions({
-              physics: false
-            });
-          }
-          else {
-            network.setOptions({
-              physics: {
-                // 'barnesHut': {
-                //   'avoidOverlap': 1
-                // },
-                'stabilization': true
-              }
-            });
-          }
-
-          for (let key in nodeObjects) {
-            if (updatedNodes.length !== undefined) {
-              for (let i = 0; i < updatedNodes.length; i++) {
-                if (updatedNodes[i].id !== key) {
-                  delete nodeObjects[key];
-                }
-              }
-            }
-          }
-
-          for (let key in edgeObjects) {
-            if (updatedEdges.length !== undefined) {
-              for (let i = 0; i < updatedEdges.length; i++) {
-                if (updatedEdges[i].id !== key) {
-                  delete edgeObjects[key];
-                }
-              }
-            }
-          }
-
-          let tempNodesArray = Object.assign([], previousNodesEdges.nodes),
-            tempEdgesArray = Object.assign([], previousNodesEdges.edges);
-
-          tempNodesArray.splice(undoGraphCount, 1);
-          tempEdgesArray.splice(undoGraphCount, 1);
-
-          this.setState({
-            'loadAgain': false,
-            'nodesListStatus': 'extended',
-            'nodes': updatedNodes,
-            'edges': updatedEdges,
-            isFetching: false,
-            style: {
-              'networkGraph': {
-                'height': '600px',
-                'width': '100%'
-              },
-              'contextualMenu': {
-                width: '259px',
-                backgroundColor: '#898E9B', // '#6B7282',
-                // opacity: '0.8',
-                display: 'none',
-                position: 'absolute',
-                top: '0px',
-                right: '0px',
-                bottom: '0px'
-              }
-            },
-            selectedNodeDetails: '',
-            actions: '',
-            selectedNode: '',
-            selectedNodesForExtendingGraph: [],
-            previousNodesEdges: {
-              nodes: Object.assign([], tempNodesArray),
-              edges: Object.assign([], tempEdgesArray)
-            }
-          });
-
-          document.getElementById('actions').innerHTML = '';
-          undoGraphCount--;
-        }
-      }
-    };
-  }
-
-  resetGraph(network) {
-    return (event) => {
-      let originalNodesEdges = this.state.originalNodesEdges;
-      if (originalNodesEdges.nodes !== undefined &&
-        originalNodesEdges.edges !== undefined) {
-        let updatedNodes = Object.assign([], originalNodesEdges.nodes),
-          updatedEdges = Object.assign([], originalNodesEdges.edges);
-
-        network.setData({nodes: originalNodesEdges.nodes,
-          edges: originalNodesEdges.edges});
-
-        if (originalNodesEdges.nodes.length <= 10) {
-          network.setOptions({
-            physics: false
-          });
-        }
-        else {
-          network.setOptions({
-            physics: {
-              // 'barnesHut': {
-              //   'avoidOverlap': 1
-              // },
-              'stabilization': true
-            }
-          });
-        }
-
-        for (let key in nodeObjects) {
-          if (updatedNodes.length !== undefined) {
-            for (let i = 0; i < updatedNodes.length; i++) {
-              if (updatedNodes[i].id !== key) {
-                delete nodeObjects[key];
-              }
-            }
-          }
-        }
-
-        for (let key in edgeObjects) {
-          if (updatedEdges.length !== undefined) {
-            for (let i = 0; i < updatedEdges.length; i++) {
-              if (updatedEdges[i].id !== key) {
-                delete edgeObjects[key];
-              }
-            }
-          }
-        }
-
-        this.setState({
-          'loadAgain': false,
-          'nodesListStatus': 'extended',
-          'nodes': updatedNodes,
-          'edges': updatedEdges,
-          isFetching: false,
-          style: {
-            'networkGraph': {
-              'height': '600px',
-              'width': '100%'
-            },
-            'contextualMenu': {
-              width: '259px',
-              backgroundColor: '#898E9B', // '#6B7282',
-              // opacity: '0.8',
-              display: 'none',
-              position: 'absolute',
-              top: '0px',
-              right: '0px',
-              bottom: '0px'
-            }
-          },
-          selectedNodeDetails: '',
-          actions: '',
-          selectedNode: '',
-          selectedNodesForExtendingGraph: [],
-          previousNodesEdges: {
-            nodes: [],
-            edges: []
-          }
-        });
-
-        document.getElementById('actions').innerHTML = '';
-        undoGraphCount = 0;
-      }
-    };
   }
 }
 

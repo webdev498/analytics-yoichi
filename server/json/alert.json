@@ -3,213 +3,147 @@
     [
       {
         "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_alert_count_time_shifted"
-            },
-            "queryParams": {
-              "window": ""
-            }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#F69275"
-          },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
-          }
-        },
-        "id": "1",
-        "type": "MetricsCard",
-        "title": "High Priority Alerts",
-        "kibana": {
-          "pathParams": [
-            "alerts-score"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": "",
-            "scoreRange": ""
-          }
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_malware_count_time_shifted"
-            },
-            "queryParams": {
-              "window": ""
-            }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#F69275"
-          },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
-          }
-        },
-        "id": "2",
-        "type": "MetricsCard",
-        "title": "High Priority Malware"
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_event_count_time_shifted"
-            },
-            "queryParams": {
-              "window": ""
-            }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
-          },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
-          }
-        },
-        "id": "3",
-        "type": "MetricsCard",
-        "title": "Events Processed",
-        "kibana": {
-          "pathParams": [
-            "traffic-details"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
-          }
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_asset_count_time_shifted"
-            },
-            "queryParams": {
-              "window": ""
-            }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
-          },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
-          }
-        },
-        "id": "4",
-        "type": "MetricsCard",
-        "title": "Assets Monitored",
-        "kibana": {
-          "pathParams": [
-            "assets-all"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
-          }
-        }
-      }
-    ],
-    [
-      {
-        "meta": {
           "showHeader": true,
           "showRefresh": false,
+          "showBackButton": true,
           "api": {
             "path": "/api/alert/{alertId}",
+            "pathParams": {
+              "alertId": ":pathParam"
+            },
             "queryParams": {
+              "date": "date:pathParam",
               "window": ""
             }
           },
-          "title": "Alert Details",
-          "fetchDataFor": {
-            "id": "malware-traffic-details",
-            "api": {
-              "path": "/api/alert/traffic",
-              "pathParams": {},
-              "queryParams": {
-                "count": 200,
-                "from": 0,
-                "window": "1w"
+          "title": "Alert Detail",
+          "fetchDataFor": [
+            {
+              "id": "alert-activity",
+              "api": {
+                "method": "POST",
+                "path": "/api/analytics/reporting/executeById",
+                "body": "data.rank_alert.chartsFilter$customParam",
+                "pathParams": {},
+                "queryParams": {
+                  "window": ""
+                },
+                "loadOnce": true
+              }
+            },
+            {
+              "id": "timeline",
+              "api": {
+                "method": "GET",
+                "path": "/api/alert/traffic",
+                "pathParams": {},
+                "queryParams": {
+                  "count": 10,
+                  "from": 0,
+                  "window": "",
+                  "filter": "data.rank_alert.trafficFilter$customParam",
+                  "date": "date:pathParam"
+                },
+                "loadOnce": true
               }
             }
-          }
+          ]
         },
-        "name": "AlertDetails",
+        "name": "AlertDetail",
         "attributes": {
           "style": {
-            "width": "100%"
+            "backgroundColor": "#F7F7F9",
+            "width": "250px",
+            "flex": "0 0 250px"
           }
         },
-        "id": "alert-details",
+        "id": "alert-detail",
         "type": "AlertDetails"
-      }
-    ],
-    [
+      },
       {
         "meta": {
           "showHeader": true,
-          "showRefresh": false,
-          "api": null,
-          "title": "Malware Details"
-        },
-        "attributes": {
-          "style": {
-            "display": "none",
-            "width": "100%"
+          "api": {
+            "path": "/api/analytics/graph/{alertId}",
+            "pathParams": {
+              "alertId": ":pathParam"
+            },
+            "queryParams": {}
           },
-          "id": "malware-details"
+          "title": "Overview"
         },
-        "id": "malware-traffic-details",
-        "type": "MalwareDetails"
-      }
-    ],
-    [
-      {
-        "meta": {
-          "showHeader": true,
-          "showRefresh": false,
-          "api": null,
-          "title": "Traffic Details"
-        },
-        "name": "Table",
+        "name": "NetworkGraph",
         "attributes": {
           "style": {
             "width": "100%"
           },
-          "id": "malware-traffic-details"
+          "canvasStyle": {
+            "height": "600px",
+            "width": "100%"
+          },
+          "id": "NetworkGraph"
         },
-        "id": "malware-traffic-details",
-        "type": "TrafficTable"
+        "id": "network-graph",
+        "type": "NetworkGraph"
+      }
+    ],
+    [
+      {
+        "id": "alert-activity",
+        "type": "AlertMultiChart",
+        "meta": {
+          "showHeader": true,
+          "title": "Activity",
+          "showRefresh": false
+        },
+        "chart": {
+          "chartOptions": {
+            "xAxisName": "TIME",
+            "divLineThickness": "2",
+            "lineThickness": "1",
+            "showYAxisValues": "1",
+            "xAxisNameFontSize": "10",
+            "yAxisNameFontSize": "10",
+            "labelFontSize": "8",
+            "drawAnchors": "1",
+            "anchorRadius": "1",
+            "showlegend": "0",
+            "outCnvBaseFontSize": "8"
+          }
+        },
+        "attributes": {
+          "chart": {
+            "chartHeight": "200",
+            "chartCaption": {
+              "display": "none"
+            }
+          },
+          "style": {
+            "width": "35%",
+            "flexDirection": "column"
+          },
+          "id": "activity"
+        }
+      },
+      {
+        "id": "timeline",
+        "type": "Timeline",
+        "meta": {
+          "showHeader": true,
+          "api": null,
+          "title": "Timeline"
+        },
+        "attributes": {
+          "type": "traffic",
+          "displaySelectedRows": true,
+          "noOfEventsPerPage": 10,
+          "maxNumbersOnLeftRightPagination": 4,
+          "style": {
+            "width": "65%",
+            "backgroundColor": "#F7F7F9"
+          },
+          "id": "timeline-component"
+        }
       }
     ]
   ]

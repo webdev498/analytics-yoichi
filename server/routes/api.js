@@ -1,15 +1,15 @@
 import https from 'https';
 import fetch from 'node-fetch';
+import KoaRouter from 'koa-router';
 
-import app from '../main.js';
-import koaRouter from 'koa-router';
+// import {getData} from '../components/paretoChart';
 
-import {getData} from '../components/paretoChart'
-
-import {serverBaseUrl} from '../../serverEnv';
+import {serverBaseUrl, timeoutDuration} from '../../serverEnv';
 import layoutRoutes from './layouts';
 
-const router = new koaRouter({
+import timeline from '../components/Timeline';
+
+const router = new KoaRouter({
   prefix: '/api'
 });
 
@@ -18,8 +18,6 @@ const agentOptions = {
 };
 
 const agent = new https.Agent(agentOptions);
-
-const reportId = new koaRouter();
 
 // reportId
 // .get('/taf_threat_trend', async function(ctx, next) {
@@ -45,11 +43,11 @@ const reportId = new koaRouter();
 //   return res;
 // }, async function(ctx, next) {})
 
-const timeout = 1000 * 60;
+const timeout = timeoutDuration || 1000 * 60;
 
 router
 .get('/store/*', layoutRoutes)
-.get('*', async function (ctx, next) {
+.get('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);
   const res = await fetch(serverBaseUrl + ctx.url,
@@ -61,12 +59,17 @@ router
     }
   );
 
-  ctx.set('content-type', res.headers.get('content-type'))
+  ctx.tempData = res;
+  await next();
+
+  ctx.set('content-type', res.headers.get('content-type'));
   ctx.status = res.status;
   ctx.statusText = res.statusText;
-  ctx.body = res.body;
+  ctx.body = ctx.normalizeData || res.body;
 })
-.post('*', async function (ctx, next) {
+.get('/alert/traffic', timeline)
+.get('/analytics/reporting/execute/taf_alert_by_asset', timeline)
+.post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);
   const res = await fetch(serverBaseUrl + ctx.url,
@@ -80,7 +83,7 @@ router
     }
   );
 
-  ctx.set('content-type', res.headers.get('content-type'))
+  ctx.set('content-type', res.headers.get('content-type'));
   ctx.status = res.status;
   ctx.statusText = res.statusText;
   ctx.body = res.body;

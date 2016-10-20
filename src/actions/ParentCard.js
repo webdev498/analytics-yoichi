@@ -41,11 +41,11 @@ export function changeTimeRange(timeRange) {
   };
 }
 
-export function parentCardEvent(id, callback) {
+export function componentEvent(id, eventData) {
   return {
     type: PARENT_CARD_EVENT,
     id,
-    callback
+    eventData
   };
 }
 
@@ -109,10 +109,33 @@ function getUrl(api, duration, routerParams) {
   return baseUrl + url + queryString;
 }
 
-export function fetchApiData(id, api, params, options) {
+function callApi(api, duration, params, options) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
+  const defaultHeaders = Object.assign({
+    'Authorization': `${tokenType} ${accessToken}`,
+    'Content-Type': 'application/json'
+  }, api.headers);
 
+  const body = options && JSON.stringify(options.body);
+  return fetch(getUrl(api, duration, params), {
+    method: api.method || 'GET',
+    headers: defaultHeaders,
+    body
+  })
+  .then(response => {
+    if (response.status >= 200 && response.status < 300) {
+      return response.json();
+    }
+    else {
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    }
+  });
+}
+
+export function fetchApiData(id, api, params, options) {
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
@@ -122,28 +145,9 @@ export function fetchApiData(id, api, params, options) {
 
     dispatch(requestApiData(id, api));
 
-    const defaultHeaders = Object.assign({
-      'Authorization': `${tokenType} ${accessToken}`
-    }, api.headers);
-
     if (Array.isArray(api)) {
       const arr = api.map((apiObj) => {
-        const body = options && JSON.stringify(options.body);
-        return fetch(getUrl(apiObj, currentDuration, params), {
-          method: api.method || 'GET',
-          headers: defaultHeaders,
-          body
-        })
-        .then(response => {
-          if (response.status >= 200 && response.status < 300) {
-            return response.json();
-          }
-          else {
-            const error = new Error(response.statusText);
-            error.response = response;
-            throw error;
-          }
-        });
+        return callApi(apiObj, currentDuration, params, options);
       });
 
       Promise.all(arr)
@@ -163,24 +167,7 @@ export function fetchApiData(id, api, params, options) {
       });
     }
     else {
-      const body = options && JSON.stringify(options.body);
-      return fetch(getUrl(api, currentDuration, params), {
-        method: api.method || 'GET',
-        headers: Object.assign({}, defaultHeaders, {
-          'Content-Type': 'application/json'
-        }),
-        body
-      })
-      .then(response => {
-        if (response.status >= 200 && response.status < 300) {
-          return response.json();
-        }
-        else {
-          const error = new Error(response.statusText);
-          error.response = response;
-          throw error;
-        }
-      })
+      callApi(api, currentDuration, params, options)
       .then(json => {
         json.options = options;
         dispatch(receiveApiData(id, {json, api}));
@@ -221,7 +208,7 @@ export function updateApiData(newDuration, params) {
   };
 }
 
-export function action(id, callback) {
+export function broadcastEvent(id, eventData) {
   return function(dispatch, getState) {
     const {apiData} = getState();
 
@@ -231,46 +218,19 @@ export function action(id, callback) {
       components.forEach((component, index) => {
         const componentId = component.get('id');
         if (componentId === id) {
-          dispatch(id, callback);
+          dispatch(componentEvent(id, eventData));
         }
       });
     }
   };
 }
 
+export function broadcastEventOnPageLoad(id, eventData) {
+
+}
+
 export function removeComponent(id) {
   return function(dispatch) {
     dispatch(removeComponentWithId(id));
-  };
-}
-
-export function fetchTrafficDetailsApiData(id, api, trafficFilter, alertDate) {
-  const accessToken = Cookies.get('access_token');
-  const tokenType = Cookies.get('token_type');
-
-  // Thunk middleware knows how to handle functions.
-  // It passes the dispatch method as an argument to the function,
-  // thus making it able to dispatch actions itself.
-
-  return function(dispatch, getState) {
-    const currentDuration = getState().apiData.get('duration');
-
-    dispatch(requestApiData(id, api));
-
-    const defaultHeaders = Object.assign({
-      'Authorization': `${tokenType} ${accessToken}`
-    }, api.headers);
-
-    return fetch(getUrl(api, currentDuration), {
-      method: 'GET',
-      headers: defaultHeaders
-    })
-    .then(response => response.json())
-    .then(json => {
-      dispatch(receiveApiData(id, {json, api, trafficFilter, alertDate}));
-    })
-    .catch((ex) => {
-      dispatch(errorApiData(id, ex));
-    });
   };
 }
