@@ -72,6 +72,32 @@ class TimelineCard extends React.Component {
     this.handleCardClick = this.handleCardClick.bind(this);
   }
 
+  displayAnomalyIcon(data, key, index) {
+    if (data.Type === 'Anomaly' && index === 1) {
+      return (
+        <div style={{}}>
+          {
+            (data[key].indexOf('exfiltration') > -1)
+            ? <img src='/img/anomaly/exfiltration.png' />
+              : (data[key].indexOf('snoop') > -1)
+                ? <img src='/img/anomaly/snoop.png' />
+                  : (data[key].indexOf('command and control') > -1)
+                      ? <img src='/img/anomaly/command-control.png' />
+                      : null
+          }
+        </div>
+      );
+    }
+    else if (data.Type === 'Anomaly' && index !== 1) {
+      return (
+        <div style={{}}></div>
+      );
+    }
+    else {
+      return null;
+    }
+  }
+
   getDetails(data) {
     const {props, state} = this;
     if (!data) {
@@ -94,7 +120,12 @@ class TimelineCard extends React.Component {
             i++;
             return (
               <li style={{...styles.listItem, fontWeight, ...displayFlex}}>
-                {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
+                {that.displayAnomalyIcon(data, key, i)}
+                <div style={{
+                  paddingLeft: data.Type === 'Anomaly' ? i === 1 ? '10px' : '40px' : '0px'
+                }}>
+                  {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
+                </div>
                 {
                   (data.Type === 'Anomaly' &&
                     i === 1 &&
