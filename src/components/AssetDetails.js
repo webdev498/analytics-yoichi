@@ -17,7 +17,8 @@ const styles = {
     height: '45px',
     width: '45px',
     lineHeight: '45px',
-    fontSize: '20px'
+    fontSize: '20px',
+    marginRight: '10px'
   },
   scoreDetails: {
     display: 'flex',
@@ -25,7 +26,6 @@ const styles = {
     cursor: 'pointer'
   },
   scoreDesc: {
-    paddingLeft: '15px',
     display: 'inline-flex',
     flexGrow: 1
   },
@@ -66,7 +66,7 @@ const styles = {
     fontSize: '18px'
   },
   value: {
-    fontWeight: '600',
+    fontWeight: '300',
     fontSize: '16px',
     marginLeft: 'auto'
   },
