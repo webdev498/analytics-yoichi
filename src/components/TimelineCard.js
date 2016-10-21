@@ -1,9 +1,9 @@
 import React from 'react';
 import Card from 'material-ui/Card/Card';
-import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
 import {
-  whatIsIt
+  whatIsIt,
+  isUndefined
 } from 'utils/utils';
 
 let styles = {
@@ -65,11 +65,12 @@ class TimelineCard extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      selectedAnomalyId: ''
-    };
+    // this.state = {
+    //   selectedAnomalyId: ''
+    // };
     this.getDetails = this.getDetails.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
+    // this.collapseRightPanel = this.collapseRightPanel.bind(this);
   }
 
   displayAnomalyIcon(data, key, index) {
@@ -99,7 +100,7 @@ class TimelineCard extends React.Component {
   }
 
   getDetails(data) {
-    const {props, state} = this;
+    const {props} = this;
     if (!data) {
       return;
     }
@@ -129,14 +130,14 @@ class TimelineCard extends React.Component {
                 {
                   (data.Type === 'Anomaly' &&
                     i === 1 &&
-                    state.selectedAnomalyId !== '' &&
-                    state.selectedAnomalyId === props.data.id)
+                    props.selectedAnomalyId !== '' &&
+                    props.selectedAnomalyId === props.data.id)
                   ? <div style={{marginLeft: 'auto'}}>
                     <img src='/img/anomaly/right-arrow-dark.png' />
                   </div>
                   : (data.Type === 'Anomaly' &&
                     i === 1 &&
-                    state.selectedAnomalyId !== props.data.id)
+                    props.selectedAnomalyId !== props.data.id)
                     ? <div style={{marginLeft: 'auto'}}>
                       <img src='/img/anomaly/right-arrow-light.png' />
                     </div>
@@ -161,7 +162,7 @@ class TimelineCard extends React.Component {
   }
 
   handleCardClick() {
-    const {props, state} = this;
+    const {props} = this;
 
     return () => {
       switch (props.data.Type) {
@@ -170,17 +171,17 @@ class TimelineCard extends React.Component {
           props.updateRoute(url);
           break;
         case 'Anomaly':
-          if (state.selectedAnomalyId !== '' && state.selectedAnomalyId === props.data.id) {
+          if (props.selectedAnomalyId !== '' && props.selectedAnomalyId === props.data.id) {
             props.setAnomalyId('');
-            this.setState({
-              selectedAnomalyId: ''
-            });
+            // this.setState({
+            //   selectedAnomalyId: ''
+            // });
           }
           else {
             props.setAnomalyId(props.data.id);
-            this.setState({
-              selectedAnomalyId: props.data.id
-            });
+            // this.setState({
+            //   selectedAnomalyId: props.data.id
+            // });
           }
           break;
         default:
@@ -189,11 +190,21 @@ class TimelineCard extends React.Component {
     };
   }
 
+  // collapseRightPanel(anomalyId) {
+  //   if (!isUndefined(anomalyId)) {
+  //     const {props} = this;
+  //     props.setAnomalyId(anomalyId);
+  //     this.setState({
+  //       selectedAnomalyId: anomalyId
+  //     });
+  //   }
+  // }
+
   render() {
-    const {props, state} = this;
+    const {props} = this;
     let cardType = (props.data.Type === 'Alert' || props.data.Type === 'Rank Alert')
       ? 'alert' : 'other';
-    console.log(props);
+
     switch (cardType) {
       case 'alert':
         let borderColor = Colors.cherry,
@@ -244,7 +255,7 @@ class TimelineCard extends React.Component {
         paddingRight: '18px',
         height: 'auto',
         width: '450px',
-        backgroundColor: ((state.selectedAnomalyId !== '' && state.selectedAnomalyId === props.data.id) ||
+        backgroundColor: ((props.selectedAnomalyId !== '' && props.selectedAnomalyId === props.data.id) ||
           (props.card === 'anomaly_event_card'))
           ? Colors.cloud : Colors.white,
         fontSize: '14px',

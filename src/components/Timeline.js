@@ -92,38 +92,40 @@ class Timeline extends React.Component {
       this.setState({
         selectedAnomalyId: anomalyId
       });
-      this.anomalyEventsParams = {
-        meta: {
-          showHeader: false,
-          api: {
-            path: '/api/anomaly/{anomalyId}/events',
-            pathParams: {
-              anomalyId: anomalyId
+      if (anomalyId !== '') {
+        this.anomalyEventsParams = {
+          meta: {
+            showHeader: false,
+            api: {
+              path: '/api/anomaly/{anomalyId}/events',
+              pathParams: {
+                anomalyId: anomalyId
+              },
+              queryParams: {
+                window: ''
+              }
             },
-            queryParams: {
-              window: ''
-            }
+            title: ''
           },
-          title: ''
-        },
-        attributes: {
-          type: 'traffic',
-          displaySelectedRows: true,
-          noOfEventsPerPage: 8,
-          maxNumbersOnLeftRightPagination: 4,
-          style: {
-            width: '100%',
-            height: '100%'
-          },
-          id: 'timeline-anomaly-events'
-        }
-      };
+          attributes: {
+            type: 'traffic',
+            displaySelectedRows: true,
+            noOfEventsPerPage: 8,
+            maxNumbersOnLeftRightPagination: 4,
+            style: {
+              width: '100%',
+              height: '100%'
+            },
+            id: 'timeline-anomaly-events'
+          }
+        };
+      }
     }
   }
 
   displayCard() {
     const rows = this.state.rows,
-      {props} = this,
+      {props, state} = this,
       that = this;
 
     return (
@@ -143,10 +145,12 @@ class Timeline extends React.Component {
                 <div style={{...{display: 'flex'}, ...backgroundColor, ...padding}} key={barId}>
                   {card === 'timeline_card' ? that.displayDate(dateString, card) : null}
                   <TimelineCard
+                    // ref={(ref) => this.TimelineCard = ref}
                     id={barId}
                     data={event}
                     updateRoute={props.updateRoute}
                     setAnomalyId={that.setAnomalyId}
+                    selectedAnomalyId={state.selectedAnomalyId}
                     card={card} />
                   {card === 'anomaly_event_card' ? that.displayDate(dateString, card) : null}
                 </div>
@@ -220,31 +224,45 @@ class Timeline extends React.Component {
   displayAnomalyEvents() {
     const {state, props} = this;
     return (
-      <div style={{
-        top: '0px',
-        right: '0px',
-        position: 'absolute',
-        width: '350px',
-        height: '100%',
-        overflowY: 'scroll',
-        overflowX: 'hidden'
-      }} className='scrollbar'>
-        <ParentCard
-          id={state.selectedAnomalyId}
-          meta={this.anomalyEventsParams.meta}
-          params={props.params}
-          attributes={this.anomalyEventsParams.attributes}>
-          <Timeline />
-        </ParentCard>
+      <div>
+        <div style={{
+          top: '0px',
+          right: '0px',
+          position: 'absolute',
+          width: '350px',
+          // height: '92%',
+          bottom: '50px',
+          overflowY: 'scroll',
+          overflowX: 'hidden'
+        }} className='scrollbar'>
+          <ParentCard
+            id={state.selectedAnomalyId}
+            meta={this.anomalyEventsParams.meta}
+            params={props.params}
+            attributes={this.anomalyEventsParams.attributes}>
+            <Timeline />
+          </ParentCard>
+        </div>
         <div id='collapse-anomaly-events' style={{
-          marginLeft: '24px',
-          marginBottom: '24px',
-          marginTop: '10px'
+          width: '350px',
+          bottom: '0px',
+          position: 'absolute',
+          right: '0px',
+          height: '58px',
+          paddingTop: '12px',
+          paddingLeft: '12px',
+          backgroundColor: Colors.contextBG
         }}>
-          <img id='right-arrow' src='/img/rightArrow.png' />
+          <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collasePanel()} />
         </div>
       </div>
     );
+  }
+
+  collasePanel() {
+    return () => {
+      this.setAnomalyId('');
+    };
   }
 
   render() {
