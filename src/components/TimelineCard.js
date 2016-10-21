@@ -10,8 +10,7 @@ let styles = {
   alert: {},
   listItem: {
     fontSize: '13px',
-    color: Colors.grape,
-    display: 'flex'
+    color: Colors.grape
   }
 };
 
@@ -87,22 +86,22 @@ class TimelineCard extends React.Component {
     return (
       Object.keys(data).map(function(key, index) {
         let fontWeight = (i === 0) ? '600' : 'lighter',
-          anomalyType = (data.Type === 'Anomaly' && key === 'Type');
+          anomalyType = (data.Type === 'Anomaly' && key === 'Type'),
+          displayFlex = data.Type === 'Anomaly' ? {display: 'flex'} : {};
 
         if (key !== 'Date' && key !== 'id' && !anomalyType) {
           if (whatIsIt(data[key]) === 'String') {
             i++;
             return (
-              <li style={{...styles.listItem, fontWeight}}>
+              <li style={{...styles.listItem, fontWeight, ...displayFlex}}>
                 {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
-                {console.log(data.Type, i)}
                 {
                   (data.Type === 'Anomaly' &&
                     i === 1 &&
                     state.selectedAnomalyId !== '' &&
                     state.selectedAnomalyId === props.data.id)
                   ? <div style={{marginLeft: 'auto'}}>
-                    <img src='/img/anomaly/right-arrow-dark.png' onClick={that.handleCardClick()} />
+                    <img src='/img/anomaly/right-arrow-dark.png' />
                   </div>
                   : (data.Type === 'Anomaly' &&
                     i === 1 &&
@@ -119,7 +118,7 @@ class TimelineCard extends React.Component {
             i++;
             let sourceDest = data[key];
             return (
-              <li style={{...styles.listItem, fontWeight}}>
+              <li style={{...styles.listItem, fontWeight, displayFlex}}>
                 {sourceDest.source ? getSource(sourceDest.source) : null}
                 {sourceDest.dest ? getDestinaton(sourceDest.dest) : null}
               </li>
