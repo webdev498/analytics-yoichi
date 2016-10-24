@@ -1,10 +1,8 @@
 import React from 'react';
 import Card from 'material-ui/Card/Card';
 import {Colors} from 'theme/colors';
-import {
-  whatIsIt,
-  isUndefined
-} from 'utils/utils';
+import {whatIsIt} from 'utils/utils';
+import {CONTEXTUAL_MENU_CARD} from 'Constants';
 
 let styles = {
   alert: {},
@@ -65,38 +63,8 @@ class TimelineCard extends React.Component {
   constructor(props) {
     super(props);
 
-    // this.state = {
-    //   selectedAnomalyId: ''
-    // };
     this.getDetails = this.getDetails.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
-    // this.collapseRightPanel = this.collapseRightPanel.bind(this);
-  }
-
-  displayAnomalyIcon(data, key, index) {
-    if (data.Type === 'Anomaly' && index === 1) {
-      return (
-        <div style={{}}>
-          {
-            (data[key].indexOf('exfiltration') > -1)
-            ? <img src='/img/anomaly/exfiltration.png' />
-              : (data[key].indexOf('snoop') > -1)
-                ? <img src='/img/anomaly/snoop.png' />
-                  : (data[key].indexOf('command and control') > -1)
-                      ? <img src='/img/anomaly/command-control.png' />
-                      : null
-          }
-        </div>
-      );
-    }
-    else if (data.Type === 'Anomaly' && index !== 1) {
-      return (
-        <div style={{}}></div>
-      );
-    }
-    else {
-      return null;
-    }
   }
 
   getDetails(data) {
@@ -106,7 +74,7 @@ class TimelineCard extends React.Component {
     }
 
     let i = 0; // I need to use "i" instead of "index",
-    // Becasue we are not displaying all attributes in this same list only.
+    // Becasue we are not displaying all attributes in this same list.
     // See below where I am incrementing "i". But "index" is always getting increament.
     const that = this;
 
@@ -130,16 +98,16 @@ class TimelineCard extends React.Component {
                 {
                   (data.Type === 'Anomaly' &&
                     i === 1 &&
-                    props.selectedAnomalyId !== '' &&
-                    props.selectedAnomalyId === props.data.id)
+                    props.selectedCardId !== '' &&
+                    props.selectedCardId === props.data.id)
                   ? <div style={{marginLeft: 'auto'}}>
-                    <img src='/img/anomaly/right-arrow-dark.png' />
+                    <img src='/img/right-arrow-dark.png' />
                   </div>
                   : (data.Type === 'Anomaly' &&
                     i === 1 &&
-                    props.selectedAnomalyId !== props.data.id)
+                    props.selectedCardId !== props.data.id)
                     ? <div style={{marginLeft: 'auto'}}>
-                      <img src='/img/anomaly/right-arrow-light.png' />
+                      <img src='/img/right-arrow-light.png' />
                     </div>
                     : null
                 }
@@ -171,17 +139,11 @@ class TimelineCard extends React.Component {
           props.updateRoute(url);
           break;
         case 'Anomaly':
-          if (props.selectedAnomalyId !== '' && props.selectedAnomalyId === props.data.id) {
-            props.setAnomalyId('');
-            // this.setState({
-            //   selectedAnomalyId: ''
-            // });
+          if (props.selectedCardId !== '' && props.selectedCardId === props.data.id) {
+            props.getContextualMenuApiObj('');
           }
           else {
-            props.setAnomalyId(props.data.id);
-            // this.setState({
-            //   selectedAnomalyId: props.data.id
-            // });
+            props.getContextualMenuApiObj(props.data.id);
           }
           break;
         default:
@@ -190,15 +152,30 @@ class TimelineCard extends React.Component {
     };
   }
 
-  // collapseRightPanel(anomalyId) {
-  //   if (!isUndefined(anomalyId)) {
-  //     const {props} = this;
-  //     props.setAnomalyId(anomalyId);
-  //     this.setState({
-  //       selectedAnomalyId: anomalyId
-  //     });
-  //   }
-  // }
+  displayAnomalyIcon(data, key, index) {
+    if (data.Type === 'Anomaly') {
+      if (index === 1) {
+        return (
+          <div>
+            {
+              (data[key].indexOf('exfiltration') > -1)
+              ? <img src='/img/anomaly/exfiltration.png' />
+                : (data[key].indexOf('snoop') > -1)
+                  ? <img src='/img/anomaly/snoop.png' />
+                    : (data[key].indexOf('command and control') > -1)
+                        ? <img src='/img/anomaly/command-control.png' />
+                        : null
+            }
+          </div>
+        );
+      }
+      else {
+        return (<div />);
+      }
+    }
+
+    return null;
+  }
 
   render() {
     const {props} = this;
@@ -247,21 +224,27 @@ class TimelineCard extends React.Component {
     }
 
     return (
-      <Card style={Object.assign({
-        boxShadow: '0px',
-        paddingTop: '22px',
-        paddingBottom: '22px',
-        paddingLeft: '18px',
-        paddingRight: '18px',
-        height: 'auto',
-        width: '450px',
-        backgroundColor: ((props.selectedAnomalyId !== '' && props.selectedAnomalyId === props.data.id) ||
-          (props.card === 'anomaly_event_card'))
-          ? Colors.cloud : Colors.white,
-        fontSize: '14px',
-        cursor: 'pointer',
-        overflowWrap: 'break-word',
-        marginBottom: '20px'}, styles.alert)} key={props.id} onClick={this.handleCardClick()}>
+      <Card
+        style={
+          Object.assign({
+            boxShadow: '0px',
+            paddingTop: '22px',
+            paddingBottom: '22px',
+            paddingLeft: '18px',
+            paddingRight: '18px',
+            height: 'auto',
+            width: '450px',
+            fontSize: '14px',
+            cursor: 'pointer',
+            overflowWrap: 'break-word',
+            backgroundColor: (
+              (props.selectedCardId !== '' && props.selectedCardId === props.data.id) ||
+              (props.card === CONTEXTUAL_MENU_CARD))
+              ? Colors.cloud : Colors.white,
+            marginBottom: '20px'}, styles.alert)
+        }
+        key={props.id}
+        onClick={this.handleCardClick()}>
         <ul className='no-list-style'>{this.getDetails(props.data)}</ul>
       </Card>
     );
