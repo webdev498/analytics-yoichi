@@ -35,8 +35,12 @@ const TimeRanges = [
     param: '12h'
   },
   {
-    text: '1 Day',
-    param: '1d'
+    text: '24 Hours',
+    param: '24h'
+  },
+  {
+    text: '48 Hours',
+    param: '48h'
   },
   {
     text: '1 Week',
