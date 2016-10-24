@@ -50,7 +50,9 @@ class Timeline extends React.Component {
       attributes: {}
     };
 
-    this.card = ((props.id).indexOf('timeline') > -1) ? TIMELINE_CARD : CONTEXTUAL_MENU_CARD;
+    const {attributes} = props;
+    this.card = (!isUndefined(attributes.isMainComponent) && !attributes.isMainComponent)
+    ? CONTEXTUAL_MENU_CARD : TIMELINE_CARD;
     this.style.card = this.card === TIMELINE_CARD ? this.style.card : {};
 
     this.fetchData = this.fetchData.bind(this);
@@ -98,11 +100,11 @@ class Timeline extends React.Component {
     return (
       <div style={this.style.card}>
         {
-          rows.map(function(event, index) {
+          rows.map((event, index) => {
             let dateString = event.Date,
               cardId = 'card' + index,
-              backgroundColor = (that.card === CONTEXTUAL_MENU_CARD) ? {backgroundColor: Colors.contextBG} : {},
-              padding = (that.card === CONTEXTUAL_MENU_CARD)
+              backgroundColor = (this.card === CONTEXTUAL_MENU_CARD) ? {backgroundColor: Colors.contextBG} : {},
+              padding = (this.card === CONTEXTUAL_MENU_CARD)
               ? (index === 0 ? {padding: '15px 15px 0px 15px'} : {padding: '0px 15px 0px 15px'})
               : {};
 
@@ -113,15 +115,15 @@ class Timeline extends React.Component {
                   ...backgroundColor,
                   ...padding
                 }} key={cardId}>
-                  {that.card === TIMELINE_CARD ? that.displayDate(dateString, that.card) : null}
+                  {this.card === TIMELINE_CARD ? this.displayDate(dateString, this.card) : null}
                   <TimelineCard
                     id={cardId}
                     data={event}
                     updateRoute={props.updateRoute}
-                    getContextualMenuApiObj={that.getContextualMenuApiObj}
+                    getContextualMenuApiObj={this.getContextualMenuApiObj}
                     selectedCardId={state.selectedCardId}
-                    card={that.card} />
-                  {that.card === CONTEXTUAL_MENU_CARD ? that.displayDate(dateString, that.card) : null}
+                    card={this.card} />
+                  {this.card === CONTEXTUAL_MENU_CARD ? this.displayDate(dateString, this.card) : null}
                 </div>
               );
             }
@@ -240,6 +242,7 @@ class Timeline extends React.Component {
             displaySelectedRows: true,
             noOfEventsPerPage: 8,
             maxNumbersOnLeftRightPagination: 4,
+            isMainComponent: false,
             style: {
               width: '100%',
               height: '100%'
@@ -281,15 +284,17 @@ class Timeline extends React.Component {
                 maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}
                 fetchData={this.fetchData}
                 type={attributes.type} />
-              {state.selectedCardId !== '' ? this.displayContextualMenuCards() : null}
               {
                 state.selectedCardId !== ''
-                ? <div id='collapse-contextual-menu' style={{
-                  bottom: '10px',
-                  position: 'absolute',
-                  right: '360px'
-                }}>
-                  <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
+                ? <div>
+                  {this.displayContextualMenuCards()}
+                  <div id='collapse-contextual-menu' style={{
+                    bottom: '10px',
+                    position: 'absolute',
+                    right: '360px'
+                  }}>
+                    <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
+                  </div>
                 </div>
                 : null
               }

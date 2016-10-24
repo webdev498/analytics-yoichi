@@ -118,7 +118,7 @@ class TimelineCard extends React.Component {
             i++;
             let sourceDest = data[key];
             return (
-              <li style={{...styles.listItem, fontWeight, displayFlex}}>
+              <li style={{...styles.listItem, fontWeight, ...displayFlex}}>
                 {sourceDest.source ? getSource(sourceDest.source) : null}
                 {sourceDest.dest ? getDestinaton(sourceDest.dest) : null}
               </li>
@@ -139,7 +139,7 @@ class TimelineCard extends React.Component {
           props.updateRoute(url);
           break;
         case 'Anomaly':
-          if (props.selectedCardId !== '' && props.selectedCardId === props.data.id) {
+          if (props.selectedCardId === props.data.id) {
             props.getContextualMenuApiObj('');
           }
           else {
