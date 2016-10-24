@@ -353,9 +353,8 @@ class MultiSeriesCombiChart extends React.Component {
 
   renderChart() {
     const {props} = this;
-    console.log(props);
 
-    if (props.data.rows && props.data.rows.length === 0) {
+    if (props.data && props.data.rows && props.data.rows.length === 0) {
       return;
     }
 
@@ -409,7 +408,8 @@ class MultiSeriesCombiChart extends React.Component {
     const {props} = this,
       {attributes, meta, data} = props;
 
-    if (typeof data === 'undefined' && !data) return;
+    if (typeof data === 'undefined') return null;
+    if (data === null) return null;
 
     if (props.processedData) {
       return (
