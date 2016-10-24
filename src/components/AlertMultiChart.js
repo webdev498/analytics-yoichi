@@ -138,7 +138,7 @@ class AlertMultiChart extends React.Component {
   }
 
   getAnomalyChart(input) {
-    const {attributes} = this.props;
+    const {attributes, data: rawData} = this.props;
 
     return Object.keys(input).map((chart, index) => {
       if (!chart) return null;
@@ -151,13 +151,16 @@ class AlertMultiChart extends React.Component {
         processedData: true
       };
 
-      const data = input[chart];
+      const title = rawData[chart].uiConfig.title,
+        data = input[chart];
+
       data.chart = this.props.chart.chartOptions;
-      delete data.chart.xAxisName;
+      data.chart.xAxisName = 'Country';
       props.data = data;
 
       return (
         <div style={styles.wrap}>
+          <h2 style={styles.title}>{title}</h2>
           <MultiSeriesCombiChart {...props} />
         </div>
       );
