@@ -16,6 +16,7 @@ function requestApi(id, state) {
   const dataMap = Map({
     id,
     isFetching: true,
+    data: null,
     isError: false
   });
 
