@@ -196,6 +196,18 @@ function getAnomaly(row) {
   return info;
 }
 
+function getRDP(row) {
+  const info = {
+    sourceDest: getSourceDestination(row),
+    Type: getEventTypeString(row.type)
+  };
+
+  if (row.date) { info.Date = row.date; }
+  if (row.id) { info.id = row.id; }
+
+  return info;
+}
+
 function getDetails(row) {
   switch (row.type.toLowerCase()) {
     case 'conn':
@@ -222,6 +234,8 @@ function getDetails(row) {
       return getWinEvent(row);
     case 'anomaly':
       return getAnomaly(row);
+    case 'rdp':
+      return getRDP(row);
     default:
       return null;
   }
