@@ -199,7 +199,7 @@ export class PageHeader extends React.Component {
                     <Menu value={1}
                       onChange={this.handleChange}
                       autoWidth={false}>
-                        {/* <MenuItem value={1} primaryText='View Token'/>*/}
+                      {/* <MenuItem value={1} primaryText='View Token'/>*/}
                       <MenuItem value={2} primaryText='Log Out' onClick={props.logout} />
                     </Menu>
                   </Paper>

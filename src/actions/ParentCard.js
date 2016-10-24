@@ -26,10 +26,11 @@ export function receiveApiData(id, json) {
   };
 }
 
-export function errorApiData(id, ex) {
+export function errorApiData(id, ex, api) {
   return {
     type: ERROR_API_DATA,
     id,
+    api,
     errorData: ex
   };
 }
@@ -164,7 +165,7 @@ export function fetchApiData(id, api, params, options) {
         dispatch(receiveApiData(id, {json, api}));
       })
       .catch((ex) => {
-        dispatch(errorApiData(id, ex));
+        dispatch(errorApiData(id, ex, api));
       });
     }
     else {
@@ -174,7 +175,7 @@ export function fetchApiData(id, api, params, options) {
         dispatch(receiveApiData(id, {json, api}));
       })
       .catch((ex) => {
-        dispatch(errorApiData(id, ex));
+        dispatch(errorApiData(id, ex, api));
       });
     }
   };

@@ -40,13 +40,14 @@ function receiveApi(id, state, action) {
 }
 
 function errorApi(id, state, action) {
-  const {errorData} = action;
+  const {errorData, api} = action;
 
   const dataMap = Map({
     id,
     isFetching: false,
     isError: true,
-    errorData
+    errorData,
+    api
   });
 
   return state.updateIn(['components'], val => val.set(id, dataMap));
