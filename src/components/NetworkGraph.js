@@ -58,28 +58,29 @@ let timeWindow = '1h',
   };
 
 function createNodeObject(dataNode) {
-  let nodeObject = {
-    id: dataNode.id,
-    type: dataNode.type,
-    label: '  ' + dataNode.id,
-    title: '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id,
-    nodeDetails: [],
-    actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
-    borderWidth: '0',
-    font: {
-      face: 'Open Sans',
-      color: Colors.pebble,
-      size: '11',
-      align: 'left'
-    },
-    shape: 'image',
-    color: {
-      color: Colors.networkNodeLabel,
-      highlight: Colors.turquoise
-    }
-  };
+  let id = dataNode.type === 'anomaly' ? dataNode.label : dataNode.id,
+    nodeObject = {
+      id: id,
+      type: dataNode.type,
+      label: '  ' + id,
+      title: '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + id,
+      nodeDetails: [],
+      actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
+      borderWidth: '0',
+      font: {
+        face: 'Open Sans',
+        color: Colors.pebble,
+        size: '11',
+        align: 'left'
+      },
+      shape: 'image',
+      color: {
+        color: Colors.networkNodeLabel,
+        highlight: Colors.turquoise
+      }
+    };
 
-  nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {dataNode.id}</li>);
+  nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {id}</li>);
 
   let metaDataObject = handleMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
