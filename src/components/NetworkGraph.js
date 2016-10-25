@@ -1153,31 +1153,7 @@ class NetworkGraph extends React.Component {
   }
 
   isGraphExtended(nodes, edges, extendedNodes) {
-    // let isGraphExtended = false,
-    //   nodesEdges = this.getNodesEdges(extendedNodes[0]);
     let nodesEdges = this.mergeMultipleGraphs(nodes, edges, extendedNodes);
-
-    // if (!isUndefined(nodesEdges.nodes)) {
-    //   nodesEdges.nodes.forEach((node) => {
-    //     if (isNodeOrEdgeAlreadyExists(nodes, node.id) === false) {
-    //       nodes.push(node);
-    //       this.nodeObjects[node.id] = node;
-    //       isGraphExtended = true;
-    //     }
-    //   });
-    // }
-
-    // if (!isUndefined(nodesEdges.edges)) {
-    //   nodesEdges.edges.forEach((edge) => {
-    //     if (isNodeOrEdgeAlreadyExists(edges, edge.id) === false) {
-    //       edges.push(edge);
-    //       this.edgeObjects[edge.to] = edge;
-    //       this.edgeObjects[edge.id] = edge;
-    //       isGraphExtended = true;
-    //     }
-    //   });
-    // }
-
     return nodesEdges.isGraphExtended;
   }
 
