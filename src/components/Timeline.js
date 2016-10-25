@@ -90,7 +90,6 @@ class Timeline extends React.Component {
     if (state.filter === '' && data.options && data.options.customParams) {
       state.filter = data.options.customParams.filter;
     }
-    console.log('rows', data.rows);
   }
 
   displayCard() {
@@ -98,7 +97,7 @@ class Timeline extends React.Component {
       {props, state} = this;
 
     return (
-      <div style={this.style.card}>{console.log(rows)}
+      <div style={this.style.card}>
         {
           rows.map((event, index) => {
             let dateString = (event.Date) ? event.Date : '',
