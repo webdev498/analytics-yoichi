@@ -72,8 +72,25 @@ class Timeline extends React.Component {
     if (!nextProps.data) {
       return;
     }
-    this.setRows(nextProps);
-    this.pagination.isPaginated = false;
+
+    const {props} = this;
+
+    // if api object has loadOnce property it implies that the general function
+    // for duration update will not be called, component has to manage on its own.
+    // therefore we are managing in here only e.g. asset page timeline component.
+    let loadOnDurationUpdate = false;
+    if (props.meta.api && props.meta.api.loadOnce) {
+      loadOnDurationUpdate = true;
+    }
+
+    if (loadOnDurationUpdate && nextProps.duration !== props.duration) {
+      this.fetchData(1, props.attributes.type);
+    }
+    else {
+      this.setRows(nextProps);
+      this.pagination.isPaginated = false;
+    }
+
     this.state.selectedCardId = '';
   }
 
@@ -153,10 +170,10 @@ class Timeline extends React.Component {
 
   fetchData(pageNumber, type) {
     const {props} = this,
-      {params} = props;
-
-    const api = this.getApiObj(pageNumber, type),
+      {params} = props,
+      api = Object.assign({}, props.meta.api, this.getApiObj(pageNumber, type)),
       options = props.options ? props.options : {};
+
     props.fetchApiData(props.id, api, params, options);
     this.pagination = {
       isPaginated: true,
@@ -167,28 +184,36 @@ class Timeline extends React.Component {
   getApiObj(pageNumber, type) {
     const {state, props} = this,
       {params, attributes, meta} = props;
+
     let apiPath = (type === 'traffic') ? '/api/alert/traffic' : meta.api.path,
       pathParams = (type === 'traffic') ? {} : {
         reportId: meta.api.pathParams.reportId
       },
-      queryParams = {
-        window: '',
-        count: attributes.noOfEventsPerPage,
-        from: (pageNumber - 1) * attributes.noOfEventsPerPage
-      };
+      queryParams = Object.assign({},
+        props.meta.api && props.meta.api.queryParams,
+        {
+          window: '',
+          count: attributes.noOfEventsPerPage,
+          from: (pageNumber - 1) * attributes.noOfEventsPerPage
+        });
+
+    const apiObj = {
+      path: apiPath,
+      pathParams
+    };
 
     if (type === 'traffic') {
       queryParams = Object.assign(queryParams, {
         date: params.date,
         filter: state.filter
       });
+
+      apiObj.loadOnce = true;
     }
 
-    return {
-      path: apiPath,
-      pathParams: pathParams,
-      queryParams: queryParams
-    };
+    apiObj.queryParams = queryParams;
+
+    return apiObj;
   }
 
   displayContextualMenuCards() {

@@ -1,13 +1,29 @@
-Add env.js to the project at root level.
+Add serverEnv.js to the project at root level.
 ```
 export const serverBaseUrl = 'https://demo.ranksoftwareinc.com';
+export const timeoutDuration = 1000 * 60;
 ```
+
+And add env.js to src/static/
+```
+window.global = {
+  baseUrl: '',
+  redirectUri: 'http://localhost:3000/dashboard?',
+  defaultRoute: '/',
+  loginUrl: 'https://api.ranksoftwareinc.com/oauth/authorize',
+  kibanaBaseUrl: 'https://demo.ranksoftwareinc.com',
+  openKibanaInNewWindow: false
+};
+
+```
+
 
 Requirements
 ------------
 
 * node `^4.2.0`
 * npm `^3.0.0`
+* bower
 
 Features
 --------
@@ -45,6 +61,7 @@ Just clone the repo and install the necessary node modules:
 
 $ npm install                   # Install Node modules listed in ./package.json (may take a while the first time)
 $ npm start                     # Compile and launch
+$ bower install                 # Install Bower modules listed in ./bower.json
 ```
 
 

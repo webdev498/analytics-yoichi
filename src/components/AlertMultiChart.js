@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {formatDate} from 'utils/dateUtils';
 import MultiSeriesLineChart from './MultiSeriesLineChart';
+import MultiSeriesCombiChart from './MultiSeriesCombiChart';
 
 const styles = {
   title: {
@@ -136,6 +137,36 @@ class AlertMultiChart extends React.Component {
     });
   }
 
+  getAnomalyChart(input) {
+    const {attributes, data: rawData} = this.props;
+
+    return Object.keys(input).map((chart, index) => {
+      if (!chart) return null;
+
+      const props = {
+        attributes: {
+          id: `chart${index}`,
+          ...attributes.chart
+        },
+        processedData: true
+      };
+
+      const title = rawData[chart].uiConfig.title,
+        data = input[chart];
+
+      data.chart = this.props.chart.chartOptions;
+      data.chart.xAxisName = 'Country';
+      props.data = data;
+
+      return (
+        <div style={styles.wrap}>
+          <h2 style={styles.title}>{title}</h2>
+          <MultiSeriesCombiChart {...props} />
+        </div>
+      );
+    });
+  }
+
   render() {
     let {data} = this.props;
     if (!data) return null;
@@ -150,12 +181,20 @@ class AlertMultiChart extends React.Component {
       data = {[key]: data};
     }
 
-    const normalizedData = Object.assign({}, data);
-    delete normalizedData.options;
+    const tempData = Object.assign({}, data);
+    delete tempData.options;
+
+    let charts;
+    if (data.normalizeData) {
+      charts = this.getAnomalyChart(data.normalizeData);
+    }
+    else {
+      charts = this.getCharts(tempData);
+    }
 
     return (
       <div>
-        {this.getCharts(normalizedData)}
+        {charts}
       </div>
     );
   }

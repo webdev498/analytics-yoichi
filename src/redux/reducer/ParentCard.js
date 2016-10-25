@@ -9,12 +9,14 @@ import {
 
 import {Map, fromJS} from 'immutable';
 
-const initialState = fromJS({duration: '1h', components: {}});
+const duration = window.localStorage.rankDuration || '1h';
+const initialState = fromJS({duration, components: {}});
 
 function requestApi(id, state) {
   const dataMap = Map({
     id,
     isFetching: true,
+    data: null,
     isError: false
   });
 
@@ -38,13 +40,14 @@ function receiveApi(id, state, action) {
 }
 
 function errorApi(id, state, action) {
-  const {errorData} = action;
+  const {errorData, api} = action;
 
   const dataMap = Map({
     id,
     isFetching: false,
     isError: true,
-    errorData
+    errorData,
+    api
   });
 
   return state.updateIn(['components'], val => val.set(id, dataMap));
@@ -74,6 +77,7 @@ export default function APIDataReducer(state = initialState, action) {
     }
     case TIME_INTERVAL_UPDATE: {
       const {data: duration} = action;
+      window.localStorage.rankDuration = duration;
       return state.set('duration', duration);
     }
     case REMOVE_COMPONENT: {

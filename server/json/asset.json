@@ -381,7 +381,8 @@
             },
             "pathParams": {
               "reportId": "taf_alert_by_asset"
-            }
+            },
+            "loadOnce": true
           },
           "title": "Timeline"
         },

@@ -35,8 +35,12 @@ const TimeRanges = [
     param: '12h'
   },
   {
-    text: '1 Day',
-    param: '1d'
+    text: '24 Hours',
+    param: '24h'
+  },
+  {
+    text: '48 Hours',
+    param: '48h'
   },
   {
     text: '1 Week',
@@ -96,7 +100,14 @@ function getTimeRangeItems() {
 export class PageHeader extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: 1, showMenu: false};
+    let value = 1;
+    TimeRanges.forEach((range, index) => {
+      if (range.param === props.duration) {
+        value = index + 1;
+      }
+    });
+
+    this.state = {value, showMenu: false};
     this.toggleMenu = this.toggleMenu.bind(this);
     this.handleTimeChange = this.handleTimeChange.bind(this);
   }
@@ -107,7 +118,8 @@ export class PageHeader extends React.Component {
     hideKibana: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     showKibana: PropTypes.bool.isRequired,
-    params: PropTypes.object.isRequired
+    params: PropTypes.object.isRequired,
+    duration: PropTypes.string.isRequired
   }
 
   getChildContext() {
@@ -187,7 +199,7 @@ export class PageHeader extends React.Component {
                     <Menu value={1}
                       onChange={this.handleChange}
                       autoWidth={false}>
-                        {/* <MenuItem value={1} primaryText='View Token'/>*/}
+                      {/* <MenuItem value={1} primaryText='View Token'/>*/}
                       <MenuItem value={2} primaryText='Log Out' onClick={props.logout} />
                     </Menu>
                   </Paper>
@@ -209,7 +221,7 @@ PageHeader.childContextTypes = {
 };
 
 function mapStateToProps(state) {
-  return { auth: state.auth };
+  return { auth: state.auth, duration: state.apiData.get('duration') };
 }
 
 export default connect(mapStateToProps, {

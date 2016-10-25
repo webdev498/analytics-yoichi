@@ -15,6 +15,40 @@ import {
   generatePathParams
 } from 'utils/kibanaUtils';
 
+const chart = {
+  'showvalues': '0',
+  'decimals': '3',
+  'sFormatNumberScale': '1',
+  'setadaptiveymin': '1',
+  'setadaptivesymin': '1',
+  'showborder': '0',
+  'theme': 'zune',
+  'numDivLines': '6',
+  'showAxisLines': '1',
+  'showYAxisValues': '1',
+  'labelDisplay': 'wrap',
+  'rotateLabels': '1',
+  'xAxisName': 'TIME',
+  'scrollHeight': '4',
+  'xAxisNameFontSize': '13',
+  'yAxisNameFontSize': '13',
+  'slantLabels': '1',
+  'labelFontSize': '11',
+  'xAxisNamePadding': '20',
+  'yAxisNamePadding': '20',
+  'showXAxisLine': '1',
+  'showYAxisLine': '0',
+  'divLineIsDashed': '0',
+  'divLineAlpha': '20',
+  'chartLeftMargin': '0',
+  'chartRightMargin': '0',
+  'chartBottomMargin': '0',
+  'baseFont': 'Open Sans, sans-serif',
+  'baseFontColor': Colors.pebble,
+  'paletteColors': Colors.defaultGraphPalette,
+  'xAxisLineColor': Colors.axis
+};
+
 export function getXindex(currentChartDataColumn, columns) {
   let x = '';
   for (let c = 0; c < columns.length; c++) {
@@ -281,39 +315,7 @@ export function generateChartDataSource(rawData, props) {
   }
 
   const dataSourceObject = {
-    chart: Object.assign({
-      'showvalues': '0',
-      'decimals': '3',
-      'sFormatNumberScale': '1',
-      'setadaptiveymin': '1',
-      'setadaptivesymin': '1',
-      'showborder': '0',
-      'theme': 'zune',
-      'numDivLines': '6',
-      'showAxisLines': '1',
-      'showYAxisValues': '1',
-      'labelDisplay': 'wrap',
-      'rotateLabels': '1',
-      'xAxisName': 'TIME',
-      'scrollHeight': '4',
-      'xAxisNameFontSize': '13',
-      'yAxisNameFontSize': '13',
-      'slantLabels': '1',
-      'labelFontSize': '11',
-      'xAxisNamePadding': '20',
-      'yAxisNamePadding': '20',
-      'showXAxisLine': '1',
-      'showYAxisLine': '0',
-      'divLineIsDashed': '0',
-      'divLineAlpha': '20',
-      'chartLeftMargin': '0',
-      'chartRightMargin': '0',
-      'chartBottomMargin': '0',
-      'baseFont': 'Open Sans, sans-serif',
-      'baseFontColor': Colors.pebble,
-      'paletteColors': Colors.defaultGraphPalette,
-      'xAxisLineColor': Colors.axis
-    }, chartOptions),
+    chart: Object.assign({}, chart, chartOptions),
     'annotations': {'groups': [{'items': annotationItems}]}
   };
 
@@ -349,32 +351,24 @@ class MultiSeriesCombiChart extends React.Component {
     meta: PropTypes.object
   }
 
-  renderChart(props) {
-    if (!props.duration) {
+  renderChart() {
+    const {props} = this;
+
+    if (props.data && props.data.rows && props.data.rows.length === 0) {
       return;
     }
 
-    if (!props.data) {
-      return;
-    }
-
-    if (props.data.rows && props.data.rows.length === 0) {
-      return;
-    }
-
-    const data = props.data,
+    const {data, attributes} = props,
       fieldMapping = props.chartData.fieldMapping,
-      {clickThrough} = this.context;
-
-    let rawData = {};
-    rawData = generateRawData(fieldMapping, data);
+      {clickThrough} = this.context,
+      rawData = generateRawData(fieldMapping, data);
 
     FusionCharts.ready(function() {
       const fusioncharts = new FusionCharts({
         type: 'mscombi2d',
-        renderAt: props.attributes.id,
-        width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
-        height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
+        renderAt: attributes.id,
+        width: attributes.chartWidth ? attributes.chartWidth : '100%',
+        height: attributes.chartHeight ? attributes.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
         dataSource: generateChartDataSource(rawData, props),
@@ -392,12 +386,41 @@ class MultiSeriesCombiChart extends React.Component {
     });
   }
 
+  renderChartPreProcessed(dataSource, attributes) {
+    dataSource.chart = Object.assign({}, chart, dataSource.chart);
+
+    FusionCharts.ready(function() {
+      const fusioncharts = new FusionCharts({
+        type: 'mscombi2d',
+        renderAt: attributes.id,
+        width: attributes.chartWidth ? attributes.chartWidth : '100%',
+        height: attributes.chartHeight ? attributes.chartHeight : '400',
+        dataFormat: 'json',
+        containerBackgroundOpacity: '0',
+        dataSource
+      });
+
+      fusioncharts.render();
+    });
+  }
+
   render() {
-    const {props} = this;
+    const {props} = this,
+      {attributes, meta, data} = props;
+
+    if (typeof data === 'undefined') return null;
+    if (data === null) return null;
+
+    if (props.processedData) {
+      return (
+        <div id={attributes.id}>{this.renderChartPreProcessed(data, attributes)}</div>
+      );
+    }
+
     return (
-      <div style={props.attributes.chartBorder}>
-        <div style={props.attributes.chartCaption}>{props.meta.title}</div>
-        <div id={props.attributes.id}>{this.renderChart(props)}</div>
+      <div>
+        <div style={attributes.chartCaption}>{meta.title}</div>
+        <div id={attributes.id}>{this.renderChart()}</div>
       </div>
     );
   }

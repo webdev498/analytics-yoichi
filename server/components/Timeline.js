@@ -1,4 +1,4 @@
-import {msToTime, getEventTypeString, formatBytes} from '../utils';
+import {msToTime, getEventTypeString, formatBytes} from '../utils/utils';
 function getIPDetails(source) {
   if (source) {
     const info = {};
@@ -10,7 +10,7 @@ function getIPDetails(source) {
   return null;
 }
 
-export function getSourceDestination(row) {
+function getSourceDestination(row) {
   const {source, destination} = row;
   return {
     source: getIPDetails(source),

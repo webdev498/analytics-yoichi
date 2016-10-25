@@ -4,10 +4,11 @@ import KoaRouter from 'koa-router';
 
 // import {getData} from '../components/paretoChart';
 
-import {serverBaseUrl} from '../../serverEnv';
+import {serverBaseUrl, timeoutDuration} from '../../serverEnv';
 import layoutRoutes from './layouts';
 
 import timeline from '../components/Timeline';
+import anomalyChart from '../components/anomalyChart';
 
 const router = new KoaRouter({
   prefix: '/api'
@@ -43,7 +44,7 @@ const agent = new https.Agent(agentOptions);
 //   return res;
 // }, async function(ctx, next) {})
 
-const timeout = 1000 * 60;
+const timeout = timeoutDuration || 1000 * 60;
 
 router
 .get('/store/*', layoutRoutes)
@@ -84,10 +85,14 @@ router
     }
   );
 
+  ctx.tempData = res;
+  await next();
+
   ctx.set('content-type', res.headers.get('content-type'));
   ctx.status = res.status;
   ctx.statusText = res.statusText;
-  ctx.body = res.body;
-});
+  ctx.body = ctx.normalizeData || res.body;
+})
+.post('/analytics/reporting/executeById', anomalyChart);
 
 export default router;

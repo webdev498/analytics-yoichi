@@ -256,7 +256,6 @@
                     "position": "absolute"
                   },
                   "chartWidth": "100%",
-                  "chartBorder": {},
                   "style": {
                     "marginTop": "35px"
                   },
@@ -461,7 +460,6 @@
                     "position": "absolute"
                   },
                   "chartWidth": "100%",
-                  "chartBorder": {},
                   "style": {
                     "marginTop": "35px"
                   },

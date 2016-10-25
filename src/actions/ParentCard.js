@@ -26,10 +26,11 @@ export function receiveApiData(id, json) {
   };
 }
 
-export function errorApiData(id, ex) {
+export function errorApiData(id, ex, api) {
   return {
     type: ERROR_API_DATA,
     id,
+    api,
     errorData: ex
   };
 }
@@ -109,10 +110,34 @@ function getUrl(api, duration, routerParams) {
   return baseUrl + url + queryString;
 }
 
-export function fetchApiData(id, api, params, options) {
+function callApi(api, duration, params, options) {
   const accessToken = Cookies.get('access_token');
   const tokenType = Cookies.get('token_type');
+  const headers = (api && api.headers) || {};
+  const defaultHeaders = Object.assign({
+    'Authorization': `${tokenType} ${accessToken}`,
+    'Content-Type': 'application/json'
+  }, headers);
 
+  const body = options && JSON.stringify(options.body);
+  return fetch(getUrl(api, duration, params), {
+    method: api.method || 'GET',
+    headers: defaultHeaders,
+    body
+  })
+  .then(response => {
+    if (response.status >= 200 && response.status < 300) {
+      return response.json();
+    }
+    else {
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    }
+  });
+}
+
+export function fetchApiData(id, api, params, options) {
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
@@ -122,28 +147,9 @@ export function fetchApiData(id, api, params, options) {
 
     dispatch(requestApiData(id, api));
 
-    const defaultHeaders = Object.assign({
-      'Authorization': `${tokenType} ${accessToken}`
-    }, api.headers);
-
     if (Array.isArray(api)) {
       const arr = api.map((apiObj) => {
-        const body = options && JSON.stringify(options.body);
-        return fetch(getUrl(apiObj, currentDuration, params), {
-          method: api.method || 'GET',
-          headers: defaultHeaders,
-          body
-        })
-        .then(response => {
-          if (response.status >= 200 && response.status < 300) {
-            return response.json();
-          }
-          else {
-            const error = new Error(response.statusText);
-            error.response = response;
-            throw error;
-          }
-        });
+        return callApi(apiObj, currentDuration, params, options);
       });
 
       Promise.all(arr)
@@ -159,34 +165,17 @@ export function fetchApiData(id, api, params, options) {
         dispatch(receiveApiData(id, {json, api}));
       })
       .catch((ex) => {
-        dispatch(errorApiData(id, ex));
+        dispatch(errorApiData(id, ex, api));
       });
     }
     else {
-      const body = options && JSON.stringify(options.body);
-      return fetch(getUrl(api, currentDuration, params), {
-        method: api.method || 'GET',
-        headers: Object.assign({}, defaultHeaders, {
-          'Content-Type': 'application/json'
-        }),
-        body
-      })
-      .then(response => {
-        if (response.status >= 200 && response.status < 300) {
-          return response.json();
-        }
-        else {
-          const error = new Error(response.statusText);
-          error.response = response;
-          throw error;
-        }
-      })
+      callApi(api, currentDuration, params, options)
       .then(json => {
         json.options = options;
         dispatch(receiveApiData(id, {json, api}));
       })
       .catch((ex) => {
-        dispatch(errorApiData(id, ex));
+        dispatch(errorApiData(id, ex, api));
       });
     }
   };

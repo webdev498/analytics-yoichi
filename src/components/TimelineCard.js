@@ -20,7 +20,7 @@ function getSource(source) {
           <span> {source.ip} </span>
           {
             source.country
-            ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()}></span>
+            ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()} />
             : null
           }
           {
@@ -43,7 +43,7 @@ function getDestinaton(dest) {
           <span> connected to {dest.ip} </span>
           {
             dest.country
-            ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()}></span>
+            ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()} />
             : null
           }
           {
@@ -88,7 +88,7 @@ class TimelineCard extends React.Component {
           if (whatIsIt(data[key]) === 'String') {
             i++;
             return (
-              <li style={{...styles.listItem, fontWeight, ...displayFlex}}>
+              <li style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
                 {that.displayAnomalyIcon(data, key, i)}
                 <div style={{
                   paddingLeft: data.Type === 'Anomaly' ? i === 1 ? '10px' : '40px' : '0px'
@@ -96,19 +96,25 @@ class TimelineCard extends React.Component {
                   {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
                 </div>
                 {
-                  (data.Type === 'Anomaly' &&
+                  ( data.Type === 'Anomaly' &&
                     i === 1 &&
                     props.selectedCardId !== '' &&
-                    props.selectedCardId === props.data.id)
-                  ? <div style={{marginLeft: 'auto'}}>
+                    props.selectedCardId === props.data.id
+                  )
+                  ? (
+                  <div style={{marginLeft: 'auto'}}>
                     <img src='/img/right-arrow-dark.png' />
                   </div>
-                  : (data.Type === 'Anomaly' &&
-                    i === 1 &&
-                    props.selectedCardId !== props.data.id)
-                    ? <div style={{marginLeft: 'auto'}}>
-                      <img src='/img/right-arrow-light.png' />
-                    </div>
+                  )
+                  : ( data.Type === 'Anomaly' &&
+                      i === 1 &&
+                      props.selectedCardId !== props.data.id
+                    )
+                    ? (
+                      <div style={{marginLeft: 'auto'}}>
+                        <img src='/img/right-arrow-light.png' />
+                      </div>
+                    )
                     : null
                 }
               </li>
@@ -118,7 +124,7 @@ class TimelineCard extends React.Component {
             i++;
             let sourceDest = data[key];
             return (
-              <li style={{...styles.listItem, fontWeight, ...displayFlex}}>
+              <li style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
                 {sourceDest.source ? getSource(sourceDest.source) : null}
                 {sourceDest.dest ? getDestinaton(sourceDest.dest) : null}
               </li>

@@ -158,12 +158,17 @@ export function translateTimeWindow(window) {
   if (window === '1 hour') return '1h';
   if (window === '6 hour') return '6h';
   if (window === '12 hour') return '12h';
+  if (window === '24 hour') return '24h';
+  if (window === '48 hour') return '48h';
   if (window === '1 day') return '1d';
   if (window === '1 week') return '1w';
   if (window === '1 month') return '1mo';
+
   if (window === '1h') return '1 hour';
   if (window === '6h') return '6 hour';
   if (window === '12h') return '12 hour';
+  if (window === '24h') return '24 hour';
+  if (window === '48h') return '48 hour';
   if (window === '1d') return '1 day';
   if (window === '1w') return '1 week';
   if (window === '1mo') return '1 month';
@@ -251,6 +256,12 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     if (timeWindow === '12h') {
       timeDifference = 30;// i.e. 30 minutes difference
     }
+    if (timeWindow === '24h') {
+      timeDifference = 60;// i.e. 60 minutes difference
+    }
+    if (timeWindow === '48h') {
+      timeDifference = 120;// i.e. 120 minutes difference
+    }
     if (timeWindow === '1d') {
       timeDifference = 60;// i.e. 1 hour difference
     }
@@ -281,6 +292,12 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     }
     if (timeWindow === '12h') {
       fromDate.setHours(todayDate.getHours() - 12);
+    }
+    if (timeWindow === '24h') {
+      fromDate.setHours(todayDate.getDate() - 1);
+    }
+    if (timeWindow === '48h') {
+      fromDate.setHours(todayDate.getDate() - 2);
     }
     if (timeWindow === '1d') {
       fromDate.setDate(todayDate.getDate() - 1);
