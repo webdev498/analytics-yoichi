@@ -58,28 +58,29 @@ let timeWindow = '1h',
   };
 
 function createNodeObject(dataNode) {
-  let nodeObject = {
-    id: dataNode.id,
-    type: dataNode.type,
-    label: '  ' + dataNode.id,
-    title: '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + dataNode.id,
-    nodeDetails: [],
-    actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
-    borderWidth: '0',
-    font: {
-      face: 'Open Sans',
-      color: Colors.pebble,
-      size: '11',
-      align: 'left'
-    },
-    shape: 'image',
-    color: {
-      color: Colors.networkNodeLabel,
-      highlight: Colors.turquoise
-    }
-  };
+  let id = dataNode.type === 'anomaly' ? dataNode.label : dataNode.id,
+    nodeObject = {
+      id: id,
+      type: dataNode.type,
+      label: '  ' + id,
+      title: '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + id,
+      nodeDetails: [],
+      actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
+      borderWidth: '0',
+      font: {
+        face: 'Open Sans',
+        color: Colors.pebble,
+        size: '11',
+        align: 'left'
+      },
+      shape: 'image',
+      color: {
+        color: Colors.networkNodeLabel,
+        highlight: Colors.turquoise
+      }
+    };
 
-  nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {dataNode.id}</li>);
+  nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {id}</li>);
 
   let metaDataObject = handleMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
@@ -336,6 +337,10 @@ function parseReputationText(values, newLine, value) {
 
 function getIcon(nodeType, nodeStatus, nodeAction) {
   nodeType = nodeType.toLowerCase();
+  if (nodeType === 'anomaly') {
+    nodeStatus = 'malicious';
+  }
+  console.log(nodeType, nodeStatus);
   const iconPath = '/img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
 
   if (nodeType !== '') {
@@ -665,7 +670,9 @@ class NetworkGraph extends React.Component {
       edges: []
     };
     if (this.state.nodesListStatus === 'default') {
-      let nodesEdges = this.getNodesEdges(data[0]);
+      let nodes = [],
+        edges = [],
+        nodesEdges = this.mergeMultipleGraphs(nodes, edges, data);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       this.state.originalNodesEdges = {
@@ -681,6 +688,37 @@ class NetworkGraph extends React.Component {
       };
     }
     return networkData;
+  }
+
+  mergeMultipleGraphs(nodes, edges, data) {
+    let isGraphExtended = false;
+
+    data.forEach((graph) => {
+      let nodesEdges = this.getNodesEdges(graph);
+
+      if (!isUndefined(nodesEdges.nodes)) {
+        nodesEdges.nodes.forEach((node) => {
+          if (isNodeOrEdgeAlreadyExists(nodes, node.id) === false) {
+            nodes.push(node);
+            isGraphExtended = true;
+          }
+        });
+      }
+
+      if (!isUndefined(nodesEdges.edges)) {
+        nodesEdges.edges.forEach((edge) => {
+          if (isNodeOrEdgeAlreadyExists(edges, edge.id) === false) {
+            edges.push(edge);
+            isGraphExtended = true;
+          }
+        });
+      }
+    });
+    return {
+      nodes: nodes,
+      edges: edges,
+      isGraphExtended: isGraphExtended
+    };
   }
 
   createNetworkGraph(networkData) {
@@ -1119,31 +1157,8 @@ class NetworkGraph extends React.Component {
   }
 
   isGraphExtended(nodes, edges, extendedNodes) {
-    let isGraphExtended = false,
-      nodesEdges = this.getNodesEdges(extendedNodes[0]);
-
-    if (!isUndefined(nodesEdges.nodes)) {
-      nodesEdges.nodes.forEach((node) => {
-        if (isNodeOrEdgeAlreadyExists(nodes, node.id) === false) {
-          nodes.push(node);
-          this.nodeObjects[node.id] = node;
-          isGraphExtended = true;
-        }
-      });
-    }
-
-    if (!isUndefined(nodesEdges.edges)) {
-      nodesEdges.edges.forEach((edge) => {
-        if (isNodeOrEdgeAlreadyExists(edges, edge.id) === false) {
-          edges.push(edge);
-          this.edgeObjects[edge.to] = edge;
-          this.edgeObjects[edge.id] = edge;
-          isGraphExtended = true;
-        }
-      });
-    }
-
-    return isGraphExtended;
+    let nodesEdges = this.mergeMultipleGraphs(nodes, edges, extendedNodes);
+    return nodesEdges.isGraphExtended;
   }
 
   undoOrResetGraph(network, action) {

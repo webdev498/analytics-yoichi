@@ -21,7 +21,8 @@ const style = {
       fontSize: '16px',
       fontFamily: 'Open Sans',
       overflowWrap: 'break-word',
-      paddingRight: '20px'
+      paddingRight: '20px',
+      paddingBottom: '20px'
     },
     notificationMessage: {
       top: 0,
