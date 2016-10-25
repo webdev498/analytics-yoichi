@@ -39,6 +39,23 @@
             "flex": "0 0 300px",
             "backgroundColor": "#F7F7F9"
           }
+        },
+        "chartOptions": {
+          "labelFontSize": "9",
+          "bgColor": "#cbcbd1",
+          "radarfillalpha": "100",
+          "radarfillcolor": "#ffffff",
+          "labelPadding": "3",
+          "chartLeftMargin": "0",
+          "chartRightMargin": "0",
+          "chartBottomMargin": "0",
+          "canvasBottomMargin": "0",
+          "canvasRightMargin": "0",
+          "canvasLeftMargin": "0",
+          "canvasTopMargin": "0",
+          "showLimits": "0",
+          "showDivLineValues": "0",
+          "paletteColors": "#2bd8d0"
         }
       },
       {
