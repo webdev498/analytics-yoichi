@@ -1,17 +1,16 @@
 import React, {PropTypes} from 'react';
 import PaginationWidget from 'components/PaginationWidget';
-import TimelineCard from '../components/TimelineCard';
+import TimelineCard from 'components/TimelineCard';
+import ParentCard from 'containers/ParentCard';
 import {Colors} from 'theme/colors';
 import {
   formatDateInLocalTimeZone,
   isUndefined
 } from 'utils/utils';
-
-let style = {
-  card: {
-    paddingBottom: '25px'
-  }
-};
+import {
+  TIMELINE_CARD,
+  CONTEXTUAL_MENU_CARD
+} from 'Constants';
 
 class Timeline extends React.Component {
   static propTypes = {
@@ -31,7 +30,8 @@ class Timeline extends React.Component {
       'currentPage': 1,
       'filter': '',
       'rows': [],
-      'nextPageStart': 0
+      'nextPageStart': 0,
+      'selectedCardId': ''
     };
 
     this.pagination = {
@@ -39,9 +39,24 @@ class Timeline extends React.Component {
       pageNumber: 1
     };
 
-    this.displayCard = this.displayCard.bind(this);
+    this.style = {
+      card: {
+        paddingBottom: '25px'
+      }
+    };
+
+    this.contextualMenuApiParams = {
+      meta: {},
+      attributes: {}
+    };
+
+    const {attributes} = props;
+    this.card = (!isUndefined(attributes.isMainComponent) && !attributes.isMainComponent)
+    ? CONTEXTUAL_MENU_CARD : TIMELINE_CARD;
+    this.style.card = this.card === TIMELINE_CARD ? this.style.card : {};
+
     this.fetchData = this.fetchData.bind(this);
-    this.getApiObj = this.getApiObj.bind(this);
+    this.getContextualMenuApiObj = this.getContextualMenuApiObj.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +65,7 @@ class Timeline extends React.Component {
       return;
     }
     this.setRows(props);
+    this.state.selectedCardId = '';
   }
 
   componentWillReceiveProps(nextProps) {
@@ -74,6 +90,8 @@ class Timeline extends React.Component {
       this.setRows(nextProps);
       this.pagination.isPaginated = false;
     }
+
+    this.state.selectedCardId = '';
   }
 
   setRows(props) {
@@ -93,30 +111,59 @@ class Timeline extends React.Component {
 
   displayCard() {
     const rows = this.state.rows,
-      {props} = this;
+      {props, state} = this;
 
     return (
-      <div style={style.card}>
+      <div style={this.style.card}>
         {
-          rows.map(function(event, index) {
+          rows.map((event, index) => {
             let dateString = event.Date,
-              barId = 'bar' + index;
+              cardId = 'card' + index,
+              backgroundColor = (this.card === CONTEXTUAL_MENU_CARD) ? {backgroundColor: Colors.contextBG} : {},
+              padding = (this.card === CONTEXTUAL_MENU_CARD)
+              ? (index === 0 ? {padding: '15px 15px 0px 15px'} : {padding: '0px 15px 0px 15px'})
+              : {};
 
             if (dateString !== '') {
-              let dateTime = formatDateInLocalTimeZone(dateString);
               return (
-                <div style={{display: 'flex'}} key={barId}>
-                  <div style={{width: '110px', paddingTop: '22px'}}>
-                    <span style={{fontSize: '12px', fontWeight: 'lighter', Color: Colors.grape}}>
-                      {dateTime.date}<br />{dateTime.time}
-                    </span>
-                  </div>
-                  <TimelineCard id={barId} data={event} updateRoute={props.updateRoute} />
+                <div style={{
+                  ...{display: 'flex'},
+                  ...backgroundColor,
+                  ...padding
+                }} key={cardId}>
+                  {this.card === TIMELINE_CARD ? this.displayDate(dateString, this.card) : null}
+                  <TimelineCard
+                    id={cardId}
+                    data={event}
+                    updateRoute={props.updateRoute}
+                    getContextualMenuApiObj={this.getContextualMenuApiObj}
+                    selectedCardId={state.selectedCardId}
+                    card={this.card} />
+                  {this.card === CONTEXTUAL_MENU_CARD ? this.displayDate(dateString, this.card) : null}
                 </div>
               );
             }
           })
         }
+      </div>
+    );
+  }
+
+  displayDate(dateString, card) {
+    let dateTime = formatDateInLocalTimeZone(dateString);
+    return (
+      <div style={{
+        width: '85px',
+        paddingTop: '22px',
+        paddingLeft: (card === TIMELINE_CARD) ? '0px' : '10px'
+      }}>
+        <span style={{
+          fontSize: '12px',
+          fontWeight: 'lighter',
+          color: (card === TIMELINE_CARD) ? Colors.grape : Colors.white
+        }}>
+          {dateTime.date}<br />{dateTime.time}
+        </span>
       </div>
     );
   }
@@ -169,6 +216,74 @@ class Timeline extends React.Component {
     return apiObj;
   }
 
+  displayContextualMenuCards() {
+    const {state, props} = this;
+    return (
+      <div>
+        <div style={{
+          top: '0px',
+          right: '0px',
+          bottom: '0px',
+          width: '350px',
+          position: 'absolute',
+          overflowY: 'scroll',
+          overflowX: 'hidden'
+        }} className='scrollbar'>
+          <ParentCard
+            id={state.selectedCardId}
+            meta={this.contextualMenuApiParams.meta}
+            params={props.params}
+            attributes={this.contextualMenuApiParams.attributes}>
+            <Timeline />
+          </ParentCard>
+        </div>
+      </div>
+    );
+  }
+
+  getContextualMenuApiObj(selectedCardId) {
+    if (!isUndefined(selectedCardId)) {
+      this.setState({
+        selectedCardId: selectedCardId
+      });
+      if (selectedCardId !== '') {
+        this.contextualMenuApiParams = {
+          meta: {
+            showHeader: false,
+            api: {
+              path: '/api/anomaly/{anomalyId}/events',
+              pathParams: {
+                anomalyId: selectedCardId
+              },
+              queryParams: {
+                window: ''
+              }
+            },
+            title: ''
+          },
+          attributes: {
+            type: 'traffic',
+            displaySelectedRows: true,
+            noOfEventsPerPage: 8,
+            maxNumbersOnLeftRightPagination: 4,
+            isMainComponent: false,
+            style: {
+              width: '100%',
+              height: '100%'
+            },
+            id: 'timeline-anomaly-events'
+          }
+        };
+      }
+    }
+  }
+
+  collaseContextualMenu() {
+    return () => {
+      this.getContextualMenuApiObj('');
+    };
+  }
+
   render() {
     const {state, props} = this,
       {attributes} = props;
@@ -176,7 +291,10 @@ class Timeline extends React.Component {
     return (
       <div>
         {
-          (!isUndefined(state.rows) && state.rows.length === 0)
+          (props.data &&
+          !isUndefined(state.rows) &&
+          state.rows.length === 0 &&
+          this.card === TIMELINE_CARD)
           ? <div>No additional results were found.</div>
           : null
         }
@@ -190,6 +308,20 @@ class Timeline extends React.Component {
                 maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}
                 fetchData={this.fetchData}
                 type={attributes.type} />
+              {
+                state.selectedCardId !== ''
+                ? <div>
+                  {this.displayContextualMenuCards()}
+                  <div id='collapse-contextual-menu' style={{
+                    bottom: '10px',
+                    position: 'absolute',
+                    right: '360px'
+                  }}>
+                    <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
+                  </div>
+                </div>
+                : null
+              }
             </div>
           : null
         }

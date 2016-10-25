@@ -228,7 +228,8 @@
                     }
                   ],
                   "style": {
-                    "width": "70%"
+                    "width": "70%",
+                    "wordBreak": "break-all"
                   },
                   "type": "text",
                   "columnNameToDisplay": "LONGEST USER AGENT"
@@ -299,7 +300,8 @@
                     }
                   ],
                   "style": {
-                    "width": "70%"
+                    "width": "70%",
+                    "wordBreak": "break-all"
                   },
                   "type": "text",
                   "columnNameToDisplay": "SHORTEST USER AGENT"

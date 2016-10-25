@@ -1,9 +1,8 @@
 import React from 'react';
 import Card from 'material-ui/Card/Card';
 import {Colors} from 'theme/colors';
-import {
-  whatIsIt
-} from 'utils/utils';
+import {whatIsIt} from 'utils/utils';
+import {CONTEXTUAL_MENU_CARD} from 'Constants';
 
 let styles = {
   alert: {},
@@ -63,32 +62,69 @@ function getDestinaton(dest) {
 class TimelineCard extends React.Component {
   constructor(props) {
     super(props);
+
     this.getDetails = this.getDetails.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
   }
 
   getDetails(data) {
+    const {props} = this;
     if (!data) {
       return;
     }
 
+    let i = 0; // I need to use "i" instead of "index",
+    // Becasue we are not displaying all attributes in this same list.
+    // See below where I am incrementing "i". But "index" is always getting increament.
+    const that = this;
+
     return (
       Object.keys(data).map(function(key, index) {
-        let fontWeight = (index === 0) ? '600' : 'lighter',
-          anomalyType = (data.Type === 'Anomaly' && key === 'Type');
+        let fontWeight = (i === 0) ? '600' : 'lighter',
+          anomalyType = (data.Type === 'Anomaly' && key === 'Type'),
+          displayFlex = data.Type === 'Anomaly' ? {display: 'flex'} : {};
 
         if (key !== 'Date' && key !== 'id' && !anomalyType) {
           if (whatIsIt(data[key]) === 'String') {
+            i++;
             return (
-              <li style={{...styles.listItem, fontWeight}} key={`desc${index}`}>
-                {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
+              <li style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
+                {that.displayAnomalyIcon(data, key, i)}
+                <div style={{
+                  paddingLeft: data.Type === 'Anomaly' ? i === 1 ? '10px' : '40px' : '0px'
+                }}>
+                  {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
+                </div>
+                {
+                  ( data.Type === 'Anomaly' &&
+                    i === 1 &&
+                    props.selectedCardId !== '' &&
+                    props.selectedCardId === props.data.id
+                  )
+                  ? (
+                  <div style={{marginLeft: 'auto'}}>
+                    <img src='/img/right-arrow-dark.png' />
+                  </div>
+                  )
+                  : ( data.Type === 'Anomaly' &&
+                      i === 1 &&
+                      props.selectedCardId !== props.data.id
+                    )
+                    ? (
+                      <div style={{marginLeft: 'auto'}}>
+                        <img src='/img/right-arrow-light.png' />
+                      </div>
+                    )
+                    : null
+                }
               </li>
             );
           }
           if (key === 'sourceDest' && whatIsIt(data[key]) === 'Object') {
+            i++;
             let sourceDest = data[key];
             return (
-              <li style={{...styles.listItem, fontWeight}} key={`desc${index}`}>
+              <li style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
                 {sourceDest.source ? getSource(sourceDest.source) : null}
                 {sourceDest.dest ? getDestinaton(sourceDest.dest) : null}
               </li>
@@ -109,7 +145,12 @@ class TimelineCard extends React.Component {
           props.updateRoute(url);
           break;
         case 'Anomaly':
-          // here code will come for anomaly card click.
+          if (props.selectedCardId === props.data.id) {
+            props.getContextualMenuApiObj('');
+          }
+          else {
+            props.getContextualMenuApiObj(props.data.id);
+          }
           break;
         default:
           break;
@@ -117,10 +158,36 @@ class TimelineCard extends React.Component {
     };
   }
 
+  displayAnomalyIcon(data, key, index) {
+    if (data.Type === 'Anomaly') {
+      if (index === 1) {
+        return (
+          <div>
+            {
+              (data[key].indexOf('exfiltration') > -1)
+              ? <img src='/img/anomaly/exfiltration.png' />
+                : (data[key].indexOf('snoop') > -1)
+                  ? <img src='/img/anomaly/snoop.png' />
+                    : (data[key].indexOf('command and control') > -1)
+                        ? <img src='/img/anomaly/command-control.png' />
+                        : null
+            }
+          </div>
+        );
+      }
+      else {
+        return (<div />);
+      }
+    }
+
+    return null;
+  }
+
   render() {
     const {props} = this;
     let cardType = (props.data.Type === 'Alert' || props.data.Type === 'Rank Alert')
       ? 'alert' : 'other';
+
     switch (cardType) {
       case 'alert':
         let borderColor = Colors.cherry,
@@ -163,19 +230,27 @@ class TimelineCard extends React.Component {
     }
 
     return (
-      <Card style={Object.assign({
-        boxShadow: '0px',
-        paddingTop: '22px',
-        paddingBottom: '22px',
-        paddingLeft: '18px',
-        paddingRight: '18px',
-        height: 'auto',
-        width: '450px',
-        backgroundColor: Colors.white,
-        fontSize: '14px',
-        cursor: 'pointer',
-        overflowWrap: 'break-word',
-        marginBottom: '20px'}, styles.alert)} key={props.id} onClick={this.handleCardClick()}>
+      <Card
+        style={
+          Object.assign({
+            boxShadow: '0px',
+            paddingTop: '22px',
+            paddingBottom: '22px',
+            paddingLeft: '18px',
+            paddingRight: '18px',
+            height: 'auto',
+            width: '450px',
+            fontSize: '14px',
+            cursor: 'pointer',
+            overflowWrap: 'break-word',
+            backgroundColor: (
+              (props.selectedCardId !== '' && props.selectedCardId === props.data.id) ||
+              (props.card === CONTEXTUAL_MENU_CARD))
+              ? Colors.cloud : Colors.white,
+            marginBottom: '20px'}, styles.alert)
+        }
+        key={props.id}
+        onClick={this.handleCardClick()}>
         <ul className='no-list-style'>{this.getDetails(props.data)}</ul>
       </Card>
     );
