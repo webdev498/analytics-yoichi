@@ -80,7 +80,7 @@ class TimelineCard extends React.Component {
 
     return (
       Object.keys(data).map(function(key, index) {
-        let fontWeight = (i === 0) ? '600' : 'lighter',
+        let fontWeight = (i === 0 && key !== 'Type') ? '600' : 'lighter',
           anomalyType = (data.Type === 'Anomaly' && key === 'Type'),
           displayFlex = data.Type === 'Anomaly' ? {display: 'flex'} : {};
 

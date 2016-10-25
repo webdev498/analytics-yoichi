@@ -90,18 +90,18 @@ class Timeline extends React.Component {
     if (state.filter === '' && data.options && data.options.customParams) {
       state.filter = data.options.customParams.filter;
     }
+    console.log('rows', data.rows);
   }
 
   displayCard() {
     const rows = this.state.rows,
-      {props, state} = this,
-      that = this;
+      {props, state} = this;
 
     return (
-      <div style={this.style.card}>
+      <div style={this.style.card}>{console.log(rows)}
         {
           rows.map((event, index) => {
-            let dateString = event.Date,
+            let dateString = (event.Date) ? event.Date : '',
               cardId = 'card' + index,
               backgroundColor = (this.card === CONTEXTUAL_MENU_CARD) ? {backgroundColor: Colors.contextBG} : {},
               padding = (this.card === CONTEXTUAL_MENU_CARD)

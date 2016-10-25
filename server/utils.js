@@ -27,7 +27,8 @@ export function getEventTypeString(typeName) {
   else if (typeName.indexOf('sysmon') > -1) typeString = 'Sysmon';
   else if (typeName.indexOf('report') > -1) typeString = 'Report';
   else if (typeName.indexOf('anomaly') > -1) typeString = 'Anomaly';
-  else typeString = 'Other';
+  else if (typeName.indexOf('auth') > -1) typeString = 'Auth';
+  else typeString = typeName;
   return typeString;
 };
 

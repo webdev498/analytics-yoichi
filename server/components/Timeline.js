@@ -208,6 +208,32 @@ function getRDP(row) {
   return info;
 }
 
+function getAuth(row) {
+  const {data: {auth}} = row,
+    info = {};
+
+  if (row.date) { info.Date = row.date; }
+  if (row.id) { info.id = row.id; }
+  if (auth.message) { info.Message = auth.message; }
+  if (row.type) { info.Type = getEventTypeString(row.type); }
+  if (auth.severity && auth.severity_label) { info.Severity = auth.severity_label + ' (' + auth.severity + ')'; }
+  if (auth.status) { info.Status = auth.status; }
+  if (auth.priority) { info.Priority = (auth.priority).toString(); }
+
+  return info;
+}
+
+function getOther(row) {
+  const info = {
+    Type: getEventTypeString(row.type)
+  };
+
+  if (row.date) { info.Date = row.date; }
+  if (row.id) { info.id = row.id; }
+
+  return info;
+}
+
 function getDetails(row) {
   switch (row.type.toLowerCase()) {
     case 'conn':
@@ -236,8 +262,10 @@ function getDetails(row) {
       return getAnomaly(row);
     case 'rdp':
       return getRDP(row);
+    case 'auth':
+      return getAuth(row);
     default:
-      return null;
+      return getOther(row);
   }
 }
 
