@@ -18,19 +18,11 @@ function getDataByIndex(data, index, label, callback) {
     let value = val[index] === 'N/A' ? 0 : val[index];
 
     if (callback) {
-      return {
-        [label]: callback(value, i)
-      };
+      return callback(value, i);
     }
     return {
       [label]: value
     };
-  });
-}
-
-function filterData(input, compare) {
-  return input.filter((item) => {
-    return compare(item);
   });
 }
 
@@ -48,8 +40,14 @@ function getChartData(input) {
 
     const outlierIndex = getColumnIndex(columns, 'outlier');
 
+    let counter = 0;
     let filterdRows = rows.filter((item) => {
-      return item[outlierIndex.index] !== 0;
+      counter++;
+      if (counter < 50 || item[outlierIndex.index] !== 0) {
+        return true;
+      }
+
+      return false;
     });
 
     const categories = [{
@@ -65,11 +63,27 @@ function getChartData(input) {
         value = uiConfigObj[key],
         renderAs = value === 'Point' ? 'line' : value.toLowerCase();
 
-      let data = getDataByIndex(filterdRows, yAxis.index, 'value', (val, index) => {
-        val = Math.round(val);
-        val = val <= 0 ? 0 : val;
-        return val;
-      });
+      let data;
+
+      // if value is 0, set this to be null so it is not shown.
+      if (value === 'Point') {
+        const current = getColumnIndex(columns, 'current');
+        data = filterdRows.map((item, index) => {
+          let currentValue = item[current.index];
+          currentValue = Math.round(currentValue);
+          currentValue = currentValue <= 0 ? 0 : currentValue;
+
+          const val = item[yAxis.index];
+          return (val === 0) ? null : {'value': currentValue};
+        });
+      }
+      else {
+        data = getDataByIndex(filterdRows, yAxis.index, 'value', (val, index) => {
+          val = Math.round(val);
+          val = val <= 0 ? 0 : val;
+          return {'value': val};
+        });
+      }
 
       let chartConfig = {};
       if (value.toLowerCase() === 'line') {
