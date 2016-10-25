@@ -337,6 +337,10 @@ function parseReputationText(values, newLine, value) {
 
 function getIcon(nodeType, nodeStatus, nodeAction) {
   nodeType = nodeType.toLowerCase();
+  if (nodeType === 'anomaly') {
+    nodeStatus = 'malicious';
+  }
+  console.log(nodeType, nodeStatus);
   const iconPath = '/img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
 
   if (nodeType !== '') {
