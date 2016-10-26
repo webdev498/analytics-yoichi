@@ -2,7 +2,8 @@ import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR, SET_COOKI
 
 const initialState = {
   isLoading: true,
-  isError: false
+  isError: false,
+  sidebar: []
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -14,11 +15,13 @@ export default function reducer(state = initialState, action = {}) {
       });
     }
     case USER_DETAILS_LOADED: {
-      const {application, roles, user} = action.data.__authDetails;
+      const {__authDetails: {application, roles, user}, taf: {sidebar}} = action.data;
+
       return Object.assign({}, state, {
         application,
         roles,
         user,
+        sidebar,
         isLoading: false,
         isError: false
       });
@@ -31,7 +34,7 @@ export default function reducer(state = initialState, action = {}) {
       });
     }
     case SET_COOKIES: {
-      return {cookies: action.data};
+      return Object.assign({}, state, {cookies: action.data});
     }
     default:
       return state;
