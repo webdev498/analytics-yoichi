@@ -59,6 +59,13 @@ class AssetWidget extends React.Component {
         </div>
       );
     }
+    else if (asset.type === 'machine') {
+      return (
+        <div>
+          <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>desktop_mac</FontIcon>
+        </div>
+      );
+    }
 
     return null;
   }
