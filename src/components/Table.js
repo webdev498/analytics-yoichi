@@ -513,7 +513,7 @@ export class TableCard extends React.Component {
                     if (tableColumn.columnType === 'text') {
                       return (
                         <Td column={tableColumn.columnName}
-                          style={tableColumn.columnStyle}
+                          style={{...tableColumn.columnStyle, 'wordBreak': 'break-all'}}
                           key={`td${id}${indexCol}`}>
                           {tableColumn.columnText}
                         </Td>

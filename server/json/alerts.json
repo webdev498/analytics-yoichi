@@ -213,7 +213,8 @@
                     }
                   ],
                   "style": {
-                    "width": "10%"
+                    "width": "10%",
+                    "minWidth": "110px"
                   },
                   "type": "text",
                   "columnNameToDisplay": "DATE"
