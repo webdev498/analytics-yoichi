@@ -115,9 +115,13 @@ function getChartData(input) {
 
 export default async function(ctx, next) {
   let parsedData = await ctx.tempData.clone().json();
-  if (parsedData && parsedData[0] && parsedData[0].uiConfig.baseline) {
-    const normalizeData = getChartData(parsedData);
-    parsedData.normalizeData = normalizeData;
-    ctx.normalizeData = parsedData;
+  if (parsedData) {
+    if ((parsedData[0] && parsedData[0].uiConfig.type === 'combination') ||
+        (parsedData.uiConfig.type === 'combination')
+    ) {
+      const normalizeData = getChartData(parsedData);
+      parsedData.normalizeData = normalizeData;
+      ctx.normalizeData = parsedData;
+    }
   }
 };

@@ -138,7 +138,7 @@ class AlertMultiChart extends React.Component {
   }
 
   getAnomalyChart(input) {
-    const {attributes, data: rawData} = this.props;
+    let {attributes, data} = this.props;
 
     return Object.keys(input).map((chart, index) => {
       if (!chart) return null;
@@ -151,15 +151,22 @@ class AlertMultiChart extends React.Component {
         processedData: true
       };
 
-      const title = rawData[chart].uiConfig.title,
-        data = input[chart];
+      let title;
+      if (data && data.rows) {
+        title = data.uiConfig.title;
+      }
+      else {
+        title = data[chart].uiConfig.title;
+      }
 
-      data.chart = this.props.chart.chartOptions;
-      data.chart.xAxisName = 'Country';
-      props.data = data;
+      const chartData = input[chart];
+
+      chartData.chart = this.props.chart.chartOptions;
+      chartData.chart.xAxisName = 'Country';
+      props.data = chartData;
 
       return (
-        <div style={styles.wrap}>
+        <div style={styles.wrap} key={`anomalyChart${index}`}>
           <h2 style={styles.title}>{title}</h2>
           <MultiSeriesCombiChart {...props} />
         </div>
@@ -171,7 +178,7 @@ class AlertMultiChart extends React.Component {
     let {data} = this.props;
     if (!data) return null;
 
-    if (data.rows) {
+    if (data.rows && !data.normalizeData) {
       let key = 'randomKey';
       try {
         key = data.options.body[0].uuid;
