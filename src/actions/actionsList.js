@@ -1,4 +1,3 @@
-import Cookies from 'cookies-js';
 import {
   REQUEST_ACTIONS_LIST,
   RECEIVE_ACTIONS_LIST,
@@ -27,14 +26,14 @@ export function actionsListError(json, errorData) {
 }
 
 export function fetchActionsList() {
-  const accessToken = Cookies.get('access_token');
-  const tokenType = Cookies.get('token_type');
+  return function(dispatch, getState) {
+    const cookies = getState().auth.cookies,
+      accessToken = cookies.access_token,
+      tokenType = cookies.token_type,
+      authorizationHeader = {
+        'Authorization': `${tokenType} ${accessToken}`
+      };
 
-  const authorizationHeader = {
-    'Authorization': `${tokenType} ${accessToken}`
-  };
-
-  return function(dispatch) {
     dispatch(actionsListRequest());
 
     return fetch(baseUrl + '/api/analytics/actions/list?mediaType=json', {

@@ -7,8 +7,9 @@ import {
   REMOVE_COMPONENT
 } from 'Constants';
 
-import Cookies from 'cookies-js';
 import {baseUrl} from 'config';
+
+let cookies = {};
 
 export function requestApiData(id, api) {
   return {
@@ -111,15 +112,15 @@ function getUrl(api, duration, routerParams) {
 }
 
 function callApi(api, duration, params, options) {
-  const accessToken = Cookies.get('access_token');
-  const tokenType = Cookies.get('token_type');
-  const headers = (api && api.headers) || {};
-  const defaultHeaders = Object.assign({
-    'Authorization': `${tokenType} ${accessToken}`,
-    'Content-Type': 'application/json'
-  }, headers);
+  const accessToken = cookies.access_token,
+    tokenType = cookies.token_type,
+    headers = (api && api.headers) || {},
+    defaultHeaders = Object.assign({
+      'Authorization': `${tokenType} ${accessToken}`,
+      'Content-Type': 'application/json'
+    }, headers),
+    body = options && JSON.stringify(options.body);
 
-  const body = options && JSON.stringify(options.body);
   return fetch(getUrl(api, duration, params), {
     method: api.method || 'GET',
     headers: defaultHeaders,
@@ -145,6 +146,7 @@ export function fetchApiData(id, api, params, options) {
   return function(dispatch, getState) {
     const currentDuration = getState().apiData.get('duration');
 
+    cookies = getState().auth.cookies;
     dispatch(requestApiData(id, api));
 
     if (Array.isArray(api)) {
@@ -225,10 +227,6 @@ export function broadcastEvent(id, eventData) {
       });
     }
   };
-}
-
-export function broadcastEventOnPageLoad(id, eventData) {
-
 }
 
 export function removeComponent(id) {
