@@ -63,7 +63,8 @@ function getChartData(input) {
         value = uiConfigObj[key],
         renderAs = value === 'Point' ? 'line' : value.toLowerCase();
 
-      let data;
+      let data,
+        seriesname = yAxis.col.displayName;
 
       // if value is 0, set this to be null so it is not shown.
       if (value === 'Point') {
@@ -73,15 +74,30 @@ function getChartData(input) {
           currentValue = Math.round(currentValue);
           currentValue = currentValue <= 0 ? 0 : currentValue;
 
+          let dataValue = currentValue === 0 ? 0 : Math.log2(currentValue);
+          dataValue = dataValue.toFixed(2);
+
+          let label = `${seriesname}, ${item[xAxis.index]}, ${dataValue}, ${currentValue}`;
+
           const val = item[yAxis.index];
-          return (val === 0) ? null : {'value': currentValue};
+          return (val === 0) ? null : {'value': dataValue, toolText: label};
         });
       }
       else {
-        data = getDataByIndex(filterdRows, yAxis.index, 'value', (val, index) => {
+        data = filterdRows.map((item, index) => {
+          let val = item[yAxis.index];
           val = Math.round(val);
           val = val <= 0 ? 0 : val;
-          return {'value': val};
+
+          let dataValue = val === 0 ? 0 : Math.log2(val);
+          dataValue = dataValue.toFixed(2);
+
+          let label = `${seriesname}, ${item[xAxis.index]}, ${dataValue}, ${val}`;
+
+          return {
+            'value': dataValue,
+            toolText: label
+          };
         });
       }
 
@@ -101,7 +117,7 @@ function getChartData(input) {
 
       return Object.assign({
         data,
-        seriesname: yAxis.col.displayName,
+        seriesname,
         renderAs
       }, chartConfig);
     });

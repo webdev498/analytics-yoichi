@@ -163,6 +163,7 @@ class AlertMultiChart extends React.Component {
 
       chartData.chart = this.props.chart.chartOptions;
       chartData.chart.xAxisName = 'Country';
+      chartData.chart.divlineThickness = 1;
       props.data = chartData;
 
       return (
