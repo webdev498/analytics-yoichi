@@ -70,7 +70,8 @@ export class CoreLayout extends React.Component {
     this.state = {
       showKibana: false,
       showFullSidebar: false,
-      sidebarWidth: {width: '72px'}
+      sidebarWidth: {width: '72px'},
+      sidebar: props.auth.sidebar
     };
 
     this.toggleSidebar = this.toggleSidebar.bind(this);
@@ -127,6 +128,8 @@ export class CoreLayout extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {props} = this;
 
+    this.setState({sidebar: nextProps.auth.sidebar});
+
     // if user api returns error redirect to auth page.
     if (nextProps.auth.isError) {
       props.logout();
@@ -139,12 +142,6 @@ export class CoreLayout extends React.Component {
       show = {display: 'block'},
       hide = {display: 'none'},
       sidebarWidth = state.sidebarWidth;
-
-    // let icon = 'keyboard_arrow_right';
-    // if (state.showFullSidebar) {
-    //   sidebarWidth.width = '200px';
-    //   icon = 'keyboard_arrow_left';
-    // }
 
     let contentStyle = Object.assign({}, styles.content, show),
       kibanaUrl = '';
@@ -164,6 +161,7 @@ export class CoreLayout extends React.Component {
 
         <nav style={{...styles.nav, ...sidebarWidth}} onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
           <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
+            sidebar={this.state.sidebar}
             location={props.location}
             hideKibana={this.hideKibana} />
         </nav>

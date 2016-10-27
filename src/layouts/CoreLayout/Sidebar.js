@@ -39,41 +39,15 @@ const styles = {
   }
 };
 
-const links = [
-  {
-    to: '/alerts',
-    icon: 'warning',
-    text: 'alerts'
-  },
-  {
-    to: '/country',
-    icon: 'public',
-    text: 'country'
-  },
-  {
-    to: '/traffic',
-    icon: 'swap_vert',
-    text: 'traffic'
-  },
-  {
-    to: '/assets',
-    icon: 'desktop_mac',
-    text: 'assets'
-  },
-  {
-    to: '/user-agent',
-    icon: 'dvr',
-    text: 'user-agent'
-  }
-];
-
 class Sidebar extends React.Component {
   static propTypes = {
     style: PropTypes.object,
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
+    sidebar: PropTypes.array.isRequired
   }
 
   getLinks(path) {
+    const {sidebar: links} = this.props;
     return links.map((link, index) => {
       let style = {};
       if (link.to === path) {

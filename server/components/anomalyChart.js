@@ -18,19 +18,11 @@ function getDataByIndex(data, index, label, callback) {
     let value = val[index] === 'N/A' ? 0 : val[index];
 
     if (callback) {
-      return {
-        [label]: callback(value, i)
-      };
+      return callback(value, i);
     }
     return {
       [label]: value
     };
-  });
-}
-
-function filterData(input, compare) {
-  return input.filter((item) => {
-    return compare(item);
   });
 }
 
@@ -48,8 +40,14 @@ function getChartData(input) {
 
     const outlierIndex = getColumnIndex(columns, 'outlier');
 
+    let counter = 0;
     let filterdRows = rows.filter((item) => {
-      return item[outlierIndex.index] !== 0;
+      counter++;
+      if (counter < 50 || item[outlierIndex.index] !== 0) {
+        return true;
+      }
+
+      return false;
     });
 
     const categories = [{
@@ -65,11 +63,43 @@ function getChartData(input) {
         value = uiConfigObj[key],
         renderAs = value === 'Point' ? 'line' : value.toLowerCase();
 
-      let data = getDataByIndex(filterdRows, yAxis.index, 'value', (val, index) => {
-        val = Math.round(val);
-        val = val <= 0 ? 0 : val;
-        return val;
-      });
+      let data,
+        seriesname = yAxis.col.displayName;
+
+      // if value is 0, set this to be null so it is not shown.
+      if (value === 'Point') {
+        const current = getColumnIndex(columns, 'current');
+        data = filterdRows.map((item, index) => {
+          let currentValue = item[current.index];
+          currentValue = Math.round(currentValue);
+          currentValue = currentValue <= 0 ? 0 : currentValue;
+
+          let dataValue = currentValue === 0 ? 0 : Math.log2(currentValue);
+          dataValue = dataValue.toFixed(2);
+
+          let label = `${seriesname}, ${item[xAxis.index]}, ${dataValue}, ${currentValue}`;
+
+          const val = item[yAxis.index];
+          return (val === 0) ? null : {'value': dataValue, toolText: label};
+        });
+      }
+      else {
+        data = filterdRows.map((item, index) => {
+          let val = item[yAxis.index];
+          val = Math.round(val);
+          val = val <= 0 ? 0 : val;
+
+          let dataValue = val === 0 ? 0 : Math.log2(val);
+          dataValue = dataValue.toFixed(2);
+
+          let label = `${seriesname}, ${item[xAxis.index]}, ${dataValue}, ${val}`;
+
+          return {
+            'value': dataValue,
+            toolText: label
+          };
+        });
+      }
 
       let chartConfig = {};
       if (value.toLowerCase() === 'line') {
@@ -87,7 +117,7 @@ function getChartData(input) {
 
       return Object.assign({
         data,
-        seriesname: yAxis.col.displayName,
+        seriesname,
         renderAs
       }, chartConfig);
     });
@@ -101,9 +131,14 @@ function getChartData(input) {
 
 export default async function(ctx, next) {
   let parsedData = await ctx.tempData.clone().json();
-  if (parsedData && parsedData[0] && parsedData[0].uiConfig.baseline) {
-    const normalizeData = getChartData(parsedData);
-    parsedData.normalizeData = normalizeData;
-    ctx.normalizeData = parsedData;
+
+  if (parsedData) {
+    if ((parsedData[0] && parsedData[0].uiConfig.type === 'combination') ||
+        (parsedData.uiConfig && parsedData.uiConfig.type === 'combination')
+    ) {
+      const normalizeData = getChartData(parsedData);
+      parsedData.normalizeData = normalizeData;
+      ctx.normalizeData = parsedData;
+    }
   }
 };

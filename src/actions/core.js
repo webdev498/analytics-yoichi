@@ -43,14 +43,18 @@ function getUrl(id) {
 // }
 
 export function fetchLayoutData(id, params) {
-  const accessToken = Cookies.get('access_token');
-  const tokenType = Cookies.get('token_type');
-
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
   return function(dispatch, getState) {
+    const cookies = getState().auth.cookies,
+      accessToken = cookies.access_token,
+      tokenType = cookies.token_type,
+      authorizationHeader = {
+        'Authorization': `${tokenType} ${accessToken}`
+      };
+
     dispatch(requestPageData(id));
 
     // if path id is / then layout id is new-summary-page.
@@ -60,9 +64,7 @@ export function fetchLayoutData(id, params) {
 
     return fetch(getUrl(urlId), {
       method: 'GET',
-      headers: {
-        'Authorization': `${tokenType} ${accessToken}`
-      }
+      headers: authorizationHeader
     })
     .then(response => {
       const status = response.status;

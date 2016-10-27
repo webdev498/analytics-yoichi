@@ -117,7 +117,8 @@ function getArrowIcon(change) {
 
 class AssetDetail extends React.Component {
   static propTypes = {
-    data: PropTypes.object
+    data: PropTypes.object,
+    chartOptions: PropTypes.object
   }
 
   constructor(props) {
@@ -292,20 +293,7 @@ class AssetDetail extends React.Component {
 
     const {assetDetail, assetReports} = data,
       radarChartProps = {
-        'chartOptions': {
-          labelFontSize: 8,
-          'bgColor': Colors.smoke,
-          'labelPadding': 2,
-          'chartLeftMargin': 0,
-          'chartRightMargin': 0,
-          'chartBottomMargin': 0,
-          'canvasBottomMargin': '0',
-          'canvasRightMargin': '0',
-          'canvasLeftMargin': '0',
-          'canvasTopMargin': '0',
-          'showLimits': '0',
-          'showDivLineValues': 0
-        },
+        'chartOptions': this.props.chartOptions,
         'attributes': {
           'chartWidth': '100%',
           'chartHeight': '240',
