@@ -21,8 +21,8 @@ function shallowRenderWithProps(props = {}) {
   return shallowRender(<MultiSeriesCombiChart {...props} />);
 }
 
-describe('MultiSeriesCombiChart Component: ', function() {
-  it('Should render as <div>', function() {
+describe('<MultiSeriesCombiChart />', function() {
+  it('Should render as null', function() {
     const props = {
       'attributes': {'id': 'AlertPriorityChart'},
       'meta': {
@@ -32,7 +32,7 @@ describe('MultiSeriesCombiChart Component: ', function() {
     };
 
     const component = shallowRenderWithProps(props);
-    expect(component.type).to.equal('div');
+    expect(component).to.equal(null);
   });
 
   it('getXindex should return x index.', function() {

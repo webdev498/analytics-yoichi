@@ -10,24 +10,24 @@ describe('Redux Auth Reducer', function() {
   });
 
   it('Should initialize with a state of {isLoading: true, isError: false}.', function() {
-    expect(authReducer(undefined, {})).to.deep.equal({isLoading: true, isError: false});
+    expect(authReducer(undefined, {})).to.deep.equal({isLoading: true, isError: false, sidebar: []});
   });
 
   it('Should return the previous state if an action was not matched.', function() {
     let state = authReducer(undefined, {});
-    expect(state).to.deep.equal({isLoading: true, isError: false});
+    expect(state).to.deep.equal({isLoading: true, isError: false, sidebar: []});
     state = authReducer(state, {type: '@@@@@@@'});
-    expect(state).to.deep.equal({isLoading: true, isError: false});
+    expect(state).to.deep.equal({isLoading: true, isError: false, sidebar: []});
 
     const errorData = {msg: 'error'};
     state = authReducer(state, {
       type: USER_DETAILS_ERROR,
       errorData
     });
-    expect(state).to.deep.equal({isLoading: false, isError: true, errorData});
+    expect(state).to.deep.equal({isLoading: false, isError: true, errorData, sidebar: []});
 
     state = authReducer(state, {type: '@@@@@@@'});
-    expect(state).to.deep.equal({isLoading: false, isError: true, errorData});
+    expect(state).to.deep.equal({isLoading: false, isError: true, errorData, sidebar: []});
   });
 
   it('Should update the state with isLoading propery for "USER_DETAILS_LOADING" action.', function() {
@@ -35,27 +35,31 @@ describe('Redux Auth Reducer', function() {
     state = authReducer(state, {
       type: USER_DETAILS_LOADING
     });
-    expect(state).to.deep.equal({isLoading: true, isError: false});
+    expect(state).to.deep.equal({isLoading: true, isError: false, sidebar: []});
   });
 
   it('Should update the state with user info for "USER_DETAILS_LOADED" action.', function() {
     let state;
     const application = {},
       roles = {},
-      user = {};
+      user = {},
+      sidebar = [];
 
     state = authReducer(state, {
       type: USER_DETAILS_LOADED,
       data: {
-        __authDetails: {application, roles, user}
+        __authDetails: {application, roles, user},
+        taf: {sidebar}
       }
     });
+
     expect(state).to.deep.equal({
       isLoading: false,
       isError: false,
       application,
       roles,
-      user
+      user,
+      sidebar
     });
   });
 
@@ -67,6 +71,6 @@ describe('Redux Auth Reducer', function() {
       type: USER_DETAILS_ERROR,
       errorData
     });
-    expect(state).to.deep.equal({isLoading: false, isError: true, errorData});
+    expect(state).to.deep.equal({isLoading: false, isError: true, sidebar: [], errorData});
   });
 });
