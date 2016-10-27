@@ -198,10 +198,10 @@ class TimelineCard extends React.Component {
           if (score >= 65) {
             borderColor = Colors.cherry;
           }
-          if (score < 65 && score >= 35) {
+          else if (score < 65 && score >= 35) {
             borderColor = Colors.coral;
           }
-          if (score < 35) {
+          else if (score < 35) {
             borderColor = Colors.mustard;
           }
         }
@@ -209,10 +209,10 @@ class TimelineCard extends React.Component {
           if (severity.toLowerCase() === 'high') {
             borderColor = Colors.cherry;
           }
-          if (severity.toLowerCase() === 'medium') {
+          else if (severity.toLowerCase() === 'medium') {
             borderColor = Colors.coral;
           }
-          if (severity.toLowerCase() === 'low') {
+          else if (severity.toLowerCase() === 'low') {
             borderColor = Colors.mustard;
           }
         }
@@ -239,7 +239,7 @@ class TimelineCard extends React.Component {
             paddingLeft: '18px',
             paddingRight: '18px',
             height: 'auto',
-            width: '450px',
+            width: '350px',
             fontSize: '14px',
             cursor: 'pointer',
             overflowWrap: 'break-word',

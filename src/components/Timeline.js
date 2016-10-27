@@ -186,9 +186,15 @@ class Timeline extends React.Component {
       {params, attributes, meta} = props;
 
     let apiPath = (type === 'traffic') ? '/api/alert/traffic' : meta.api.path,
-      pathParams = (type === 'traffic') ? {} : {
-        reportId: meta.api.pathParams.reportId
-      },
+      pathParams = (type === 'traffic')
+        ? {}
+        : (type === 'anomalyEvents')
+          ? {
+            anomalyId: props.id
+          }
+          : {
+            reportId: meta.api.pathParams.reportId
+          },
       queryParams = Object.assign({},
         props.meta.api && props.meta.api.queryParams,
         {
@@ -221,14 +227,10 @@ class Timeline extends React.Component {
     return (
       <div>
         <div style={{
-          top: '0px',
-          right: '0px',
-          bottom: '0px',
-          width: '350px',
-          position: 'absolute',
-          overflowY: 'scroll',
-          overflowX: 'hidden'
-        }} className='scrollbar'>
+          width: '450px',
+          marginTop: '-111px',
+          marginLeft: '-19px'
+        }}>
           <ParentCard
             id={state.selectedCardId}
             meta={this.contextualMenuApiParams.meta}
@@ -256,20 +258,27 @@ class Timeline extends React.Component {
                 anomalyId: selectedCardId
               },
               queryParams: {
-                window: ''
+                window: '',
+                from: 0,
+                count: 3
               }
             },
             title: ''
           },
           attributes: {
-            type: 'traffic',
+            type: 'anomalyEvents',
             displaySelectedRows: true,
-            noOfEventsPerPage: 8,
+            noOfEventsPerPage: 3,
             maxNumbersOnLeftRightPagination: 4,
             isMainComponent: false,
             style: {
               width: '100%',
-              height: '100%'
+              height: '100%',
+              backgroundColor: Colors.contextBG
+            },
+            otherStyles: {
+              flex: {},
+              pagination: {}
             },
             id: 'timeline-anomaly-events'
           }
@@ -300,22 +309,23 @@ class Timeline extends React.Component {
         }
         {
           (state.rows.length > 0)
-            ? <div>
+            ? <div style={attributes.otherStyles.flex ? attributes.otherStyles.flex : {}}>
               {this.displayCard()}
 
               <PaginationWidget size={state.totalPage}
                 currentPage={state.currentPage}
                 maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}
                 fetchData={this.fetchData}
-                type={attributes.type} />
+                type={attributes.type}
+                style={attributes.otherStyles.pagination ? attributes.otherStyles.pagination : {}} />
               {
                 state.selectedCardId !== ''
                 ? <div>
                   {this.displayContextualMenuCards()}
                   <div id='collapse-contextual-menu' style={{
-                    bottom: '10px',
+                    bottom: '35px',
                     position: 'absolute',
-                    right: '360px'
+                    right: '460px'
                   }}>
                     <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
                   </div>

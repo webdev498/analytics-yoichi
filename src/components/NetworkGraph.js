@@ -46,7 +46,7 @@ let timeWindow = '1h',
   undoGraphCount = 0,
   physicsTrue = {
     physics: {
-      'stabilization': true
+      stabilization: true
     }
   },
   physicsFalse = {
@@ -340,7 +340,6 @@ function getIcon(nodeType, nodeStatus, nodeAction) {
   if (nodeType === 'anomaly') {
     nodeStatus = 'malicious';
   }
-  console.log(nodeType, nodeStatus);
   const iconPath = '/img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
 
   if (nodeType !== '') {
