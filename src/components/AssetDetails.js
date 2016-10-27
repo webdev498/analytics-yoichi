@@ -287,21 +287,31 @@ class AssetDetail extends React.Component {
     };
   }
 
+  getRadarChart() {
+    const {data: {assetDetail}, chartOptions} = this.props,
+      {risk: {score}} = assetDetail;
+
+    chartOptions.paletteColors = (score >= 60 && score <= 100) ? Colors.coral : Colors.mustard;
+
+    const radarChartProps = {
+      chartOptions,
+      'attributes': {
+        'chartWidth': '100%',
+        'chartHeight': '240',
+        'style': styles.chart,
+        id: 'score-justification'
+      },
+      data: assetDetail.risk.scoreDetails
+    };
+
+    return <RadarChart {...radarChartProps} />;
+  }
+
   render() {
     let {data} = this.props;
     if (!data) return null;
 
-    const {assetDetail, assetReports} = data,
-      radarChartProps = {
-        'chartOptions': this.props.chartOptions,
-        'attributes': {
-          'chartWidth': '100%',
-          'chartHeight': '240',
-          'style': styles.chart,
-          id: 'score-justification'
-        },
-        data: assetDetail.risk.scoreDetails
-      };
+    const {assetDetail, assetReports} = data;
 
     let chartWrapStyle = {
         height: 0,
@@ -333,7 +343,7 @@ class AssetDetail extends React.Component {
         </div>
 
         <div style={chartWrapStyle}>
-          <RadarChart {...radarChartProps} />
+          {this.getRadarChart()}
         </div>
 
         <ul style={listStyle}>
