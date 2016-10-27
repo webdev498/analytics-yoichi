@@ -52,14 +52,7 @@ class AssetWidget extends React.Component {
         </div>
       );
     }
-    else if (asset.type === 'host') {
-      return (
-        <div>
-          <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>desktop_mac</FontIcon>
-        </div>
-      );
-    }
-    else if (asset.type === 'machine') {
+    else if (asset.type === 'host' || asset.type === 'machine') {
       return (
         <div>
           <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>desktop_mac</FontIcon>
