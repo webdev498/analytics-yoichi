@@ -46,12 +46,12 @@ function getLayout() {
 
 function setup(isLoading = false) {
   let props = {
-    updateApiData: spy(),
-    hideKibana: spy(),
-    location: {},
-    auth: {
-      isLoading
-    }
+    fetchUserData: spy(),
+    fetchActionsList: spy(),
+    logout: spy(),
+    history: {},
+    auth: { isLoading },
+    location: {}
   };
 
   let renderer = createRenderer();
@@ -142,9 +142,5 @@ describe('CoreLayout', () => {
       expect(firstMetricCard.type).to.equal(MetricsCard);
       expect(secondMetricCard.type).to.equal(MetricsCard);
     });
-  });
-
-  describe('Sidebar component', () => {
-
   });
 });
