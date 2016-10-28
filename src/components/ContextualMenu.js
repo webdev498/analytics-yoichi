@@ -128,16 +128,10 @@ class ContextualMenu extends React.Component {
 
     actionsData.forEach((data) => {
       if (whatIsIt(itemType) === 'String') {
-        // if ((actionsData[i].nodeType).toLowerCase() === itemType.toLowerCase()) {
-        //   actions = Object.assign(actions, actionsData[i].actions);
-        // }
         actions = getActions(actions, data);
       }
       else if (whatIsIt(itemType) === 'Array') {
         itemType.forEach((type) => {
-          // if ((actionsData[i].nodeType).toLowerCase() === type.toLowerCase()) {
-          //   actions = Object.assign(actions, actionsData[i].actions);
-          // }
           actions = getActions(actions, data);
         });
       }
