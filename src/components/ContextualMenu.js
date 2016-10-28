@@ -119,20 +119,29 @@ class ContextualMenu extends React.Component {
     table.cellPadding = actionTable.cellPadding;
     table.cellSpacing = actionTable.cellSpacing;
 
-    for (let i = 0; i < actionsData.length; i++) {
+    function getActions(actions, data) {
+      if ((data.nodeType).toLowerCase() === itemType.toLowerCase()) {
+        actions = Object.assign(actions, data.actions);
+      }
+      return actions;
+    }
+
+    actionsData.forEach((data) => {
       if (whatIsIt(itemType) === 'String') {
-        if ((actionsData[i].nodeType).toLowerCase() === itemType.toLowerCase()) {
-          actions = Object.assign(actions, actionsData[i].actions);
-        }
+        // if ((actionsData[i].nodeType).toLowerCase() === itemType.toLowerCase()) {
+        //   actions = Object.assign(actions, actionsData[i].actions);
+        // }
+        actions = getActions(actions, data);
       }
       else if (whatIsIt(itemType) === 'Array') {
         itemType.forEach((type) => {
-          if ((actionsData[i].nodeType).toLowerCase() === type.toLowerCase()) {
-            actions = Object.assign(actions, actionsData[i].actions);
-          }
+          // if ((actionsData[i].nodeType).toLowerCase() === type.toLowerCase()) {
+          //   actions = Object.assign(actions, actionsData[i].actions);
+          // }
+          actions = getActions(actions, data);
         });
       }
-    }
+    });
 
     // Append the actions associated with nodes
     if (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].actions) &&
