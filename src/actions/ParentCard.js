@@ -8,6 +8,7 @@ import {
 } from 'Constants';
 
 import {baseUrl} from 'config';
+import {logoutUtil} from './auth';
 
 let cookies = {};
 
@@ -129,6 +130,9 @@ function callApi(api, duration, params, options) {
   .then(response => {
     if (response.status >= 200 && response.status < 300) {
       return response.json();
+    }
+    else if(response.status === 401) {
+      logoutUtil(dispatch);
     }
     else {
       const error = new Error(response.statusText);
