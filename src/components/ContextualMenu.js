@@ -38,9 +38,6 @@ const style = {
   notificationMessage = {
     width: '259px'
   },
-  refreshData = {
-    marginLeft: '735px'
-  },
   actionTable = {
     border: '0',
     width: '259',
@@ -68,7 +65,6 @@ function updateDOM(table) {
   document.getElementById('right-arrow').style.display = 'block';
   document.getElementById('contextual-menu-contents').style.display = 'block';
   document.getElementById('expand-contextual-menu').style.display = 'none';
-  document.getElementById('refreshData').style.marginLeft = refreshData.marginLeft;
 }
 
 function displayTextBoxForInputParam(table, userInputParameters, index) {
