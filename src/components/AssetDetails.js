@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 
 import AssetWidget from 'components/AssetWidget';
 import RadarChart from 'components/RadarChart';
-import {formatBytes, getCountryNameByCountryCode} from 'utils/utils';
+import {formatBytes, getCountryNameByCountryCode, getColor} from 'utils/utils';
 import ScoreWidget from 'components/ScoreWidget';
 import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
@@ -291,7 +291,7 @@ class AssetDetail extends React.Component {
     const {data: {assetDetail}, chartOptions} = this.props,
       {risk: {score}} = assetDetail;
 
-    chartOptions.paletteColors = (score >= 60 && score <= 100) ? Colors.coral : Colors.mustard;
+    chartOptions.paletteColors = getColor(score);
 
     const radarChartProps = {
       chartOptions,

@@ -109,8 +109,8 @@ tr.reactable-filterer td {
 
 .threatTable tr:nth-child(even) td div.scoreWidget {background: $CoralColorShade1}
 .threatTable tr:nth-child(odd) td div.scoreWidget {background: $CoralColorShade2}
-.threatTable tr:nth-child(even) td span.description {color: $CoralColorShade1; font-weight: 600; font-size: 14px;}
-.threatTable tr:nth-child(odd) td span.description {color: $CoralColorShade2; font-weight: 600; font-size: 14px;}
+.threatTable tr:nth-child(even) td span.description {font-weight: 600; font-size: 14px;}
+.threatTable tr:nth-child(odd) td span.description {font-weight: 600; font-size: 14px;}
 
 .threatTable tr td span.title {color: $CloudColorShade1; font-weight: 600; font-size: 14px;}
 .threatTable tr td span.heading {color: $CloudColorShade1; font-weight: 600; font-size: 13px;}

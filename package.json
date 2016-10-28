@@ -167,6 +167,7 @@
     "cheerio": "^0.22.0",
     "codecov": "^1.0.1",
     "enzyme": "^2.3.0",
+    "eslint": "^3.8.1",
     "eslint-config-standard": "^6.2.0",
     "eslint-config-standard-react": "^4.2.0",
     "eslint-plugin-babel": "^3.3.0",
