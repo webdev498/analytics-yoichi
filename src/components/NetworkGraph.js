@@ -90,47 +90,67 @@ function createNodeObject(dataNode) {
   return nodeObject;
 }
 
-function createEdgeObject(dataEdge) {
+function createEdgeObject(dataEdge, edgesInSameDirection) {
   let edgeObject = {
-    id: dataEdge.id,
-    type: dataEdge.type,
-    from: dataEdge.source,
-    to: dataEdge.target,
-    arrows: {
-      to: {
-        scaleFactor: 0.5
+      id: dataEdge.id,
+      type: dataEdge.type,
+      from: dataEdge.source,
+      to: dataEdge.target,
+      arrows: {
+        to: {
+          scaleFactor: 0.5
+        },
+        arrowStrikethrough: false
       },
-      arrowStrikethrough: false
+      label: dataEdge.label + '\n\n\n',
+      title: dataEdge.label,
+      font: {
+        face: 'Open Sans',
+        color: Colors.pebble,
+        size: '11',
+        align: 'left'
+      },
+      length: 1000,
+      smooth: {
+        type: 'discrete'
+      },
+      color: {
+        color: Colors.pebble,
+        highlight: Colors.turquoise
+      },
+      edgeDetails: []
     },
-    label: dataEdge.label + '\n\n\n',
-    font: {
-      face: 'Open Sans',
-      color: Colors.pebble,
-      size: '11',
-      align: 'left'
-    },
-    length: 1000,
-    smooth: {
-      type: 'discrete'
-    },
-    color: {
-      color: Colors.pebble,
-      highlight: Colors.turquoise
-    },
-    edgeDetails: []
-  };
+    edgesTypes = [];
+
+  if (dataEdge.type === 'ioc') {
+    edgeObject.dashes = true;
+  }
+
+  edgesTypes.push(
+    <li>{edgesInSameDirection.length > 0 ? '1. ' : ''}{dataEdge.label}</li>
+  );
+
+  if (edgesInSameDirection.length > 0) {
+    edgesInSameDirection.forEach((edgeInSameDirection, index) => {
+      edgeObject.title += '<br />' + edgeInSameDirection.label;
+      edgesTypes.push(
+        <li>{index + 2}. {edgeInSameDirection.label}</li>
+      );
+    });
+  }
 
   edgeObject.edgeDetails.push(
     <ul className='no-list-style'>
-      <li>Edge Type: {dataEdge.label}</li>
+      <li>Edge Type:
+        <ol style={{marginLeft: '-40px'}}>
+          {edgesTypes}
+        </ol>
+      </li>
       <li>Source: {dataEdge.source}</li>
       <li>Target: {dataEdge.target}</li>
     </ul>
   );
 
-  if (dataEdge.type === 'ioc') {
-    edgeObject.dashes = true;
-  }
   return edgeObject;
 }
 
@@ -590,9 +610,20 @@ class NetworkGraph extends React.Component {
     }
 
     if (!isUndefined(dataEdges)) {
+      let alreadyAddedEdges = [];
       dataEdges.forEach((dataEdge) => {
-        if (isUndefined(this.edgeObjects[dataEdge.id])) {
-          let edgeObject = createEdgeObject(dataEdge);
+        if (isUndefined(this.edgeObjects[dataEdge.id]) && !isNodeOrEdgeAlreadyExists(alreadyAddedEdges, dataEdge.id)) {
+          let edgesInSameDirection = [];
+          dataEdges.forEach((edgeInSameDirection) => {
+            if (dataEdge.id !== edgeInSameDirection.id &&
+              dataEdge.source === edgeInSameDirection.source &&
+              dataEdge.target === edgeInSameDirection.target) {
+              edgesInSameDirection.push(edgeInSameDirection);
+              alreadyAddedEdges.push(edgeInSameDirection);
+            }
+          });
+
+          let edgeObject = createEdgeObject(dataEdge, edgesInSameDirection);
           edges.push(edgeObject);
           this.edgeObjects[dataEdge.target] = edgeObject;
           this.edgeObjects[edgeObject.id] = edgeObject;

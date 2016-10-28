@@ -53,7 +53,6 @@ class Timeline extends React.Component {
     const {attributes} = props;
     this.card = (!isUndefined(attributes.isMainComponent) && !attributes.isMainComponent)
     ? CONTEXTUAL_MENU_CARD : TIMELINE_CARD;
-    this.style.card = this.card === TIMELINE_CARD ? this.style.card : {};
 
     this.fetchData = this.fetchData.bind(this);
     this.getContextualMenuApiObj = this.getContextualMenuApiObj.bind(this);
@@ -297,6 +296,8 @@ class Timeline extends React.Component {
     const {state, props} = this,
       {attributes} = props;
 
+    this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
+
     return (
       <div>
         {
@@ -309,7 +310,10 @@ class Timeline extends React.Component {
         }
         {
           (state.rows.length > 0)
-            ? <div style={attributes.otherStyles.flex ? attributes.otherStyles.flex : {}}>
+            ? <div style={
+                attributes.otherStyles.flex && state.selectedCardId !== ''
+                ? attributes.otherStyles.flex : {}
+              }>
               {this.displayCard()}
 
               <PaginationWidget size={state.totalPage}
