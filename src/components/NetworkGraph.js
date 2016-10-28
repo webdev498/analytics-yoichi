@@ -895,7 +895,7 @@ class NetworkGraph extends React.Component {
         selectedNodesForExtendingGraph: []
       });
       document.getElementById('actions').innerHTML = '';
-      document.getElementById('refreshData').style.marginLeft = 'auto';
+      // document.getElementById('refreshData').style.marginLeft = 'auto';
     }
   }
 

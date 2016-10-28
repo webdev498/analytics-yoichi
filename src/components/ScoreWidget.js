@@ -1,5 +1,6 @@
 import React from 'react';
 import {Colors} from 'theme/colors';
+import {getColor} from 'utils/utils';
 
 class ScoreWidget extends React.Component {
   render() {
@@ -16,17 +17,17 @@ class ScoreWidget extends React.Component {
         fontFamily: 'Open Sans, sans-serif'
       };
 
-    let className = (scoreValue >= 60 && scoreValue <= 100) ? 'sw-high-priority' : 'sw-low-priority';
+    let color = getColor(scoreValue);
+    style.backgroundColor = color;
 
     if (props.inverse) {
       style.borderRadius = 0;
       style.backgroundColor = 'transparent';
-      style.color = (scoreValue >= 60 && scoreValue <= 100) ? Colors.coral : Colors.mustard;
-      className = '';
+      style.color = color;
     }
 
     return (
-      <div style={{...style, ...props.style}} className={className}>
+      <div style={{...style, ...props.style}}>
         {scoreValue}
       </div>
     );

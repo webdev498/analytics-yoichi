@@ -1,6 +1,6 @@
 import React from 'react';
-
 import moment from 'moment';
+import {Colors} from 'theme/colors';
 
 // Function to get Country ID by passing Country Code
 export function getCountryIDByCountryCode(countryCode) {
@@ -609,4 +609,18 @@ export function getPosition(el) {
     el != null;
     lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
   return {x: lx, y: ly};
+}
+
+export function getColor(score) {
+  let color;
+  if (score >= 65) {
+    color = Colors.cherry;
+  }
+  else if (score < 65 && score >= 35) {
+    color = Colors.coral;
+  }
+  else if (score < 35) {
+    color = Colors.mustard;
+  }
+  return color;
 }

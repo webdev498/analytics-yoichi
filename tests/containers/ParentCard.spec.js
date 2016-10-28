@@ -13,7 +13,6 @@ const muiTheme = getMuiTheme(AppTheme);
 
 function renderParentCard(propsOptions, contextOptions) {
   const child = <div>Hello World</div>;
-
   let props = {
     meta: {id: 'testId', api: null},
     history: {

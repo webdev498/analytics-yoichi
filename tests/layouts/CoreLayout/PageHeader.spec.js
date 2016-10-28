@@ -26,7 +26,9 @@ function setupPageHeader(auth = {user: null}, showKibana = false, enzymeFlag = f
     showKibana,
     hideKibana: spy(),
     logout: spy(),
-    updateApiData: spy()
+    updateApiData: spy(),
+    params: {},
+    duration: '1h'
   };
 
   let component;
@@ -53,7 +55,9 @@ function setupPageHeaderShallow(auth = {user: null}, showKibana = false) {
     showKibana,
     hideKibana: spy(),
     logout: spy(),
-    updateApiData: spy()
+    updateApiData: spy(),
+    params: {},
+    duration: '1h'
   };
 
   let component = shallow(<PageHeader {...props} />);
@@ -87,13 +91,14 @@ describe('<PageHeader />', () => {
 
     let toggleMenu = component.ref('menuToggleDiv');
     expect(toggleMenu.childAt(0).type()).to.equal('div');
-    expect(toggleMenu.childAt(1).type()).to.be.null;
+    expect(toggleMenu.children().length).to.equal(1);
     expect(component.state().showMenu).to.be.false;
 
     toggleMenu.simulate('click');
 
     expect(toggleMenu.childAt(1).type()).to.not.be.null;
     expect(toggleMenu.childAt(1).type()).to.equal(Paper);
+    expect(toggleMenu.children().length).to.equal(2);
     expect(component.state().showMenu).to.be.true;
   });
 
@@ -116,19 +121,20 @@ describe('<PageHeader />', () => {
   });
 
   describe('timeRange dropDown', function() {
-    it('should have dropdown with 6 children', () => {
+    it('should have dropdown with 7 children', () => {
       let {component} = setupPageHeaderShallow(undefined, false),
         dropDown = component.childAt(1);
 
       expect(dropDown.type()).to.equal(DropDownMenu);
-      expect(dropDown.children().length).to.equal(6);
+      expect(dropDown.children().length).to.equal(7);
       expect(dropDown.childAt(0).type()).to.equal(MenuItem);
       expect(dropDown.childAt(1).type()).to.equal(MenuItem);
       expect(dropDown.childAt(2).type()).to.equal(MenuItem);
       expect(dropDown.childAt(3).type()).to.equal(MenuItem);
       expect(dropDown.childAt(4).type()).to.equal(MenuItem);
       expect(dropDown.childAt(5).type()).to.equal(MenuItem);
-      expect(dropDown.find(MenuItem).length).to.equal(6);
+      expect(dropDown.childAt(6).type()).to.equal(MenuItem);
+      expect(dropDown.find(MenuItem).length).to.equal(7);
     });
 
     it('should call time range on click', () => {
@@ -146,13 +152,14 @@ describe('<PageHeader />', () => {
 
       let toggleMenu = component.ref('menuToggleDiv');
       expect(toggleMenu.childAt(0).type()).to.equal('div');
-      expect(toggleMenu.childAt(1).type()).to.be.null;
+      expect(toggleMenu.children().length).to.equal(1);
       expect(component.state().showMenu).to.be.false;
 
       toggleMenu.simulate('click');
 
       expect(toggleMenu.childAt(1).type()).to.not.be.null;
       expect(toggleMenu.childAt(1).type()).to.equal(Paper);
+      expect(toggleMenu.children().length).to.equal(2);
       expect(component.state().showMenu).to.be.true;
 
       const button = toggleMenu.find('MenuItem').first().find('EnhancedButton');

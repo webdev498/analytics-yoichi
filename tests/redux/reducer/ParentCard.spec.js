@@ -74,7 +74,7 @@ describe('Redux Parent Card Reducer', function() {
     expect(components).to.have.deep.property([id, 'isError'], false);
   });
 
-  it('Should remove the data, api, query "REQUEST_API_DATA" action, if already there', function() {
+  it('Should remove the api, query and make data null for "REQUEST_API_DATA" action, if already there', function() {
     const id = '1',
       data = {
         json: {},
@@ -95,7 +95,7 @@ describe('Redux Parent Card Reducer', function() {
     expect(components).to.have.key(id);
     expect(components).to.have.deep.property([id, 'isFetching'], true);
     expect(components).to.have.deep.property([id, 'isError'], false);
-    expect(components).to.not.have.deep.property([id, 'data']);
+    expect(components).to.have.deep.property([id, 'data'], null);
     expect(components).to.not.have.deep.property([id, 'api']);
     expect(components).to.not.have.deep.property([id, 'query']);
   });

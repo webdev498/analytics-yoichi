@@ -43,7 +43,8 @@ describe('<Sidebar />', () => {
 
   beforeEach(function() {
     props = {
-      location: {pathname: '/'}
+      location: {pathname: '/'},
+      sidebar: links
     };
 
     component = mount(
