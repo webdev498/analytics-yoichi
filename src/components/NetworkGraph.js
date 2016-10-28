@@ -150,7 +150,7 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
   edgeObject.edgeDetails.push(
     <ul className='no-list-style'>
       <li>Edge Type:
-        <ol style={{marginLeft: '-40px'}}>
+        <ol style={{padding: 0}}>
           {edgesTypes}
         </ol>
       </li>
