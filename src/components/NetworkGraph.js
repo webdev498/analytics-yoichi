@@ -82,7 +82,7 @@ function createNodeObject(dataNode) {
 
   nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {id}</li>);
 
-  let metaDataObject = handleMetaData(dataNode.metadata, nodeObject),
+  let metaDataObject = handleNodeMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
   nodeObject = metaDataObject.nodeObject;
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
@@ -144,6 +144,9 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
     });
   }
 
+  let metaDataObject = handleEdgeMetaData(dataEdge.metadata, edgeObject);
+  edgeObject = metaDataObject.edgeObject;
+
   edgeObject.edgeDetails.push(
     <ul className='no-list-style'>
       <li>Edge Type:
@@ -153,13 +156,37 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
       </li>
       <li>Source: {dataEdge.source}</li>
       <li>Target: {dataEdge.target}</li>
+      {metaDataObject.edgeMetaData}
     </ul>
   );
 
   return edgeObject;
 }
 
-function handleMetaData(metadata, nodeObject) {
+function handleEdgeMetaData(metadata, edgeObject) {
+  edgeObject.metadata = metadata;
+  let edgeMetaData = [];
+  for (let metadataType in metadata) {
+    let metadataTypeLower = metadataType.toLowerCase();
+    if (metadataTypeLower === 'date' || metadataTypeLower === 'datetime') {
+      let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
+      edgeObject.title += '<br /><b>Date:</b> ' +
+        dateTime.date + ' ' + dateTime.time;
+      edgeMetaData.push(<li>Date: {dateTime.date} {dateTime.time}</li>);
+    }
+    else {
+      edgeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+        metadata[metadataType];
+      edgeMetaData.push(<li>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
+    }
+  }
+  return {
+    edgeMetaData: edgeMetaData,
+    edgeObject: edgeObject
+  };
+}
+
+function handleNodeMetaData(metadata, nodeObject) {
   let nodeStatus = 'safe';
   nodeObject.metadata = metadata;
   for (let metadataType in metadata) {
