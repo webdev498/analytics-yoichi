@@ -93,7 +93,7 @@ function createNodeObject(dataNode) {
 function createEdgeObject(dataEdge, edgesInSameDirection) {
   let edgeObject = {
       id: dataEdge.id,
-      type: dataEdge.type,
+      type: [],
       from: dataEdge.source,
       to: dataEdge.target,
       arrows: {
@@ -126,12 +126,15 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
     edgeObject.dashes = true;
   }
 
+  edgeObject.type.push(dataEdge.type);
+
   edgesTypes.push(
     <li>{edgesInSameDirection.length > 0 ? '1. ' : ''}{dataEdge.label}</li>
   );
 
   if (edgesInSameDirection.length > 0) {
     edgesInSameDirection.forEach((edgeInSameDirection, index) => {
+      edgeObject.type.push(edgeInSameDirection.type);
       edgeObject.title += '<br />' + edgeInSameDirection.label;
       edgesTypes.push(
         <li>{index + 2}. {edgeInSameDirection.label}</li>
@@ -926,6 +929,7 @@ class NetworkGraph extends React.Component {
   loadNodeContextMenu(nodeDetails) {
     let {network, nodeID, nodeType, selectedNodeDetails, selected, selectedNodesForExtendingGraph} = nodeDetails,
       {state} = this;
+
     if (!isUndefined(nodeID)) {
       state.nodes.forEach((nodeObject) => {
         let node = network.body.nodes[nodeObject.id];

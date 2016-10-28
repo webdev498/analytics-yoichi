@@ -2,7 +2,8 @@ import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 import {
   isUndefined,
-  firstCharCapitalize
+  firstCharCapitalize,
+  whatIsIt
 } from 'utils/utils';
 
 const style = {
@@ -123,8 +124,17 @@ class ContextualMenu extends React.Component {
     table.cellSpacing = actionTable.cellSpacing;
 
     for (let i = 0; i < actionsData.length; i++) {
-      if ((actionsData[i].nodeType).toLowerCase() === itemType.toLowerCase()) {
-        actions = Object.assign(actions, actionsData[i].actions);
+      if (whatIsIt(itemType) === 'String') {
+        if ((actionsData[i].nodeType).toLowerCase() === itemType.toLowerCase()) {
+          actions = Object.assign(actions, actionsData[i].actions);
+        }
+      }
+      else if (whatIsIt(itemType) === 'Array') {
+        itemType.forEach((type) => {
+          if ((actionsData[i].nodeType).toLowerCase() === type.toLowerCase()) {
+            actions = Object.assign(actions, actionsData[i].actions);
+          }
+        });
       }
     }
 
