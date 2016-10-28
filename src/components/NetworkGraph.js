@@ -61,9 +61,9 @@ function createNodeObject(dataNode) {
   let id = dataNode.type === 'anomaly' ? dataNode.label : dataNode.id,
     nodeObject = {
       id: id,
-      type: dataNode.type,
+      type: dataNode.type ? dataNode.type : '',
       label: '  ' + id,
-      title: '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + id,
+      title: '<b>' + dataNode.type ? firstCharCapitalize(dataNode.type) : '' + ':</b> ' + id,
       nodeDetails: [],
       actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
       borderWidth: '0',
@@ -102,8 +102,8 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
         },
         arrowStrikethrough: false
       },
-      label: dataEdge.label + '\n\n\n',
-      title: dataEdge.label,
+      label: dataEdge.label ? dataEdge.label + '\n\n\n' : '',
+      title: dataEdge.label ? dataEdge.label : '',
       font: {
         face: 'Open Sans',
         color: Colors.pebble,
@@ -122,11 +122,13 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
     },
     edgesTypes = [];
 
-  if (dataEdge.type === 'ioc') {
+  if (dataEdge.type && dataEdge.type === 'ioc') {
     edgeObject.dashes = true;
   }
 
-  edgeObject.type.push(dataEdge.type);
+  if (dataEdge.type) {
+    edgeObject.type.push(dataEdge.type);
+  }
 
   edgesTypes.push(
     <li>{edgesInSameDirection.length > 0 ? '1. ' : ''}{dataEdge.label}</li>

@@ -41,8 +41,6 @@ class PaginationWidget extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log(props);
-
     this.onPageChanged = this.onPageChanged.bind(this);
     this.onPrevPageChanged = this.onPrevPageChanged.bind(this);
     this.onNextPageChanged = this.onNextPageChanged.bind(this);
