@@ -111,8 +111,11 @@ function getChartData(input) {
         chartConfig.anchorradius = 0;
       }
       else if (value.toLowerCase() === 'point') {
-        chartConfig.color = '#ff0000';
         chartConfig.lineThickness = 0;
+        chartConfig.anchorradius = 4;
+        chartConfig.anchorbgcolor = '#F69275';
+        chartConfig.anchorBorderColor = '#F69275';
+        chartConfig.anchorsides = 0;
       }
 
       return Object.assign({
