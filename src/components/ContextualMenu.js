@@ -63,6 +63,7 @@ function checkForUserInputs(parameters) {
 function updateDOM(table) {
   document.getElementById('actions').appendChild(table);
   document.getElementById('notification-message').style.width = notificationMessage.width;
+  document.getElementById('contextual-menu').style.width = '259px';
   document.getElementById('right-arrow').style.display = 'block';
   document.getElementById('contextual-menu-contents').style.display = 'block';
   document.getElementById('expand-contextual-menu').style.display = 'none';

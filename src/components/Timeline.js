@@ -110,10 +110,11 @@ class Timeline extends React.Component {
 
   displayCard() {
     const rows = this.state.rows,
-      {props, state} = this;
+      {props, state} = this,
+      {attributes} = props;
 
     return (
-      <div style={this.style.card}>
+      <div style={this.style.card} ref={(ref) => this.timelineCard = ref}>
         {
           rows.map((event, index) => {
             let dateString = (event.Date) ? event.Date : '',
@@ -144,6 +145,12 @@ class Timeline extends React.Component {
             }
           })
         }
+        <PaginationWidget size={state.totalPage}
+          currentPage={state.currentPage}
+          maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}
+          fetchData={this.fetchData}
+          type={attributes.type}
+          style={attributes.otherStyles.pagination ? attributes.otherStyles.pagination : {}} />
       </div>
     );
   }
@@ -222,13 +229,21 @@ class Timeline extends React.Component {
   }
 
   displayContextualMenuCards() {
-    const {state, props} = this;
+    const {state, props} = this,
+      timelineHeight = this.timelineCard.offsetHeight;
+
+    if (timelineHeight < 550 && this.card === 'TIMELINE_CARD') {
+      this.timelineCard.style.height = '550px';
+    }
+
     return (
       <div>
         <div style={{
           width: '450px',
-          marginTop: '-111px',
-          marginLeft: '-19px'
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          height: '695px'
         }}>
           <ParentCard
             id={state.selectedCardId}
@@ -315,19 +330,12 @@ class Timeline extends React.Component {
                 ? attributes.otherStyles.flex : {}
               }>
               {this.displayCard()}
-
-              <PaginationWidget size={state.totalPage}
-                currentPage={state.currentPage}
-                maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}
-                fetchData={this.fetchData}
-                type={attributes.type}
-                style={attributes.otherStyles.pagination ? attributes.otherStyles.pagination : {}} />
               {
                 state.selectedCardId !== ''
                 ? <div>
                   {this.displayContextualMenuCards()}
                   <div id='collapse-contextual-menu' style={{
-                    bottom: '35px',
+                    bottom: 0,
                     position: 'absolute',
                     right: '460px'
                   }}>
