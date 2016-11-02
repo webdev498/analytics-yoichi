@@ -88,7 +88,7 @@ class TimelineCard extends React.Component {
           if (whatIsIt(data[key]) === 'String') {
             i++;
             return (
-              <li style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
+              <li key={index} style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
                 {that.displayAnomalyIcon(data, key, i)}
                 <div style={{
                   paddingLeft: data.Type === 'Anomaly' ? i === 1 ? '10px' : '40px' : '0px'
@@ -96,7 +96,7 @@ class TimelineCard extends React.Component {
                   {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
                 </div>
                 {
-                  ( data.Type === 'Anomaly' &&
+                  (data.Type === 'Anomaly' &&
                     i === 1 &&
                     props.selectedCardId !== '' &&
                     props.selectedCardId === props.data.id
@@ -106,7 +106,7 @@ class TimelineCard extends React.Component {
                     <img src='/img/right-arrow-dark.png' />
                   </div>
                   )
-                  : ( data.Type === 'Anomaly' &&
+                  : (data.Type === 'Anomaly' &&
                       i === 1 &&
                       props.selectedCardId !== props.data.id
                     )
@@ -124,7 +124,7 @@ class TimelineCard extends React.Component {
             i++;
             let sourceDest = data[key];
             return (
-              <li style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
+              <li key={index} style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
                 {sourceDest.source ? getSource(sourceDest.source) : null}
                 {sourceDest.dest ? getDestinaton(sourceDest.dest) : null}
               </li>
@@ -198,10 +198,10 @@ class TimelineCard extends React.Component {
           if (score >= 65) {
             borderColor = Colors.cherry;
           }
-          if (score < 65 && score >= 35) {
+          else if (score < 65 && score >= 35) {
             borderColor = Colors.coral;
           }
-          if (score < 35) {
+          else if (score < 35) {
             borderColor = Colors.mustard;
           }
         }
@@ -209,10 +209,10 @@ class TimelineCard extends React.Component {
           if (severity.toLowerCase() === 'high') {
             borderColor = Colors.cherry;
           }
-          if (severity.toLowerCase() === 'medium') {
+          else if (severity.toLowerCase() === 'medium') {
             borderColor = Colors.coral;
           }
-          if (severity.toLowerCase() === 'low') {
+          else if (severity.toLowerCase() === 'low') {
             borderColor = Colors.mustard;
           }
         }
@@ -239,7 +239,7 @@ class TimelineCard extends React.Component {
             paddingLeft: '18px',
             paddingRight: '18px',
             height: 'auto',
-            width: '450px',
+            width: '350px',
             fontSize: '14px',
             cursor: 'pointer',
             overflowWrap: 'break-word',

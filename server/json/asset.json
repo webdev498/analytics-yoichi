@@ -79,6 +79,9 @@
           "style": {
             "width": "80%"
           },
+          "bodyStyle": {
+            "height": "100%"
+          },
           "canvasStyle": {
             "height": "600px",
             "width": "100%"
@@ -411,6 +414,15 @@
           "style": {
             "width": "65%",
             "backgroundColor": "#F7F7F9"
+          },
+          "otherStyles": {
+            "flex": {
+              "display": "flex"
+            },
+            "pagination": {
+              "bottom": 0,
+              "position": "absolute"
+            }
           },
           "id": "timeline-component"
         }

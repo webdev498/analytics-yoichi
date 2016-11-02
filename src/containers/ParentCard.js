@@ -429,7 +429,7 @@ export class ParentCard extends React.Component {
           : null
         }
 
-        <div>
+        <div style={props.attributes.bodyStyle}>
           {
             props.isError
             ? this.getErrorElement()

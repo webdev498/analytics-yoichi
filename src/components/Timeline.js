@@ -53,7 +53,6 @@ class Timeline extends React.Component {
     const {attributes} = props;
     this.card = (!isUndefined(attributes.isMainComponent) && !attributes.isMainComponent)
     ? CONTEXTUAL_MENU_CARD : TIMELINE_CARD;
-    this.style.card = this.card === TIMELINE_CARD ? this.style.card : {};
 
     this.fetchData = this.fetchData.bind(this);
     this.getContextualMenuApiObj = this.getContextualMenuApiObj.bind(this);
@@ -111,10 +110,11 @@ class Timeline extends React.Component {
 
   displayCard() {
     const rows = this.state.rows,
-      {props, state} = this;
+      {props, state} = this,
+      {attributes} = props;
 
     return (
-      <div style={this.style.card}>
+      <div style={this.style.card} ref={(ref) => this.timelineCard = ref}>
         {
           rows.map((event, index) => {
             let dateString = (event.Date) ? event.Date : '',
@@ -145,6 +145,12 @@ class Timeline extends React.Component {
             }
           })
         }
+        <PaginationWidget size={state.totalPage}
+          currentPage={state.currentPage}
+          maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}
+          fetchData={this.fetchData}
+          type={attributes.type}
+          style={attributes.otherStyles.pagination ? attributes.otherStyles.pagination : {}} />
       </div>
     );
   }
@@ -186,9 +192,15 @@ class Timeline extends React.Component {
       {params, attributes, meta} = props;
 
     let apiPath = (type === 'traffic') ? '/api/alert/traffic' : meta.api.path,
-      pathParams = (type === 'traffic') ? {} : {
-        reportId: meta.api.pathParams.reportId
-      },
+      pathParams = (type === 'traffic')
+        ? {}
+        : (type === 'anomalyEvents')
+          ? {
+            anomalyId: props.id
+          }
+          : {
+            reportId: meta.api.pathParams.reportId
+          },
       queryParams = Object.assign({},
         props.meta.api && props.meta.api.queryParams,
         {
@@ -217,18 +229,22 @@ class Timeline extends React.Component {
   }
 
   displayContextualMenuCards() {
-    const {state, props} = this;
+    const {state, props} = this,
+      timelineHeight = this.timelineCard.offsetHeight;
+
+    if (timelineHeight < 550 && this.card === 'TIMELINE_CARD') {
+      this.timelineCard.style.height = '550px';
+    }
+
     return (
       <div>
         <div style={{
-          top: '0px',
-          right: '0px',
-          bottom: '0px',
-          width: '350px',
+          width: '450px',
           position: 'absolute',
-          overflowY: 'scroll',
-          overflowX: 'hidden'
-        }} className='scrollbar'>
+          top: 0,
+          right: 0,
+          height: '695px'
+        }}>
           <ParentCard
             id={state.selectedCardId}
             meta={this.contextualMenuApiParams.meta}
@@ -256,20 +272,27 @@ class Timeline extends React.Component {
                 anomalyId: selectedCardId
               },
               queryParams: {
-                window: ''
+                window: '',
+                from: 0,
+                count: 3
               }
             },
             title: ''
           },
           attributes: {
-            type: 'traffic',
+            type: 'anomalyEvents',
             displaySelectedRows: true,
-            noOfEventsPerPage: 8,
+            noOfEventsPerPage: 3,
             maxNumbersOnLeftRightPagination: 4,
             isMainComponent: false,
             style: {
               width: '100%',
-              height: '100%'
+              height: '100%',
+              backgroundColor: Colors.contextBG
+            },
+            otherStyles: {
+              flex: {},
+              pagination: {}
             },
             id: 'timeline-anomaly-events'
           }
@@ -288,6 +311,8 @@ class Timeline extends React.Component {
     const {state, props} = this,
       {attributes} = props;
 
+    this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
+
     return (
       <div>
         {
@@ -300,22 +325,19 @@ class Timeline extends React.Component {
         }
         {
           (state.rows.length > 0)
-            ? <div>
+            ? <div style={
+                attributes.otherStyles.flex && state.selectedCardId !== ''
+                ? attributes.otherStyles.flex : {}
+              }>
               {this.displayCard()}
-
-              <PaginationWidget size={state.totalPage}
-                currentPage={state.currentPage}
-                maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}
-                fetchData={this.fetchData}
-                type={attributes.type} />
               {
                 state.selectedCardId !== ''
                 ? <div>
                   {this.displayContextualMenuCards()}
                   <div id='collapse-contextual-menu' style={{
-                    bottom: '10px',
+                    bottom: 0,
                     position: 'absolute',
-                    right: '360px'
+                    right: '460px'
                   }}>
                     <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
                   </div>

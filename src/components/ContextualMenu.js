@@ -2,7 +2,8 @@ import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 import {
   isUndefined,
-  firstCharCapitalize
+  firstCharCapitalize,
+  whatIsIt
 } from 'utils/utils';
 
 const style = {
@@ -62,6 +63,7 @@ function checkForUserInputs(parameters) {
 function updateDOM(table) {
   document.getElementById('actions').appendChild(table);
   document.getElementById('notification-message').style.width = notificationMessage.width;
+  document.getElementById('contextual-menu').style.width = '259px';
   document.getElementById('right-arrow').style.display = 'block';
   document.getElementById('contextual-menu-contents').style.display = 'block';
   document.getElementById('expand-contextual-menu').style.display = 'none';
@@ -118,11 +120,23 @@ class ContextualMenu extends React.Component {
     table.cellPadding = actionTable.cellPadding;
     table.cellSpacing = actionTable.cellSpacing;
 
-    for (let i = 0; i < actionsData.length; i++) {
-      if ((actionsData[i].nodeType).toLowerCase() === itemType.toLowerCase()) {
-        actions = Object.assign(actions, actionsData[i].actions);
+    function getActions(actions, data, type) {
+      if ((data.nodeType).toLowerCase() === type.toLowerCase()) {
+        actions = Object.assign(actions, data.actions);
       }
+      return actions;
     }
+
+    actionsData.forEach((data) => {
+      if (whatIsIt(itemType) === 'String') {
+        actions = getActions(actions, data, itemType);
+      }
+      else if (whatIsIt(itemType) === 'Array') {
+        itemType.forEach((type) => {
+          actions = getActions(actions, data, type);
+        });
+      }
+    });
 
     // Append the actions associated with nodes
     if (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].actions) &&

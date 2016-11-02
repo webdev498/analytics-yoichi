@@ -11,7 +11,7 @@ import {
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import vis from 'vis';
-import {baseUrl, networkGraphDefaultOptions} from 'config';
+import {baseUrl, networkGraphDefaultOptions, hierarchicalNetwork, applyHierarchicalNetwork} from 'config';
 // Loader will get removed after started using fetchApiData function from props object
 import Loader from '../components/Loader';
 import ContextualMenu from '../components/ContextualMenu';
@@ -46,7 +46,7 @@ let timeWindow = '1h',
   undoGraphCount = 0,
   physicsTrue = {
     physics: {
-      'stabilization': true
+      stabilization: true
     }
   },
   physicsFalse = {
@@ -58,12 +58,12 @@ let timeWindow = '1h',
   };
 
 function createNodeObject(dataNode) {
-  let id = dataNode.type === 'anomaly' ? dataNode.label : dataNode.id,
+  let idDisplay = dataNode.type === 'anomaly' ? dataNode.label : dataNode.id,
     nodeObject = {
-      id: id,
-      type: dataNode.type,
-      label: '  ' + id,
-      title: '<b>' + firstCharCapitalize(dataNode.type) + ':</b> ' + id,
+      id: dataNode.id,
+      type: dataNode.type ? dataNode.type : '',
+      label: '  ' + idDisplay,
+      title: '<b>' + dataNode.type ? firstCharCapitalize(dataNode.type) : '' + ':</b> ' + idDisplay,
       nodeDetails: [],
       actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
       borderWidth: '0',
@@ -80,9 +80,9 @@ function createNodeObject(dataNode) {
       }
     };
 
-  nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {id}</li>);
+  nodeObject.nodeDetails.push(<li key='nodeId'>{firstCharCapitalize(dataNode.type)}: {idDisplay}</li>);
 
-  let metaDataObject = handleMetaData(dataNode.metadata, nodeObject),
+  let metaDataObject = handleNodeMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
   nodeObject = metaDataObject.nodeObject;
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
@@ -90,51 +90,103 @@ function createNodeObject(dataNode) {
   return nodeObject;
 }
 
-function createEdgeObject(dataEdge) {
+function createEdgeObject(dataEdge, edgesInSameDirection) {
   let edgeObject = {
-    id: dataEdge.id,
-    type: dataEdge.type,
-    from: dataEdge.source,
-    to: dataEdge.target,
-    arrows: {
-      to: {
-        scaleFactor: 0.5
+      id: dataEdge.id,
+      type: [],
+      from: dataEdge.source,
+      to: dataEdge.target,
+      arrows: {
+        to: {
+          scaleFactor: 0.5
+        },
+        arrowStrikethrough: false
       },
-      arrowStrikethrough: false
+      label: dataEdge.label ? dataEdge.label + '\n\n\n' : '',
+      title: dataEdge.label ? dataEdge.label : '',
+      font: {
+        face: 'Open Sans',
+        color: Colors.pebble,
+        size: '11',
+        align: 'left'
+      },
+      length: 1000,
+      smooth: {
+        type: 'discrete'
+      },
+      color: {
+        color: Colors.pebble,
+        highlight: Colors.turquoise
+      },
+      edgeDetails: []
     },
-    label: dataEdge.label + '\n\n\n',
-    font: {
-      face: 'Open Sans',
-      color: Colors.pebble,
-      size: '11',
-      align: 'left'
-    },
-    length: 1000,
-    smooth: {
-      type: 'discrete'
-    },
-    color: {
-      color: Colors.pebble,
-      highlight: Colors.turquoise
-    },
-    edgeDetails: []
-  };
+    edgesTypes = [];
+
+  if (dataEdge.type && dataEdge.type === 'ioc') {
+    edgeObject.dashes = true;
+  }
+
+  if (dataEdge.type) {
+    edgeObject.type.push(dataEdge.type);
+  }
+
+  edgesTypes.push(
+    <li key='1'>{edgesInSameDirection.length > 0 ? '1. ' : ''}{dataEdge.label}</li>
+  );
+
+  if (edgesInSameDirection.length > 0) {
+    edgesInSameDirection.forEach((edgeInSameDirection, index) => {
+      edgeObject.type.push(edgeInSameDirection.type);
+      edgeObject.title += '<br />' + edgeInSameDirection.label;
+      edgesTypes.push(
+        <li key={index + 2}>{index + 2}. {edgeInSameDirection.label}</li>
+      );
+    });
+  }
+
+  let metaDataObject = handleEdgeMetaData(dataEdge.metadata, edgeObject);
+  edgeObject = metaDataObject.edgeObject;
 
   edgeObject.edgeDetails.push(
     <ul className='no-list-style'>
-      <li>Edge Type: {dataEdge.label}</li>
-      <li>Source: {dataEdge.source}</li>
-      <li>Target: {dataEdge.target}</li>
+      <li key='edgeType'>Edge Type:
+        <ol style={{padding: 0}}>
+          {edgesTypes}
+        </ol>
+      </li>
+      <li key='source'>Source: {dataEdge.source}</li>
+      <li key='target'>Target: {dataEdge.target}</li>
+      {metaDataObject.edgeMetaData}
     </ul>
   );
 
-  if (dataEdge.type === 'ioc') {
-    edgeObject.dashes = true;
-  }
   return edgeObject;
 }
 
-function handleMetaData(metadata, nodeObject) {
+function handleEdgeMetaData(metadata, edgeObject) {
+  edgeObject.metadata = metadata;
+  let edgeMetaData = [];
+  for (let metadataType in metadata) {
+    let metadataTypeLower = metadataType.toLowerCase();
+    if (metadataTypeLower === 'date' || metadataTypeLower === 'datetime') {
+      let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
+      edgeObject.title += '<br /><b>Date:</b> ' +
+        dateTime.date + ' ' + dateTime.time;
+      edgeMetaData.push(<li key='date'>Date: {dateTime.date} {dateTime.time}</li>);
+    }
+    else {
+      edgeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+        metadata[metadataType];
+      edgeMetaData.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
+    }
+  }
+  return {
+    edgeMetaData: edgeMetaData,
+    edgeObject: edgeObject
+  };
+}
+
+function handleNodeMetaData(metadata, nodeObject) {
   let nodeStatus = 'safe';
   nodeObject.metadata = metadata;
   for (let metadataType in metadata) {
@@ -164,7 +216,7 @@ function handleMetaData(metadata, nodeObject) {
             getCountryNameByCountryCode[metadata[metadataType]];
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[metadata[metadataType]];
-          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
+          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}:
             &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
           break;
         case 'date':
@@ -173,12 +225,11 @@ function handleMetaData(metadata, nodeObject) {
             dateTime.date + ' ' + dateTime.time;
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             dateTime.date + ' ' + dateTime.time;
-          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
-            &nbsp;{dateTime.date} {dateTime.time}</li>);
+          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {dateTime.date} {dateTime.time}</li>);
           break;
         case 'displayname':
           nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
-          nodeObject.nodeDetails.push(<li>Name: {metadata[metadataType]}</li>);
+          nodeObject.nodeDetails.push(<li key={metadataType}>Name: {metadata[metadataType]}</li>);
           break;
         default:
           if (metadataTypeLower === 'title') {
@@ -187,8 +238,7 @@ function handleMetaData(metadata, nodeObject) {
           }
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             metadata[metadataType];
-          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
-            &nbsp;{metadata[metadataType]}</li>);
+          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
           break;
       }
     }
@@ -251,11 +301,11 @@ function handleReputationMetaData(parameters) {
     if (nodeDetails.indexOf('<br />') > -1) {
       let tempNodeDetails = nodeDetails.split('<br />');
       tempNodeDetails.forEach((nodeDetail) => {
-        nodeObject.nodeDetails.push(<li>{nodeDetail}</li>);
+        nodeObject.nodeDetails.push(<li key='nodeDetails'>{nodeDetail}</li>);
       });
     }
     else {
-      nodeObject.nodeDetails.push(<li>{nodeDetails}</li>);
+      nodeObject.nodeDetails.push(<li key='nodeDetails'>{nodeDetails}</li>);
     }
 
     nodeStatus = (label.indexOf('Scanning Host') > -1) ? 'scan' : 'malicious';
@@ -340,7 +390,6 @@ function getIcon(nodeType, nodeStatus, nodeAction) {
   if (nodeType === 'anomaly') {
     nodeStatus = 'malicious';
   }
-  console.log(nodeType, nodeStatus);
   const iconPath = '/img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
 
   if (nodeType !== '') {
@@ -591,9 +640,20 @@ class NetworkGraph extends React.Component {
     }
 
     if (!isUndefined(dataEdges)) {
+      let alreadyAddedEdges = [];
       dataEdges.forEach((dataEdge) => {
-        if (isUndefined(this.edgeObjects[dataEdge.id])) {
-          let edgeObject = createEdgeObject(dataEdge);
+        if (isUndefined(this.edgeObjects[dataEdge.id]) && !isNodeOrEdgeAlreadyExists(alreadyAddedEdges, dataEdge.id)) {
+          let edgesInSameDirection = [];
+          dataEdges.forEach((edgeInSameDirection) => {
+            if (dataEdge.id !== edgeInSameDirection.id &&
+              dataEdge.source === edgeInSameDirection.source &&
+              dataEdge.target === edgeInSameDirection.target) {
+              edgesInSameDirection.push(edgeInSameDirection);
+              alreadyAddedEdges.push(edgeInSameDirection);
+            }
+          });
+
+          let edgeObject = createEdgeObject(dataEdge, edgesInSameDirection);
           edges.push(edgeObject);
           this.edgeObjects[dataEdge.target] = edgeObject;
           this.edgeObjects[edgeObject.id] = edgeObject;
@@ -725,6 +785,14 @@ class NetworkGraph extends React.Component {
     const that = this,
       {props} = this,
       {attributes} = props;
+
+    console.log(networkGraphDefaultOptions);
+
+    networkGraphDefaultOptions.layout = applyHierarchicalNetwork
+      ? Object.assign(networkGraphDefaultOptions.layout, hierarchicalNetwork)
+      : networkGraphDefaultOptions.layout;
+
+    console.log(networkGraphDefaultOptions);
 
     let options = Object.assign(networkGraphDefaultOptions,
       {
@@ -896,6 +964,7 @@ class NetworkGraph extends React.Component {
   loadNodeContextMenu(nodeDetails) {
     let {network, nodeID, nodeType, selectedNodeDetails, selected, selectedNodesForExtendingGraph} = nodeDetails,
       {state} = this;
+
     if (!isUndefined(nodeID)) {
       state.nodes.forEach((nodeObject) => {
         let node = network.body.nodes[nodeObject.id];
