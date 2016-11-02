@@ -23,17 +23,17 @@ export function requestApiData(id, api) {
 export function receiveApiData(id, json) {
   return {
     type: RECEIVE_API_DATA,
-    id,
-    data: json
+    data: json,
+    id
   };
 }
 
 export function errorApiData(id, ex, api) {
   return {
     type: ERROR_API_DATA,
+    errorData: ex,
     id,
-    api,
-    errorData: ex
+    api
   };
 }
 
@@ -66,7 +66,7 @@ function getUrl(api, duration, routerParams) {
 
   const pathKeys = Object.keys(pathParams);
 
-  pathKeys.forEach((key) => {
+  pathKeys.forEach(key => {
     let templateString = `{${key}}`;
 
     const param = pathParams[key];
@@ -85,7 +85,7 @@ function getUrl(api, duration, routerParams) {
   if (keys.length > 0) {
     queryString += '?';
 
-    keys.forEach((key) => {
+    keys.forEach(key => {
       let queryKey = key;
       if (key.endsWith(':pathParam')) {
         queryKey = key.substr(0, key.indexOf(':pathParam'));
@@ -131,7 +131,7 @@ function callApi(api, duration, params, options) {
     if (response.status >= 200 && response.status < 300) {
       return response.json();
     }
-    else if(response.status === 401) {
+    else if (response.status === 401) {
       logoutUtil(dispatch);
     }
     else {
@@ -154,12 +154,10 @@ export function fetchApiData(id, api, params, options) {
     dispatch(requestApiData(id, api));
 
     if (Array.isArray(api)) {
-      const arr = api.map((apiObj) => {
-        return callApi(apiObj, currentDuration, params, options);
-      });
+      const arr = api.map(apiObj => callApi(apiObj, currentDuration, params, options));
 
       Promise.all(arr)
-      .then((results) => {
+      .then(results => {
         const json = {};
 
         results.forEach((val, index) => {
@@ -170,7 +168,7 @@ export function fetchApiData(id, api, params, options) {
 
         dispatch(receiveApiData(id, {json, api}));
       })
-      .catch((ex) => {
+      .catch(ex => {
         dispatch(errorApiData(id, ex, api));
       });
     }
@@ -180,7 +178,7 @@ export function fetchApiData(id, api, params, options) {
         json.options = options;
         dispatch(receiveApiData(id, {json, api}));
       })
-      .catch((ex) => {
+      .catch(ex => {
         dispatch(errorApiData(id, ex, api));
       });
     }
@@ -200,14 +198,14 @@ export function updateApiData(newDuration, params) {
 
       if (apiData && apiData.has('components')) {
         const components = apiData.get('components');
-        components.forEach((component, index) => {
+        components.forEach(component => {
           const id = component.get('id');
           const api = component.get('api');
           const options = component.get('data') && component.get('data').options;
 
           // this is the case if one api serves the data for multiple element
           // therefore on time duration update there are multiple calls for the api request.
-          if (api && api.loadOnce) return;
+          if (api && api.loadOnce) { return; }
 
           fetchApiData(id, api, params, options)(dispatch, getState);
         });
@@ -223,7 +221,7 @@ export function broadcastEvent(id, eventData) {
     if (apiData && apiData.has('components')) {
       const components = apiData.get('components');
 
-      components.forEach((component, index) => {
+      components.forEach(component => {
         const componentId = component.get('id');
         if (componentId === id) {
           dispatch(componentEvent(id, eventData));
