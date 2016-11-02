@@ -20,7 +20,7 @@ export const networkGraphDefaultOptions = {
     selectConnectedEdges: false
   },
   autoResize: true,
-  height: '600',
+  // height: '600',
   width: '100%',
   edges: {
     selectionWidth: 1,
