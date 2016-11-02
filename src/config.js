@@ -33,9 +33,9 @@ export const networkGraphDefaultOptions = {
 
 export const hierarchicalNetwork = {
   hierarchical: {
-    direction: 'LR', // Direction can be - UD, DU, LR, RL
-    nodeSpacing: 600,
+    direction: global.hierarchicalNetworkDirection, // Direction can be - UD, DU, LR, RL
+    nodeSpacing: 150,
     levelSeparation: 300,
-    treeSpacing: 500
+    treeSpacing: 200
   }
 };

@@ -80,7 +80,7 @@ function createNodeObject(dataNode) {
       }
     };
 
-  nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {idDisplay}</li>);
+  nodeObject.nodeDetails.push(<li key='nodeId'>{firstCharCapitalize(dataNode.type)}: {idDisplay}</li>);
 
   let metaDataObject = handleNodeMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
@@ -131,7 +131,7 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
   }
 
   edgesTypes.push(
-    <li>{edgesInSameDirection.length > 0 ? '1. ' : ''}{dataEdge.label}</li>
+    <li key='1'>{edgesInSameDirection.length > 0 ? '1. ' : ''}{dataEdge.label}</li>
   );
 
   if (edgesInSameDirection.length > 0) {
@@ -139,7 +139,7 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
       edgeObject.type.push(edgeInSameDirection.type);
       edgeObject.title += '<br />' + edgeInSameDirection.label;
       edgesTypes.push(
-        <li>{index + 2}. {edgeInSameDirection.label}</li>
+        <li key={index + 2}>{index + 2}. {edgeInSameDirection.label}</li>
       );
     });
   }
@@ -149,13 +149,13 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
 
   edgeObject.edgeDetails.push(
     <ul className='no-list-style'>
-      <li>Edge Type:
+      <li key='edgeType'>Edge Type:
         <ol style={{padding: 0}}>
           {edgesTypes}
         </ol>
       </li>
-      <li>Source: {dataEdge.source}</li>
-      <li>Target: {dataEdge.target}</li>
+      <li key='source'>Source: {dataEdge.source}</li>
+      <li key='target'>Target: {dataEdge.target}</li>
       {metaDataObject.edgeMetaData}
     </ul>
   );
@@ -172,12 +172,12 @@ function handleEdgeMetaData(metadata, edgeObject) {
       let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
       edgeObject.title += '<br /><b>Date:</b> ' +
         dateTime.date + ' ' + dateTime.time;
-      edgeMetaData.push(<li>Date: {dateTime.date} {dateTime.time}</li>);
+      edgeMetaData.push(<li key='date'>Date: {dateTime.date} {dateTime.time}</li>);
     }
     else {
       edgeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
         metadata[metadataType];
-      edgeMetaData.push(<li>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
+      edgeMetaData.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
     }
   }
   return {
@@ -216,7 +216,7 @@ function handleNodeMetaData(metadata, nodeObject) {
             getCountryNameByCountryCode[metadata[metadataType]];
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[metadata[metadataType]];
-          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}:
+          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}:
             &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
           break;
         case 'date':
@@ -225,11 +225,11 @@ function handleNodeMetaData(metadata, nodeObject) {
             dateTime.date + ' ' + dateTime.time;
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             dateTime.date + ' ' + dateTime.time;
-          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}: {dateTime.date} {dateTime.time}</li>);
+          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {dateTime.date} {dateTime.time}</li>);
           break;
         case 'displayname':
           nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
-          nodeObject.nodeDetails.push(<li>Name: {metadata[metadataType]}</li>);
+          nodeObject.nodeDetails.push(<li key={metadataType}>Name: {metadata[metadataType]}</li>);
           break;
         default:
           if (metadataTypeLower === 'title') {
@@ -238,7 +238,7 @@ function handleNodeMetaData(metadata, nodeObject) {
           }
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             metadata[metadataType];
-          nodeObject.nodeDetails.push(<li>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
+          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
           break;
       }
     }
@@ -301,11 +301,11 @@ function handleReputationMetaData(parameters) {
     if (nodeDetails.indexOf('<br />') > -1) {
       let tempNodeDetails = nodeDetails.split('<br />');
       tempNodeDetails.forEach((nodeDetail) => {
-        nodeObject.nodeDetails.push(<li>{nodeDetail}</li>);
+        nodeObject.nodeDetails.push(<li key='nodeDetails'>{nodeDetail}</li>);
       });
     }
     else {
-      nodeObject.nodeDetails.push(<li>{nodeDetails}</li>);
+      nodeObject.nodeDetails.push(<li key='nodeDetails'>{nodeDetails}</li>);
     }
 
     nodeStatus = (label.indexOf('Scanning Host') > -1) ? 'scan' : 'malicious';
