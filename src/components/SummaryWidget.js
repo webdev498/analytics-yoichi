@@ -21,7 +21,8 @@ const styles = {
     marginLeft: '10px'
   },
   text: {
-    fontWeight: '300'
+    fontWeight: '300',
+    'word-break': 'break-word'
   }
 };
 
