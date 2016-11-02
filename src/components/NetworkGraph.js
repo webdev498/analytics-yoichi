@@ -1294,63 +1294,6 @@ class NetworkGraph extends React.Component {
     if (props.data && !Array.isArray(props.data)) {
       assetData = generateDataFromAssetDetails(props.data);
     }
-    console.log(props);
-    /*let dataTest = [
-  {
-    "label": "OikKAfhbT2lrS0FmaEJiV3hLTVRreUxqRTJPQzR5TGpuNUFtbEZhbm9tYWx5-Q",
-    "type": "anomaly",
-    "nodes": [
-      {
-        "id": "AJJRwpuvEeaUJAokzQeERw",
-        "label": "Abnormal bandwidth usage by host to given country.",
-        "type": "anomaly",
-        "metadata": {
-          "date": "2016-10-25T00:00:00.000",
-          "score": 100
-        }
-      },
-      {
-        "id": "192.168.2.9",
-        "label": "192.168.2.9",
-        "type": "IP"
-      },
-      {
-        "id": "6g_hoJuvEeaDuQpG9QlaFQ",
-        "label": "Possible data exfiltration.",
-        "type": "anomaly",
-        "metadata": {
-          "date": "2016-10-25T00:00:00.000",
-          "details": "Abnormal number of connections by host to given country."
-        }
-      }
-    ],
-    "edges": [
-      {
-        "label": "Anomaly",
-        "type": "anomaly",
-        "metadata": {
-          "count": 2
-        },
-        "source": "192.168.2.9",
-        "target": "AJJRwpuvEeaUJAokzQeERw",
-        "directed": true,
-        "id": "OikKAfhGYW5vbWFseUoxOTIuMTY4LjIuOVVBSkpSd3B1dkVlYVVKQW9relFlRVJ3-Q"
-      },
-      {
-        "label": "Anomaly",
-        "type": "anomaly",
-        "metadata": {
-          "count": 3
-        },
-        "source": "192.168.2.9",
-        "target": "6g_hoJuvEeaDuQpG9QlaFQ",
-        "directed": true,
-        "id": "OikKAfhGYW5vbWFseUoxOTIuMTY4LjIuOVU2Z19ob0p1dkVlYUR1UXBHOVFsYUZR-Q"
-      }
-    ],
-    "id": "OikKAfhbT2lrS0FmaEJiV3hLTVRreUxqRTJPQzR5TGpuNUFtbEZhbm9tYWx5-Q"
-  }
-];*/
 
     let undoResetStyle = {display: state.showUndoResetButtons ? 'block' : 'none'};
 
