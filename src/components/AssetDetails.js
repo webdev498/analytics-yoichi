@@ -3,6 +3,7 @@ import React, {PropTypes} from 'react';
 import AssetWidget from 'components/AssetWidget';
 import RadarChart from 'components/RadarChart';
 import {formatBytes, getCountryNameByCountryCode, getColor} from 'utils/utils';
+import {getArrowIcon} from 'utils/graphUtils';
 import ScoreWidget from 'components/ScoreWidget';
 import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
@@ -81,6 +82,7 @@ const styles = {
     fontWeight: '600'
   },
   icon: {
+    fontSize: '16px',
     width: '12px',
     lineHeight: '14px',
     marginTop: 'auto'
@@ -95,25 +97,6 @@ const styles = {
     width: '40px'
   }
 };
-
-function getArrowIcon(change) {
-  if (change !== 'N/A') {
-    if (parseFloat(change) > 0) {
-      return <FontIcon style={styles.icon} className='material-icons'>arrow_drop_up</FontIcon>;
-    }
-    else if (parseFloat(change) < 0) {
-      return <FontIcon style={styles.icon} className='material-icons'>arrow_drop_down</FontIcon>;
-    }
-    else {
-      return <FontIcon style={{...styles.icon, visibility: 'hidden'}} className='material-icons'>
-        arrow_drop_down
-      </FontIcon>;
-    }
-  }
-  else {
-    return <span style={styles.icon}>-</span>;
-  }
-}
 
 class AssetDetail extends React.Component {
   static propTypes = {
@@ -138,12 +121,11 @@ class AssetDetail extends React.Component {
   }
 
   getChangeElement(change) {
-    // change = Math.round(change * 100) / 100;
-    change = parseFloat(change).toFixed(2);
+    const formattedChange = parseFloat(change).toFixed(2);
     return (
       <span style={styles.change}>
-        <span style={styles.percent}>{Math.abs(change)} %</span>
-        {getArrowIcon(change)}
+        <span style={styles.percent}>{Math.abs(formattedChange)} %</span>
+        {getArrowIcon(change, styles.icon)}
       </span>
     );
   }

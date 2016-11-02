@@ -1,6 +1,6 @@
 import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
+import {getArrowIcon} from 'utils/graphUtils';
 
 import {
   generateQueryParams,
@@ -44,7 +44,7 @@ const styles = {
     fontSize: '13px'
   },
   icon: {
-    lineHeight: '10px'
+    fontSize: '16px'
   }
 };
 
@@ -54,27 +54,23 @@ function getCount(data) {
 }
 
 function getPercent(data) {
-  return (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A')
-          ? Math.abs(Math.round(data.rows[0][0][2])) + '%'
-          : '';
-}
-
-function getArrowIcon(data) {
   if (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A') {
-    const percent = Math.round(data.rows[0][0][2]);
-    if (percent > 0) {
-      return <FontIcon style={styles.icon} className='material-icons'>arrow_drop_up</FontIcon>;
-    }
-    else if (percent === 0) {
-      // return <FontIcon style={styles.icon} className='material-icons'>trending_flat</FontIcon>;
-      return null;
-    }
-    else {
-      return <FontIcon style={styles.icon} className='material-icons'>arrow_drop_down</FontIcon>;
-    }
+    let change = parseFloat(data.rows[0][0][2]).toFixed(2);
+    change = Math.abs(change);
+
+    return change + '%';
   }
   else {
-    return '-';
+    return '';
+  }
+}
+
+function getIcon(data) {
+  if (data && data.rows && data.rows[0]) {
+    return getArrowIcon(data.rows[0][0][2], styles.icon);
+  }
+  else {
+    return null;
   }
 }
 
@@ -84,7 +80,6 @@ class MetricsCard extends React.Component {
       {kibana, clickData} = props,
       dataObj = {};
 
-    // console.log(props);
     if (kibana) {
       if (props.kibana.queryParams) {
         dataObj.datasetName = 'high';
@@ -146,7 +141,7 @@ class MetricsCard extends React.Component {
             <span style={styles.percentage}>
               {getPercent(props.data)}
             </span>
-            {getArrowIcon(props.data)}
+            {getIcon(props.data)}
           </div>
         </div>
 
