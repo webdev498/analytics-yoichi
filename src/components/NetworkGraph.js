@@ -783,13 +783,23 @@ class NetworkGraph extends React.Component {
 
   createNetworkGraph(networkData) {
     const that = this,
-      {props} = this;
+      {props} = this,
+      {attributes} = props;
+
+    console.log(networkGraphDefaultOptions);
 
     networkGraphDefaultOptions.layout = applyHierarchicalNetwork
       ? Object.assign(networkGraphDefaultOptions.layout, hierarchicalNetwork)
       : networkGraphDefaultOptions.layout;
 
-    let options = networkGraphDefaultOptions,
+    console.log(networkGraphDefaultOptions);
+
+    let options = Object.assign(networkGraphDefaultOptions,
+      {
+        height: (!isUndefined(attributes.canvasStyle.height))
+          ? attributes.canvasStyle.height
+          : networkGraphDefaultOptions.height
+      }),
       network = new vis.Network(this.networkGraph, networkData, options);
 
     if (networkData.nodes.length <= 10) {
@@ -1296,7 +1306,7 @@ class NetworkGraph extends React.Component {
     let undoResetStyle = {display: state.showUndoResetButtons ? 'block' : 'none'};
 
     return (
-      <div style={{display: 'flex', height: '100%'}}>
+      <div style={{display: 'flex'}}>
         {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
           text={state.loaderText} /> : null}
         <div ref={(ref) => this.networkGraph = ref} style={props.attributes.canvasStyle}
