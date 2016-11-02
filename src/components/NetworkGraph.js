@@ -11,7 +11,7 @@ import {
 } from 'utils/utils';
 import Cookies from 'cookies-js';
 import vis from 'vis';
-import {baseUrl, networkGraphDefaultOptions} from 'config';
+import {baseUrl, networkGraphDefaultOptions, hierarchicalNetwork, applyHierarchicalNetwork} from 'config';
 // Loader will get removed after started using fetchApiData function from props object
 import Loader from '../components/Loader';
 import ContextualMenu from '../components/ContextualMenu';
@@ -785,6 +785,14 @@ class NetworkGraph extends React.Component {
     const that = this,
       {props} = this,
       {attributes} = props;
+
+    console.log(networkGraphDefaultOptions);
+
+    networkGraphDefaultOptions.layout = applyHierarchicalNetwork
+      ? Object.assign(networkGraphDefaultOptions.layout, hierarchicalNetwork)
+      : networkGraphDefaultOptions.layout;
+
+    console.log(networkGraphDefaultOptions);
 
     let options = Object.assign(networkGraphDefaultOptions,
       {

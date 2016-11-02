@@ -7,12 +7,10 @@ export const clientId = 'taf_dashboard';
 export const redirectUri = global.redirectUri || 'http://localhost:3000/#/dashboard?';
 export const defaultRoute = global.defaultRoute || '/';
 
+export const applyHierarchicalNetwork = global.applyHierarchicalNetwork;
 export const networkGraphDefaultOptions = {
   physics: {
-    // 'barnesHut': {
-    //   'avoidOverlap': 1
-    // },
-    'stabilization': true
+    stabilization: true
   },
   interaction: {
     navigationButtons: true,
@@ -26,10 +24,18 @@ export const networkGraphDefaultOptions = {
   width: '100%',
   edges: {
     selectionWidth: 1,
-    physics: false // ,
-    // length: 1000
+    physics: false
   },
   layout: {
     improvedLayout: true
+  }
+};
+
+export const hierarchicalNetwork = {
+  hierarchical: {
+    direction: 'LR', // Direction can be - UD, DU, LR, RL
+    nodeSpacing: 600,
+    levelSeparation: 300,
+    treeSpacing: 500
   }
 };

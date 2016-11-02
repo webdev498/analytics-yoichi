@@ -412,6 +412,15 @@
             "width": "65%",
             "backgroundColor": "#F7F7F9"
           },
+          "otherStyles": {
+            "flex": {
+              "display": "flex"
+            },
+            "pagination": {
+              "bottom": 0,
+              "position": "absolute"
+            }
+          },
           "id": "timeline-component"
         }
       }
