@@ -58,12 +58,12 @@ let timeWindow = '1h',
   };
 
 function createNodeObject(dataNode) {
-  let id = dataNode.type === 'anomaly' ? dataNode.label : dataNode.id,
+  let idDisplay = dataNode.type === 'anomaly' ? dataNode.label : dataNode.id,
     nodeObject = {
-      id: id,
+      id: dataNode.id,
       type: dataNode.type ? dataNode.type : '',
-      label: '  ' + id,
-      title: '<b>' + dataNode.type ? firstCharCapitalize(dataNode.type) : '' + ':</b> ' + id,
+      label: '  ' + idDisplay,
+      title: '<b>' + dataNode.type ? firstCharCapitalize(dataNode.type) : '' + ':</b> ' + idDisplay,
       nodeDetails: [],
       actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
       borderWidth: '0',
@@ -80,7 +80,7 @@ function createNodeObject(dataNode) {
       }
     };
 
-  nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {id}</li>);
+  nodeObject.nodeDetails.push(<li>{firstCharCapitalize(dataNode.type)}: {idDisplay}</li>);
 
   let metaDataObject = handleNodeMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;

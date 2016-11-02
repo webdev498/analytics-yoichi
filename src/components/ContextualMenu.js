@@ -119,8 +119,8 @@ class ContextualMenu extends React.Component {
     table.cellPadding = actionTable.cellPadding;
     table.cellSpacing = actionTable.cellSpacing;
 
-    function getActions(actions, data) {
-      if ((data.nodeType).toLowerCase() === itemType.toLowerCase()) {
+    function getActions(actions, data, type) {
+      if ((data.nodeType).toLowerCase() === type.toLowerCase()) {
         actions = Object.assign(actions, data.actions);
       }
       return actions;
@@ -128,11 +128,11 @@ class ContextualMenu extends React.Component {
 
     actionsData.forEach((data) => {
       if (whatIsIt(itemType) === 'String') {
-        actions = getActions(actions, data);
+        actions = getActions(actions, data, itemType);
       }
       else if (whatIsIt(itemType) === 'Array') {
         itemType.forEach((type) => {
-          actions = getActions(actions, data);
+          actions = getActions(actions, data, type);
         });
       }
     });
