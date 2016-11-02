@@ -19,7 +19,7 @@ export function userDetailsLoaded(data) {
   };
 }
 
-export function userDetailsError(json, errorData) {
+export function userDetailsError(errorData) {
   return {
     type: USER_DETAILS_ERROR,
     errorData
@@ -50,7 +50,7 @@ export function fetchUserData() {
     })
     .then(response => response.json())
     .then(json => {
-      dispatch(userDetailsLoaded(json, {accessToken, tokenType}));
+      dispatch(userDetailsLoaded(json));
     })
     .catch((ex) => {
       dispatch(userDetailsError(ex));
