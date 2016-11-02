@@ -52,7 +52,7 @@ export function fetchUserData() {
     .then(json => {
       dispatch(userDetailsLoaded(json));
     })
-    .catch((ex) => {
+    .catch(ex => {
       dispatch(userDetailsError(ex));
     });
   };

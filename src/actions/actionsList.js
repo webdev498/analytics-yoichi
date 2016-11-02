@@ -44,7 +44,7 @@ export function fetchActionsList() {
     .then(json => {
       dispatch(actionsListRecieve(json));
     })
-    .catch((ex) => {
+    .catch(ex => {
       dispatch(actionsListError(ex));
     });
   };
