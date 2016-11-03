@@ -19,7 +19,7 @@ const style = {
       margin: '0px 24px',
       width: '90%',
       color: Colors.garnet,
-      fontSize: '16px',
+      fontSize: '13px',
       fontFamily: 'Open Sans',
       overflowWrap: 'break-word',
       paddingRight: '20px',
