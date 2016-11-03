@@ -22,7 +22,7 @@ const styles = {
   },
   text: {
     fontWeight: '300',
-    'word-break': 'break-word'
+    wordBreak: 'break-word'
   }
 };
 
