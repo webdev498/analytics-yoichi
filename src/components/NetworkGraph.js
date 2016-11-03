@@ -198,6 +198,12 @@ function handleNodeMetaData(metadata, nodeObject) {
       newLine1 = '\n  ',
       newLine2 = '<br />';
 
+    metadataTypeLower = (metadataTypeLower === 'date' ||
+      metadataTypeLower === 'start_date' ||
+      metadataTypeLower === 'end_date')
+    ? 'date'
+    : metadataTypeLower;
+
     if (metadataTypeLower !== 'coordinates') {
       switch (metadataTypeLower) {
         case 'reputation':
