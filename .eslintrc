@@ -13,7 +13,8 @@
     "babel"
   ],
   "env"     : {
-    "browser" : true
+    "browser" : true,
+    "node": true
   },
   "globals" : {
     "Action"       : false,
