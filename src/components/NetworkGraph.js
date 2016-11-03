@@ -58,12 +58,14 @@ let timeWindow = '1h',
   };
 
 function createNodeObject(dataNode) {
-  let idDisplay = dataNode.type === 'anomaly' ? dataNode.label : dataNode.id,
+  let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id,
+    idDisplay = dataNode.type === 'anomaly' ? dataNode.label : nodeId,
+    nodeType = dataNode.type ? dataNode.type : '',
     nodeObject = {
-      id: dataNode.id,
-      type: dataNode.type ? dataNode.type : '',
+      id: nodeId,
+      type: nodeType,
       label: '  ' + idDisplay,
-      title: '<b>' + dataNode.type ? firstCharCapitalize(dataNode.type) : '' + ':</b> ' + idDisplay,
+      title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + idDisplay,
       nodeDetails: [],
       actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
       borderWidth: '0',
@@ -406,6 +408,7 @@ function generateDataFromAssetDetails(data) {
 
   nodes[0] = {
     id: data.id,
+    nodeId: data.id,
     label: data.info.name,
     type: data.type,
     metadata: data.info
@@ -631,10 +634,11 @@ class NetworkGraph extends React.Component {
 
     if (!isUndefined(dataNodes)) {
       dataNodes.forEach((dataNode) => {
-        if (isUndefined(this.nodeObjects[dataNode.id])) {
+        let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id;
+        if (isUndefined(this.nodeObjects[nodeId])) {
           let nodeObject = createNodeObject(dataNode);
           nodes.push(nodeObject);
-          this.nodeObjects[dataNode.id] = nodeObject;
+          this.nodeObjects[nodeId] = nodeObject;
         }
       });
     }
@@ -674,7 +678,8 @@ class NetworkGraph extends React.Component {
     for (let key in this.nodeObjects) {
       if (!isUndefined(updatedNodes)) {
         updatedNodes.forEach((updatedNode) => {
-          if (updatedNode.id === key) {
+          let nodeId = updatedNode.nodeId ? updatedNode.nodeId : updatedNode.id;
+          if (nodeId === key) {
             tempNodeObjects[key] = this.nodeObjects[key];
             tempEdgeObjects[key] = this.edgeObjects[key];// Remove other targets from edgeObjects
           }
@@ -786,13 +791,9 @@ class NetworkGraph extends React.Component {
       {props} = this,
       {attributes} = props;
 
-    console.log(networkGraphDefaultOptions);
-
     networkGraphDefaultOptions.layout = applyHierarchicalNetwork
       ? Object.assign(networkGraphDefaultOptions.layout, hierarchicalNetwork)
       : networkGraphDefaultOptions.layout;
-
-    console.log(networkGraphDefaultOptions);
 
     let options = Object.assign(networkGraphDefaultOptions,
       {
