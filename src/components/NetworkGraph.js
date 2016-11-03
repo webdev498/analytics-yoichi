@@ -82,7 +82,7 @@ function createNodeObject(dataNode) {
       }
     };
 
-  nodeObject.nodeDetails.push(<li key='nodeId'>{firstCharCapitalize(dataNode.type)}: {idDisplay}</li>);
+  nodeObject.nodeDetails.push(<li key='nodeId'><b>{firstCharCapitalize(dataNode.type)}:</b> {idDisplay}</li>);
 
   let metaDataObject = handleNodeMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
@@ -151,13 +151,13 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
 
   edgeObject.edgeDetails.push(
     <ul className='no-list-style'>
-      <li key='edgeType'>Edge Type:
+      <li key='edgeType'><b>Edge Type:</b>
         <ol style={{padding: 0}}>
           {edgesTypes}
         </ol>
       </li>
-      <li key='source'>Source: {dataEdge.source}</li>
-      <li key='target'>Target: {dataEdge.target}</li>
+      <li key='source'><b>Source:</b> {dataEdge.source}</li>
+      <li key='target'><b>Target:</b> {dataEdge.target}</li>
       {metaDataObject.edgeMetaData}
     </ul>
   );
@@ -174,12 +174,14 @@ function handleEdgeMetaData(metadata, edgeObject) {
       let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
       edgeObject.title += '<br /><b>Date:</b> ' +
         dateTime.date + ' ' + dateTime.time;
-      edgeMetaData.push(<li key='date'>Date: {dateTime.date} {dateTime.time}</li>);
+      edgeMetaData.push(<li key='date'><b>Date:</b> {dateTime.date} {dateTime.time}</li>);
     }
     else {
       edgeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
         metadata[metadataType];
-      edgeMetaData.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
+      edgeMetaData.push(
+        <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
+      );
     }
   }
   return {
@@ -218,7 +220,7 @@ function handleNodeMetaData(metadata, nodeObject) {
             getCountryNameByCountryCode[metadata[metadataType]];
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[metadata[metadataType]];
-          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}:
+          nodeObject.nodeDetails.push(<li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b>
             &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
           break;
         case 'date':
@@ -227,11 +229,13 @@ function handleNodeMetaData(metadata, nodeObject) {
             dateTime.date + ' ' + dateTime.time;
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             dateTime.date + ' ' + dateTime.time;
-          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {dateTime.date} {dateTime.time}</li>);
+          nodeObject.nodeDetails.push(
+            <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {dateTime.date} {dateTime.time}</li>
+          );
           break;
         case 'displayname':
           nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
-          nodeObject.nodeDetails.push(<li key={metadataType}>Name: {metadata[metadataType]}</li>);
+          nodeObject.nodeDetails.push(<li key={metadataType}><b>Name:</b> {metadata[metadataType]}</li>);
           break;
         default:
           if (metadataTypeLower === 'title') {
@@ -240,7 +244,9 @@ function handleNodeMetaData(metadata, nodeObject) {
           }
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             metadata[metadataType];
-          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
+          nodeObject.nodeDetails.push(
+            <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
+          );
           break;
       }
     }

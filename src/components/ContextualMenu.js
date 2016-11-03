@@ -247,7 +247,7 @@ class ContextualMenu extends React.Component {
           break;
         case 'metadata':
           let paramName = (name).replace('metadata.', ''),
-            metadataValue = nodeObjects[itemId].metadata[paramName];
+            metadataValue = (!isUndefined(nodeObjects[itemId].metadata)) ? nodeObjects[itemId].metadata[paramName] : '';
           value = (!isUndefined(metadataValue)) ? metadataValue : '';
           break;
         default:

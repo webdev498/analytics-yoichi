@@ -102,9 +102,9 @@ class TimelineCard extends React.Component {
                     props.selectedCardId === props.data.id
                   )
                   ? (
-                  <div style={{marginLeft: 'auto'}}>
-                    <img src='/img/right-arrow-dark.png' />
-                  </div>
+                    <div style={{marginLeft: 'auto'}}>
+                      <img src='/img/right-arrow-dark.png' />
+                    </div>
                   )
                   : (data.Type === 'Anomaly' &&
                       i === 1 &&
