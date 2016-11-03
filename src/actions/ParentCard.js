@@ -112,7 +112,7 @@ function getUrl(api, duration, routerParams) {
   return baseUrl + url + queryString;
 }
 
-function callApi(api, duration, params, options) {
+function callApi(api, duration, params, options, dispatch) {
   const accessToken = cookies.access_token,
     tokenType = cookies.token_type,
     headers = (api && api.headers) || {},
@@ -154,7 +154,7 @@ export function fetchApiData(id, api, params, options) {
     dispatch(requestApiData(id, api));
 
     if (Array.isArray(api)) {
-      const arr = api.map(apiObj => callApi(apiObj, currentDuration, params, options));
+      const arr = api.map(apiObj => callApi(apiObj, currentDuration, params, options, dispatch));
 
       Promise.all(arr)
       .then(results => {
@@ -173,7 +173,7 @@ export function fetchApiData(id, api, params, options) {
       });
     }
     else {
-      callApi(api, currentDuration, params, options)
+      callApi(api, currentDuration, params, options, dispatch)
       .then(json => {
         json.options = options;
         dispatch(receiveApiData(id, {json, api}));
