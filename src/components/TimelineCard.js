@@ -88,7 +88,7 @@ class TimelineCard extends React.Component {
           if (whatIsIt(data[key]) === 'String') {
             i++;
             return (
-              <li key={index} style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
+              <li style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
                 {that.displayAnomalyIcon(data, key, i)}
                 <div style={{
                   paddingLeft: data.Type === 'Anomaly' ? i === 1 ? '10px' : '40px' : '0px'
@@ -102,9 +102,9 @@ class TimelineCard extends React.Component {
                     props.selectedCardId === props.data.id
                   )
                   ? (
-                  <div style={{marginLeft: 'auto'}}>
-                    <img src='/img/right-arrow-dark.png' />
-                  </div>
+                    <div style={{marginLeft: 'auto'}}>
+                      <img src='/img/right-arrow-dark.png' />
+                    </div>
                   )
                   : (data.Type === 'Anomaly' &&
                       i === 1 &&
@@ -124,7 +124,7 @@ class TimelineCard extends React.Component {
             i++;
             let sourceDest = data[key];
             return (
-              <li key={index} style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
+              <li style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
                 {sourceDest.source ? getSource(sourceDest.source) : null}
                 {sourceDest.dest ? getDestinaton(sourceDest.dest) : null}
               </li>
@@ -146,10 +146,10 @@ class TimelineCard extends React.Component {
           break;
         case 'Anomaly':
           if (props.selectedCardId === props.data.id) {
-            props.getContextualMenuApiObj('');
+            props.getContextualMenuApiObj('', '');
           }
           else {
-            props.getContextualMenuApiObj(props.data.id);
+            props.getContextualMenuApiObj(props.data.id, props.data.Date);
           }
           break;
         default:

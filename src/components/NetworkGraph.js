@@ -58,12 +58,14 @@ let timeWindow = '1h',
   };
 
 function createNodeObject(dataNode) {
-  let idDisplay = dataNode.type === 'anomaly' ? dataNode.label : dataNode.id,
+  let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id,
+    idDisplay = dataNode.type === 'anomaly' ? dataNode.label : nodeId,
+    nodeType = dataNode.type ? dataNode.type : '',
     nodeObject = {
-      id: dataNode.id,
-      type: dataNode.type ? dataNode.type : '',
+      id: nodeId,
+      type: nodeType,
       label: '  ' + idDisplay,
-      title: '<b>' + dataNode.type ? firstCharCapitalize(dataNode.type) : '' + ':</b> ' + idDisplay,
+      title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + idDisplay,
       nodeDetails: [],
       actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
       borderWidth: '0',
@@ -80,7 +82,7 @@ function createNodeObject(dataNode) {
       }
     };
 
-  nodeObject.nodeDetails.push(<li key='nodeId'>{firstCharCapitalize(dataNode.type)}: {idDisplay}</li>);
+  nodeObject.nodeDetails.push(<li key='nodeId'><b>{firstCharCapitalize(dataNode.type)}:</b> {idDisplay}</li>);
 
   let metaDataObject = handleNodeMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
@@ -149,13 +151,13 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
 
   edgeObject.edgeDetails.push(
     <ul className='no-list-style'>
-      <li key='edgeType'>Edge Type:
+      <li key='edgeType'><b>Edge Type:</b>
         <ol style={{padding: 0}}>
           {edgesTypes}
         </ol>
       </li>
-      <li key='source'>Source: {dataEdge.source}</li>
-      <li key='target'>Target: {dataEdge.target}</li>
+      <li key='source'><b>Source:</b> {dataEdge.source}</li>
+      <li key='target'><b>Target:</b> {dataEdge.target}</li>
       {metaDataObject.edgeMetaData}
     </ul>
   );
@@ -172,12 +174,14 @@ function handleEdgeMetaData(metadata, edgeObject) {
       let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
       edgeObject.title += '<br /><b>Date:</b> ' +
         dateTime.date + ' ' + dateTime.time;
-      edgeMetaData.push(<li key='date'>Date: {dateTime.date} {dateTime.time}</li>);
+      edgeMetaData.push(<li key='date'><b>Date:</b> {dateTime.date} {dateTime.time}</li>);
     }
     else {
       edgeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
         metadata[metadataType];
-      edgeMetaData.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
+      edgeMetaData.push(
+        <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
+      );
     }
   }
   return {
@@ -193,6 +197,12 @@ function handleNodeMetaData(metadata, nodeObject) {
     let metadataTypeLower = metadataType.toLowerCase(),
       newLine1 = '\n  ',
       newLine2 = '<br />';
+
+    metadataTypeLower = (metadataTypeLower === 'date' ||
+      metadataTypeLower === 'start_date' ||
+      metadataTypeLower === 'end_date')
+    ? 'date'
+    : metadataTypeLower;
 
     if (metadataTypeLower !== 'coordinates') {
       switch (metadataTypeLower) {
@@ -216,7 +226,7 @@ function handleNodeMetaData(metadata, nodeObject) {
             getCountryNameByCountryCode[metadata[metadataType]];
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             getCountryNameByCountryCode[metadata[metadataType]];
-          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}:
+          nodeObject.nodeDetails.push(<li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b>
             &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
           break;
         case 'date':
@@ -225,11 +235,13 @@ function handleNodeMetaData(metadata, nodeObject) {
             dateTime.date + ' ' + dateTime.time;
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             dateTime.date + ' ' + dateTime.time;
-          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {dateTime.date} {dateTime.time}</li>);
+          nodeObject.nodeDetails.push(
+            <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {dateTime.date} {dateTime.time}</li>
+          );
           break;
         case 'displayname':
           nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
-          nodeObject.nodeDetails.push(<li key={metadataType}>Name: {metadata[metadataType]}</li>);
+          nodeObject.nodeDetails.push(<li key={metadataType}><b>Name:</b> {metadata[metadataType]}</li>);
           break;
         default:
           if (metadataTypeLower === 'title') {
@@ -238,7 +250,9 @@ function handleNodeMetaData(metadata, nodeObject) {
           }
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
             metadata[metadataType];
-          nodeObject.nodeDetails.push(<li key={metadataType}>{firstCharCapitalize(metadataType)}: {metadata[metadataType]}</li>);
+          nodeObject.nodeDetails.push(
+            <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
+          );
           break;
       }
     }
@@ -406,6 +420,7 @@ function generateDataFromAssetDetails(data) {
 
   nodes[0] = {
     id: data.id,
+    nodeId: data.id,
     label: data.info.name,
     type: data.type,
     metadata: data.info
@@ -631,10 +646,11 @@ class NetworkGraph extends React.Component {
 
     if (!isUndefined(dataNodes)) {
       dataNodes.forEach((dataNode) => {
-        if (isUndefined(this.nodeObjects[dataNode.id])) {
+        let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id;
+        if (isUndefined(this.nodeObjects[nodeId])) {
           let nodeObject = createNodeObject(dataNode);
           nodes.push(nodeObject);
-          this.nodeObjects[dataNode.id] = nodeObject;
+          this.nodeObjects[nodeId] = nodeObject;
         }
       });
     }
@@ -674,7 +690,8 @@ class NetworkGraph extends React.Component {
     for (let key in this.nodeObjects) {
       if (!isUndefined(updatedNodes)) {
         updatedNodes.forEach((updatedNode) => {
-          if (updatedNode.id === key) {
+          let nodeId = updatedNode.nodeId ? updatedNode.nodeId : updatedNode.id;
+          if (nodeId === key) {
             tempNodeObjects[key] = this.nodeObjects[key];
             tempEdgeObjects[key] = this.edgeObjects[key];// Remove other targets from edgeObjects
           }
@@ -786,13 +803,9 @@ class NetworkGraph extends React.Component {
       {props} = this,
       {attributes} = props;
 
-    console.log(networkGraphDefaultOptions);
-
     networkGraphDefaultOptions.layout = applyHierarchicalNetwork
       ? Object.assign(networkGraphDefaultOptions.layout, hierarchicalNetwork)
       : networkGraphDefaultOptions.layout;
-
-    console.log(networkGraphDefaultOptions);
 
     let options = Object.assign(networkGraphDefaultOptions,
       {
@@ -813,6 +826,8 @@ class NetworkGraph extends React.Component {
     network.on('selectEdge', this.loadContextMenu(network, 'edge'));
     network.on('deselectNode', this.deselectNode(network));
     network.on('deselectEdge', this.deselectEdge());
+
+    network.on('dragStart', this.loadContextMenu(network, 'node'));
 
     network.on('hoverNode', function(params) {
       let hoverNode = params.node,

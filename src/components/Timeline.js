@@ -257,7 +257,7 @@ class Timeline extends React.Component {
     );
   }
 
-  getContextualMenuApiObj(selectedCardId) {
+  getContextualMenuApiObj(selectedCardId, eventDate) {
     if (!isUndefined(selectedCardId)) {
       this.setState({
         selectedCardId: selectedCardId
@@ -274,7 +274,8 @@ class Timeline extends React.Component {
               queryParams: {
                 window: '',
                 from: 0,
-                count: 3
+                count: 3,
+                date: eventDate
               }
             },
             title: ''
@@ -303,7 +304,7 @@ class Timeline extends React.Component {
 
   collaseContextualMenu() {
     return () => {
-      this.getContextualMenuApiObj('');
+      this.getContextualMenuApiObj('', '');
     };
   }
 

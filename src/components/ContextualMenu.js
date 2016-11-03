@@ -19,7 +19,7 @@ const style = {
       margin: '0px 24px',
       width: '90%',
       color: Colors.garnet,
-      fontSize: '16px',
+      fontSize: '13px',
       fontFamily: 'Open Sans',
       overflowWrap: 'break-word',
       paddingRight: '20px',
@@ -217,6 +217,8 @@ class ContextualMenu extends React.Component {
         {nodeObjects, edgeObjects} = props,
         parameterName = ((name).indexOf('metadata') > -1) ? 'metadata' : name;
 
+      parameterName = (name === 'nodeId' || name === 'id') ? 'id' : parameterName;
+
       value = '';
       switch (parameterName) {
         case 'id':
@@ -245,7 +247,7 @@ class ContextualMenu extends React.Component {
           break;
         case 'metadata':
           let paramName = (name).replace('metadata.', ''),
-            metadataValue = nodeObjects[itemId].metadata[paramName];
+            metadataValue = (!isUndefined(nodeObjects[itemId].metadata)) ? nodeObjects[itemId].metadata[paramName] : '';
           value = (!isUndefined(metadataValue)) ? metadataValue : '';
           break;
         default:
