@@ -146,10 +146,10 @@ class TimelineCard extends React.Component {
           break;
         case 'Anomaly':
           if (props.selectedCardId === props.data.id) {
-            props.getContextualMenuApiObj('');
+            props.getContextualMenuApiObj('', '');
           }
           else {
-            props.getContextualMenuApiObj(props.data.id);
+            props.getContextualMenuApiObj(props.data.id, props.data.Date);
           }
           break;
         default:
