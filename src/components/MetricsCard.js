@@ -54,23 +54,18 @@ function getCount(data) {
 }
 
 function getPercent(data) {
-  if (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A') {
-    let change = parseFloat(data.rows[0][0][2]).toFixed(2);
-    change = Math.abs(change);
-
-    return change + '%';
-  }
-  else {
-    return '';
-  }
+  return (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A')
+           ? Math.abs(Math.round(data.rows[0][0][2])) + '%'
+           : '';
 }
 
 function getIcon(data) {
-  if (data && data.rows && data.rows[0]) {
-    return getArrowIcon(data.rows[0][0][2], styles.icon);
+  if (data && data.rows && data.rows[0] && data.rows[0][0][2] !== 'N/A') {
+    const percent = Math.round(data.rows[0][0][2]);
+    return getArrowIcon(percent, styles.icon);
   }
   else {
-    return null;
+    return '-';
   }
 }
 

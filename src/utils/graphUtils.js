@@ -2,9 +2,6 @@ import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
 
 export function getArrowIcon(change, style) {
-  change = change.toFixed(2);
-  change = parseFloat(change);
-
   if (change !== 'N/A') {
     if (change === 0) {
       return null;
@@ -16,6 +13,5 @@ export function getArrowIcon(change, style) {
       return <FontIcon style={style} className='material-icons'>trending_down</FontIcon>;
     }
   }
-
   return null;
 }
