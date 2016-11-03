@@ -815,6 +815,8 @@ class NetworkGraph extends React.Component {
     network.on('deselectNode', this.deselectNode(network));
     network.on('deselectEdge', this.deselectEdge());
 
+    network.on('dragStart', this.loadContextMenu(network, 'node'));
+
     network.on('hoverNode', function(params) {
       let hoverNode = params.node,
         node = network.body.nodes[hoverNode];
