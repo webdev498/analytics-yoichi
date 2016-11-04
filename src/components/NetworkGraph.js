@@ -68,6 +68,11 @@ function createNodeObject(dataNode) {
       : idDisplay;
   }
 
+  if (dataNode.type === 'time') {
+    let dateTime = formatDateInLocalTimeZone(idDisplay);
+    idDisplay = dateTime.date + ' ' + dateTime.time;
+  }
+
   let nodeObject = {
     id: nodeId,
     type: nodeType,
