@@ -67,8 +67,7 @@ function createNodeObject(dataNode) {
       ? getCountryNameByCountryCode[idDisplay]
       : idDisplay;
   }
-
-  if (dataNode.type === 'time') {
+  else if (dataNode.type === 'time') {
     let dateTime = formatDateInLocalTimeZone(idDisplay);
     idDisplay = dateTime.date + ' ' + dateTime.time;
   }
