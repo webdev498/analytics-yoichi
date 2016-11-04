@@ -59,28 +59,35 @@ let timeWindow = '1h',
 
 function createNodeObject(dataNode) {
   let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id,
-    idDisplay = dataNode.type === 'anomaly' ? dataNode.label : nodeId,
-    nodeType = dataNode.type ? dataNode.type : '',
-    nodeObject = {
-      id: nodeId,
-      type: nodeType,
-      label: '  ' + idDisplay,
-      title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + idDisplay,
-      nodeDetails: [],
-      actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
-      borderWidth: '0',
-      font: {
-        face: 'Open Sans',
-        color: Colors.pebble,
-        size: '11',
-        align: 'left'
-      },
-      shape: 'image',
-      color: {
-        color: Colors.networkNodeLabel,
-        highlight: Colors.turquoise
-      }
-    };
+    idDisplay = dataNode.label ? dataNode.label : (dataNode.id ? dataNode.id : dataNode.nodeId),
+    nodeType = dataNode.type ? dataNode.type : '';
+
+  if (dataNode.type === 'country') {
+    idDisplay = (!isUndefined(getCountryNameByCountryCode[idDisplay]))
+      ? getCountryNameByCountryCode[idDisplay]
+      : idDisplay;
+  }
+
+  let nodeObject = {
+    id: nodeId,
+    type: nodeType,
+    label: '  ' + idDisplay,
+    title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + idDisplay,
+    nodeDetails: [],
+    actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
+    borderWidth: '0',
+    font: {
+      face: 'Open Sans',
+      color: Colors.pebble,
+      size: '11',
+      align: 'left'
+    },
+    shape: 'image',
+    color: {
+      color: Colors.networkNodeLabel,
+      highlight: Colors.turquoise
+    }
+  };
 
   nodeObject.nodeDetails.push(<li key='nodeId'><b>{firstCharCapitalize(dataNode.type)}:</b> {idDisplay}</li>);
 
