@@ -193,10 +193,9 @@ class Timeline extends React.Component {
 
     // here, I was trying to set height on each pagination button clicks
     // since the height of contextual menu is keeps on changing when user paginated between different pages.
-    setTimeout(() => {
-      console.log('test');
-      this.setPrimaryTimelineHeight();
-    }, 2000);
+    // setTimeout(() => {
+    //   this.setPrimaryTimelineHeight();
+    // }, 2000);
   }
 
   getApiObj(pageNumber, type) {
