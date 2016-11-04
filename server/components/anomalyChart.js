@@ -26,6 +26,17 @@ function getDataByIndex(data, index, label, callback) {
   });
 }
 
+function checkIfColumnExist(cols, item) {
+  let flag = false;
+  cols.forEach(col => {
+    if (col.name === item) {
+      flag = true;
+      return;
+    }
+  });
+  return flag;
+}
+
 function getChartData(input) {
   if (input.rows) {
     input = {0: input};
@@ -54,9 +65,13 @@ function getChartData(input) {
       category: getDataByIndex(filterdRows, xAxis.index, 'label')
     }];
 
-    const uiConfigObj = Object.assign({}, uiConfig);
-    delete uiConfigObj.type;
-    delete uiConfigObj.title;
+    const uiConfigObj = {};
+
+    for (let key in uiConfig) {
+      if (checkIfColumnExist(columns, key)) {
+        uiConfigObj[key] = uiConfig[key];
+      }
+    }
 
     const dataset = Object.keys(uiConfigObj).map((key, index) => {
       const yAxis = getColumnIndex(columns, key),
