@@ -77,7 +77,7 @@
         },
         "attributes": {
           "style": {
-            "width": "80%"
+            "width": "100%"
           },
           "bodyStyle": {
             "height": "100%"
@@ -93,8 +93,8 @@
     [
       {
         "id": "asset-activity",
-        "type": "Compound",
-        "name": "Compound",
+        "type": "CompoundCard",
+        "name": "CompoundCard",
         "meta": {
           "showHeader": true,
           "title": "Activity",

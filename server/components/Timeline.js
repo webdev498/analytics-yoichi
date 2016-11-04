@@ -271,7 +271,9 @@ function getDetails(row) {
 
 export default async function Timeline(ctx, next) {
   let parsedData = await ctx.tempData.json();
-  const normalizeData = parsedData.rows.map((row) => (getDetails(row[0])));
-  parsedData.normalizeData = normalizeData;
-  ctx.normalizeData = parsedData;
+  if (!parsedData.errorCode) {
+    const normalizeData = parsedData.rows.map((row) => (getDetails(row[0])));
+    parsedData.normalizeData = normalizeData;
+    ctx.normalizeData = parsedData;
+  }
 };

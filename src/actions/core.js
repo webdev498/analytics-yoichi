@@ -4,12 +4,11 @@ import {
   ERROR_LAYOUT_DATA
 } from 'Constants';
 
-import Cookies from 'cookies-js';
 import {baseUrl} from 'config';
 import {logoutUtil} from './auth';
 import { push } from 'react-router-redux';
 
-export function requestPageData(id, api) {
+export function requestPageData(id) {
   return {
     type: REQUEST_LAYOUT_DATA,
     id
@@ -19,16 +18,16 @@ export function requestPageData(id, api) {
 export function receivePageData(id, json) {
   return {
     type: RECEIVE_LAYOUT_DATA,
-    id,
-    data: json
+    data: json,
+    id
   };
 }
 
 export function errorPageData(id, ex) {
   return {
     type: ERROR_LAYOUT_DATA,
-    id,
-    errorData: ex
+    errorData: ex,
+    id
   };
 }
 
@@ -36,13 +35,7 @@ function getUrl(id) {
   return `${baseUrl}/api/store/dashboard${id}`;
 }
 
-// function getLayout(urlId) {
-//   const temp = urlId.slice(1, urlId.length),
-//     layout = require('json/' + temp).default;
-//   return layout;
-// }
-
-export function fetchLayoutData(id, params) {
+export function fetchLayoutData(id) {
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
@@ -59,6 +52,7 @@ export function fetchLayoutData(id, params) {
 
     // if path id is / then layout id is new-summary-page.
     id = (id === '/') ? '/new-summary-page' : id;
+
     // if id has path params, then first part of the url is used to fetch layout json.
     let urlId = id.indexOf('/', 1) > -1 ? id.slice(0, id.indexOf('/', 1)) : id;
 
@@ -77,7 +71,6 @@ export function fetchLayoutData(id, params) {
       }
       else {
         return response.json();
-        // return response.text();
       }
     })
     .then(json => {
@@ -85,7 +78,7 @@ export function fetchLayoutData(id, params) {
         dispatch(receivePageData(id, {json}));
       }
     })
-    .catch((ex) => {
+    .catch(ex => {
       dispatch(errorPageData(id, ex));
     });
   };

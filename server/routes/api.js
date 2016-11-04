@@ -2,8 +2,6 @@ import https from 'https';
 import fetch from 'node-fetch';
 import KoaRouter from 'koa-router';
 
-// import {getData} from '../components/paretoChart';
-
 import {serverBaseUrl, timeoutDuration} from '../../serverEnv';
 import layoutRoutes from './layouts';
 
@@ -18,33 +16,8 @@ const agentOptions = {
   rejectUnauthorized: false
 };
 
-const agent = new https.Agent(agentOptions);
-
-// reportId
-// .get('/taf_threat_trend', async function(ctx, next) {
-//   const url = ctx.request.url;
-
-//   const res = await fetch(serverBaseUrl + ctx.url,
-//     {
-//       method: 'GET',
-//       headers: ctx.headers,
-//       agent
-//     }
-//   )
-//   .then((response) => {
-//     return response.json().then((json) => {
-//       ctx.set('content-type', response.headers.get('content-type'));
-//       json.graphBars = getData(json);
-//       console.log(json);
-//       ctx.body = json;
-//       return next();
-//     });
-//   })
-
-//   return res;
-// }, async function(ctx, next) {})
-
-const timeout = timeoutDuration || 1000 * 60;
+const agent = new https.Agent(agentOptions),
+  timeout = timeoutDuration || 1000 * 60;
 
 router
 .get('/store/*', layoutRoutes)
@@ -74,25 +47,32 @@ router
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);
-  const res = await fetch(serverBaseUrl + ctx.url,
+  const res = fetch(serverBaseUrl + ctx.url,
     {
       method: 'POST',
       headers: ctx.headers,
-      'rejectUnauthorized': false,
+      rejectUnauthorized: false,
       timeout,
       agent,
       body: JSON.stringify(ctx.request.body)
     }
   );
 
-  ctx.tempData = res;
-  await next();
+  await res.then(response => {
+    ctx.set('content-type', response.headers.get('content-type'));
+    ctx.status = response.status;
+    ctx.statusText = response.statusText;
+    return response.json();
+  }).then(json => {
+    if (url.includes('/analytics/reporting/executeById')) {
+      const normalizeData = anomalyChart(json);
+      if (normalizeData) {
+        json.normalizeData = normalizeData;
+      }
+    }
 
-  ctx.set('content-type', res.headers.get('content-type'));
-  ctx.status = res.status;
-  ctx.statusText = res.statusText;
-  ctx.body = ctx.normalizeData || res.body;
-})
-.post('/analytics/reporting/executeById', anomalyChart);
+    ctx.body = json;
+  });
+});
 
 export default router;
