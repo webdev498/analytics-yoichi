@@ -65,11 +65,11 @@ export const NetworkNodeLabelColor = '#F2F2F4';
 
 export const LineChartPallete = `${CherryColor},${CoralColor},${MustardColor},${SeafoamColor},${TurquoiseColor}`;
 
-export const contextBGColor = '#898E9B';
+export const contextBGColor = '#EBEBEF';
 
-export const selectedActionBGColor = '#979BA7';
+export const selectedActionBGColor = '#F5F5F7';
 
-export const notificationMessageBGColor = '#DADADE';
+export const notificationMessageBGColor = '#EBEBEF';
 
 export const Colors = {
   garnet: GarnetColor,

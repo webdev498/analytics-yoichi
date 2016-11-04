@@ -192,8 +192,8 @@ input:focus {
   text-decoration: none;
 }
 .pagination > .active > button, .pagination > .active > button:focus, .pagination > .active > button:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-  background-color: $CloudColorShade6;
-  border-color: $CloudColorShade6;
+  background-color: $CloudColorShade8;
+  border-color: $CloudColorShade8;
   color: $CloudColorShade7;
   cursor: default;
   z-index: 3;

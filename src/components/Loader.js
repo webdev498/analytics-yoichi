@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import {Colors} from 'theme/colors';
 
 const style = {
   position: 'absolute',
@@ -54,7 +55,7 @@ class Loader extends React.Component {
             <div style={{
               fontSize: '14px',
               paddingLeft: '10px',
-              color: 'white',
+              color: Colors.garnet,
               fontWeight: 'lighter',
               width: '300px'
             }}>{props.text}</div>

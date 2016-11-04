@@ -45,6 +45,8 @@ class Timeline extends React.Component {
       }
     };
 
+    this.decreaseHeightBy = 120;
+
     this.contextualMenuApiParams = {
       meta: {},
       attributes: {}
@@ -63,6 +65,7 @@ class Timeline extends React.Component {
     if (!props.data) {
       return;
     }
+
     this.setRows(props);
     this.state.selectedCardId = '';
   }
@@ -114,7 +117,9 @@ class Timeline extends React.Component {
       {attributes} = props;
 
     return (
-      <div style={this.style.card} ref={(ref) => this.timelineCard = ref}>
+      <div style={this.style.card}
+        ref={this.card === CONTEXTUAL_MENU_CARD ? 'secondaryTimeline' : 'primaryTimeline'}
+        id={this.card === CONTEXTUAL_MENU_CARD ? 'secondaryTimeline' : 'primaryTimeline'}>
         {
           rows.map((event, index) => {
             let dateString = (event.Date) ? event.Date : '',
@@ -166,7 +171,7 @@ class Timeline extends React.Component {
         <span style={{
           fontSize: '12px',
           fontWeight: 'lighter',
-          color: (card === TIMELINE_CARD) ? Colors.grape : Colors.white
+          color: Colors.grape
         }}>
           {dateTime.date}<br />{dateTime.time}
         </span>
@@ -185,6 +190,13 @@ class Timeline extends React.Component {
       isPaginated: true,
       pageNumber: pageNumber
     };
+
+    // here, I was trying to set height on each pagination button clicks
+    // since the height of contextual menu is keeps on changing when user paginated between different pages.
+    setTimeout(() => {
+      console.log('test');
+      this.setPrimaryTimelineHeight();
+    }, 2000);
   }
 
   getApiObj(pageNumber, type) {
@@ -229,13 +241,7 @@ class Timeline extends React.Component {
   }
 
   displayContextualMenuCards() {
-    const {state, props} = this,
-      timelineHeight = this.timelineCard.offsetHeight;
-
-    if (timelineHeight < 550 && this.card === 'TIMELINE_CARD') {
-      this.timelineCard.style.height = '550px';
-    }
-
+    const {state, props} = this;
     return (
       <div>
         <div style={{
@@ -243,9 +249,10 @@ class Timeline extends React.Component {
           position: 'absolute',
           top: 0,
           right: 0,
-          height: '695px'
+          height: '100%'
         }}>
           <ParentCard
+            key={state.selectedCardId}
             id={state.selectedCardId}
             meta={this.contextualMenuApiParams.meta}
             params={props.params}
@@ -274,7 +281,7 @@ class Timeline extends React.Component {
               queryParams: {
                 window: '',
                 from: 0,
-                count: 3,
+                count: 10,
                 date: eventDate
               }
             },
@@ -283,7 +290,7 @@ class Timeline extends React.Component {
           attributes: {
             type: 'anomalyEvents',
             displaySelectedRows: true,
-            noOfEventsPerPage: 3,
+            noOfEventsPerPage: 10,
             maxNumbersOnLeftRightPagination: 4,
             isMainComponent: false,
             style: {
@@ -306,6 +313,19 @@ class Timeline extends React.Component {
     return () => {
       this.getContextualMenuApiObj('', '');
     };
+  }
+
+  setPrimaryTimelineHeight() {
+    if (this.card === 'TIMELINE_CARD') {
+      // For now, I am keeping this commented code.
+      // As discussed with Ojassvi, we need to find out some other good solution for this.
+      // this.refs.primaryTimeline.style.height =
+      //   (this.refs.secondaryTimeline.offsetHeight - this.decreaseHeightBy) + 'px';
+
+      // For now, I am using 'document' object here.
+      this.refs.primaryTimeline.style.height =
+        (document.getElementById('secondaryTimeline').offsetHeight - this.decreaseHeightBy) + 'px';
+    }
   }
 
   render() {
@@ -341,6 +361,13 @@ class Timeline extends React.Component {
                     right: '460px'
                   }}>
                     <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
+                  </div>
+                  <div style={{color: 'transparent'}}>
+                    {
+                      setTimeout(() => {
+                        this.setPrimaryTimelineHeight();
+                      }, 2000)
+                    }
                   </div>
                 </div>
                 : null

@@ -244,8 +244,7 @@ class TimelineCard extends React.Component {
             cursor: 'pointer',
             overflowWrap: 'break-word',
             backgroundColor: (
-              (props.selectedCardId !== '' && props.selectedCardId === props.data.id) ||
-              (props.card === CONTEXTUAL_MENU_CARD))
+              (props.selectedCardId !== '' && props.selectedCardId === props.data.id))
               ? Colors.cloud : Colors.white,
             marginBottom: '20px'}, styles.alert)
         }
