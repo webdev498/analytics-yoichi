@@ -134,8 +134,7 @@ function getChartData(input) {
 
 export default async function(ctx, next) {
   let parsedData = await ctx.tempData.clone().json();
-
-  if (parsedData) {
+  if (parsedData && !parsedData.errorCode) {
     if ((parsedData[0] && parsedData[0].uiConfig && parsedData[0].uiConfig.type === 'combination') ||
         (parsedData.uiConfig && parsedData.uiConfig.type === 'combination')
     ) {
