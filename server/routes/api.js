@@ -47,7 +47,7 @@ router
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);
-  const res = await fetch(serverBaseUrl + ctx.url,
+  const res = fetch(serverBaseUrl + ctx.url,
     {
       method: 'POST',
       headers: ctx.headers,
@@ -58,14 +58,21 @@ router
     }
   );
 
-  ctx.tempData = res;
-  await next();
+  await res.then(response => {
+    ctx.set('content-type', response.headers.get('content-type'));
+    ctx.status = response.status;
+    ctx.statusText = response.statusText;
+    return response.json();
+  }).then(json => {
+    if (url.includes('/analytics/reporting/executeById')) {
+      const normalizeData = anomalyChart(json);
+      if (normalizeData) {
+        json.normalizeData = normalizeData;
+      }
+    }
 
-  ctx.set('content-type', res.headers.get('content-type'));
-  ctx.status = res.status;
-  ctx.statusText = res.statusText;
-  ctx.body = ctx.normalizeData || res.body;
-})
-.post('/analytics/reporting/executeById', anomalyChart);
+    ctx.body = json;
+  });
+});
 
 export default router;
