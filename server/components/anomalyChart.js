@@ -42,12 +42,15 @@ function getChartData(input) {
     input = {0: input};
   }
 
-  return Object.keys(input).map((i) => {
+  const charts = [];
+  Object.keys(input).map((i) => {
     const chart = input[i],
       {rows, columns, uiConfig} = chart,
       xAxis = getColumnIndex(columns, null, 'DIMENSION');
 
-    if (rows.length === 0) return null;
+    if (rows.length === 0) {
+      return;
+    }
 
     const outlierIndex = getColumnIndex(columns, 'outlier');
 
@@ -140,11 +143,13 @@ function getChartData(input) {
       }, chartConfig);
     });
 
-    return {
+    charts.push({
       categories,
       dataset
-    };
+    });
   });
+
+  return charts;
 }
 
 export default function(parsedData) {

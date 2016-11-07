@@ -21,7 +21,7 @@
             {
               "path": "/api/analytics/reporting/execute/{reportId}",
               "pathParams": {
-                "reportId": "taf_asset_session_count_time_shifted,taf_asset_internal_resource_count_time_shifted,taf_asset_total_incoming_bandwidth_external_time_shifted,taf_asset_total_incoming_bandwidth_internal_time_shifted,taf_asset_total_outgoing_bandwidth_external_time_shifted,taf_asset_total_outgoing_bandwidth_internal_time_shifted,taf_asset_top_dest_countries,taf_asset_top_source_countries,taf_asset_top_dest_countries,taf_asset_top_source_countries"
+                "reportId": "taf_asset_session_count_time_shifted,taf_asset_internal_resource_count_time_shifted,taf_asset_total_incoming_bandwidth_external_time_shifted,taf_asset_total_incoming_bandwidth_internal_time_shifted,taf_asset_total_outgoing_bandwidth_external_time_shifted,taf_asset_total_outgoing_bandwidth_internal_time_shifted,taf_asset_top_dest_countries,taf_asset_top_source_countries,taf_asset_top_dest_countries"
               },
               "queryParams": {
                 "type:pathParam": "assetId:pathParam",
