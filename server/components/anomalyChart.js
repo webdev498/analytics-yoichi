@@ -26,6 +26,17 @@ function getDataByIndex(data, index, label, callback) {
   });
 }
 
+function checkIfColumnExist(cols, item) {
+  let flag = false;
+  cols.forEach(col => {
+    if (col.name === item) {
+      flag = true;
+      return;
+    }
+  });
+  return flag;
+}
+
 function getChartData(input) {
   if (input.rows) {
     input = {0: input};
@@ -54,9 +65,13 @@ function getChartData(input) {
       category: getDataByIndex(filterdRows, xAxis.index, 'label')
     }];
 
-    const uiConfigObj = Object.assign({}, uiConfig);
-    delete uiConfigObj.type;
-    delete uiConfigObj.title;
+    const uiConfigObj = {};
+
+    for (let key in uiConfig) {
+      if (checkIfColumnExist(columns, key)) {
+        uiConfigObj[key] = uiConfig[key];
+      }
+    }
 
     const dataset = Object.keys(uiConfigObj).map((key, index) => {
       const yAxis = getColumnIndex(columns, key),
@@ -111,8 +126,11 @@ function getChartData(input) {
         chartConfig.anchorradius = 0;
       }
       else if (value.toLowerCase() === 'point') {
-        chartConfig.color = '#ff0000';
         chartConfig.lineThickness = 0;
+        chartConfig.anchorradius = 4;
+        chartConfig.anchorbgcolor = '#F69275';
+        chartConfig.anchorBorderColor = '#F69275';
+        chartConfig.anchorsides = 0;
       }
 
       return Object.assign({
@@ -129,16 +147,12 @@ function getChartData(input) {
   });
 }
 
-export default async function(ctx, next) {
-  let parsedData = await ctx.tempData.clone().json();
-
-  if (parsedData) {
-    if ((parsedData[0] && parsedData[0].uiConfig.type === 'combination') ||
+export default function(parsedData) {
+  if (parsedData && !parsedData.errorCode) {
+    if ((parsedData[0] && parsedData[0].uiConfig && parsedData[0].uiConfig.type === 'combination') ||
         (parsedData.uiConfig && parsedData.uiConfig.type === 'combination')
     ) {
-      const normalizeData = getChartData(parsedData);
-      parsedData.normalizeData = normalizeData;
-      ctx.normalizeData = parsedData;
+      return getChartData(parsedData);
     }
   }
 };

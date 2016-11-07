@@ -321,7 +321,7 @@
                 }
               }
             },
-            "name": "Compound",
+            "name": "CompoundCard",
             "attributes": {
               "style": {
                 "width": "30%",
@@ -330,14 +330,14 @@
               "id": "OutgoingTrafficHeatMapLegends"
             },
             "id": "OutgoingTrafficHeatMapLegends",
-            "type": "Compound"
+            "type": "CompoundCard"
           }
         ],
         "meta": {
           "showHeader": true,
           "title": "Outgoing Traffic HeatMap"
         },
-        "name": "Compound",
+        "name": "CompoundCard",
         "attributes": {
           "style": {
             "width": "100%"
@@ -345,7 +345,7 @@
           "id": "OutgoingTrafficHeatMap"
         },
         "id": "outgoing-traffic-heatMap",
-        "type": "Compound"
+        "type": "CompoundCard"
       }
     ],
     [
@@ -525,7 +525,7 @@
                 }
               }
             },
-            "name": "Compound",
+            "name": "CompoundCard",
             "attributes": {
               "style": {
                 "width": "30%",
@@ -534,14 +534,14 @@
               "id": "IncomingTrafficHeatMapLegends"
             },
             "id": "IncomingTrafficHeatMapLegends",
-            "type": "Compound"
+            "type": "CompoundCard"
           }
         ],
         "meta": {
           "showHeader": true,
           "title": "Incoming Traffic HeatMap"
         },
-        "name": "Compound",
+        "name": "CompoundCard",
         "attributes": {
           "style": {
             "width": "100%"
@@ -549,7 +549,7 @@
           "id": "IncomingTrafficHeatMap"
         },
         "id": "incoming-traffic-heatMap",
-        "type": "Compound"
+        "type": "CompoundCard"
       }
     ]
   ]

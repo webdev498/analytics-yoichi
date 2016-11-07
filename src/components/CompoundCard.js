@@ -27,9 +27,7 @@ class CompoundCard extends React.Component {
     return (
       <div style={compoundCardStyle}>
         {
-          children.map((child, index) => {
-            return getChild(child, props, index);
-          })
+          children.map((child, index) => getChild(child, props, index))
         }
       </div>
     );
