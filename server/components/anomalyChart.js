@@ -42,7 +42,7 @@ function getChartData(input) {
     input = {0: input};
   }
 
-  const charts = [];
+  const charts = {};
   Object.keys(input).map((i) => {
     const chart = input[i],
       {rows, columns, uiConfig} = chart,
@@ -143,10 +143,10 @@ function getChartData(input) {
       }, chartConfig);
     });
 
-    charts.push({
+    charts[i] = {
       categories,
       dataset
-    });
+    };
   });
 
   return charts;
@@ -154,8 +154,11 @@ function getChartData(input) {
 
 export default function(parsedData) {
   if (parsedData && !parsedData.errorCode) {
-    if ((parsedData[0] && parsedData[0].uiConfig && parsedData[0].uiConfig.type === 'combination') ||
-        (parsedData.uiConfig && parsedData.uiConfig.type === 'combination')
+    const keys = Object.keys(parsedData),
+      firstKey = keys[0];
+
+    if ((parsedData.uiConfig && parsedData.uiConfig.type === 'combination') ||
+        (parsedData[firstKey] && parsedData[firstKey].uiConfig && parsedData[firstKey].uiConfig.type === 'combination')
     ) {
       return getChartData(parsedData);
     }
