@@ -164,11 +164,11 @@ class TimelineCard extends React.Component {
         return (
           <div>
             {
-              (data[key].indexOf('exfiltration') > -1)
+              ((data[key].toLowerCase()).indexOf('exfiltration') > -1)
               ? <img src='/img/anomaly/exfiltration.png' />
-                : (data[key].indexOf('snoop') > -1)
+                : ((data[key].toLowerCase()).indexOf('snoop') > -1)
                   ? <img src='/img/anomaly/snoop.png' />
-                    : (data[key].indexOf('command and control') > -1)
+                    : ((data[key].toLowerCase()).indexOf('command and control') > -1)
                         ? <img src='/img/anomaly/command-control.png' />
                         : null
             }
