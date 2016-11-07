@@ -152,6 +152,15 @@ function getChartData(input) {
   return charts;
 }
 
+function sortData(unordered) {
+  const ordered = {};
+  Object.keys(unordered).sort().forEach(function(key) {
+    ordered[key] = unordered[key];
+  });
+
+  return ordered;
+}
+
 export default function(parsedData) {
   if (parsedData && !parsedData.errorCode) {
     const keys = Object.keys(parsedData),
@@ -160,7 +169,7 @@ export default function(parsedData) {
     if ((parsedData.uiConfig && parsedData.uiConfig.type === 'combination') ||
         (parsedData[firstKey] && parsedData[firstKey].uiConfig && parsedData[firstKey].uiConfig.type === 'combination')
     ) {
-      return getChartData(parsedData);
+      return sortData(getChartData(parsedData));
     }
   }
 };
