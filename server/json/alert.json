@@ -52,7 +52,7 @@
         "name": "AlertDetail",
         "attributes": {
           "style": {
-            "backgroundColor": "#F7F7F9",
+            "backgroundColor": "#ffffff",
             "width": "250px",
             "flex": "0 0 250px"
           }
@@ -75,7 +75,9 @@
         "name": "NetworkGraph",
         "attributes": {
           "style": {
-            "width": "100%"
+            "width": "100%",
+            "backgroundSize": "20px 20px",
+            "backgroundImage": "linear-gradient(to right, #F1F1F3 1px, transparent 1px), linear-gradient(to bottom, #F1F1F3 1px, #FAFAFB 1px)"
           },
           "canvasStyle": {
             "height": "600px",

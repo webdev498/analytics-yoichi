@@ -190,7 +190,6 @@ function getAnomaly(row) {
   if (row.date) { info.Date = row.date; }
   if (row.id) { info.id = row.id; }
   if (anomaly.impact) { info.Impact = anomaly.impact; }
-  if (anomaly.analysis_description) { info['Analysis Description'] = anomaly.analysis_description; }
   if (anomaly.anomaly_description) { info['Anomaly Description'] = anomaly.anomaly_description; }
 
   return info;

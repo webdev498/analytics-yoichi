@@ -183,9 +183,8 @@ function handleEdgeMetaData(metadata, edgeObject) {
     let metadataTypeLower = metadataType.toLowerCase();
     if (metadataTypeLower === 'date' || metadataTypeLower === 'datetime') {
       let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
-      edgeObject.title += '<br /><b>Date:</b> ' +
-        dateTime.date + ' ' + dateTime.time;
-      edgeMetaData.push(<li key='date'><b>Date:</b> {dateTime.date} {dateTime.time}</li>);
+      edgeObject.title += '<br />' + dateTime.date + ' ' + dateTime.time;
+      edgeMetaData.push(<li key='date'> {dateTime.date} {dateTime.time}</li>);
     }
     else {
       edgeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
@@ -215,6 +214,15 @@ function handleNodeMetaData(metadata, nodeObject) {
     ? 'date'
     : metadataTypeLower;
 
+    metadataTypeLower = (nodeObject.type === 'anomaly' && metadataTypeLower === 'date')
+      ? 'anomalyDate'
+      : nodeObject.type === 'anomaly' && (metadataTypeLower === 'start_date' || metadataTypeLower === 'end_date')
+        ? 'date'
+        : nodeObject.type !== 'anomaly' &&
+          (metadataTypeLower === 'date' || metadataTypeLower === 'start_date' || metadataTypeLower === 'end_date')
+          ? 'date'
+          : metadataTypeLower;
+
     if (metadataTypeLower !== 'coordinates') {
       switch (metadataTypeLower) {
         case 'reputation':
@@ -239,6 +247,15 @@ function handleNodeMetaData(metadata, nodeObject) {
             getCountryNameByCountryCode[metadata[metadataType]];
           nodeObject.nodeDetails.push(<li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b>
             &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
+          break;
+        case 'anomalyDate':
+          let dateTimeAnomaly = formatDateInLocalTimeZone(metadata[metadataType]),
+            time = nodeObject.type === 'anomaly' ? '' : ' ' + dateTimeAnomaly.time;
+          nodeObject.label += newLine1 + dateTimeAnomaly.date + time;
+          nodeObject.title += newLine2 + dateTimeAnomaly.date + time;
+          nodeObject.nodeDetails.push(
+            <li key={metadataType}>{dateTimeAnomaly.date}{time}</li>
+          );
           break;
         case 'date':
           let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
