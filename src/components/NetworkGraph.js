@@ -214,6 +214,15 @@ function handleNodeMetaData(metadata, nodeObject) {
     ? 'date'
     : metadataTypeLower;
 
+    metadataTypeLower = (nodeObject.type === 'anomaly' && metadataTypeLower === 'date')
+      ? 'anomalyDate'
+      : nodeObject.type === 'anomaly' && (metadataTypeLower === 'start_date' || metadataTypeLower === 'end_date')
+        ? 'date'
+        : nodeObject.type !== 'anomaly' &&
+          (metadataTypeLower === 'date' || metadataTypeLower === 'start_date' || metadataTypeLower === 'end_date')
+          ? 'date'
+          : metadataTypeLower;
+
     if (metadataTypeLower !== 'coordinates') {
       switch (metadataTypeLower) {
         case 'reputation':
@@ -239,12 +248,23 @@ function handleNodeMetaData(metadata, nodeObject) {
           nodeObject.nodeDetails.push(<li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b>
             &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
           break;
+        case 'anomalyDate':
+          let dateTimeAnomaly = formatDateInLocalTimeZone(metadata[metadataType]),
+            time = nodeObject.type === 'anomaly' ? '' : ' ' + dateTimeAnomaly.time;
+          nodeObject.label += newLine1 + dateTimeAnomaly.date + time;
+          nodeObject.title += newLine2 + dateTimeAnomaly.date + time;
+          nodeObject.nodeDetails.push(
+            <li key={metadataType}>{dateTimeAnomaly.date}{time}</li>
+          );
+          break;
         case 'date':
           let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
-          nodeObject.label += newLine1 + dateTime.date + ' ' + dateTime.time;
-          nodeObject.title += newLine2 + dateTime.date + ' ' + dateTime.time;
+          nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
+            dateTime.date + ' ' + dateTime.time;
+          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+            dateTime.date + ' ' + dateTime.time;
           nodeObject.nodeDetails.push(
-            <li key={metadataType}>{dateTime.date} {dateTime.time}</li>
+            <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {dateTime.date} {dateTime.time}</li>
           );
           break;
         case 'displayname':

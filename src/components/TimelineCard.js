@@ -161,14 +161,15 @@ class TimelineCard extends React.Component {
   displayAnomalyIcon(data, key, index) {
     if (data.Type === 'Anomaly') {
       if (index === 1) {
+        let value = data[key].toLowerCase();
         return (
           <div>
             {
-              ((data[key].toLowerCase()).indexOf('exfiltration') > -1)
+              (value.indexOf('exfiltration') > -1)
               ? <img src='/img/anomaly/exfiltration.png' />
-                : ((data[key].toLowerCase()).indexOf('snoop') > -1)
+                : (value.indexOf('snoop') > -1)
                   ? <img src='/img/anomaly/snoop.png' />
-                    : ((data[key].toLowerCase()).indexOf('command and control') > -1)
+                    : (value.indexOf('command and control') > -1)
                         ? <img src='/img/anomaly/command-control.png' />
                         : null
             }
@@ -186,7 +187,8 @@ class TimelineCard extends React.Component {
   render() {
     const {props} = this;
     let cardType = (props.data.Type === 'Alert' || props.data.Type === 'Rank Alert')
-      ? 'alert' : 'other';
+      ? 'alert' : 'other',
+      isLinkCard = (props.data.Type === 'Anomaly' || props.data.Type === 'Rank Alert');
 
     switch (cardType) {
       case 'alert':
@@ -241,15 +243,15 @@ class TimelineCard extends React.Component {
             height: 'auto',
             width: '350px',
             fontSize: '14px',
-            cursor: 'pointer',
+            cursor: isLinkCard ? 'pointer' : 'auto',
             overflowWrap: 'break-word',
             backgroundColor: (
               (props.selectedCardId !== '' && props.selectedCardId === props.data.id))
               ? Colors.cloud : Colors.white,
             marginBottom: '20px'}, styles.alert)
         }
-        key={props.id}
-        onClick={this.handleCardClick()}>
+        onClick={this.handleCardClick()}
+        key={props.id}>
         <ul className='no-list-style'>{this.getDetails(props.data)}</ul>
       </Card>
     );
