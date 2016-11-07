@@ -154,7 +154,7 @@ function getChartData(input) {
 
 function sortData(unordered) {
   const ordered = {};
-  Object.keys(unordered).sort().forEach(function(key) {
+  Object.keys(unordered).sort().reverse().forEach(function(key) {
     ordered[key] = unordered[key];
   });
 
