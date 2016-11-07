@@ -94,6 +94,10 @@ div.context-menu div li {
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
 
+#actions table tr td:hover {
+  background-color: $CloudColorShade9;
+}
+
 /*******************************************/
 
 .ui-draggable, .ui-droppable {
