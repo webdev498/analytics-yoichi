@@ -101,7 +101,7 @@ function getIcon(percentage, iconIndex, iconName) {
   }
 
   return (
-    <div style={{marginBottom: '1px'}}>
+    <div key={iconIndex} style={{marginBottom: '1px'}}>
       <div style={style.overlayDiv}></div>
       <FontIcon className='material-icons'
         style={style.icon}>
