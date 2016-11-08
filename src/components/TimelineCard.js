@@ -81,6 +81,16 @@ function getBorderColor(score, severity) {
   return borderColor;
 }
 
+function getAnomalyArrow(selected) {
+  let arrowName = selected ? 'right-arrow-dark' : 'right-arrow-light',
+    arrowPath = '/img/' + arrowName + '.png';
+  return (
+    <div style={{marginLeft: 'auto'}}>
+      <img src={arrowPath} />
+    </div>
+  );
+}
+
 class TimelineCard extends React.Component {
   constructor(props) {
     super(props);
@@ -147,26 +157,13 @@ class TimelineCard extends React.Component {
           {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
         </div>
         {
-          (data.Type === 'Anomaly' &&
-            i === 1 &&
-            props.selectedCardId !== '' &&
-            props.selectedCardId === props.data.id
-          )
-          ? (
-            <div style={{marginLeft: 'auto'}}>
-              <img src='/img/right-arrow-dark.png' />
-            </div>
-          )
-          : (data.Type === 'Anomaly' &&
-              i === 1 &&
-              props.selectedCardId !== props.data.id
-            )
-            ? (
-              <div style={{marginLeft: 'auto'}}>
-                <img src='/img/right-arrow-light.png' />
-              </div>
-            )
-            : null
+          data.Type !== 'Anomaly'
+          ? null
+          : i !== 1
+            ? null
+            : props.selectedCardId !== '' && props.selectedCardId === props.data.id
+              ? getAnomalyArrow(true)
+              : getAnomalyArrow(false)
         }
       </div>
     );
