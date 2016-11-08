@@ -58,7 +58,7 @@ let timeWindow = '1h',
   };
 
 function createNodeObject(dataNode) {
-  let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id,
+  let nodeId = dataNode.nodeId ? dataNode.nodeId : '',
     idDisplay = dataNode.label ? dataNode.label : (dataNode.id ? dataNode.id : dataNode.nodeId),
     nodeType = dataNode.type ? dataNode.type : '';
 
@@ -74,6 +74,7 @@ function createNodeObject(dataNode) {
 
   let nodeObject = {
     id: nodeId,
+    notNodeId: dataNode.id ? dataNode.id : '',
     type: nodeType,
     label: '  ' + idDisplay,
     title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + idDisplay,
@@ -1025,11 +1026,14 @@ class NetworkGraph extends React.Component {
         }
       });
 
+      let notNodeId = this.nodeObjects[nodeID] ? this.nodeObjects[nodeID].notNodeId : '';
+
       let sourceDetails = {
         contextMenuType: selected,
         network: network,
         itemId: nodeID,
-        itemType: nodeType
+        itemType: nodeType,
+        notNodeId: notNodeId
       };
 
       this.ContextualMenu.getContextMenu(sourceDetails);
