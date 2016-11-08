@@ -40,37 +40,40 @@ export function generateQueryParams(parameters) {
   return queryParams;
 }
 
+export function getColumnIndex(columns, value) {
+  let columnIndex = '';
+  for (let c = 0; c < columns.length; c++) {
+    if (value === columns[c].name) {
+      columnIndex = c;
+      break;
+    }
+  }
+  return columnIndex;
+}
+
+export function getFieldValue(rows, columnIndex) {
+  let fieldValue = '';
+  for (let nestedKey in rows) {
+    if (!isUndefined(nestedKey) && columnIndex === 0) {
+      fieldValue = (nestedKey !== '') ? nestedKey : '';
+      break;
+    }
+  }
+  return fieldValue;
+}
+
 export function getQueryParamsFromApi(parameters, key, value) {
   let {data, currentRowNumber, nestedResult} = parameters,
     queryParam = '';
   const {rows, columns} = data;
 
   if (nestedResult) {
-    let columnIndex = '',
-      fieldValue = '';
-    for (let c = 0; c < columns.length; c++) {
-      if (value === columns[c].name) {
-        columnIndex = c;
-        break;
-      }
-    }
-
-    for (let nestedKey in rows[currentRowNumber]) {
-      if (!isUndefined(nestedKey) && columnIndex === 0) {
-        fieldValue = (nestedKey !== '') ? nestedKey : '';
-        break;
-      }
-    }
+    let columnIndex = getColumnIndex(columns, value),
+      fieldValue = getFieldValue(rows[currentRowNumber], columnIndex);
     queryParam = key + '=' + fieldValue;
   }
   else {
-    let columnIndex = '';
-    for (let c = 0; c < columns.length; c++) {
-      if (key === columns[c].name) {
-        columnIndex = c;
-        break;
-      }
-    }
+    let columnIndex = getColumnIndex(columns, key);
     queryParam = key + '=' + rows[currentRowNumber][columnIndex];
   }
   return queryParam;
