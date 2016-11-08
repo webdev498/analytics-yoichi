@@ -53,20 +53,15 @@ export function msToTime(duration) {
 // Function to generate row data
 export function generateRawData(fieldMapping, apiData) {
   let rawData = {};
+  if (apiData === null) {
+    return;
+  }
   for (let i = 0; i < fieldMapping.length; i++) {
     let currentChartData = fieldMapping[i];
-    if (apiData === null && apiData[currentChartData.reportId] === undefined) {
-      return;
-    }
-    else {
-      if (!rawData.hasOwnProperty(currentChartData.reportId)) {
-        if (apiData[currentChartData.reportId] !== undefined) {
-          rawData[currentChartData.reportId] = apiData[currentChartData.reportId];
-        }
-        else {
-          rawData[currentChartData.reportId] = apiData;
-        }
-      }
+    if (!rawData.hasOwnProperty(currentChartData.reportId)) {
+      rawData[currentChartData.reportId] = apiData[currentChartData.reportId] !== undefined
+        ? apiData[currentChartData.reportId]
+        : apiData;
     }
   }
   return rawData;
@@ -118,12 +113,7 @@ export function getXYIndexFromColumnNames(currentChartDataColumns, columnsArray)
 // Function to get index from object name specified in layout JSON
 export function getIndexFromObjectName(inputArray) {
   let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
-  if (fieldName.indexOf('.') > -1) {
-    fieldValueArray = fieldName.split('.');
-  }
-  else {
-    fieldValueArray = [fieldName];
-  }
+  fieldValueArray = fieldName.includes('.') ? fieldName.split('.') : [fieldName];
 
   for (let v = 0; v < fieldValueArray.length; v++) {
     if (v === 0) {
@@ -156,41 +146,31 @@ export function checkForUndefinedChartOptionObject(chartOptions, objectName, def
 // Function to translate time window
 export function translateTimeWindow(window) {
   if (window === '1 hour') return '1h';
-  if (window === '6 hour') return '6h';
-  if (window === '12 hour') return '12h';
-  if (window === '24 hour') return '24h';
-  if (window === '48 hour') return '48h';
-  if (window === '1 day') return '1d';
-  if (window === '1 week') return '1w';
-  if (window === '1 month') return '1mo';
+  else if (window === '6 hour') return '6h';
+  else if (window === '12 hour') return '12h';
+  else if (window === '24 hour') return '24h';
+  else if (window === '48 hour') return '48h';
+  else if (window === '1 day') return '1d';
+  else if (window === '1 week') return '1w';
+  else if (window === '1 month') return '1mo';
 
-  if (window === '1h') return '1 hour';
-  if (window === '6h') return '6 hour';
-  if (window === '12h') return '12 hour';
-  if (window === '24h') return '24 hour';
-  if (window === '48h') return '48 hour';
-  if (window === '1d') return '1 day';
-  if (window === '1w') return '1 week';
-  if (window === '1mo') return '1 month';
-  return window;
+  else if (window === '1h') return '1 hour';
+  else if (window === '6h') return '6 hour';
+  else if (window === '12h') return '12 hour';
+  else if (window === '24h') return '24 hour';
+  else if (window === '48h') return '48 hour';
+  else if (window === '1d') return '1 day';
+  else if (window === '1w') return '1 week';
+  else if (window === '1mo') return '1 month';
+  else return window;
 }
 
 export function isUndefined(value) {
-  if (value === undefined) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return value === undefined;
 }
 
 export function isNull(value) {
-  if (value === null) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return value === null;
 }
 
 function addZero(x, n) {
@@ -216,7 +196,7 @@ export function formatDate(date) {
   let min = addZero(date.getMinutes(), 2);
   let ss = addZero(date.getSeconds(), 2);
   let milisec = addZero(date.getMilliseconds(), 3);
-  if (milisec !== '' || milisec !== 0 || milisec !== '0') milisec = '.' + milisec;
+  milisec = (milisec !== '' || milisec !== 0 || milisec !== '0') ? '.' + milisec : milisec;
 
   let formattedDateString = yyyy + '-' + mm + '-' + dd + 'T' + hh + ':' + min + ':' + ss + milisec;
 
@@ -511,7 +491,7 @@ export function formatMicroseconds(miliseconds) {
   let ms = miliseconds % 1000;
   if (ms >= 0) timeString += (ms + ' ms');
 
-  return timeString;// Math.floor(timeString / 1000);
+  return timeString;
 }
 
 export function kFormatter(num) {
@@ -522,24 +502,26 @@ export function firstCharCapitalize(string) {
   if (string === undefined) {
     return string;
   }
-  if (string !== undefined && string.toLowerCase() === 'ip') {
-    return string.toUpperCase();
-  }
-  if (string.indexOf('_') > -1) {
-    string = string.replace('_', ' ');
-  }
+  else {
+    if (string.toLowerCase() === 'ip') {
+      return string.toUpperCase();
+    }
+    if (string.indexOf('_') > -1) {
+      string = string.replace('_', ' ');
+    }
 
-  string = string.toLowerCase().replace(/\b\w/g, function(m) {
-    return m.toUpperCase();
-  });
+    string = string.toLowerCase().replace(/\b\w/g, function(m) {
+      return m.toUpperCase();
+    });
 
-  if (string.indexOf(' Ip') > -1) {
-    string = string.replace(' Ip', ' IP');
+    if (string.indexOf(' Ip') > -1) {
+      string = string.replace(' Ip', ' IP');
+    }
   }
   return string;
 };
 
-export function nFormatter(num, digits, {numberStyle, textStyle}) {
+export function nFormatter(num, digits, {numberStyle}) {
   const si = [
       { value: 1E18, symbol: 'E' },
       { value: 1E15, symbol: 'P' },
@@ -570,7 +552,7 @@ export function parseQuery(qstr) {
   const query = {},
     arr = qstr.substr(1).split('&');
 
-  arr.forEach((val) => {
+  arr.forEach(val => {
     const b = val.split('=');
     query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
   });
@@ -605,7 +587,8 @@ export function whatIsIt(object) {
 
 export function getPosition(el) {
   // yay readability
-  for (var lx = 0, ly = 0;
+  let lx = 0, ly = 0;
+  for (lx = 0, ly = 0;
     el != null;
     lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
   return {x: lx, y: ly};
