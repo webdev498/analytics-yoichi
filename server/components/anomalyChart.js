@@ -42,12 +42,15 @@ function getChartData(input) {
     input = {0: input};
   }
 
-  return Object.keys(input).map((i) => {
+  const charts = {};
+  Object.keys(input).map((i) => {
     const chart = input[i],
       {rows, columns, uiConfig} = chart,
       xAxis = getColumnIndex(columns, null, 'DIMENSION');
 
-    if (rows.length === 0) return null;
+    if (rows.length === 0) {
+      return;
+    }
 
     const outlierIndex = getColumnIndex(columns, 'outlier');
 
@@ -140,19 +143,33 @@ function getChartData(input) {
       }, chartConfig);
     });
 
-    return {
+    charts[i] = {
       categories,
       dataset
     };
   });
+
+  return charts;
+}
+
+function sortData(unordered) {
+  const ordered = {};
+  Object.keys(unordered).sort().reverse().forEach(function(key) {
+    ordered[key] = unordered[key];
+  });
+
+  return ordered;
 }
 
 export default function(parsedData) {
   if (parsedData && !parsedData.errorCode) {
-    if ((parsedData[0] && parsedData[0].uiConfig && parsedData[0].uiConfig.type === 'combination') ||
-        (parsedData.uiConfig && parsedData.uiConfig.type === 'combination')
+    const keys = Object.keys(parsedData),
+      firstKey = keys[0];
+
+    if ((parsedData.uiConfig && parsedData.uiConfig.type === 'combination') ||
+        (parsedData[firstKey] && parsedData[firstKey].uiConfig && parsedData[firstKey].uiConfig.type === 'combination')
     ) {
-      return getChartData(parsedData);
+      return sortData(getChartData(parsedData));
     }
   }
 };

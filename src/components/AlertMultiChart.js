@@ -151,20 +151,23 @@ class AlertMultiChart extends React.Component {
         processedData: true
       };
 
-      let title;
-      if (data && data.rows) {
-        title = data.uiConfig.title;
-      }
-      else {
-        title = data[chart].uiConfig.title;
-      }
-
       const chartData = input[chart];
 
       chartData.chart = this.props.chart.chartOptions;
-      chartData.chart.xAxisName = 'Country';
       chartData.chart.divlineThickness = 1;
       props.data = chartData;
+
+      let title;
+      if (data && data.rows) {
+        title = data.uiConfig.title;
+        chartData.chart.xAxisName = data.uiConfig.xAxisLabel;
+        chartData.chart.yAxisName = data.uiConfig.yAxisLabel;
+      }
+      else {
+        title = data[chart].uiConfig.title;
+        chartData.chart.xAxisName = data[chart].uiConfig.xAxisLabel;
+        chartData.chart.yAxisName = data[chart].uiConfig.yAxisLabel;
+      }
 
       return (
         <div style={styles.wrap} key={`anomalyChart${index}`}>
