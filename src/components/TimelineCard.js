@@ -2,7 +2,6 @@ import React from 'react';
 import Card from 'material-ui/Card/Card';
 import {Colors} from 'theme/colors';
 import {whatIsIt} from 'utils/utils';
-import {CONTEXTUAL_MENU_CARD} from 'Constants';
 
 let styles = {
   alert: {},
@@ -13,50 +12,73 @@ let styles = {
 };
 
 function getSource(source) {
-  if (source) {
-    if (source.ip) {
-      return (
-        <span>
-          <span> {source.ip} </span>
-          {
-            source.country
-            ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()} />
-            : null
-          }
-          {
-            source.port > 0
-            ? <span> on Port {source.port}</span>
-            : null
-          }
-        </span>
-      );
-    }
+  if (source.ip) {
+    return (
+      <span>
+        <span> {source.ip} </span>
+        {
+          source.country
+          ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()} />
+          : null
+        }
+        {
+          source.port > 0
+          ? <span> on Port {source.port}</span>
+          : null
+        }
+      </span>
+    );
   }
   return null;
 }
 
 function getDestinaton(dest) {
-  if (dest) {
-    if (dest.ip) {
-      return (
-        <span>
-          <span> connected to {dest.ip} </span>
-          {
-            dest.country
-            ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()} />
-            : null
-          }
-          {
-            dest.port > 0
-            ? <span> on Port {dest.port}</span>
-            : null
-          }
-        </span>
-      );
-    }
+  if (dest.ip) {
+    return (
+      <span>
+        <span> connected to {dest.ip} </span>
+        {
+          dest.country
+          ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()} />
+          : null
+        }
+        {
+          dest.port > 0
+          ? <span> on Port {dest.port}</span>
+          : null
+        }
+      </span>
+    );
   }
 
   return null;
+}
+
+function getBorderColor(score, severity) {
+  let borderColor = Colors.cherry;
+  if (score) {
+    if (score >= 65) {
+      borderColor = Colors.cherry;
+    }
+    else if (score < 65 && score >= 35) {
+      borderColor = Colors.coral;
+    }
+    else if (score < 35) {
+      borderColor = Colors.mustard;
+    }
+  }
+  if (severity) {
+    if (severity.toLowerCase() === 'high') {
+      borderColor = Colors.cherry;
+    }
+    else if (severity.toLowerCase() === 'medium') {
+      borderColor = Colors.coral;
+    }
+    else if (severity.toLowerCase() === 'low') {
+      borderColor = Colors.mustard;
+    }
+  }
+  return borderColor;
 }
 
 class TimelineCard extends React.Component {
@@ -68,7 +90,6 @@ class TimelineCard extends React.Component {
   }
 
   getDetails(data) {
-    const {props} = this;
     if (!data) {
       return;
     }
@@ -76,67 +97,100 @@ class TimelineCard extends React.Component {
     let i = 0; // I need to use "i" instead of "index",
     // Becasue we are not displaying all attributes in this same list.
     // See below where I am incrementing "i". But "index" is always getting increament.
-    const that = this;
 
     return (
-      Object.keys(data).map(function(key, index) {
-        let fontWeight = (i === 0 && key !== 'Type') ? '600' : 'lighter',
-          anomalyType = (data.Type === 'Anomaly' && key === 'Type'),
+      Object.keys(data).map((key, index) => {
+        let anomalyType = (data.Type === 'Anomaly' && key === 'Type'),
+          fontWeight = (i === 0 && key !== 'Type') ? '600' : 'lighter',
           displayFlex = data.Type === 'Anomaly' ? {display: 'flex'} : {};
-
         if (key !== 'Date' && key !== 'id' && !anomalyType) {
-          if (whatIsIt(data[key]) === 'String') {
-            i++;
-            return (
-              <li style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
-                {that.displayAnomalyIcon(data, key, i)}
-                <div style={{
-                  paddingLeft: data.Type === 'Anomaly' ? i === 1 ? '10px' : '40px' : '0px'
-                }}>
-                  {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
-                </div>
-                {
-                  (data.Type === 'Anomaly' &&
-                    i === 1 &&
-                    props.selectedCardId !== '' &&
-                    props.selectedCardId === props.data.id
-                  )
-                  ? (
-                    <div style={{marginLeft: 'auto'}}>
-                      <img src='/img/right-arrow-dark.png' />
-                    </div>
-                  )
-                  : (data.Type === 'Anomaly' &&
-                      i === 1 &&
-                      props.selectedCardId !== props.data.id
-                    )
-                    ? (
-                      <div style={{marginLeft: 'auto'}}>
-                        <img src='/img/right-arrow-light.png' />
-                      </div>
-                    )
-                    : null
-                }
-              </li>
-            );
-          }
-          if (key === 'sourceDest' && whatIsIt(data[key]) === 'Object') {
-            i++;
-            let sourceDest = data[key];
-            return (
-              <li style={{...styles.listItem, fontWeight, ...displayFlex}} key={`desc${index}`}>
-                {sourceDest.source ? getSource(sourceDest.source) : null}
-                {sourceDest.dest ? getDestinaton(sourceDest.dest) : null}
-              </li>
-            );
-          }
+          i++;
+          let params = {
+            i: i,
+            key: key,
+            index: index,
+            data: data,
+            fontWeight: fontWeight,
+            displayFlex: displayFlex
+          };
+          return this.displayDetails(params);
         }
       })
     );
   }
 
+  displayDetails(params) {
+    let {key, index, data} = params;
+
+    return (
+      <li style={{...styles.listItem}} key={`desc${index}`}>
+        {
+          whatIsIt(data[key]) === 'String'
+          ? this.getStringDetails(params)
+          : (key === 'sourceDest' && whatIsIt(data[key]) === 'Object')
+            ? this.getObjectDetails(params)
+            : null
+        }
+      </li>
+    );
+  }
+
+  getStringDetails(params) {
+    const {props} = this;
+    let {i, key, data, fontWeight, displayFlex} = params;
+    return (
+      <div style={{fontWeight, ...displayFlex}}>
+        {this.displayAnomalyIcon(data, key, i)}
+        <div style={{
+          paddingLeft: data.Type === 'Anomaly' ? i === 1 ? '10px' : '40px' : '0px'
+        }}>
+          {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
+        </div>
+        {
+          (data.Type === 'Anomaly' &&
+            i === 1 &&
+            props.selectedCardId !== '' &&
+            props.selectedCardId === props.data.id
+          )
+          ? (
+            <div style={{marginLeft: 'auto'}}>
+              <img src='/img/right-arrow-dark.png' />
+            </div>
+          )
+          : (data.Type === 'Anomaly' &&
+              i === 1 &&
+              props.selectedCardId !== props.data.id
+            )
+            ? (
+              <div style={{marginLeft: 'auto'}}>
+                <img src='/img/right-arrow-light.png' />
+              </div>
+            )
+            : null
+        }
+      </div>
+    );
+  }
+
+  getObjectDetails(params) {
+    let {key, data, fontWeight, displayFlex} = params,
+      sourceDest = data[key],
+      source = sourceDest.source ? sourceDest.source : {},
+      dest = sourceDest.dest ? sourceDest.dest : {};
+    return (
+      <div style={{fontWeight, ...displayFlex}}>
+        {sourceDest.source ? getSource(source) : null}
+        {sourceDest.dest ? getDestinaton(dest) : null}
+      </div>
+    );
+  }
+
   handleCardClick() {
     const {props} = this;
+    let details = {
+      selectedCardId: '',
+      eventDate: ''
+    };
 
     return () => {
       switch (props.data.Type) {
@@ -145,12 +199,13 @@ class TimelineCard extends React.Component {
           props.updateRoute(url);
           break;
         case 'Anomaly':
-          if (props.selectedCardId === props.data.id) {
-            props.getContextualMenuApiObj('', '');
+          if (props.selectedCardId !== props.data.id) {
+            details = {
+              selectedCardId: props.data.id,
+              eventDate: props.data.Date
+            };
           }
-          else {
-            props.getContextualMenuApiObj(props.data.id, props.data.Date);
-          }
+          props.getContextualMenuApiObj(details);
           break;
         default:
           break;
@@ -185,42 +240,16 @@ class TimelineCard extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props} = this,
+      {data} = props;
     let cardType = (props.data.Type === 'Alert' || props.data.Type === 'Rank Alert')
       ? 'alert' : 'other',
       isLinkCard = (props.data.Type === 'Anomaly' || props.data.Type === 'Rank Alert');
 
     switch (cardType) {
       case 'alert':
-        let borderColor = Colors.cherry,
-          score = props.data.Score,
-          severity = props.data.Severity;
-
-        if (score) {
-          if (score >= 65) {
-            borderColor = Colors.cherry;
-          }
-          else if (score < 65 && score >= 35) {
-            borderColor = Colors.coral;
-          }
-          else if (score < 35) {
-            borderColor = Colors.mustard;
-          }
-        }
-        if (severity) {
-          if (severity.toLowerCase() === 'high') {
-            borderColor = Colors.cherry;
-          }
-          else if (severity.toLowerCase() === 'medium') {
-            borderColor = Colors.coral;
-          }
-          else if (severity.toLowerCase() === 'low') {
-            borderColor = Colors.mustard;
-          }
-        }
-
         styles.alert = {
-          borderLeft: '5px solid ' + borderColor,
+          borderLeft: '5px solid ' + getBorderColor(data.Score, data.Severity),
           paddingLeft: '18px'
         };
         break;
