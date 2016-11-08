@@ -156,7 +156,8 @@ class ContextualMenu extends React.Component {
           parameters: actions[j].parameters,
           index: j,
           itemId: itemId,
-          itemType: itemType
+          itemType: itemType,
+          notNodeId: sourceDetails.notNodeId ? sourceDetails.notNodeId : ''
         },
         parameters = this.generateParameters(details);
 
@@ -173,7 +174,7 @@ class ContextualMenu extends React.Component {
   }
 
   generateParameters(details) {
-    let {parameters, index, itemId, itemType} = details,
+    let {parameters, index, itemId, itemType, notNodeId} = details,
       parametersToApi = [],
       userInputParameters = [],
       fullMalwareReportLink = '';
@@ -183,8 +184,15 @@ class ContextualMenu extends React.Component {
         let tempObj = {},
           parameter = parameters[i];
         if (parameter.userInput === false && parameter.name !== 'link') {
+          let params = {
+            name: parameter.name,
+            value: parameter.value,
+            itemId: itemId,
+            itemType: itemType,
+            notNodeId: notNodeId
+          };
           tempObj.name = parameter.name;
-          tempObj.value = this.getParameterValue(parameter.name, parameter.value, itemId, itemType);
+          tempObj.value = this.getParameterValue(params);
 
           tempObj.userInput = false;
           parametersToApi.push(tempObj);
@@ -211,17 +219,19 @@ class ContextualMenu extends React.Component {
     };
   }
 
-  getParameterValue(name, value, itemId, itemType) {
+  getParameterValue(params) {
+    let {name, value, itemId, itemType, notNodeId} = params;
     if (isUndefined(value)) {
       let {props} = this,
         {nodeObjects, edgeObjects} = props,
         parameterName = ((name).indexOf('metadata') > -1) ? 'metadata' : name;
 
-      parameterName = (name === 'nodeId' || name === 'id') ? 'id' : parameterName;
-
       value = '';
       switch (parameterName) {
         case 'id':
+          value = notNodeId;
+          break;
+        case 'nodeId':
           value = itemId;
           break;
         case 'type':
