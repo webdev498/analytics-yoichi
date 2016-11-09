@@ -19,3 +19,4 @@ global.expect = chai.expect;
 global.should = chai.should();
 
 require('./components/anomalyChart.spec.js');
+require('./components/Timeline.spec.js');

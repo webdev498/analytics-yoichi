@@ -87,7 +87,7 @@ function getChartData(input) {
       // if value is 0, set this to be null so it is not shown.
       if (value === 'Point') {
         const current = getColumnIndex(columns, 'current');
-        data = filterdRows.map((item, index) => {
+        data = filterdRows.map(item => {
           let currentValue = item[current.index];
           currentValue = Math.round(currentValue);
           currentValue = currentValue <= 0 ? 0 : currentValue;
@@ -102,7 +102,7 @@ function getChartData(input) {
         });
       }
       else {
-        data = filterdRows.map((item, index) => {
+        data = filterdRows.map(item => {
           let val = item[yAxis.index];
           val = Math.round(val);
           val = val <= 0 ? 0 : val;

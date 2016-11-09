@@ -55,7 +55,7 @@ describe('Anomaly Chart DAL', () => {
     expect(result).to.be.undefined;
   });
 
-  it('returns a blank array if rows are empty array', () => {
+  it('returns a blank object if rows are empty array', () => {
     let data = {
       uiConfig: { type: 'combination' },
       rows: [],
@@ -63,8 +63,8 @@ describe('Anomaly Chart DAL', () => {
     };
 
     const result = anomalyChart(data);
-    expect(result).to.be.an('array');
-    expect(result).to.have.lengthOf(0);
+    expect(result).to.be.an('object');
+    expect(result).to.deep.equal({});
   });
 
   it('returns [] if it is an Object of graphs Objects but rows are empty', () => {
@@ -74,16 +74,16 @@ describe('Anomaly Chart DAL', () => {
     };
 
     const result = anomalyChart(data);
-    expect(result).to.be.an('array');
-    expect(result).to.have.lengthOf(0);
+    expect(result).to.be.an('object');
+    expect(result).to.deep.equal({});
   });
 
   it('returns category object, where column name equals "bucket" for index from columns array', () => {
     const rows = [['A1', -7.549516567451064e-15, 0.5463775184570068, 0]];
     let data = { uiConfig: { type: 'combination' }, rows, columns };
     const result = anomalyChart(data);
-    expect(result).to.be.an('array');
-    expect(result).to.have.lengthOf(1);
+    expect(result).to.be.an('object');
+    expect(result).to.have.property('0');
 
     const categories = result[0].categories;
     expect(categories).to.exist;
@@ -128,7 +128,7 @@ describe('Anomaly Chart DAL', () => {
       .that.is.an('array')
       .that.deep.equals([
         { value: '0.00', toolText: 'current, A1, 0.00, 0' },
-        { value: '7.32', toolText: 'current, B1, 7.32, 160' }
+        { value: '2.20', toolText: 'current, B1, 2.20, 160' }
       ]);
 
     expect(outlier).to.have.property('seriesname', 'outlier');
@@ -137,7 +137,7 @@ describe('Anomaly Chart DAL', () => {
       .that.is.an('array')
       .that.deep.equals([
         { value: '0.00', toolText: 'outlier, A1, 0.00, 0' },
-        { value: '7.32', toolText: 'outlier, B1, 7.32, 160' }
+        { value: '2.20', toolText: 'outlier, B1, 2.20, 160' }
       ]);
 
     expect(baseline).to.have.property('seriesname', 'baseline');
@@ -146,7 +146,7 @@ describe('Anomaly Chart DAL', () => {
       .that.is.an('array')
       .that.deep.equals([
         { value: '0.00', toolText: 'baseline, A1, 0.00, 1' },
-        { value: '4.32', toolText: 'baseline, B1, 4.32, 20' }
+        { value: '1.30', toolText: 'baseline, B1, 1.30, 20' }
       ]);
   });
 
@@ -154,15 +154,34 @@ describe('Anomaly Chart DAL', () => {
     const rows = [['A1', -7.549516567451064e-15, 0.5463775184570068, 0]];
     let data = { uiConfig: { type: 'combination' }, rows, columns };
     const result = anomalyChart(data);
-    expect(result).to.be.an('array');
-    expect(result).to.have.lengthOf(1);
+    expect(result).to.be.an('object');
+    expect(result).to.have.property('0');
   });
 
   it('returns multiple graph array, if it is an of graph Objects', () => {
-    const rows = [['A1', -7.549516567451064e-15, 0.5463775184570068, 0]];
-    let data = { uiConfig: { type: 'combination' }, rows, columns };
+    const rows = [
+      ['A1', -7.549516567451064e-15, 0.5463775184570068, 1],
+      ['B1', 160, 20, 1]
+    ];
+    let data = {
+      'c': {uiConfig, rows, columns},
+      'a': {uiConfig, rows, columns}
+    };
     const result = anomalyChart(data);
-    expect(result).to.be.an('array');
-    expect(result).to.have.lengthOf(1);
+    expect(result).to.be.an('object');
+    expect(result).to.have.property('c');
+    expect(result).to.have.property('a');
+
+    const {c, a} = result,
+      cDataset = c.dataset,
+      aDataset = a.dataset;
+
+    expect(cDataset).to.exist;
+    expect(cDataset).to.be.an('array');
+    expect(cDataset).to.have.lengthOf(3);
+
+    expect(aDataset).to.exist;
+    expect(aDataset).to.be.an('array');
+    expect(aDataset).to.have.lengthOf(3);
   });
 });
