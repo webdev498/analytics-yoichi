@@ -468,24 +468,6 @@ export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
   return numberStyle ? numberToReactElm(val, text, {numberStyle, textStyle}) : val + ' ' + text;
 };
 
-export function formatMicroseconds(miliseconds) {
-  if (miliseconds === 0) return 0;
-
-  let seconds = Math.floor(miliseconds / 1000);
-  let days = Math.floor(seconds / 86400);
-  let hours = Math.floor((seconds % 86400) / 3600);
-  let minutes = Math.floor(((seconds % 86400) % 3600) / 60);
-  let timeString = '';
-  if (days > 0) timeString += (days > 1) ? (days + ' days ') : (days + ' day ');
-  if (hours > 0) timeString += (hours > 1) ? (hours + ' hours ') : (hours + ' hour ');
-  if (minutes > 0) timeString += (minutes > 1) ? (minutes + ' minutes ') : (minutes + ' minute ');
-  if (seconds > 0) timeString += (seconds > 1) ? (seconds + ' seconds ') : (seconds + ' second ');
-  let ms = miliseconds % 1000;
-  if (ms >= 0) timeString += (ms + ' ms');
-
-  return timeString;
-}
-
 export function kFormatter(num) {
   return num > 999 ? (num / 1000).toFixed(2) + 'k' : num;
 }
