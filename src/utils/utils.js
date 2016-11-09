@@ -607,9 +607,3 @@ export function getColor(score) {
   }
   return color;
 }
-
-if (!('contains' in String.prototype)) {
-  String.prototype.contains = function(str, startIndex) {
-    return (String.prototype.indexOf.call(this, str, startIndex) !== -1);
-  };
-}

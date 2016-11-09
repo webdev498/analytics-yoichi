@@ -114,10 +114,7 @@ function getIcon(percentage, iconIndex, iconName) {
 class PercentageWidget extends React.Component {
   loadIcons() {
     const {props} = this;
-    if (!props) {
-      return;
-    }
-    if (!props.percentage) {
+    if (!props || !props.percentage) {
       return;
     }
 
