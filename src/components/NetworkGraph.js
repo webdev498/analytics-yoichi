@@ -344,7 +344,8 @@ function handleReputationMetaData(parameters) {
     nodeObject.title += newLine2 + title;
     if (nodeDetails.indexOf('<br />') > -1) {
       let tempNodeDetails = nodeDetails.split('<br />');
-      tempNodeDetails.forEach((nodeDetail) => {
+      tempNodeDetails.forEach((nodeDetail, index) => {
+        key = key + '_' + index;
         nodeObject.nodeDetails.push(<li key={key}>{nodeDetail}</li>);
       });
     }
