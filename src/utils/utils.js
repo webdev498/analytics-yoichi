@@ -453,12 +453,7 @@ export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
   if (bytes === '' || bytes === undefined) return '-';
 
   if (bytes === 0) {
-    if (numberStyle) {
-      return numberToReactElm(0, 'Byte', {numberStyle, textStyle});
-    }
-    else {
-      return '0 Byte';
-    }
+    return numberStyle ? numberToReactElm(0, 'Byte', {numberStyle, textStyle}) : '0 Byte';
   }
 
   const k = 1000,
@@ -470,10 +465,7 @@ export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
     text = sizes[i];
 
   // if custom sytles are provided then return React Element.
-  if (numberStyle) {
-    return numberToReactElm(val, text, {numberStyle, textStyle});
-  }
-  return val + ' ' + text;
+  return numberStyle ? numberToReactElm(val, text, {numberStyle, textStyle}) : val + ' ' + text;
 };
 
 export function formatMicroseconds(miliseconds) {
