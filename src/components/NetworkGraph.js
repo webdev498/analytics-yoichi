@@ -339,16 +339,17 @@ function handleReputationMetaData(parameters) {
   nodeStatus = 'safe';
 
   if (label !== '') {
+    let key = 'nodeDetails_' + nodeObject.id;
     nodeObject.label += newLine1 + label;
     nodeObject.title += newLine2 + title;
     if (nodeDetails.indexOf('<br />') > -1) {
       let tempNodeDetails = nodeDetails.split('<br />');
       tempNodeDetails.forEach((nodeDetail) => {
-        nodeObject.nodeDetails.push(<li key='nodeDetails'>{nodeDetail}</li>);
+        nodeObject.nodeDetails.push(<li key={key}>{nodeDetail}</li>);
       });
     }
     else {
-      nodeObject.nodeDetails.push(<li key='nodeDetails'>{nodeDetails}</li>);
+      nodeObject.nodeDetails.push(<li key={key}>{nodeDetails}</li>);
     }
 
     nodeStatus = (label.indexOf('Scanning Host') > -1) ? 'scan' : 'malicious';

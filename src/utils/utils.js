@@ -289,7 +289,8 @@ export function getTimePairFromWindow(timeWindow, dateString) {
   }
   else {
     let todayDate = new Date(),
-      fromDate = getFromDate(timeDifferences[timeWindow], todayDate, fromDate);
+      fromDate = todayDate;
+    fromDate = getFromDate(timeDifferences[timeWindow], todayDate, fromDate);
     dateString1 = formatDate(todayDate);
     dateString2 = formatDate(fromDate);
     return {fromDate: dateString2, toDate: dateString1};
