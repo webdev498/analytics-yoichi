@@ -216,8 +216,63 @@ export function formatDateInLocalTimeZone(value) {
   return dateTime;
 }
 
+function getFromDate(params, todayDate, fromDate) {
+  if (params.functionName === 'hour') {
+    fromDate.setHours(todayDate.getHours() - params.diffInUnits);
+  }
+  else if (params.functionName === 'date') {
+    fromDate.setDate(todayDate.getDate() - params.diffInUnits);
+  }
+  else if (params.functionName === 'month') {
+    fromDate.setMonth(todayDate.getMonth() - params.diffInUnits);
+  }
+  return fromDate;
+}
+
 // Function to get from and to dates for the specific time window
 export function getTimePairFromWindow(timeWindow, dateString) {
+  const timeDifferences = {
+    '1h': {
+      diffInMin: 5,
+      functionName: 'hour',
+      diffInUnits: 1
+    },
+    '6h': {
+      diffInMin: 15,
+      functionName: 'hour',
+      diffInUnits: 6
+    },
+    '12h': {
+      diffInMin: 30,
+      functionName: 'hour',
+      diffInUnits: 12
+    },
+    '24h': {
+      diffInMin: 60,
+      functionName: 'date',
+      diffInUnits: 1
+    },
+    '48h': {
+      diffInMin: 120,
+      functionName: 'date',
+      diffInUnits: 2
+    },
+    '1d': {
+      diffInMin: 60,
+      functionName: 'date',
+      diffInUnits: 1
+    },
+    '1w': {
+      diffInMin: 1440,
+      functionName: 'date',
+      diffInUnits: 7
+    },
+    '1mo': {
+      diffInMin: 10080,
+      functionName: 'month',
+      diffInUnits: 1
+    }
+  };
   let dateString1 = '',
     dateString2 = '';
 
@@ -226,73 +281,18 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     let dateParameter = new Date(Date.parse((dateString).toString()));
     dateString1 = formatDate(dateParameter);
 
-    let timeDifference = 5;// default 5 minutes time difference
-    if (timeWindow === '1h') {
-      timeDifference = 5;// i.e. 5 minutes difference
-    }
-    if (timeWindow === '6h') {
-      timeDifference = 15;// i.e. 15 minutes difference
-    }
-    if (timeWindow === '12h') {
-      timeDifference = 30;// i.e. 30 minutes difference
-    }
-    if (timeWindow === '24h') {
-      timeDifference = 60;// i.e. 60 minutes difference
-    }
-    if (timeWindow === '48h') {
-      timeDifference = 120;// i.e. 120 minutes difference
-    }
-    if (timeWindow === '1d') {
-      timeDifference = 60;// i.e. 1 hour difference
-    }
-    if (timeWindow === '1w') {
-      timeDifference = 1440;// i.e. 1 day difference
-    }
-    if (timeWindow === '1mo') {
-      timeDifference = 10080;// i.e. 1 week difference
-    }
-
-    let toDate = dateParameter;
+    let timeDifference = timeDifferences[timeWindow] ? timeDifferences[timeWindow].diffInMin : 5,
+      toDate = dateParameter;
     toDate.setMinutes(toDate.getMinutes() + timeDifference);
     dateString2 = formatDate(toDate);
-
-    let dateTimePair = {fromDate: dateString1, toDate: dateString2};
-    return dateTimePair;
+    return {fromDate: dateString1, toDate: dateString2};
   }
   else {
-    let todayDate = new Date();
+    let todayDate = new Date(),
+      fromDate = getFromDate(timeDifferences[timeWindow], todayDate, fromDate);
     dateString1 = formatDate(todayDate);
-    let fromDate = todayDate;
-
-    if (timeWindow === '1h') {
-      fromDate.setHours(todayDate.getHours() - 1);
-    }
-    if (timeWindow === '6h') {
-      fromDate.setHours(todayDate.getHours() - 6);
-    }
-    if (timeWindow === '12h') {
-      fromDate.setHours(todayDate.getHours() - 12);
-    }
-    if (timeWindow === '24h') {
-      fromDate.setHours(todayDate.getDate() - 1);
-    }
-    if (timeWindow === '48h') {
-      fromDate.setHours(todayDate.getDate() - 2);
-    }
-    if (timeWindow === '1d') {
-      fromDate.setDate(todayDate.getDate() - 1);
-    }
-    if (timeWindow === '1w') {
-      fromDate.setDate(todayDate.getDate() - 7);
-    }
-    if (timeWindow === '1mo') {
-      fromDate.setMonth(todayDate.getMonth() - 1);
-    }
-
     dateString2 = formatDate(fromDate);
-
-    let dateTimePair = {fromDate: dateString2, toDate: dateString1};
-    return dateTimePair;
+    return {fromDate: dateString2, toDate: dateString1};
   }
 }
 
