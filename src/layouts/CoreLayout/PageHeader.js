@@ -80,14 +80,26 @@ const styles = {
     lineHeight: '32px',
     marginLeft: '10px'
   },
-  label: {
-    opacity: 0.54,
-    textDecoration: 'none',
-    color: Colors.arctic
-  },
   dropicon: {
     top: 0,
     opacity: 0.54
+  },
+  logoWrap: {
+    display: 'flex',
+    height: '100%'
+  },
+  label: {
+    textDecoration: 'none',
+    marginTop: 'auto',
+    marginBottom: 'auto'
+  },
+  clientLogo: {
+    display: 'flex',
+    maxHeight: '40px'
+  },
+  rankLogo: {
+    display: 'flex',
+    marginRight: '20px'
   }
 };
 
@@ -107,9 +119,10 @@ export class PageHeader extends React.Component {
       }
     });
 
-    this.state = {value, showMenu: false};
+    this.state = {value, showMenu: false, showImage: true};
     this.toggleMenu = this.toggleMenu.bind(this);
     this.handleTimeChange = this.handleTimeChange.bind(this);
+    this.onError = this.onError.bind(this);
   }
 
   static propTypes = {
@@ -137,6 +150,10 @@ export class PageHeader extends React.Component {
     });
   }
 
+  onError() {
+    this.setState({showImage: false});
+  }
+
   render() {
     const {props} = this,
       name = props.auth.user ? props.auth.user.name : '';
@@ -148,9 +165,22 @@ export class PageHeader extends React.Component {
     }
 
     const title = (
-      <Link to='/' style={styles.label}>
-        {props.title}
-      </Link>
+      <div style={styles.logoWrap}>
+        <Link to='/' style={styles.label}>
+          <img src='/rank-logo.png' style={styles.rankLogo} alt='Rank Logo' />
+        </Link>
+        <div style={styles.label}>
+          {
+            this.state.showImage
+            ? <img src='/client-logo.png'
+              style={styles.clientLogo}
+              onError={this.onError}
+              alt='Client Logo' />
+            : null
+          }
+
+        </div>
+      </div>
     );
 
     return (
