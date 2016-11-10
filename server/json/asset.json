@@ -399,7 +399,8 @@
               "window": "",
               "count": 10,
               "from": 0,
-              "asset": "assetId:pathParam"
+              "asset": "assetId:pathParam",
+              "type": "type:pathParam"
             },
             "pathParams": {
               "reportId": "taf_alert_by_asset"
@@ -425,6 +426,15 @@
               "bottom": 0,
               "position": "absolute"
             }
+          },
+          "tabNames": [
+            "DETAILS",
+            "SESSIONS",
+            "ASSETS ACCESSED"
+          ],
+          "sessionsAPIDetails": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "reportId": "taf_asset_session_details"
           },
           "id": "timeline-component"
         }

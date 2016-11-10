@@ -71,6 +71,8 @@ export const selectedActionBGColor = '#F5F5F7';
 
 export const notificationMessageBGColor = '#EBEBEF';
 
+export const CloudColorShades = ['#EEEEF1'];
+
 export const Colors = {
   garnet: GarnetColor,
   grape: GrapeColor,
@@ -98,7 +100,8 @@ export const Colors = {
   networkNodeLabel: NetworkNodeLabelColor,
   contextBG: contextBGColor,
   selectedActionBG: selectedActionBGColor,
-  notificationMessageBG: notificationMessageBGColor
+  notificationMessageBG: notificationMessageBGColor,
+  cloudShades: CloudColorShades
 };
 
 export const PrimaryPalette = {

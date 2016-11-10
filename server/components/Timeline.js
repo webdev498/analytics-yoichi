@@ -1,4 +1,4 @@
-import {msToTime, getEventTypeString, formatBytes} from '../utils/utils';
+import {msToTime, getEventTypeString, formatBytes, formatDateInLocalTimeZone} from '../utils/utils';
 function getIPDetails(source) {
   if (source) {
     const info = {};
@@ -222,13 +222,32 @@ function getAuth(row) {
   return info;
 }
 
+function getSession(row, info) {
+  if (row.from) {
+    let dateTime = formatDateInLocalTimeZone(row.from);
+    info['Start Date'] = dateTime.date + ' ' + dateTime.time;
+    info.Date = row.from;
+  }
+  if (row.to) {
+    let dateTime = formatDateInLocalTimeZone(row.to);
+    info['End Date'] = dateTime.date + ' ' + dateTime.time;
+  }
+  if (row.machine) { info.Machine = row.machine; }
+  if (row.user) { info.User = row.user; }
+  if (row.session.durationMs) { info.Duration = row.session.durationMs; }
+  return info;
+}
+
 function getOther(row) {
-  const info = {
+  let info = {
     Type: getEventTypeString(row.type)
   };
 
   if (row.date) { info.Date = row.date; }
   if (row.id) { info.id = row.id; }
+  if (row.session) {
+    info = getSession(row, info);
+  }
 
   return info;
 }

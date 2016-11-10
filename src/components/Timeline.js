@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import PaginationWidget from 'components/PaginationWidget';
 import TimelineCard from 'components/TimelineCard';
 import ParentCard from 'containers/ParentCard';
+import TabsWidget from 'components/TabsWidget';
 import {Colors} from 'theme/colors';
 import {
   formatDateInLocalTimeZone,
@@ -46,6 +47,7 @@ class Timeline extends React.Component {
     };
 
     this.decreaseHeightBy = 120;
+    this.currentTabId = 0;
 
     this.contextualMenuApiParams = {
       meta: {},
@@ -58,6 +60,7 @@ class Timeline extends React.Component {
 
     this.fetchData = this.fetchData.bind(this);
     this.getContextualMenuApiObj = this.getContextualMenuApiObj.bind(this);
+    this.onTabChange = this.onTabChange.bind(this);
   }
 
   componentDidMount() {
@@ -105,7 +108,7 @@ class Timeline extends React.Component {
     state.currentPage = (this.pagination.isPaginated) ? this.pagination.pageNumber : 1;
     state.nextPageStart = data.next;
     state.rows = data.normalizeData;
-
+    console.log('data.normalizeData', data.normalizeData);
     if (state.filter === '' && data.options && data.options.customParams) {
       state.filter = data.options.customParams.filter;
     }
@@ -165,7 +168,6 @@ class Timeline extends React.Component {
     return (
       <div style={{
         width: '85px',
-        paddingTop: '22px',
         paddingLeft: (card === TIMELINE_CARD) ? '0px' : '10px'
       }}>
         <span style={{
@@ -181,8 +183,9 @@ class Timeline extends React.Component {
 
   fetchData(pageNumber, type) {
     const {props} = this,
-      {params} = props,
-      api = Object.assign({}, props.meta.api, this.getApiObj(pageNumber, type)),
+      {params} = props;
+
+    let api = Object.assign({}, props.meta.api, this.getApiObj(pageNumber, type)),
       options = props.options ? props.options : {};
 
     props.fetchApiData(props.id, api, params, options);
@@ -202,7 +205,11 @@ class Timeline extends React.Component {
     const {state, props} = this,
       {params, attributes, meta} = props;
 
-    let apiPath = (type === 'traffic') ? '/api/alert/traffic' : meta.api.path,
+    let apiPath = (type === 'traffic')
+      ? '/api/alert/traffic'
+      : this.currentTabId === 1
+        ? attributes.sessionsAPIDetails.path
+        : meta.api.path,
       pathParams = (type === 'traffic')
         ? {}
         : (type === 'anomalyEvents')
@@ -210,7 +217,7 @@ class Timeline extends React.Component {
             anomalyId: props.id
           }
           : {
-            reportId: meta.api.pathParams.reportId
+            reportId: this.currentTabId === 1 ? attributes.sessionsAPIDetails.reportId : meta.api.pathParams.reportId
           },
       queryParams = Object.assign({},
         props.meta.api && props.meta.api.queryParams,
@@ -232,6 +239,10 @@ class Timeline extends React.Component {
       });
 
       apiObj.loadOnce = true;
+    }
+
+    if (this.currentTabId === 1 && props.params && props.params.type) {
+      queryParams[props.params.type] = props.params.assetId;
     }
 
     apiObj.queryParams = queryParams;
@@ -332,6 +343,16 @@ class Timeline extends React.Component {
     }
   }
 
+  onTabChange(tabId) {
+    this.currentTabId = tabId.props.index;
+    if (this.currentTabId === 0) {
+      this.fetchData(1, 'alert');
+    }
+    if (this.currentTabId === 1) {
+      this.fetchData(1, 'sessions');
+    }
+  }
+
   render() {
     const {state, props} = this,
       {attributes} = props;
@@ -350,32 +371,42 @@ class Timeline extends React.Component {
         }
         {
           (state.rows.length > 0)
-            ? <div style={
+            ? <div>
+                {
+                  attributes.tabNames && attributes.tabNames.length
+                  ? <TabsWidget
+                    tabNames={attributes.tabNames}
+                    style={{paddingLeft: '85px', paddingBottom: '17px'}}
+                    onTabChange={this.onTabChange} />
+                  : null
+                }
+              <div style={
                 attributes.otherStyles.flex && state.selectedCardId !== ''
                 ? attributes.otherStyles.flex : {}
               }>
-              {this.displayCard()}
-              {
-                state.selectedCardId !== ''
-                ? <div>
-                  {this.displayContextualMenuCards()}
-                  <div id='collapse-contextual-menu' style={{
-                    bottom: 0,
-                    position: 'absolute',
-                    right: '460px'
-                  }}>
-                    <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
+                {this.displayCard()}
+                {
+                  state.selectedCardId !== ''
+                  ? <div>
+                    {this.displayContextualMenuCards()}
+                    <div id='collapse-contextual-menu' style={{
+                      bottom: 0,
+                      position: 'absolute',
+                      right: '460px'
+                    }}>
+                      <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
+                    </div>
+                    <div style={{color: 'transparent'}}>
+                      {
+                        setTimeout(() => {
+                          this.setPrimaryTimelineHeight();
+                        }, 2000)
+                      }
+                    </div>
                   </div>
-                  <div style={{color: 'transparent'}}>
-                    {
-                      setTimeout(() => {
-                        this.setPrimaryTimelineHeight();
-                      }, 2000)
-                    }
-                  </div>
-                </div>
-                : null
-              }
+                  : null
+                }
+              </div>
             </div>
           : null
         }
