@@ -87,12 +87,12 @@ function getChartData(input) {
       // if value is 0, set this to be null so it is not shown.
       if (value === 'Point') {
         const current = getColumnIndex(columns, 'current');
-        data = filterdRows.map((item, index) => {
+        data = filterdRows.map(item => {
           let currentValue = item[current.index];
           currentValue = Math.round(currentValue);
           currentValue = currentValue <= 0 ? 0 : currentValue;
 
-          let dataValue = currentValue === 0 ? 0 : Math.log2(currentValue);
+          let dataValue = currentValue === 0 ? 0 : Math.log10(currentValue);
           dataValue = dataValue.toFixed(2);
 
           let label = `${seriesname}, ${item[xAxis.index]}, ${dataValue}, ${currentValue}`;
@@ -102,12 +102,12 @@ function getChartData(input) {
         });
       }
       else {
-        data = filterdRows.map((item, index) => {
+        data = filterdRows.map(item => {
           let val = item[yAxis.index];
           val = Math.round(val);
           val = val <= 0 ? 0 : val;
 
-          let dataValue = val === 0 ? 0 : Math.log2(val);
+          let dataValue = val === 0 ? 0 : Math.log10(val);
           dataValue = dataValue.toFixed(2);
 
           let label = `${seriesname}, ${item[xAxis.index]}, ${dataValue}, ${val}`;
