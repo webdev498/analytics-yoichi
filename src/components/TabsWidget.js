@@ -5,19 +5,11 @@ import {Colors} from 'theme/colors';
 const styles = {
   tab: {
     backgroundColor: Colors.cloudShades[0],
-    color: Colors.grape // ,
-    // height: '34px'
+    color: Colors.grape
   }
 };
 
 class TabsWidget extends React.Component {
-  // handleTabChange() {
-  //   const {props} = this;
-  //   return (key) => {
-  //     props.onTabChange(key);
-  //   };
-  // }
-
   handleTabChange = (value) => {
     const {props} = this;
     props.onTabChange(value);
