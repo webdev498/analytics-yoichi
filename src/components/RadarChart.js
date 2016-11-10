@@ -47,7 +47,9 @@ class RadarChart extends React.Component {
 
   render() {
     const { props } = this;
-    if (!props.data) { return null; }
+    if (!props.data) {
+      return null;
+    }
     return (
       <div id={props.attributes.id} style={{...props.attributes.style}}>
         {this.renderChart()}
