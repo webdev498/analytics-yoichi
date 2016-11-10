@@ -316,7 +316,25 @@ describe('Timeline DAL', () => {
   });
 
   it('returns dns card', async function() {
+    const dns = {
+      id: 'dnsid',
+      date: '2016-11-08T04:54:15.592',
+      type: 'dns',
+      source,
+      destination,
+      data: {dns: {answers: ['answer']}}
+    };
 
+    const ctx = getCtx({columns, rows: [[dns]]});
+    await Timeline(ctx);
+
+    cardTests(ctx, {
+      id: 'dnsid',
+      sourceDest: null,
+      'DNS Response': 'answer',
+      Type: 'DNS',
+      Date: null
+    });
   });
 
   it('returns http card', async function() {
@@ -397,7 +415,35 @@ describe('Timeline DAL', () => {
   });
 
   it('returns winevent card', async function() {
+    const winevent = {
+      id: 'winid',
+      date: '2016-11-08T04:54:15.592',
+      type: 'winevent',
+      data: {
+        winevent: {
+          Message: 'Message',
+          EventType: 'winevent',
+          Category: 'Category',
+          SourceName: 'Source',
+          Severity: 'Severity',
+          SeverityValue: 'SeverityValue'
+        }
+      }
+    };
 
+    const ctx = getCtx({columns, rows: [[winevent]]});
+    await Timeline(ctx);
+
+    cardTests(ctx, {
+      Type: 'winevent',
+      Date: null,
+      id: 'winid',
+      Message: 'Message',
+      Category: 'Category',
+      Source: 'Source',
+      Severity: 'Severity',
+      SeverityValue: 'SeverityValue'
+    });
   });
 
   it('returns anomaly card', async function() {
