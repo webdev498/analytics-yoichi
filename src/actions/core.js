@@ -50,8 +50,8 @@ export function fetchLayoutData(id) {
 
     dispatch(requestPageData(id));
 
-    // if path id is / then layout id is new-summary-page.
-    id = (id === '/') ? '/new-summary-page' : id;
+    // if path id is / then layout id is summary-page.
+    id = (id === '/') ? '/summary-page' : id;
 
     // if id has path params, then first part of the url is used to fetch layout json.
     let urlId = id.indexOf('/', 1) > -1 ? id.slice(0, id.indexOf('/', 1)) : id;

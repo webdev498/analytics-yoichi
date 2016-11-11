@@ -97,7 +97,7 @@ function mapStateToProps(state, ownProps) {
   const {layout: layouts} = state;
   let id = ownProps.location.pathname;
 
-  id = (id === '/') ? '/new-summary-page' : id;
+  id = (id === '/') ? '/summary-page' : id;
 
   const { layout = [],
           isFetching = true,

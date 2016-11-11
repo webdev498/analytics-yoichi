@@ -30,7 +30,7 @@ export default (store) => {
         <Route path='assets' />
         <Route path='asset/:type/:assetId' />
         <Route path='user-agent' />
-        <Route path='new-summary-page' />
+        <Route path='summary-page' />
         <Route path='network-graph' />
         <Route path='timeline-graph' />
       </Route>
