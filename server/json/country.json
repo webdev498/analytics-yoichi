@@ -203,7 +203,7 @@
               "id": "OutgoingTrafficWorldMap",
               "chartHeight": "450"
             },
-            "id": "Outgoingworld-map",
+            "id": "outgoing-traffic-world-map",
             "type": "WorldMap",
             "kibana": {
               "pathParams": [
@@ -259,9 +259,10 @@
                   "style": {
                     "marginTop": "35px"
                   },
-                  "id": "OutgoingTopCountries",
+                  "id": "outgoing-top-countries",
                   "chartHeight": "200"
                 },
+                "id": "OutgoingTopCountries",
                 "type": "HorizontalBarChart"
               },
               {
@@ -303,9 +304,10 @@
                   "style": {
                     "marginTop": "35px"
                   },
-                  "id": "OutgoingTopBandwidth",
+                  "id": "outgoing-top-bandwidth",
                   "chartHeight": "200"
                 },
+                "id": "OutgoingTopBandwidth",
                 "type": "HorizontalBarChart"
               }
             ],
@@ -327,7 +329,7 @@
                 "width": "30%",
                 "marginTop": "-30px"
               },
-              "id": "OutgoingTrafficHeatMapLegends"
+              "id": "outgoing-traffic-heatMap-legends"
             },
             "id": "OutgoingTrafficHeatMapLegends",
             "type": "CompoundCard"
@@ -463,9 +465,10 @@
                   "style": {
                     "marginTop": "35px"
                   },
-                  "id": "IncomingTopCountries",
+                  "id": "incoming-top-countries",
                   "chartHeight": "200"
                 },
+                "id": "IncomingTopCountries",
                 "type": "HorizontalBarChart"
               },
               {
@@ -507,9 +510,10 @@
                   "style": {
                     "marginTop": "35px"
                   },
-                  "id": "IncomingTopBandwidth",
+                  "id": "incoming-top-bandwidth",
                   "chartHeight": "200"
                 },
+                "id": "IncomingTopBandwidth",
                 "type": "HorizontalBarChart"
               }
             ],
@@ -531,7 +535,7 @@
                 "width": "30%",
                 "marginTop": "-30px"
               },
-              "id": "IncomingTrafficHeatMapLegends"
+              "id": "incoming-traffic-heatmap-legends"
             },
             "id": "IncomingTrafficHeatMapLegends",
             "type": "CompoundCard"
