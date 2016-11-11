@@ -145,7 +145,8 @@ function getChartData(input) {
 
     charts[i] = {
       categories,
-      dataset
+      dataset,
+      uiConfig
     };
   });
 

@@ -138,40 +138,33 @@ class AlertMultiChart extends React.Component {
   }
 
   getAnomalyChart(input) {
-    let {attributes, data} = this.props;
+    let {attributes} = this.props;
 
     return Object.keys(input).map((chart, index) => {
       if (!chart) return null;
 
-      const props = {
-        attributes: {
-          id: `chart${index}`,
-          ...attributes.chart
-        },
-        processedData: true
-      };
+      const id = `chart${index}`,
+        props = {
+          attributes: {
+            id,
+            ...attributes.chart
+          },
+          processedData: true
+        };
 
-      const chartData = input[chart];
+      const chartData = input[chart],
+        uiConfig = chartData.uiConfig;
 
       chartData.chart = this.props.chart.chartOptions;
       chartData.chart.divlineThickness = 1;
+      chartData.chart.xAxisName = uiConfig.xAxisLabel;
+      chartData.chart.yAxisName = uiConfig.yAxisLabel;
+
+      delete chartData.uiConfig;
       props.data = chartData;
-
-      let title;
-      if (data && data.rows) {
-        title = data.uiConfig.title;
-        chartData.chart.xAxisName = data.uiConfig.xAxisLabel;
-        chartData.chart.yAxisName = data.uiConfig.yAxisLabel;
-      }
-      else {
-        title = data[chart].uiConfig.title;
-        chartData.chart.xAxisName = data[chart].uiConfig.xAxisLabel;
-        chartData.chart.yAxisName = data[chart].uiConfig.yAxisLabel;
-      }
-
       return (
-        <div style={styles.wrap} key={`anomalyChart${index}`}>
-          <h2 style={styles.title}>{title}</h2>
+        <div style={styles.wrap} key={id}>
+          <h2 style={styles.title}>{uiConfig.title}</h2>
           <MultiSeriesCombiChart {...props} />
         </div>
       );
