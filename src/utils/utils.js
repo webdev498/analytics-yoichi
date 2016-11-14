@@ -218,7 +218,6 @@ export function formatDateInLocalTimeZone(value) {
 
 function getFromDate(params, todayDate, fromDate) {
   if (params.functionName === 'hour') {
-    console.log('functionName', fromDate, todayDate.getHours(), params.diffInUnits);
     fromDate.setHours(todayDate.getHours() - params.diffInUnits);
   }
   else if (params.functionName === 'date') {
@@ -291,12 +290,9 @@ export function getTimePairFromWindow(timeWindow, dateString) {
   else {
     let todayDate = new Date(),
       fromDate = todayDate;
-    console.log(timeDifferences[timeWindow], todayDate, fromDate);
     fromDate = getFromDate(timeDifferences[timeWindow], todayDate, fromDate);
-    console.log('fromDate', fromDate);
     dateString1 = formatDate(new Date());
     dateString2 = formatDate(fromDate);
-    console.log({fromDate: dateString2, toDate: dateString1});
     return {fromDate: dateString2, toDate: dateString1};
   }
 }
