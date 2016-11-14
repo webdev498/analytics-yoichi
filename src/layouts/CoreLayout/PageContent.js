@@ -11,6 +11,17 @@ import { connect } from 'react-redux';
 const styles = {
   content: {
     padding: '33px'
+  },
+  error: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: 'flex'
+  },
+  errorMsg: {
+    margin: 'auto'
   }
 };
 
@@ -80,13 +91,28 @@ export class PageContent extends React.Component {
     return React.DOM.div({}, finalElmements);
   }
 
+  showError() {
+    const {props} = this;
+    return (
+      <div style={styles.error}>
+        <span style={styles.errorMsg}>
+          {props.errorData.message}
+        </span>
+      </div>
+    );
+  }
+
   render() {
+    const {props} = this;
+
     return (
       <div style={styles.content}>
         {
-          this.props.isFetching
+          props.isFetching
           ? <Loader />
-          : this.renderChildren()
+          : props.isError
+            ? this.showError()
+            : this.renderChildren()
         }
       </div>
     );

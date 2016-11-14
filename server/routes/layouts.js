@@ -1,6 +1,6 @@
 import https from 'https';
 import fetch from 'node-fetch';
-import {layoutBaseUrl} from '../../serverEnv';
+import {serverBaseUrl} from '../../serverEnv';
 
 const fs = require('fs');
 const path = require('path');
@@ -28,8 +28,7 @@ export default async function layoutRoutes(ctx, next) {
   // First try and get layout json from the server,
   // if it fails then use the local layout json file
   try {
-    console.log(layoutBaseUrl + reqPath);
-    const response = await fetch(layoutBaseUrl + reqPath,
+    const response = await fetch(serverBaseUrl + reqPath,
       {
         method: 'GET',
         headers: ctx.headers,
@@ -38,20 +37,23 @@ export default async function layoutRoutes(ctx, next) {
     );
 
     const data = await response.json();
-    console.log('yo yo', data);
     ctx.set('Content-Type', 'application/json; charset=UTF-8');
     ctx.body = data;
   }
   catch (ex) {
-    console.log('here');
     try {
       const body = await readFileThunk(filePath);
       ctx.set('Content-Type', 'application/json; charset=UTF-8');
       ctx.body = body;
     }
     catch (ex) {
-      console.log('File loading failed');
+      ctx.status = 404;
+      ctx.message = 'Layout not found';
+      ctx.body = {
+        'timeStamp': (new Date()).getTime(),
+        'errorCode': 404,
+        'details': 'Layout not found'
+      };
     }
   }
 }
-
