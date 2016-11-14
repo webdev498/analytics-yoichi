@@ -16,12 +16,14 @@ const openKibanaInNewWindow = window.global && window.global.openKibanaInNewWind
 
 const styles = {
   kibana: {
+    backgroundColor: Colors.arctic,
     padding: '5px 5px 0 5px',
     position: 'fixed',
     top: '64px',
     left: '72px',
     bottom: 0,
-    right: 0
+    right: 0,
+    zIndex: 1
   },
   sidebar: {
     width: '72px'
@@ -88,6 +90,9 @@ export class CoreLayout extends React.Component {
           url,
           showKibana: true
         });
+
+        // hides the scroll from the body element when kibana is shown.
+        document.body.style.overflow = 'hidden';
       }
     };
   }
@@ -102,6 +107,9 @@ export class CoreLayout extends React.Component {
     this.setState({
       showKibana: false
     });
+
+    // shows the scroll of the body element when kibana is hidden.
+    document.body.style.overflow = '';
   }
 
   mouseOver() {
@@ -139,17 +147,9 @@ export class CoreLayout extends React.Component {
   render() {
     const {props, state} = this,
       {showKibana} = this.state,
-      show = {display: 'block'},
-      hide = {display: 'none'},
       sidebarWidth = state.sidebarWidth;
 
-    let contentStyle = Object.assign({}, styles.content, show),
-      kibanaUrl = '';
-
-    if (showKibana) {
-      contentStyle = Object.assign({}, styles.content, hide);
-      kibanaUrl = this.state.url;
-    }
+    let kibanaUrl = showKibana ? this.state.url : '';
 
     return (
       <div>
@@ -167,7 +167,7 @@ export class CoreLayout extends React.Component {
         </nav>
 
         <div style={styles.base}>
-          <div style={contentStyle}>
+          <div style={styles.content}>
             {
               (props.auth.isLoading)
               ? <Loader />
@@ -176,16 +176,16 @@ export class CoreLayout extends React.Component {
           </div>
 
           {
-            showKibana && openKibanaInNewWindow && kibanaUrl !== ''
-            ? window.open(kibanaUrl)
-            : null
-          }
-
-          {
-            showKibana && !openKibanaInNewWindow
-            ? <div style={styles.kibana}>
-              <Kibana url={this.state.url} />
-            </div>
+            showKibana && kibanaUrl !== ''
+            ? (
+              openKibanaInNewWindow
+              ? window.open(kibanaUrl)
+              : (
+                <div style={styles.kibana}>
+                  <Kibana url={this.state.url} />
+                </div>
+              )
+            )
             : null
           }
         </div>

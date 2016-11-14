@@ -205,7 +205,9 @@ export function updateApiData(newDuration, params) {
 
           // this is the case if one api serves the data for multiple element
           // therefore on time duration update there are multiple calls for the api request.
-          if (api && api.loadOnce) { return; }
+          if (api && api.loadOnce) {
+            return;
+          }
 
           fetchApiData(id, api, params, options)(dispatch, getState);
         });
