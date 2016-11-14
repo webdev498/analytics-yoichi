@@ -32,7 +32,7 @@ export function errorPageData(id, ex) {
 }
 
 function getUrl(id) {
-  return `${baseUrl}/api/store/dashboard${id}`;
+  return `${baseUrl}/api/layout${id}`;
 }
 
 export function fetchLayoutData(id) {
