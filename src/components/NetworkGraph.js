@@ -224,7 +224,11 @@ function handleNodeMetaData(metadata, nodeObject) {
           ? 'date'
           : metadataTypeLower;
 
-    if (metadataTypeLower !== 'coordinates') {
+    let displayMetaData = (metadataTypeLower !== '' &&
+      metadataTypeLower !== 'coordinates' &&
+      metadataTypeLower !== 'multiple');
+
+    if (displayMetaData) {
       switch (metadataTypeLower) {
         case 'reputation':
           let parameters = {
@@ -253,7 +257,11 @@ function handleNodeMetaData(metadata, nodeObject) {
           let dateTimeAnomaly = formatDateInLocalTimeZone(metadata[metadataType]),
             time = nodeObject.type === 'anomaly' ? '' : ' ' + dateTimeAnomaly.time;
           nodeObject.label += newLine1 + dateTimeAnomaly.date + time;
-          nodeObject.title += newLine2 + dateTimeAnomaly.date + time;
+          if (nodeObject.type === 'anomaly' &&
+            !isUndefined(metadata.multiple) &&
+            metadata.multiple) {
+            nodeObject.title += newLine2 + dateTimeAnomaly.date + time;
+          }
           nodeObject.nodeDetails.push(
             <li key={metadataType}>{dateTimeAnomaly.date}{time}</li>
           );
