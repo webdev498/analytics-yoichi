@@ -161,7 +161,8 @@ class AlertMultiChart extends React.Component {
       chartData.chart.yAxisName = uiConfig.yAxisLabel;
 
       delete chartData.uiConfig;
-      props.data = chartData;
+      props.data = JSON.parse(JSON.stringify(chartData));
+
       return (
         <div style={styles.wrap} key={id}>
           <h2 style={styles.title}>{uiConfig.title}</h2>
