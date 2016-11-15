@@ -15,7 +15,7 @@ export function generatePathParams(pathParamArray) {
   let pathParams = '';
   for (let i = 0; i < pathParamArray.length; i++) {
     if (pathParams === '') {
-      pathParams += pathParams === '' ? pathParamArray[i] : '/' + pathParamArray[i];
+      pathParams = pathParamArray[i];
     }
     else {
       pathParams += '/' + pathParamArray[i];
@@ -28,7 +28,7 @@ export function generateQueryParams(parameters) {
   let {queryParamsArray} = parameters,
     queryParams = '';
   for (let key in queryParamsArray) {
-    if (!isUndefined(key)) { // needs to be change
+    if (!isUndefined(key)) {
       if (queryParams === '') {
         queryParams = '?' + generateQueryParam(parameters, key);
       }
