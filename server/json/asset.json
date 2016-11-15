@@ -537,17 +537,7 @@
           },
           "ASSETS ACCESSED": {}
         },
-        "timelineType": "primary",
-        "sessionsAPIDetails": {
-          "session": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "reportId": "taf_asset_session_details"
-          },
-          "sessionDetails": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "reportId": "taf_asset_session_details"
-          }
-        }
+        "timelineType": "primary"
       }
     ]
   ]

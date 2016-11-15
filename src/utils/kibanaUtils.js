@@ -12,7 +12,16 @@ import {isUndefined,
 const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
 
 export function generatePathParams(pathParamArray) {
-  return pathParamArray.join('/');
+  let pathParams = '';
+  for (let i = 0; i < pathParamArray.length; i++) {
+    if (pathParams === '') {
+      pathParams += pathParams === '' ? pathParamArray[i] : '/' + pathParamArray[i];
+    }
+    else {
+      pathParams += '/' + pathParamArray[i];
+    }
+  }
+  return pathParams;
 }
 
 export function generateQueryParams(parameters) {
