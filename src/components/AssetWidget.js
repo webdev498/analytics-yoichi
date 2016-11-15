@@ -78,8 +78,10 @@ class AssetWidget extends React.Component {
         {this.getImage(props.data)}
         <div>
           <div style={headingStyle}>{info.displayName}</div>
-          <div style={styles.subHeading}>{info.title}</div>
-          <div style={styles.subHeading}>{info.department}</div>
+          {info.title ? <div style={styles.subHeading}>{info.title}</div> : null}
+          {info.department ? <div style={styles.subHeading}>{info.department}</div> : null}
+          {info.servicePack ? <div style={styles.subHeading}>{info.servicePack}</div> : null}
+          {info.OS ? <div style={styles.subHeading}>{info.OS}</div> : null}
         </div>
       </div>
     );
