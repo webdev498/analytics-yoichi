@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Card from 'material-ui/Card/Card';
 import {Colors} from 'theme/colors';
 import {whatIsIt} from 'utils/utils';
@@ -92,8 +92,16 @@ function getAnomalyArrow(selected) {
 }
 
 class TimelineCard extends React.Component {
+  static propTypes = {
+    data: PropTypes.object
+  }
+
   constructor(props) {
     super(props);
+    const {data} = props;
+
+    this.cardType = data.session ? 'Session' : data.Type;
+    this.isLinkCard = (this.cardType === 'Anomaly' || this.cardType === 'Rank Alert' || this.cardType === 'Session');
 
     this.getDetails = this.getDetails.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
@@ -110,10 +118,10 @@ class TimelineCard extends React.Component {
 
     return (
       Object.keys(data).map((key, index) => {
-        let anomalyType = (data.Type === 'Anomaly' && key === 'Type'),
+        let isAnomaly = (this.cardType === 'Anomaly' && key === 'Type'),
           fontWeight = (i === 0 && key !== 'Type') ? '600' : 'lighter',
-          displayFlex = data.Type === 'Anomaly' ? {display: 'flex'} : {};
-        if (key !== 'Date' && key !== 'id' && !anomalyType) {
+          displayFlex = this.cardType === 'Anomaly' ? {display: 'flex'} : {};
+        if (key !== 'Date' && key !== 'id' && !isAnomaly) {
           i++;
           let params = {
             i: i,
@@ -135,7 +143,7 @@ class TimelineCard extends React.Component {
     return (
       <li style={{...styles.listItem}} key={`desc${index}`}>
         {
-          whatIsIt(data[key]) === 'String'
+          whatIsIt(data[key]) === 'String' && key !== 'session'
           ? this.getStringDetails(params)
           : (key === 'sourceDest' && whatIsIt(data[key]) === 'Object')
             ? this.getObjectDetails(params)
@@ -152,9 +160,9 @@ class TimelineCard extends React.Component {
       <div style={{fontWeight, ...displayFlex}}>
         {this.displayAnomalyIcon(data, key, i)}
         <div style={{
-          paddingLeft: data.Type === 'Anomaly' ? i === 1 ? '10px' : '40px' : '0px'
+          paddingLeft: this.cardType === 'Anomaly' ? i === 1 ? '10px' : '40px' : '0px'
         }}>
-          {(data.Type !== 'Anomaly') ? key + ':' : ''} {data[key]}
+          {(this.cardType !== 'Anomaly') ? key + ':' : ''} {data[key]}
         </div>
         {
           data.Type !== 'Anomaly'
@@ -190,7 +198,7 @@ class TimelineCard extends React.Component {
     };
 
     return () => {
-      switch (props.data.Type) {
+      switch (this.cardType) {
         case 'Rank Alert':
           const url = `/alert/${props.data.id}/${props.data.Date}`;
           props.updateRoute(url);
@@ -204,6 +212,17 @@ class TimelineCard extends React.Component {
           }
           props.getContextualMenuApiObj(details);
           break;
+        case 'Session':
+          if (props.selectedCardId !== props.data.id) {
+            details = {
+              selectedCardId: props.data.id,
+              eventDate: props.data.Date,
+              user: props.data.User ? props.data.User : '',
+              machine: props.data.Machine ? props.data.Machine : ''
+            };
+          }
+          props.getContextualMenuApiObj(details);
+          break;
         default:
           break;
       }
@@ -211,7 +230,7 @@ class TimelineCard extends React.Component {
   }
 
   displayAnomalyIcon(data, key, index) {
-    if (data.Type === 'Anomaly') {
+    if (this.cardType === 'Anomaly') {
       if (index === 1) {
         let value = data[key].toLowerCase();
         return (
@@ -239,11 +258,12 @@ class TimelineCard extends React.Component {
   render() {
     const {props} = this,
       {data} = props;
-    let cardType = (props.data.Type === 'Alert' || props.data.Type === 'Rank Alert')
-      ? 'alert' : 'other',
-      isLinkCard = (props.data.Type === 'Anomaly' || props.data.Type === 'Rank Alert');
+    this.cardType = data.session ? 'Session' : data.Type;
+    this.isLinkCard = (this.cardType === 'Anomaly' || this.cardType === 'Rank Alert' || this.cardType === 'Session');
+    console.log('this.cardType', this.cardType);
+    let isAlert = (this.cardType === 'Alert' || this.cardType === 'Rank Alert') ? 'alert' : 'other';
 
-    switch (cardType) {
+    switch (isAlert) {
       case 'alert':
         styles.alert = {
           borderLeft: '5px solid ' + getBorderColor(data.Score, data.Severity),
@@ -269,7 +289,7 @@ class TimelineCard extends React.Component {
             height: 'auto',
             width: '350px',
             fontSize: '14px',
-            cursor: isLinkCard ? 'pointer' : 'auto',
+            cursor: this.isLinkCard ? 'pointer' : 'auto',
             overflowWrap: 'break-word',
             backgroundColor: (
               (props.selectedCardId !== '' && props.selectedCardId === props.data.id))

@@ -13,6 +13,16 @@ import {
   CONTEXTUAL_MENU_CARD
 } from 'Constants';
 
+function getTabObj(tabs, timelineType, currentTab) {
+  let tabObj = {};
+  for (let tab in tabs) {
+    if (tab === currentTab) {
+      tabObj = tabs[tab][timelineType];
+    }
+  }
+  return tabObj;
+}
+
 class Timeline extends React.Component {
   static propTypes = {
     attributes: PropTypes.object.isRequired,
@@ -48,6 +58,7 @@ class Timeline extends React.Component {
 
     this.decreaseHeightBy = 120;
     this.currentTabId = 0;
+    this.currentTab = 'DETAILS';
 
     this.contextualMenuApiParams = {
       meta: {},
@@ -108,7 +119,6 @@ class Timeline extends React.Component {
     state.currentPage = (this.pagination.isPaginated) ? this.pagination.pageNumber : 1;
     state.nextPageStart = data.next;
     state.rows = data.normalizeData;
-    console.log('data.normalizeData', data.normalizeData);
     if (state.filter === '' && data.options && data.options.customParams) {
       state.filter = data.options.customParams.filter;
     }
@@ -203,34 +213,32 @@ class Timeline extends React.Component {
 
   getApiObj(pageNumber, type) {
     const {state, props} = this,
-      {params, attributes, meta} = props;
+      {params, attributes, meta, tabs, timelineType} = props;
 
-    let apiPath = (type === 'traffic')
-      ? '/api/alert/traffic'
-      : this.currentTabId === 1
-        ? attributes.sessionsAPIDetails.path
-        : meta.api.path,
-      pathParams = (type === 'traffic')
-        ? {}
-        : (type === 'anomalyEvents')
-          ? {
-            anomalyId: props.id
-          }
-          : {
-            reportId: this.currentTabId === 1 ? attributes.sessionsAPIDetails.reportId : meta.api.pathParams.reportId
-          },
-      queryParams = Object.assign({},
-        props.meta.api && props.meta.api.queryParams,
-        {
-          window: '',
-          count: attributes.noOfEventsPerPage,
-          from: (pageNumber - 1) * attributes.noOfEventsPerPage
-        });
+    let queryParams = Object.assign({},
+      meta.api && meta.api.queryParams,
+      {
+        window: '',
+        count: attributes.noOfEventsPerPage,
+        from: (pageNumber - 1) * attributes.noOfEventsPerPage
+      }),
+      apiObj = {},
+      tabObj = getTabObj(tabs, timelineType, this.currentTab);
 
-    const apiObj = {
-      path: apiPath,
-      pathParams
-    };
+    if (timelineType === 'secondary') {
+      let apiObj = tabObj;
+      if (apiObj.meta.api.pathParams.selectedCardId) {
+        apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = props.id;
+      }
+    }
+    else {
+      apiObj.path = tabObj.path;
+      apiObj.pathParams = (meta.api.pathParams.reportId)
+        ? {
+          reportId: this.currentTabId === 0 ? meta.api.pathParams.reportId : tabObj.pathParams.reportId
+        }
+        : {};
+    }
 
     if (type === 'traffic') {
       queryParams = Object.assign(queryParams, {
@@ -275,47 +283,50 @@ class Timeline extends React.Component {
   }
 
   getContextualMenuApiObj(details) {
-    let {selectedCardId, eventDate} = details;
+    const {props} = this,
+      {tabs} = props;
+
+    let {selectedCardId, eventDate, user, machine} = details;
     if (!isUndefined(selectedCardId)) {
       this.setState({
         selectedCardId: selectedCardId
       });
+
       if (selectedCardId !== '') {
-        this.contextualMenuApiParams = {
-          meta: {
-            showHeader: false,
-            api: {
-              path: '/api/anomaly/{anomalyId}/events',
-              pathParams: {
-                anomalyId: selectedCardId
-              },
-              queryParams: {
-                window: '',
-                from: 0,
-                count: 10,
-                date: eventDate
-              }
-            },
-            title: ''
-          },
-          attributes: {
-            type: 'anomalyEvents',
-            displaySelectedRows: true,
-            noOfEventsPerPage: 10,
-            maxNumbersOnLeftRightPagination: 4,
-            isMainComponent: false,
-            style: {
-              width: '100%',
-              height: '100%',
-              backgroundColor: Colors.contextBG
-            },
-            otherStyles: {
-              flex: {},
-              pagination: {}
-            },
-            id: 'timeline-anomaly-events'
-          }
-        };
+        let apiObj = getTabObj(tabs, 'secondary', this.currentTab);
+        if (apiObj.meta.api.pathParams.selectedCardId) {
+          apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = selectedCardId;
+        }
+        apiObj.meta.api.queryParams = Object.assign({},
+          apiObj.meta.api && apiObj.meta.api.queryParams,
+          {
+            window: '',
+            date: '',
+            user: '',
+            machine: ''
+          });
+        if (apiObj.meta.api.queryParams.date === '') {
+          apiObj.meta.api.queryParams.date = eventDate;
+        }
+        else {
+          delete apiObj.meta.api.queryParams.date;
+        }
+
+        if (apiObj.meta.api.queryParams.user === '' && user) {
+          apiObj.meta.api.queryParams.user = user;
+        }
+        else {
+          delete apiObj.meta.api.queryParams.user;
+        }
+
+        if (apiObj.meta.api.queryParams.machine === '' && machine) {
+          apiObj.meta.api.queryParams.machine = machine;
+        }
+        else {
+          delete apiObj.meta.api.queryParams.machine;
+        }
+        apiObj.type = 'secondary';
+        this.contextualMenuApiParams = apiObj;
       }
     }
   }
@@ -324,7 +335,9 @@ class Timeline extends React.Component {
     return () => {
       let details = {
         selectedCardId: '',
-        eventDate: ''
+        eventDate: '',
+        user: '',
+        machine: ''
       };
       this.getContextualMenuApiObj(details);
     };
@@ -345,6 +358,7 @@ class Timeline extends React.Component {
 
   onTabChange(tabId) {
     this.currentTabId = tabId.props.index;
+    this.currentTab = tabId.props.label;
     if (this.currentTabId === 0) {
       this.fetchData(1, 'alert');
     }
@@ -355,58 +369,63 @@ class Timeline extends React.Component {
 
   render() {
     const {state, props} = this,
-      {attributes} = props;
+      {attributes, tabs} = props;
 
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
 
+    let tabNames = [];
+    if (tabs) {
+      for (let tab in tabs) {
+        tabNames.push(tab);
+      }
+    }
+
     return (
       <div>
+        {
+          tabs && tabNames.length > 1
+          ? <TabsWidget
+            tabs={tabNames}
+            style={{paddingLeft: '85px', paddingBottom: '17px'}}
+            onTabChange={this.onTabChange} />
+          : null
+        }
         {
           (props.data &&
           !isUndefined(state.rows) &&
           state.rows.length === 0 &&
           this.card === TIMELINE_CARD)
-          ? <div>No additional results were found.</div>
+          ? <div style={{paddingLeft: '85px'}}>No additional results were found.</div>
           : null
         }
         {
           (state.rows.length > 0)
-            ? <div>
-                {
-                  attributes.tabNames && attributes.tabNames.length
-                  ? <TabsWidget
-                    tabNames={attributes.tabNames}
-                    style={{paddingLeft: '85px', paddingBottom: '17px'}}
-                    onTabChange={this.onTabChange} />
-                  : null
-                }
-              <div style={
+            ? <div style={
                 attributes.otherStyles.flex && state.selectedCardId !== ''
                 ? attributes.otherStyles.flex : {}
               }>
-                {this.displayCard()}
-                {
-                  state.selectedCardId !== ''
-                  ? <div>
-                    {this.displayContextualMenuCards()}
-                    <div id='collapse-contextual-menu' style={{
-                      bottom: 0,
-                      position: 'absolute',
-                      right: '460px'
-                    }}>
-                      <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
-                    </div>
-                    <div style={{color: 'transparent'}}>
-                      {
-                        setTimeout(() => {
-                          this.setPrimaryTimelineHeight();
-                        }, 2000)
-                      }
-                    </div>
+              {this.displayCard()}
+              {
+                state.selectedCardId !== ''
+                ? <div>
+                  {this.displayContextualMenuCards()}
+                  <div id='collapse-contextual-menu' style={{
+                    bottom: 0,
+                    position: 'absolute',
+                    right: '460px'
+                  }}>
+                    <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
                   </div>
-                  : null
-                }
-              </div>
+                  <div style={{color: 'transparent'}}>
+                    {
+                      setTimeout(() => {
+                        this.setPrimaryTimelineHeight();
+                      }, 2000)
+                    }
+                  </div>
+                </div>
+                : null
+              }
             </div>
           : null
         }

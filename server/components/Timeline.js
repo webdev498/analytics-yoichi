@@ -1,4 +1,5 @@
-import {msToTime, getEventTypeString, formatBytes, formatDateInLocalTimeZone} from '../utils/utils';
+import moment from 'moment';
+import {msToTime, getEventTypeString, formatBytes} from '../utils/utils';
 function getIPDetails(source) {
   if (source) {
     const info = {};
@@ -48,7 +49,7 @@ function getSSH(row) {
   if (ssh.direction) { info.Direction = ssh.direction; }
   if (ssh.client) { info.Client = ssh.client; }
   if (ssh.server) { info.Server = ssh.server; }
-  if (ssh.success) { info.Successful = ssh.success; }
+  if (ssh.success) { info.Successful = ssh.success ? 'Successful' : 'Failed'; }
   return info;
 }
 
@@ -222,6 +223,18 @@ function getAuth(row) {
   return info;
 }
 
+function formatDateInLocalTimeZone(value) {
+  let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    dateTime = {
+      date: '',
+      time: ''
+    },
+    localDateTime = moment.utc(value1).toDate();
+  dateTime.date = moment(localDateTime).format('DD MMM YYYY');
+  dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
+  return dateTime;
+}
+
 function getSession(row, info) {
   if (row.from) {
     let dateTime = formatDateInLocalTimeZone(row.from);
@@ -246,6 +259,7 @@ function getOther(row) {
   if (row.date) { info.Date = row.date; }
   if (row.id) { info.id = row.id; }
   if (row.session) {
+    info.session = true;
     info = getSession(row, info);
   }
 

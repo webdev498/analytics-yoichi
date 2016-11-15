@@ -430,16 +430,123 @@
               "position": "absolute"
             }
           },
-          "tabNames": [
-            "DETAILS",
-            "SESSIONS",
-            "ASSETS ACCESSED"
-          ],
-          "sessionsAPIDetails": {
+          "id": "timeline-component"
+        },
+        "tabs": {
+          "DETAILS": {
+            "primary": {
+              "path": "/api/analytics/reporting/execute/{reportId}",
+              "queryParams": {
+                "window": "",
+                "count": 10,
+                "from": 0,
+                "asset": "assetId:pathParam",
+                "type": "type:pathParam"
+              },
+              "pathParams": {
+                "reportId": "taf_alert_by_asset"
+              }
+            },
+            "secondary": {
+              "meta": {
+                "showHeader": false,
+                "api": {
+                  "path": "/api/anomaly/{anomalyId}/events",
+                  "pathParams": {
+                    "selectedCardId": "anomalyId"
+                  },
+                  "queryParams": {
+                    "window": "",
+                    "from": 0,
+                    "count": 10,
+                    "date": ""
+                  }
+                },
+                "title": ""
+              },
+              "attributes": {
+                "type": "anomalyEvents",
+                "displaySelectedRows": true,
+                "noOfEventsPerPage": 10,
+                "maxNumbersOnLeftRightPagination": 4,
+                "isMainComponent": false,
+                "style": {
+                  "width": "100%",
+                  "height": "100%",
+                  "backgroundColor": "#EBEBEF"
+                },
+                "otherStyles": {
+                  "flex": {},
+                  "pagination": {}
+                },
+                "id": "timeline-contextual-menu"
+              },
+              "timelineType": "secondary"
+            }
+          },
+          "SESSIONS": {
+            "primary": {
+              "path": "/api/analytics/reporting/execute/{reportId}",
+              "queryParams": {
+                "window": "",
+                "count": 10,
+                "from": 0
+              },
+              "pathParams": {
+                "reportId": "taf_asset_session_details"
+              }
+            },
+            "secondary": {
+              "meta": {
+                "showHeader": false,
+                "api": {
+                  "path": "/api/analytics/reporting/execute/{reportId}",
+                  "pathParams": {
+                    "reportId": "taf_asset_session_event_details"
+                  },
+                  "queryParams": {
+                    "window": "",
+                    "from": 0,
+                    "count": 10,
+                    "date": "",
+                    "user": "",
+                    "machine": ""
+                  }
+                },
+                "title": ""
+              },
+              "attributes": {
+                "type": "sessionDetails",
+                "displaySelectedRows": true,
+                "noOfEventsPerPage": 10,
+                "maxNumbersOnLeftRightPagination": 4,
+                "isMainComponent": false,
+                "style": {
+                  "width": "100%",
+                  "height": "100%",
+                  "backgroundColor": "#EBEBEF"
+                },
+                "otherStyles": {
+                  "flex": {},
+                  "pagination": {}
+                },
+                "id": "timeline-contextual-menu"
+              },
+              "timelineType": "secondary"
+            }
+          },
+          "ASSETS ACCESSED": {}
+        },
+        "timelineType": "primary",
+        "sessionsAPIDetails": {
+          "session": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "reportId": "taf_asset_session_details"
           },
-          "id": "timeline-component"
+          "sessionDetails": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "reportId": "taf_asset_session_details"
+          }
         }
       }
     ]

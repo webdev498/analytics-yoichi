@@ -258,8 +258,7 @@ function handleNodeMetaData(metadata, nodeObject) {
             time = nodeObject.type === 'anomaly' ? '' : ' ' + dateTimeAnomaly.time;
           nodeObject.label += newLine1 + dateTimeAnomaly.date + time;
           if (nodeObject.type === 'anomaly' &&
-            !isUndefined(metadata.multiple) &&
-            metadata.multiple) {
+            ((!isUndefined(metadata.multiple) && !metadata.multiple) || isUndefined(metadata.multiple))) {
             nodeObject.title += newLine2 + dateTimeAnomaly.date + time;
           }
           nodeObject.nodeDetails.push(
