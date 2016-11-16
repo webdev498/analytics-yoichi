@@ -17,7 +17,7 @@ class ScoreWidget extends React.Component {
         fontFamily: 'Open Sans, sans-serif'
       };
 
-    let color = getColor(scoreValue, '');
+    let color = getColor(scoreValue);
     style.backgroundColor = color;
 
     if (props.inverse) {

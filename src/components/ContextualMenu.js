@@ -282,7 +282,8 @@ class ContextualMenu extends React.Component {
         actionsCount: actions.length,
         actionId: 'action' + index,
         actionLabel: actions[index].label,
-        fullMalwareReportLink: fullMalwareReportLink
+        fullMalwareReportLink: fullMalwareReportLink,
+        actionType: actions[index].actionType
       };
 
     td1.appendChild(document.createTextNode(actions[index].label));

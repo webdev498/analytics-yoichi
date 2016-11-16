@@ -273,7 +273,7 @@ class AssetDetail extends React.Component {
     const {data: {assetDetail}, chartOptions} = this.props,
       {risk: {score}} = assetDetail;
 
-    chartOptions.paletteColors = getColor(score, '');
+    chartOptions.paletteColors = getColor(score);
 
     const radarChartProps = {
       chartOptions,

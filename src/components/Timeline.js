@@ -396,7 +396,7 @@ class Timeline extends React.Component {
           : null
         }
         {
-          (state.rows.length > 0)
+          (state.rows && state.rows.length > 0)
             ? <div style={
                 attributes.otherStyles.flex && state.selectedCardId !== ''
                 ? attributes.otherStyles.flex : {}

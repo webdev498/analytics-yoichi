@@ -570,7 +570,7 @@ export function getPosition(el) {
 }
 
 export function getColor(score, severity) {
-  let color;
+  let color = '';
   if (!score) {
     score = '';
   }
@@ -578,15 +578,14 @@ export function getColor(score, severity) {
     severity = '';
   }
 
-  if (score >= 65 || severity.toLowerCase() === 'high') {
+  if ((score !== '' && score >= 65) || severity.toLowerCase() === 'high') {
     color = Colors.cherry;
   }
-  else if ((score < 65 && score >= 35) || severity.toLowerCase() === 'medium') {
+  else if ((score !== '' && score < 65 && score >= 35) || severity.toLowerCase() === 'medium') {
     color = Colors.coral;
   }
-  else if (score < 35 || severity.toLowerCase() === 'low') {
+  else if ((score !== '' && score < 35) || severity.toLowerCase() === 'low') {
     color = Colors.mustard;
   }
   return color;
 }
-

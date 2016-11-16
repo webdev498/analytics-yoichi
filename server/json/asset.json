@@ -89,7 +89,8 @@
             "width": "100%"
           },
           "id": "NetworkGraph"
-        }
+        },
+        "timelineId": "timeline"
       }
     ],
     [
