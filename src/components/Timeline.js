@@ -23,14 +23,14 @@ function getTabObj(tabs, timelineType, currentTab) {
   return tabObj;
 }
 
-function setOrRemoveQueryParam(apiObj, name, value) {
-  if (apiObj.meta.api.queryParams[name] === '') {
-    apiObj.meta.api.queryParams[name] = value;
+function setOrRemoveQueryParam(queryParams, name, value) {
+  if (queryParams[name] === '') {
+    queryParams[name] = value;
   }
   else {
-    delete apiObj.meta.api.queryParams[name];
+    delete queryParams[name];
   }
-  return apiObj;
+  return queryParams;
 }
 
 class Timeline extends React.Component {
@@ -307,7 +307,7 @@ class Timeline extends React.Component {
         if (apiObj.meta.api.pathParams.selectedCardId) {
           apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = selectedCardId;
         }
-        apiObj.meta.api.queryParams = Object.assign({},
+        let queryParams = Object.assign({},
           apiObj.meta.api && apiObj.meta.api.queryParams,
           {
             window: '',
@@ -316,9 +316,11 @@ class Timeline extends React.Component {
             machine: ''
           });
 
-        apiObj = setOrRemoveQueryParam(apiObj, 'date', eventDate);
-        apiObj = setOrRemoveQueryParam(apiObj, 'user', user);
-        apiObj = setOrRemoveQueryParam(apiObj, 'machine', machine);
+        queryParams = setOrRemoveQueryParam(queryParams, 'date', eventDate);
+        queryParams = setOrRemoveQueryParam(queryParams, 'user', user);
+        queryParams = setOrRemoveQueryParam(queryParams, 'machine', machine);
+
+        apiObj.meta.api.queryParams = queryParams;
 
         apiObj.type = 'secondary';
         this.contextualMenuApiParams = apiObj;
