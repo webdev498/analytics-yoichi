@@ -333,7 +333,7 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText,
       fieldValue = '<span class="title">' + fieldValue + '</span>';
       columnText += newLine + fieldValue;
     }
-    else if (!isUndefined(displayName) && displayName.indexOf('bytes') > -1) {
+    else if (!isUndefined(displayName) && displayName.includes('bytes')) {
       fieldValue = '<span class="heading">' + displayName + ': </span>' + formatBytes(fieldValue, 2);
       columnText += newLine + fieldValue;
     }

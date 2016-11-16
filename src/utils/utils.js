@@ -481,7 +481,7 @@ export function firstCharCapitalize(string) {
     if (string.toLowerCase() === 'ip') {
       return string.toUpperCase();
     }
-    if (string.indexOf('_') > -1) {
+    if (string.includes('_')) {
       string = string.replace('_', ' ');
     }
 
@@ -489,7 +489,7 @@ export function firstCharCapitalize(string) {
       return m.toUpperCase();
     });
 
-    if (string.indexOf(' Ip') > -1) {
+    if (string.includes(' Ip')) {
       string = string.replace(' Ip', ' IP');
     }
   }

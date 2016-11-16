@@ -138,7 +138,7 @@ class TimelineCard extends React.Component {
           {(this.cardType !== 'Anomaly') ? key + ':' : ''} {data[key]}
         </div>
         {
-          data.Type !== 'Anomaly'
+          this.cardType !== 'Anomaly'
           ? null
           : i !== 1
             ? null
@@ -209,11 +209,11 @@ class TimelineCard extends React.Component {
         return (
           <div>
             {
-              (value.indexOf('exfiltration') > -1)
+              (value.includes('exfiltration'))
               ? <img src='/img/anomaly/exfiltration.png' />
-                : (value.indexOf('snoop') > -1)
+                : (value.includes('snoop'))
                   ? <img src='/img/anomaly/snoop.png' />
-                    : (value.indexOf('command and control') > -1)
+                    : (value.includes('command and control'))
                         ? <img src='/img/anomaly/command-control.png' />
                         : null
             }
@@ -233,7 +233,6 @@ class TimelineCard extends React.Component {
       {data} = props;
     this.cardType = data.session ? 'Session' : data.Type;
     this.isLinkCard = (this.cardType === 'Anomaly' || this.cardType === 'Rank Alert' || this.cardType === 'Session');
-    console.log('this.cardType', this.cardType);
     let isAlert = (this.cardType === 'Alert' || this.cardType === 'Rank Alert') ? 'alert' : 'other';
 
     switch (isAlert) {

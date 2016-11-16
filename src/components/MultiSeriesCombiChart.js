@@ -65,7 +65,7 @@ export function getYindex(currentChartData, columns, combinedResult) {
     seriesIndex = '',
     y2 = '';
   for (let c = 0; c < columns.length; c++) {
-    if (!isUndefined(currentChartData.columns[0]) && currentChartData.columns[0].indexOf('[') > -1) {
+    if (!isUndefined(currentChartData.columns[0]) && currentChartData.columns[0].includes('[')) {
       let tempArray = currentChartData.columns[0].split('['),
         columnName = tempArray[0],
         indexName = tempArray[1];

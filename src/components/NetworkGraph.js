@@ -349,7 +349,7 @@ function handleReputationMetaData(parameters) {
     let key = 'nodeDetails_' + nodeObject.id;
     nodeObject.label += newLine1 + label;
     nodeObject.title += newLine2 + title;
-    if (nodeDetails.indexOf('<br />') > -1) {
+    if (nodeDetails.includes('<br />')) {
       let tempNodeDetails = nodeDetails.split('<br />');
       tempNodeDetails.forEach((nodeDetail, index) => {
         key = key + '_' + index;
@@ -360,7 +360,7 @@ function handleReputationMetaData(parameters) {
       nodeObject.nodeDetails.push(<li key={key}>{nodeDetails}</li>);
     }
 
-    nodeStatus = (label.indexOf('Scanning Host') > -1) ? 'scan' : 'malicious';
+    nodeStatus = (label.includes('Scanning Host')) ? 'scan' : 'malicious';
   }
 
   return {
@@ -497,7 +497,7 @@ function getActionsByTypes(actionsData) {
     actionObject.actions = [];
 
     actionsData.forEach((action) => {
-      if ((action.types).indexOf(nodeType) > -1) {
+      if ((action.types).includes(nodeType)) {
         let tempObj = {
           reportId: action.name,
           targetType: action.targetType,

@@ -244,6 +244,32 @@ const http = {
   'type': 'http'
 };
 
+const session = {
+  'date': '2016-11-08T12:00:10.028',
+  'data': {
+    'http': {
+      'originalMimeTyes': [],
+      'fileName': '',
+      'method': 'GET',
+      'responseLength': 10462,
+      'userAgent': 'Media Center',
+      'statusMessage': 'OK',
+      'referrer': 'http://forpagesearch.eu/u2b871hi/RMtPEeENIz3RGmDA2Ruk',
+      'password': '',
+      'depth': 1,
+      'host': 'forpagesearch.eu',
+      'statusCode': 200,
+      'infoMessage': '',
+      'username': ''
+    }
+  },
+  destination,
+  'micros': 906,
+  'id': 'httpId',
+  source,
+  'type': 'http'
+};
+
 function cardTests(ctx, props) {
   const {normalizeData: {normalizeData: result}} = ctx;
   expect(result).to.be.an('array');
@@ -506,6 +532,39 @@ describe('Timeline DAL', () => {
       'Severity': null,
       'Status': null,
       'Priority': null
+    });
+  });
+
+  it('returns session card', async function() {
+    const session = {
+      'lastSeen': '2016-10-30T00:15:01.271',
+      'machine': 'demo-slave-2.aws.demo.ranksoftwareinc.com',
+      'session': {
+        'ready': true,
+        'updated': '2016-10-30T00:15:01.907',
+        'durationMs': 2
+      },
+      'origin': 'live',
+      'from': '2016-10-30T00:00:00.000',
+      'pid': '23634',
+      'to': '2016-10-30T00:00:00.000',
+      'id': 'sessionId',
+      'type': 'LOGON',
+      'user': 'root'
+    };
+
+    const ctx = getCtx({columns, rows: [[session]]});
+    await Timeline(ctx);
+
+    cardTests(ctx, {
+      'Type': 'LOGON',
+      'Date': '30 Oct 2016 05:30:00.000',
+      'Start Date': '30 Oct 2016 05:30:00.000',
+      'End Date': '30 Oct 2016 05:30:00.000',
+      'id': 'sessionId',
+      'Machine': 'demo-slave-2.aws.demo.ranksoftwareinc.com',
+      'User': 'root',
+      'Duration': 2
     });
   });
 
