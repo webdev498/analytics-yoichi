@@ -25,12 +25,13 @@ const styles = {
   heading: {
     textTransform: 'capitalize',
     fontSize: '14px',
-    fontWeight: '600',
-    paddingTop: '5px'
+    fontWeight: '600'
   },
   subHeading: {
+    width: '110px',
     textTransform: 'capitalize',
-    fontWeight: 'light'
+    fontWeight: 'light',
+    overflowWrap: 'break-word'
   }
 };
 
@@ -66,12 +67,21 @@ class AssetWidget extends React.Component {
   render() {
     const {props} = this,
       info = props.data.info;
+
+    const headingStyle = {...styles.heading, ...props.headingStyle};
+    if (!info.title) {
+      headingStyle.paddingTop = '5px';
+    }
+
     return (
       <div style={{...styles.wrap, ...props.style}}>
         {this.getImage(props.data)}
         <div>
-          <div style={{...styles.heading, ...props.headingStyle}}>{info.displayName}</div>
-          <div style={styles.subHeading}>{info.title}</div>
+          <div style={headingStyle}>{info.displayName}</div>
+          {info.title ? <div style={styles.subHeading}>{info.title}</div> : null}
+          {info.department ? <div style={styles.subHeading}>{info.department}</div> : null}
+          {info.servicePack ? <div style={styles.subHeading}>{info.servicePack}</div> : null}
+          {info.OS ? <div style={styles.subHeading}>{info.OS}</div> : null}
         </div>
       </div>
     );
