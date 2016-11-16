@@ -23,6 +23,16 @@ function getTabObj(tabs, timelineType, currentTab) {
   return tabObj;
 }
 
+function setOrRemoveQueryParam(apiObj, name, value) {
+  if (apiObj.meta.api.queryParams[name] === '') {
+    apiObj.meta.api.queryParams[name] = value;
+  }
+  else {
+    delete apiObj.meta.api.queryParams[name];
+  }
+  return apiObj;
+}
+
 class Timeline extends React.Component {
   static propTypes = {
     attributes: PropTypes.object.isRequired,
@@ -305,26 +315,11 @@ class Timeline extends React.Component {
             user: '',
             machine: ''
           });
-        if (apiObj.meta.api.queryParams.date === '') {
-          apiObj.meta.api.queryParams.date = eventDate;
-        }
-        else {
-          delete apiObj.meta.api.queryParams.date;
-        }
 
-        if (apiObj.meta.api.queryParams.user === '' && user) {
-          apiObj.meta.api.queryParams.user = user;
-        }
-        else {
-          delete apiObj.meta.api.queryParams.user;
-        }
+        apiObj = setOrRemoveQueryParam(apiObj, 'date', eventDate);
+        apiObj = setOrRemoveQueryParam(apiObj, 'user', user);
+        apiObj = setOrRemoveQueryParam(apiObj, 'machine', machine);
 
-        if (apiObj.meta.api.queryParams.machine === '' && machine) {
-          apiObj.meta.api.queryParams.machine = machine;
-        }
-        else {
-          delete apiObj.meta.api.queryParams.machine;
-        }
         apiObj.type = 'secondary';
         this.contextualMenuApiParams = apiObj;
       }
