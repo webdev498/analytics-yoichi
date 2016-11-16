@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import Card from 'material-ui/Card/Card';
 import {Colors} from 'theme/colors';
-import {whatIsIt} from 'utils/utils';
+import {whatIsIt, getColor} from 'utils/utils';
 
 let styles = {
   alert: {},
@@ -52,33 +52,6 @@ function getDestinaton(dest) {
   }
 
   return null;
-}
-
-function getBorderColor(score, severity) {
-  let borderColor = Colors.cherry;
-  if (score) {
-    if (score >= 65) {
-      borderColor = Colors.cherry;
-    }
-    else if (score < 65 && score >= 35) {
-      borderColor = Colors.coral;
-    }
-    else if (score < 35) {
-      borderColor = Colors.mustard;
-    }
-  }
-  if (severity) {
-    if (severity.toLowerCase() === 'high') {
-      borderColor = Colors.cherry;
-    }
-    else if (severity.toLowerCase() === 'medium') {
-      borderColor = Colors.coral;
-    }
-    else if (severity.toLowerCase() === 'low') {
-      borderColor = Colors.mustard;
-    }
-  }
-  return borderColor;
 }
 
 function getAnomalyArrow(selected) {
@@ -266,7 +239,7 @@ class TimelineCard extends React.Component {
     switch (isAlert) {
       case 'alert':
         styles.alert = {
-          borderLeft: '5px solid ' + getBorderColor(data.Score, data.Severity),
+          borderLeft: '5px solid ' + getColor(data.Score, data.Severity),
           paddingLeft: '18px'
         };
         break;

@@ -569,16 +569,24 @@ export function getPosition(el) {
   return {x: lx, y: ly};
 }
 
-export function getColor(score) {
+export function getColor(score, severity) {
   let color;
-  if (score >= 65) {
+  if (!score) {
+    score = '';
+  }
+  if (!severity) {
+    severity = '';
+  }
+
+  if (score >= 65 || severity.toLowerCase() === 'high') {
     color = Colors.cherry;
   }
-  else if (score < 65 && score >= 35) {
+  else if ((score < 65 && score >= 35) || severity.toLowerCase() === 'medium') {
     color = Colors.coral;
   }
-  else if (score < 35) {
+  else if (score < 35 || severity.toLowerCase() === 'low') {
     color = Colors.mustard;
   }
   return color;
 }
+
