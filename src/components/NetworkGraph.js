@@ -203,7 +203,8 @@ function handleEdgeMetaData(metadata, edgeObject) {
 }
 
 function handleNodeMetaData(metadata, nodeObject) {
-  let nodeStatus = 'safe';
+  let nodeStatus = 'safe',
+    isNameDisplayed = false;
   nodeObject.metadata = metadata;
   for (let metadataType in metadata) {
     let metadataTypeLower = metadataType.toLowerCase(),
@@ -277,10 +278,16 @@ function handleNodeMetaData(metadata, nodeObject) {
           );
           break;
         case 'displayname':
-          nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
-          nodeObject.nodeDetails.push(<li key={metadataType}><b>Name:</b> {metadata[metadataType]}</li>);
+          if (!isNameDisplayed) {
+            nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
+            nodeObject.nodeDetails.push(<li key={metadataType}><b>Name:</b> {metadata[metadataType]}</li>);
+            isNameDisplayed = true;
+          }
           break;
         default:
+          if (isNameDisplayed && metadataTypeLower === 'name') {
+            break;
+          }
           if (metadataTypeLower === 'title') {
             nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
               addNewlines(metadata[metadataType]);
@@ -292,7 +299,7 @@ function handleNodeMetaData(metadata, nodeObject) {
             );
             metadataArray.forEach((value, index) => {
               nodeObject.nodeDetails.push(
-                <li key={metadataType}>{index + 1}. {value}</li>
+                <li key={metadataType + index}>{index + 1}. {value}</li>
               );
             });
           }
@@ -302,6 +309,9 @@ function handleNodeMetaData(metadata, nodeObject) {
             nodeObject.nodeDetails.push(
               <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
             );
+          }
+          if (metadataTypeLower === 'name') {
+            isNameDisplayed = true;
           }
           break;
       }
