@@ -68,7 +68,9 @@
             "pathParams": {
               "alertId": ":pathParam"
             },
-            "queryParams": {}
+            "queryParams": {
+              "date": "date:pathParam"
+            }
           },
           "title": "Overview"
         },

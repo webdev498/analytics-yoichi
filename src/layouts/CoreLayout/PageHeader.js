@@ -1,22 +1,25 @@
 import React, {PropTypes} from 'react';
 
 import AppBar from 'material-ui/AppBar';
-
 import DropDownMenu from 'material-ui/DropDownMenu';
 import Menu from 'material-ui/Menu/Menu';
 import MenuItem from 'material-ui/MenuItem/MenuItem';
 import FontIcon from 'material-ui/FontIcon';
+import Paper from 'material-ui/Paper';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import AppTheme from 'theme/AppTheme';
+
+import Image from 'components/widgets/Image';
 
 import {updateApiData} from 'actions/ParentCard';
 import {logout} from 'actions/auth';
 
 import { connect } from 'react-redux';
-import Paper from 'material-ui/Paper';
+
 import {Colors} from 'theme/colors';
 import { Link } from 'react-router';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import AppTheme from 'theme/AppTheme';
+
 const muiTheme = getMuiTheme(AppTheme);
 
 const openKibanaInNewWindow = window.global && window.global.openKibanaInNewWindow;
@@ -119,10 +122,9 @@ export class PageHeader extends React.Component {
       }
     });
 
-    this.state = {value, showMenu: false, showImage: true};
+    this.state = {value, showMenu: false};
     this.toggleMenu = this.toggleMenu.bind(this);
     this.handleTimeChange = this.handleTimeChange.bind(this);
-    this.onError = this.onError.bind(this);
   }
 
   static propTypes = {
@@ -150,10 +152,6 @@ export class PageHeader extends React.Component {
     });
   }
 
-  onError() {
-    this.setState({showImage: false});
-  }
-
   render() {
     const {props} = this,
       name = props.auth.user ? props.auth.user.name : '';
@@ -170,15 +168,9 @@ export class PageHeader extends React.Component {
           <img src='/rank-logo.png' style={styles.rankLogo} alt='Rank Logo' />
         </Link>
         <div style={styles.label}>
-          {
-            this.state.showImage
-            ? <img src='/client-logo.png'
-              style={styles.clientLogo}
-              onError={this.onError}
-              alt='Client Logo' />
-            : null
-          }
-
+          <Image imageUrl='/client-logo.png'
+            alt='Client Logo'
+            style={styles.clientLogo} />
         </div>
       </div>
     );

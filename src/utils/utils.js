@@ -53,20 +53,15 @@ export function msToTime(duration) {
 // Function to generate row data
 export function generateRawData(fieldMapping, apiData) {
   let rawData = {};
+  if (apiData === null) {
+    return;
+  }
   for (let i = 0; i < fieldMapping.length; i++) {
     let currentChartData = fieldMapping[i];
-    if (apiData === null && apiData[currentChartData.reportId] === undefined) {
-      return;
-    }
-    else {
-      if (!rawData.hasOwnProperty(currentChartData.reportId)) {
-        if (apiData[currentChartData.reportId] !== undefined) {
-          rawData[currentChartData.reportId] = apiData[currentChartData.reportId];
-        }
-        else {
-          rawData[currentChartData.reportId] = apiData;
-        }
-      }
+    if (!rawData.hasOwnProperty(currentChartData.reportId)) {
+      rawData[currentChartData.reportId] = apiData[currentChartData.reportId] !== undefined
+        ? apiData[currentChartData.reportId]
+        : apiData;
     }
   }
   return rawData;
@@ -118,12 +113,7 @@ export function getXYIndexFromColumnNames(currentChartDataColumns, columnsArray)
 // Function to get index from object name specified in layout JSON
 export function getIndexFromObjectName(inputArray) {
   let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
-  if (fieldName.indexOf('.') > -1) {
-    fieldValueArray = fieldName.split('.');
-  }
-  else {
-    fieldValueArray = [fieldName];
-  }
+  fieldValueArray = fieldName.includes('.') ? fieldName.split('.') : [fieldName];
 
   for (let v = 0; v < fieldValueArray.length; v++) {
     if (v === 0) {
@@ -156,41 +146,31 @@ export function checkForUndefinedChartOptionObject(chartOptions, objectName, def
 // Function to translate time window
 export function translateTimeWindow(window) {
   if (window === '1 hour') return '1h';
-  if (window === '6 hour') return '6h';
-  if (window === '12 hour') return '12h';
-  if (window === '24 hour') return '24h';
-  if (window === '48 hour') return '48h';
-  if (window === '1 day') return '1d';
-  if (window === '1 week') return '1w';
-  if (window === '1 month') return '1mo';
+  else if (window === '6 hour') return '6h';
+  else if (window === '12 hour') return '12h';
+  else if (window === '24 hour') return '24h';
+  else if (window === '48 hour') return '48h';
+  else if (window === '1 day') return '1d';
+  else if (window === '1 week') return '1w';
+  else if (window === '1 month') return '1mo';
 
-  if (window === '1h') return '1 hour';
-  if (window === '6h') return '6 hour';
-  if (window === '12h') return '12 hour';
-  if (window === '24h') return '24 hour';
-  if (window === '48h') return '48 hour';
-  if (window === '1d') return '1 day';
-  if (window === '1w') return '1 week';
-  if (window === '1mo') return '1 month';
-  return window;
+  else if (window === '1h') return '1 hour';
+  else if (window === '6h') return '6 hour';
+  else if (window === '12h') return '12 hour';
+  else if (window === '24h') return '24 hour';
+  else if (window === '48h') return '48 hour';
+  else if (window === '1d') return '1 day';
+  else if (window === '1w') return '1 week';
+  else if (window === '1mo') return '1 month';
+  else return window;
 }
 
 export function isUndefined(value) {
-  if (value === undefined) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return value === undefined;
 }
 
 export function isNull(value) {
-  if (value === null) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return value === null;
 }
 
 function addZero(x, n) {
@@ -216,7 +196,7 @@ export function formatDate(date) {
   let min = addZero(date.getMinutes(), 2);
   let ss = addZero(date.getSeconds(), 2);
   let milisec = addZero(date.getMilliseconds(), 3);
-  if (milisec !== '' || milisec !== 0 || milisec !== '0') milisec = '.' + milisec;
+  milisec = (milisec !== '' || milisec !== 0 || milisec !== '0') ? '.' + milisec : milisec;
 
   let formattedDateString = yyyy + '-' + mm + '-' + dd + 'T' + hh + ':' + min + ':' + ss + milisec;
 
@@ -236,8 +216,63 @@ export function formatDateInLocalTimeZone(value) {
   return dateTime;
 }
 
+function getFromDate(params, todayDate, fromDate) {
+  if (params.functionName === 'hour') {
+    fromDate.setHours(todayDate.getHours() - params.diffInUnits);
+  }
+  else if (params.functionName === 'date') {
+    fromDate.setDate(todayDate.getDate() - params.diffInUnits);
+  }
+  else if (params.functionName === 'month') {
+    fromDate.setMonth(todayDate.getMonth() - params.diffInUnits);
+  }
+  return fromDate;
+}
+
 // Function to get from and to dates for the specific time window
 export function getTimePairFromWindow(timeWindow, dateString) {
+  const timeDifferences = {
+    '1h': {
+      diffInMin: 5,
+      functionName: 'hour',
+      diffInUnits: 1
+    },
+    '6h': {
+      diffInMin: 15,
+      functionName: 'hour',
+      diffInUnits: 6
+    },
+    '12h': {
+      diffInMin: 30,
+      functionName: 'hour',
+      diffInUnits: 12
+    },
+    '24h': {
+      diffInMin: 60,
+      functionName: 'date',
+      diffInUnits: 1
+    },
+    '48h': {
+      diffInMin: 120,
+      functionName: 'date',
+      diffInUnits: 2
+    },
+    '1d': {
+      diffInMin: 60,
+      functionName: 'date',
+      diffInUnits: 1
+    },
+    '1w': {
+      diffInMin: 1440,
+      functionName: 'date',
+      diffInUnits: 7
+    },
+    '1mo': {
+      diffInMin: 10080,
+      functionName: 'month',
+      diffInUnits: 1
+    }
+  };
   let dateString1 = '',
     dateString2 = '';
 
@@ -246,73 +281,19 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     let dateParameter = new Date(Date.parse((dateString).toString()));
     dateString1 = formatDate(dateParameter);
 
-    let timeDifference = 5;// default 5 minutes time difference
-    if (timeWindow === '1h') {
-      timeDifference = 5;// i.e. 5 minutes difference
-    }
-    if (timeWindow === '6h') {
-      timeDifference = 15;// i.e. 15 minutes difference
-    }
-    if (timeWindow === '12h') {
-      timeDifference = 30;// i.e. 30 minutes difference
-    }
-    if (timeWindow === '24h') {
-      timeDifference = 60;// i.e. 60 minutes difference
-    }
-    if (timeWindow === '48h') {
-      timeDifference = 120;// i.e. 120 minutes difference
-    }
-    if (timeWindow === '1d') {
-      timeDifference = 60;// i.e. 1 hour difference
-    }
-    if (timeWindow === '1w') {
-      timeDifference = 1440;// i.e. 1 day difference
-    }
-    if (timeWindow === '1mo') {
-      timeDifference = 10080;// i.e. 1 week difference
-    }
-
-    let toDate = dateParameter;
+    let timeDifference = timeDifferences[timeWindow] ? timeDifferences[timeWindow].diffInMin : 5,
+      toDate = dateParameter;
     toDate.setMinutes(toDate.getMinutes() + timeDifference);
     dateString2 = formatDate(toDate);
-
-    let dateTimePair = {fromDate: dateString1, toDate: dateString2};
-    return dateTimePair;
+    return {fromDate: dateString1, toDate: dateString2};
   }
   else {
-    let todayDate = new Date();
-    dateString1 = formatDate(todayDate);
-    let fromDate = todayDate;
-
-    if (timeWindow === '1h') {
-      fromDate.setHours(todayDate.getHours() - 1);
-    }
-    if (timeWindow === '6h') {
-      fromDate.setHours(todayDate.getHours() - 6);
-    }
-    if (timeWindow === '12h') {
-      fromDate.setHours(todayDate.getHours() - 12);
-    }
-    if (timeWindow === '24h') {
-      fromDate.setHours(todayDate.getDate() - 1);
-    }
-    if (timeWindow === '48h') {
-      fromDate.setHours(todayDate.getDate() - 2);
-    }
-    if (timeWindow === '1d') {
-      fromDate.setDate(todayDate.getDate() - 1);
-    }
-    if (timeWindow === '1w') {
-      fromDate.setDate(todayDate.getDate() - 7);
-    }
-    if (timeWindow === '1mo') {
-      fromDate.setMonth(todayDate.getMonth() - 1);
-    }
-
+    let todayDate = new Date(),
+      fromDate = todayDate;
+    fromDate = getFromDate(timeDifferences[timeWindow], todayDate, fromDate);
+    dateString1 = formatDate(new Date());
     dateString2 = formatDate(fromDate);
-
-    let dateTimePair = {fromDate: dateString2, toDate: dateString1};
-    return dateTimePair;
+    return {fromDate: dateString2, toDate: dateString1};
   }
 }
 
@@ -473,12 +454,7 @@ export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
   if (bytes === '' || bytes === undefined) return '-';
 
   if (bytes === 0) {
-    if (numberStyle) {
-      return numberToReactElm(0, 'Byte', {numberStyle, textStyle});
-    }
-    else {
-      return '0 Byte';
-    }
+    return numberStyle ? numberToReactElm(0, 'Byte', {numberStyle, textStyle}) : '0 Byte';
   }
 
   const k = 1000,
@@ -490,29 +466,8 @@ export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
     text = sizes[i];
 
   // if custom sytles are provided then return React Element.
-  if (numberStyle) {
-    return numberToReactElm(val, text, {numberStyle, textStyle});
-  }
-  return val + ' ' + text;
+  return numberStyle ? numberToReactElm(val, text, {numberStyle, textStyle}) : val + ' ' + text;
 };
-
-export function formatMicroseconds(miliseconds) {
-  if (miliseconds === 0) return 0;
-
-  let seconds = Math.floor(miliseconds / 1000);
-  let days = Math.floor(seconds / 86400);
-  let hours = Math.floor((seconds % 86400) / 3600);
-  let minutes = Math.floor(((seconds % 86400) % 3600) / 60);
-  let timeString = '';
-  if (days > 0) timeString += (days > 1) ? (days + ' days ') : (days + ' day ');
-  if (hours > 0) timeString += (hours > 1) ? (hours + ' hours ') : (hours + ' hour ');
-  if (minutes > 0) timeString += (minutes > 1) ? (minutes + ' minutes ') : (minutes + ' minute ');
-  if (seconds > 0) timeString += (seconds > 1) ? (seconds + ' seconds ') : (seconds + ' second ');
-  let ms = miliseconds % 1000;
-  if (ms >= 0) timeString += (ms + ' ms');
-
-  return timeString;// Math.floor(timeString / 1000);
-}
 
 export function kFormatter(num) {
   return num > 999 ? (num / 1000).toFixed(2) + 'k' : num;
@@ -522,24 +477,26 @@ export function firstCharCapitalize(string) {
   if (string === undefined) {
     return string;
   }
-  if (string !== undefined && string.toLowerCase() === 'ip') {
-    return string.toUpperCase();
-  }
-  if (string.indexOf('_') > -1) {
-    string = string.replace('_', ' ');
-  }
+  else {
+    if (string.toLowerCase() === 'ip') {
+      return string.toUpperCase();
+    }
+    if (string.indexOf('_') > -1) {
+      string = string.replace('_', ' ');
+    }
 
-  string = string.toLowerCase().replace(/\b\w/g, function(m) {
-    return m.toUpperCase();
-  });
+    string = string.toLowerCase().replace(/\b\w/g, function(m) {
+      return m.toUpperCase();
+    });
 
-  if (string.indexOf(' Ip') > -1) {
-    string = string.replace(' Ip', ' IP');
+    if (string.indexOf(' Ip') > -1) {
+      string = string.replace(' Ip', ' IP');
+    }
   }
   return string;
 };
 
-export function nFormatter(num, digits, {numberStyle, textStyle}) {
+export function nFormatter(num, digits, {numberStyle}) {
   const si = [
       { value: 1E18, symbol: 'E' },
       { value: 1E15, symbol: 'P' },
@@ -570,7 +527,7 @@ export function parseQuery(qstr) {
   const query = {},
     arr = qstr.substr(1).split('&');
 
-  arr.forEach((val) => {
+  arr.forEach(val => {
     const b = val.split('=');
     query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
   });
@@ -605,7 +562,8 @@ export function whatIsIt(object) {
 
 export function getPosition(el) {
   // yay readability
-  for (var lx = 0, ly = 0;
+  let lx = 0, ly = 0;
+  for (lx = 0, ly = 0;
     el != null;
     lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
   return {x: lx, y: ly};
@@ -623,10 +581,4 @@ export function getColor(score) {
     color = Colors.mustard;
   }
   return color;
-}
-
-if (!('contains' in String.prototype)) {
-  String.prototype.contains = function(str, startIndex) {
-    return (String.prototype.indexOf.call(this, str, startIndex) !== -1);
-  };
 }

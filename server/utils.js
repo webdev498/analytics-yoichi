@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 // Function to convert milliseconds to time
 export function msToTime(duration) {
   let seconds = parseInt((duration / 1000) % 60),
@@ -48,3 +50,16 @@ export function formatBytes(bytes, decimals) {
     text = sizes[i];
   return val + ' ' + text;
 };
+
+// function to format Date In Local TimeZone
+export function formatDateInLocalTimeZone(value) {
+  let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    dateTime = {
+      date: '',
+      time: ''
+    },
+    localDateTime = moment.utc(value1).toDate();
+  dateTime.date = moment(localDateTime).format('DD MMM YYYY');
+  dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
+  return dateTime;
+}

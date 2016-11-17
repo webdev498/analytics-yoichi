@@ -44,6 +44,7 @@ router
 .get('/alert/traffic', timeline)
 .get('/analytics/reporting/execute/taf_alert_by_asset', timeline)
 .get('/anomaly/:anomalyId/events', timeline)
+.get('/analytics/reporting/execute/taf_asset_session_details', timeline)
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);

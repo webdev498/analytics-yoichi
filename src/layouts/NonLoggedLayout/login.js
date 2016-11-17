@@ -7,7 +7,6 @@ import Card from 'material-ui/Card/Card';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import CustomCardHeader from 'components/CustomCardHeader';
 import {loginUrl, responseType, clientId, redirectUri, defaultRoute} from 'config';
 
 import {Colors} from 'theme/colors';
@@ -20,11 +19,11 @@ const styles = {
     backgroundColor: Colors.garnet,
     position: 'relative'
   },
-  container: {
-  },
   header: {
+    width: '100%',
     backgroundColor: Colors.garnet,
-    padding: '0 35px'
+    padding: '16px 35px',
+    textAlign: 'left'
   },
   inputWrap: {
     padding: '0 35px'
@@ -162,8 +161,10 @@ class LoginView extends React.Component {
     return (
       <Card style={styles.card}
         containerStyle={styles.container} >
-        <CustomCardHeader title='Rank'
-          style={styles.header} />
+        <header
+          style={styles.header}>
+          <img src='/rank-logo.png' style={styles.rankLogo} alt='Rank Logo' />
+        </header>
 
         {this.getErrorState()}
 
