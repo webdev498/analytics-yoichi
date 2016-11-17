@@ -291,9 +291,8 @@ function handleNodeMetaData(metadata, nodeObject) {
               <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b></li>
             );
             metadataArray.forEach((value, index) => {
-              index++;
               nodeObject.nodeDetails.push(
-                <li key={metadataType}>{index}. {value}</li>
+                <li key={metadataType}>{index + 1}. {value}</li>
               );
             });
           }
