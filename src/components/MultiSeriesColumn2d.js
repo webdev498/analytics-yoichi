@@ -29,6 +29,19 @@ const chart = {
   'legendItemFontColor': '#666666'
 };
 
+function getColumnIndex(columns, name, type) {
+  let index = null, col = null;
+  columns.forEach((column, i) => {
+    if (column.name === name || column.columnType === type) {
+      index = i;
+      col = column;
+      return;
+    }
+  });
+
+  return {index, col};
+}
+
 function getData(data, index, label, callback) {
   return data.map((val) => {
     if (callback) {
@@ -43,21 +56,35 @@ function getData(data, index, label, callback) {
 }
 
 function getDataSource(props) {
-  const {data: {success, fail}} = props;
+  let {data, chartData: {fieldMapping}} = props;
 
-  const categories = [{
-    category: getData(success.rows, 0, 'label')
-  }];
+  let xAxis, yAxis = [];
+  fieldMapping.forEach(field => {
+    if (field.axis === 'x') {
+      xAxis = {...getColumnIndex(data.columns, field.columns[0].name), field};
+    }
 
-  const dataset = [];
-  dataset.push({
-    seriesname: 'Successful Logins',
-    data: getData(success.rows, 1, 'value')
+    if (field.axis === 'y') {
+      yAxis.push({...getColumnIndex(data.columns, field.columns[0].name), field});
+    }
   });
 
-  dataset.push({
-    seriesname: 'Failed Logins',
-    data: getData(fail.rows, 1, 'value')
+  const categories = [],
+    dataset = [];
+
+  const {rows} = data;
+
+  categories.push({
+    category: getData(rows, xAxis.index, 'label')
+  });
+
+  yAxis.forEach(y => {
+    const {index, field, field: {columns}} = y;
+
+    dataset.push({
+      seriesname: field.seriesname,
+      data: getData(rows, index, 'value', (val) => (val[columns[0].key]))
+    });
   });
 
   return {

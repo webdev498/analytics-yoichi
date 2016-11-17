@@ -431,7 +431,7 @@ export class ParentCard extends React.Component {
 
         <div style={props.attributes.bodyStyle}>
           {
-            props.isError
+            props.isError && (props.meta.showErrorMessage !== false)
             ? this.getErrorElement()
             : React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})
           }
