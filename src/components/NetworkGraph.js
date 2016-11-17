@@ -285,11 +285,25 @@ function handleNodeMetaData(metadata, nodeObject) {
             nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
               addNewlines(metadata[metadataType]);
           }
-          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            metadata[metadataType];
-          nodeObject.nodeDetails.push(
-            <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
-          );
+          if (whatIsIt(metadata[metadataType]) === 'Array') {
+            let metadataArray = metadata[metadataType];
+            nodeObject.nodeDetails.push(
+              <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b></li>
+            );
+            metadataArray.forEach((value, index) => {
+              index++;
+              nodeObject.nodeDetails.push(
+                <li key={metadataType}>{index}. {value}</li>
+              );
+            });
+          }
+          else {
+            nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              metadata[metadataType];
+            nodeObject.nodeDetails.push(
+              <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
+            );
+          }
           break;
       }
     }
