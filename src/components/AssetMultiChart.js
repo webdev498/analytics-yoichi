@@ -67,6 +67,7 @@ const userCharts = [
       },
       'style': {
         'width': '100%',
+        'minHeight': '100px',
         'padding': 0,
         'boxShadow': 'none',
         'marginBottom': '35px'
@@ -151,6 +152,7 @@ const userCharts = [
       },
       'style': {
         'width': '100%',
+        'minHeight': '100px',
         'padding': 0,
         'boxShadow': 'none',
         'marginBottom': '35px'
@@ -231,6 +233,7 @@ const userCharts = [
       },
       'style': {
         'width': '100%',
+        'minHeight': '100px',
         'padding': 0,
         'boxShadow': 'none',
         'marginBottom': '35px'
@@ -311,6 +314,7 @@ const userCharts = [
       },
       'style': {
         'width': '100%',
+        'minHeight': '100px',
         'padding': 0,
         'boxShadow': 'none',
         'marginBottom': '35px'
@@ -398,6 +402,7 @@ const machineCharts = [
       },
       'style': {
         'width': '100%',
+        'minHeight': '100px',
         'padding': 0,
         'boxShadow': 'none',
         'marginBottom': '35px'
@@ -482,6 +487,7 @@ const machineCharts = [
       },
       'style': {
         'width': '100%',
+        'minHeight': '100px',
         'padding': 0,
         'boxShadow': 'none',
         'marginBottom': '35px'
@@ -562,6 +568,7 @@ const machineCharts = [
       },
       'style': {
         'width': '100%',
+        'minHeight': '100px',
         'padding': 0,
         'boxShadow': 'none',
         'marginBottom': '35px'
@@ -642,6 +649,7 @@ const machineCharts = [
       },
       'style': {
         'width': '100%',
+        'minHeight': '100px',
         'padding': 0,
         'boxShadow': 'none',
         'marginBottom': '35px'
