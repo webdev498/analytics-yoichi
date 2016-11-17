@@ -32,7 +32,7 @@ export function errorPageData(id, ex) {
 }
 
 function getUrl(id) {
-  return `${baseUrl}/api/store/dashboard${id}`;
+  return `${baseUrl}/api/layout${id}`;
 }
 
 export function fetchLayoutData(id) {
@@ -66,8 +66,9 @@ export function fetchLayoutData(id) {
       if (status === 401) {
         logoutUtil(dispatch);
       }
-      else if (status === 404 || status === 500) {
-        // dispatch(receivePageData(id, {json: getLayout(urlId)}));
+      else if (status !== 200) {
+        console.log(response);
+        dispatch(errorPageData(id, {message: response.statusText}));
       }
       else {
         return response.json();

@@ -20,7 +20,7 @@ const agent = new https.Agent(agentOptions),
   timeout = timeoutDuration || 1000 * 60;
 
 router
-.get('/store/*', layoutRoutes)
+.get('/layout/*', layoutRoutes)
 .get('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);
