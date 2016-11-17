@@ -392,15 +392,10 @@ class Timeline extends React.Component {
           : null
         }
         {
-          (props.data &&
+          ((props.data &&
           !isUndefined(state.rows) &&
           state.rows.length === 0 &&
-          this.card === TIMELINE_CARD)
-          ? <div style={{paddingLeft: '85px'}}>No additional results were found.</div>
-          : null
-        }
-        {
-          props.errorData
+          this.card === TIMELINE_CARD) || props.errorData)
           ? <div style={{paddingLeft: '85px'}}>No additional results were found.</div>
           : null
         }
