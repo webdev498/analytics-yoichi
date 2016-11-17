@@ -115,6 +115,7 @@
         "type": "Timeline",
         "meta": {
           "showHeader": true,
+          "showErrorMessage": false,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "queryParams": {
