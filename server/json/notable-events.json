@@ -1,0 +1,464 @@
+{
+  "layout": [
+    [
+      {
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_alert_count_time_shifted"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
+        },
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#F69275"
+          },
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #F69275"
+          }
+        },
+        "id": "1",
+        "type": "MetricsCard",
+        "title": "High Priority Alerts",
+        "kibana": {
+          "pathParams": [
+            "alerts-score"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "scoreRange": ""
+          }
+        }
+      },
+      {
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_malware_count_time_shifted"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
+        },
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#F69275"
+          },
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #F69275"
+          }
+        },
+        "id": "2",
+        "type": "MetricsCard",
+        "title": "High Priority Malware",
+        "clickData": {
+          "tableId": "RecentAlerts",
+          "filterText": "malware",
+          "page": "/alerts"
+        }
+      },
+      {
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_event_count_time_shifted"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
+        },
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#2bd8d0"
+          },
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #2bd8d0"
+          }
+        },
+        "id": "3",
+        "type": "MetricsCard",
+        "title": "Events Processed",
+        "kibana": {
+          "pathParams": [
+            "traffic-details"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": ""
+          }
+        }
+      },
+      {
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_asset_count_time_shifted"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
+        },
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#2bd8d0"
+          },
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #2bd8d0"
+          }
+        },
+        "id": "4",
+        "type": "MetricsCard",
+        "title": "Assets Monitored",
+        "kibana": {
+          "pathParams": [
+            "assets-all"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": ""
+          }
+        }
+      }
+    ],
+    [
+      {
+        "chartOptions": {
+          "xAxisname": "STATUS",
+          "baseFontColor": "#6B7282",
+          "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_login_failure_by_type",
+              "columns": [
+                "data.winevent.SubStatus"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_login_failure_by_type",
+              "columns": [
+                "count"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_login_failure_by_type"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Login failure by type"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "marginRight": "33px",
+            "width": "50%"
+          },
+          "id": "loginFailureByType",
+          "chartHeight": "350"
+        },
+        "id": "login-failure-by-type",
+        "type": "ParetoChart"
+      },
+      {
+        "chartOptions": {
+          "xAxisname": "USER",
+          "baseFontColor": "#6B7282",
+          "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_login_failure_by_user",
+              "columns": [
+                "data.winevent.TargetUserName"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_login_failure_by_user",
+              "columns": [
+                "count"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_login_failure_by_user"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Login failure by user"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "width": "50%"
+          },
+          "id": "loginFailureByUser",
+          "chartHeight": "350"
+        },
+        "id": "login-failure-by-user",
+        "type": "ParetoChart"
+      }
+    ],
+    [
+      {
+        "chartOptions": {
+          "xAxisname": "TIME",
+          "baseFontColor": "#6B7282",
+          "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_login_failure_by_time",
+              "columns": [
+                "date"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_login_failure_by_time",
+              "columns": [
+                "count"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_login_failure_by_time"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Login failure by time"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "chartHeight": "350",
+          "chartType": "area2d",
+          "style": {
+            "width": "100%"
+          },
+          "id": "loginFailureByTime"
+        },
+        "id": "login-failure-by-time",
+        "type": "StandardChart"
+      }
+    ],
+    [
+      {
+        "chartOptions": {
+          "xAxisname": "MESSAGE",
+          "baseFontColor": "#6B7282",
+          "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_account_management_events_by_type",
+              "columns": [
+                "data.winevent.Message"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_account_management_events_by_type",
+              "columns": [
+                "count"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_account_management_events_by_type"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Account management events by type"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "marginRight": "33px",
+            "width": "33%"
+          },
+          "id": "AccountManagementEventsByType",
+          "chartHeight": "350"
+        },
+        "id": "account-management-events-by-type",
+        "type": "ParetoChart"
+      },
+      {
+        "chartOptions": {
+          "xAxisname": "MESSAGE",
+          "baseFontColor": "#6B7282",
+          "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_computer_management_events_by_type",
+              "columns": [
+                "data.winevent.Message"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_computer_management_events_by_type",
+              "columns": [
+                "count"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_computer_management_events_by_type"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Computer management events by type"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "marginRight": "33px",
+            "width": "33%"
+          },
+          "id": "ComputerManagementEventsByType",
+          "chartHeight": "350"
+        },
+        "id": "computer-management-events-by-type",
+        "type": "ParetoChart"
+      },
+      {
+        "chartOptions": {
+          "xAxisname": "MESSAGE",
+          "baseFontColor": "#6B7282",
+          "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_security_group_management_events_by_type",
+              "columns": [
+                "data.winevent.Message"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_security_group_management_events_by_type",
+              "columns": [
+                "count"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_security_group_management_events_by_type"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Security Group management events by type"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "width": "33%"
+          },
+          "id": "SecurityGroupManagementEventsByType",
+          "chartHeight": "350"
+        },
+        "id": "security-group-management-events-by-type",
+        "type": "ParetoChart"
+      }
+    ]
+  ]
+}

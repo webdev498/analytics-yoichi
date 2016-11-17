@@ -88,7 +88,8 @@
           "id": "NetworkGraph"
         },
         "id": "network-graph",
-        "type": "NetworkGraph"
+        "type": "NetworkGraph",
+        "timelineId": "timeline"
       }
     ],
     [
@@ -156,7 +157,58 @@
             }
           },
           "id": "timeline-component"
-        }
+        },
+        "tabs": {
+          "DETAILS": {
+            "primary": {
+              "path": "/api/alert/traffic",
+              "queryParams": {
+                "window": "",
+                "count": 10,
+                "from": 0
+              },
+              "pathParams": {
+              }
+            },
+            "secondary": {
+              "meta": {
+                "showHeader": false,
+                "api": {
+                  "path": "/api/anomaly/{anomalyId}/events",
+                  "pathParams": {
+                    "selectedCardId": "anomalyId"
+                  },
+                  "queryParams": {
+                    "window": "",
+                    "from": 0,
+                    "count": 10,
+                    "date": ""
+                  }
+                },
+                "title": ""
+              },
+              "attributes": {
+                "type": "anomalyEvents",
+                "displaySelectedRows": true,
+                "noOfEventsPerPage": 10,
+                "maxNumbersOnLeftRightPagination": 4,
+                "isMainComponent": false,
+                "style": {
+                  "width": "100%",
+                  "height": "100%",
+                  "backgroundColor": "#EBEBEF"
+                },
+                "otherStyles": {
+                  "flex": {},
+                  "pagination": {}
+                },
+                "id": "timeline-contextual-menu"
+              },
+              "timelineType": "secondary"
+            }
+          }
+        },
+        "timelineType": "primary"
       }
     ]
   ]

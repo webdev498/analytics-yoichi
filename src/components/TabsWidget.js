@@ -20,7 +20,7 @@ class TabsWidget extends React.Component {
     return (
       <Tabs style={props.style}>
         {
-          props.tabNames.map((tab, index) => {
+          props.tabs.map((tab, index) => {
             return (
               <Tab key={index} label={tab} style={styles.tab} onActive={props.onTabChange}>
                 <div />

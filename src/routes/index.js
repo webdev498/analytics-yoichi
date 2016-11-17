@@ -33,6 +33,7 @@ export default (store) => {
         <Route path='summary-page' />
         <Route path='network-graph' />
         <Route path='timeline-graph' />
+        <Route path='notable-events' />
       </Route>
 
       { /* Catch all route */ }

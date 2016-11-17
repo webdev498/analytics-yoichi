@@ -224,7 +224,7 @@ class ContextualMenu extends React.Component {
     if (isUndefined(value)) {
       let {props} = this,
         {nodeObjects, edgeObjects} = props,
-        parameterName = ((name).indexOf('metadata') > -1) ? 'metadata' : name;
+        parameterName = ((name).includes('metadata')) ? 'metadata' : name;
 
       value = '';
       switch (parameterName) {
@@ -282,7 +282,8 @@ class ContextualMenu extends React.Component {
         actionsCount: actions.length,
         actionId: 'action' + index,
         actionLabel: actions[index].label,
-        fullMalwareReportLink: fullMalwareReportLink
+        fullMalwareReportLink: fullMalwareReportLink,
+        actionType: actions[index].actionType
       };
 
     td1.appendChild(document.createTextNode(actions[index].label));

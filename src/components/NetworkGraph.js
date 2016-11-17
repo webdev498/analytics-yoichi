@@ -107,6 +107,7 @@ function createNodeObject(dataNode) {
 function createEdgeObject(dataEdge, edgesInSameDirection) {
   let edgeObject = {
       id: dataEdge.id,
+      notNodeId: dataEdge.id ? dataEdge.id : '',
       type: [],
       from: dataEdge.source,
       to: dataEdge.target,
@@ -202,7 +203,8 @@ function handleEdgeMetaData(metadata, edgeObject) {
 }
 
 function handleNodeMetaData(metadata, nodeObject) {
-  let nodeStatus = 'safe';
+  let nodeStatus = 'safe',
+    isNameDisplayed = false;
   nodeObject.metadata = metadata;
   for (let metadataType in metadata) {
     let metadataTypeLower = metadataType.toLowerCase(),
@@ -258,8 +260,7 @@ function handleNodeMetaData(metadata, nodeObject) {
             time = nodeObject.type === 'anomaly' ? '' : ' ' + dateTimeAnomaly.time;
           nodeObject.label += newLine1 + dateTimeAnomaly.date + time;
           if (nodeObject.type === 'anomaly' &&
-            !isUndefined(metadata.multiple) &&
-            metadata.multiple) {
+            ((!isUndefined(metadata.multiple) && !metadata.multiple) || isUndefined(metadata.multiple))) {
             nodeObject.title += newLine2 + dateTimeAnomaly.date + time;
           }
           nodeObject.nodeDetails.push(
@@ -277,19 +278,41 @@ function handleNodeMetaData(metadata, nodeObject) {
           );
           break;
         case 'displayname':
-          nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
-          nodeObject.nodeDetails.push(<li key={metadataType}><b>Name:</b> {metadata[metadataType]}</li>);
+          if (!isNameDisplayed) {
+            nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
+            nodeObject.nodeDetails.push(<li key={metadataType}><b>Name:</b> {metadata[metadataType]}</li>);
+            isNameDisplayed = true;
+          }
           break;
         default:
+          if (isNameDisplayed && metadataTypeLower === 'name') {
+            break;
+          }
           if (metadataTypeLower === 'title') {
             nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
               addNewlines(metadata[metadataType]);
           }
-          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            metadata[metadataType];
-          nodeObject.nodeDetails.push(
-            <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
-          );
+          if (whatIsIt(metadata[metadataType]) === 'Array') {
+            let metadataArray = metadata[metadataType];
+            nodeObject.nodeDetails.push(
+              <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b></li>
+            );
+            metadataArray.forEach((value, index) => {
+              nodeObject.nodeDetails.push(
+                <li key={metadataType + index}>{index + 1}. {value}</li>
+              );
+            });
+          }
+          else {
+            nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
+              metadata[metadataType];
+            nodeObject.nodeDetails.push(
+              <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
+            );
+          }
+          if (metadataTypeLower === 'name') {
+            isNameDisplayed = true;
+          }
           break;
       }
     }
@@ -350,7 +373,7 @@ function handleReputationMetaData(parameters) {
     let key = 'nodeDetails_' + nodeObject.id;
     nodeObject.label += newLine1 + label;
     nodeObject.title += newLine2 + title;
-    if (nodeDetails.indexOf('<br />') > -1) {
+    if (nodeDetails.includes('<br />')) {
       let tempNodeDetails = nodeDetails.split('<br />');
       tempNodeDetails.forEach((nodeDetail, index) => {
         key = key + '_' + index;
@@ -361,7 +384,7 @@ function handleReputationMetaData(parameters) {
       nodeObject.nodeDetails.push(<li key={key}>{nodeDetails}</li>);
     }
 
-    nodeStatus = (label.indexOf('Scanning Host') > -1) ? 'scan' : 'malicious';
+    nodeStatus = (label.includes('Scanning Host')) ? 'scan' : 'malicious';
   }
 
   return {
@@ -498,12 +521,13 @@ function getActionsByTypes(actionsData) {
     actionObject.actions = [];
 
     actionsData.forEach((action) => {
-      if ((action.types).indexOf(nodeType) > -1) {
+      if ((action.types).includes(nodeType)) {
         let tempObj = {
           reportId: action.name,
           targetType: action.targetType,
           label: action.label,
-          parameters: action.parameters
+          parameters: action.parameters,
+          actionType: action.actionType
         };
         actionObject.actions.push(tempObj);
       }
@@ -513,42 +537,6 @@ function getActionsByTypes(actionsData) {
   });
 
   return actions;
-}
-
-function fetchExtendedNodes(reportId, duration, parameters) {
-  let otherParameters = '';
-  if (!isUndefined(parameters) && !isUndefined(parameters.length)) {
-    parameters.forEach((parameter) => {
-      if (parameter.userInput === true) {
-        otherParameters += '&' + parameter.name + '=' + document.getElementById(parameter.id).value;
-      }
-      else {
-        otherParameters += '&' + parameter.name + '=' + parameter.value;
-      }
-    });
-  }
-  const accessToken = Cookies.get('access_token'),
-    tokenType = Cookies.get('token_type'),
-    apiUrl = baseUrl + '/api/analytics/actions/execute/' + reportId + '?window=' + duration + otherParameters,
-    customHeaders = {
-      'Accept': 'application/json'
-    },
-    defaultHeaders = Object.assign({
-      'Authorization': `${tokenType} ${accessToken}`
-    }, customHeaders);
-
-  return fetch(apiUrl, {
-    method: 'GET',
-    headers: defaultHeaders
-  })
-  .then(response => response.json()
-  )
-  .catch(error => {
-    this.setState({
-      isFetching: false
-    });
-    return Promise.reject(Error(error.message));
-  });
 }
 
 function isNodeOrEdgeAlreadyExists(array, id) {
@@ -1077,11 +1065,14 @@ class NetworkGraph extends React.Component {
         }
       });
 
+      let notNodeId = this.edgeObjects[edgeID] ? this.edgeObjects[edgeID].notNodeId : '';
+
       let sourceDetails = {
         contextMenuType: selected,
         network: network,
         itemId: edgeID,
-        itemType: edgeType
+        itemType: edgeType,
+        notNodeId: notNodeId
       };
 
       this.ContextualMenu.getContextMenu(sourceDetails);
@@ -1105,8 +1096,7 @@ class NetworkGraph extends React.Component {
     return (event) => {
       let {contextMenuType, network, itemId} = sourceDetails,
         nodeID = itemId,
-        {reportId, parameters, actionsCount, actionId, actionLabel, fullMalwareReportLink} = actionDetails;
-
+        {reportId, parameters, actionsCount, actionId, actionLabel, fullMalwareReportLink, actionType} = actionDetails;
       this.setState({
         isFetching: true,
         loaderText: actionLabel
@@ -1137,7 +1127,8 @@ class NetworkGraph extends React.Component {
         parameters: parameters,
         selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
         contextMenuType: contextMenuType,
-        actionsCount: actionsCount
+        actionsCount: actionsCount,
+        actionType: actionType
       };
 
       this.fetchExtendedNodes(details);
@@ -1154,34 +1145,100 @@ class NetworkGraph extends React.Component {
       parameters,
       selectedNodesForExtendingGraph,
       contextMenuType,
-      actionsCount
+      actionsCount,
+      actionType
     } = details;
 
-    const extendedNodes = fetchExtendedNodes(reportId, timeWindow, parameters),
+    const extendedNodes = this.fetchData(reportId, timeWindow, parameters, actionType),
       that = this;
-    if (!extendedNodes) {
+
+    if (actionType !== 'timeline') {
+      if (!extendedNodes) {
+        this.setState({
+          isFetching: false
+        });
+        return;
+      }
+
+      extendedNodes.then(
+        function(json) {
+          let graphDetails = {
+            extendedNodes: json,
+            network: network,
+            actionId: actionId,
+            selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
+            nodeID: nodeID,
+            reportId: reportId,
+            contextMenuType: contextMenuType
+          };
+          that.updateGraph(graphDetails);
+        }
+      );
+    }
+    else {
       this.setState({
         isFetching: false
       });
-      return;
     }
 
-    extendedNodes.then(
-      function(json) {
-        let graphDetails = {
-          extendedNodes: json,
-          network: network,
-          actionId: actionId,
-          selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
-          nodeID: nodeID,
-          reportId: reportId,
-          contextMenuType: contextMenuType
-        };
-        that.updateGraph(graphDetails);
-      }
-    );
-
     displayActionAsSelected(actionsCount, actionId);
+  }
+
+  fetchData(reportId, duration, parameters, actionType) {
+    const {props} = this;
+    let otherParameters = '',
+      params = {};
+    if (!isUndefined(parameters) && !isUndefined(parameters.length)) {
+      parameters.forEach((parameter) => {
+        if (parameter.userInput === true) {
+          otherParameters += '&' + parameter.name + '=' + document.getElementById(parameter.id).value;
+          params[parameter.name] = document.getElementById(parameter.id).value;
+        }
+        else {
+          otherParameters += '&' + parameter.name + '=' + parameter.value;
+          params[parameter.name] = parameter.value;
+        }
+      });
+    }
+
+    if (actionType === 'timeline') {
+      const apiObj = {
+        'path': '/api/analytics/reporting/execute/{reportId}',
+        'pathParams': {
+          'reportId': reportId
+        },
+        'queryParams': Object.assign({
+          'window': '',
+          'from': 0,
+          'count': 10
+        }, params)
+      };
+      props.fetchApiData(props.timelineId, apiObj, {}, {});
+    }
+    else {
+      const accessToken = Cookies.get('access_token'),
+        tokenType = Cookies.get('token_type'),
+        apiUrl = baseUrl + '/api/analytics/actions/execute/' + reportId + '?window=' + duration + otherParameters,
+        customHeaders = {
+          'Accept': 'application/json'
+        },
+        defaultHeaders = Object.assign({
+          'Authorization': `${tokenType} ${accessToken}`
+        }, customHeaders);
+
+      return fetch(apiUrl, {
+        method: 'GET',
+        headers: defaultHeaders
+      })
+      .then(response => response.json()
+      )
+      .catch(error => {
+        this.setState({
+          isFetching: false
+        });
+        return Promise.reject(Error(error.message));
+      });
+    }
   }
 
   updateGraph(details) {

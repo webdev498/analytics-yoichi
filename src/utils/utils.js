@@ -481,7 +481,7 @@ export function firstCharCapitalize(string) {
     if (string.toLowerCase() === 'ip') {
       return string.toUpperCase();
     }
-    if (string.indexOf('_') > -1) {
+    if (string.includes('_')) {
       string = string.replace('_', ' ');
     }
 
@@ -489,7 +489,7 @@ export function firstCharCapitalize(string) {
       return m.toUpperCase();
     });
 
-    if (string.indexOf(' Ip') > -1) {
+    if (string.includes(' Ip')) {
       string = string.replace(' Ip', ' IP');
     }
   }
@@ -569,15 +569,22 @@ export function getPosition(el) {
   return {x: lx, y: ly};
 }
 
-export function getColor(score) {
-  let color;
-  if (score >= 65) {
+export function getColor(score, severity) {
+  let color = '';
+  if (!score) {
+    score = '';
+  }
+  if (!severity) {
+    severity = '';
+  }
+
+  if ((score !== '' && score >= 65) || severity.toLowerCase() === 'high') {
     color = Colors.cherry;
   }
-  else if (score < 65 && score >= 35) {
+  else if ((score !== '' && score < 65 && score >= 35) || severity.toLowerCase() === 'medium') {
     color = Colors.coral;
   }
-  else if (score < 35) {
+  else if ((score !== '' && score < 35) || severity.toLowerCase() === 'low') {
     color = Colors.mustard;
   }
   return color;
