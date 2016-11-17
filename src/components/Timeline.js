@@ -366,7 +366,11 @@ class Timeline extends React.Component {
 
   render() {
     const {state, props} = this,
-      {attributes, tabs} = props;
+      {attributes, tabs, errorData} = props;
+
+    if (errorData) {
+      state.rows = [];
+    }
 
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
 
@@ -388,10 +392,15 @@ class Timeline extends React.Component {
           : null
         }
         {
-          (props.data &&
+          ((props.data) &&
           !isUndefined(state.rows) &&
           state.rows.length === 0 &&
           this.card === TIMELINE_CARD)
+          ? <div style={{paddingLeft: '85px'}}>No additional results were found.</div>
+          : null
+        }
+        {
+          props.errorData
           ? <div style={{paddingLeft: '85px'}}>No additional results were found.</div>
           : null
         }
