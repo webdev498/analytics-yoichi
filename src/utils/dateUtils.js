@@ -3,10 +3,10 @@ import moment from 'moment';
 export function calculateDateDisplayFormat(timeWindow) {
   let dateDisplayFormat = 'D MMM YYYY, HH:mm';
 
-  if (timeWindow === '1h' || timeWindow === '1d') {
+  if (timeWindow === '1h' || timeWindow === '6h' || timeWindow === '12h' || timeWindow === '24h') {
     dateDisplayFormat = 'HH:mm';
   }
-  else if (timeWindow === '1w' || timeWindow === '1mo') {
+  else if (timeWindow === '48h' || timeWindow === '1w' || timeWindow === '1mo') {
     dateDisplayFormat = 'ddd, D MMM';
   }
   return dateDisplayFormat;
@@ -14,10 +14,10 @@ export function calculateDateDisplayFormat(timeWindow) {
 
 export function calculateDateDisplayFormatForHistogram(timeWindow) {
   var dateDisplayFormat = 'D MMM YYYY, HH:mm';
-  if (timeWindow === '1h' || timeWindow === '6h' || timeWindow === '12h' || timeWindow === '1d') {
+  if (timeWindow === '1h' || timeWindow === '6h' || timeWindow === '12h' || timeWindow === '24h') {
     dateDisplayFormat = 'ddd, D HH:mm';
   }
-  else if (timeWindow === '1w' || timeWindow === '1mo') {
+  else if (timeWindow === '48h' || timeWindow === '1w' || timeWindow === '1mo') {
     dateDisplayFormat = 'ddd, D MMM HH:mm';
   }
   return dateDisplayFormat;
