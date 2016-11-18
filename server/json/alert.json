@@ -58,7 +58,8 @@
           }
         },
         "id": "alert-detail",
-        "type": "AlertDetails"
+        "type": "AlertDetails",
+        "timelineId": "timeline"
       },
       {
         "meta": {

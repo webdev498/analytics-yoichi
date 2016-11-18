@@ -151,8 +151,7 @@
           "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0",
-          "showCumulativeLine": "0"
+          "paletteColors": "#2bd8d0"
         },
         "chartData": {
           "fieldMapping": [
@@ -186,16 +185,17 @@
           "title": "Login failure by type"
         },
         "attributes": {
+          "chartType": "column2d",
           "chartWidth": "100%",
+          "chartHeight": "350",
           "style": {
             "marginRight": "33px",
             "width": "50%"
           },
-          "id": "loginFailureByType",
-          "chartHeight": "350"
+          "id": "loginFailureByType"
         },
         "id": "login-failure-by-type",
-        "type": "ParetoChart"
+        "type": "StandardChart"
       },
       {
         "chartOptions": {
@@ -203,8 +203,7 @@
           "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0",
-          "showCumulativeLine": "0"
+          "paletteColors": "#2bd8d0"
         },
         "chartData": {
           "fieldMapping": [
@@ -238,15 +237,16 @@
           "title": "Login failure by user"
         },
         "attributes": {
+          "chartType": "column2d",
           "chartWidth": "100%",
+          "chartHeight": "350",
           "style": {
             "width": "50%"
           },
-          "id": "loginFailureByUser",
-          "chartHeight": "350"
+          "id": "loginFailureByUser"
         },
         "id": "login-failure-by-user",
-        "type": "ParetoChart"
+        "type": "StandardChart"
       }
     ],
     [
@@ -310,15 +310,14 @@
           "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0",
-          "showCumulativeLine": "0"
+          "paletteColors": "#2bd8d0"
         },
         "chartData": {
           "fieldMapping": [
             {
               "reportId": "taf_account_management_events_by_type",
               "columns": [
-                "data.winevent.Message"
+                "data.ad.Message"
               ],
               "axis": "x"
             },
@@ -345,16 +344,17 @@
           "title": "Account management events by type"
         },
         "attributes": {
+          "chartType": "column2d",
           "chartWidth": "100%",
+          "chartHeight": "350",
           "style": {
             "marginRight": "33px",
             "width": "33%"
           },
-          "id": "AccountManagementEventsByType",
-          "chartHeight": "350"
+          "id": "AccountManagementEventsByType"
         },
         "id": "account-management-events-by-type",
-        "type": "ParetoChart"
+        "type": "StandardChart"
       },
       {
         "chartOptions": {
@@ -362,15 +362,14 @@
           "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0",
-          "showCumulativeLine": "0"
+          "paletteColors": "#2bd8d0"
         },
         "chartData": {
           "fieldMapping": [
             {
               "reportId": "taf_computer_management_events_by_type",
               "columns": [
-                "data.winevent.Message"
+                "data.ad.Message"
               ],
               "axis": "x"
             },
@@ -397,6 +396,7 @@
           "title": "Computer management events by type"
         },
         "attributes": {
+          "chartType": "column2d",
           "chartWidth": "100%",
           "style": {
             "marginRight": "33px",
@@ -406,7 +406,7 @@
           "chartHeight": "350"
         },
         "id": "computer-management-events-by-type",
-        "type": "ParetoChart"
+        "type": "StandardChart"
       },
       {
         "chartOptions": {
@@ -414,15 +414,14 @@
           "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0",
-          "showCumulativeLine": "0"
+          "paletteColors": "#2bd8d0"
         },
         "chartData": {
           "fieldMapping": [
             {
               "reportId": "taf_security_group_management_events_by_type",
               "columns": [
-                "data.winevent.Message"
+                "data.ad.Message"
               ],
               "axis": "x"
             },
@@ -449,6 +448,7 @@
           "title": "Security Group management events by type"
         },
         "attributes": {
+          "chartType": "column2d",
           "chartWidth": "100%",
           "style": {
             "width": "33%"
@@ -457,7 +457,7 @@
           "chartHeight": "350"
         },
         "id": "security-group-management-events-by-type",
-        "type": "ParetoChart"
+        "type": "StandardChart"
       }
     ]
   ]

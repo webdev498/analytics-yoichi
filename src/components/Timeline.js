@@ -382,7 +382,7 @@ class Timeline extends React.Component {
     }
 
     return (
-      <div>
+      <div id={props.attributes.id}>
         {
           tabs && tabNames.length > 1
           ? <TabsWidget

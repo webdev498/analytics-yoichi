@@ -36,6 +36,41 @@ class AlertDetails extends React.Component {
     data: PropTypes.object
   }
 
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('test');
+  //   this.loadTimeline(nextProps);
+  // }
+
+  // loadTimeline(props) {
+  //   let {data, params} = props;
+  //   console.log('testing1', props);
+  //   if (!data) return;
+  //   console.log('testing2');
+  //   let alertName = data.data.rank_alert.name,
+  //     apiPath = '/api/alert/traffic',
+  //     pathParams = {};
+
+  //   if (alertName && alertName === 'anomaly') {
+  //     apiPath = '/api/anomaly/{alertId}/timeline';
+  //     pathParams = {
+  //       alertId: ':pathParam'
+  //     };
+  //   }
+  //   let apiObj = {
+  //     method: 'GET',
+  //     path: apiPath,
+  //     pathParams: pathParams,
+  //     queryParams: {
+  //       count: 10,
+  //       from: 0,
+  //       window: '',
+  //       filter: data.data.rank_alert.trafficFilter,
+  //       date: 'date:pathParam'
+  //     }
+  //   };
+  //   props.fetchApiData(props.timelineId, apiObj, params, {});
+  // }
+
   render() {
     let {data} = this.props;
     if (!data) return null;
