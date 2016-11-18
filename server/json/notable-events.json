@@ -151,7 +151,8 @@
           "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0"
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
         },
         "chartData": {
           "fieldMapping": [
@@ -185,17 +186,16 @@
           "title": "Login failure by type"
         },
         "attributes": {
-          "chartType": "column2d",
           "chartWidth": "100%",
-          "chartHeight": "350",
           "style": {
             "marginRight": "33px",
             "width": "50%"
           },
-          "id": "loginFailureByType"
+          "id": "loginFailureByType",
+          "chartHeight": "350"
         },
         "id": "login-failure-by-type",
-        "type": "StandardChart"
+        "type": "ParetoChart"
       },
       {
         "chartOptions": {
@@ -203,7 +203,8 @@
           "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0"
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
         },
         "chartData": {
           "fieldMapping": [
@@ -237,16 +238,15 @@
           "title": "Login failure by user"
         },
         "attributes": {
-          "chartType": "column2d",
           "chartWidth": "100%",
-          "chartHeight": "350",
           "style": {
             "width": "50%"
           },
-          "id": "loginFailureByUser"
+          "id": "loginFailureByUser",
+          "chartHeight": "350"
         },
         "id": "login-failure-by-user",
-        "type": "StandardChart"
+        "type": "ParetoChart"
       }
     ],
     [
@@ -310,7 +310,8 @@
           "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0"
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
         },
         "chartData": {
           "fieldMapping": [
@@ -344,17 +345,16 @@
           "title": "Account management events by type"
         },
         "attributes": {
-          "chartType": "column2d",
           "chartWidth": "100%",
-          "chartHeight": "350",
           "style": {
             "marginRight": "33px",
             "width": "33%"
           },
-          "id": "AccountManagementEventsByType"
+          "id": "AccountManagementEventsByType",
+          "chartHeight": "350"
         },
         "id": "account-management-events-by-type",
-        "type": "StandardChart"
+        "type": "ParetoChart"
       },
       {
         "chartOptions": {
@@ -362,7 +362,8 @@
           "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0"
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
         },
         "chartData": {
           "fieldMapping": [
@@ -396,7 +397,6 @@
           "title": "Computer management events by type"
         },
         "attributes": {
-          "chartType": "column2d",
           "chartWidth": "100%",
           "style": {
             "marginRight": "33px",
@@ -406,7 +406,7 @@
           "chartHeight": "350"
         },
         "id": "computer-management-events-by-type",
-        "type": "StandardChart"
+        "type": "ParetoChart"
       },
       {
         "chartOptions": {
@@ -414,7 +414,8 @@
           "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0"
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
         },
         "chartData": {
           "fieldMapping": [
@@ -448,7 +449,6 @@
           "title": "Security Group management events by type"
         },
         "attributes": {
-          "chartType": "column2d",
           "chartWidth": "100%",
           "style": {
             "width": "33%"
@@ -457,7 +457,7 @@
           "chartHeight": "350"
         },
         "id": "security-group-management-events-by-type",
-        "type": "StandardChart"
+        "type": "ParetoChart"
       }
     ]
   ]
