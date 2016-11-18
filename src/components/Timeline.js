@@ -237,13 +237,13 @@ class Timeline extends React.Component {
 
     if (timelineType === 'secondary') {
       let apiObj = tabObj;
-      if (apiObj.meta.api.pathParams.selectedCardId) {
+      if (apiObj.meta.api && apiObj.meta.api.pathParams && apiObj.meta.api.pathParams.selectedCardId) {
         apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = props.id;
       }
     }
     else {
       apiObj.path = tabObj.path;
-      apiObj.pathParams = (meta.api.pathParams.reportId)
+      apiObj.pathParams = (meta.api && meta.api.pathParams && meta.api.pathParams.reportId)
         ? {
           reportId: this.currentTabId === 0 ? meta.api.pathParams.reportId : tabObj.pathParams.reportId
         }
@@ -304,7 +304,7 @@ class Timeline extends React.Component {
 
       if (selectedCardId !== '') {
         let apiObj = getTabObj(tabs, 'secondary', this.currentTab);
-        if (apiObj.meta.api.pathParams.selectedCardId) {
+        if (apiObj.meta.api && apiObj.meta.api.pathParams && apiObj.meta.api.pathParams.selectedCardId) {
           apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = selectedCardId;
         }
         let queryParams = Object.assign({},
