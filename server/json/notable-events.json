@@ -348,6 +348,10 @@
             "marginRight": "33px",
             "width": "33%"
           },
+          "headerStyle": {
+            "textOverflow": "ellipsis",
+            "overflow": "hidden"
+          },
           "id": "AccountManagementEventsByType",
           "chartHeight": "350"
         },
