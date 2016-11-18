@@ -55,7 +55,7 @@ export function generateDataSource(data, chartOptions, fieldMapping, duration) {
       'showAxisLines': '1',
       'showLabels': '1',
       'showPercentInTooltip': '1',
-      'showValues': '1',
+      'showValues': '0',
       'showYAxisValues': '1',
       'theme': 'zune',
       'xAxisNameFontSize': '13',
@@ -75,7 +75,9 @@ export function generateDataSource(data, chartOptions, fieldMapping, duration) {
       'baseFont': 'Open Sans, sans-serif',
       'baseFontColor': Colors.pebble,
       'paletteColors': Colors.defaultGraphPalette,
-      'decimals': '0'
+      'decimals': '0',
+      'labelDisplay': 'wrap',
+      'slantLabels': '1'
     }, chartOptions),
     data: graphBars
   };

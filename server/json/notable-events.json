@@ -253,11 +253,9 @@
       {
         "chartOptions": {
           "xAxisname": "TIME",
-          "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0",
-          "showCumulativeLine": "0"
+          "paletteColors": "#C9EDDF, #60E2DC"
         },
         "chartData": {
           "fieldMapping": [
