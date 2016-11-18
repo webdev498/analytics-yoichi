@@ -70,7 +70,9 @@ export function generateDataSource(data, chartOptions, fieldMapping) {
       'baseFont': 'Open Sans, sans-serif',
       'baseFontColor': Colors.pebble,
       'paletteColors': Colors.defaultGraphPalette,
-      'decimals': '0'
+      'decimals': '0',
+      'labelDisplay': 'wrap',
+      'slantLabels': '1'
     }, chartOptions),
     data: graphBars
   };

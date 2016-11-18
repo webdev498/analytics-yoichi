@@ -253,11 +253,9 @@
       {
         "chartOptions": {
           "xAxisname": "TIME",
-          "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#2bd8d0",
-          "showCumulativeLine": "0"
+          "paletteColors": "#C9EDDF, #60E2DC"
         },
         "chartData": {
           "fieldMapping": [
@@ -318,7 +316,7 @@
             {
               "reportId": "taf_account_management_events_by_type",
               "columns": [
-                "data.winevent.Message"
+                "data.ad.Message"
               ],
               "axis": "x"
             },
@@ -350,6 +348,10 @@
             "marginRight": "33px",
             "width": "33%"
           },
+          "headerStyle": {
+            "textOverflow": "ellipsis",
+            "overflow": "hidden"
+          },
           "id": "AccountManagementEventsByType",
           "chartHeight": "350"
         },
@@ -370,7 +372,7 @@
             {
               "reportId": "taf_computer_management_events_by_type",
               "columns": [
-                "data.winevent.Message"
+                "data.ad.Message"
               ],
               "axis": "x"
             },
@@ -422,7 +424,7 @@
             {
               "reportId": "taf_security_group_management_events_by_type",
               "columns": [
-                "data.winevent.Message"
+                "data.ad.Message"
               ],
               "axis": "x"
             },

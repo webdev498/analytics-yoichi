@@ -237,13 +237,13 @@ class Timeline extends React.Component {
 
     if (timelineType === 'secondary') {
       let apiObj = tabObj;
-      if (apiObj.meta.api.pathParams.selectedCardId) {
+      if (apiObj.meta.api && apiObj.meta.api.pathParams && apiObj.meta.api.pathParams.selectedCardId) {
         apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = props.id;
       }
     }
     else {
       apiObj.path = tabObj.path;
-      apiObj.pathParams = (meta.api.pathParams.reportId)
+      apiObj.pathParams = (meta.api && meta.api.pathParams && meta.api.pathParams.reportId)
         ? {
           reportId: this.currentTabId === 0 ? meta.api.pathParams.reportId : tabObj.pathParams.reportId
         }
@@ -304,7 +304,7 @@ class Timeline extends React.Component {
 
       if (selectedCardId !== '') {
         let apiObj = getTabObj(tabs, 'secondary', this.currentTab);
-        if (apiObj.meta.api.pathParams.selectedCardId) {
+        if (apiObj.meta.api && apiObj.meta.api.pathParams && apiObj.meta.api.pathParams.selectedCardId) {
           apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = selectedCardId;
         }
         let queryParams = Object.assign({},
@@ -366,7 +366,11 @@ class Timeline extends React.Component {
 
   render() {
     const {state, props} = this,
-      {attributes, tabs} = props;
+      {attributes, tabs, errorData} = props;
+
+    if (errorData) {
+      state.rows = [];
+    }
 
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
 
@@ -378,7 +382,7 @@ class Timeline extends React.Component {
     }
 
     return (
-      <div>
+      <div id={props.attributes.id}>
         {
           tabs && tabNames.length > 1
           ? <TabsWidget
@@ -388,10 +392,10 @@ class Timeline extends React.Component {
           : null
         }
         {
-          (props.data &&
+          ((props.data &&
           !isUndefined(state.rows) &&
           state.rows.length === 0 &&
-          this.card === TIMELINE_CARD)
+          this.card === TIMELINE_CARD) || props.errorData)
           ? <div style={{paddingLeft: '85px'}}>No additional results were found.</div>
           : null
         }
