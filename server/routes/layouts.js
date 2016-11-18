@@ -32,6 +32,9 @@ export default async function layoutRoutes(ctx, next) {
       );
 
       const data = await response.json();
+      if (data.errorCode) {
+        throw new Error({msg: 'Use the local files if result fails'});
+      }
       ctx.set('Content-Type', 'application/json; charset=UTF-8');
       ctx.body = data;
     }
