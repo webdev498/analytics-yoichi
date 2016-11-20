@@ -30,8 +30,8 @@ const styles = {
   title: {
     textTransform: 'capitalize',
     fontSize: '21px',
-    fontWeight: 300,
-    whiteSpace: 'nowrap'
+    fontWeight: 300 // ,
+    // whiteSpace: 'nowrap'
   },
   iconWrap: {
     marginLeft: 'auto',
