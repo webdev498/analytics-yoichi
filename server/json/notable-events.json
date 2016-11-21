@@ -311,6 +311,12 @@
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
+        "updateChartOptions": {
+          "displayLabelAs": {
+            "slanted": true,
+            "afterCount": 3
+          }
+        },
         "chartData": {
           "fieldMapping": [
             {
@@ -363,6 +369,12 @@
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
+        "updateChartOptions": {
+          "displayLabelAs": {
+            "slanted": true,
+            "afterCount": 3
+          }
+        },
         "chartData": {
           "fieldMapping": [
             {
@@ -414,6 +426,12 @@
           "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
+        },
+        "updateChartOptions": {
+          "displayLabelAs": {
+            "slanted": true,
+            "afterCount": 3
+          }
         },
         "chartData": {
           "fieldMapping": [

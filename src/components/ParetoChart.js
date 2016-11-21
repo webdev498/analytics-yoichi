@@ -10,7 +10,7 @@ import {
   generatePathParams
 } from 'utils/kibanaUtils';
 
-export function generateDataSource(data, chartOptions, fieldMapping) {
+export function generateDataSource(data, chartOptions, fieldMapping, updateChartOptions) {
   const graphBars = [];
 
   let x, y;
@@ -44,6 +44,16 @@ export function generateDataSource(data, chartOptions, fieldMapping) {
     graphBars.push(barObject);
   }
 
+  if (updateChartOptions &&
+    updateChartOptions.displayLabelAs &&
+    updateChartOptions.displayLabelAs.slanted &&
+    updateChartOptions.displayLabelAs.afterCount < rows.length) {
+    chartOptions.labelDisplay = 'rotate';
+  }
+  else {
+    chartOptions.labelDisplay = 'wrap';
+  }
+
   return {
     chart: Object.assign({
       'labelFontSize': '11',
@@ -71,7 +81,6 @@ export function generateDataSource(data, chartOptions, fieldMapping) {
       'baseFontColor': Colors.pebble,
       'paletteColors': Colors.defaultGraphPalette,
       'decimals': '2',
-      'labelDisplay': 'wrap',
       'slantLabels': '1'
     }, chartOptions),
     data: graphBars
@@ -109,9 +118,8 @@ class ParetoChart extends React.Component {
       return;
     }
 
-    const data = props.data,
-      chartOptions = props.chartOptions,
-      fieldMapping = props.chartData.fieldMapping,
+    const {data, chartOptions, updateChartOptions, chartData} = props,
+      fieldMapping = chartData.fieldMapping,
       {clickThrough} = this.context;
 
     FusionCharts.ready(function() {
@@ -124,7 +132,7 @@ class ParetoChart extends React.Component {
         height: mapProps.chartHeight ? mapProps.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
-        dataSource: generateDataSource(data, chartOptions, fieldMapping),
+        dataSource: generateDataSource(data, chartOptions, fieldMapping, updateChartOptions),
         events: {
           dataplotClick: function(eventObj, dataObj) {
             const url = getDataPlotClickUrl(props, dataObj);
