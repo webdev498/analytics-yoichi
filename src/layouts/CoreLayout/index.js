@@ -135,6 +135,9 @@ export class CoreLayout extends React.Component {
 
     this.context.router.listen(() => {
       this.hideKibana();
+      if (this.state.showSearch) {
+        this.toggleSearch();
+      }
     });
   }
 

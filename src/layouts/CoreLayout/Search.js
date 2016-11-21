@@ -1,7 +1,28 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+
+import {fetchSearchData} from 'actions/core';
 import FontIcon from 'material-ui/FontIcon';
 
+import AssetWidget from 'components/AssetWidget';
+import Loader from 'components/Loader';
+
 import {Colors} from 'theme/colors';
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
 
 const styles = {
   wrap: {
@@ -37,24 +58,89 @@ const styles = {
     margin: '0 30px',
     textAlign: 'center',
     cursor: 'pointer'
+  },
+  results: {
+    position: 'relative',
+    backgroundColor: Colors.arctic,
+    margin: '30px 50px',
+    padding: '30px',
+    minHeight: '300px'
+  },
+  error: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    textAlign: 'center',
+    padding: '30px'
   }
 };
 
-export default class Search extends React.Component {
+export class Search extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      dataSource: []
+      data: [],
+      showLoader: false,
+      isError: false,
+      errorMessage: ''
     };
+  }
+
+  static propTypes = {
+    auth: PropTypes.object.isRequired
   }
 
   clear = () => {
     this.refs.searchInput.value = '';
+    this.setState({data: []});
   };
 
+  search = (evt) => {
+    const {refs, props} = this;
+    let query = refs.searchInput.value;
+
+    if (query.length < 2) return;
+
+    this.setState({showLoader: true, isError: false});
+    debounce(fetchSearchData(props.auth, query)
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        else {
+          throw new Error({message: 'Error in search'});
+        }
+      })
+      .then(json => {
+        this.setState({showLoader: false, isError: false});
+        this.setState({data: json.rows});
+      })
+      .catch(ex => {
+        this.setState({showLoader: false});
+        this.setState({isError: true, errorMessage: 'Error in search'});
+      }), 200);
+  }
+
+  getResults() {
+    const {state} = this;
+    return state.data.map((item, index) => {
+      return <AssetWidget data={item[0]} key={`asset${index}`} link />;
+    });
+  }
+
+  getErrorMessage() {
+    return (
+      <div style={styles.error}>
+        {this.state.errorMessage}
+      </div>
+    );
+  }
+
   render() {
-    const {props} = this;
+    const {props, state} = this;
     return (
       <div style={styles.wrap}>
         <div style={styles.searchWrap}>
@@ -62,11 +148,29 @@ export default class Search extends React.Component {
             arrow_back
           </FontIcon>
 
-          <input ref='searchInput' placeholder='Search Assets' style={styles.search} />
+          <input ref='searchInput'
+            placeholder='Search Assets'
+            style={styles.search}
+            onKeyPress={this.search} />
 
           <FontIcon style={styles.icon} className='material-icons' onClick={this.clear}>clear</FontIcon>
+        </div>
+        <div style={styles.results}>
+          {state.showLoader ? <Loader /> : null}
+          {state.isError ? this.getErrorMessage() : null}
+          {this.getResults()}
         </div>
       </div>
     );
   }
 }
+
+function mapStateToProps(state, ownProps) {
+  const {auth} = state;
+
+  return {
+    auth
+  };
+}
+
+export default connect(mapStateToProps, {})(Search);

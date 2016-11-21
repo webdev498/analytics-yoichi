@@ -85,6 +85,21 @@ export function fetchLayoutData(id) {
   };
 };
 
+export function fetchSearchData(auth, query) {
+  const cookies = auth.cookies,
+    accessToken = cookies.access_token,
+    tokenType = cookies.token_type,
+    authorizationHeader = {
+      'Authorization': `${tokenType} ${accessToken}`
+    };
+
+  let url = `/api/analytics/reporting/execute/taf_search_assets?term=${encodeURIComponent(query)}`;
+  return fetch(url, {
+    method: 'GET',
+    headers: authorizationHeader
+  });
+};
+
 export function updateRoute(url) {
   return function(dispatch, getState) {
     dispatch(push(url));
