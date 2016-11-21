@@ -340,7 +340,7 @@
               "window": ""
             }
           },
-          "title": "Account management events by type"
+          "title": "Account management events"
         },
         "attributes": {
           "chartWidth": "100%",
@@ -392,7 +392,7 @@
               "window": ""
             }
           },
-          "title": "Computer management events by type"
+          "title": "Computer management events"
         },
         "attributes": {
           "chartWidth": "100%",
@@ -444,7 +444,7 @@
               "window": ""
             }
           },
-          "title": "Security Group management events by type"
+          "title": "Security Group management events"
         },
         "attributes": {
           "chartWidth": "100%",
