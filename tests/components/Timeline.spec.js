@@ -3,17 +3,8 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
-import {
-  createRenderer
-} from 'react-addons-test-utils';
-
 import Timeline from 'components/Timeline';
 import {wrapThemeProvider} from '../testUtils';
-
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import AppTheme from 'theme/AppTheme';
-
-const muiTheme = getMuiTheme(AppTheme);
 
 let props = {
   id: 'timeline',
@@ -27,54 +18,41 @@ let props = {
   attributes: {
     id: 'timeline-component',
     style: {
-      width: "65%"
-    },
+      width: '65%'
+    }
   },
   tabs: {
     DETAILS: {
       primary: {
-        "path": "/api/alert/traffic",
-        "queryParams": {
-          "window": "",
-          "count": 10,
-          "from": 0
-        },
-        "pathParams": {
-        }
+        'path': '/api/alert/traffic',
+        'queryParams': {},
+        'pathParams': {}
       },
       secondary: {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/anomaly/{anomalyId}/events",
-            "pathParams": {
-              "selectedCardId": "anomalyId"
-            },
-            "queryParams": {
-              "window": "",
-              "from": 0,
-              "count": 10,
-              "date": ""
-            }
+        'meta': {
+          'showHeader': false,
+          'api': {
+            'path': '/api/anomaly/{anomalyId}/events',
+            'pathParams': {},
+            'queryParams': {}
           },
-          "title": ""
+          'title': ''
         },
-        "attributes": {
-          "type": "anomalyEvents",
-          "displaySelectedRows": true,
-          "noOfEventsPerPage": 10,
-          "maxNumbersOnLeftRightPagination": 4,
-          "isMainComponent": false,
-          "style": {
-            "width": "100%",
-            "height": "100%",
-            "backgroundColor": "#EBEBEF"
+        'attributes': {
+          'type': 'anomalyEvents',
+          'displaySelectedRows': true,
+          'noOfEventsPerPage': 10,
+          'maxNumbersOnLeftRightPagination': 4,
+          'isMainComponent': false,
+          'style': {
+            'width': '100%',
+            'height': '100%'
           },
-          "otherStyles": {
-            "flex": {},
-            "pagination": {}
+          'otherStyles': {
+            'flex': {},
+            'pagination': {}
           },
-          "id": "timeline-contextual-menu"
+          'id': 'timeline-contextual-menu'
         }
       }
     }
