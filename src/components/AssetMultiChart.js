@@ -1,6 +1,81 @@
 import React, {PropTypes} from 'react';
 import ParentCard from 'containers/ParentCard';
 
+const protocolChart = {
+  'header': {
+    'style': {
+      'paddingBottom': 0
+    },
+    'title': {
+      'fontSize': '13px',
+      'fontWeight': 600,
+      'textTransform': 'capitalize'
+    }
+  },
+  'id': 'connections-by-protocol',
+  'type': 'HorizontalBarChart',
+  'meta': {
+    'showHeader': true,
+    'showRefresh': false,
+    'api': {
+      'path': '/api/analytics/reporting/execute/{reportId}',
+      'pathParams': {
+        'reportId': 'taf_connections_by_protocol'
+      },
+      'queryParams': {
+        'type:pathParam': 'assetId:pathParam',
+        'window': ''
+      }
+    },
+    'title': 'Connections By Protocol'
+  },
+  'attributes': {
+    'chartCaption': {
+      'display': 'none'
+    },
+    'chartWidth': '100%',
+    'chartHeight': '200px',
+    'style': {
+      'width': '100%',
+      'padding': 0,
+      'boxShadow': 'none'
+    },
+    'header': {
+      'style': {
+        'paddingBottom': 0
+      },
+      'title': {
+        'fontSize': '13px',
+        'fontWeight': 600,
+        'textTransform': 'capitalize'
+      }
+    },
+    'id': 'connections-by-protocol-chart'
+  },
+  'chartOptions': {
+    'showValues': '1',
+    'showLabels': '1',
+    'chartRightMargin': '0',
+    'divLineThickness': '2'
+  },
+  'chart': {
+    'showAnnotations': false
+  },
+  'chartData': {
+    'showTrendLines': false,
+    'fieldMapping': [
+      {
+        'reportId': 'taf_connections_by_protocol',
+        'columns': [
+          'protocol.service',
+          'date'
+        ]
+      }
+    ],
+    'multipleReportIds': false
+  }
+};
+
 const userCharts = [
   {
     'chartOptions': {
@@ -20,7 +95,7 @@ const userCharts = [
       'fieldMapping': [
         {
           'columns': [ {
-            name: 'destination.name'
+            name: 'source.name'
           } ],
           'axis': 'x'
         },
@@ -58,7 +133,7 @@ const userCharts = [
           'asset': 'assetId:pathParam'
         }
       },
-      'title': 'Successful Logins'
+      'title': 'Successful Logins by User'
     },
     'attributes': {
       'chartHeight': '200',
@@ -89,7 +164,7 @@ const userCharts = [
   },
   {
     'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
+      'paletteColors': '#ef5976, #F69275',
       'xAxisName': 'Machines',
       'divLineThickness': '2',
       'showYAxisValues': '1',
@@ -105,7 +180,7 @@ const userCharts = [
       'fieldMapping': [
         {
           'columns': [ {
-            name: 'data.auth.username'
+            name: 'source.name'
           } ],
           'axis': 'x'
         },
@@ -143,7 +218,7 @@ const userCharts = [
           'asset': 'assetId:pathParam'
         }
       },
-      'title': 'Failed Logins'
+      'title': 'Failed Logins by User'
     },
     'attributes': {
       'chartHeight': '200',
@@ -224,7 +299,7 @@ const userCharts = [
           'asset': 'assetId:pathParam'
         }
       },
-      'title': 'Successful logins'
+      'title': 'Successful logins by Time'
     },
     'attributes': {
       'chartHeight': '200',
@@ -255,7 +330,7 @@ const userCharts = [
   },
   {
     'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
+      'paletteColors': '#ef5976, #F69275',
       'xAxisName': 'TIME',
       'lineThickness': '1',
       'drawAnchors': '0',
@@ -305,7 +380,7 @@ const userCharts = [
           'asset': 'assetId:pathParam'
         }
       },
-      'title': 'Failed logins'
+      'title': 'Failed logins by Time'
     },
     'attributes': {
       'chartHeight': '200',
@@ -333,7 +408,8 @@ const userCharts = [
     },
     'id': 'FailedLoginsByUser',
     'type': 'MultiSeriesCombiChart'
-  }
+  },
+  protocolChart
 ];
 
 const machineCharts = [
@@ -355,7 +431,7 @@ const machineCharts = [
       'fieldMapping': [
         {
           'columns': [ {
-            name: 'data.auth.username'
+            name: 'data.winevent.TargetUserName'
           } ],
           'axis': 'x'
         },
@@ -393,7 +469,7 @@ const machineCharts = [
           'asset': 'assetId:pathParam'
         }
       },
-      'title': 'Successful Logins'
+      'title': 'Successful Logins on Machine'
     },
     'attributes': {
       'chartHeight': '200',
@@ -424,7 +500,7 @@ const machineCharts = [
   },
   {
     'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
+      'paletteColors': '#ef5976, #F69275',
       'xAxisName': 'Users',
       'divLineThickness': '2',
       'showYAxisValues': '1',
@@ -478,7 +554,7 @@ const machineCharts = [
           'asset': 'assetId:pathParam'
         }
       },
-      'title': 'Failed Logins'
+      'title': 'Failed Logins on Machine'
     },
     'attributes': {
       'chartHeight': '200',
@@ -559,7 +635,7 @@ const machineCharts = [
           'asset': 'assetId:pathParam'
         }
       },
-      'title': 'Successful logins'
+      'title': 'Successful logins by Time'
     },
     'attributes': {
       'chartHeight': '200',
@@ -590,7 +666,7 @@ const machineCharts = [
   },
   {
     'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
+      'paletteColors': '#ef5976, #F69275',
       'xAxisName': 'TIME',
       'lineThickness': '1',
       'drawAnchors': '0',
@@ -640,7 +716,7 @@ const machineCharts = [
           'asset': 'assetId:pathParam'
         }
       },
-      'title': 'Failed logins'
+      'title': 'Failed logins by Time'
     },
     'attributes': {
       'chartHeight': '200',
@@ -668,7 +744,8 @@ const machineCharts = [
     },
     'id': 'FailedLoginsByUser',
     'type': 'MultiSeriesCombiChart'
-  }
+  },
+  protocolChart
 ];
 
 class AssetMultiChart extends React.Component {
