@@ -26,7 +26,10 @@ const chart = {
   'legendBorderAlpha': '0',
   'legendShadow': '0',
   'legendItemFontSize': '10',
-  'legendItemFontColor': '#666666'
+  'legendItemFontColor': '#666666',
+  'labelDisplay': 'wrap',
+  'rotateLabels': '1',
+  'slantLabels': '1'
 };
 
 function getColumnIndex(columns, name, type) {

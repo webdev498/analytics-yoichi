@@ -48,6 +48,7 @@ class Sidebar extends React.Component {
 
   getLinks(path) {
     const {sidebar: links} = this.props;
+
     return links.map((link, index) => {
       let style = {};
       if (link.to === path) {
@@ -69,6 +70,10 @@ class Sidebar extends React.Component {
     const {props} = this;
     return (
       <LeftNav open containerStyle={{...styles.leftNav, ...props.style}}>
+        <Link style={{...styles.wrap, cursor: 'pointer'}} key='searchlink' onClick={props.toggleSearch}>
+          <FontIcon style={styles.icon} className='material-icons'>search</FontIcon>
+          <span style={styles.text}>search</span>
+        </Link>
         {this.getLinks(props.location.pathname)}
       </LeftNav>
     );
