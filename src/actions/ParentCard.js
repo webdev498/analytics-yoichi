@@ -71,11 +71,13 @@ function getUrl(api, duration, routerParams) {
 
     const param = pathParams[key];
     // if param is :pathParam, it implies use path param of the current url.
-    if (param.startsWith(':pathParam')) {
-      url = url.replace(templateString, routerParams[key]);
-    }
-    else {
-      url = url.replace(templateString, pathParams[key]);
+    if (url) {
+      if (param.startsWith(':pathParam')) {
+        url = url.replace(templateString, routerParams[key]);
+      }
+      else {
+        url = url.replace(templateString, pathParams[key]);
+      }
     }
   });
 

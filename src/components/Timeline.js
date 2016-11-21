@@ -284,7 +284,9 @@ class Timeline extends React.Component {
             id={state.selectedCardId}
             meta={this.contextualMenuApiParams.meta}
             params={props.params}
-            attributes={this.contextualMenuApiParams.attributes}>
+            attributes={this.contextualMenuApiParams.attributes}
+            tabs={props.tabs}
+            timelineType='secondary'>
             <Timeline />
           </ParentCard>
         </div>
@@ -366,7 +368,7 @@ class Timeline extends React.Component {
 
   render() {
     const {state, props} = this,
-      {attributes, tabs, errorData} = props;
+      {attributes, tabs, errorData, timelineType} = props;
 
     if (errorData) {
       state.rows = [];
@@ -384,7 +386,7 @@ class Timeline extends React.Component {
     return (
       <div id={props.attributes.id}>
         {
-          tabs && tabNames.length > 1
+          tabs && tabNames.length > 1 && timelineType === 'primary'
           ? <TabsWidget
             tabs={tabNames}
             style={{paddingLeft: '85px', paddingBottom: '17px'}}
