@@ -57,7 +57,7 @@ let timeWindow = '1h',
     edges: []
   };
 
-function createNodeObject(dataNode) {
+export function createNodeObject(dataNode) {
   let nodeId = dataNode.nodeId ? dataNode.nodeId : '',
     idDisplay = dataNode.label ? dataNode.label : (dataNode.id ? dataNode.id : dataNode.nodeId),
     nodeType = dataNode.type ? dataNode.type : '';
@@ -91,7 +91,8 @@ function createNodeObject(dataNode) {
     color: {
       color: Colors.networkNodeLabel,
       highlight: Colors.turquoise
-    }
+    },
+    actionData: dataNode.actionData ? dataNode.actionData : {}
   };
 
   nodeObject.nodeDetails.push(<li key='nodeId'><b>{firstCharCapitalize(dataNode.type)}:</b> {idDisplay}</li>);
@@ -100,6 +101,8 @@ function createNodeObject(dataNode) {
     nodeStatus = metaDataObject.nodeStatus;
   nodeObject = metaDataObject.nodeObject;
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
+
+  console.log(nodeObject);
 
   return nodeObject;
 }
@@ -133,7 +136,8 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
         color: Colors.pebble,
         highlight: Colors.turquoise
       },
-      edgeDetails: []
+      edgeDetails: [],
+      actionData: dataEdge.actionData ? dataEdge.actionData : {}
     },
     edgesTypes = [];
 
@@ -476,7 +480,7 @@ function getIcon(nodeType, nodeStatus, nodeAction) {
   }
 }
 
-function generateDataFromAssetDetails(data) {
+export function generateDataFromAssetDetails(data) {
   const assetData = [];
   const nodes = [];
 

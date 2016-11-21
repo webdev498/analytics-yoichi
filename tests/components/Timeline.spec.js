@@ -4,6 +4,7 @@ import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
 import Timeline from 'components/Timeline';
+import TabsWidget from 'components/TabsWidget';
 import {wrapThemeProvider} from '../testUtils';
 
 let props = {
@@ -65,7 +66,8 @@ let props = {
   timelineType: 'primary'
 };
 
-function renderTimeline() {
+function renderTimeline(timelineType) {
+  props.timelineType = timelineType ? timelineType : 'primary';
   let component = shallow(wrapThemeProvider(<Timeline {...props} />));
   return component.find('Timeline');
 }
@@ -105,6 +107,13 @@ describe('<Timeline />', () => {
     expect(component.props().tabs.DETAILS.secondary).to.be.an('object');
     expect(component.props().tabs.DETAILS.secondary.meta.api.path).to.be.defined;
     expect(component.props().tabs.DETAILS.secondary.meta.api.path).to.be.an('string');
+  });
+
+  it('should render tab only when timeline is primary', () => {
+    const component = renderTimeline();
+    expect(component.props().timelineType).to.equal('primary');
+    expect(component.props().tabs).to.be.defined;
+    expect(component.find(TabsWidget));
   });
 
   it('primary timeline should have api path', () => {

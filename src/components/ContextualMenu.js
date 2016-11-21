@@ -226,6 +226,8 @@ class ContextualMenu extends React.Component {
         {nodeObjects, edgeObjects} = props,
         parameterName = ((name).includes('metadata')) ? 'metadata' : name;
 
+      parameterName = ((name).includes('actionData')) ? 'actionData' : name;
+
       value = '';
       switch (parameterName) {
         case 'id':
@@ -259,6 +261,12 @@ class ContextualMenu extends React.Component {
           let paramName = (name).replace('metadata.', ''),
             metadataValue = (!isUndefined(nodeObjects[itemId].metadata)) ? nodeObjects[itemId].metadata[paramName] : '';
           value = (!isUndefined(metadataValue)) ? metadataValue : '';
+          break;
+        case 'actionData':
+          let paramNameActionData = (name).replace('actionData.', ''),
+            actiondataValue = (!isUndefined(nodeObjects[itemId].actionData))
+              ? nodeObjects[itemId].actionData[paramNameActionData] : '';
+          value = (!isUndefined(actiondataValue)) ? actiondataValue : '';
           break;
         default:
           break;
