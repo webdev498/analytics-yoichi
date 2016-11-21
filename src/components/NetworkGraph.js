@@ -102,8 +102,6 @@ export function createNodeObject(dataNode) {
   nodeObject = metaDataObject.nodeObject;
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
 
-  console.log(nodeObject);
-
   return nodeObject;
 }
 
