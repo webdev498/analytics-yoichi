@@ -20,7 +20,7 @@ const protocolChart = {
     'api': {
       'path': '/api/analytics/reporting/execute/{reportId}',
       'pathParams': {
-        'reportId': 'taf_connections_by_protocol'
+        'reportId': 'taf_asset_top_connections_by_protocol'
       },
       'queryParams': {
         'type:pathParam': 'assetId:pathParam',
