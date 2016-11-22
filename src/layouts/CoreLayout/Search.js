@@ -127,7 +127,13 @@ export class Search extends React.Component {
   getResults() {
     const {state} = this;
     return state.data.map((item, index) => {
-      return <AssetWidget data={item[0]} key={`asset${index}`} link />;
+      return (
+        <AssetWidget
+          headingStyle={{textTransform: 'none'}}
+          data={item[0]}
+          key={`asset${index}`}
+          link />
+      );
     });
   }
 
