@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {msToTime, getEventTypeString, formatBytes} from '../utils/utils';
+import {msToTime, getEventTypeString, formatBytes, whatIsIt} from '../utils/utils';
 function getIPDetails(source) {
   if (source) {
     const info = {};

@@ -132,6 +132,7 @@ class Timeline extends React.Component {
     if (state.filter === '' && data.options && data.options.customParams) {
       state.filter = data.options.customParams.filter;
     }
+    console.log('timeline', state.rows);
   }
 
   displayCard() {

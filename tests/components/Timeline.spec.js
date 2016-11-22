@@ -113,7 +113,7 @@ describe('<Timeline />', () => {
     const component = renderTimeline();
     expect(component.props().timelineType).to.equal('primary');
     expect(component.props().tabs).to.be.defined;
-    expect(component.find(TabsWidget));
+    expect(component.find(TabsWidget).to.equal(<TabsWidget />));
   });
 
   it('primary timeline should have api path', () => {

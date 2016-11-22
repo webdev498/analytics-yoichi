@@ -2,13 +2,15 @@ import {} from '../utils/chartUtils';
 
 function getColumnIndex(columns, name, type) {
   let index = null, col = null;
-  columns.forEach((column, i) => {
-    if (column.name === name || column.columnType === type) {
-      index = i;
-      col = column;
-      return;
-    }
-  });
+  if (columns) {
+    columns.forEach((column, i) => {
+      if (column.name === name || column.columnType === type) {
+        index = i;
+        col = column;
+        return;
+      }
+    });
+  }
 
   return {index, col};
 }

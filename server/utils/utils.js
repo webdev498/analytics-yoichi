@@ -48,3 +48,28 @@ export function formatBytes(bytes, decimals) {
     text = sizes[i];
   return val + ' ' + text;
 };
+
+let stringConstructor = 'test'.constructor;
+let arrayConstructor = [].constructor;
+let objectConstructor = {}.constructor;
+
+export function whatIsIt(object) {
+  if (object === null) {
+    return 'null';
+  }
+  else if (object === undefined) {
+    return 'undefined';
+  }
+  else if (object.constructor === stringConstructor) {
+    return 'String';
+  }
+  else if (object.constructor === arrayConstructor) {
+    return 'Array';
+  }
+  else if (object.constructor === objectConstructor) {
+    return 'Object';
+  }
+  else {
+    return 'unknown';
+  }
+}

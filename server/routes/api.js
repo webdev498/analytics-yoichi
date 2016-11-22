@@ -6,6 +6,7 @@ import {serverBaseUrl, timeoutDuration} from '../../serverEnv';
 import layoutRoutes from './layouts';
 
 import timeline from '../components/Timeline';
+import timelineAnomaly from '../components/TimelineAnomaly';
 import anomalyChart from '../components/anomalyChart';
 
 const router = new KoaRouter({
@@ -27,7 +28,8 @@ router
   const res = await fetch(serverBaseUrl + ctx.url,
     {
       method: 'GET',
-      headers: ctx.headers,
+      // headers: ctx.headers,
+      headers: {...ctx.headers, 'Content-Type': 'application/json'},
       timeout,
       agent
     }
@@ -47,6 +49,7 @@ router
 .get('/analytics/reporting/execute/taf_asset_session_details', timeline)
 .get('/analytics/reporting/execute/taf_asset_session_event_details', timeline)
 .get('/analytics/reporting/execute/taf_events_between_source_and_dest_same_type_as_edge', timeline)
+.get('/anomaly/:alertId/timeline', timelineAnomaly)
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);

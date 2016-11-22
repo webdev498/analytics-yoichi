@@ -58,6 +58,7 @@ let timeWindow = '1h',
   };
 
 export function createNodeObject(dataNode) {
+  console.log(JSON.stringify(dataNode));
   let nodeId = dataNode.nodeId ? dataNode.nodeId : '',
     idDisplay = dataNode.label ? dataNode.label : (dataNode.id ? dataNode.id : dataNode.nodeId),
     nodeType = dataNode.type ? dataNode.type : '';
@@ -101,7 +102,7 @@ export function createNodeObject(dataNode) {
     nodeStatus = metaDataObject.nodeStatus;
   nodeObject = metaDataObject.nodeObject;
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-
+  console.log(nodeObject);
   return nodeObject;
 }
 
