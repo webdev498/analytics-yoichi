@@ -269,14 +269,14 @@ const userCharts = [
           'axis': 'x'
         },
         {
-          'seriesname': 'Current Incoming Bandwidth',
+          'seriesname': 'Current Successful Logins',
           'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted',
           'columns': [ 'count[0]' ],
           'renderas': 'Line',
           'axis': 'y'
         },
         {
-          'seriesname': 'Historical Incoming Bandwidth',
+          'seriesname': 'Historical Successful Logins',
           'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted',
           'columns': [ 'count[1]' ],
           'renderas': 'Area',
@@ -350,14 +350,14 @@ const userCharts = [
           'axis': 'x'
         },
         {
-          'seriesname': 'Current Incoming Bandwidth',
+          'seriesname': 'Current Failed Logins',
           'reportId': 'taf_asset_all_failed_logins_by_user_time_shifted',
           'columns': [ 'count[0]' ],
           'renderas': 'Line',
           'axis': 'y'
         },
         {
-          'seriesname': 'Historical Incoming Bandwidth',
+          'seriesname': 'Historical Failed Logins',
           'reportId': 'taf_asset_all_failed_logins_by_user_time_shifted',
           'columns': [ 'count[1]' ],
           'renderas': 'Area',
@@ -605,14 +605,14 @@ const machineCharts = [
           'axis': 'x'
         },
         {
-          'seriesname': 'Current Incoming Bandwidth',
+          'seriesname': 'Current Successful Logins',
           'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted',
           'columns': [ 'count[0]' ],
           'renderas': 'Line',
           'axis': 'y'
         },
         {
-          'seriesname': 'Historical Incoming Bandwidth',
+          'seriesname': 'Historical Successful Logins',
           'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted',
           'columns': [ 'count[1]' ],
           'renderas': 'Area',
@@ -686,14 +686,14 @@ const machineCharts = [
           'axis': 'x'
         },
         {
-          'seriesname': 'Current Incoming Bandwidth',
+          'seriesname': 'Current Failed Logins',
           'reportId': 'taf_asset_all_failed_logins_by_machine_time_shifted',
           'columns': [ 'count[0]' ],
           'renderas': 'Line',
           'axis': 'y'
         },
         {
-          'seriesname': 'Historical Incoming Bandwidth',
+          'seriesname': 'Historical Failed Logins',
           'reportId': 'taf_asset_all_failed_logins_by_machine_time_shifted',
           'columns': [ 'count[1]' ],
           'renderas': 'Area',
