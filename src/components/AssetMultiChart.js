@@ -95,7 +95,7 @@ const userCharts = [
       'fieldMapping': [
         {
           'columns': [ {
-            name: 'source.name'
+            columnType: 'DIMENSION'
           } ],
           'axis': 'x'
         },
@@ -103,7 +103,7 @@ const userCharts = [
           'seriesname': 'Current Logins',
           'reportId': 'taf_asset_successful_logins_by_user_on_machines_time_shifted',
           'columns': [ {
-            name: 'count',
+            columnType: 'MEASURE',
             key: 0
           } ],
           'axis': 'y'
@@ -112,7 +112,7 @@ const userCharts = [
           'seriesname': 'Historic Logins',
           'reportId': 'taf_asset_successful_logins_by_user_on_machines_time_shifted',
           'columns': [ {
-            name: 'count',
+            columnType: 'MEASURE',
             key: 1
           } ],
           'axis': 'y'
@@ -180,7 +180,7 @@ const userCharts = [
       'fieldMapping': [
         {
           'columns': [ {
-            name: 'source.name'
+            columnType: 'DIMENSION'
           } ],
           'axis': 'x'
         },
@@ -188,7 +188,7 @@ const userCharts = [
           'seriesname': 'Current Logins',
           'reportId': 'taf_asset_failed_logins_by_user_on_machines_time_shifted',
           'columns': [ {
-            name: 'count',
+            columnType: 'MEASURE',
             key: 0
           } ],
           'axis': 'y'
@@ -197,7 +197,7 @@ const userCharts = [
           'seriesname': 'Historic Logins',
           'reportId': 'taf_asset_failed_logins_by_user_on_machines_time_shifted',
           'columns': [ {
-            name: 'count',
+            columnType: 'MEASURE',
             key: 1
           } ],
           'axis': 'y'
@@ -269,14 +269,14 @@ const userCharts = [
           'axis': 'x'
         },
         {
-          'seriesname': 'Current Successful Logins',
+          'seriesname': 'Current Logins',
           'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted',
           'columns': [ 'count[0]' ],
           'renderas': 'Line',
           'axis': 'y'
         },
         {
-          'seriesname': 'Historical Successful Logins',
+          'seriesname': 'Historic Logins',
           'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted',
           'columns': [ 'count[1]' ],
           'renderas': 'Area',
@@ -350,14 +350,14 @@ const userCharts = [
           'axis': 'x'
         },
         {
-          'seriesname': 'Current Failed Logins',
+          'seriesname': 'Current Logins',
           'reportId': 'taf_asset_all_failed_logins_by_user_time_shifted',
           'columns': [ 'count[0]' ],
           'renderas': 'Line',
           'axis': 'y'
         },
         {
-          'seriesname': 'Historical Failed Logins',
+          'seriesname': 'Historic Logins',
           'reportId': 'taf_asset_all_failed_logins_by_user_time_shifted',
           'columns': [ 'count[1]' ],
           'renderas': 'Area',
@@ -431,7 +431,7 @@ const machineCharts = [
       'fieldMapping': [
         {
           'columns': [ {
-            name: 'data.winevent.TargetUserName'
+            columnType: 'DIMENSION'
           } ],
           'axis': 'x'
         },
@@ -439,7 +439,7 @@ const machineCharts = [
           'seriesname': 'Current Logins',
           'reportId': 'taf_asset_successful_logins_on_machine_by_users_time_shifted',
           'columns': [ {
-            name: 'count',
+            columnType: 'MEASURE',
             key: 0
           } ],
           'axis': 'y'
@@ -448,7 +448,7 @@ const machineCharts = [
           'seriesname': 'Historic Logins',
           'reportId': 'taf_asset_successful_logins_on_machine_by_users_time_shifted',
           'columns': [ {
-            name: 'count',
+            columnType: 'MEASURE',
             key: 1
           } ],
           'axis': 'y'
@@ -516,7 +516,7 @@ const machineCharts = [
       'fieldMapping': [
         {
           'columns': [ {
-            name: 'data.winevent.TargetUserName'
+            columnType: 'DIMENSION'
           } ],
           'axis': 'x'
         },
@@ -524,7 +524,7 @@ const machineCharts = [
           'seriesname': 'Current Logins',
           'reportId': 'taf_asset_failed_logins_on_machine_by_users_time_shifted',
           'columns': [ {
-            name: 'count',
+            columnType: 'MEASURE',
             key: 0
           } ],
           'axis': 'y'
@@ -533,7 +533,7 @@ const machineCharts = [
           'seriesname': 'Historic Logins',
           'reportId': 'taf_asset_failed_logins_on_machine_by_users_time_shifted',
           'columns': [ {
-            name: 'count',
+            columnType: 'MEASURE',
             key: 1
           } ],
           'axis': 'y'
@@ -605,14 +605,14 @@ const machineCharts = [
           'axis': 'x'
         },
         {
-          'seriesname': 'Current Successful Logins',
+          'seriesname': 'Current Logins',
           'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted',
           'columns': [ 'count[0]' ],
           'renderas': 'Line',
           'axis': 'y'
         },
         {
-          'seriesname': 'Historical Successful Logins',
+          'seriesname': 'Historic Logins',
           'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted',
           'columns': [ 'count[1]' ],
           'renderas': 'Area',
@@ -686,14 +686,14 @@ const machineCharts = [
           'axis': 'x'
         },
         {
-          'seriesname': 'Current Failed Logins',
+          'seriesname': 'Current Logins',
           'reportId': 'taf_asset_all_failed_logins_by_machine_time_shifted',
           'columns': [ 'count[0]' ],
           'renderas': 'Line',
           'axis': 'y'
         },
         {
-          'seriesname': 'Historical Failed Logins',
+          'seriesname': 'Historic Logins',
           'reportId': 'taf_asset_all_failed_logins_by_machine_time_shifted',
           'columns': [ 'count[1]' ],
           'renderas': 'Area',
