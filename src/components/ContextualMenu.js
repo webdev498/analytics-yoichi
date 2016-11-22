@@ -226,7 +226,7 @@ class ContextualMenu extends React.Component {
         {nodeObjects, edgeObjects} = props,
         parameterName = ((name).includes('metadata')) ? 'metadata' : name;
 
-      parameterName = ((name).includes('actionData')) ? 'actionData' : name;
+      parameterName = ((name).includes('actionData')) ? 'actionData' : parameterName;
 
       value = '';
       switch (parameterName) {
