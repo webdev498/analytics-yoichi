@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 
 import ParentCard from 'containers/ParentCard';
+import Search from './Search';
 import Loader from 'components/Loader';
 
 import {fetchLayoutData} from 'actions/core';
@@ -10,7 +11,8 @@ import { connect } from 'react-redux';
 
 const styles = {
   content: {
-    padding: '33px'
+    padding: '33px',
+    position: 'relative'
   },
   error: {
     position: 'absolute',
@@ -88,7 +90,7 @@ export class PageContent extends React.Component {
       );
     });
 
-    return React.DOM.div({}, finalElmements);
+    return finalElmements;
   }
 
   showError() {
@@ -112,7 +114,12 @@ export class PageContent extends React.Component {
           ? <Loader />
           : props.isError
             ? this.showError()
-            : this.renderChildren()
+            : (
+              <div>
+                {props.showSearch ? <Search toggleSearch={props.toggleSearch} /> : null}
+                {this.renderChildren()}
+              </div>
+            )
         }
       </div>
     );

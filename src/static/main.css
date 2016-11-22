@@ -94,3 +94,7 @@
 body {
   background-color: #e5e5ea;
 }
+
+* {
+  font-family: 'Open Sans', sans-serif;
+}

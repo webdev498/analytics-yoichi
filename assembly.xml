@@ -6,7 +6,8 @@
     <formats>
         <format>tar.gz</format>
     </formats>
-    <includeBaseDirectory>false</includeBaseDirectory>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <baseDirectory>${artifactId}-${version}-${buildNumber}</baseDirectory>
     <fileSets>
         <fileSet>
             <directory>${basedir}/dist</directory>

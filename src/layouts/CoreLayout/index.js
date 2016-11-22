@@ -73,7 +73,8 @@ export class CoreLayout extends React.Component {
       showKibana: false,
       showFullSidebar: false,
       sidebarWidth: {width: '72px'},
-      sidebar: props.auth.sidebar
+      sidebar: props.auth.sidebar,
+      showSearch: false
     };
 
     this.toggleSidebar = this.toggleSidebar.bind(this);
@@ -124,12 +125,19 @@ export class CoreLayout extends React.Component {
     });
   }
 
+  toggleSearch = () => {
+    this.setState({showSearch: !this.state.showSearch});
+  }
+
   componentDidMount() {
     this.props.fetchUserData();
     this.props.fetchActionsList();
 
     this.context.router.listen(() => {
       this.hideKibana();
+      if (this.state.showSearch) {
+        this.toggleSearch();
+      }
     });
   }
 
@@ -163,7 +171,8 @@ export class CoreLayout extends React.Component {
           <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
             sidebar={this.state.sidebar}
             location={props.location}
-            hideKibana={this.hideKibana} />
+            hideKibana={this.hideKibana}
+            toggleSearch={this.toggleSearch} />
         </nav>
 
         <div style={styles.base}>
@@ -171,7 +180,12 @@ export class CoreLayout extends React.Component {
             {
               (props.auth.isLoading)
               ? <Loader />
-              : <PageContent location={props.location} params={props.params} history={this.context.router} />
+              : <PageContent
+                location={props.location}
+                params={props.params}
+                history={this.context.router}
+                toggleSearch={this.toggleSearch}
+                showSearch={state.showSearch} />
             }
           </div>
 
