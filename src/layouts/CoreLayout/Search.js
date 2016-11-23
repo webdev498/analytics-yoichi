@@ -148,7 +148,7 @@ export class Search extends React.Component {
   render() {
     const {props, state} = this;
     return (
-      <div style={styles.wrap}>
+      <div style={{...styles.wrap, ...props.style}} className={props.className}>
         <div style={styles.searchWrap}>
           <FontIcon style={styles.icon} className='material-icons' onClick={props.toggleSearch}>
             arrow_back
