@@ -84,10 +84,13 @@ class Sidebar extends React.Component {
     return (
       <div>
         <nav className='sidebar' style={{...styles.leftNav, ...props.style}}>
-          <Link style={{...styles.wrap, cursor: 'pointer'}} key='searchlink' onClick={props.toggleSearch}>
+          <div style={{...styles.wrap, cursor: 'pointer'}}
+            key='searchlink'
+            onClick={props.toggleSearch}
+            className='search-link'>
             <FontIcon style={styles.icon} className='material-icons'>search</FontIcon>
             <span style={styles.text}>search</span>
-          </Link>
+          </div>
           {this.getLinks(props.location.pathname)}
         </nav>
         { props.showSearch ? (
