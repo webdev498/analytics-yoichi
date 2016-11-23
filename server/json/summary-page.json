@@ -262,6 +262,110 @@
     ],
     [
       {
+        "chartOptions": {
+          "xAxisname": "TIME",
+          "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
+          "paletteColors": "#C9EDDF, #60E2DC"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_at_risk_assets_by_time",
+              "columns": [
+                "risk.lastUpdated"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_at_risk_assets_by_time",
+              "columns": [
+                "id"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_at_risk_assets_by_time"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "At Risk Asset Count by Time"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "chartType": "area2d",
+          "style": {
+            "marginRight": "33px",
+            "width": "50%"
+          },
+          "chartHeight": "350",
+          "id": "atRiskAssetsByTime"
+        },
+        "id": "at-risk-assets-by-time",
+        "type": "StandardChart"
+      },
+      {
+        "chartOptions": {
+          "xAxisname": "SCORE",
+          "baseFontColor": "#6B7282",
+          "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_at_risk_assets_by_risk",
+              "columns": [
+                "risk.score"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_at_risk_assets_by_risk",
+              "columns": [
+                "id"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_at_risk_assets_by_risk"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "At Risk Asset Count by Score"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "width": "50%"
+          },
+          "id": "atRiskAssetByRisk",
+          "chartHeight": "350"
+        },
+        "id": "at-risk-asset-by-risk",
+        "type": "ParetoChart"
+      }
+    ],
+    [
+      {
         "chartOptions": {},
         "chartData": {
           "fieldMapping": [
