@@ -145,6 +145,10 @@ export class Search extends React.Component {
     );
   }
 
+  componentDidMount() {
+    this.refs.searchInput.focus();
+  }
+
   render() {
     const {props, state} = this;
     return (
