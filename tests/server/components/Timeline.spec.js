@@ -1,4 +1,4 @@
-import Timeline from '../../server/components/Timeline';
+import Timeline from '../../../server/components/Timeline';
 
 function getCtx(data) {
   return { tempData: { json() { return Object.assign({}, data); } } };
