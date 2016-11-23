@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import Reactable from 'reactable';
+
 import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/DurationWidget';
@@ -10,10 +11,11 @@ import {
   getIndexFromObjectName,
   isUndefined,
   msToTime,
-  getCountryNameByCountryCode,
   formatBytes,
   formatDateInLocalTimeZone
 } from 'utils/utils';
+
+import {getCountryNameByCountryCode} from 'utils/countryUtils';
 import {
   generateQueryParams,
   generateClickThroughUrl,
