@@ -111,6 +111,11 @@ export function getQueryParamsFromKey(parameters, key, value) {
       const sectionName = toolText.split(',');
       queryParam = key + '=' + (sectionName[0]).toLowerCase();
       break;
+    case 'message':
+        toolText = dataObj.toolText;
+        const sectionName = toolText.split(',');
+        queryParam = key + '=' + sectionName[0];
+        break;  
     case 'ip':
       toolText = dataObj.toolText;
       const IP = toolText.split(',');
