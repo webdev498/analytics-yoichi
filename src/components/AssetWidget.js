@@ -8,7 +8,6 @@ const styles = {
   wrap: {
     display: 'flex',
     padding: '10px 0',
-    textDecoration: 'none',
     color: Colors.grape
   },
   icon: {
@@ -72,11 +71,6 @@ class AssetWidget extends React.Component {
     return null;
   }
 
-  getAssetUrl() {
-    const {data: {id, type}} = this.props;
-    return `/asset/${type}/${id}`;
-  }
-
   render() {
     const {props} = this,
       info = props.data.info;
@@ -86,13 +80,8 @@ class AssetWidget extends React.Component {
       headingStyle.paddingTop = '5px';
     }
 
-    let to = '';
-    if (props.link) {
-      to = this.getAssetUrl();
-    }
-
     return (
-      <Link style={{...styles.wrap, ...props.style}} to={to}>
+      <div style={{...styles.wrap, ...props.style}}>
         {this.getImage(props.data)}
         <div>
           <div style={headingStyle}>{info.displayName}</div>
@@ -101,7 +90,7 @@ class AssetWidget extends React.Component {
           {info.servicePack ? <div style={styles.subHeading}>{info.servicePack}</div> : null}
           {info.OS ? <div style={styles.subHeading}>{info.OS}</div> : null}
         </div>
-      </Link>
+      </div>
     );
   }
 }

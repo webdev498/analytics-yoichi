@@ -3,26 +3,12 @@ import { connect } from 'react-redux';
 
 import {fetchSearchData} from 'actions/core';
 import FontIcon from 'material-ui/FontIcon';
+import { Link } from 'react-router';
 
 import AssetWidget from 'components/AssetWidget';
 import Loader from 'components/Loader';
 
 import {Colors} from 'theme/colors';
-
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function() {
-    var context = this, args = arguments;
-    var later = function() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    var callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-};
 
 const styles = {
   wrap: {
@@ -60,11 +46,15 @@ const styles = {
     cursor: 'pointer'
   },
   results: {
-    position: 'relative',
+    position: 'absolute',
     backgroundColor: Colors.arctic,
     margin: '30px 50px',
     padding: '30px',
-    minHeight: '300px'
+    overflowY: 'auto',
+    right: 0,
+    left: 0,
+    bottom: 0,
+    top: '70px'
   },
   error: {
     position: 'absolute',
@@ -74,7 +64,25 @@ const styles = {
     bottom: 0,
     textAlign: 'center',
     padding: '30px'
+  },
+  link: {
+    textDecoration: 'none'
   }
+};
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
 };
 
 export class Search extends React.Component {
@@ -124,15 +132,21 @@ export class Search extends React.Component {
       }), 200);
   }
 
+  getAssetUrl(item) {
+    const {id, type} = item[0];
+    return `/asset/${type}/${id}`;
+  }
+
   getResults() {
     const {state} = this;
     return state.data.map((item, index) => {
+      let to = this.getAssetUrl(item);
+
       return (
-        <AssetWidget
-          headingStyle={{textTransform: 'none'}}
-          data={item[0]}
-          key={`asset${index}`}
-          link />
+        <Link to={to} style={styles.link} key={`asset${index}`}>
+          <AssetWidget
+            data={item[0]} />
+        </Link>
       );
     });
   }
@@ -147,6 +161,11 @@ export class Search extends React.Component {
 
   componentDidMount() {
     this.refs.searchInput.focus();
+    document.body.style.overflow = 'hidden';
+  }
+
+  componentWillUnmount() {
+    document.body.style.overflow = '';
   }
 
   render() {
