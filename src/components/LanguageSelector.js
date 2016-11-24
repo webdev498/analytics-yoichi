@@ -19,16 +19,16 @@ const messages = defineMessages({
 });
 
 class LanguageSelector extends Component {
-  constructor () {
+  constructor() {
     super();
     this._handleChange = this._handleChange.bind(this);
   }
 
-  _handleChange (e) {
+  _handleChange(e) {
     this.props.onChange(e.target.value);
   }
 
-  render () {
+  render() {
     const {formatMessage, locale} = this.props.intl;
     return (
       <select value={locale} onChange={this._handleChange}>
