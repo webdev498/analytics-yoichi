@@ -421,13 +421,14 @@ class Timeline extends React.Component {
                   }}>
                     <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
                   </div>
+                  { /* Need to implement some other solution for primary timeline height. Working on it.
                   <div style={{color: 'transparent'}}>
                     {
-                      setTimeout(() => {
-                        this.setPrimaryTimelineHeight();
-                      }, 2000)
+                      // setTimeout(() => {
+                      //   this.setPrimaryTimelineHeight();
+                      // }, 2000)
                     }
-                  </div>
+                  </div> */ }
                 </div>
                 : null
               }
