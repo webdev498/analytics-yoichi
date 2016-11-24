@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import ScoreWidget from 'components/ScoreWidget';
+import ScoreWidget from 'components/widgets/ScoreWidget';
 
 const styles = {
   wrap: {

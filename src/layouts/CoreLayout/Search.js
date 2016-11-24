@@ -5,7 +5,7 @@ import {fetchSearchData} from 'actions/core';
 import FontIcon from 'material-ui/FontIcon';
 import { Link } from 'react-router';
 
-import AssetWidget from 'components/AssetWidget';
+import AssetWidget from 'components/widgets/AssetWidget';
 import Loader from 'components/Loader';
 
 import {Colors} from 'theme/colors';
