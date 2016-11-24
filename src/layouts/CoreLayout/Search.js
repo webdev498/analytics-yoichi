@@ -95,22 +95,33 @@ export class Search extends React.Component {
       isError: false,
       errorMessage: ''
     };
+
+    this.prevQuery = '';
   }
 
   static propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    toggleSearch: PropTypes.func.isRequired
   }
 
   clear = () => {
-    this.refs.searchInput.value = '';
-    this.setState({data: []});
-  };
+    const value = this.refs.searchInput.value;
+    if (value === '') {
+      this.props.toggleSearch();
+    }
+    else {
+      this.refs.searchInput.value = '';
+      this.setState({data: []});
+    }
+  }
 
   search = (evt) => {
-    const {refs, props} = this;
+    const {refs, props, prevQuery} = this;
     let query = refs.searchInput.value;
 
-    if (query.length < 2) return;
+    if (query.length < 2 || prevQuery === query) return;
+
+    this.prevQuery = query;
 
     this.setState({showLoader: true, isError: false});
     debounce(fetchSearchData(props.auth, query)
@@ -180,7 +191,7 @@ export class Search extends React.Component {
           <input ref='searchInput'
             placeholder='Search Assets'
             style={styles.search}
-            onKeyPress={this.search} />
+            onKeyUp={this.search} />
 
           <FontIcon style={styles.icon} className='material-icons' onClick={this.clear}>clear</FontIcon>
         </div>

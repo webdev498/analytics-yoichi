@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import FontIcon from 'material-ui/FontIcon';
-import { Link } from 'react-router';
 
 import {Colors} from 'theme/colors';
 
