@@ -4,10 +4,9 @@ import {
   MEDIUM_SCORE_RANGE,
   HIGH_SCORE_RANGE
 } from 'Constants';
-import {isUndefined,
-  getTimePairFromWindow,
-  getCountryCodeByCountryName
-} from 'utils/utils';
+
+import {isUndefined, getTimePairFromWindow} from 'utils/utils';
+import {getCountryCodeByCountryName} from 'utils/countryUtils';
 
 const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
 

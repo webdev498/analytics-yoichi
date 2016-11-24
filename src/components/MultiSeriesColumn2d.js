@@ -32,10 +32,10 @@ const chart = {
   'slantLabels': '1'
 };
 
-function getColumnIndex(columns, name, type) {
+function getColumnIndex(columns, type) {
   let index = null, col = null;
   columns.forEach((column, i) => {
-    if (column.name === name || column.columnType === type) {
+    if (column.columnType === type) {
       index = i;
       col = column;
       return;
@@ -64,11 +64,11 @@ function getDataSource(props) {
   let xAxis, yAxis = [];
   fieldMapping.forEach(field => {
     if (field.axis === 'x') {
-      xAxis = {...getColumnIndex(data.columns, field.columns[0].name), field};
+      xAxis = {...getColumnIndex(data.columns, field.columns[0].columnType), field};
     }
 
     if (field.axis === 'y') {
-      yAxis.push({...getColumnIndex(data.columns, field.columns[0].name), field});
+      yAxis.push({...getColumnIndex(data.columns, field.columns[0].columnType), field});
     }
   });
 

@@ -25,18 +25,11 @@ const styles = {
     right: 0,
     zIndex: 1
   },
-  sidebar: {
-    width: '72px'
-  },
   base: {
     paddingLeft: '72px',
     paddingTop: '64px',
     boxSizing: 'border-box',
     height: '100%'
-  },
-  nav: {
-    position: 'relative',
-    width: '72px'
   },
   handle: {
     position: 'absolute',
@@ -77,7 +70,6 @@ export class CoreLayout extends React.Component {
       showSearch: false
     };
 
-    this.toggleSidebar = this.toggleSidebar.bind(this);
     this.hideKibana = this.hideKibana.bind(this);
     this.mouseOver = this.mouseOver.bind(this);
     this.mouseOut = this.mouseOut.bind(this);
@@ -96,12 +88,6 @@ export class CoreLayout extends React.Component {
         document.body.style.overflow = 'hidden';
       }
     };
-  }
-
-  toggleSidebar() {
-    this.setState({
-      showFullSidebar: !this.state.showFullSidebar
-    });
   }
 
   hideKibana() {
@@ -154,8 +140,7 @@ export class CoreLayout extends React.Component {
 
   render() {
     const {props, state} = this,
-      {showKibana} = this.state,
-      sidebarWidth = state.sidebarWidth;
+      {showKibana} = this.state;
 
     let kibanaUrl = showKibana ? this.state.url : '';
 
@@ -167,13 +152,12 @@ export class CoreLayout extends React.Component {
           hideKibana={this.hideKibana}
           params={props.params} />
 
-        <nav style={{...styles.nav, ...sidebarWidth}} onMouseOver={this.mouseOver} onMouseOut={this.mouseOut}>
-          <Sidebar style={{...styles.sidebar, ...sidebarWidth}}
-            sidebar={this.state.sidebar}
-            location={props.location}
-            hideKibana={this.hideKibana}
-            toggleSearch={this.toggleSearch} />
-        </nav>
+        <Sidebar
+          sidebar={this.state.sidebar}
+          location={props.location}
+          hideKibana={this.hideKibana}
+          toggleSearch={this.toggleSearch}
+          showSearch={state.showSearch} />
 
         <div style={styles.base}>
           <div style={styles.content}>
@@ -183,9 +167,7 @@ export class CoreLayout extends React.Component {
               : <PageContent
                 location={props.location}
                 params={props.params}
-                history={this.context.router}
-                toggleSearch={this.toggleSearch}
-                showSearch={state.showSearch} />
+                history={this.context.router} />
             }
           </div>
 

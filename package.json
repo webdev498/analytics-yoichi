@@ -1,6 +1,6 @@
 {
   "name": "yoichi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rank Protect's User Interface",
   "main": "index.js",
   "engines": {
@@ -20,8 +20,6 @@
     "prod": "better-npm-run prod",
     "test": "better-npm-run test",
     "test:dev": "npm run test -- --watch",
-    "testServer": "mocha -u bdd -t 500 --recursive --compilers js:babel-core/register server-test/index.js",
-    "testServer:dev": "mocha --watch -u bdd -t 500 --recursive --compilers js:babel-core/register server-test/index.js",
     "deploy": "better-npm-run deploy",
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod",

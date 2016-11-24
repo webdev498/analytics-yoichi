@@ -1,0 +1,17 @@
+.sidebar {
+  width: 72px;
+  overflow: hidden;
+  transition: width 0.2s;
+}
+
+.sidebar:hover {
+  width: 172px;
+}
+
+.search {
+  transition: left 0.2s;
+}
+
+.sidebar:hover + .search {
+  left: 172px !important;
+}

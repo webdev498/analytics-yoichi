@@ -2,17 +2,17 @@ import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
 import {
   firstCharCapitalize,
-  getCountryNameByCountryCode,
   getPosition,
   isUndefined,
   isNull,
   whatIsIt,
   formatDateInLocalTimeZone
 } from 'utils/utils';
+import {getCountryNameByCountryCode} from 'utils/countryUtils';
 import Cookies from 'cookies-js';
 import vis from 'vis';
 import {baseUrl, networkGraphDefaultOptions, hierarchicalNetwork, applyHierarchicalNetwork} from 'config';
-// Loader will get removed after started using fetchApiData function from props object
+
 import Loader from '../components/Loader';
 import ContextualMenu from '../components/ContextualMenu';
 

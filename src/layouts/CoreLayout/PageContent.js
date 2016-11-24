@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react';
 
 import ParentCard from 'containers/ParentCard';
-import Search from './Search';
 import Loader from 'components/Loader';
 
 import {fetchLayoutData} from 'actions/core';
@@ -114,12 +113,7 @@ export class PageContent extends React.Component {
           ? <Loader />
           : props.isError
             ? this.showError()
-            : (
-              <div>
-                {props.showSearch ? <Search toggleSearch={props.toggleSearch} /> : null}
-                {this.renderChildren()}
-              </div>
-            )
+            : this.renderChildren()
         }
       </div>
     );

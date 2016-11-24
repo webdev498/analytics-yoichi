@@ -9,6 +9,7 @@ import {spy} from 'sinon';
 import {CoreLayout} from 'layouts/CoreLayout';
 import PageHeaderWrapped from 'layouts/CoreLayout/PageHeader';
 import {PageContent} from 'layouts/CoreLayout/PageContent';
+import Sidebar from 'layouts/CoreLayout/Sidebar';
 import Loader from 'components/Loader';
 import ParentCard from 'containers/ParentCard';
 import MetricsCard from 'components/MetricsCard';
@@ -88,9 +89,9 @@ describe('CoreLayout', () => {
   describe('index File', () => {
     it('should render correctly', () => {
       const { component } = setup();
-      let [ header, nav, contentWrap ] = component.props.children;
+      let [ header, sidebar, contentWrap ] = component.props.children;
 
-      expect(nav.type).to.equal('nav');
+      expect(sidebar.type).to.equal(Sidebar);
       expect(header.type).to.equal(PageHeaderWrapped);
       expect(contentWrap.type).to.equal('div');
     });
@@ -124,7 +125,7 @@ describe('CoreLayout', () => {
 
       expect(props.layout).to.deep.equal(layout);
 
-      const sections = component.props.children.props.children,
+      const sections = component.props.children,
         section = sections[0];
 
       expect(sections.length).to.equal(1);

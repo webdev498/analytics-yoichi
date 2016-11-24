@@ -1,12 +1,10 @@
 import React, {PropTypes} from 'react';
 import WorldMapLegends from 'components/WorldMapLegends';
 import {Colors} from 'theme/colors';
-import {
-  generateRawData,
-  getCountryIDByCountryCode,
-  isUndefined,
-  getColorRanges
-} from 'utils/utils';
+
+import { generateRawData, isUndefined, getColorRanges } from 'utils/utils';
+import {getCountryIDByCountryCode} from 'utils/countryUtils';
+
 import {
   generateQueryParams,
   generateClickThroughUrl,

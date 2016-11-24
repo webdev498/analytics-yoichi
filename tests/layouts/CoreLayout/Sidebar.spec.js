@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import {spy} from 'sinon';
 
 import Sidebar from 'layouts/CoreLayout/Sidebar';
 
@@ -38,22 +39,30 @@ const links = [
   }
 ];
 
-describe('<Sidebar />', () => {
-  let component, props;
+function getSidebar(propObj = {}) {
+  const props = Object.assign({
+    location: {pathname: '/'},
+    sidebar: links,
+    showSearch: false,
+    toggleSearch: spy()
+  }, propObj);
 
-  beforeEach(function() {
-    props = {
-      location: {pathname: '/'},
-      sidebar: links
-    };
-
-    component = mount(
-      <MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-        <Sidebar {...props} />
-      </MuiThemeProvider>
+  const root = mount(
+    <MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
+      <Sidebar {...props} />
+    </MuiThemeProvider>
     );
 
-    component = component.find('Sidebar');
+  const component = root.find('Sidebar');
+
+  return { root, component };
+}
+
+describe('<Sidebar />', () => {
+  let component, root;
+
+  before(function() {
+    ({root, component} = getSidebar());
   });
 
   it('should exist', () => {
@@ -64,9 +73,25 @@ describe('<Sidebar />', () => {
     expect(component.type()).to.equal(Sidebar);
   });
 
-  it('should have one child of type LeftNav', () => {
-    expect(component.find('LeftNav').length).to.equal(0);
+  it('should have one search element', () => {
+    expect(component.find('.search-link')).to.exist;
   });
+
+  it('should not show search by default', () => {
+    expect(root.find('.search')).to.have.length(0);
+  });
+
+  it('should call toggleSearch on click of search link', () => {
+    expect(root.find('.search')).to.have.length(0);
+    const searchLink = component.find('.search-link');
+    searchLink.simulate('click');
+    expect(component.props().toggleSearch.callCount).to.equal(1);
+  });
+
+  // it('should show search if showSearch is true', function() {
+  //   const comp = getSidebar({ showSearch: true }).component;
+  //   expect(comp.find('.search')).to.have.length(1);
+  // });
 
   it('should have 5 links', () => {
     expect(component.find('Link').length).to.equal(5);
@@ -85,8 +110,8 @@ describe('<Sidebar />', () => {
     });
   });
 
-  it('should have 5 font icons', () => {
-    expect(component.find('FontIcon').length).to.equal(5);
+  it('should have 6 font icons', () => {
+    expect(component.find('FontIcon').length).to.equal(6);
     component.find('Link').forEach((node, index) => {
       expect(node.text()).to.have.string(links[index].icon);
     });
