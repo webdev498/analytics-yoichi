@@ -1,4 +1,4 @@
-import anomalyChart from '../../server/components/anomalyChart';
+import anomalyChart from '../../../server/components/anomalyChart';
 
 const columns = [
   {

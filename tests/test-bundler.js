@@ -18,6 +18,22 @@ global.sinon = sinon;
 global.expect = chai.expect;
 global.should = chai.should();
 
+if (!String.prototype.includes) {
+  String.prototype.includes = function(search, start) { // eslint-disable-line
+    'use strict';
+    if (typeof start !== 'number') {
+      start = 0;
+    }
+
+    if (start + search.length > this.length) {
+      return false;
+    }
+    else {
+      return this.indexOf(search, start) !== -1;
+    }
+  };
+}
+
 // ---------------------------------------
 // Require Tests
 // ---------------------------------------

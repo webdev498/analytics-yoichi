@@ -2,7 +2,8 @@ import React, {PropTypes} from 'react';
 
 import AssetWidget from 'components/AssetWidget';
 import RadarChart from 'components/RadarChart';
-import {formatBytes, getCountryNameByCountryCode, getColor} from 'utils/utils';
+import {formatBytes, getColor} from 'utils/utils';
+import {getCountryNameByCountryCode} from 'utils/countryUtils';
 import {getArrowIcon} from 'utils/graphUtils';
 import ScoreWidget from 'components/ScoreWidget';
 import FontIcon from 'material-ui/FontIcon';
