@@ -6,7 +6,6 @@ import {serverBaseUrl, timeoutDuration} from '../../serverEnv';
 import layoutRoutes from './layouts';
 
 import timeline from '../components/Timeline';
-// import timelineAnomaly from '../components/TimelineAnomaly';
 import anomalyChart from '../components/anomalyChart';
 
 const router = new KoaRouter({
@@ -28,7 +27,6 @@ router
   const res = await fetch(serverBaseUrl + ctx.url,
     {
       method: 'GET',
-      // headers: ctx.headers,
       headers: {...ctx.headers, 'Content-Type': 'application/json'},
       timeout,
       agent

@@ -132,13 +132,12 @@ class Timeline extends React.Component {
     if (state.filter === '' && data.options && data.options.customParams) {
       state.filter = data.options.customParams.filter;
     }
-    console.log('timeline', state.rows);
   }
 
   displayCard() {
     const rows = this.state.rows,
       {props, state} = this,
-      {attributes} = props;
+      {attributes, chart} = props;
 
     return (
       <div style={this.style.card}
@@ -150,8 +149,8 @@ class Timeline extends React.Component {
               cardId = 'card' + index,
               backgroundColor = (this.card === CONTEXTUAL_MENU_CARD) ? {backgroundColor: Colors.contextBG} : {},
               padding = (this.card === CONTEXTUAL_MENU_CARD)
-              ? (index === 0 ? {padding: '15px 15px 0px 15px'} : {padding: '0px 15px 0px 15px'})
-              : {};
+                ? (index === 0 ? {padding: '15px 15px 0px 15px'} : {padding: '0px 15px 0px 15px'})
+                : {};
 
             if (dateString !== '') {
               return (
@@ -167,7 +166,9 @@ class Timeline extends React.Component {
                     updateRoute={props.updateRoute}
                     getContextualMenuApiObj={this.getContextualMenuApiObj}
                     selectedCardId={state.selectedCardId}
-                    card={this.card} />
+                    card={this.card}
+                    attributes={attributes}
+                    chart={chart} />
                   {this.card === CONTEXTUAL_MENU_CARD ? this.displayDate(dateString, this.card) : null}
                 </div>
               );
@@ -374,7 +375,7 @@ class Timeline extends React.Component {
     if (errorData) {
       state.rows = [];
     }
-
+    console.log(props);
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
 
     let tabNames = [];

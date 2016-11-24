@@ -79,12 +79,38 @@
     ],
     [
       {
-        "id": "alert-activity",
-        "type": "AlertMultiChart",
+        "id": "timeline",
+        "type": "Timeline",
         "meta": {
           "showHeader": true,
-          "title": "Activity",
-          "showRefresh": false
+          "api": null,
+          "title": "Timeline"
+        },
+        "attributes": {
+          "type": "traffic",
+          "displaySelectedRows": true,
+          "noOfEventsPerPage": 10,
+          "maxNumbersOnLeftRightPagination": 4,
+          "style": {
+            "width": "100%",
+            "backgroundColor": "#F7F7F9"
+          },
+          "chart": {
+            "chartHeight": "200",
+            "chartCaption": {
+              "display": "none"
+            }
+          },
+          "otherStyles": {
+            "flex": {
+              "display": "flex"
+            },
+            "pagination": {
+              "bottom": 0,
+              "position": "absolute"
+            }
+          },
+          "id": "timeline-component"
         },
         "chart": {
           "chartOptions": {
@@ -100,48 +126,6 @@
             "showlegend": "0",
             "outCnvBaseFontSize": "8"
           }
-        },
-        "attributes": {
-          "chart": {
-            "chartHeight": "200",
-            "chartCaption": {
-              "display": "none"
-            }
-          },
-          "style": {
-            "width": "35%",
-            "flexDirection": "column"
-          },
-          "id": "activity"
-        }
-      },
-      {
-        "id": "timeline",
-        "type": "Timeline",
-        "meta": {
-          "showHeader": true,
-          "api": null,
-          "title": "Timeline"
-        },
-        "attributes": {
-          "type": "traffic",
-          "displaySelectedRows": true,
-          "noOfEventsPerPage": 10,
-          "maxNumbersOnLeftRightPagination": 4,
-          "style": {
-            "width": "65%",
-            "backgroundColor": "#F7F7F9"
-          },
-          "otherStyles": {
-            "flex": {
-              "display": "flex"
-            },
-            "pagination": {
-              "bottom": 0,
-              "position": "absolute"
-            }
-          },
-          "id": "timeline-component"
         },
         "tabs": {
           "DETAILS": {

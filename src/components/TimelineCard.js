@@ -2,12 +2,22 @@ import React, {PropTypes} from 'react';
 import Card from 'material-ui/Card/Card';
 import {Colors} from 'theme/colors';
 import {whatIsIt, getColor} from 'utils/utils';
+import MultiSeriesCombiChart from 'components/MultiSeriesCombiChart';
 
 let styles = {
   alert: {},
   listItem: {
     fontSize: '13px',
     color: Colors.grape
+  },
+  title: {
+    'fontSize': '13px',
+    'fontWeight': 600,
+    'margin': 0,
+    'paddingBottom': '10px'
+  },
+  wrap: {
+    marginBottom: '35px'
   }
 };
 
@@ -228,6 +238,36 @@ class TimelineCard extends React.Component {
     return null;
   }
 
+  getAnomalyChart(chartData) {
+    if (!chartData) return null;
+
+    const {props} = this,
+      {id, attributes, chart} = props,
+      chartProps = {
+        attributes: {
+          id,
+          ...attributes.chart
+        },
+        processedData: true
+      },
+      uiConfig = chartData.uiConfig;
+
+    chartData.chart = chart.chartOptions;
+    chartData.chart.divlineThickness = 1;
+    chartData.chart.xAxisName = uiConfig.xAxisLabel;
+    chartData.chart.yAxisName = uiConfig.yAxisLabel;
+
+    chartProps.data = JSON.parse(JSON.stringify(chartData));
+    delete chartProps.data.uiConfig;
+
+    return (
+      <div style={styles.wrap}>
+        <h2 style={styles.title}>{uiConfig.title}</h2>
+        <MultiSeriesCombiChart {...chartProps} />
+      </div>
+    );
+  }
+
   render() {
     const {props} = this,
       {data} = props;
@@ -247,6 +287,12 @@ class TimelineCard extends React.Component {
           paddingLeft: '22px'
         };
         break;
+    }
+
+    if (props.data.chart) {
+      styles.alert = Object.assign(styles.alert, {
+        display: 'flex'
+      });
     }
 
     return (
@@ -270,6 +316,11 @@ class TimelineCard extends React.Component {
         }
         onClick={this.handleCardClick()}
         key={props.id}>
+        {
+          props.data.chart
+          ? this.getAnomalyChart(props.data.chart)
+          : null
+        }
         <ul className='no-list-style'>{this.getDetails(props.data)}</ul>
       </Card>
     );

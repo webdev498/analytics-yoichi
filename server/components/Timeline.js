@@ -1,5 +1,9 @@
 import moment from 'moment';
-import {msToTime, getEventTypeString, formatBytes, whatIsIt} from '../utils/utils';
+import {msToTime, getEventTypeString, formatBytes} from '../utils/utils';
+import {
+  getChartData
+} from '../components/anomalyChart';
+
 function getIPDetails(source) {
   if (source) {
     const info = {};
@@ -192,6 +196,10 @@ function getAnomaly(row) {
   if (row.id) { info.id = row.id; }
   if (anomaly.impact) { info.Impact = anomaly.impact; }
   if (anomaly.anomaly_description) { info['Anomaly Description'] = anomaly.anomaly_description; }
+  console.log(anomaly);
+  if (anomaly.context) {
+    info.chart = getChartData(anomaly.context);
+  }
 
   return info;
 }
