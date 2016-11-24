@@ -37,13 +37,12 @@ class AlertDetails extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('test');
     this.loadTimeline(nextProps);
   }
 
   loadTimeline(props) {
     let {data, params} = props;
-    console.log('testing1', props);
+
     if (!data) return;
 
     let alertName = data.data.rank_alert.name,

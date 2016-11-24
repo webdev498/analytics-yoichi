@@ -30,6 +30,22 @@
                 },
                 "loadOnce": true
               }
+            },
+            {
+              "id": "timeline",
+              "api": {
+                "method": "GET",
+                "path": "/api/alert/traffic",
+                "pathParams": {},
+                "queryParams": {
+                  "count": 10,
+                  "from": 0,
+                  "window": "",
+                  "filter": "data.rank_alert.trafficFilter$customParam",
+                  "date": "date:pathParam"
+                },
+                "loadOnce": true
+              }
             }
           ]
         },
@@ -78,6 +94,43 @@
       }
     ],
     [
+      {
+        "id": "alert-activity",
+        "type": "AlertMultiChart",
+        "meta": {
+          "showHeader": true,
+          "title": "Activity",
+          "showRefresh": false
+        },
+        "chart": {
+          "chartOptions": {
+            "xAxisName": "TIME",
+            "divLineThickness": "2",
+            "lineThickness": "1",
+            "showYAxisValues": "1",
+            "xAxisNameFontSize": "10",
+            "yAxisNameFontSize": "10",
+            "labelFontSize": "8",
+            "drawAnchors": "1",
+            "anchorRadius": "1",
+            "showlegend": "0",
+            "outCnvBaseFontSize": "8"
+          }
+        },
+        "attributes": {
+          "chart": {
+            "chartHeight": "200",
+            "chartCaption": {
+              "display": "none"
+            }
+          },
+          "style": {
+            "width": "35%",
+            "flexDirection": "column"
+          },
+          "id": "activity"
+        }
+      },
       {
         "id": "timeline",
         "type": "Timeline",

@@ -95,7 +95,7 @@ export function createNodeObject(dataNode) {
     actionData: dataNode.actionData ? dataNode.actionData : {}
   };
 
-  // nodeObject.nodeDetails.push(<li key='nodeId'><b>{dataNode.nodeTypeDisplay}:</b> {idDisplay}</li>);
+  nodeObject.nodeDetails.push(<li key='nodeId'><b>{dataNode.nodeTypeDisplay}:</b> {idDisplay}</li>);
 
   let metaDataObject = handleNodeMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;

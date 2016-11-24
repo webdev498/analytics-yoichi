@@ -120,17 +120,22 @@ class TimelineCard extends React.Component {
   displayDetails(params) {
     let {key, index, data} = params;
 
-    return (
-      <li style={{...styles.listItem}} key={`desc${index}`}>
-        {
-          whatIsIt(data[key]) === 'String' && key !== 'session'
-          ? this.getStringDetails(params)
-          : (key === 'sourceDest' && whatIsIt(data[key]) === 'Object')
-            ? this.getObjectDetails(params)
-            : null
-        }
-      </li>
-    );
+    if (key.includes('Param')) {
+      return null;
+    }
+    else {
+      return (
+        <li style={{...styles.listItem}} key={`desc${index}`}>
+          {
+            whatIsIt(data[key]) === 'String' && key !== 'session'
+            ? this.getStringDetails(params)
+            : (key === 'sourceDest' && whatIsIt(data[key]) === 'Object')
+              ? this.getObjectDetails(params)
+              : null
+          }
+        </li>
+      );
+    }
   }
 
   getStringDetails(params) {
@@ -198,7 +203,9 @@ class TimelineCard extends React.Component {
               selectedCardId: props.data.id,
               eventDate: props.data.Date,
               user: props.data.User ? props.data.User : '',
-              machine: props.data.Machine ? props.data.Machine : ''
+              machine: props.data.Machine ? props.data.Machine : '',
+              start: props.data.Date ? props.data.Date : '',
+              end: props.data.endParam ? props.data.endParam : ''
             };
           }
           props.getContextualMenuApiObj(details);

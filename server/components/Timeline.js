@@ -196,10 +196,7 @@ function getAnomaly(row) {
   if (row.id) { info.id = row.id; }
   if (anomaly.impact) { info.Impact = anomaly.impact; }
   if (anomaly.anomaly_description) { info['Anomaly Description'] = anomaly.anomaly_description; }
-  console.log(anomaly);
-  if (anomaly.context) {
-    info.chart = getChartData(anomaly.context);
-  }
+  if (anomaly.context) { info.chart = getChartData(anomaly.context); }
 
   return info;
 }
@@ -252,6 +249,7 @@ function getSession(row, info) {
   if (row.to) {
     let dateTime = formatDateInLocalTimeZone(row.to);
     info['End Date'] = dateTime.date + ' ' + dateTime.time;
+    info.endParam = row.to;
   }
   if (row.machine) { info.Machine = row.machine; }
   if (row.user) { info.User = row.user; }
@@ -260,15 +258,16 @@ function getSession(row, info) {
 }
 
 function getOther(row) {
-  let info = {
-    Type: getEventTypeString(row.type)
-  };
+  let info = {};
 
   if (row.date) { info.Date = row.date; }
   if (row.id) { info.id = row.id; }
   if (row.session) {
     info.session = true;
     info = getSession(row, info);
+  }
+  else {
+    info.Type = getEventTypeString(row.type);
   }
 
   return info;

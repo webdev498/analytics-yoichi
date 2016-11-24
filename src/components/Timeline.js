@@ -25,7 +25,12 @@ function getTabObj(tabs, timelineType, currentTab) {
 
 function setOrRemoveQueryParam(queryParams, name, value) {
   if (queryParams[name] === '') {
-    queryParams[name] = value;
+    if (!isUndefined(value)) {
+      queryParams[name] = value;
+    }
+    else {
+      delete queryParams[name];
+    }
   }
   else {
     delete queryParams[name];
@@ -300,7 +305,7 @@ class Timeline extends React.Component {
     const {props} = this,
       {tabs} = props;
 
-    let {selectedCardId, eventDate, user, machine} = details;
+    let {selectedCardId, eventDate, user, machine, start, end} = details;
     if (!isUndefined(selectedCardId)) {
       this.setState({
         selectedCardId: selectedCardId
@@ -317,12 +322,16 @@ class Timeline extends React.Component {
             window: '',
             date: '',
             user: '',
-            machine: ''
+            machine: '',
+            start: '',
+            end: ''
           });
 
         queryParams = setOrRemoveQueryParam(queryParams, 'date', eventDate);
         queryParams = setOrRemoveQueryParam(queryParams, 'user', user);
         queryParams = setOrRemoveQueryParam(queryParams, 'machine', machine);
+        queryParams = setOrRemoveQueryParam(queryParams, 'start', start);
+        queryParams = setOrRemoveQueryParam(queryParams, 'end', end);
 
         apiObj.meta.api.queryParams = queryParams;
 
@@ -375,7 +384,7 @@ class Timeline extends React.Component {
     if (errorData) {
       state.rows = [];
     }
-    console.log(props);
+
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
 
     let tabNames = [];
