@@ -96,6 +96,7 @@
             "backgroundColor": "#F7F7F9"
           },
           "chart": {
+            "chartWidth": "400",
             "chartHeight": "200",
             "chartCaption": {
               "display": "none"

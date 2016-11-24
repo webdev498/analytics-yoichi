@@ -15,9 +15,6 @@ let styles = {
     'fontWeight': 600,
     'margin': 0,
     'paddingBottom': '10px'
-  },
-  wrap: {
-    marginBottom: '35px'
   }
 };
 
@@ -219,13 +216,13 @@ class TimelineCard extends React.Component {
         return (
           <div>
             {
-              (value.includes('exfiltration'))
-              ? <img src='/img/anomaly/exfiltration.png' />
-                : (value.includes('snoop'))
-                  ? <img src='/img/anomaly/snoop.png' />
-                    : (value.includes('command and control'))
-                        ? <img src='/img/anomaly/command-control.png' />
-                        : null
+              (value.includes('snoop'))
+              ? <img src='/img/anomaly/snoop.png' />
+              : (value.includes('exfiltration') || value.includes('exfiltrate'))
+                ? <img src='/img/anomaly/exfiltration.png' />
+                : (value.includes('command and control'))
+                  ? <img src='/img/anomaly/command-control.png' />
+                  : null
             }
           </div>
         );
@@ -261,7 +258,7 @@ class TimelineCard extends React.Component {
     delete chartProps.data.uiConfig;
 
     return (
-      <div style={styles.wrap}>
+      <div>
         <h2 style={styles.title}>{uiConfig.title}</h2>
         <MultiSeriesCombiChart {...chartProps} />
       </div>
@@ -289,12 +286,6 @@ class TimelineCard extends React.Component {
         break;
     }
 
-    if (props.data.chart) {
-      styles.alert = Object.assign(styles.alert, {
-        display: 'flex'
-      });
-    }
-
     return (
       <Card
         style={
@@ -305,7 +296,7 @@ class TimelineCard extends React.Component {
             paddingLeft: '18px',
             paddingRight: '18px',
             height: 'auto',
-            width: '350px',
+            width: props.data.chart ? '775px' : '350px',
             fontSize: '14px',
             cursor: this.isLinkCard ? 'pointer' : 'auto',
             overflowWrap: 'break-word',
@@ -316,12 +307,17 @@ class TimelineCard extends React.Component {
         }
         onClick={this.handleCardClick()}
         key={props.id}>
-        {
-          props.data.chart
-          ? this.getAnomalyChart(props.data.chart)
-          : null
-        }
-        <ul className='no-list-style'>{this.getDetails(props.data)}</ul>
+          <div style={{display: 'flex'}}>
+            {
+              props.data.chart
+              ? this.getAnomalyChart(props.data.chart)
+              : null
+            }
+            <ul className='no-list-style'
+              style={props.data.chart ? {paddingLeft: '20px'} : {}}>
+              {this.getDetails(props.data)}
+            </ul>
+          </div>
       </Card>
     );
   }

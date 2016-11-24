@@ -40,13 +40,7 @@ function checkIfColumnExist(cols, item) {
 }
 
 export function getChartData(chart) {
-  // if (input.rows) {
-  //   input = {0: input};
-  // }
-
   let charts = {};
-  // Object.keys(input).map((i) => {
-  // const chart = input[i],
   const {rows, columns, uiConfig} = chart,
     xAxis = getColumnIndex(columns, null, 'DIMENSION');
 
@@ -150,7 +144,6 @@ export function getChartData(chart) {
     dataset,
     uiConfig
   };
-  // });
 
   return charts;
 }
