@@ -17,18 +17,52 @@
             }
           },
           "title": "Alert Detail",
-          "fetchDataFor": [
+          "relatedComponents": [
             {
               "id": "alert-activity",
               "api": {
-                "method": "POST",
-                "path": "/api/analytics/reporting/executeById",
-                "body": "data.rank_alert.chartsFilter$customParam",
-                "pathParams": {},
-                "queryParams": {
-                  "window": ""
+                "default": {
+                  "method": "POST",
+                  "path": "/api/analytics/reporting/executeById",
+                  "body": "data.rank_alert.chartsFilter:fieldName",
+                  "pathParams": {},
+                  "queryParams": {
+                    "window": ""
+                  },
+                  "hideWhen": {
+                    "data.rank_alert.name": "anomaly"
+                  }
+                }
+              }
+            },
+            {
+              "id": "timeline",
+              "api": {
+                "default": {
+                  "method": "GET",
+                  "path": "/api/alert/traffic",
+                  "pathParams": {},
+                  "queryParams": {
+                    "count": 10,
+                    "from": 0,
+                    "window": "",
+                    "date": "date:pathParam",
+                    "filter": "data.rank_alert.trafficFilter:fieldName"
+                  }
                 },
-                "loadOnce": true
+                "anomaly": {
+                  "method": "GET",
+                  "path": "/api/anomaly/{alertId}/timeline",
+                  "pathParams": {
+                    "alertId": ":pathParam"
+                  },
+                  "queryParams": {
+                    "count": 10,
+                    "from": 0,
+                    "window": "",
+                    "date": "date:pathParam"
+                  }
+                }
               }
             }
           ]
@@ -42,8 +76,7 @@
           }
         },
         "id": "alert-detail",
-        "type": "AlertDetails",
-        "timelineId": "timeline"
+        "type": "AlertDetails"
       },
       {
         "meta": {
@@ -84,7 +117,9 @@
         "meta": {
           "showHeader": true,
           "title": "Activity",
-          "showRefresh": false
+          "showRefresh": false,
+          "api": null,
+          "hideComponent": true
         },
         "chart": {
           "chartOptions": {

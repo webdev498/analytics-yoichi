@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import SummaryWidget from 'components/SummaryWidget';
-
+import {renderRelatedComponents} from 'components/RelatedComponent';
 import {
   formatDateInLocalTimeZone
 } from 'utils/utils';
@@ -37,45 +37,11 @@ class AlertDetails extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.loadTimeline(nextProps);
-  }
-
-  loadTimeline(props) {
-    let {data, params, options} = props;
-
-    if (!data) return;
-
-    let alertName = data.data.rank_alert.name,
-      apiPath = '/api/alert/traffic',
-      pathParams = {};
-
-    if (alertName && alertName === 'anomaly') {
-      apiPath = '/api/anomaly/{alertId}/timeline';
-      pathParams = {
-        alertId: ':pathParam'
-      };
+    let {meta, data} = nextProps;
+    if (!data) return null;
+    if (meta.relatedComponents) {
+      renderRelatedComponents(nextProps, data.data.rank_alert.name);
     }
-    let apiObj = {
-      method: 'GET',
-      path: apiPath,
-      pathParams: pathParams,
-      queryParams: {
-        count: 10,
-        from: 0,
-        window: '',
-        filter: data.data.rank_alert.trafficFilter,
-        date: 'date:pathParam'
-      }
-    };
-
-    options = Object.assign({}, options, {
-      customParams: {
-        alertType: data.data.rank_alert.name,
-        filter: data.data.rank_alert.trafficFilter
-      }
-    });
-
-    props.fetchApiData(props.timelineId, apiObj, params, options);
   }
 
   render() {

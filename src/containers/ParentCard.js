@@ -419,6 +419,18 @@ export class ParentCard extends React.Component {
       cardStyle = {...styles.childwrap, ...props.attributes.style};
     }
 
+    let tempCardStyle = cardStyle;
+
+    if (props.meta.hideComponent) {
+      tempCardStyle = {width: '0px'};
+    }
+
+    if (props.meta.api && !props.meta.api.hideComponent) {
+      tempCardStyle = cardStyle;
+    }
+
+    cardStyle = tempCardStyle;
+
     return (
       <Card style={cardStyle} id={props.id}>
         {props.isFetching ? <Loader /> : null}
