@@ -41,7 +41,7 @@ class AlertDetails extends React.Component {
   }
 
   loadTimeline(props) {
-    let {data, params} = props;
+    let {data, params, options} = props;
 
     if (!data) return;
 
@@ -68,7 +68,14 @@ class AlertDetails extends React.Component {
       }
     };
 
-    props.fetchApiData(props.timelineId, apiObj, params, {});
+    options = Object.assign({}, options, {
+      customParams: {
+        alertType: data.data.rank_alert.name,
+        filter: data.data.rank_alert.trafficFilter
+      }
+    });
+
+    props.fetchApiData(props.timelineId, apiObj, params, options);
   }
 
   render() {

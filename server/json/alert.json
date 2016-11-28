@@ -30,22 +30,6 @@
                 },
                 "loadOnce": true
               }
-            },
-            {
-              "id": "timeline",
-              "api": {
-                "method": "GET",
-                "path": "/api/alert/traffic",
-                "pathParams": {},
-                "queryParams": {
-                  "count": 10,
-                  "from": 0,
-                  "window": "",
-                  "filter": "data.rank_alert.trafficFilter$customParam",
-                  "date": "date:pathParam"
-                },
-                "loadOnce": true
-              }
             }
           ]
         },
