@@ -30,7 +30,7 @@
                     "window": ""
                   },
                   "hideWhen": {
-                    "data.rank_alert.name": "anomaly"
+                    "data.rank_alert.name:fieldName": "anomaly"
                   }
                 }
               }
@@ -39,7 +39,6 @@
               "id": "timeline",
               "api": {
                 "default": {
-                  "method": "GET",
                   "path": "/api/alert/traffic",
                   "pathParams": {},
                   "queryParams": {
@@ -51,7 +50,6 @@
                   }
                 },
                 "anomaly": {
-                  "method": "GET",
                   "path": "/api/anomaly/{alertId}/timeline",
                   "pathParams": {
                     "alertId": ":pathParam"

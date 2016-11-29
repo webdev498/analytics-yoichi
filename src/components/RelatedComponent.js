@@ -1,16 +1,4 @@
-function getFieldValue(data, fieldName) {
-  if (fieldName.includes('.')) {
-    let attributes = fieldName.split('.'),
-      fieldValue = data;
-    attributes.forEach((attribute, index) => {
-      fieldValue = fieldValue[attribute];
-    });
-    return fieldValue;
-  }
-  else {
-    return data[fieldName];
-  }
-}
+import {getFieldValue} from 'utils/utils';
 
 export function renderRelatedComponents(props, type) {
   let {meta, data, params, options} = props,
@@ -44,11 +32,16 @@ export function renderRelatedComponents(props, type) {
       customParams: customParams
     });
 
+    if (options.body) {
+      delete options.body;
+    }
+
     if (apiObj.body && apiObj.body.includes(':fieldName')) {
       let bodyValue = apiObj.body.split(':fieldName');
       options = Object.assign({}, options, {
         body: getFieldValue(data, bodyValue[0])
       });
+      delete apiObj.body;
     }
 
     let hideWhenValue = '',
@@ -56,8 +49,11 @@ export function renderRelatedComponents(props, type) {
 
     if (apiObj.hideWhen) {
       for (let key in apiObj.hideWhen) {
-        hideWhenValue = getFieldValue(data, key);
-        hideWhenComparedValue = apiObj.hideWhen[key];
+        if (key.includes(':fieldName')) {
+          let fieldName = key.split(':fieldName');
+          hideWhenValue = getFieldValue(data, fieldName[0]);
+          hideWhenComparedValue = apiObj.hideWhen[key];
+        }
       }
     }
 

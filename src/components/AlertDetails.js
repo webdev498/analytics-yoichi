@@ -40,7 +40,8 @@ class AlertDetails extends React.Component {
     let {meta, data} = nextProps;
     if (!data) return null;
     if (meta.relatedComponents) {
-      renderRelatedComponents(nextProps, data.data.rank_alert.name);
+      let type = data.data.rank_alert.name;
+      renderRelatedComponents(nextProps, type);
     }
   }
 
