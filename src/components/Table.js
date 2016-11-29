@@ -444,9 +444,15 @@ export class TableCard extends React.Component {
 
     return () => {
       if (props.openAlertDetails) {
-        const {rows} = props.data;
-        const currentRow = rows[index][0];
-        const url = `/alert/${currentRow.id}/${currentRow.date}`;
+        const {rows} = props.data,
+          currentRow = rows[index][0],
+          url = `/alert/${currentRow.id}/${currentRow.date}`;
+        props.updateRoute(url);
+      }
+      else if (props.openAssetDetails) {
+        const {rows} = props.data,
+          currentRow = rows[index][0],
+          url = `/asset/${currentRow.type}/${currentRow.id}`;
         props.updateRoute(url);
       }
       else {

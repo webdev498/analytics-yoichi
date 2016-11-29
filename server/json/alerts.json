@@ -301,10 +301,13 @@
         "id": "RecentAlerts",
         "type": "Table",
         "openAlertDetails": true
-      },
+      }
+    ],
+    [
       {
         "meta": {
           "showHeader": true,
+          "showSearch": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -315,27 +318,232 @@
               "window": ""
             }
           },
-          "title": "High Risk Assets"
+          "title": "At Risk Users"
         },
         "name": "Table",
         "tableOptions": {
+          "filterable": [ "SCORE", "NAME", "TITLE", "DEPARTMENT", "ACCOUNT TYPE" ],
           "itemsPerPage": 5,
-          "sortable": ["SCORE"],
-          "defaultSort": {
-            "column": "SCORE",
-            "direction": "desc"
-          }
+          "sortable": [ "SCORE", "NAME", "TITLE", "DEPARTMENT", "ACCOUNT TYPE" ]
         },
         "attributes": {
           "style": {
-            "width": "290px",
-            "flex": "0 0 290px",
-            "marginLeft": "33px"
+            "marginRight": "33px",
+            "width": "50%"
           },
-          "id": "risk-assets-table"
+          "id": "at-risk-users"
         },
-        "id": "risk-assets",
-        "type": "riskAssetsTable"
+        "tableData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_top_at_risk_assets",
+              "columns": [
+                {
+                  "data": [
+                    {
+                      "fieldName": "risk.score"
+                    }
+                  ],
+                  "style": {
+                    "minWidth": "50px",
+                    "width": "10%"
+                  },
+                  "type": "scoreWidget",
+                  "columnNameToDisplay": "SCORE"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.displayName"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "NAME"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.accountType"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "ACCOUNT TYPE"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.title"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "TITLE"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.department"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "DEPARTMENT"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.location"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "LOCATION"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.manager"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "MANAGER"
+                }
+              ]
+            }
+          ]
+        },
+        "id": "AtRiskUsers",
+        "type": "Table",
+        "openAssetDetails": true
+      },
+      {
+        "meta": {
+          "showHeader": true,
+          "showSearch": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_top_at_risk_assets"
+            },
+            "queryParams": {
+              "count": 200,
+              "window": ""
+            }
+          },
+          "title": "At Risk Machines"
+        },
+        "name": "Table",
+        "tableOptions": {
+          "filterable": [ "SCORE", "NAME", "OS", "CRITICAL" ],
+          "itemsPerPage": 5,
+          "sortable": [ "SCORE", "NAME", "OS", "CRITICAL" ]
+        },
+        "attributes": {
+          "style": {
+            "width": "50%"
+          },
+          "id": "at-risk-machines"
+        },
+        "tableData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_top_at_risk_assets",
+              "columns": [
+                {
+                  "data": [
+                    {
+                      "fieldName": "risk.score"
+                    }
+                  ],
+                  "style": {
+                    "minWidth": "50px",
+                    "width": "10%"
+                  },
+                  "type": "scoreWidget",
+                  "columnNameToDisplay": "SCORE"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.displayName"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "NAME"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.OS"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "OS"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.version"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "VERSION"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.servicePack"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "SERVICE PACK"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.critical"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "CRITICAL"
+                }
+              ]
+            }
+          ]
+        },
+        "id": "AtRiskMachines",
+        "type": "Table",
+        "openAssetDetails": true
       }
     ],
     [
