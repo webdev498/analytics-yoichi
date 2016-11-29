@@ -421,7 +421,8 @@ export class ParentCard extends React.Component {
 
     let tempCardStyle = cardStyle;
 
-    if (props.meta.hideComponent) {
+    if (props.meta.hideComponent && (!props.meta.api)) {
+      console.log('test');
       tempCardStyle = {width: '0px'};
     }
     // else {
@@ -429,7 +430,7 @@ export class ParentCard extends React.Component {
     // }
 
     if (props.meta.api && !props.meta.api.hideComponent) {
-      tempCardStyle = Object.assign({}, cardStyle);
+      tempCardStyle = Object.assign({}, cardStyle);// , {display: 'block'}
       props.meta.hideComponent = false;
     }
     // if (props.meta.api && props.meta.api.hideComponent) {
