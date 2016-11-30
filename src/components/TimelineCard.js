@@ -240,6 +240,8 @@ class TimelineCard extends React.Component {
     chartData.chart.divlineThickness = 1;
     chartData.chart.xAxisName = uiConfig.xAxisLabel;
     chartData.chart.yAxisName = uiConfig.yAxisLabel;
+    chartData.chart.canvasBgColor = 'transparent';
+    chartData.chart.bgColor = 'transparent';
 
     chartProps.data = JSON.parse(JSON.stringify(chartData));
     delete chartProps.data.uiConfig;
@@ -284,7 +286,7 @@ class TimelineCard extends React.Component {
             paddingLeft: '18px',
             paddingRight: '18px',
             height: 'auto',
-            width: props.data.chart ? '775px' : '350px',
+            width: props.data.chart ? '800px' : '350px',
             fontSize: '14px',
             cursor: this.isLinkCard ? 'pointer' : 'auto',
             overflowWrap: 'break-word',
