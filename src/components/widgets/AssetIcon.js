@@ -18,6 +18,12 @@ const styles = {
     borderRadius: '50%',
     textAlign: 'center',
     marginRight: '10px'
+  },
+  assetName: {
+    textTransform: 'none',
+    fontSize: '14px',
+    overflowWrap: 'break-word',
+    paddingTop: '5px'
   }
 };
 
@@ -27,27 +33,48 @@ class AssetIconWidget extends React.Component {
   }
 
   getImage() {
-    const {asset} = this.props;
+    let {asset} = this.props;
+    asset = asset.row[0];
+
     if (asset.type === 'user') {
       const name = asset.info.name;
 
       return (
-        <div style={styles.imgWrap}>
-          {name[0].toUpperCase()}
+        <div style={{display: 'flex', color: 'rgb(68, 76, 99)'}}>
+          <div style={styles.imgWrap}>
+            {name[0].toUpperCase()}
+          </div>
+          <div>
+            <div style={styles.assetName}>
+              {asset.info.displayName}
+            </div>
+          </div>
         </div>
       );
     }
     else if (asset.type === 'ip') {
       return (
-        <div>
-          <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>language</FontIcon>
+        <div style={{display: 'flex', color: 'rgb(68, 76, 99)'}}>
+          <div>
+            <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>language</FontIcon>
+          </div>
+          <div>
+            <div style={styles.assetName}>
+              {asset.info.displayName}
+            </div>
+          </div>
         </div>
       );
     }
     else if (asset.type === 'host' || asset.type === 'machine') {
       return (
-        <div>
-          <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>desktop_mac</FontIcon>
+        <div style={{display: 'flex', color: 'rgb(68, 76, 99)'}}>
+          <div>
+            <FontIcon style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>desktop_mac</FontIcon>
+          </div>
+            <div style={styles.assetName}>
+              {asset.info.displayName}
+            </div>
         </div>
       );
     }
