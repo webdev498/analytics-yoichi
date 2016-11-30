@@ -28,6 +28,7 @@ class AssetIconWidget extends React.Component {
 
   getImage() {
     const {asset} = this.props;
+    console.log(asset);
     if (asset.type === 'user') {
       const name = asset.info.name;
 

@@ -315,7 +315,8 @@
             },
             "queryParams": {
               "count": 200,
-              "window": ""
+              "window": "",
+              "type": "user"
             }
           },
           "title": "At Risk Users"
@@ -362,6 +363,27 @@
                   },
                   "type": "text",
                   "columnNameToDisplay": "NAME"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "type"
+                    },
+                    {
+                      "fieldName": "info.name"
+                    }
+                  ],
+                  "attributes": {
+                    "chartWidth": "100%",
+                    "chartType": "assetIcon",
+                    "id": "assetIcon",
+                    "chartHeight": "75"
+                  },
+                  "style": {
+                    "width": "10%"
+                  },
+                  "type": "chart",
+                  "columnNameToDisplay": "Icon"
                 },
                 {
                   "data": [
@@ -442,7 +464,8 @@
             },
             "queryParams": {
               "count": 200,
-              "window": ""
+              "window": "",
+              "type": "machine"
             }
           },
           "title": "At Risk Machines"

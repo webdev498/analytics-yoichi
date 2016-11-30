@@ -5,6 +5,7 @@ import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/widgets/DurationWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
+import AssetIcon from 'components/widgets/AssetIcon';
 
 import {
   generateRawData,
@@ -414,6 +415,10 @@ function loadChartComponentInTableRow(tableColumn, duration) {
     case 'area2d':
       return (
         <Area2DAsSparkLineChart chartProperties={tableColumn} duration={duration} />
+      );
+    case 'assetIcon':
+      return (
+        <AssetIcon asset={tableColumn} />
       );
     default:
       break;
