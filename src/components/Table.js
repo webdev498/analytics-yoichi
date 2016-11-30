@@ -81,7 +81,8 @@ const generateDataSource = (props) => {
           chartValue: individualRowData.chartValue,
           columnText: individualRowData.columnText,
           rowNumber: d,
-          timeValue: individualRowData.timeValue
+          timeValue: individualRowData.timeValue,
+          row: rows[d]
         };
         mainObject = generateRowObject(rowDetails, mainObject);
         if (props.kibana) {
@@ -160,7 +161,7 @@ export function generateIndividualRowData(rowColumnDetails) {
 }
 
 export function generateRowObject(rowDetails, mainObject) {
-  let {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue} = rowDetails,
+  let {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue, row} = rowDetails,
     rowObj = {
       columnType: currentColumnType,
       columnName: currentTableData.columnNameToDisplay,
@@ -173,7 +174,8 @@ export function generateRowObject(rowDetails, mainObject) {
         chartId: currentTableData.attributes.id + rowNumber,
         chartType: currentTableData.attributes.chartType,
         chartWidth: currentTableData.attributes.chartWidth,
-        chartHeight: currentTableData.attributes.chartHeight
+        chartHeight: currentTableData.attributes.chartHeight,
+        row: row
       });
       chartValue = '';
       mainObject.columns.push(rowObj);

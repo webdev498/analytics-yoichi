@@ -355,22 +355,7 @@
                 {
                   "data": [
                     {
-                      "fieldName": "info.displayName"
-                    }
-                  ],
-                  "style": {
-                    "width": "15%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "NAME"
-                },
-                {
-                  "data": [
-                    {
                       "fieldName": "type"
-                    },
-                    {
-                      "fieldName": "info.name"
                     }
                   ],
                   "attributes": {
@@ -380,10 +365,10 @@
                     "chartHeight": "75"
                   },
                   "style": {
-                    "width": "10%"
+                    "width": "5%"
                   },
                   "type": "chart",
-                  "columnNameToDisplay": "Icon"
+                  "columnNameToDisplay": "Name"
                 },
                 {
                   "data": [
@@ -392,7 +377,7 @@
                     }
                   ],
                   "style": {
-                    "width": "15%"
+                    "width": "10%"
                   },
                   "type": "text",
                   "columnNameToDisplay": "ACCOUNT TYPE"
@@ -440,7 +425,7 @@
                     }
                   ],
                   "style": {
-                    "width": "15%"
+                    "width": "10%"
                   },
                   "type": "text",
                   "columnNameToDisplay": "MANAGER"
@@ -503,14 +488,20 @@
                 {
                   "data": [
                     {
-                      "fieldName": "info.displayName"
+                      "fieldName": "type"
                     }
                   ],
-                  "style": {
-                    "width": "15%"
+                  "attributes": {
+                    "chartWidth": "100%",
+                    "chartType": "assetIcon",
+                    "id": "assetIcon",
+                    "chartHeight": "75"
                   },
-                  "type": "text",
-                  "columnNameToDisplay": "NAME"
+                  "style": {
+                    "width": "5%"
+                  },
+                  "type": "chart",
+                  "columnNameToDisplay": "Name"
                 },
                 {
                   "data": [
@@ -519,7 +510,7 @@
                     }
                   ],
                   "style": {
-                    "width": "15%"
+                    "width": "10%"
                   },
                   "type": "text",
                   "columnNameToDisplay": "OS"
@@ -531,7 +522,7 @@
                     }
                   ],
                   "style": {
-                    "width": "15%"
+                    "width": "10%"
                   },
                   "type": "text",
                   "columnNameToDisplay": "VERSION"
