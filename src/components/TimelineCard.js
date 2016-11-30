@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import Card from 'material-ui/Card/Card';
 import {Colors} from 'theme/colors';
 import {whatIsIt, getColor} from 'utils/utils';
+import {getCountryNameByCountryCode} from 'utils/countryUtils';
 import MultiSeriesCombiChart from 'components/MultiSeriesCombiChart';
 
 let styles = {
@@ -18,46 +19,26 @@ let styles = {
   }
 };
 
-function getSource(source) {
-  if (source.ip) {
+function getSourceDestination(data) {
+  if (data.ip) {
+    let country = data.country ? getCountryNameByCountryCode[data.country.toUpperCase()] : '';
     return (
       <span>
-        <span> {source.ip} </span>
+        <span> {data.ip} </span>
         {
-          source.country
-          ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()} />
+          data.country
+          ? <span className={'flag-icon flag-icon-' + data.country.toLowerCase()} rel='tooltip'
+            title={country} />
           : null
         }
         {
-          source.port > 0
-          ? <span> on Port {source.port}</span>
+          data.port > 0
+          ? <span> on Port {data.port}</span>
           : null
         }
       </span>
     );
   }
-  return null;
-}
-
-function getDestinaton(dest) {
-  if (dest.ip) {
-    return (
-      <span>
-        <span> connected to {dest.ip} </span>
-        {
-          dest.country
-          ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()} />
-          : null
-        }
-        {
-          dest.port > 0
-          ? <span> on Port {dest.port}</span>
-          : null
-        }
-      </span>
-    );
-  }
-
   return null;
 }
 
@@ -168,8 +149,8 @@ class TimelineCard extends React.Component {
       dest = sourceDest.dest ? sourceDest.dest : {};
     return (
       <div style={{fontWeight, ...displayFlex}}>
-        {sourceDest.source ? getSource(source) : null}
-        {sourceDest.dest ? getDestinaton(dest) : null}
+        {sourceDest.source ? getSourceDestination(source) : null}
+        {sourceDest.dest ? getSourceDestination(dest) : null}
       </div>
     );
   }

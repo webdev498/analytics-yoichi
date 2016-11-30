@@ -421,27 +421,11 @@ export class ParentCard extends React.Component {
 
     let tempCardStyle = cardStyle;
 
-    if (props.meta.hideComponent && (!props.meta.api)) {
-      console.log('test');
-      tempCardStyle = {width: '0px'};
+    if (props.meta.hideComponent && (!props.data)) {
+      tempCardStyle = {display: 'none'};
     }
-    // else {
-    //   tempCardStyle = Object.assign({}, cardStyle);
-    // }
-
-    if (props.meta.api && !props.meta.api.hideComponent) {
-      tempCardStyle = Object.assign({}, cardStyle);// , {display: 'block'}
-      props.meta.hideComponent = false;
-    }
-    // if (props.meta.api && props.meta.api.hideComponent) {
-    //   tempCardStyle = Object.assign({}, cardStyle, {display: 'none'});
-    // }
 
     cardStyle = tempCardStyle;
-
-    if (props.id === 'alert-activity') {
-      console.log('props:', props, cardStyle);
-    }
 
     return (
       <Card style={cardStyle} id={props.id}>

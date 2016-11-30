@@ -388,8 +388,6 @@ class Timeline extends React.Component {
       state.rows = [];
     }
 
-    console.log(props);
-
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
 
     let tabNames = [];
