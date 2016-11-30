@@ -17,34 +17,50 @@
             }
           },
           "title": "Alert Detail",
-          "fetchDataFor": [
+          "relatedComponents": [
             {
               "id": "alert-activity",
               "api": {
-                "method": "POST",
-                "path": "/api/analytics/reporting/executeById",
-                "body": "data.rank_alert.chartsFilter$customParam",
-                "pathParams": {},
-                "queryParams": {
-                  "window": ""
-                },
-                "loadOnce": true
+                "default": {
+                  "method": "POST",
+                  "path": "/api/analytics/reporting/executeById",
+                  "body": "data.rank_alert.chartsFilter:fieldName",
+                  "pathParams": {},
+                  "queryParams": {
+                    "window": ""
+                  },
+                  "hideWhen": {
+                    "data.rank_alert.name:fieldName": "anomaly"
+                  }
+                }
               }
             },
             {
               "id": "timeline",
               "api": {
-                "method": "GET",
-                "path": "/api/alert/traffic",
-                "pathParams": {},
-                "queryParams": {
-                  "count": 10,
-                  "from": 0,
-                  "window": "",
-                  "filter": "data.rank_alert.trafficFilter$customParam",
-                  "date": "date:pathParam"
+                "default": {
+                  "path": "/api/alert/traffic",
+                  "pathParams": {},
+                  "queryParams": {
+                    "count": 10,
+                    "from": 0,
+                    "window": "",
+                    "date": "date:pathParam",
+                    "filter": "data.rank_alert.trafficFilter:fieldName"
+                  }
                 },
-                "loadOnce": true
+                "anomaly": {
+                  "path": "/api/anomaly/{alertId}/timeline",
+                  "pathParams": {
+                    "alertId": ":pathParam"
+                  },
+                  "queryParams": {
+                    "count": 10,
+                    "from": 0,
+                    "window": "",
+                    "date": "date:pathParam"
+                  }
+                }
               }
             }
           ]
@@ -99,7 +115,9 @@
         "meta": {
           "showHeader": true,
           "title": "Activity",
-          "showRefresh": false
+          "showRefresh": false,
+          "api": null,
+          "hideComponent": true
         },
         "chart": {
           "chartOptions": {
@@ -144,8 +162,15 @@
           "noOfEventsPerPage": 10,
           "maxNumbersOnLeftRightPagination": 4,
           "style": {
-            "width": "65%",
+            "width": "100%",
             "backgroundColor": "#F7F7F9"
+          },
+          "chart": {
+            "chartWidth": "400",
+            "chartHeight": "200",
+            "chartCaption": {
+              "display": "none"
+            }
           },
           "otherStyles": {
             "flex": {
@@ -157,6 +182,21 @@
             }
           },
           "id": "timeline-component"
+        },
+        "chart": {
+          "chartOptions": {
+            "xAxisName": "TIME",
+            "divLineThickness": "2",
+            "lineThickness": "1",
+            "showYAxisValues": "1",
+            "xAxisNameFontSize": "10",
+            "yAxisNameFontSize": "10",
+            "labelFontSize": "8",
+            "drawAnchors": "1",
+            "anchorRadius": "1",
+            "showlegend": "0",
+            "outCnvBaseFontSize": "8"
+          }
         },
         "tabs": {
           "DETAILS": {

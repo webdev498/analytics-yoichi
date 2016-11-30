@@ -77,7 +77,7 @@ export function createNodeObject(dataNode) {
     notNodeId: dataNode.id ? dataNode.id : '',
     type: nodeType,
     label: '  ' + idDisplay,
-    title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + idDisplay,
+    title: '<b>' + dataNode.nodeTypeDisplay + ':</b> ' + idDisplay,
     nodeDetails: [],
     actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
     borderWidth: '0',
@@ -95,17 +95,16 @@ export function createNodeObject(dataNode) {
     actionData: dataNode.actionData ? dataNode.actionData : {}
   };
 
-  nodeObject.nodeDetails.push(<li key='nodeId'><b>{firstCharCapitalize(dataNode.type)}:</b> {idDisplay}</li>);
+  nodeObject.nodeDetails.push(<li key='nodeId'><b>{dataNode.nodeTypeDisplay}:</b> {idDisplay}</li>);
 
   let metaDataObject = handleNodeMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
   nodeObject = metaDataObject.nodeObject;
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-
   return nodeObject;
 }
 
-function createEdgeObject(dataEdge, edgesInSameDirection) {
+export function createEdgeObject(dataEdge, edgesInSameDirection) {
   let edgeObject = {
       id: dataEdge.id,
       notNodeId: dataEdge.id ? dataEdge.id : '',
@@ -139,7 +138,7 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
     },
     edgesTypes = [];
 
-  if (dataEdge.type && dataEdge.type === 'ioc') {
+  if (displayEdgeAsDashLine(dataEdge.type)) {
     edgeObject.dashes = true;
   }
 
@@ -178,6 +177,20 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
   );
 
   return edgeObject;
+}
+
+function displayEdgeAsDashLine(type) {
+  let dashes = false;
+  if (type) {
+    switch (type) {
+      case 'ioc':
+        dashes = true;
+        break;
+      default:
+        break;
+    }
+  }
+  return dashes;
 }
 
 function handleEdgeMetaData(metadata, edgeObject) {
@@ -677,6 +690,7 @@ class NetworkGraph extends React.Component {
       dataNodes.forEach((dataNode) => {
         let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id;
         if (isUndefined(this.nodeObjects[nodeId])) {
+          dataNode.nodeTypeDisplay = dataNode.type ? firstCharCapitalize(dataNode.type) : '';
           let nodeObject = createNodeObject(dataNode);
           nodes.push(nodeObject);
           this.nodeObjects[nodeId] = nodeObject;

@@ -2,12 +2,19 @@ import React, {PropTypes} from 'react';
 import Card from 'material-ui/Card/Card';
 import {Colors} from 'theme/colors';
 import {whatIsIt, getColor} from 'utils/utils';
+import MultiSeriesCombiChart from 'components/MultiSeriesCombiChart';
 
 let styles = {
   alert: {},
   listItem: {
     fontSize: '13px',
     color: Colors.grape
+  },
+  title: {
+    'fontSize': '13px',
+    'fontWeight': 600,
+    'margin': 0,
+    'paddingBottom': '10px'
   }
 };
 
@@ -196,7 +203,9 @@ class TimelineCard extends React.Component {
               selectedCardId: props.data.id,
               eventDate: props.data.Date,
               user: props.data.User ? props.data.User : '',
-              machine: props.data.Machine ? props.data.Machine : ''
+              machine: props.data.Machine ? props.data.Machine : '',
+              start: props.data.Date ? props.data.Date : '',
+              end: props.data.endParam ? props.data.endParam : ''
             };
           }
           props.getContextualMenuApiObj(details);
@@ -214,13 +223,13 @@ class TimelineCard extends React.Component {
         return (
           <div>
             {
-              (value.includes('exfiltration'))
-              ? <img src='/img/anomaly/exfiltration.png' />
-                : (value.includes('snoop'))
-                  ? <img src='/img/anomaly/snoop.png' />
-                    : (value.includes('command and control'))
-                        ? <img src='/img/anomaly/command-control.png' />
-                        : null
+              (value.includes('snoop'))
+              ? <img src='/img/anomaly/snoop.png' />
+              : (value.includes('exfiltration') || value.includes('exfiltrate'))
+                ? <img src='/img/anomaly/exfiltration.png' />
+                : (value.includes('command and control'))
+                  ? <img src='/img/anomaly/command-control.png' />
+                  : null
             }
           </div>
         );
@@ -231,6 +240,36 @@ class TimelineCard extends React.Component {
     }
 
     return null;
+  }
+
+  getAnomalyChart(chartData) {
+    if (!chartData) return null;
+
+    const {props} = this,
+      {id, attributes, chart} = props,
+      chartProps = {
+        attributes: {
+          id,
+          ...attributes.chart
+        },
+        processedData: true
+      },
+      uiConfig = chartData.uiConfig;
+
+    chartData.chart = chart.chartOptions;
+    chartData.chart.divlineThickness = 1;
+    chartData.chart.xAxisName = uiConfig.xAxisLabel;
+    chartData.chart.yAxisName = uiConfig.yAxisLabel;
+
+    chartProps.data = JSON.parse(JSON.stringify(chartData));
+    delete chartProps.data.uiConfig;
+
+    return (
+      <div>
+        <h2 style={styles.title}>{uiConfig.title}</h2>
+        <MultiSeriesCombiChart {...chartProps} />
+      </div>
+    );
   }
 
   render() {
@@ -265,7 +304,7 @@ class TimelineCard extends React.Component {
             paddingLeft: '18px',
             paddingRight: '18px',
             height: 'auto',
-            width: '350px',
+            width: props.data.chart ? '775px' : '350px',
             fontSize: '14px',
             cursor: this.isLinkCard ? 'pointer' : 'auto',
             overflowWrap: 'break-word',
@@ -276,7 +315,17 @@ class TimelineCard extends React.Component {
         }
         onClick={this.handleCardClick()}
         key={props.id}>
-        <ul className='no-list-style'>{this.getDetails(props.data)}</ul>
+          <div style={{display: 'flex'}}>
+            {
+              props.data.chart
+              ? this.getAnomalyChart(props.data.chart)
+              : null
+            }
+            <ul className='no-list-style'
+              style={props.data.chart ? {paddingLeft: '20px'} : {}}>
+              {this.getDetails(props.data)}
+            </ul>
+          </div>
       </Card>
     );
   }

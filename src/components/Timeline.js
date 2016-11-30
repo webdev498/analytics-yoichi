@@ -25,7 +25,12 @@ function getTabObj(tabs, timelineType, currentTab) {
 
 function setOrRemoveQueryParam(queryParams, name, value) {
   if (queryParams[name] === '') {
-    queryParams[name] = value;
+    if (!isUndefined(value)) {
+      queryParams[name] = value;
+    }
+    else {
+      delete queryParams[name];
+    }
   }
   else {
     delete queryParams[name];
@@ -137,7 +142,7 @@ class Timeline extends React.Component {
   displayCard() {
     const rows = this.state.rows,
       {props, state} = this,
-      {attributes} = props;
+      {attributes, chart} = props;
 
     return (
       <div style={this.style.card}
@@ -149,8 +154,8 @@ class Timeline extends React.Component {
               cardId = 'card' + index,
               backgroundColor = (this.card === CONTEXTUAL_MENU_CARD) ? {backgroundColor: Colors.contextBG} : {},
               padding = (this.card === CONTEXTUAL_MENU_CARD)
-              ? (index === 0 ? {padding: '15px 15px 0px 15px'} : {padding: '0px 15px 0px 15px'})
-              : {};
+                ? (index === 0 ? {padding: '15px 15px 0px 15px'} : {padding: '0px 15px 0px 15px'})
+                : {};
 
             if (dateString !== '') {
               return (
@@ -166,7 +171,9 @@ class Timeline extends React.Component {
                     updateRoute={props.updateRoute}
                     getContextualMenuApiObj={this.getContextualMenuApiObj}
                     selectedCardId={state.selectedCardId}
-                    card={this.card} />
+                    card={this.card}
+                    attributes={attributes}
+                    chart={chart} />
                   {this.card === CONTEXTUAL_MENU_CARD ? this.displayDate(dateString, this.card) : null}
                 </div>
               );
@@ -298,7 +305,7 @@ class Timeline extends React.Component {
     const {props} = this,
       {tabs} = props;
 
-    let {selectedCardId, eventDate, user, machine} = details;
+    let {selectedCardId, eventDate, user, machine, start, end} = details;
     if (!isUndefined(selectedCardId)) {
       this.setState({
         selectedCardId: selectedCardId
@@ -315,12 +322,16 @@ class Timeline extends React.Component {
             window: '',
             date: '',
             user: '',
-            machine: ''
+            machine: '',
+            start: '',
+            end: ''
           });
 
         queryParams = setOrRemoveQueryParam(queryParams, 'date', eventDate);
         queryParams = setOrRemoveQueryParam(queryParams, 'user', user);
         queryParams = setOrRemoveQueryParam(queryParams, 'machine', machine);
+        queryParams = setOrRemoveQueryParam(queryParams, 'start', start);
+        queryParams = setOrRemoveQueryParam(queryParams, 'end', end);
 
         apiObj.meta.api.queryParams = queryParams;
 
@@ -374,6 +385,8 @@ class Timeline extends React.Component {
       state.rows = [];
     }
 
+    console.log(props);
+
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
 
     let tabNames = [];
@@ -419,13 +432,14 @@ class Timeline extends React.Component {
                   }}>
                     <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
                   </div>
+                  { /* Need to implement some other solution for primary timeline height. Working on it.
                   <div style={{color: 'transparent'}}>
                     {
-                      setTimeout(() => {
-                        this.setPrimaryTimelineHeight();
-                      }, 2000)
+                      // setTimeout(() => {
+                      //   this.setPrimaryTimelineHeight();
+                      // }, 2000)
                     }
-                  </div>
+                  </div> */ }
                 </div>
                 : null
               }
