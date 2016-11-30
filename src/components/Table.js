@@ -400,7 +400,9 @@ export function generateColumnTextForDisplayingDate(fieldValue) {
 
 export function generateColumnTextForDisplayingCountryFlag(fieldValue) {
   if (fieldValue !== '' && fieldValue !== null) {
-    fieldValue = ' <span class="flag-icon flag-icon-' + fieldValue.toLowerCase() + '"></span>';
+    let country = getCountryNameByCountryCode[fieldValue.toUpperCase()];
+    fieldValue = ' <span class="flag-icon flag-icon-' + fieldValue.toLowerCase() +
+      '" rel="tooltip" title="' + country + '"></span>';
   }
   return fieldValue;
 }
