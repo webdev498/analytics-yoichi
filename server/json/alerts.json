@@ -315,7 +315,8 @@
             },
             "queryParams": {
               "count": 200,
-              "window": ""
+              "window": "",
+              "type": "user"
             }
           },
           "title": "At Risk Users"
@@ -442,7 +443,8 @@
             },
             "queryParams": {
               "count": 200,
-              "window": ""
+              "window": "",
+              "type": "machine"
             }
           },
           "title": "At Risk Machines"
