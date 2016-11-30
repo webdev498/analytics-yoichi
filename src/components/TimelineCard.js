@@ -13,12 +13,14 @@ let styles = {
 
 function getSource(source) {
   if (source.ip) {
+    let country = source.country ? getCountryNameByCountryCode[source.country.toUpperCase()] : '';
     return (
       <span>
         <span> {source.ip} </span>
         {
           source.country
-          ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()} />
+          ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()} rel='tooltip'
+            title={country} />
           : null
         }
         {
@@ -34,12 +36,14 @@ function getSource(source) {
 
 function getDestinaton(dest) {
   if (dest.ip) {
+    let country = dest.country ? getCountryNameByCountryCode[dest.country.toUpperCase()] : '';
     return (
       <span>
         <span> connected to {dest.ip} </span>
         {
           dest.country
-          ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()} />
+          ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()} rel='tooltip'
+            title={country} />
           : null
         }
         {
