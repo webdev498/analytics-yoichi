@@ -223,11 +223,10 @@ class TimelineCard extends React.Component {
     return null;
   }
 
-  getAnomalyChart(chartData) {
-    if (!chartData) return null;
-
+  getAnomalyChart() {
     const {props} = this,
-      {id, attributes, chart} = props,
+      {id, attributes, chart, data} = props,
+      chartData = data.chart,
       chartProps = {
         attributes: {
           id,

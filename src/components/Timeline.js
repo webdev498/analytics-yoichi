@@ -361,10 +361,13 @@ class Timeline extends React.Component {
       //   (this.refs.secondaryTimeline.offsetHeight - this.decreaseHeightBy) + 'px';
 
       // For now, I am using 'document' object here.
-      if (document.getElementById('secondaryTimeline').offsetHeight >
-        document.getElementById('primaryTimeline').offsetHeight) {
-        this.refs.primaryTimeline.style.height =
-          (document.getElementById('secondaryTimeline').offsetHeight - this.decreaseHeightBy) + 'px';
+      if (document.getElementById('secondaryTimeline') &&
+        document.getElementById('secondaryTimeline').offsetHeight) {
+        if (document.getElementById('secondaryTimeline').offsetHeight >
+          document.getElementById('primaryTimeline').offsetHeight) {
+          this.refs.primaryTimeline.style.height =
+            (document.getElementById('secondaryTimeline').offsetHeight - this.decreaseHeightBy) + 'px';
+        }
       }
     }
   }
