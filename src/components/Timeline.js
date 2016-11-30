@@ -40,10 +40,10 @@ function setOrRemoveQueryParam(queryParams, name, value) {
 
 class Timeline extends React.Component {
   static propTypes = {
-    attributes: PropTypes.object.isRequired,
-    meta: PropTypes.object.isRequired,
-    id: PropTypes.string.isRequired,
-    params: PropTypes.object.isRequired,
+    attributes: PropTypes.object,
+    meta: PropTypes.object,
+    id: PropTypes.string,
+    params: PropTypes.object,
     data: PropTypes.object
   }
 
