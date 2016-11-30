@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import SummaryWidget from 'components/SummaryWidget';
+import SummaryWidget from 'components/widgets/SummaryWidget';
 import {renderRelatedComponents} from 'components/RelatedComponent';
 import {
   formatDateInLocalTimeZone

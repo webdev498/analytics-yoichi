@@ -361,8 +361,11 @@ class Timeline extends React.Component {
       //   (this.refs.secondaryTimeline.offsetHeight - this.decreaseHeightBy) + 'px';
 
       // For now, I am using 'document' object here.
-      this.refs.primaryTimeline.style.height =
-        (document.getElementById('secondaryTimeline').offsetHeight - this.decreaseHeightBy) + 'px';
+      if (document.getElementById('secondaryTimeline').offsetHeight >
+        document.getElementById('primaryTimeline').offsetHeight) {
+        this.refs.primaryTimeline.style.height =
+          (document.getElementById('secondaryTimeline').offsetHeight - this.decreaseHeightBy) + 'px';
+      }
     }
   }
 
@@ -432,14 +435,13 @@ class Timeline extends React.Component {
                   }}>
                     <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
                   </div>
-                  { /* Need to implement some other solution for primary timeline height. Working on it.
                   <div style={{color: 'transparent'}}>
                     {
-                      // setTimeout(() => {
-                      //   this.setPrimaryTimelineHeight();
-                      // }, 2000)
+                      setTimeout(() => {
+                        this.setPrimaryTimelineHeight();
+                      }, 2000)
                     }
-                  </div> */ }
+                  </div>
                 </div>
                 : null
               }
