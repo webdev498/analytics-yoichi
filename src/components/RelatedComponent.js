@@ -33,7 +33,7 @@ export function renderRelatedComponents(props, type) {
     });
 
     if (options.body) {
-      delete options.body;
+      delete options.body;// delete body if already exists
     }
 
     if (apiObj.body && apiObj.body.includes(':fieldName')) {
