@@ -12,50 +12,26 @@ let styles = {
   }
 };
 
-function getSource(source) {
-  if (source.ip) {
-    let country = source.country ? getCountryNameByCountryCode[source.country.toUpperCase()] : '';
+function getSourceDestination(data) {
+  if (data.ip) {
+    let country = data.country ? getCountryNameByCountryCode[data.country.toUpperCase()] : '';
     return (
       <span>
-        <span> {source.ip} </span>
+        <span> {data.ip} </span>
         {
-          source.country
-          ? <span className={'flag-icon flag-icon-' + source.country.toLowerCase()} rel='tooltip'
+          data.country
+          ? <span className={'flag-icon flag-icon-' + data.country.toLowerCase()} rel='tooltip'
             title={country} />
           : null
         }
         {
-          source.port > 0
-          ? <span> on Port {source.port}</span>
+          data.port > 0
+          ? <span> on Port {data.port}</span>
           : null
         }
       </span>
     );
   }
-  return null;
-}
-
-function getDestinaton(dest) {
-  if (dest.ip) {
-    let country = dest.country ? getCountryNameByCountryCode[dest.country.toUpperCase()] : '';
-    return (
-      <span>
-        <span> connected to {dest.ip} </span>
-        {
-          dest.country
-          ? <span className={'flag-icon flag-icon-' + dest.country.toLowerCase()} rel='tooltip'
-            title={country} />
-          : null
-        }
-        {
-          dest.port > 0
-          ? <span> on Port {dest.port}</span>
-          : null
-        }
-      </span>
-    );
-  }
-
   return null;
 }
 
@@ -166,8 +142,8 @@ class TimelineCard extends React.Component {
       dest = sourceDest.dest ? sourceDest.dest : {};
     return (
       <div style={{fontWeight, ...displayFlex}}>
-        {sourceDest.source ? getSource(source) : null}
-        {sourceDest.dest ? getDestinaton(dest) : null}
+        {sourceDest.source ? getSourceDestination(source) : null}
+        {sourceDest.dest ? getSourceDestination(dest) : null}
       </div>
     );
   }
