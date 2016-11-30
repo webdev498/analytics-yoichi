@@ -83,7 +83,6 @@ class TimelineCard extends React.Component {
     this.cardType = data.session ? 'Session' : data.Type;
     this.isLinkCard = (this.cardType === 'Anomaly' || this.cardType === 'Rank Alert' || this.cardType === 'Session');
 
-    this.getDetails = this.getDetails.bind(this);
     this.handleCardClick = this.handleCardClick.bind(this);
   }
 
@@ -104,12 +103,12 @@ class TimelineCard extends React.Component {
         if (key !== 'Date' && key !== 'id' && !isAnomaly) {
           i++;
           let params = {
-            i: i,
-            key: key,
-            index: index,
-            data: data,
-            fontWeight: fontWeight,
-            displayFlex: displayFlex
+            i,
+            key,
+            index,
+            data,
+            fontWeight,
+            displayFlex
           };
           return this.displayDetails(params);
         }
@@ -120,22 +119,22 @@ class TimelineCard extends React.Component {
   displayDetails(params) {
     let {key, index, data} = params;
 
-    if (key.includes('Param')) {
-      return null;
+    const updatedData = Object.assign({}, data);
+    if (data.Type === 'Rank Alert') {
+      delete updatedData.Type;
     }
-    else {
-      return (
-        <li style={{...styles.listItem}} key={`desc${index}`}>
-          {
-            whatIsIt(data[key]) === 'String' && key !== 'session'
-            ? this.getStringDetails(params)
-            : (key === 'sourceDest' && whatIsIt(data[key]) === 'Object')
-              ? this.getObjectDetails(params)
-              : null
-          }
-        </li>
-      );
-    }
+
+    return (
+      <li style={{...styles.listItem}} key={`desc${index}`}>
+        {
+          whatIsIt(updatedData[key]) === 'String' && key !== 'session'
+          ? this.getStringDetails(params)
+          : (key === 'sourceDest' && whatIsIt(updatedData[key]) === 'Object')
+            ? this.getObjectDetails(params)
+            : null
+        }
+      </li>
+    );
   }
 
   getStringDetails(params) {
@@ -188,7 +187,7 @@ class TimelineCard extends React.Component {
           const url = `/alert/${props.data.id}/${props.data.Date}`;
           props.updateRoute(url);
           break;
-        case 'Anomaly':
+        case 'Anomaly': {
           if (props.selectedCardId !== props.data.id) {
             details = {
               selectedCardId: props.data.id,
@@ -197,6 +196,7 @@ class TimelineCard extends React.Component {
           }
           props.getContextualMenuApiObj(details);
           break;
+        }
         case 'Session':
           if (props.selectedCardId !== props.data.id) {
             details = {
@@ -273,10 +273,11 @@ class TimelineCard extends React.Component {
   }
 
   render() {
-    const {props} = this,
-      {data} = props;
+    const {props, props: {data}} = this;
+
     this.cardType = data.session ? 'Session' : data.Type;
     this.isLinkCard = (this.cardType === 'Anomaly' || this.cardType === 'Rank Alert' || this.cardType === 'Session');
+
     let isAlert = (this.cardType === 'Alert' || this.cardType === 'Rank Alert') ? 'alert' : 'other';
 
     switch (isAlert) {

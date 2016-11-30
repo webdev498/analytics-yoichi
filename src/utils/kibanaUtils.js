@@ -106,11 +106,18 @@ export function getQueryParamsFromKey(parameters, key, value) {
       dateTime2 = pair.toDate;
       queryParam = 'from=' + dateTime1 + '&to=' + dateTime2;
       break;
-    case 'type':
+    case 'type': {
       toolText = dataObj.toolText;
       const sectionName = toolText.split(',');
       queryParam = key + '=' + (sectionName[0]).toLowerCase();
       break;
+    }
+    case 'message': {
+      toolText = dataObj.toolText;
+      const sectionName = toolText.split(',');
+      queryParam = key + '=' + sectionName[0];
+      break;
+    }
     case 'ip':
       toolText = dataObj.toolText;
       const IP = toolText.split(',');

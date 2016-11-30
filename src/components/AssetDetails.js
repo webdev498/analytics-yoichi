@@ -1,13 +1,15 @@
 import React, {PropTypes} from 'react';
 
-import AssetWidget from 'components/AssetWidget';
 import RadarChart from 'components/RadarChart';
+import AssetWidget from 'components/widgets/AssetWidget';
+import ScoreWidget from 'components/widgets/ScoreWidget';
+
+import FontIcon from 'material-ui/FontIcon';
+import {Colors} from 'theme/colors';
+
 import {formatBytes, getColor} from 'utils/utils';
 import {getCountryNameByCountryCode} from 'utils/countryUtils';
 import {getArrowIcon} from 'utils/graphUtils';
-import ScoreWidget from 'components/ScoreWidget';
-import FontIcon from 'material-ui/FontIcon';
-import {Colors} from 'theme/colors';
 
 const styles = {
   assetWidget: {

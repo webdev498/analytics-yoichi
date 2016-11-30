@@ -3,8 +3,8 @@ import Reactable from 'reactable';
 
 import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
-import DurationWidget from 'components/DurationWidget';
-import ScoreWidget from 'components/ScoreWidget';
+import DurationWidget from 'components/widgets/DurationWidget';
+import ScoreWidget from 'components/widgets/ScoreWidget';
 
 import {
   generateRawData,

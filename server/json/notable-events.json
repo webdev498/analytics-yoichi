@@ -358,7 +358,16 @@
           "chartHeight": "350"
         },
         "id": "account-management-events-by-type",
-        "type": "ParetoChart"
+        "type": "ParetoChart",
+        "kibana": {
+          "pathParams": [
+            "management-events"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "message": ""
+          }
+        }
       },
       {
         "chartOptions": {
@@ -416,7 +425,16 @@
           "chartHeight": "350"
         },
         "id": "computer-management-events-by-type",
-        "type": "ParetoChart"
+        "type": "ParetoChart",
+        "kibana": {
+          "pathParams": [
+            "management-events"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "message": ""
+          }
+        }
       },
       {
         "chartOptions": {
@@ -473,7 +491,16 @@
           "chartHeight": "350"
         },
         "id": "security-group-management-events-by-type",
-        "type": "ParetoChart"
+        "type": "ParetoChart",
+        "kibana": {
+          "pathParams": [
+            "management-events"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "message": ""
+          }
+        }
       }
     ]
   ]

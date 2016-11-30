@@ -7,7 +7,7 @@ import {
   checkForUndefinedChartOptionObject
 } from 'utils/utils';
 
-import PercentageWidget from 'components/PercentageWidget';
+import PercentageWidget from 'components/widgets/PercentageWidget';
 
 const styles = {
   'pieWrap': {

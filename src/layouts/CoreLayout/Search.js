@@ -3,26 +3,12 @@ import { connect } from 'react-redux';
 
 import {fetchSearchData} from 'actions/core';
 import FontIcon from 'material-ui/FontIcon';
+import { Link } from 'react-router';
 
-import AssetWidget from 'components/AssetWidget';
+import AssetWidget from 'components/widgets/AssetWidget';
 import Loader from 'components/Loader';
 
 import {Colors} from 'theme/colors';
-
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function() {
-    var context = this, args = arguments;
-    var later = function() {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    var callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-};
 
 const styles = {
   wrap: {
@@ -60,11 +46,15 @@ const styles = {
     cursor: 'pointer'
   },
   results: {
-    position: 'relative',
+    position: 'absolute',
     backgroundColor: Colors.arctic,
     margin: '30px 50px',
     padding: '30px',
-    minHeight: '300px'
+    overflowY: 'auto',
+    right: 0,
+    left: 0,
+    bottom: 0,
+    top: '70px'
   },
   error: {
     position: 'absolute',
@@ -74,7 +64,25 @@ const styles = {
     bottom: 0,
     textAlign: 'center',
     padding: '30px'
+  },
+  link: {
+    textDecoration: 'none'
   }
+};
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
 };
 
 export class Search extends React.Component {
@@ -87,22 +95,33 @@ export class Search extends React.Component {
       isError: false,
       errorMessage: ''
     };
+
+    this.prevQuery = '';
   }
 
   static propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    toggleSearch: PropTypes.func.isRequired
   }
 
   clear = () => {
-    this.refs.searchInput.value = '';
-    this.setState({data: []});
-  };
+    const value = this.refs.searchInput.value;
+    if (value === '') {
+      this.props.toggleSearch();
+    }
+    else {
+      this.refs.searchInput.value = '';
+      this.setState({data: []});
+    }
+  }
 
   search = (evt) => {
-    const {refs, props} = this;
+    const {refs, props, prevQuery} = this;
     let query = refs.searchInput.value;
 
-    if (query.length < 2) return;
+    if (query.length < 2 || prevQuery === query) return;
+
+    this.prevQuery = query;
 
     this.setState({showLoader: true, isError: false});
     debounce(fetchSearchData(props.auth, query)
@@ -124,15 +143,21 @@ export class Search extends React.Component {
       }), 200);
   }
 
+  getAssetUrl(item) {
+    const {id, type} = item[0];
+    return `/asset/${type}/${id}`;
+  }
+
   getResults() {
     const {state} = this;
     return state.data.map((item, index) => {
+      let to = this.getAssetUrl(item);
+
       return (
-        <AssetWidget
-          headingStyle={{textTransform: 'none'}}
-          data={item[0]}
-          key={`asset${index}`}
-          link />
+        <Link to={to} style={styles.link} key={`asset${index}`}>
+          <AssetWidget
+            data={item[0]} />
+        </Link>
       );
     });
   }
@@ -147,6 +172,11 @@ export class Search extends React.Component {
 
   componentDidMount() {
     this.refs.searchInput.focus();
+    document.body.style.overflow = 'hidden';
+  }
+
+  componentWillUnmount() {
+    document.body.style.overflow = '';
   }
 
   render() {
@@ -161,7 +191,7 @@ export class Search extends React.Component {
           <input ref='searchInput'
             placeholder='Search Assets'
             style={styles.search}
-            onKeyPress={this.search} />
+            onKeyUp={this.search} />
 
           <FontIcon style={styles.icon} className='material-icons' onClick={this.clear}>clear</FontIcon>
         </div>
