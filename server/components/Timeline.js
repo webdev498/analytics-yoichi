@@ -78,6 +78,7 @@ function getHTTP(row) {
   if (row.id) { info.id = row.id; }
   if (http.userAgent) { info['User Agent'] = http.userAgent; }
   if (http.referrer) { info['Referrer'] = http.referrer; }
+  if (http.host) { info['Host'] = http.host; }
 
   return info;
 }
