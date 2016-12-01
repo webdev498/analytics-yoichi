@@ -82,20 +82,26 @@ export function getXYIndexFromColumnNames(currentChartDataColumns, columnsArray)
 export function getIndexFromObjectName(inputArray) {
   let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
   fieldValueArray = fieldName.includes('.') ? fieldName.split('.') : [fieldName];
+  fieldValue = dataArray;
 
-  for (let v = 0; v < fieldValueArray.length; v++) {
-    if (v === 0) {
-      fieldValue = dataArray[fieldValueArray[v]];
+  fieldValueArray.forEach((arrayValue) => {
+    if (!arrayValue.includes('[') && !arrayValue.includes(']')) {
+      fieldValue = fieldValue[arrayValue];
     }
     else {
-      fieldValue = fieldValue[fieldValueArray[v]];
+      let tempArray = arrayValue.split('[');
+      let arrayName = tempArray[0],
+        arrayIndex = tempArray[1].replace('[', '');
+      arrayIndex = arrayIndex.replace(']', '');
+      fieldValue = fieldValue[arrayName];
+      fieldValue = fieldValue[arrayIndex];
     }
-
-    if (fieldValue === undefined) {
+    if (isUndefined(fieldValue)) {
       fieldValue = '';
-      break;
+      return false;
     }
-  }
+  });
+
   return fieldValue;
 }
 
