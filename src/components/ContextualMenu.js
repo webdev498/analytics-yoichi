@@ -8,7 +8,7 @@ import {
 
 import './styles/_contextualMenu.scss';
 
-const style = {
+const styles = {
     contextualMenu: {
       width: '259px',
       backgroundColor: Colors.contextBG,
@@ -365,25 +365,25 @@ class ContextualMenu extends React.Component {
     return (
       <div>
         <div ref={(ref) => this.contextualMenu = ref}
-          style={{...style.contextualMenu, ...contextMenuStyle}} id='contextual-menu'>
-          <div style={style.contextualMenuContents} className='context-menu scrollbar' id='contextual-menu-contents'>
+          style={{...styles.contextualMenu, ...contextMenuStyle}} id='contextual-menu'>
+          <div style={styles.contextualMenuContents} className='context-menu scrollbar' id='contextual-menu-contents'>
             <div
-              style={{...style.selectedDetails}}>
+              style={{...styles.selectedDetails}}>
               {props.selectedDetails}
             </div>
             <div id='actions'></div>
           </div>
 
-          <div id='collapse-contextual-menu' style={style.collapseContextualMenu}>
+          <div id='collapse-contextual-menu' style={styles.collapseContextualMenu}>
             <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collapseExpand('collapse')} />
           </div>
         </div>
 
-        <div id='expand-contextual-menu' style={style.expandContextualMenu}>
+        <div id='expand-contextual-menu' style={styles.expandContextualMenu}>
           <img id='left-arrow' src='/img/menu.png' onClick={this.collapseExpand('expand')} />
         </div>
 
-        <div style={{...style.notificationMessage}} id='notification-message'></div>
+        <div style={{...styles.notificationMessage}} id='notification-message'></div>
       </div>
     );
   }
