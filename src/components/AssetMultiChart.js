@@ -775,7 +775,7 @@ class AssetMultiChart extends React.Component {
     if (params.type === 'user') {
       charts = userCharts;
     }
-    else if (params.type === 'machine') {
+    else {
       charts = machineCharts;
     }
 
