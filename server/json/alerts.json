@@ -355,19 +355,13 @@
                 {
                   "data": [
                     {
-                      "fieldName": "type"
+                      "fieldName": "info.displayName"
                     }
                   ],
-                  "attributes": {
-                    "chartWidth": "100%",
-                    "chartType": "assetIcon",
-                    "id": "assetIcon",
-                    "chartHeight": "75"
-                  },
                   "style": {
-                    "width": "5%"
+                    "width": "25%"
                   },
-                  "type": "chart",
+                  "type": "text",
                   "columnNameToDisplay": "Name"
                 },
                 {
@@ -377,7 +371,7 @@
                     }
                   ],
                   "style": {
-                    "width": "10%"
+                    "width": "15%"
                   },
                   "type": "text",
                   "columnNameToDisplay": "ACCOUNT TYPE"
@@ -413,22 +407,10 @@
                     }
                   ],
                   "style": {
-                    "width": "15%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "LOCATION"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.manager"
-                    }
-                  ],
-                  "style": {
                     "width": "10%"
                   },
                   "type": "text",
-                  "columnNameToDisplay": "MANAGER"
+                  "columnNameToDisplay": "LOCATION"
                 }
               ]
             }
@@ -457,9 +439,9 @@
         },
         "name": "Table",
         "tableOptions": {
-          "filterable": [ "SCORE", "NAME", "OS", "CRITICAL" ],
+          "filterable": [ "Score", "Name", "OS", "Critical" ],
           "itemsPerPage": 5,
-          "sortable": [ "SCORE", "NAME", "OS", "CRITICAL" ]
+          "sortable": [ "Score", "Name", "OS", "Critical", "Service" ]
         },
         "attributes": {
           "style": {
@@ -483,24 +465,18 @@
                     "width": "10%"
                   },
                   "type": "scoreWidget",
-                  "columnNameToDisplay": "SCORE"
+                  "columnNameToDisplay": "Score"
                 },
                 {
                   "data": [
                     {
-                      "fieldName": "type"
+                      "fieldName": "info.displayName"
                     }
                   ],
-                  "attributes": {
-                    "chartWidth": "100%",
-                    "chartType": "assetIcon",
-                    "id": "assetIcon",
-                    "chartHeight": "75"
-                  },
                   "style": {
-                    "width": "5%"
+                    "width": "25%"
                   },
-                  "type": "chart",
+                  "type": "text",
                   "columnNameToDisplay": "Name"
                 },
                 {
@@ -510,7 +486,7 @@
                     }
                   ],
                   "style": {
-                    "width": "10%"
+                    "width": "15%"
                   },
                   "type": "text",
                   "columnNameToDisplay": "OS"
@@ -525,7 +501,7 @@
                     "width": "10%"
                   },
                   "type": "text",
-                  "columnNameToDisplay": "VERSION"
+                  "columnNameToDisplay": "Version"
                 },
                 {
                   "data": [
@@ -534,10 +510,10 @@
                     }
                   ],
                   "style": {
-                    "width": "15%"
+                    "width": "10%"
                   },
                   "type": "text",
-                  "columnNameToDisplay": "SERVICE PACK"
+                  "columnNameToDisplay": "Service Pack"
                 },
                 {
                   "data": [
@@ -546,10 +522,22 @@
                     }
                   ],
                   "style": {
-                    "width": "15%"
+                    "width": "10%"
                   },
                   "type": "text",
                   "columnNameToDisplay": "CRITICAL"
+                },
+                {
+                  "data": [
+                    {
+                      "fieldName": "info.services[0]"
+                    }
+                  ],
+                  "style": {
+                    "width": "15%"
+                  },
+                  "type": "text",
+                  "columnNameToDisplay": "Services"
                 }
               ]
             }
