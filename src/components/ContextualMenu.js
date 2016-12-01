@@ -362,8 +362,9 @@ class ContextualMenu extends React.Component {
 
           <div id='collapse-contextual-menu' style={{
             marginLeft: '24px',
-            marginBottom: '24px',
-            marginTop: '10px'
+            marginTop: '10px',
+            position: 'absolute',
+            bottom: '25px'
           }}>
             <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collapseExpand('collapse')} />
           </div>
