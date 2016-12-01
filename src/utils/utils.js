@@ -80,7 +80,6 @@ export function getXYIndexFromColumnNames(currentChartDataColumns, columnsArray)
 
 // Function to get field value from object name specified in layout JSON
 export function getIndexFromObjectName(inputArray) {
-  // let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
   let {fieldName, dataArray: fieldValue} = inputArray;
   let fieldValueArray = fieldName.includes('.') ? fieldName.split('.') : [fieldName];
 
