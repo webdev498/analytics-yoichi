@@ -301,129 +301,10 @@
         "id": "RecentAlerts",
         "type": "Table",
         "openAlertDetails": true
-      }
-    ],
-    [
-      {
-        "meta": {
-          "showHeader": true,
-          "showSearch": true,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_top_at_risk_assets"
-            },
-            "queryParams": {
-              "count": 200,
-              "window": "",
-              "type": "user"
-            }
-          },
-          "title": "At Risk Users"
-        },
-        "name": "Table",
-        "tableOptions": {
-          "filterable": [ "SCORE", "NAME", "TITLE", "DEPARTMENT", "ACCOUNT TYPE" ],
-          "itemsPerPage": 5,
-          "sortable": [ "SCORE", "NAME", "TITLE", "DEPARTMENT", "ACCOUNT TYPE" ]
-        },
-        "attributes": {
-          "style": {
-            "marginRight": "33px",
-            "width": "50%"
-          },
-          "id": "at-risk-users"
-        },
-        "tableData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_top_at_risk_assets",
-              "columns": [
-                {
-                  "data": [
-                    {
-                      "fieldName": "risk.score"
-                    }
-                  ],
-                  "style": {
-                    "minWidth": "50px",
-                    "width": "10%"
-                  },
-                  "type": "scoreWidget",
-                  "columnNameToDisplay": "SCORE"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.displayName"
-                    }
-                  ],
-                  "style": {
-                    "width": "25%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "Name"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.accountType"
-                    }
-                  ],
-                  "style": {
-                    "width": "15%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "ACCOUNT TYPE"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.title"
-                    }
-                  ],
-                  "style": {
-                    "width": "15%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "TITLE"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.department"
-                    }
-                  ],
-                  "style": {
-                    "width": "15%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "DEPARTMENT"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.location"
-                    }
-                  ],
-                  "style": {
-                    "width": "10%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "LOCATION"
-                }
-              ]
-            }
-          ]
-        },
-        "id": "AtRiskUsers",
-        "type": "Table",
-        "openAssetDetails": true
       },
       {
         "meta": {
           "showHeader": true,
-          "showSearch": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -431,121 +312,30 @@
             },
             "queryParams": {
               "count": 200,
-              "window": "",
-              "type": "machine"
+              "window": ""
             }
           },
-          "title": "At Risk Machines"
+          "title": "High Risk Assets"
         },
         "name": "Table",
         "tableOptions": {
-          "filterable": [ "Score", "Name", "OS", "Critical" ],
           "itemsPerPage": 5,
-          "sortable": [ "Score", "Name", "OS", "Critical", "Service" ]
+          "sortable": ["SCORE"],
+          "defaultSort": {
+            "column": "SCORE",
+            "direction": "desc"
+          }
         },
         "attributes": {
           "style": {
-            "width": "50%"
+            "width": "290px",
+            "flex": "0 0 290px",
+            "marginLeft": "33px"
           },
-          "id": "at-risk-machines"
+          "id": "risk-assets-table"
         },
-        "tableData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_top_at_risk_assets",
-              "columns": [
-                {
-                  "data": [
-                    {
-                      "fieldName": "risk.score"
-                    }
-                  ],
-                  "style": {
-                    "minWidth": "50px",
-                    "width": "10%"
-                  },
-                  "type": "scoreWidget",
-                  "columnNameToDisplay": "Score"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.displayName"
-                    }
-                  ],
-                  "style": {
-                    "width": "25%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "Name"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.OS"
-                    }
-                  ],
-                  "style": {
-                    "width": "15%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "OS"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.version"
-                    }
-                  ],
-                  "style": {
-                    "width": "10%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "Version"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.servicePack"
-                    }
-                  ],
-                  "style": {
-                    "width": "10%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "Service Pack"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.critical"
-                    }
-                  ],
-                  "style": {
-                    "width": "10%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "CRITICAL"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "info.services[0]"
-                    }
-                  ],
-                  "style": {
-                    "width": "15%"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "Services"
-                }
-              ]
-            }
-          ]
-        },
-        "id": "AtRiskMachines",
-        "type": "Table",
-        "openAssetDetails": true
+        "id": "risk-assets",
+        "type": "riskAssetsTable"
       }
     ],
     [
