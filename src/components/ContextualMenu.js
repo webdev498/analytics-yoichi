@@ -6,6 +6,8 @@ import {
   whatIsIt
 } from 'utils/utils';
 
+import './styles/_contextualMenu.scss';
+
 const style = {
     contextualMenu: {
       width: '259px',
@@ -14,6 +16,23 @@ const style = {
       top: '0px',
       right: '0px',
       bottom: '0px'
+    },
+    contextualMenuContents: {
+      overflowX: 'hidden',
+      overflowY: 'auto',
+      marginTop: '35px'
+    },
+    collapseContextualMenu: {
+      marginLeft: '24px',
+      marginTop: '10px',
+      position: 'absolute',
+      bottom: '25px'
+    },
+    expandContextualMenu: {
+      bottom: '25px',
+      right: '24px',
+      position: 'absolute',
+      display: 'none'
     },
     selectedDetails: {
       margin: '0px 24px',
@@ -348,11 +367,7 @@ class ContextualMenu extends React.Component {
       <div>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...style.contextualMenu, ...contextMenuStyle}} id='contextual-menu'>
-          <div style={{
-            overflowX: 'hidden',
-            overflowY: 'auto',
-            marginTop: '35px'
-          }} className='context-menu scrollbar' id='contextual-menu-contents'>
+          <div style={style.contextualMenuContents} className='context-menu scrollbar' id='contextual-menu-contents'>
             <div
               style={{...style.selectedDetails}}>
               {props.selectedDetails}
@@ -360,22 +375,12 @@ class ContextualMenu extends React.Component {
             <div id='actions'></div>
           </div>
 
-          <div id='collapse-contextual-menu' style={{
-            marginLeft: '24px',
-            marginTop: '10px',
-            position: 'absolute',
-            bottom: '25px'
-          }}>
+          <div id='collapse-contextual-menu' style={style.collapseContextualMenu}>
             <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collapseExpand('collapse')} />
           </div>
         </div>
 
-        <div id='expand-contextual-menu' style={{
-          bottom: '25px',
-          right: '24px',
-          position: 'absolute',
-          display: 'none'
-        }}>
+        <div id='expand-contextual-menu' style={style.expandContextualMenu}>
           <img id='left-arrow' src='/img/menu.png' onClick={this.collapseExpand('expand')} />
         </div>
 

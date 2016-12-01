@@ -16,6 +16,8 @@ import {baseUrl, networkGraphDefaultOptions, hierarchicalNetwork, applyHierarchi
 import Loader from '../components/Loader';
 import ContextualMenu from '../components/ContextualMenu';
 
+import './styles/_network.scss';
+
 const style = {
   undoGraph: {
     bottom: '118px',
