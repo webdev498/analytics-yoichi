@@ -183,14 +183,12 @@ export function createEdgeObject(dataEdge, edgesInSameDirection) {
 
 function displayEdgeAsDashLine(type) {
   let dashes = false;
-  if (type) {
-    switch (type) {
-      case 'ioc':
-        dashes = true;
-        break;
-      default:
-        break;
-    }
+  switch (type) {
+    case 'ioc':
+      dashes = true;
+      break;
+    default:
+      break;
   }
   return dashes;
 }
