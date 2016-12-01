@@ -342,22 +342,13 @@ class ContextualMenu extends React.Component {
 
   render() {
     const {props} = this;
-
-    let contextMenuStyle = {display: props.showContextMenu ? 'block' : 'none'},
-      height = '650px';// This is default height
-
-    if (!isUndefined(props.style.height)) {
-      height = (props.style.height).replace('px', '');
-      height = parseInt(height) + 50;
-      height = height + 'px';
-    }
+    let contextMenuStyle = {display: props.showContextMenu ? 'block' : 'none'};
 
     return (
       <div>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...style.contextualMenu, ...contextMenuStyle}} id='contextual-menu'>
           <div style={{
-            height: height,
             overflowX: 'hidden',
             overflowY: 'auto',
             marginTop: '35px'

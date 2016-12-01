@@ -1,4 +1,4 @@
-div.vis-network-tooltip {
+.vis-network-tooltip {
   position: absolute;
   visibility: hidden;
   padding: 5px;
@@ -12,13 +12,13 @@ div.vis-network-tooltip {
   pointer-events: none;
 }
 
-div.vis-network div.vis-navigation div.vis-button:hover {
+.vis-network .vis-navigation .vis-button:hover {
 }
 
-div.vis-network div.vis-navigation div.vis-button:active {
+.vis-network .vis-navigation .vis-button:active {
 }
 
-div.vis-network div.vis-navigation div.vis-button.vis-zoomIn {
+.vis-network .vis-navigation .vis-button.vis-zoomIn {
   background-image: url("../static/img/plus.png");
   bottom: 30px;
   position: absolute;
@@ -26,7 +26,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomIn {
   width: 30px;
   cursor: pointer;
 }
-div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
+.vis-network .vis-navigation .vis-button.vis-zoomOut {
   background-image: url("../static/img/minus.png");
   bottom: 0px;
   position: absolute;
@@ -34,7 +34,7 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
   width: 30px;
   cursor: pointer;
 }
-div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
+.vis-network .vis-navigation .vis-button.vis-zoomExtends {
   background-image: url("../static/img/zoomExtends.png");
   bottom: 60px;
   position: absolute;
@@ -43,9 +43,25 @@ div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
   cursor: pointer;
 }
 
-/*******************************************/
+.vis-network .vis-navigation .vis-button.vis-undo {
+  background-image: url("../static/img/undo.png");
+  bottom: 90px;
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
 
-div.context-menu table tr td {
+.vis-network .vis-navigation .vis-button.vis-reset {
+  background-image: url("../static/img/reset.png");
+  bottom: 120px;
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
+
+.context-menu table tr td {
   padding: 10px 25px;
   font-size: 13px;
   cursor: pointer;
@@ -59,7 +75,7 @@ ul.no-list-style {
   padding: 0;
 }
 
-div.context-menu div li {
+.context-menu div li {
   list-style: none;
 }
 
@@ -77,98 +93,10 @@ div.context-menu div li {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }
 
-.rotate {
-  /* Safari */
-  -webkit-transform: rotate(-90deg);
-
-  /* Firefox */
-  -moz-transform: rotate(-90deg);
-
-  /* IE */
-  -ms-transform: rotate(-90deg);
-
-  /* Opera */
-  -o-transform: rotate(-90deg);
-
-  /* Internet Explorer */
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
-
 #actions table tr td:hover {
   background-color: $CloudColorShade9;
 }
 
-/*******************************************/
-
-.ui-draggable, .ui-droppable {
-  background-position: top;
-}
-
-.ui-slider-vertical {
-  width: 0.3em;
-}
-
-.ui-slider .ui-slider-handle {
-  width: 0.7em;
-}
-
-.ui-state-active,
-.ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active,
-a.ui-button:active,
-.ui-button:active,
-.ui-button.ui-state-active:hover {
-  border: 1px solid $CoralColor;
-  background: $CoralColor;
-  font-weight: normal;
-  color: #ffffff;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-}
-
-.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
-    border-bottom-right-radius: 5px;
-}
-.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
-    border-bottom-left-radius: 5px;
-}
-.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
-    border-top-right-radius: 5px;
-}
-.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
-    border-top-left-radius: 5px;
-}
-
-.ui-slider-vertical .ui-slider-handle {
-  left: -.25em;
-}
-
-.ui-slider .ui-slider-handle {
-  height: 1.6em;
-}
-
-.ui-widget-header {
-  background: #ffffff; /*#B4B7C0;*/
-}
-
-/*******************************************/
-
-#timelineGraph ::-webkit-scrollbar {
-    width: 12px;
-}
-#timelineGraph ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-}
-#timelineGraph ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background: rgba(255,0,0,0.8);
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-}
-#timelineGraph ::-webkit-scrollbar-thumb:window-inactive {
-  background: rgba(255,0,0,0.4);
+#network-graph > div {
+  height: 100%;
 }

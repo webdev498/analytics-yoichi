@@ -888,6 +888,16 @@ class NetworkGraph extends React.Component {
     document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
     document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
     document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
+
+    let undoDiv = document.createElement('div');
+    undoDiv.id = 'undo';
+    undoDiv.className = 'vis-button vis-undo';
+    document.getElementsByClassName('vis-navigation')[0].appendChild(undoDiv);
+
+    let resetDiv = document.createElement('div');
+    resetDiv.id = 'reset';
+    resetDiv.className = 'vis-button vis-reset';
+    document.getElementsByClassName('vis-navigation')[0].appendChild(resetDiv);
   }
 
   setHoverBlurNodeImage(event, nodeID, node) {
@@ -1436,7 +1446,7 @@ class NetworkGraph extends React.Component {
     let undoResetStyle = {display: state.showUndoResetButtons ? 'block' : 'none'};
 
     return (
-      <div style={{display: 'flex'}}>
+      <div style={{display: 'flex', height: '100%'}}>
         {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
           text={state.loaderText} /> : null}
         <div ref={(ref) => this.networkGraph = ref} style={props.attributes.canvasStyle}
@@ -1462,14 +1472,6 @@ class NetworkGraph extends React.Component {
             style={props.attributes.canvasStyle} />
           : null
         }
-
-        <div id='undoGraph' style={{...style.undoGraph, ...undoResetStyle}}>
-          <img id='undo' src='/img/undo.png' />
-        </div>
-
-        <div id='resetGraph' style={{...style.resetGraph, ...undoResetStyle}}>
-          <img id='reset' src='/img/reset.png' />
-        </div>
       </div>
     );
   }
