@@ -23,8 +23,7 @@ const style = {
       marginTop: '35px'
     },
     collapseContextualMenu: {
-      marginLeft: '24px',
-      marginTop: '10px',
+      left: '24px',
       position: 'absolute',
       bottom: '25px'
     },
