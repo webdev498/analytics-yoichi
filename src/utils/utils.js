@@ -80,9 +80,9 @@ export function getXYIndexFromColumnNames(currentChartDataColumns, columnsArray)
 
 // Function to get index from object name specified in layout JSON
 export function getIndexFromObjectName(inputArray) {
-  let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
-  fieldValueArray = fieldName.includes('.') ? fieldName.split('.') : [fieldName];
-  fieldValue = dataArray;
+  // let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
+  let {fieldName, dataArray: fieldValue} = inputArray;
+  let fieldValueArray = fieldName.includes('.') ? fieldName.split('.') : [fieldName];
 
   fieldValueArray.forEach((arrayValue) => {
     if (!arrayValue.includes('[') && !arrayValue.includes(']')) {
@@ -96,6 +96,7 @@ export function getIndexFromObjectName(inputArray) {
       fieldValue = fieldValue[arrayName];
       fieldValue = fieldValue[arrayIndex];
     }
+
     if (isUndefined(fieldValue)) {
       fieldValue = '';
       return false;

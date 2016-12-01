@@ -61,9 +61,59 @@ describe('Utility Function:', function() {
   });
 
   it('getIndexFromObjectName should return x and y index from column name.', function() {
-    const objectName = {'fieldName': 'data.rank_alert.score', 'fieldValueArray': [], 'fieldValue': '', 'dataArray': {'date': '2016-06-23T11:07:53.621', 'data': {'rank_alert': {'score': 66, 'triggered': '2016-06-23T11:07:53.621', 'partition': 'OikKAfhDbGl2ZUQzMzIyM_k', 'created': '2016-06-23T11:07:53.621', 'interesting': [], 'scoreDetails': [{'contribution': 66, 'firstSeen': '2016-06-23T11:07:53.643', 'message': 'Suspicious listening port on internal host.', 'uuid': '1428403803'}], 'name': 'unique.uniqueport', 'description': 'Suspicious listening port on internal host.', 'modified': '2016-06-23T11:07:53.621', 'justification': [], 'message': '172.31.9.171 received a connection and transferred 54,663 bytes on port: 33,223.', 'category': 'potential-apt'}}, 'origin': 'live', 'correlationIds': [], 'id': 'OikKAfhWT2lrS0FmaERiR2wyWlVRek16SXlNX2tDbGl2ZVB1bmlxdWUudW5pcXVlcG9ydPk', 'type': 'rank_alert'}},
-      index = 66;
-    expect(getIndexFromObjectName(objectName)).to.deep.equal(index);
+    const data1 = {
+        'fieldName': 'data.rank_alert.name',
+        'dataArray': {
+          'data': {
+            'rank_alert': {
+              'name': 'anomaly',
+              'services': [
+                'UPS'
+              ]
+            }
+          }
+        }
+      },
+      data2 = {
+        'fieldName': 'data.rank_alert.services[0]',
+        'dataArray': {
+          'data': {
+            'rank_alert': {
+              'name': 'anomaly',
+              'services': [
+                'UPS'
+              ]
+            }
+          }
+        }
+      },
+      data3 = {
+        'fieldName': 'data.rank_alert.services[0]',
+        'dataArray': {
+          'data': {
+            'rank_alert': {
+              'name': 'anomaly',
+              'services': []
+            }
+          }
+        }
+      },
+      data4 = {
+        'fieldName': 'data.rank_alert.name',
+        'dataArray': {
+          'data': {
+            'rank_alert': {
+              'services': []
+            }
+          }
+        }
+      },
+      value1 = 'anomaly',
+      value2 = 'UPS';
+    expect(getIndexFromObjectName(data1)).to.deep.equal(value1);
+    expect(getIndexFromObjectName(data2)).to.deep.equal(value2);
+    expect(getIndexFromObjectName(data3)).to.deep.equal('');
+    expect(getIndexFromObjectName(data4)).to.deep.equal('');
   });
 
   it('translateTimeWindow should return time window.', function() {
