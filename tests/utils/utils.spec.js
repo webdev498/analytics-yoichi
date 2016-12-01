@@ -60,7 +60,7 @@ describe('Utility Function:', function() {
     expect(getXYIndexFromColumnNames(columns, columnArray)).to.deep.equal(indexArray);
   });
 
-  it('getIndexFromObjectName should return x and y index from column name.', function() {
+  it('getIndexFromObjectName should return value from column name.', function() {
     const data1 = {
         'fieldName': 'data.rank_alert.name',
         'dataArray': {
