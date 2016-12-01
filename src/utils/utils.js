@@ -92,8 +92,18 @@ export function getIndexFromObjectName(inputArray) {
       let arrayName = tempArray[0],
         arrayIndex = tempArray[1].replace('[', '');
       arrayIndex = arrayIndex.replace(']', '');
-      fieldValue = fieldValue[arrayName];
-      fieldValue = fieldValue[arrayIndex];
+      if (!isUndefined(fieldValue)) {
+        fieldValue = fieldValue[arrayName];
+      }
+      else {
+        fieldName = '';
+      }
+      if (!isUndefined(fieldValue)) {
+        fieldValue = fieldValue[arrayIndex];
+      }
+      else {
+        fieldName = '';
+      }
     }
 
     if (isUndefined(fieldValue)) {

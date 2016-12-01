@@ -108,12 +108,23 @@ describe('Utility Function:', function() {
           }
         }
       },
+      data5 = {
+        'fieldName': 'data.rank_alert.services[0]',
+        'dataArray': {
+          'data': {
+            'rank_alert': {
+              'name': 'anomaly'
+            }
+          }
+        }
+      },
       value1 = 'anomaly',
       value2 = 'UPS';
     expect(getIndexFromObjectName(data1)).to.deep.equal(value1);
     expect(getIndexFromObjectName(data2)).to.deep.equal(value2);
     expect(getIndexFromObjectName(data3)).to.deep.equal('');
     expect(getIndexFromObjectName(data4)).to.deep.equal('');
+    expect(getIndexFromObjectName(data5)).to.deep.equal('');
   });
 
   it('translateTimeWindow should return time window.', function() {
