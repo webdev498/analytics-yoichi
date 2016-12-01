@@ -95,14 +95,8 @@ export function getIndexFromObjectName(inputArray) {
       if (!isUndefined(fieldValue)) {
         fieldValue = fieldValue[arrayName];
       }
-      else {
-        fieldName = '';
-      }
       if (!isUndefined(fieldValue)) {
         fieldValue = fieldValue[arrayIndex];
-      }
-      else {
-        fieldName = '';
       }
     }
 
