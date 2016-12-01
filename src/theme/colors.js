@@ -17,6 +17,8 @@ export const BlackColor = '#000000';
 export const NavigationColor = 'rgba(255, 255, 255, 0.54)';
 export const SliderColor = 'rgba(36,41,61, 0.25)';
 
+export const SearchColor = '#363E51';
+
 export const AreaSparkLineChartColor = {
   'area': '#BFEFEE',
   'border': '#59DED9'
@@ -101,7 +103,8 @@ export const Colors = {
   contextBG: contextBGColor,
   selectedActionBG: selectedActionBGColor,
   notificationMessageBG: notificationMessageBGColor,
-  cloudShades: CloudColorShades
+  cloudShades: CloudColorShades,
+  search: SearchColor
 };
 
 export const PrimaryPalette = {
