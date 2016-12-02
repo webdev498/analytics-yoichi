@@ -108,8 +108,8 @@ function getFile(row) {
 
   if (row.date) { info.Date = row.date; }
   if (row.id) { info.id = row.id; }
-  if (files.txHosts[0]) { info['Source'] = files.txHosts[0]; }
-  if (files.rxHosts[0]) { info['Destination'] = files.rxHosts[0]; }
+  if (files.filename) { info['File Name'] = files.filename; }
+  if (files.mimeType) { info['Mime Type'] = files.mimeType; }
   if (files.sha256) { info['File Hash'] = files.sha256; }
 
   return info;
@@ -128,7 +128,7 @@ function getReport(row) {
   if (report.file.sha256) { info['sha256'] = report.file.sha256; }
   if (report.status) { info['Status'] = report.status; }
   if (report.score) { info['Score'] = (report.score).toString(); }
-  if (report.file.mimeType) { info['MIME Type'] = report.file.mimeType; }
+  if (report.file.mimeType) { info['Mime Type'] = report.file.mimeType; }
 
   return info;
 }
