@@ -105,6 +105,10 @@ class TimelineCard extends React.Component {
       delete updatedData.Type;
     }
 
+    if (key.includes('Param')) {
+      return null;
+    }
+
     return (
       <li style={{...styles.listItem}} key={`desc${index}`}>
         {
