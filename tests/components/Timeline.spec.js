@@ -5,6 +5,7 @@ import {spy} from 'sinon';
 
 import Timeline from 'components/Timeline';
 import TabsWidget from 'components/TabsWidget';
+import PaginationWidget from 'components/PaginationWidget';
 import {wrapThemeProvider} from '../testUtils';
 
 let props = {
@@ -113,7 +114,7 @@ describe('<Timeline />', () => {
     const component = renderTimeline();
     expect(component.props().timelineType).to.equal('primary');
     expect(component.props().tabs).to.be.defined;
-    expect(component.find(TabsWidget));
+    expect(TabsWidget).to.exist;
   });
 
   it('primary timeline should have api path', () => {
@@ -173,5 +174,21 @@ describe('<Timeline />', () => {
     expect(component.props().data.options).to.be.an('object');
     expect(component.props().data.options.customParams).to.be.defined;
     expect(component.props().data.options.customParams).to.be.an('object');
+  });
+
+  describe('Pagination', () => {
+    it('exists', () => {
+      props.data = Object.assign(props.data, {
+        total: 15,
+        next: 10
+      });
+      const timeline = mountTimeline(true),
+        {data, attributes} = props;
+      timeline.setState({ totalCount: data.total });
+      timeline.setState({ totalPage: Math.ceil(data.total / attributes.noOfEventsPerPage) });
+      timeline.setState({ currentPage: 1 });
+      timeline.setState({ nextPageStart: data.next });
+      expect(timeline.find(PaginationWidget)).to.exist;
+    });
   });
 });

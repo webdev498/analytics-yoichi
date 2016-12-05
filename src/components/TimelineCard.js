@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import Card from 'material-ui/Card/Card';
 import {Colors} from 'theme/colors';
-import {whatIsIt, getColor} from 'utils/utils';
+import {getColor} from 'utils/utils';
 import {getCountryNameByCountryCode} from 'utils/countryUtils';
 import MultiSeriesCombiChart from 'components/MultiSeriesCombiChart';
 
@@ -16,6 +16,17 @@ let styles = {
     'fontWeight': 600,
     'margin': 0,
     'paddingBottom': '10px'
+  },
+  timelineCard: {
+    boxShadow: '0px',
+    paddingTop: '22px',
+    paddingBottom: '22px',
+    paddingLeft: '18px',
+    paddingRight: '18px',
+    height: 'auto',
+    fontSize: '14px',
+    overflowWrap: 'break-word',
+    marginBottom: '20px'
   }
 };
 
@@ -42,7 +53,7 @@ function getSourceDestination(data) {
   return null;
 }
 
-function getAnomalyArrow(selected) {
+function getDetailsArrow(selected) {
   let arrowName = selected ? 'right-arrow-dark' : 'right-arrow-light',
     arrowPath = '/img/' + arrowName + '.png';
   return (
@@ -62,7 +73,11 @@ class TimelineCard extends React.Component {
     const {data} = props;
 
     this.cardType = data.session ? 'Session' : data.Type;
-    this.isLinkCard = (this.cardType === 'Anomaly' || this.cardType === 'Rank Alert' || this.cardType === 'Session');
+    this.clickCards = ['Anomaly', 'Rank Alert', 'Session'];
+    this.loadDetailsCards = ['Anomaly', 'Session'];
+    this.isClickCard = false;
+    this.isLoadDetails = false;
+    this.displayFlex = {};
 
     this.handleCardClick = this.handleCardClick.bind(this);
   }
@@ -72,90 +87,58 @@ class TimelineCard extends React.Component {
       return;
     }
 
-    let i = 0; // I need to use "i" instead of "index",
-    // Becasue we are not displaying all attributes in this same list.
-    // See below where I am incrementing "i". But "index" is always getting increament.
-
     return (
-      Object.keys(data).map((key, index) => {
-        let isAnomaly = (this.cardType === 'Anomaly' && key === 'Type'),
-          fontWeight = (i === 0 && key !== 'Type') ? '600' : 'lighter',
-          displayFlex = this.cardType === 'Anomaly' ? {display: 'flex'} : {};
-        if (key !== 'Date' && key !== 'id' && !isAnomaly) {
-          i++;
-          let params = {
-            i,
-            key,
-            index,
-            data,
-            fontWeight,
-            displayFlex
-          };
-          return this.displayDetails(params);
+      Object.keys(data.display).map((key, index) => {
+        if (key === 'sourceDest') {
+          return this.getSourceDestination(data);
         }
+        return this.displayDetails(key, index, data);
       })
     );
   }
 
-  displayDetails(params) {
-    let {key, index, data} = params;
+  displayDetails(key, index, data) {
+    let {props} = this;
 
-    const updatedData = Object.assign({}, data);
-    if (data.Type === 'Rank Alert') {
-      delete updatedData.Type;
+    let fontWeight = (index === 0) ? '600' : 'lighter',
+      currentDetails = data.display[key];
+
+    if (currentDetails.value !== '') {
+      return (
+        <li style={{...styles.listItem}} key={`desc${index}`}>
+          <div style={{fontWeight, ...this.displayFlex}}>
+            {data.isIconDisplay ? this.displayIcon(index, currentDetails.value) : null}
+            <div style={{
+              paddingLeft: this.cardType === 'Anomaly' ? index === 0 ? '10px' : '40px' : '0px'
+            }}>
+              {currentDetails.displayKey ? key + ':' : ''} {currentDetails.value}
+            </div>
+            {
+              this.isLoadDetails && index === 0
+              ? props.selectedCardId !== '' && props.selectedCardId === props.data.id
+                ? getDetailsArrow(true)
+                : getDetailsArrow(false)
+              : null
+            }
+          </div>
+        </li>
+      );
     }
 
-    if (key.includes('Param')) {
-      return null;
-    }
-
-    return (
-      <li style={{...styles.listItem}} key={`desc${index}`}>
-        {
-          whatIsIt(updatedData[key]) === 'String' && key !== 'session'
-          ? this.getStringDetails(params)
-          : (key === 'sourceDest' && whatIsIt(updatedData[key]) === 'Object')
-            ? this.getObjectDetails(params)
-            : null
-        }
-      </li>
-    );
+    return null;
   }
 
-  getStringDetails(params) {
-    const {props} = this;
-    let {i, key, data, fontWeight, displayFlex} = params;
-    return (
-      <div style={{fontWeight, ...displayFlex}}>
-        {this.displayAnomalyIcon(data, key, i)}
-        <div style={{
-          paddingLeft: this.cardType === 'Anomaly' ? i === 1 ? '10px' : '40px' : '0px'
-        }}>
-          {(this.cardType !== 'Anomaly') ? key + ':' : ''} {data[key]}
-        </div>
-        {
-          this.cardType !== 'Anomaly'
-          ? null
-          : i !== 1
-            ? null
-            : props.selectedCardId !== '' && props.selectedCardId === props.data.id
-              ? getAnomalyArrow(true)
-              : getAnomalyArrow(false)
-        }
-      </div>
-    );
-  }
-
-  getObjectDetails(params) {
-    let {key, data, fontWeight, displayFlex} = params,
-      sourceDest = data[key],
+  getSourceDestination(data) {
+    let {display: {sourceDest}, id} = data,
       source = sourceDest.source ? sourceDest.source : {},
       dest = sourceDest.dest ? sourceDest.dest : {};
     return (
-      <div style={{fontWeight, ...displayFlex}}>
-        {sourceDest.source ? getSourceDestination(source) : null}
-        {sourceDest.dest ? getSourceDestination(dest) : null}
-      </div>
+      <li style={{...styles.listItem}} key={'sourceDest' + id}>
+        <div style={{fontWeight: '600', ...this.displayFlex}}>
+          {sourceDest.source ? getSourceDestination(source) : null}
+          {sourceDest.dest ? getSourceDestination(dest) : null}
+        </div>
+      </li>
     );
   }
 
@@ -185,12 +168,13 @@ class TimelineCard extends React.Component {
         case 'Session':
           if (props.selectedCardId !== props.data.id) {
             details = {
+              id: props.id,
               selectedCardId: props.data.id,
               eventDate: props.data.Date,
-              user: props.data.User ? props.data.User : '',
-              machine: props.data.Machine ? props.data.Machine : '',
+              user: props.data.display.User.value ? props.data.display.User.value : '',
+              machine: props.data.display.Machine.value ? props.data.display.Machine.value : '',
               start: props.data.Date ? props.data.Date : '',
-              end: props.data.endParam ? props.data.endParam : ''
+              end: props.data.endDate ? props.data.endDate : ''
             };
           }
           props.getContextualMenuApiObj(details);
@@ -201,30 +185,26 @@ class TimelineCard extends React.Component {
     };
   }
 
-  displayAnomalyIcon(data, key, index) {
-    if (this.cardType === 'Anomaly') {
-      if (index === 1) {
-        let value = data[key].toLowerCase();
-        return (
-          <div>
-            {
-              (value.includes('snoop'))
-              ? <img src='/img/anomaly/snoop.png' />
-              : (value.includes('exfiltration') || value.includes('exfiltrate'))
-                ? <img src='/img/anomaly/exfiltration.png' />
-                : (value.includes('command and control'))
-                  ? <img src='/img/anomaly/command-control.png' />
-                  : null
-            }
-          </div>
-        );
-      }
-      else {
-        return (<div />);
-      }
+  displayIcon(index, value) {
+    if (index === 0) {
+      value = value.toLowerCase();
+      return (
+        <div>
+          {
+            (value.includes('snoop'))
+            ? <img src='/img/anomaly/snoop.png' />
+            : (value.includes('exfiltration') || value.includes('exfiltrate'))
+              ? <img src='/img/anomaly/exfiltration.png' />
+              : (value.includes('command and control'))
+                ? <img src='/img/anomaly/command-control.png' />
+                : null
+          }
+        </div>
+      );
     }
-
-    return null;
+    else {
+      return (<div />);
+    }
   }
 
   getAnomalyChart() {
@@ -258,18 +238,15 @@ class TimelineCard extends React.Component {
     );
   }
 
-  render() {
-    const {props, props: {data}} = this;
-
-    this.cardType = data.session ? 'Session' : data.Type;
-    this.isLinkCard = (this.cardType === 'Anomaly' || this.cardType === 'Rank Alert' || this.cardType === 'Session');
-
-    let isAlert = (this.cardType === 'Alert' || this.cardType === 'Rank Alert') ? 'alert' : 'other';
+  getAlertBorder(data) {
+    let isAlert = (this.cardType === 'Alert' || this.cardType === 'Rank Alert') ? 'alert' : 'other',
+      score = data.display.Score ? data.display.Score.value : '',
+      severity = data.display.Severity ? data.display.Severity.value : '';
 
     switch (isAlert) {
       case 'alert':
         styles.alert = {
-          borderLeft: '5px solid ' + getColor(data.Score, data.Severity),
+          borderLeft: '5px solid ' + getColor(score, severity),
           paddingLeft: '18px'
         };
         break;
@@ -279,25 +256,27 @@ class TimelineCard extends React.Component {
         };
         break;
     }
+  }
+
+  render() {
+    const {props, props: {data}} = this;
+
+    this.cardType = data.session ? 'Session' : data.Type;
+    this.isClickCard = this.clickCards.includes(this.cardType);
+    this.isLoadDetails = this.loadDetailsCards.includes(this.cardType);
+    this.displayFlex = data.isIconDisplay ? {display: 'flex'} : {};
+
+    this.getAlertBorder(data);
 
     return (
       <Card
         style={
-          Object.assign({
-            boxShadow: '0px',
-            paddingTop: '22px',
-            paddingBottom: '22px',
-            paddingLeft: '18px',
-            paddingRight: '18px',
-            height: 'auto',
-            width: props.data.chart ? '800px' : '350px',
-            fontSize: '14px',
-            cursor: this.isLinkCard ? 'pointer' : 'auto',
-            overflowWrap: 'break-word',
+          Object.assign({}, styles.timelineCard, {
+            width: props.data.chart ? '800px' : '350px', // These widths are not provided by Rose.
+            cursor: this.isClickCard ? 'pointer' : 'auto',
             backgroundColor: (
               (props.selectedCardId !== '' && props.selectedCardId === props.data.id))
-              ? Colors.cloud : Colors.white,
-            marginBottom: '20px'}, styles.alert)
+              ? Colors.cloud : Colors.white}, styles.alert)
         }
         onClick={this.handleCardClick()}
         key={props.id}>

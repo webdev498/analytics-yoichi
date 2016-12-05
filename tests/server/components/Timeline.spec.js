@@ -557,10 +557,10 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      'Type': 'LOGON',
-      'Date': '30 Oct 2016 05:30:00.000',
+      'Date': '2016-10-30T00:00:00.000',
       'Start Date': '30 Oct 2016 05:30:00.000',
       'End Date': '30 Oct 2016 05:30:00.000',
+      'endParam': '2016-10-30T00:00:00.000',
       'id': 'sessionId',
       'Machine': 'demo-slave-2.aws.demo.ranksoftwareinc.com',
       'User': 'root',

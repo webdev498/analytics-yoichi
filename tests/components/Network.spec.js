@@ -150,7 +150,7 @@ describe('<NetworkGraph />', () => {
   it('Should display loader', () => {
     const wrapper = mountNetworkGraph(true);
     wrapper.setState({ isFetching: true });
-    expect(wrapper.find(Loader));
+    expect(wrapper.find(Loader)).to.exist;
   });
 
   it('Should create node object correctly', () => {

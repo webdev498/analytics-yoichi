@@ -6,7 +6,8 @@ import TabsWidget from 'components/TabsWidget';
 import {Colors} from 'theme/colors';
 import {
   formatDateInLocalTimeZone,
-  isUndefined
+  isUndefined,
+  getPosition
 } from 'utils/utils';
 import {
   TIMELINE_CARD,
@@ -74,6 +75,7 @@ class Timeline extends React.Component {
     this.decreaseHeightBy = 120;
     this.currentTabId = 0;
     this.currentTab = 'DETAILS';
+    this.selectedCardHTMLId = '';
 
     this.contextualMenuApiParams = {
       meta: {},
@@ -151,11 +153,12 @@ class Timeline extends React.Component {
         {
           rows.map((event, index) => {
             let dateString = (event.Date) ? event.Date : '',
-              cardId = 'card' + index,
+              cardType = this.card === CONTEXTUAL_MENU_CARD ? 'secondary' : 'primary',
               backgroundColor = (this.card === CONTEXTUAL_MENU_CARD) ? {backgroundColor: Colors.contextBG} : {},
               padding = (this.card === CONTEXTUAL_MENU_CARD)
                 ? (index === 0 ? {padding: '15px 15px 0px 15px'} : {padding: '0px 15px 0px 15px'})
-                : {};
+                : {},
+              cardId = cardType + 'card' + index;
 
             if (dateString !== '') {
               return (
@@ -167,6 +170,7 @@ class Timeline extends React.Component {
                   {this.card === TIMELINE_CARD ? this.displayDate(dateString, this.card) : null}
                   <TimelineCard
                     id={cardId}
+                    type={cardType}
                     data={event}
                     updateRoute={props.updateRoute}
                     getContextualMenuApiObj={this.getContextualMenuApiObj}
@@ -305,7 +309,7 @@ class Timeline extends React.Component {
     const {props} = this,
       {tabs} = props;
 
-    let {selectedCardId, eventDate, user, machine, start, end} = details;
+    let {selectedCardId, eventDate, user, machine, start, end, id} = details;
     if (!isUndefined(selectedCardId)) {
       this.setState({
         selectedCardId: selectedCardId
@@ -337,6 +341,7 @@ class Timeline extends React.Component {
 
         apiObj.type = 'secondary';
         this.contextualMenuApiParams = apiObj;
+        this.selectedCardHTMLId = id ? id : '';
       }
     }
   }
@@ -369,6 +374,11 @@ class Timeline extends React.Component {
             (document.getElementById('secondaryTimeline').offsetHeight - this.decreaseHeightBy) + 'px';
         }
       }
+      // if (this.selectedCardHTMLId) {
+      //   let position = getPosition(document.getElementById(this.selectedCardHTMLId)),
+      //     targetCardId = this.selectedCardHTMLId.replace('primary', 'secondary');
+      //   document.getElementById(targetCardId).style.top = (position.y - 85) + 'px';
+      // }
     }
   }
 
