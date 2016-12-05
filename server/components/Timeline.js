@@ -153,6 +153,10 @@ function getHTTP(row) {
         Referrer: {
           displayKey: true,
           value: getValue(http.referrer)
+        },
+        Host: {
+          displayKey: true,
+          value: getValue(http.host)
         }
       }
     };
@@ -200,13 +204,13 @@ function getFile(row) {
           displayKey: true,
           value: getEventTypeString(row.type)
         },
-        Source: {
+        'File Name': {
           displayKey: true,
-          value: getValue(files.txHosts[0])
+          value: getValue(files.filename)
         },
-        Destination: {
+        'Mime Type': {
           displayKey: true,
-          value: getValue(files.rxHosts[0])
+          value: getValue(files.mimeType)
         },
         'File Hash': {
           displayKey: true,
@@ -245,7 +249,7 @@ function getReport(row) {
           displayKey: true,
           value: getValue(report.score) !== '' ? (report.score).toString() : ''
         },
-        'MIME Type': {
+        'Mime Type': {
           displayKey: true,
           value: getValue(report.file.mimeType)
         }

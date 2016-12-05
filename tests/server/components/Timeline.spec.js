@@ -315,15 +315,35 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      'sourceDest': null,
-      'Type': 'Connection',
-      'Date': null,
       'id': 'connId',
-      'Service': 'ssh',
-      'State': 'SF',
-      'Requested Bytes': '1.12 KB',
-      'Response Bytes': '2.64 KB',
-      'Duration': '07 : 56 : 38'
+      'Date': null,
+      'display': {
+        'sourceDest': null,
+        'Type': {
+          displayKey: true,
+          value: 'Connection'
+        },
+        'Service': {
+          displayKey: true,
+          value: 'ssh'
+        },
+        'State': {
+          displayKey: true,
+          value: 'SF'
+        },
+        'Requested Bytes': {
+          displayKey: true,
+          value: '1.12 KB'
+        },
+        'Response Bytes': {
+          displayKey: true,
+          value: '2.64 KB'
+        },
+        'Duration': {
+          displayKey: true,
+          value: '07 : 56 : 38'
+        }
+      }
     });
   });
 
@@ -332,12 +352,23 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      'sourceDest': null,
-      'Type': 'SSH',
-      'Date': null,
       'id': 'sshId',
-      'Client': 'SSH-2.0-PUTTY',
-      'Server': 'SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.8'
+      'Date': null,
+      'display': {
+        'sourceDest': null,
+        'Type': {
+          displayKey: true,
+          value: 'SSH'
+        },
+        'Client': {
+          displayKey: true,
+          value: 'SSH-2.0-PUTTY'
+        },
+        'Server': {
+          displayKey: true,
+          value: 'SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.8'
+        }
+      }
     });
   });
 
@@ -356,10 +387,18 @@ describe('Timeline DAL', () => {
 
     cardTests(ctx, {
       id: 'dnsid',
-      sourceDest: null,
-      'DNS Response': 'answer',
-      Type: 'DNS',
-      Date: null
+      Date: null,
+      display: {
+        sourceDest: null,
+        Type: {
+          displayKey: true,
+          value: 'DNS'
+        },
+        'DNS Response': {
+          displayKey: true,
+          value: 'answer'
+        }
+      }
     });
   });
 
@@ -368,12 +407,23 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      'sourceDest': null,
-      'Type': 'HTTP',
-      'Date': null,
       'id': 'httpId',
-      'User Agent': 'Media Center',
-      Referrer: 'http://forpagesearch.eu/u2b871hi/RMtPEeENIz3RGmDA2Ruk'
+      'Date': null,
+      'display': {
+        'sourceDest': null,
+        'Type': {
+          displayKey: true,
+          value: 'HTTP'
+        },
+        'User Agent': {
+          displayKey: true,
+          value: 'Media Center'
+        },
+        Referrer: {
+          displayKey: true,
+          value: 'http://forpagesearch.eu/u2b871hi/RMtPEeENIz3RGmDA2Ruk'
+        }
+      }
     });
   });
 
@@ -382,13 +432,27 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      'sourceDest': null,
-      'Type': 'File',
-      'Date': null,
       'id': 'filesId',
-      Source: '52.20.162.90',
-      Destination: '172.31.7.62',
-      'File Hash': 'd309ca97de4f5a3aa203cdac46d8dc23ba1d1a47b24c24139b885ab5186b7eba'
+      'Date': null,
+      'display': {
+        'sourceDest': null,
+        'Type': {
+          displayKey: true,
+          value: 'File'
+        },
+        'File Name': {
+          displayKey: true,
+          value: 'pafish.exe'
+        },
+        'Mime Type': {
+          displayKey: true,
+          value: 'application/x-dosexec'
+        },
+        'File Hash': {
+          displayKey: true,
+          value: 'd309ca97de4f5a3aa203cdac46d8dc23ba1d1a47b24c24139b885ab5186b7eba'
+        }
+      }
     });
   });
 
@@ -397,15 +461,35 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      sourceDest: null,
-      Type: 'Report',
-      Date: '2016-11-08T12:00:33.000',
       id: 'reportId',
-      'File Name': 'pafish.exe',
-      sha256: 'd309ca97de4f5a3aa203cdac46d8dc23ba1d1a47b24c24139b885ab5186b7eba',
-      Status: 'ANALYZED',
-      Score: '80',
-      'MIME Type': 'application/x-msdownload; format=pe32'
+      Date: '2016-11-08T12:00:33.000',
+      display: {
+        sourceDest: null,
+        Type: {
+          displayKey: true,
+          value: 'Report'
+        },
+        'File Name': {
+          displayKey: true,
+          value: 'pafish.exe'
+        },
+        sha256: {
+          displayKey: true,
+          value: 'd309ca97de4f5a3aa203cdac46d8dc23ba1d1a47b24c24139b885ab5186b7eba'
+        },
+        Status: {
+          displayKey: true,
+          value: 'ANALYZED'
+        },
+        Score: {
+          displayKey: true,
+          value: '80'
+        },
+        'Mime Type': {
+          displayKey: true,
+          value: 'application/x-msdownload; format=pe32'
+        }
+      }
     });
   });
 
@@ -414,14 +498,28 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      sourceDest: null,
-      Type: 'Alert',
-      Date: '2016-11-08T04:54:15.592',
       id: 'alertId',
-      Severity: 'LOW',
-      Signature: 'ET SCAN SSH BruteForce Tool with fake PUTTY version',
-      Category: 'Detection of a Network Scan' }
-    );
+      Date: '2016-11-08T04:54:15.592',
+      display: {
+        sourceDest: null,
+        Type: {
+          displayKey: true,
+          value: 'Alert'
+        },
+        Severity: {
+          displayKey: true,
+          value: 'LOW'
+        },
+        Signature: {
+          displayKey: true,
+          value: 'ET SCAN SSH BruteForce Tool with fake PUTTY version'
+        },
+        Category: {
+          displayKey: true,
+          value: 'Detection of a Network Scan'
+        }
+      }
+    });
   });
 
   it('returns rank_alert card', async function() {
@@ -429,14 +527,28 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      'sourceDest': null,
-      'Type': 'Rank Alert',
-      'Date': null,
       'id': 'rankId',
-      'Description': 'Rank alert card desc',
-      'Message': 'Rank alert card message',
-      'Category': 'Rank alert card category',
-      'Score': '65'
+      'Date': null,
+      'Type': 'Rank Alert',
+      'display': {
+        'sourceDest': null,
+        'Description': {
+          displayKey: true,
+          value: 'Rank alert card desc'
+        },
+        'Message': {
+          displayKey: true,
+          value: 'Rank alert card message'
+        },
+        'Category': {
+          displayKey: true,
+          value: 'Rank alert card category'
+        },
+        'Score': {
+          displayKey: true,
+          value: '65'
+        }
+      }
     });
   });
 
@@ -461,14 +573,34 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      Type: 'winevent',
-      Date: null,
       id: 'winid',
-      Message: 'Message',
-      Category: 'Category',
-      Source: 'Source',
-      Severity: 'Severity',
-      SeverityValue: 'SeverityValue'
+      Date: null,
+      display: {
+        Type: {
+          displayKey: true,
+          value: 'winevent'
+        },
+        Message: {
+          displayKey: true,
+          value: 'Message'
+        },
+        Category: {
+          displayKey: true,
+          value: 'Category'
+        },
+        Source: {
+          displayKey: true,
+          value: 'Source'
+        },
+        Severity: {
+          displayKey: true,
+          value: 'Severity'
+        },
+        'Severity Value': {
+          displayKey: true,
+          value: 'SeverityValue'
+        }
+      }
     });
   });
 
@@ -477,11 +609,19 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      Type: 'Anomaly',
-      Date: '2016-10-13T00:00:00.000',
       id: 'anomalyId',
-      Impact: 'Data Exfiltration',
-      'Anomaly Description': 'Abnormal number of connections by host to given country'
+      Date: '2016-10-13T00:00:00.000',
+      Type: 'Anomaly',
+      display: {
+        Impact: {
+          displayKey: false,
+          value: 'Data Exfiltration'
+        },
+        'Anomaly Description': {
+          displayKey: false,
+          value: 'Abnormal number of connections by host to given country'
+        }
+      }
     });
   });
 
@@ -498,10 +638,15 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      'sourceDest': null,
-      'Type': 'rdp',
+      'id': 'rdpId',
       'Date': null,
-      'id': 'rdpId'
+      display: {
+        'sourceDest': null,
+        'Type': {
+          displayKey: true,
+          value: 'rdp'
+        }
+      }
     });
   });
 
@@ -525,13 +670,30 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      'Type': 'Auth',
-      'Date': null,
       'id': 'authId',
-      'Message': null,
-      'Severity': null,
-      'Status': null,
-      'Priority': null
+      'Date': null,
+      'display': {
+        'Type': {
+          displayKey: true,
+          value: 'Auth'
+        },
+        'Message': {
+          displayKey: true,
+          value: null
+        },
+        'Severity': {
+          displayKey: true,
+          value: null
+        },
+        'Status': {
+          displayKey: true,
+          value: null
+        },
+        'Priority': {
+          displayKey: true,
+          value: null
+        }
+      }
     });
   });
 
@@ -557,14 +719,32 @@ describe('Timeline DAL', () => {
     await Timeline(ctx);
 
     cardTests(ctx, {
-      'Date': '2016-10-30T00:00:00.000',
-      'Start Date': '30 Oct 2016 05:30:00.000',
-      'End Date': '30 Oct 2016 05:30:00.000',
-      'endParam': '2016-10-30T00:00:00.000',
       'id': 'sessionId',
-      'Machine': 'demo-slave-2.aws.demo.ranksoftwareinc.com',
-      'User': 'root',
-      'Duration': 2
+      'Date': '2016-10-30T00:00:00.000',
+      'session': true,
+      'endDate': '2016-10-30T00:00:00.000',
+      'display': {
+        'Start Date': {
+          displayKey: true,
+          value: '30 Oct 2016 05:30:00.000'
+        },
+        'End Date': {
+          displayKey: true,
+          value: '30 Oct 2016 05:30:00.000'
+        },
+        'Machine': {
+          displayKey: true,
+          value: 'demo-slave-2.aws.demo.ranksoftwareinc.com'
+        },
+        'User': {
+          displayKey: true,
+          value: 'root'
+        },
+        'Duration': {
+          displayKey: true,
+          value: '2'
+        }
+      }
     });
   });
 

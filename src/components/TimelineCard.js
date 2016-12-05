@@ -70,9 +70,8 @@ class TimelineCard extends React.Component {
 
   constructor(props) {
     super(props);
-    const {data} = props;
 
-    this.cardType = data.session ? 'Session' : data.Type;
+    this.cardType = '';
     this.clickCards = ['Anomaly', 'Rank Alert', 'Session'];
     this.loadDetailsCards = ['Anomaly', 'Session'];
     this.isClickCard = false;
@@ -109,7 +108,7 @@ class TimelineCard extends React.Component {
           <div style={{fontWeight, ...this.displayFlex}}>
             {data.isIconDisplay ? this.displayIcon(index, currentDetails.value) : null}
             <div style={{
-              paddingLeft: this.cardType === 'Anomaly' ? index === 0 ? '10px' : '40px' : '0px'
+              paddingLeft: data.isIconDisplay ? index === 0 ? '10px' : '40px' : '0px'
             }}>
               {currentDetails.displayKey ? key + ':' : ''} {currentDetails.value}
             </div>
@@ -171,8 +170,8 @@ class TimelineCard extends React.Component {
               id: props.id,
               selectedCardId: props.data.id,
               eventDate: props.data.Date,
-              user: props.data.display.User.value ? props.data.display.User.value : '',
-              machine: props.data.display.Machine.value ? props.data.display.Machine.value : '',
+              user: props.data.display.User ? props.data.display.User.value : '',
+              machine: props.data.display.Machine ? props.data.display.Machine.value : '',
               start: props.data.Date ? props.data.Date : '',
               end: props.data.endDate ? props.data.endDate : ''
             };
@@ -258,14 +257,28 @@ class TimelineCard extends React.Component {
     }
   }
 
+  getCardType(data) {
+    let cardType = '';
+    if (data.session) {
+      cardType = 'Session';
+    }
+    else {
+      if (data.Type) {
+        cardType = data.Type;
+      }
+      else if (data.display.Type) {
+        cardType = data.display.Type;
+      }
+    }
+    return cardType;
+  }
+
   render() {
     const {props, props: {data}} = this;
-
-    this.cardType = data.session ? 'Session' : data.Type;
+    this.cardType = this.getCardType(data);
     this.isClickCard = this.clickCards.includes(this.cardType);
     this.isLoadDetails = this.loadDetailsCards.includes(this.cardType);
     this.displayFlex = data.isIconDisplay ? {display: 'flex'} : {};
-
     this.getAlertBorder(data);
 
     return (
