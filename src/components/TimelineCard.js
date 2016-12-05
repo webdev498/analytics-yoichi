@@ -278,7 +278,7 @@ class TimelineCard extends React.Component {
     this.cardType = this.getCardType(data);
     this.isClickCard = this.clickCards.includes(this.cardType);
     this.isLoadDetails = this.loadDetailsCards.includes(this.cardType);
-    this.displayFlex = data.isIconDisplay ? {display: 'flex'} : {};
+    this.displayFlex = data.isIconDisplay || this.isLoadDetails ? {display: 'flex'} : {};
     this.getAlertBorder(data);
 
     return (
