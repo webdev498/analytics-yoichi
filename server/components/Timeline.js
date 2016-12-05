@@ -464,8 +464,7 @@ function getOther(row) {
   };
 
   if (row.session) {
-    delete info.Type;
-    info.session = true;
+    info.Type = 'Session';
     info = getSession(row, info);
   }
 

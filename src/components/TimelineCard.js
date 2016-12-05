@@ -259,16 +259,11 @@ class TimelineCard extends React.Component {
 
   getCardType(data) {
     let cardType = '';
-    if (data.session) {
-      cardType = 'Session';
+    if (data.Type) {
+      cardType = data.Type;
     }
-    else {
-      if (data.Type) {
-        cardType = data.Type;
-      }
-      else if (data.display.Type) {
-        cardType = data.display.Type;
-      }
+    else if (data.display.Type) {
+      cardType = data.display.Type;
     }
     return cardType;
   }
