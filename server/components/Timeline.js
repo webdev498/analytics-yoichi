@@ -1,29 +1,29 @@
-// import moment from 'moment';
-import {msToTime, getEventTypeString, formatBytes, formatDateInLocalTimeZone, getValue} from '../utils/utils';
+import moment from 'moment';
+import {msToTime, getEventTypeString, formatBytes} from '../utils/utils';
 import {
   getChartData
 } from '../components/anomalyChart';
 
-// function formatDateInLocalTimeZone(value) {
-//   let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
-//     dateTime = {
-//       date: '',
-//       time: ''
-//     },
-//     localDateTime = moment.utc(value1).toDate();
-//   dateTime.date = moment(localDateTime).format('DD MMM YYYY');
-//   dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
-//   return dateTime;
-// }
+function formatDateInLocalTimeZone(value) {
+  let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    dateTime = {
+      date: '',
+      time: ''
+    },
+    localDateTime = moment.utc(value1).toDate();
+  dateTime.date = moment(localDateTime).format('DD MMM YYYY');
+  dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
+  return dateTime;
+}
 
-// function getValue(value) {
-//   if (value) {
-//     return value;
-//   }
-//   else {
-//     return '';
-//   }
-// }
+function getValue(value) {
+  if (value) {
+    return value;
+  }
+  else {
+    return '';
+  }
+}
 
 function getIPDetails(source) {
   if (source) {
