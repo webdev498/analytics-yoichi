@@ -16,6 +16,8 @@ import {baseUrl, networkGraphDefaultOptions, hierarchicalNetwork, applyHierarchi
 import Loader from '../components/Loader';
 import ContextualMenu from '../components/ContextualMenu';
 
+import './styles/_network.scss';
+
 const style = {
   undoGraph: {
     bottom: '118px',
@@ -77,7 +79,7 @@ export function createNodeObject(dataNode) {
     notNodeId: dataNode.id ? dataNode.id : '',
     type: nodeType,
     label: '  ' + idDisplay,
-    title: '<b>' + firstCharCapitalize(nodeType) + ':</b> ' + idDisplay,
+    title: '<b>' + dataNode.nodeTypeDisplay + ':</b> ' + idDisplay,
     nodeDetails: [],
     actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
     borderWidth: '0',
@@ -95,17 +97,16 @@ export function createNodeObject(dataNode) {
     actionData: dataNode.actionData ? dataNode.actionData : {}
   };
 
-  nodeObject.nodeDetails.push(<li key='nodeId'><b>{firstCharCapitalize(dataNode.type)}:</b> {idDisplay}</li>);
+  nodeObject.nodeDetails.push(<li key='nodeId'><b>{dataNode.nodeTypeDisplay}:</b> {idDisplay}</li>);
 
   let metaDataObject = handleNodeMetaData(dataNode.metadata, nodeObject),
     nodeStatus = metaDataObject.nodeStatus;
   nodeObject = metaDataObject.nodeObject;
   nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-
   return nodeObject;
 }
 
-function createEdgeObject(dataEdge, edgesInSameDirection) {
+export function createEdgeObject(dataEdge, edgesInSameDirection) {
   let edgeObject = {
       id: dataEdge.id,
       notNodeId: dataEdge.id ? dataEdge.id : '',
@@ -139,7 +140,7 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
     },
     edgesTypes = [];
 
-  if (dataEdge.type && dataEdge.type === 'ioc') {
+  if (displayEdgeAsDashLine(dataEdge.type)) {
     edgeObject.dashes = true;
   }
 
@@ -178,6 +179,18 @@ function createEdgeObject(dataEdge, edgesInSameDirection) {
   );
 
   return edgeObject;
+}
+
+function displayEdgeAsDashLine(type) {
+  let dashes = false;
+  switch (type) {
+    case 'ioc':
+      dashes = true;
+      break;
+    default:
+      break;
+  }
+  return dashes;
 }
 
 function handleEdgeMetaData(metadata, edgeObject) {
@@ -677,6 +690,7 @@ class NetworkGraph extends React.Component {
       dataNodes.forEach((dataNode) => {
         let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id;
         if (isUndefined(this.nodeObjects[nodeId])) {
+          dataNode.nodeTypeDisplay = dataNode.type ? firstCharCapitalize(dataNode.type) : '';
           let nodeObject = createNodeObject(dataNode);
           nodes.push(nodeObject);
           this.nodeObjects[nodeId] = nodeObject;
@@ -874,6 +888,16 @@ class NetworkGraph extends React.Component {
     document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
     document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
     document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
+
+    let undoDiv = document.createElement('div');
+    undoDiv.id = 'undo';
+    undoDiv.className = 'vis-button vis-undo';
+    document.getElementsByClassName('vis-navigation')[0].appendChild(undoDiv);
+
+    let resetDiv = document.createElement('div');
+    resetDiv.id = 'reset';
+    resetDiv.className = 'vis-button vis-reset';
+    document.getElementsByClassName('vis-navigation')[0].appendChild(resetDiv);
   }
 
   setHoverBlurNodeImage(event, nodeID, node) {
@@ -1422,7 +1446,7 @@ class NetworkGraph extends React.Component {
     let undoResetStyle = {display: state.showUndoResetButtons ? 'block' : 'none'};
 
     return (
-      <div style={{display: 'flex'}}>
+      <div style={{display: 'flex', height: '100%'}}>
         {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
           text={state.loaderText} /> : null}
         <div ref={(ref) => this.networkGraph = ref} style={props.attributes.canvasStyle}
@@ -1448,14 +1472,6 @@ class NetworkGraph extends React.Component {
             style={props.attributes.canvasStyle} />
           : null
         }
-
-        <div id='undoGraph' style={{...style.undoGraph, ...undoResetStyle}}>
-          <img id='undo' src='/img/undo.png' />
-        </div>
-
-        <div id='resetGraph' style={{...style.resetGraph, ...undoResetStyle}}>
-          <img id='reset' src='/img/reset.png' />
-        </div>
       </div>
     );
   }

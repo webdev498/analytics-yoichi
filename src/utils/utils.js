@@ -480,3 +480,17 @@ export function getColor(score, severity) {
   }
   return color;
 }
+
+export function getFieldValue(data, fieldName) {
+  if (fieldName.includes('.')) {
+    let attributes = fieldName.split('.'),
+      fieldValue = data;
+    attributes.forEach((attribute, index) => {
+      fieldValue = fieldValue[attribute];
+    });
+    return fieldValue;
+  }
+  else {
+    return data[fieldName];
+  }
+}

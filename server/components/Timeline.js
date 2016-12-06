@@ -1,5 +1,30 @@
 import moment from 'moment';
 import {msToTime, getEventTypeString, formatBytes} from '../utils/utils';
+import {
+  getChartData
+} from '../components/anomalyChart';
+
+function formatDateInLocalTimeZone(value) {
+  let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    dateTime = {
+      date: '',
+      time: ''
+    },
+    localDateTime = moment.utc(value1).toDate();
+  dateTime.date = moment(localDateTime).format('DD MMM YYYY');
+  dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
+  return dateTime;
+}
+
+function getValue(value) {
+  if (value) {
+    return value;
+  }
+  else {
+    return '';
+  }
+}
+
 function getIPDetails(source) {
   if (source) {
     const info = {};
@@ -22,17 +47,36 @@ function getSourceDestination(row) {
 function getConn(row) {
   const {data: {conn}} = row,
     info = {
-      sourceDest: getSourceDestination(row),
-      Type: getEventTypeString(row.type)
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        Service: {
+          displayKey: true,
+          value: getValue(conn.service)
+        },
+        State: {
+          displayKey: true,
+          value: getValue(conn.state)
+        },
+        'Requested Bytes': {
+          displayKey: true,
+          value: getValue(conn.reqBytes) !== '' ? formatBytes(conn.reqBytes, 2) : ''
+        },
+        'Response Bytes': {
+          displayKey: true,
+          value: getValue(conn.respBytes) !== '' ? formatBytes(conn.respBytes, 2) : ''
+        },
+        Duration: {
+          displayKey: true,
+          value: getValue(conn.duration) !== '' ? msToTime(conn.duration).timeString : ''
+        }
+      }
     };
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (conn.service) { info.Service = conn.service; }
-  if (conn.state) { info.State = conn.state; }
-  if (conn.reqBytes) { info['Requested Bytes'] = formatBytes(conn.reqBytes, 2); }
-  if (conn.respBytes) { info['Response Bytes'] = formatBytes(conn.respBytes, 2); }
-  if (conn.duration) { info.Duration = msToTime(conn.duration).timeString; }
 
   return info;
 }
@@ -40,29 +84,53 @@ function getConn(row) {
 function getSSH(row) {
   const {data: {ssh}} = row,
     info = {
-      sourceDest: getSourceDestination(row),
-      Type: getEventTypeString(row.type)
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        Direction: {
+          displayKey: true,
+          value: getValue(ssh.direction)
+        },
+        Client: {
+          displayKey: true,
+          value: getValue(ssh.client)
+        },
+        Server: {
+          displayKey: true,
+          value: getValue(ssh.server)
+        },
+        Successful: {
+          displayKey: true,
+          value: ssh.success ? 'Successful' : 'Failed'
+        }
+      }
     };
 
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (ssh.direction) { info.Direction = ssh.direction; }
-  if (ssh.client) { info.Client = ssh.client; }
-  if (ssh.server) { info.Server = ssh.server; }
-  if (ssh.success) { info.Successful = ssh.success ? 'Successful' : 'Failed'; }
   return info;
 }
 
 function getDNS(row) {
   const {data: {dns}} = row,
     info = {
-      sourceDest: getSourceDestination(row),
-      Type: getEventTypeString(row.type)
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        'DNS Response': {
+          displayKey: true,
+          value: getValue(dns.answers[0])
+        }
+      }
     };
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (dns.answers[0]) { info['DNS Response'] = dns.answers[0]; }
 
   return info;
 }
@@ -70,15 +138,28 @@ function getDNS(row) {
 function getHTTP(row) {
   const {data: {http}} = row,
     info = {
-      sourceDest: getSourceDestination(row),
-      Type: getEventTypeString(row.type)
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        'User Agent': {
+          displayKey: true,
+          value: getValue(http.userAgent)
+        },
+        Referrer: {
+          displayKey: true,
+          value: getValue(http.referrer)
+        },
+        Host: {
+          displayKey: true,
+          value: getValue(http.host)
+        }
+      }
     };
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (http.userAgent) { info['User Agent'] = http.userAgent; }
-  if (http.referrer) { info['Referrer'] = http.referrer; }
-  if (http.host) { info['Host'] = http.host; }
 
   return info;
 }
@@ -86,15 +167,28 @@ function getHTTP(row) {
 function getSSL(row) {
   const {data: {ssl}} = row,
     info = {
-      sourceDest: getSourceDestination(row),
-      Type: getEventTypeString(row.type)
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        Server: {
+          displayKey: true,
+          value: getValue(ssl.serverName)
+        },
+        'SSL Version': {
+          displayKey: true,
+          value: getValue(ssl.version)
+        },
+        Issuer: {
+          displayKey: true,
+          value: getValue(ssl.issue)
+        }
+      }
     };
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (ssl.serverName) { info['Server'] = ssl.serverName; }
-  if (ssl.version) { info['SSL Version'] = ssl.version; }
-  if (ssl.issue) { info['Issuer'] = ssl.issue; }
 
   return info;
 }
@@ -102,15 +196,28 @@ function getSSL(row) {
 function getFile(row) {
   const {data: {files}} = row,
     info = {
-      sourceDest: getSourceDestination(row),
-      Type: getEventTypeString(row.type)
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        'File Name': {
+          displayKey: true,
+          value: getValue(files.filename)
+        },
+        'Mime Type': {
+          displayKey: true,
+          value: getValue(files.mimeType)
+        },
+        'File Hash': {
+          displayKey: true,
+          value: getValue(files.sha256)
+        }
+      }
     };
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (files.filename) { info['File Name'] = files.filename; }
-  if (files.mimeType) { info['Mime Type'] = files.mimeType; }
-  if (files.sha256) { info['File Hash'] = files.sha256; }
 
   return info;
 }
@@ -118,17 +225,36 @@ function getFile(row) {
 function getReport(row) {
   const {data: {report}} = row,
     info = {
-      sourceDest: getSourceDestination(row),
-      Type: getEventTypeString(row.type)
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        'File Name': {
+          displayKey: true,
+          value: getValue(report.file.fileName)
+        },
+        'sha256': {
+          displayKey: true,
+          value: getValue(report.file.sha256)
+        },
+        'Status': {
+          displayKey: true,
+          value: getValue(report.status)
+        },
+        'Score': {
+          displayKey: true,
+          value: getValue(report.score) !== '' ? (report.score).toString() : ''
+        },
+        'Mime Type': {
+          displayKey: true,
+          value: getValue(report.file.mimeType)
+        }
+      }
     };
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (report.file.fileName) { info['File Name'] = report.file.fileName; }
-  if (report.file.sha256) { info['sha256'] = report.file.sha256; }
-  if (report.status) { info['Status'] = report.status; }
-  if (report.score) { info['Score'] = (report.score).toString(); }
-  if (report.file.mimeType) { info['Mime Type'] = report.file.mimeType; }
 
   return info;
 }
@@ -136,16 +262,32 @@ function getReport(row) {
 function getAlert(row) {
   const {data: {alert}} = row,
     info = {
-      sourceDest: getSourceDestination(row),
-      Type: getEventTypeString(row.type)
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        Severity: {
+          displayKey: true,
+          value: getValue(alert.severity)
+        },
+        Signature: {
+          displayKey: true,
+          value: getValue(alert.signature)
+        },
+        Category: {
+          displayKey: true,
+          value: getValue(alert.category)
+        },
+        Score: {
+          displayKey: true,
+          value: getValue(alert.score) !== '' ? (alert.score).toString() : ''
+        }
+      }
     };
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (alert.severity) { info['Severity'] = alert.severity; }
-  if (alert.signature) { info['Signature'] = alert.signature; }
-  if (alert.category) { info['Category'] = alert.category; }
-  if (alert.score) { info['Score'] = (alert.score).toString(); }
 
   return info;
 }
@@ -153,32 +295,65 @@ function getAlert(row) {
 function getRankAlert(row) {
   const {data: {rank_alert}} = row,
     info = {
-      sourceDest: getSourceDestination(row),
-      Type: getEventTypeString(row.type)
+      id: getValue(row.id),
+      Type: getEventTypeString(row.type),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Description: {
+          displayKey: true,
+          value: getValue(rank_alert.description)
+        },
+        Message: {
+          displayKey: true,
+          value: getValue(rank_alert.message)
+        },
+        Category: {
+          displayKey: true,
+          value: getValue(rank_alert.category)
+        },
+        Score: {
+          displayKey: true,
+          value: getValue(rank_alert.score) !== '' ? (rank_alert.score).toString() : ''
+        }
+      }
     };
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (rank_alert.description) { info.Description = rank_alert.description; }
-  if (rank_alert.message) { info.Message = rank_alert.message; }
-  if (rank_alert.category) { info.Category = rank_alert.category; }
-  if (rank_alert.score) { info.Score = (rank_alert.score).toString(); }
 
   return info;
 }
 
 function getWinEvent(row) {
-  const {data: {winevent}} = row;
-
-  const info = {};
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (winevent.Message) { info.Message = winevent.Message; }
-  if (winevent.EventType) { info.Type = winevent.EventType; }
-  if (winevent.Category) { info.Category = winevent.Category; }
-  if (winevent.SourceName) { info.Source = winevent.SourceName; }
-  if (winevent.Severity) { info.Severity = winevent.Severity; }
-  if (winevent.SeverityValue) { info.SeverityValue = winevent.SeverityValue; }
+  const {data: {winevent}} = row,
+    info = {
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        Message: {
+          displayKey: true,
+          value: getValue(winevent.Message)
+        },
+        Type: {
+          displayKey: true,
+          value: getValue(winevent.EventType)
+        },
+        Category: {
+          displayKey: true,
+          value: getValue(winevent.Category)
+        },
+        Source: {
+          displayKey: true,
+          value: getValue(winevent.SourceName)
+        },
+        Severity: {
+          displayKey: true,
+          value: getValue(winevent.Severity)
+        },
+        'Severity Value': {
+          displayKey: true,
+          value: getValue(winevent.SeverityValue)
+        }
+      }
+    };
 
   return info;
 }
@@ -186,82 +361,121 @@ function getWinEvent(row) {
 function getAnomaly(row) {
   const {data: {anomaly}} = row,
     info = {
-      Type: getEventTypeString(row.type)
+      id: getValue(row.id),
+      Type: getEventTypeString(row.type),
+      Date: getValue(row.date),
+      chart: anomaly.context ? getChartData(anomaly.context) : {},
+      isIconDisplay: true,
+      display: {
+        Impact: {
+          displayKey: false,
+          value: getValue(anomaly.impact)
+        },
+        'Anomaly Description': {
+          displayKey: false,
+          value: getValue(anomaly.anomaly_description)
+        }
+      }
     };
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (anomaly.impact) { info.Impact = anomaly.impact; }
-  if (anomaly.anomaly_description) { info['Anomaly Description'] = anomaly.anomaly_description; }
 
   return info;
 }
 
 function getRDP(row) {
   const info = {
+    id: getValue(row.id),
+    Date: getValue(row.date),
     sourceDest: getSourceDestination(row),
-    Type: getEventTypeString(row.type)
+    display: {
+      Type: {
+        displayKey: true,
+        value: getEventTypeString(row.type)
+      }
+    }
   };
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
 
   return info;
 }
 
 function getAuth(row) {
   const {data: {auth}} = row,
-    info = {};
-
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
-  if (auth.message) { info.Message = auth.message; }
-  if (row.type) { info.Type = getEventTypeString(row.type); }
-  if (auth.severity && auth.severity_label) { info.Severity = auth.severity_label + ' (' + auth.severity + ')'; }
-  if (auth.status) { info.Status = auth.status; }
-  if (auth.priority) { info.Priority = (auth.priority).toString(); }
+    info = {
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        Message: {
+          displayKey: true,
+          value: getValue(auth.message)
+        },
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        Severity: {
+          displayKey: true,
+          value: auth.severity && auth.severity_label ? auth.severity_label + ' (' + auth.severity + ')' : ''
+        },
+        Status: {
+          displayKey: true,
+          value: getValue(auth.status)
+        },
+        Priority: {
+          displayKey: true,
+          value: getValue(auth.priority) !== '' ? (auth.priority).toString() : ''
+        }
+      }
+    };
 
   return info;
 }
 
-function formatDateInLocalTimeZone(value) {
-  let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
-    dateTime = {
-      date: '',
-      time: ''
-    },
-    localDateTime = moment.utc(value1).toDate();
-  dateTime.date = moment(localDateTime).format('DD MMM YYYY');
-  dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
-  return dateTime;
-}
-
 function getSession(row, info) {
-  if (row.from) {
-    let dateTime = formatDateInLocalTimeZone(row.from);
-    info['Start Date'] = dateTime.date + ' ' + dateTime.time;
-    info.Date = row.from;
-  }
-  if (row.to) {
-    let dateTime = formatDateInLocalTimeZone(row.to);
-    info['End Date'] = dateTime.date + ' ' + dateTime.time;
-  }
-  if (row.machine) { info.Machine = row.machine; }
-  if (row.user) { info.User = row.user; }
-  if (row.session.durationMs) { info.Duration = row.session.durationMs; }
+  let startDate = row.from ? formatDateInLocalTimeZone(row.from) : '',
+    endDate = row.to ? formatDateInLocalTimeZone(row.to) : '';
+
+  info = Object.assign({}, info, {
+    Date: getValue(row.from),
+    endDate: getValue(row.to)
+  });
+
+  info.display = Object.assign({}, info.display, {
+    'Start Date': {
+      displayKey: true,
+      value: startDate !== '' ? startDate.date + ' ' + startDate.time : ''
+    },
+    'End Date': {
+      displayKey: true,
+      value: endDate !== '' ? endDate.date + ' ' + endDate.time : ''
+    },
+    Machine: {
+      displayKey: true,
+      value: getValue(row.machine)
+    },
+    User: {
+      displayKey: true,
+      value: getValue(row.user)
+    },
+    Duration: {
+      displayKey: true,
+      value: getValue(row.session.durationMs) !== '' ? (row.session.durationMs).toString() : ''
+    }
+  });
+
   return info;
 }
 
 function getOther(row) {
   let info = {
-    Type: getEventTypeString(row.type)
+    id: getValue(row.id),
+    Type: getEventTypeString(row.type),
+    Date: getValue(row.date),
+    display: {}
   };
 
-  if (row.date) { info.Date = row.date; }
-  if (row.id) { info.id = row.id; }
   if (row.session) {
-    info.session = true;
+    info.Type = 'Session';
     info = getSession(row, info);
+    console.log(info);
   }
 
   return info;

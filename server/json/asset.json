@@ -85,7 +85,7 @@
             "height": "100%"
           },
           "canvasStyle": {
-            "height": "600px",
+            "height": "95%",
             "width": "100%"
           },
           "id": "NetworkGraph"

@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import SummaryWidget from 'components/widgets/SummaryWidget';
-
+import {renderRelatedComponents} from 'components/RelatedComponent';
 import {
   formatDateInLocalTimeZone
 } from 'utils/utils';
@@ -34,6 +34,15 @@ const styles = {
 class AlertDetails extends React.Component {
   static propTypes = {
     data: PropTypes.object
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let {meta, data} = nextProps;
+    if (!data) return null;
+    if (meta.relatedComponents) {
+      let type = data.data.rank_alert.name;
+      renderRelatedComponents(nextProps, type);
+    }
   }
 
   render() {

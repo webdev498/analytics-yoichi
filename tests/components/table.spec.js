@@ -759,6 +759,6 @@ describe('Table Component: ', function() {
   it('generateColumnTextForDisplayingCountryFlag should return html for displaying country flag.', function() {
     const value = 'CA';
     expect(generateColumnTextForDisplayingCountryFlag(value)).to.deep.equal(
-      ' <span class="flag-icon flag-icon-ca"></span>');
+      ' <span class="flag-icon flag-icon-ca" rel="tooltip" title="Canada"></span>');
   });
 });

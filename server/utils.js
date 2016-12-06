@@ -63,3 +63,12 @@ export function formatDateInLocalTimeZone(value) {
   dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
   return dateTime;
 }
+
+export function getValue(value) {
+  if (value) {
+    return value;
+  }
+  else {
+    return '';
+  }
+}
