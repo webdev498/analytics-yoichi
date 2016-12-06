@@ -78,27 +78,34 @@ export function getXYIndexFromColumnNames(currentChartDataColumns, columnsArray)
   return [xColumnIndex, yColumnIndex];
 }
 
-// Function to get index from object name specified in layout JSON
+// Function to get field value from object name specified in layout JSON
 export function getIndexFromObjectName(inputArray) {
-  let {fieldName, fieldValueArray, fieldValue, dataArray} = inputArray;
-  fieldValueArray = fieldName.includes('.') ? fieldName.split('.') : [fieldName];
+  let {fieldName, dataArray: fieldValue} = inputArray;
+  let fieldValueArray = fieldName.includes('.') ? fieldName.split('.') : [fieldName];
 
-  for (let v = 0; v < fieldValueArray.length; v++) {
-    if (v === 0) {
-      fieldValue = dataArray[fieldValueArray[v]];
-      if (fieldValue === undefined) {
-        fieldValue = '';
-        break;
-      }
+  fieldValueArray.forEach((arrayValue) => {
+    if (!arrayValue.includes('[') && !arrayValue.includes(']')) {
+      fieldValue = fieldValue[arrayValue];
     }
     else {
-      fieldValue = fieldValue[fieldValueArray[v]];
-      if (fieldValue === undefined) {
-        fieldValue = '';
-        break;
+      let tempArray = arrayValue.split('[');
+      let arrayName = tempArray[0],
+        arrayIndex = tempArray[1].replace('[', '');
+      arrayIndex = arrayIndex.replace(']', '');
+      if (!isUndefined(fieldValue)) {
+        fieldValue = fieldValue[arrayName];
+      }
+      if (!isUndefined(fieldValue)) {
+        fieldValue = fieldValue[arrayIndex];
       }
     }
-  }
+
+    if (isUndefined(fieldValue)) {
+      fieldValue = '';
+      return false;
+    }
+  });
+
   return fieldValue;
 }
 

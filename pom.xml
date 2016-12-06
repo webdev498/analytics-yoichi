@@ -115,7 +115,7 @@
                     </execution>
                     <execution>
                         <id>del-npm-modules</id>
-                        <phase>generate-sources</phase>
+                        <phase>prepare-package</phase>
                         <configuration>
                             <executable>rm</executable>
                             <arguments>
@@ -129,7 +129,7 @@
                     </execution>
                     <execution>
                         <id>exec-npm-install-prod</id>
-                        <phase>generate-sources</phase>
+                        <phase>prepare-package</phase>
                         <configuration>
                             <executable>npm</executable>
                             <arguments>

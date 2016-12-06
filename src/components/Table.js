@@ -5,6 +5,7 @@ import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
 import DurationWidget from 'components/widgets/DurationWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
+import AssetIcon from 'components/widgets/AssetIcon';
 
 import {
   generateRawData,
@@ -80,7 +81,8 @@ const generateDataSource = (props) => {
           chartValue: individualRowData.chartValue,
           columnText: individualRowData.columnText,
           rowNumber: d,
-          timeValue: individualRowData.timeValue
+          timeValue: individualRowData.timeValue,
+          row: rows[d]
         };
         mainObject = generateRowObject(rowDetails, mainObject);
         if (props.kibana) {
@@ -159,7 +161,7 @@ export function generateIndividualRowData(rowColumnDetails) {
 }
 
 export function generateRowObject(rowDetails, mainObject) {
-  let {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue} = rowDetails,
+  let {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue, row} = rowDetails,
     rowObj = {
       columnType: currentColumnType,
       columnName: currentTableData.columnNameToDisplay,
@@ -172,7 +174,8 @@ export function generateRowObject(rowDetails, mainObject) {
         chartId: currentTableData.attributes.id + rowNumber,
         chartType: currentTableData.attributes.chartType,
         chartWidth: currentTableData.attributes.chartWidth,
-        chartHeight: currentTableData.attributes.chartHeight
+        chartHeight: currentTableData.attributes.chartHeight,
+        row: row
       });
       chartValue = '';
       mainObject.columns.push(rowObj);
@@ -417,6 +420,10 @@ function loadChartComponentInTableRow(tableColumn, duration) {
       return (
         <Area2DAsSparkLineChart chartProperties={tableColumn} duration={duration} />
       );
+    case 'assetIcon':
+      return (
+        <AssetIcon asset={tableColumn} />
+      );
     default:
       break;
   }
@@ -446,9 +453,15 @@ export class TableCard extends React.Component {
 
     return () => {
       if (props.openAlertDetails) {
-        const {rows} = props.data;
-        const currentRow = rows[index][0];
-        const url = `/alert/${currentRow.id}/${currentRow.date}`;
+        const {rows} = props.data,
+          currentRow = rows[index][0],
+          url = `/alert/${currentRow.id}/${currentRow.date}`;
+        props.updateRoute(url);
+      }
+      else if (props.openAssetDetails) {
+        const {rows} = props.data,
+          currentRow = rows[index][0],
+          url = `/asset/${currentRow.type}/${currentRow.id}`;
         props.updateRoute(url);
       }
       else {

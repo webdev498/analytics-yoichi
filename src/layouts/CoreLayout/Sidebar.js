@@ -14,7 +14,7 @@ const styles = {
     top: '64px',
     left: 0,
     bottom: 0,
-    backgroundColor: Colors.pebble,
+    backgroundColor: Colors.grape,
     color: Colors.arctic,
     zIndex: 10
   },
@@ -29,6 +29,10 @@ const styles = {
     color: Colors.navigation,
     width: '72px',
     textAlign: 'center'
+  },
+  searchLink: {
+    cursor: 'pointer',
+    backgroundColor: Colors.search
   },
   link: {
     height: '72px',
@@ -84,7 +88,7 @@ class Sidebar extends React.Component {
     return (
       <div>
         <nav className='sidebar' style={{...styles.leftNav, ...props.style}}>
-          <div style={{...styles.wrap, cursor: 'pointer'}}
+          <div style={{...styles.wrap, ...styles.searchLink}}
             key='searchlink'
             onClick={props.toggleSearch}
             className='search-link'>
