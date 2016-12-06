@@ -721,7 +721,7 @@ describe('Timeline DAL', () => {
     cardTests(ctx, {
       'id': 'sessionId',
       'Date': '2016-10-30T00:00:00.000',
-      'session': true,
+      'Type': 'Session',
       'endDate': '2016-10-30T00:00:00.000',
       'display': {
         'Start Date': {

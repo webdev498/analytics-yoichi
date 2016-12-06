@@ -1,29 +1,29 @@
-import moment from 'moment';
-import {msToTime, getEventTypeString, formatBytes} from '../utils/utils';
+// import moment from 'moment';
+import {msToTime, getEventTypeString, formatBytes, formatDateInLocalTimeZone, getValue} from '../utils/utils';
 import {
   getChartData
 } from '../components/anomalyChart';
 
-function formatDateInLocalTimeZone(value) {
-  let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
-    dateTime = {
-      date: '',
-      time: ''
-    },
-    localDateTime = moment.utc(value1).toDate();
-  dateTime.date = moment(localDateTime).format('DD MMM YYYY');
-  dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
-  return dateTime;
-}
+// function formatDateInLocalTimeZone(value) {
+//   let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
+//     dateTime = {
+//       date: '',
+//       time: ''
+//     },
+//     localDateTime = moment.utc(value1).toDate();
+//   dateTime.date = moment(localDateTime).format('DD MMM YYYY');
+//   dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
+//   return dateTime;
+// }
 
-function getValue(value) {
-  if (value) {
-    return value;
-  }
-  else {
-    return '';
-  }
-}
+// function getValue(value) {
+//   if (value) {
+//     return value;
+//   }
+//   else {
+//     return '';
+//   }
+// }
 
 function getIPDetails(source) {
   if (source) {
@@ -447,9 +447,18 @@ function getSession(row, info) {
       displayKey: true,
       value: endDate !== '' ? endDate.date + ' ' + endDate.time : ''
     },
-    Machine: getValue(row.machine),
-    User: getValue(row.user),
-    Duration: getValue(row.session.durationMs)
+    Machine: {
+      displayKey: true,
+      value: getValue(row.machine)
+    },
+    User: {
+      displayKey: true,
+      value: getValue(row.user)
+    },
+    Duration: {
+      displayKey: true,
+      value: getValue(row.session.durationMs) !== '' ? (row.session.durationMs).toString() : ''
+    }
   });
 
   return info;
@@ -466,6 +475,7 @@ function getOther(row) {
   if (row.session) {
     info.Type = 'Session';
     info = getSession(row, info);
+    console.log(info);
   }
 
   return info;
