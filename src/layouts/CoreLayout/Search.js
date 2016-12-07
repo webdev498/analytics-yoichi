@@ -16,7 +16,7 @@ const styles = {
     zIndex: 2,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(200, 200, 200, 0.7)',
+    backgroundColor: 'rgba(200, 200, 200, 0.8)',
     top: 0,
     bottom: 0
   },
@@ -34,7 +34,7 @@ const styles = {
     border: 0,
     outline: 0,
     width: '100%',
-    color: Colors.turquoise
+    color: Colors.arctic
   },
   icon: {
     color: Colors.navigation,
