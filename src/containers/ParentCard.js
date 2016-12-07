@@ -145,7 +145,7 @@ export class ParentCard extends React.Component {
       return;
     }
 
-    props.fetchApiData(props.id, api, props.params);
+    props.fetchApiData(props.id, api, props.params, props.options);
   }
 
   componentDidMount() {
