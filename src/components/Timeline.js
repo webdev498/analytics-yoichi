@@ -74,6 +74,7 @@ class Timeline extends React.Component {
     this.decreaseHeightBy = 120;
     this.currentTabId = 0;
     this.currentTab = 'DETAILS';
+    this.apiObj = {};
 
     this.contextualMenuApiParams = {
       meta: {},
@@ -230,7 +231,9 @@ class Timeline extends React.Component {
 
   getApiObj(pageNumber, type) {
     const {state, props} = this,
-      {params, attributes, meta, tabs, timelineType} = props;
+      {params, attributes, meta, tabs, timelineType, alertType, trafficFilter} = props;
+
+    console.log(props, this.apiObj, meta.api);
 
     let queryParams = Object.assign({},
       meta.api && meta.api.queryParams,
@@ -249,22 +252,28 @@ class Timeline extends React.Component {
       }
     }
     else {
-      apiObj.path = tabObj.path;
-      apiObj.pathParams = (meta.api && meta.api.pathParams && meta.api.pathParams.reportId)
-        ? {
-          reportId: this.currentTabId === 0 ? meta.api.pathParams.reportId : tabObj.pathParams.reportId
-        }
-        : {};
+      console.log('tabObj', tabObj);
+      apiObj = alertType ? tabObj[alertType].meta.api : tabObj.default.meta.api;
+      // apiObj.path = tabObj.path;
+      // apiObj.pathParams = (meta.api && meta.api.pathParams && meta.api.pathParams.reportId)
+      //   ? {
+      //     reportId: this.currentTabId === 0 ? meta.api.pathParams.reportId : tabObj.pathParams.reportId
+      //   }
+      //   : {};
+      if (trafficFilter) {
+        apiObj.queryParams.filter = trafficFilter;
+      }
+      console.log('apiObj', apiObj);
     }
 
-    if (type === 'traffic') {
-      queryParams = Object.assign(queryParams, {
-        date: params.date,
-        filter: state.filter
-      });
+    // if (type === 'traffic') {
+    //   queryParams = Object.assign(queryParams, {
+    //     date: params.date,
+    //     filter: state.filter
+    //   });
 
-      apiObj.loadOnce = true;
-    }
+    //   apiObj.loadOnce = true;
+    // }
 
     if (this.currentTabId === 1 && props.params && props.params.type) {
       queryParams[props.params.type] = props.params.assetId;
@@ -385,13 +394,16 @@ class Timeline extends React.Component {
 
   render() {
     const {state, props} = this,
-      {attributes, tabs, errorData, timelineType} = props;
+      {attributes, tabs, errorData, timelineType, meta} = props;
 
     if (errorData) {
       state.rows = [];
     }
 
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
+    this.apiObj = meta.api;
+
+    console.log('props:', props);
 
     let tabNames = [];
     if (tabs) {

@@ -55,7 +55,7 @@
                     "alertId": ":pathParam"
                   },
                   "queryParams": {
-                    "count": 10,
+                    "count": 2,
                     "from": 0,
                     "window": "",
                     "date": "date:pathParam"
@@ -162,7 +162,7 @@
         "attributes": {
           "type": "traffic",
           "displaySelectedRows": true,
-          "noOfEventsPerPage": 10,
+          "noOfEventsPerPage": 2,
           "maxNumbersOnLeftRightPagination": 4,
           "style": {
             "width": "100%",
@@ -252,6 +252,31 @@
           }
         },
         "timelineType": "primary"
+      }
+    ],
+    [
+      {
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/alert/{alertId}",
+            "pathParams": {
+              "alertId": ":pathParam"
+            },
+            "queryParams": {
+              "date": "date:pathParam",
+              "window": ""
+            }
+          }
+        },
+        "name": "AlertTimeline",
+        "attributes": {
+          "style": {
+            "width": "100%"
+          }
+        },
+        "id": "alert-timeline",
+        "type": "AlertTimeline"
       }
     ]
   ]
