@@ -7,6 +7,9 @@ import MultiSeriesCombiChart from 'components/MultiSeriesCombiChart';
 
 let styles = {
   alert: {},
+  list: {
+    width: '100%'
+  },
   listItem: {
     fontSize: '13px',
     color: Colors.grape
@@ -276,6 +279,10 @@ class TimelineCard extends React.Component {
     this.displayFlex = data.isIconDisplay || this.isLoadDetails ? {display: 'flex'} : {};
     this.getAlertBorder(data);
 
+    if (props.data.chart) {
+      styles.list = Object.assign({}, styles.list, {paddingLeft: '20px'});
+    }
+
     return (
       <Card
         style={
@@ -288,17 +295,17 @@ class TimelineCard extends React.Component {
         }
         onClick={this.handleCardClick()}
         key={props.id}>
-          <div style={{display: 'flex'}}>
-            {
-              props.data.chart
-              ? this.getAnomalyChart(props.data.chart)
-              : null
-            }
-            <ul className='no-list-style'
-              style={props.data.chart ? {paddingLeft: '20px'} : {}}>
-              {this.getDetails(props.data)}
-            </ul>
-          </div>
+        <div style={{display: 'flex'}}>
+          {
+            props.data.chart
+            ? this.getAnomalyChart(props.data.chart)
+            : null
+          }
+          <ul className='no-list-style'
+            style={styles.list}>
+            {this.getDetails(props.data)}
+          </ul>
+        </div>
       </Card>
     );
   }
