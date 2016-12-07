@@ -44,7 +44,7 @@ const chart = {
   'chartRightMargin': '0',
   'chartBottomMargin': '0',
   'baseFont': 'Open Sans, sans-serif',
-  'baseFontColor': Colors.pebble,
+  'baseFontColor': Colors.grape,
   'paletteColors': Colors.defaultGraphPalette,
   'xAxisLineColor': Colors.axis
 };

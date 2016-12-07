@@ -30,7 +30,6 @@ const styles = {
   title: {
     textTransform: 'capitalize',
     fontSize: '21px',
-    fontWeight: 300,
     whiteSpace: 'nowrap'
   },
   iconWrap: {
@@ -40,8 +39,10 @@ const styles = {
   refreshIcon: {
     cursor: 'pointer',
     fontSize: '20px',
-    color: Colors.smoke,
-    fontWeight: 600
+    color: Colors.grape,
+    fontWeight: 600,
+    height: '35px',
+    paddingTop: '7px'
   },
   backIcon: {
     color: Colors.grape
@@ -50,7 +51,7 @@ const styles = {
     fontSize: '20px'
   },
   inputWrap: {
-    marginLeft: '20px',
+    margin: '0 20px',
     width: '85%',
     textAlign: 'right',
     display: 'inline-block',
@@ -59,7 +60,7 @@ const styles = {
   },
   searchIcon: {
     bottom: '5px',
-    color: Colors.pebble,
+    color: Colors.grape,
     cursor: 'pointer',
     fontSize: '21px',
     height: '14px',
@@ -77,7 +78,7 @@ const styles = {
     margin: 'auto',
     position: 'absolute',
     top: 0,
-    background: Colors.smoke,
+    background: Colors.grape,
     lineHeight: '35px',
     width: '45px',
     textAlign: 'center',
@@ -240,7 +241,7 @@ export class ParentCard extends React.Component {
           search: data,
           clearIconStyle: {
             color: Colors.white,
-            background: Colors.smoke
+            background: Colors.grape
           },
           searchTextStyle: {
             paddingLeft: '53px'
@@ -287,7 +288,7 @@ export class ParentCard extends React.Component {
         this.setState({
           clearIconStyle: {
             color: Colors.white,
-            background: Colors.smoke
+            background: Colors.grape
           },
           searchTextStyle: {
             paddingLeft: '53px'
