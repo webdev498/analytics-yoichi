@@ -101,27 +101,51 @@ const timeline = {
           'id': 'timeline',
           'type': 'Timeline',
           'meta': {
+            'showHeader': true,
+            'title': 'Timeline',
             'api': {
               'path': '/api/anomaly/{alertId}/timeline',
               'pathParams': {
                 'alertId': ':pathParam'
               },
               'queryParams': {
-                'count': 10,
+                'count': 2,
                 'from': 0,
                 'window': '',
                 'date': 'date:pathParam'
               }
             }
           },
+          'chart': {
+            'chartOptions': {
+              'xAxisName': 'TIME',
+              'divLineThickness': '2',
+              'lineThickness': '1',
+              'showYAxisValues': '1',
+              'xAxisNameFontSize': '10',
+              'yAxisNameFontSize': '10',
+              'labelFontSize': '8',
+              'drawAnchors': '1',
+              'anchorRadius': '1',
+              'showlegend': '0',
+              'outCnvBaseFontSize': '8'
+            }
+          },
           'attributes': {
             'type': 'traffic',
             'displaySelectedRows': true,
-            'noOfEventsPerPage': 10,
+            'noOfEventsPerPage': 2,
             'maxNumbersOnLeftRightPagination': 4,
             'style': {
               'width': '100%',
               'backgroundColor': '#F7F7F9'
+            },
+            'chart': {
+              'chartWidth': '400',
+              'chartHeight': '200',
+              'chartCaption': {
+                'display': 'none'
+              }
             },
             'otherStyles': {
               'flex': {
@@ -218,7 +242,8 @@ class AlertDetails extends React.Component {
             tabs={timeline.tabs}
             timelineType='primary'
             alertType={this.alertType}
-            trafficFilter={data.data.rank_alert.trafficFilter}>
+            trafficFilter={data.data.rank_alert.trafficFilter}
+            chart={timeline.tabs.DETAILS.primary[this.alertType].chart}>
             <Timeline />
           </ParentCard>
         </div>
