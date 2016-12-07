@@ -1,9 +1,7 @@
 import React, {PropTypes} from 'react';
 import ParentCard from 'containers/ParentCard';
 import Timeline from 'components/Timeline';
-
-// const styles = {
-// };
+import AlertMultiChart from 'components/AlertMultiChart';
 
 const alertActivity = {
   'id': 'alert-activity',
@@ -13,14 +11,12 @@ const alertActivity = {
     'title': 'Activity',
     'showRefresh': false,
     'api': {
-      'default': {
-        'method': 'POST',
-        'path': '/api/analytics/reporting/executeById',
-        'body': 'data.rank_alert.chartsFilter:fieldName',
-        'pathParams': {},
-        'queryParams': {
-          'window': ''
-        }
+      'method': 'POST',
+      'path': '/api/analytics/reporting/executeById',
+      'body': 'data.rank_alert.chartsFilter:fieldName',
+      'pathParams': {},
+      'queryParams': {
+        'window': ''
       }
     }
   },
@@ -109,7 +105,7 @@ const timeline = {
                 'alertId': ':pathParam'
               },
               'queryParams': {
-                'count': 2,
+                'count': 10,
                 'from': 0,
                 'window': '',
                 'date': 'date:pathParam'
@@ -134,7 +130,7 @@ const timeline = {
           'attributes': {
             'type': 'traffic',
             'displaySelectedRows': true,
-            'noOfEventsPerPage': 2,
+            'noOfEventsPerPage': 10,
             'maxNumbersOnLeftRightPagination': 4,
             'style': {
               'width': '100%',
@@ -214,6 +210,30 @@ class AlertDetails extends React.Component {
     this.alertType = '';
   }
 
+  displayAlertActivity() {
+    const {props, props: {data}} = this;
+    if (!data) return null;
+
+    if (this.alertType !== 'anomaly') {
+      let options = Object.assign({}, props.options, {
+        body: data.data.rank_alert.chartsFilter
+      });
+
+      return (
+        <ParentCard
+          id='alert-activity'
+          meta={alertActivity.meta}
+          params={props.params}
+          options={options}
+          attributes={alertActivity.attributes}
+          chart={alertActivity.chart}>
+          <AlertMultiChart />
+        </ParentCard>
+      );
+    }
+    return null;
+  }
+
   render() {
     const {props} = this,
       {data} = props;
@@ -221,8 +241,6 @@ class AlertDetails extends React.Component {
     if (!data) return null;
 
     this.alertType = data.data.rank_alert.name === 'anomaly' ? 'anomaly' : 'default';
-
-    console.log('alertName', this.alertType);
 
     if (this.alertType === 'default') {
       timeline.tabs.DETAILS.primary[this.alertType].meta.api.queryParams.filter = data.data.rank_alert.trafficFilter;
@@ -232,8 +250,10 @@ class AlertDetails extends React.Component {
       <div>
         <div style={{
           height: '100%',
-          position: 'relative'
+          position: 'relative',
+          display: 'flex'
         }}>
+          {this.displayAlertActivity()}
           <ParentCard
             id='primary-timeline'
             meta={timeline.tabs.DETAILS.primary[this.alertType].meta}

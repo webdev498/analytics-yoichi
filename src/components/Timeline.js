@@ -251,7 +251,7 @@ class Timeline extends React.Component {
       else {
         apiObj = tabObj;
       }
-      console.log(alertType, apiObj, tabObj);
+
       if (apiObj.meta.api && apiObj.meta.api.pathParams && apiObj.meta.api.pathParams.selectedCardId) {
         apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = props.id;
       }
@@ -409,8 +409,6 @@ class Timeline extends React.Component {
 
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
     this.apiObj = meta.api;
-
-    console.log('props:', props);
 
     let tabNames = [];
     if (tabs) {

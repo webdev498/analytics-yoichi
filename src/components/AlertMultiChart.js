@@ -50,7 +50,7 @@ class AlertMultiChart extends React.Component {
     data: PropTypes.object,
     duration: PropTypes.string,
     chart: PropTypes.object,
-    attributes: PropTypes.object.isRequired
+    attributes: PropTypes.object
   }
 
   getData(rows, columns) {
