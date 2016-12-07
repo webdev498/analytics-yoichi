@@ -22,7 +22,7 @@ const styles = {
   text: {
     fontSize: '21px',
     lineHeight: '21px',
-    fontWeight: 300,
+    fontWeight: 'normal',
     margin: 0,
     marginBottom: '13px'
   },

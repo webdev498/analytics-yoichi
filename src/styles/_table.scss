@@ -17,7 +17,7 @@
 .threatTable td {
   font-size: 13px;
   padding: 15px;
-  color: $MustardColor;
+  color: $GrapeColor;
   vertical-align: top;
  }
 
@@ -29,7 +29,7 @@
   width: 30px;
   float: left;
   cursor: pointer;
-  color: $PebbleColor;
+  color: $GrapeColor;
   text-align: center;
   text-decoration: none;
 }
@@ -41,7 +41,7 @@
   width: 55px;
   float: left;
   cursor: pointer;
-  color: $PebbleColor;
+  color: $GrapeColor;
   text-align: center;
   text-decoration: none;
   font-size: 13px;
@@ -55,18 +55,18 @@
   width: 75px;
   float: left;
   cursor: pointer;
-  color: $PebbleColor;
+  color: $GrapeColor;
   text-align: center;
   text-decoration: none;
 }
 .threatTable .reactable-page-button:hover, .reactable-previous-page:hover, .reactable-next-page:hover {
   text-decoration: none;
-  color: $PebbleColor;
+  color: $GrapeColor;
 }
 
 .threatTable .reactable-current-page, .reactable-current-page:hover {
   background-color: $CloudColorShade2;
-  color: $PebbleColor;
+  color: $GrapeColor;
   cursor: default;
 }
 
@@ -183,7 +183,7 @@ input:focus {
 .pagination > li > button, .pagination > li > span {
   background-color: transparent;
   border: 0px;
-  color: $PebbleColor;
+  color: $GrapeColor;
   float: left;
   line-height: 1.42857;
   margin-left: -1px;
