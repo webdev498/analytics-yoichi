@@ -31,7 +31,7 @@ const styles = {
     fontSize: '13px',
     marginLeft: 'auto',
     cursor: 'pointer',
-    color: Colors.smoke,
+    color: Colors.grape,
     textAlign: 'right'
   },
   percentageWrap: {
