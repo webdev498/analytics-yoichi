@@ -315,7 +315,6 @@
       {
         "chartOptions": {
           "xAxisname": "SCORE",
-          "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",

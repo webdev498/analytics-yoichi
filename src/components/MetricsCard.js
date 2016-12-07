@@ -22,7 +22,7 @@ const styles = {
   text: {
     fontSize: '21px',
     lineHeight: '21px',
-    fontWeight: 300,
+    fontWeight: 'normal',
     margin: 0,
     marginBottom: '13px'
   },
@@ -31,7 +31,7 @@ const styles = {
     fontSize: '13px',
     marginLeft: 'auto',
     cursor: 'pointer',
-    color: Colors.smoke,
+    color: Colors.grape,
     textAlign: 'right'
   },
   percentageWrap: {

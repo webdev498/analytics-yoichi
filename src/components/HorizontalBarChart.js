@@ -93,7 +93,7 @@ export function generateDataArray(parameters) {
               'x': '$chartEndX - 146',
               'y': '$dataset.0.set.' + d + '.CenterY',
               'fontSize': '11',
-              'color': Colors.pebble,
+              'color': Colors.grape,
               'font': 'Open Sans, sans-serif'
             }
           ]);
@@ -265,7 +265,7 @@ export function generateDataSource(rawData, chartOptions, chartData, chart) {
                 'x': '$chartEndX - 146',
                 'y': '$dataset.0.set.' + j + '.CenterY',
                 'fontSize': '11',
-                'color': Colors.pebble,
+                'color': Colors.grape,
                 'font': 'Open Sans, sans-serif'
               }
             ]);
@@ -366,7 +366,7 @@ export function generateDataSource(rawData, chartOptions, chartData, chart) {
       'labelFontSize': '11',
       'numDivLines': '4',
       'baseFont': 'Open Sans, sans-serif',
-      'baseFontColor': Colors.pebble
+      'baseFontColor': Colors.grape
     }, chartOptions)
   };
 

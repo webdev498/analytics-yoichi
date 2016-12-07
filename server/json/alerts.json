@@ -342,7 +342,6 @@
       {
         "chartOptions": {
           "xAxisname": "ALERT TYPES",
-          "baseFontColor": "#6B7282",
           "pYAxisname": "ALERT COUNT",
           "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0"
@@ -405,7 +404,6 @@
           "paletteColors": "#2BD8D0, #6CD3B4, #B6CD94, #FCC875, #05E9F5",
           "yAxisName": "ALERT COUNT",
           "drawAnchors": "1",
-          "baseFontColor": "#6B7282",
           "legendPosition": "right",
           "baseFont": "Open Sans, sans-serif"
         },
