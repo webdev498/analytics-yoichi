@@ -61,7 +61,7 @@
         },
         "id": "network-graph",
         "type": "NetworkGraph",
-        "timelineId": "timeline"
+        "timelineId": "primary-timeline"
       }
     ],
     [

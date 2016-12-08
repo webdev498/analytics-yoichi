@@ -1167,15 +1167,13 @@ class NetworkGraph extends React.Component {
       actionId,
       reportId,
       nodeID,
-      timeWindow,
-      parameters,
       selectedNodesForExtendingGraph,
       contextMenuType,
       actionsCount,
       actionType
     } = details;
 
-    const extendedNodes = this.fetchData(reportId, timeWindow, parameters, actionType),
+    const extendedNodes = this.fetchData(details),
       that = this;
 
     if (actionType !== 'timeline') {
@@ -1210,9 +1208,17 @@ class NetworkGraph extends React.Component {
     displayActionAsSelected(actionsCount, actionId);
   }
 
-  fetchData(reportId, duration, parameters, actionType) {
+  fetchData(details) {
     const {props} = this;
-    let otherParameters = '',
+    let {
+        reportId,
+        nodeID,
+        timeWindow,
+        parameters,
+        selectedNodesForExtendingGraph,
+        actionType
+      } = details,
+      otherParameters = '',
       params = {};
     if (!isUndefined(parameters) && !isUndefined(parameters.length)) {
       parameters.forEach((parameter) => {
@@ -1240,11 +1246,17 @@ class NetworkGraph extends React.Component {
         }, params)
       };
       props.fetchApiData(props.timelineId, apiObj, {}, {});
+
+      selectedNodesForExtendingGraph.push({
+        'nodeID': nodeID,
+        'reportId': reportId,
+        'timeWindow': timeWindow
+      });
     }
     else {
       const accessToken = Cookies.get('access_token'),
         tokenType = Cookies.get('token_type'),
-        apiUrl = baseUrl + '/api/analytics/actions/execute/' + reportId + '?window=' + duration + otherParameters,
+        apiUrl = baseUrl + '/api/analytics/actions/execute/' + reportId + '?window=' + timeWindow + otherParameters,
         customHeaders = {
           'Accept': 'application/json'
         },
@@ -1442,8 +1454,6 @@ class NetworkGraph extends React.Component {
     if (props.data && !Array.isArray(props.data)) {
       assetData = generateDataFromAssetDetails(props.data);
     }
-
-    let undoResetStyle = {display: state.showUndoResetButtons ? 'block' : 'none'};
 
     return (
       <div style={{display: 'flex', height: '100%'}}>

@@ -442,18 +442,18 @@ function getSession(row, info, url) {
 
   if (assetType === 'user') {
     specificDetails = Object.assign({}, specificDetails, {
-      User: {
+      Machine: {
         displayKey: true,
-        value: getValue(row.user)
+        value: getValue(row.machine)
       }
     });
   }
 
   if (assetType === 'machine') {
     specificDetails = Object.assign({}, specificDetails, {
-      Machine: {
+      User: {
         displayKey: true,
-        value: getValue(row.machine)
+        value: getValue(row.user)
       }
     });
   }
