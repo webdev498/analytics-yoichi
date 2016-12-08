@@ -7,6 +7,7 @@ import layoutRoutes from './layouts';
 
 import timeline from '../components/Timeline';
 import anomalyChart from '../components/anomalyChart';
+import HeatMap from '../components/HeatMap.dal.js';
 
 const router = new KoaRouter({
   prefix: '/api'
@@ -47,6 +48,7 @@ router
 .get('/analytics/reporting/execute/taf_asset_session_details', timeline)
 .get('/analytics/reporting/execute/taf_asset_session_event_details', timeline)
 .get('/analytics/reporting/execute/taf_events_between_source_and_dest_same_type_as_edge', timeline)
+.get('/session/activity/live/:type/:assetId', HeatMap)
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);

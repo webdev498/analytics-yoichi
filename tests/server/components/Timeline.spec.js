@@ -244,32 +244,6 @@ const http = {
   'type': 'http'
 };
 
-const session = {
-  'date': '2016-11-08T12:00:10.028',
-  'data': {
-    'http': {
-      'originalMimeTyes': [],
-      'fileName': '',
-      'method': 'GET',
-      'responseLength': 10462,
-      'userAgent': 'Media Center',
-      'statusMessage': 'OK',
-      'referrer': 'http://forpagesearch.eu/u2b871hi/RMtPEeENIz3RGmDA2Ruk',
-      'password': '',
-      'depth': 1,
-      'host': 'forpagesearch.eu',
-      'statusCode': 200,
-      'infoMessage': '',
-      'username': ''
-    }
-  },
-  destination,
-  'micros': 906,
-  'id': 'httpId',
-  source,
-  'type': 'http'
-};
-
 function cardTests(ctx, props) {
   const {normalizeData: {normalizeData: result}} = ctx;
   expect(result).to.be.an('array');
@@ -558,7 +532,7 @@ describe('Timeline DAL', () => {
 
     cardTests(ctx, {
       'Type': 'LOGON',
-      'Date': '30 Oct 2016 05:30:00.000',
+      // 'Date': '30 Oct 2016 05:30:00.000',
       'Start Date': '30 Oct 2016 05:30:00.000',
       'End Date': '30 Oct 2016 05:30:00.000',
       'id': 'sessionId',

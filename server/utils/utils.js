@@ -48,3 +48,22 @@ export function formatBytes(bytes, decimals) {
     text = sizes[i];
   return val + ' ' + text;
 };
+
+export function militaryTimeToNormalTime(time) {
+  time = time.toString().split(':'); // convert to array
+
+  // fetch
+  const hours = Number(time[0]);
+
+  // calculate
+  let timeValue = '';
+  if (hours > 12) {
+    timeValue += hours - 12;
+  }
+  else {
+    timeValue += hours === 0 ? 12 : hours;
+  }
+  timeValue += (hours >= 12) ? ' PM' : ' AM';  // get AM/PM
+
+  return timeValue;
+}

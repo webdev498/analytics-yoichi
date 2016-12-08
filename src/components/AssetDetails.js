@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 
 import RadarChart from 'components/RadarChart';
+import Heatmap from 'components/charts/Heatmap';
 import AssetWidget from 'components/widgets/AssetWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
 
@@ -37,8 +38,15 @@ const styles = {
     marginTop: 0,
     lineHeight: '12px',
     height: '12px',
-    width: '24px',
+    width: '16px',
     marginLeft: 'auto'
+  },
+  sessionIcon: {
+    marginTop: 0,
+    lineHeight: '18px',
+    height: '18px',
+    width: '16px',
+    marginLeft: '5px'
   },
   chart: {
     position: 'absolute',
@@ -104,13 +112,14 @@ const styles = {
 class AssetDetail extends React.Component {
   static propTypes = {
     data: PropTypes.object,
-    chartOptions: PropTypes.object
+    chart: PropTypes.object.isRequired
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      chartOpen: false
+      radarChartOpen: false,
+      sessionChartOpen: false
     };
   }
 
@@ -182,13 +191,8 @@ class AssetDetail extends React.Component {
 
   getReports(reports) {
     const details = [];
-    let value = this.getValue(reports.taf_asset_session_count_time_shifted);
-    details.push({
-      title: 'sessions',
-      value
-    });
 
-    value = this.getValue(reports.taf_asset_internal_resource_count_time_shifted);
+    let value = this.getValue(reports.taf_asset_internal_resource_count_time_shifted);
     details.push({
       title: 'assets accessed',
       value
@@ -261,25 +265,27 @@ class AssetDetail extends React.Component {
     return details.map((report, index) => this.getElement(report, index));
   }
 
-  toggleRadarChart() {
+  toggleChart(type) {
+    console.log(type);
     return () => {
-      if (this.state.chartOpen) {
-        this.setState({chartOpen: false});
+      console.log(type);
+      if (this.state[type]) {
+        this.setState({[type]: false});
       }
       else {
-        this.setState({chartOpen: true});
+        this.setState({[type]: true});
       }
     };
   }
 
   getRadarChart() {
-    const {data: {assetDetail}, chartOptions} = this.props,
+    const {data: {assetDetail}, chart: {radarChartOptions}} = this.props,
       {risk: {score}} = assetDetail;
 
-    chartOptions.paletteColors = getColor(score);
+    radarChartOptions.paletteColors = getColor(score);
 
     const radarChartProps = {
-      chartOptions,
+      radarChartOptions,
       'attributes': {
         'chartWidth': '100%',
         'chartHeight': '240',
@@ -289,35 +295,17 @@ class AssetDetail extends React.Component {
       data: assetDetail.risk.scoreDetails
     };
 
-    return <RadarChart {...radarChartProps} />;
-  }
-
-  render() {
-    let {data} = this.props;
-    if (!data) return null;
-
-    const {assetDetail, assetReports} = data;
-
-    let chartWrapStyle = {
-        height: 0,
-        opacity: 0,
-        marginTop: 0,
-        transition: 'height .3s, opacity .3s, margin .3s'
-      },
-      listStyle = styles.list,
+    let chartWrapStyle = { display: 'none' },
       iconStyle = {...styles.icon, ...styles.scoreIcon, transition: 'transform .3s'};
 
-    if (this.state.chartOpen) {
-      chartWrapStyle = Object.assign({}, chartWrapStyle, {height: '220px', opacity: 1, marginTop: '15px'});
-      listStyle = Object.assign({}, styles.list);
+    if (this.state.radarChartOpen) {
+      chartWrapStyle = Object.assign({}, chartWrapStyle, {height: '220px', marginTop: '15px', display: 'block'});
       iconStyle = Object.assign({}, iconStyle, {transform: 'rotate(180deg)'});
     }
 
     return (
-      <div style={styles.card}>
-        <AssetWidget data={assetDetail} style={{padding: 0}} headingStyle={styles.assetWidget} />
-
-        <div style={styles.scoreDetails} onClick={this.toggleRadarChart()}>
+      <div>
+        <div style={styles.scoreDetails} onClick={this.toggleChart('radarChartOpen')}>
           <ScoreWidget scoreValue={assetDetail.risk.score} style={styles.rankScore} />
           <div style={styles.scoreDesc}>
             <h3 style={{...styles.title, ...styles.scoreTitle}}>Score</h3>
@@ -326,12 +314,73 @@ class AssetDetail extends React.Component {
             </FontIcon>
           </div>
         </div>
-
         <div style={chartWrapStyle}>
-          {this.getRadarChart()}
+          <RadarChart {...radarChartProps} />
         </div>
+      </div>
+    );
+  }
 
-        <ul style={listStyle}>
+  getSessionChart() {
+    const props = {
+      chartOptions: this.props.chart.sessionChartOptions,
+      'attributes': {
+        'chartWidth': '100%',
+        'chartHeight': '350',
+        'style': styles.chart,
+        id: 'session-chart'
+      },
+      data: this.props.data.sessionDetail
+    };
+
+    const {assetReports: reports} = this.props.data;
+    let {change, value} = this.getValue(reports.taf_asset_session_count_time_shifted);
+
+    let chartWrapStyle = { display: 'none' },
+      iconStyle = {...styles.icon, ...styles.sessionIcon, transition: 'transform .3s'};
+
+    if (this.state.sessionChartOpen) {
+      chartWrapStyle = Object.assign({}, chartWrapStyle, {height: '350px', marginTop: '15px', display: 'block'});
+      iconStyle = Object.assign({}, iconStyle, {transform: 'rotate(180deg)'});
+    }
+
+    return (
+      <div>
+        <div style={{...styles.item, paddingTop: '30px', cursor: 'pointer'}}
+          onClick={this.toggleChart('sessionChartOpen')}>
+          <div style={{...styles.scoreDesc, margin: 'auto'}}>
+            <h3 style={{...styles.title, ...styles.scoreTitle}}>Session</h3>
+            <FontIcon style={iconStyle} className='material-icons'>
+              arrow_drop_down
+            </FontIcon>
+          </div>
+          <div style={{marginLeft: 'auto'}}>
+            <span style={{...styles.value, ...styles.titleValue}}>{value}</span>
+            {this.getChangeElement(change)}
+          </div>
+        </div>
+        <div style={chartWrapStyle}>
+          <Heatmap {...props} />
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    let {data} = this.props;
+    if (!data) return null;
+
+    const {assetDetail, assetReports} = data;
+
+    return (
+      <div style={styles.card}>
+        <AssetWidget data={assetDetail} style={{padding: 0}} headingStyle={styles.assetWidget} />
+
+        {this.getRadarChart()}
+
+        {this.getSessionChart()}
+
+        <ul style={styles.list}>
           {this.getReports(assetReports)}
         </ul>
       </div>
