@@ -429,16 +429,36 @@ function getAuth(row) {
   return info;
 }
 
-function getSession(row, info) {
+function getSession(row, info, url) {
   let startDate = row.from ? formatDateInLocalTimeZone(row.from) : '',
-    endDate = row.to ? formatDateInLocalTimeZone(row.to) : '';
+    endDate = row.to ? formatDateInLocalTimeZone(row.to) : '',
+    assetType = url.includes('=user') ? 'user' : url.includes('=machine') ? 'machine' : '',
+    specificDetails = {};
 
   info = Object.assign({}, info, {
     Date: getValue(row.from),
     endDate: getValue(row.to)
   });
 
-  info.display = Object.assign({}, info.display, {
+  if (assetType === 'user') {
+    specificDetails = Object.assign({}, specificDetails, {
+      User: {
+        displayKey: true,
+        value: getValue(row.user)
+      }
+    });
+  }
+
+  if (assetType === 'machine') {
+    specificDetails = Object.assign({}, specificDetails, {
+      Machine: {
+        displayKey: true,
+        value: getValue(row.machine)
+      }
+    });
+  }
+
+  info.display = Object.assign({}, info.display, specificDetails, {
     'Start Date': {
       displayKey: true,
       value: startDate !== '' ? startDate.date + ' ' + startDate.time : ''
@@ -446,25 +466,13 @@ function getSession(row, info) {
     'End Date': {
       displayKey: true,
       value: endDate !== '' ? endDate.date + ' ' + endDate.time : ''
-    },
-    Machine: {
-      displayKey: true,
-      value: getValue(row.machine)
-    },
-    User: {
-      displayKey: true,
-      value: getValue(row.user)
-    },
-    Duration: {
-      displayKey: true,
-      value: getValue(row.session.durationMs) !== '' ? (row.session.durationMs).toString() : ''
     }
   });
 
   return info;
 }
 
-function getOther(row) {
+function getOther(row, url) {
   let info = {
     id: getValue(row.id),
     Type: getEventTypeString(row.type),
@@ -474,14 +482,13 @@ function getOther(row) {
 
   if (row.session) {
     info.Type = 'Session';
-    info = getSession(row, info);
-    console.log(info);
+    info = getSession(row, info, url);
   }
 
   return info;
 }
 
-function getDetails(row) {
+function getDetails(row, url) {
   switch (row.type.toLowerCase()) {
     case 'conn':
       return getConn(row);
@@ -512,14 +519,15 @@ function getDetails(row) {
     case 'auth':
       return getAuth(row);
     default:
-      return getOther(row);
+      return getOther(row, url);
   }
 }
 
 export default async function Timeline(ctx, next) {
-  let parsedData = await ctx.tempData.json();
+  let parsedData = await ctx.tempData.json(),
+    url = await ctx.request.url;
   if (!parsedData.errorCode) {
-    const normalizeData = parsedData.rows.map((row) => (getDetails(row[0])));
+    const normalizeData = parsedData.rows.map((row) => (getDetails(row[0], url)));
     parsedData.normalizeData = normalizeData;
     ctx.normalizeData = parsedData;
   }
