@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 // Function to convert milliseconds to time
 export function msToTime(duration) {
   let seconds = parseInt((duration / 1000) % 60),
@@ -15,21 +17,22 @@ export function msToTime(duration) {
 };
 
 export function getEventTypeString(typeName) {
-  let typeString = '';
-  if (typeName === 'conn') typeString = 'Connection';
-  else if (typeName === 'ssh') typeString = 'SSH';
-  else if (typeName === 'dns') typeString = 'DNS';
-  else if (typeName === 'http') typeString = 'HTTP';
-  else if (typeName === 'ssl') typeString = 'SSL';
-  else if (typeName === 'files') typeString = 'File';
-  else if (typeName === 'rank_alert') typeString = 'Rank Alert';
-  else if (typeName === 'alert') typeString = 'Alert';
-  else if (typeName === 'sysmon') typeString = 'Sysmon';
-  else if (typeName === 'report') typeString = 'Report';
-  else if (typeName === 'anomaly') typeString = 'Anomaly';
-  else if (typeName === 'auth') typeString = 'Auth';
-  else typeString = typeName;
-  return typeString;
+  const typeStrings = {
+    conn: 'Connection',
+    ssh: 'SSH',
+    dns: 'DNS',
+    http: 'HTTP',
+    ssl: 'SSL',
+    files: 'File',
+    rank_alert: 'Rank Alert',
+    alert: 'Alert',
+    sysmon: 'Sysmon',
+    report: 'Report',
+    anomaly: 'Anomaly',
+    auth: 'Auth'
+  };
+
+  return typeStrings[typeName] ? typeStrings[typeName] : typeName;
 };
 
 export function formatBytes(bytes, decimals) {
@@ -72,4 +75,17 @@ export function whatIsIt(object) {
   else {
     return 'unknown';
   }
+}
+
+// function to format Date In Local TimeZone
+export function formatDateInLocalTimeZone(value) {
+  let value1 = moment.utc(value).format('YYYY-MM-DD HH:mm:ss.SSS'),
+    dateTime = {
+      date: '',
+      time: ''
+    },
+    localDateTime = moment.utc(value1).toDate();
+  dateTime.date = moment(localDateTime).format('DD MMM YYYY');
+  dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
+  return dateTime;
 }
