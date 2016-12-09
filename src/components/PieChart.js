@@ -67,12 +67,12 @@ export function generatePieChart(inputArray) {
     percentage1 = Math.round((inputArray.top10CountValue / parseInt(inputArray.countValue)) * 100, 2),
     percentage2 = Math.round((inputArray.top10TotalValue / parseInt(inputArray.totalValue)) * 100, 2),
     displayPercentage1 = percentage1.toString() + '%',
-    displayPercentage2 = percentage2.toString() + '%',
+    displayPercentage2 = isNaN(percentage2) ? '0%' : percentage2.toString() + '%',
     percentage2Color = {fontWeight: 'bold', color: highlightedColor1},
     percentage1Color = {fontWeight: 'bold', color: highlightedColor2},
     style = {percentageText: {}};
 
-  if (percentage2 === 100) {
+  if (percentage2 === 100 || isNaN(percentage2)) {
     style.percentageText = {
       paddingLeft: '0px'
     };
