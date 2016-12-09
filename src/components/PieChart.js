@@ -231,7 +231,7 @@ class PieChart extends React.Component {
     tableOptions: PropTypes.object
   }
   render() {
-    let {props} = this;
+    const {props} = this;
 
     renderChart(props);
     return (
