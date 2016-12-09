@@ -102,7 +102,7 @@ class TimelineCard extends React.Component {
   displayDetails(key, index, data) {
     let {props} = this;
 
-    let fontWeight = (index === 0) ? '600' : 'lighter',
+    let fontWeight = (index === 0) ? 'bold' : '',
       currentDetails = data.display[key];
 
     if (currentDetails.value !== '') {
@@ -110,9 +110,7 @@ class TimelineCard extends React.Component {
         <li style={{...styles.listItem}} key={`desc${index}`}>
           <div style={{fontWeight, ...this.displayFlex}}>
             {data.isIconDisplay ? this.displayIcon(index, currentDetails.value) : null}
-            <div style={{
-              paddingLeft: data.isIconDisplay ? index === 0 ? '10px' : '40px' : '0px'
-            }}>
+            <div style={{ paddingLeft: data.isIconDisplay ? index === 0 ? '10px' : '40px' : '0px' }}>
               {currentDetails.displayKey ? key + ':' : ''} {currentDetails.value}
             </div>
             {

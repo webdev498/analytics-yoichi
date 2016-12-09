@@ -1,17 +1,20 @@
 import React, {PropTypes} from 'react';
+
 import PaginationWidget from 'components/PaginationWidget';
 import TimelineCard from 'components/TimelineCard';
 import ParentCard from 'containers/ParentCard';
 import TabsWidget from 'components/TabsWidget';
+
 import {Colors} from 'theme/colors';
-import {
-  formatDateInLocalTimeZone,
-  isUndefined
-} from 'utils/utils';
-import {
-  TIMELINE_CARD,
-  CONTEXTUAL_MENU_CARD
-} from 'Constants';
+import { formatDateInLocalTimeZone, isUndefined } from 'utils/utils';
+import { TIMELINE_CARD, CONTEXTUAL_MENU_CARD } from 'Constants';
+
+const styles = {
+  dateSpan: {
+    fontSize: '12px',
+    color: Colors.grape
+  }
+};
 
 function getTabObj(tabs, timelineType, currentTab) {
   let tabObj = {};
@@ -140,6 +143,19 @@ class Timeline extends React.Component {
     }
   }
 
+  displayDate(dateString, card) {
+    let dateTime = formatDateInLocalTimeZone(dateString),
+      paddingLeft = (card === TIMELINE_CARD) ? '0px' : '10px';
+
+    return (
+      <div style={{ width: '85px', paddingLeft }}>
+        <span style={styles.dateSpan}>
+          {dateTime.date}<br />{dateTime.time}
+        </span>
+      </div>
+    );
+  }
+
   displayCard() {
     const rows = this.state.rows,
       {props, state} = this,
@@ -160,11 +176,7 @@ class Timeline extends React.Component {
 
             if (dateString !== '') {
               return (
-                <div style={{
-                  ...{display: 'flex'},
-                  ...backgroundColor,
-                  ...padding
-                }} key={cardId}>
+                <div style={{ display: 'flex', ...backgroundColor, ...padding }} key={cardId}>
                   {this.card === TIMELINE_CARD ? this.displayDate(dateString, this.card) : null}
                   <TimelineCard
                     id={cardId}
@@ -187,24 +199,6 @@ class Timeline extends React.Component {
           fetchData={this.fetchData}
           type={attributes.type}
           style={attributes.otherStyles.pagination ? attributes.otherStyles.pagination : {}} />
-      </div>
-    );
-  }
-
-  displayDate(dateString, card) {
-    let dateTime = formatDateInLocalTimeZone(dateString);
-    return (
-      <div style={{
-        width: '85px',
-        paddingLeft: (card === TIMELINE_CARD) ? '0px' : '10px'
-      }}>
-        <span style={{
-          fontSize: '12px',
-          fontWeight: 'lighter',
-          color: Colors.grape
-        }}>
-          {dateTime.date}<br />{dateTime.time}
-        </span>
       </div>
     );
   }

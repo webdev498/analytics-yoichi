@@ -7,7 +7,7 @@ const styles = {
   },
   summaryTitle: {
     margin: 0,
-    fontWeight: '600',
+    fontWeight: 'bold',
     fontSize: '13px'
   },
   rankScore: {
@@ -21,7 +21,6 @@ const styles = {
     marginLeft: '10px'
   },
   text: {
-    fontWeight: '300',
     wordBreak: 'break-word'
   }
 };
