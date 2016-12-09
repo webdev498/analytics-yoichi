@@ -25,7 +25,12 @@ function getTabObj(tabs, timelineType, currentTab) {
 
 function setOrRemoveQueryParam(queryParams, name, value) {
   if (queryParams[name] === '') {
-    queryParams[name] = value;
+    if (!isUndefined(value)) {
+      queryParams[name] = value;
+    }
+    else {
+      delete queryParams[name];
+    }
   }
   else {
     delete queryParams[name];
@@ -35,10 +40,10 @@ function setOrRemoveQueryParam(queryParams, name, value) {
 
 class Timeline extends React.Component {
   static propTypes = {
-    attributes: PropTypes.object.isRequired,
-    meta: PropTypes.object.isRequired,
-    id: PropTypes.string.isRequired,
-    params: PropTypes.object.isRequired,
+    attributes: PropTypes.object,
+    meta: PropTypes.object,
+    id: PropTypes.string,
+    params: PropTypes.object,
     data: PropTypes.object
   }
 
@@ -69,6 +74,7 @@ class Timeline extends React.Component {
     this.decreaseHeightBy = 120;
     this.currentTabId = 0;
     this.currentTab = 'DETAILS';
+    this.apiObj = {};
 
     this.contextualMenuApiParams = {
       meta: {},
@@ -137,7 +143,7 @@ class Timeline extends React.Component {
   displayCard() {
     const rows = this.state.rows,
       {props, state} = this,
-      {attributes} = props;
+      {attributes, chart} = props;
 
     return (
       <div style={this.style.card}
@@ -149,8 +155,8 @@ class Timeline extends React.Component {
               cardId = 'card' + index,
               backgroundColor = (this.card === CONTEXTUAL_MENU_CARD) ? {backgroundColor: Colors.contextBG} : {},
               padding = (this.card === CONTEXTUAL_MENU_CARD)
-              ? (index === 0 ? {padding: '15px 15px 0px 15px'} : {padding: '0px 15px 0px 15px'})
-              : {};
+                ? (index === 0 ? {padding: '15px 15px 0px 15px'} : {padding: '0px 15px 0px 15px'})
+                : {};
 
             if (dateString !== '') {
               return (
@@ -166,7 +172,9 @@ class Timeline extends React.Component {
                     updateRoute={props.updateRoute}
                     getContextualMenuApiObj={this.getContextualMenuApiObj}
                     selectedCardId={state.selectedCardId}
-                    card={this.card} />
+                    card={this.card}
+                    attributes={attributes}
+                    chart={chart} />
                   {this.card === CONTEXTUAL_MENU_CARD ? this.displayDate(dateString, this.card) : null}
                 </div>
               );
@@ -223,7 +231,7 @@ class Timeline extends React.Component {
 
   getApiObj(pageNumber, type) {
     const {state, props} = this,
-      {params, attributes, meta, tabs, timelineType} = props;
+      {params, attributes, meta, tabs, timelineType, alertType, trafficFilter} = props;
 
     let queryParams = Object.assign({},
       meta.api && meta.api.queryParams,
@@ -236,27 +244,33 @@ class Timeline extends React.Component {
       tabObj = getTabObj(tabs, timelineType, this.currentTab);
 
     if (timelineType === 'secondary') {
-      let apiObj = tabObj;
+      let apiObj = {};
+      if (alertType) {
+        apiObj = tabObj[alertType];
+      }
+      else {
+        apiObj = tabObj;
+      }
+
       if (apiObj.meta.api && apiObj.meta.api.pathParams && apiObj.meta.api.pathParams.selectedCardId) {
         apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = props.id;
       }
     }
     else {
-      apiObj.path = tabObj.path;
-      apiObj.pathParams = (meta.api && meta.api.pathParams && meta.api.pathParams.reportId)
-        ? {
-          reportId: this.currentTabId === 0 ? meta.api.pathParams.reportId : tabObj.pathParams.reportId
+      if (alertType) {
+        apiObj = tabObj[alertType].meta.api;
+        if (trafficFilter) {
+          apiObj.queryParams.filter = trafficFilter;
         }
-        : {};
-    }
-
-    if (type === 'traffic') {
-      queryParams = Object.assign(queryParams, {
-        date: params.date,
-        filter: state.filter
-      });
-
-      apiObj.loadOnce = true;
+      }
+      else {
+        apiObj.path = tabObj.path;
+        apiObj.pathParams = (meta.api && meta.api.pathParams && meta.api.pathParams.reportId)
+          ? {
+            reportId: this.currentTabId === 0 ? meta.api.pathParams.reportId : tabObj.pathParams.reportId
+          }
+          : {};
+      }
     }
 
     if (this.currentTabId === 1 && props.params && props.params.type) {
@@ -266,6 +280,54 @@ class Timeline extends React.Component {
     apiObj.queryParams = queryParams;
 
     return apiObj;
+  }
+
+  getContextualMenuApiObj(details) {
+    const {props} = this,
+      {tabs, alertType} = props;
+
+    let {selectedCardId, eventDate, user, machine, start, end} = details;
+    if (!isUndefined(selectedCardId)) {
+      this.setState({
+        selectedCardId: selectedCardId
+      });
+
+      if (selectedCardId !== '') {
+        let apiObj = {};
+        if (alertType) {
+          let tabObj = getTabObj(tabs, 'secondary', this.currentTab);
+          apiObj = tabObj[alertType];
+        }
+        else {
+          apiObj = getTabObj(tabs, 'secondary', this.currentTab);
+        }
+
+        if (apiObj.meta.api && apiObj.meta.api.pathParams && apiObj.meta.api.pathParams.selectedCardId) {
+          apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = selectedCardId;
+        }
+        let queryParams = Object.assign({},
+          apiObj.meta.api && apiObj.meta.api.queryParams,
+          {
+            window: '',
+            date: '',
+            user: '',
+            machine: '',
+            start: '',
+            end: ''
+          });
+
+        queryParams = setOrRemoveQueryParam(queryParams, 'date', eventDate);
+        queryParams = setOrRemoveQueryParam(queryParams, 'user', user);
+        queryParams = setOrRemoveQueryParam(queryParams, 'machine', machine);
+        queryParams = setOrRemoveQueryParam(queryParams, 'start', start);
+        queryParams = setOrRemoveQueryParam(queryParams, 'end', end);
+
+        apiObj.meta.api.queryParams = queryParams;
+
+        apiObj.type = 'secondary';
+        this.contextualMenuApiParams = apiObj;
+      }
+    }
   }
 
   displayContextualMenuCards() {
@@ -286,48 +348,13 @@ class Timeline extends React.Component {
             params={props.params}
             attributes={this.contextualMenuApiParams.attributes}
             tabs={props.tabs}
-            timelineType='secondary'>
+            timelineType='secondary'
+            alertType={props.alertType}>
             <Timeline />
           </ParentCard>
         </div>
       </div>
     );
-  }
-
-  getContextualMenuApiObj(details) {
-    const {props} = this,
-      {tabs} = props;
-
-    let {selectedCardId, eventDate, user, machine} = details;
-    if (!isUndefined(selectedCardId)) {
-      this.setState({
-        selectedCardId: selectedCardId
-      });
-
-      if (selectedCardId !== '') {
-        let apiObj = getTabObj(tabs, 'secondary', this.currentTab);
-        if (apiObj.meta.api && apiObj.meta.api.pathParams && apiObj.meta.api.pathParams.selectedCardId) {
-          apiObj.meta.api.pathParams[apiObj.meta.api.pathParams.selectedCardId] = selectedCardId;
-        }
-        let queryParams = Object.assign({},
-          apiObj.meta.api && apiObj.meta.api.queryParams,
-          {
-            window: '',
-            date: '',
-            user: '',
-            machine: ''
-          });
-
-        queryParams = setOrRemoveQueryParam(queryParams, 'date', eventDate);
-        queryParams = setOrRemoveQueryParam(queryParams, 'user', user);
-        queryParams = setOrRemoveQueryParam(queryParams, 'machine', machine);
-
-        apiObj.meta.api.queryParams = queryParams;
-
-        apiObj.type = 'secondary';
-        this.contextualMenuApiParams = apiObj;
-      }
-    }
   }
 
   collaseContextualMenu() {
@@ -350,8 +377,14 @@ class Timeline extends React.Component {
       //   (this.refs.secondaryTimeline.offsetHeight - this.decreaseHeightBy) + 'px';
 
       // For now, I am using 'document' object here.
-      this.refs.primaryTimeline.style.height =
-        (document.getElementById('secondaryTimeline').offsetHeight - this.decreaseHeightBy) + 'px';
+      if (document.getElementById('secondaryTimeline') &&
+        document.getElementById('secondaryTimeline').offsetHeight) {
+        if (document.getElementById('secondaryTimeline').offsetHeight >
+          document.getElementById('primaryTimeline').offsetHeight) {
+          this.refs.primaryTimeline.style.height =
+            (document.getElementById('secondaryTimeline').offsetHeight - this.decreaseHeightBy) + 'px';
+        }
+      }
     }
   }
 
@@ -368,13 +401,14 @@ class Timeline extends React.Component {
 
   render() {
     const {state, props} = this,
-      {attributes, tabs, errorData, timelineType} = props;
+      {attributes, tabs, errorData, timelineType, meta} = props;
 
     if (errorData) {
       state.rows = [];
     }
 
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
+    this.apiObj = meta.api;
 
     let tabNames = [];
     if (tabs) {

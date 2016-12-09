@@ -145,7 +145,7 @@ export class ParentCard extends React.Component {
       return;
     }
 
-    props.fetchApiData(props.id, api, props.params);
+    props.fetchApiData(props.id, api, props.params, props.options);
   }
 
   componentDidMount() {
@@ -419,6 +419,14 @@ export class ParentCard extends React.Component {
     if (!props.meta.showHeader) {
       cardStyle = {...styles.childwrap, ...props.attributes.style};
     }
+
+    let tempCardStyle = cardStyle;
+
+    if (props.meta.hideComponent && (!props.data)) {
+      tempCardStyle = {display: 'none'};
+    }
+
+    cardStyle = tempCardStyle;
 
     return (
       <Card style={cardStyle} id={props.id}>
