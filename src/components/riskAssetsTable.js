@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import Reactable from 'reactable';
-import AssetWidget from 'components/AssetWidget';
-import ScoreWidget from 'components/ScoreWidget';
+import AssetWidget from 'components/widgets/AssetWidget';
+import ScoreWidget from 'components/widgets/ScoreWidget';
 
 const {Table, Thead, Th, Tr, Td} = Reactable;
 

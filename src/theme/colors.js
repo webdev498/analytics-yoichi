@@ -1,6 +1,6 @@
-export const PebbleColor = '#6b7282';
 export const GarnetColor = '#24293d';
 export const GrapeColor = '#444c63';
+export const PebbleColor = GrapeColor;
 export const SmokeColor = '#cbcbd1';
 export const CloudColor = '#e5e5ea';// f0f0f2
 export const ArcticColor = '#ffffff';
@@ -16,6 +16,8 @@ export const BlackColor = '#000000';
 
 export const NavigationColor = 'rgba(255, 255, 255, 0.54)';
 export const SliderColor = 'rgba(36,41,61, 0.25)';
+
+export const SearchColor = '#363E51';
 
 export const AreaSparkLineChartColor = {
   'area': '#BFEFEE',
@@ -101,7 +103,8 @@ export const Colors = {
   contextBG: contextBGColor,
   selectedActionBG: selectedActionBGColor,
   notificationMessageBG: notificationMessageBGColor,
-  cloudShades: CloudColorShades
+  cloudShades: CloudColorShades,
+  search: SearchColor
 };
 
 export const PrimaryPalette = {

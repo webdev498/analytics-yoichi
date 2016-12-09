@@ -148,7 +148,6 @@
       {
         "chartOptions": {
           "xAxisname": "STATUS",
-          "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
@@ -200,7 +199,6 @@
       {
         "chartOptions": {
           "xAxisname": "USER",
-          "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
@@ -305,7 +303,6 @@
       {
         "chartOptions": {
           "xAxisname": "MESSAGE",
-          "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
@@ -358,12 +355,20 @@
           "chartHeight": "350"
         },
         "id": "account-management-events-by-type",
-        "type": "ParetoChart"
+        "type": "ParetoChart",
+        "kibana": {
+          "pathParams": [
+            "management-events"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "message": ""
+          }
+        }
       },
       {
         "chartOptions": {
           "xAxisname": "MESSAGE",
-          "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
@@ -416,12 +421,20 @@
           "chartHeight": "350"
         },
         "id": "computer-management-events-by-type",
-        "type": "ParetoChart"
+        "type": "ParetoChart",
+        "kibana": {
+          "pathParams": [
+            "management-events"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "message": ""
+          }
+        }
       },
       {
         "chartOptions": {
           "xAxisname": "MESSAGE",
-          "baseFontColor": "#6B7282",
           "yAxisname": "COUNT",
           "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
@@ -473,7 +486,16 @@
           "chartHeight": "350"
         },
         "id": "security-group-management-events-by-type",
-        "type": "ParetoChart"
+        "type": "ParetoChart",
+        "kibana": {
+          "pathParams": [
+            "management-events"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "message": ""
+          }
+        }
       }
     ]
   ]

@@ -10,6 +10,35 @@ import {
   generatePathParams
 } from 'utils/kibanaUtils';
 
+const chart = {
+  'labelFontSize': '11',
+  'showAxisLines': '1',
+  'showLabels': '1',
+  'showPercentInTooltip': '1',
+  'showValues': '1',
+  'showYAxisValues': '1',
+  'theme': 'zune',
+  'xAxisNameFontSize': '13',
+  'yAxisNameFontSize': '13',
+  'xAxisNamePadding': '20',
+  'yAxisNamePadding': '20',
+  'lineColor': Colors.coral,
+  'showXAxisLine': '0',
+  'showYAxisLine': '0',
+  'divLineIsDashed': '0',
+  'showsYAxisLine': '0',
+  'divLineAlpha': '20',
+  'chartLeftMargin': '0',
+  'chartRightMargin': '0',
+  'chartBottomMargin': '0',
+  'numDivLines': '6',
+  'baseFont': 'Open Sans, sans-serif',
+  'baseFontColor': Colors.grape,
+  'paletteColors': Colors.defaultGraphPalette,
+  'decimals': '2',
+  'slantLabels': '1'
+};
+
 export function generateDataSource(data, chartOptions, fieldMapping, updateChartOptions) {
   const graphBars = [];
 
@@ -55,34 +84,7 @@ export function generateDataSource(data, chartOptions, fieldMapping, updateChart
   }
 
   return {
-    chart: Object.assign({
-      'labelFontSize': '11',
-      'showAxisLines': '1',
-      'showLabels': '1',
-      'showPercentInTooltip': '1',
-      'showValues': '1',
-      'showYAxisValues': '1',
-      'theme': 'zune',
-      'xAxisNameFontSize': '13',
-      'yAxisNameFontSize': '13',
-      'xAxisNamePadding': '20',
-      'yAxisNamePadding': '20',
-      'lineColor': Colors.coral,
-      'showXAxisLine': '0',
-      'showYAxisLine': '0',
-      'divLineIsDashed': '0',
-      'showsYAxisLine': '0',
-      'divLineAlpha': '20',
-      'chartLeftMargin': '0',
-      'chartRightMargin': '0',
-      'chartBottomMargin': '0',
-      'numDivLines': '6',
-      'baseFont': 'Open Sans, sans-serif',
-      'baseFontColor': Colors.pebble,
-      'paletteColors': Colors.defaultGraphPalette,
-      'decimals': '2',
-      'slantLabels': '1'
-    }, chartOptions),
+    chart: Object.assign(chart, chartOptions),
     data: graphBars
   };
 };

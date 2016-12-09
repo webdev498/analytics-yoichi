@@ -1,21 +1,38 @@
 import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
 
-import LeftNav from 'material-ui/Drawer';
 import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
+
+import './Sidebar.scss';
+
+import Search from './Search';
 
 const styles = {
   leftNav: {
     position: 'fixed',
     top: '64px',
-    backgroundColor: Colors.pebble,
-    color: Colors.arctic
+    left: 0,
+    bottom: 0,
+    backgroundColor: Colors.grape,
+    color: Colors.arctic,
+    zIndex: 10
+  },
+  search: {
+    top: '64px',
+    position: 'fixed',
+    left: '72px',
+    bottom: 0,
+    zIndex: 10
   },
   icon: {
     color: Colors.navigation,
     width: '72px',
     textAlign: 'center'
+  },
+  searchLink: {
+    cursor: 'pointer',
+    backgroundColor: Colors.search
   },
   link: {
     height: '72px',
@@ -69,13 +86,25 @@ class Sidebar extends React.Component {
   render() {
     const {props} = this;
     return (
-      <LeftNav open containerStyle={{...styles.leftNav, ...props.style}}>
-        <Link style={{...styles.wrap, cursor: 'pointer'}} key='searchlink' onClick={props.toggleSearch}>
-          <FontIcon style={styles.icon} className='material-icons'>search</FontIcon>
-          <span style={styles.text}>search</span>
-        </Link>
-        {this.getLinks(props.location.pathname)}
-      </LeftNav>
+      <div>
+        <nav className='sidebar' style={{...styles.leftNav, ...props.style}}>
+          <div style={{...styles.wrap, ...styles.searchLink}}
+            key='searchlink'
+            onClick={props.toggleSearch}
+            className='search-link'>
+            <FontIcon style={styles.icon} className='material-icons'>search</FontIcon>
+            <span style={styles.text}>search</span>
+          </div>
+          {this.getLinks(props.location.pathname)}
+        </nav>
+        { props.showSearch ? (
+          <Search className='search'
+            style={styles.search}
+            toggleSearch={props.toggleSearch} />
+          )
+          : null
+        }
+      </div>
     );
   }
 }

@@ -1,19 +1,22 @@
 import React, {PropTypes} from 'react';
 import Reactable from 'reactable';
+
 import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
-import DurationWidget from 'components/DurationWidget';
-import ScoreWidget from 'components/ScoreWidget';
+import DurationWidget from 'components/widgets/DurationWidget';
+import ScoreWidget from 'components/widgets/ScoreWidget';
+import AssetIcon from 'components/widgets/AssetIcon';
 
 import {
   generateRawData,
   getIndexFromObjectName,
   isUndefined,
   msToTime,
-  getCountryNameByCountryCode,
   formatBytes,
   formatDateInLocalTimeZone
 } from 'utils/utils';
+
+import {getCountryNameByCountryCode} from 'utils/countryUtils';
 import {
   generateQueryParams,
   generateClickThroughUrl,
@@ -78,7 +81,8 @@ const generateDataSource = (props) => {
           chartValue: individualRowData.chartValue,
           columnText: individualRowData.columnText,
           rowNumber: d,
-          timeValue: individualRowData.timeValue
+          timeValue: individualRowData.timeValue,
+          row: rows[d]
         };
         mainObject = generateRowObject(rowDetails, mainObject);
         if (props.kibana) {
@@ -157,7 +161,7 @@ export function generateIndividualRowData(rowColumnDetails) {
 }
 
 export function generateRowObject(rowDetails, mainObject) {
-  let {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue} = rowDetails,
+  let {currentColumnType, currentTableData, chartValue, columnText, rowNumber, timeValue, row} = rowDetails,
     rowObj = {
       columnType: currentColumnType,
       columnName: currentTableData.columnNameToDisplay,
@@ -170,7 +174,8 @@ export function generateRowObject(rowDetails, mainObject) {
         chartId: currentTableData.attributes.id + rowNumber,
         chartType: currentTableData.attributes.chartType,
         chartWidth: currentTableData.attributes.chartWidth,
-        chartHeight: currentTableData.attributes.chartHeight
+        chartHeight: currentTableData.attributes.chartHeight,
+        row: row
       });
       chartValue = '';
       mainObject.columns.push(rowObj);
@@ -398,7 +403,9 @@ export function generateColumnTextForDisplayingDate(fieldValue) {
 
 export function generateColumnTextForDisplayingCountryFlag(fieldValue) {
   if (fieldValue !== '' && fieldValue !== null) {
-    fieldValue = ' <span class="flag-icon flag-icon-' + fieldValue.toLowerCase() + '"></span>';
+    let country = getCountryNameByCountryCode[fieldValue.toUpperCase()];
+    fieldValue = ' <span class="flag-icon flag-icon-' + fieldValue.toLowerCase() +
+      '" rel="tooltip" title="' + country + '"></span>';
   }
   return fieldValue;
 }
@@ -412,6 +419,10 @@ function loadChartComponentInTableRow(tableColumn, duration) {
     case 'area2d':
       return (
         <Area2DAsSparkLineChart chartProperties={tableColumn} duration={duration} />
+      );
+    case 'assetIcon':
+      return (
+        <AssetIcon asset={tableColumn} />
       );
     default:
       break;
@@ -442,9 +453,15 @@ export class TableCard extends React.Component {
 
     return () => {
       if (props.openAlertDetails) {
-        const {rows} = props.data;
-        const currentRow = rows[index][0];
-        const url = `/alert/${currentRow.id}/${currentRow.date}`;
+        const {rows} = props.data,
+          currentRow = rows[index][0],
+          url = `/alert/${currentRow.id}/${currentRow.date}`;
+        props.updateRoute(url);
+      }
+      else if (props.openAssetDetails) {
+        const {rows} = props.data,
+          currentRow = rows[index][0],
+          url = `/asset/${currentRow.type}/${currentRow.id}`;
         props.updateRoute(url);
       }
       else {

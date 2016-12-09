@@ -28,6 +28,15 @@
                 "window": ""
               },
               "id": "assetReports"
+            },
+            {
+              "path": "/api/session/activity/live/{type}/{assetId}",
+              "pathParams": {
+                "assetId": ":pathParam",
+                "type": ":pathParam"
+              },
+              "queryParams": {},
+              "id": "sessionDetail"
             }
           ],
           "title": "Risk Profile"
@@ -40,22 +49,32 @@
             "backgroundColor": "#F7F7F9"
           }
         },
-        "chartOptions": {
-          "labelFontSize": "9",
-          "bgColor": "#cbcbd1",
-          "radarfillalpha": "100",
-          "radarfillcolor": "#ffffff",
-          "labelPadding": "3",
-          "chartLeftMargin": "0",
-          "chartRightMargin": "0",
-          "chartBottomMargin": "0",
-          "canvasBottomMargin": "0",
-          "canvasRightMargin": "0",
-          "canvasLeftMargin": "0",
-          "canvasTopMargin": "0",
-          "showLimits": "0",
-          "showDivLineValues": "0",
-          "paletteColors": "#2bd8d0"
+        "chart": {
+          "radarChartOptions": {
+            "labelFontSize": "9",
+            "bgColor": "#cbcbd1",
+            "radarfillalpha": "100",
+            "radarfillcolor": "#ffffff",
+            "labelPadding": "3",
+            "chartLeftMargin": "0",
+            "chartRightMargin": "0",
+            "chartBottomMargin": "0",
+            "canvasBottomMargin": "0",
+            "canvasRightMargin": "0",
+            "canvasLeftMargin": "0",
+            "canvasTopMargin": "0",
+            "showLimits": "0",
+            "showDivLineValues": "0",
+            "paletteColors": "#2bd8d0"
+          },
+          "sessionChartOptions": {
+            "labelDisplay": "rotate",
+            "labelFontSize": "9",
+            "labelPadding": "3",
+            "showLimits": "0",
+            "showDivLineValues": "0",
+            "paletteColors": "#2bd8d0"
+          }
         }
       },
       {
@@ -85,12 +104,12 @@
             "height": "100%"
           },
           "canvasStyle": {
-            "height": "600px",
+            "height": "95%",
             "width": "100%"
           },
           "id": "NetworkGraph"
         },
-        "timelineId": "timeline"
+        "timelineId": "primary-timeline"
       }
     ],
     [

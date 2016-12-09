@@ -90,11 +90,3 @@
   /* Support for IE. */
   font-feature-settings: 'liga';
 }
-
-body {
-  background-color: #e5e5ea;
-}
-
-* {
-  font-family: 'Open Sans', sans-serif;
-}
