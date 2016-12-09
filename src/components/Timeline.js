@@ -6,7 +6,7 @@ import ParentCard from 'containers/ParentCard';
 import TabsWidget from 'components/TabsWidget';
 
 import {Colors} from 'theme/colors';
-import { formatDateInLocalTimeZone, isUndefined } from 'utils/utils';
+import { formatDateInLocalTimeZone, isUndefined, getPosition } from 'utils/utils';
 import { TIMELINE_CARD, CONTEXTUAL_MENU_CARD } from 'Constants';
 
 const styles = {
@@ -451,6 +451,8 @@ class Timeline extends React.Component {
                     {
                       setTimeout(() => {
                         this.setPrimaryTimelineHeight();
+                        let position = getPosition(document.getElementById(state.selectedCardId));
+                        window.scrollTo(0, position.y);
                       }, 2000)
                     }
                   </div>

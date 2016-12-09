@@ -178,7 +178,6 @@ class TimelineCard extends React.Component {
             };
           }
           props.getContextualMenuApiObj(details);
-          window.scrollTo(0, 800);
           break;
         default:
           break;
