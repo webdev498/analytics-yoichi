@@ -1253,7 +1253,7 @@ class NetworkGraph extends React.Component {
         'timeWindow': timeWindow
       });
 
-      window.scrollTo(300, 650);
+      window.scrollTo(0, 750);
     }
     else {
       const accessToken = Cookies.get('access_token'),
