@@ -1,8 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-
-import {wrapThemeProvider} from '../testUtils';
-
 import {Search} from 'layouts/CoreLayout/Search';
 
 describe('<Search />', () => {
