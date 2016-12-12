@@ -80,13 +80,13 @@ export function getQueryParamsFromKey(parameters, key, value) {
     case 'xAxisValueInLowerCase': {
       toolText = dataObj.toolText;
       const sectionName = toolText.split(',');
-      queryParam = key + '=' + (sectionName[0]).toLowerCase();
+      queryParam = value + '=' + (sectionName[0]).toLowerCase();
       break;
     }
     case 'xAxisValueAsItIs': {
       toolText = dataObj.toolText;
       const sectionName = toolText.split(',');
-      queryParam = key + '=' + sectionName[0];
+      queryParam = value + '=' + sectionName[0];
       break;
     }
     case 'country':

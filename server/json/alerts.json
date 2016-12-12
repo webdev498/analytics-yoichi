@@ -394,7 +394,7 @@
           ],
           "queryParams": {
             "window": "",
-            "xAxisValueInLowerCase": ""
+            "xAxisValueInLowerCase": "type"
           }
         }
       },

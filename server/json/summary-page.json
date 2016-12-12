@@ -199,7 +199,7 @@
           ],
           "queryParams": {
             "window": "",
-            "xAxisValueInLowerCase": ""
+            "xAxisValueInLowerCase": "type"
           }
         }
       },
@@ -247,7 +247,7 @@
           "id": "TopAttackedEntities",
           "chartHeight": "350"
         },
-        "id": "top-attacked-entities ",
+        "id": "top-attacked-entities",
         "type": "ParetoChart",
         "kibana": {
           "pathParams": [
@@ -255,7 +255,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "xAxisValueAsItIs": ""
+            "xAxisValueAsItIs": "ip"
           }
         }
       }
@@ -496,7 +496,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "xAxisValueAsItIs": ""
+            "xAxisValueAsItIs": "ip"
           }
         }
       }

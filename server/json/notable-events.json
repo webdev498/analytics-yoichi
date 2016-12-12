@@ -362,7 +362,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "xAxisValueAsItIs": ""
+            "xAxisValueAsItIs": "message"
           }
         }
       },
@@ -428,7 +428,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "xAxisValueAsItIs": ""
+            "xAxisValueAsItIs": "message"
           }
         }
       },
@@ -493,7 +493,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "xAxisValueAsItIs": ""
+            "xAxisValueAsItIs": "message"
           }
         }
       }
