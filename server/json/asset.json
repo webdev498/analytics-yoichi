@@ -35,7 +35,9 @@
                 "assetId": ":pathParam",
                 "type": ":pathParam"
               },
-              "queryParams": {},
+              "queryParams": {
+                "window": ""
+              },
               "id": "sessionDetail"
             }
           ],

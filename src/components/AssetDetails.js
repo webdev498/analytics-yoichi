@@ -266,9 +266,7 @@ class AssetDetail extends React.Component {
   }
 
   toggleChart(type) {
-    console.log(type);
     return () => {
-      console.log(type);
       if (this.state[type]) {
         this.setState({[type]: false});
       }
