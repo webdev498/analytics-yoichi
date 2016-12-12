@@ -108,24 +108,8 @@ export function formatDateInLocalTimeZone(value) {
 }
 
 export function firstCharCapitalize(string) {
-  if (string === undefined) {
-    return string;
-  }
-  else {
-    if (string.toLowerCase() === 'ip') {
-      return string.toUpperCase();
-    }
-    if (string.includes('_')) {
-      string = string.replace('_', ' ');
-    }
-
-    string = string.toLowerCase().replace(/\b\w/g, function(m) {
-      return m.toUpperCase();
-    });
-
-    if (string.includes(' Ip')) {
-      string = string.replace(' Ip', ' IP');
-    }
-  }
+  string = string.toLowerCase().replace(/\b\w/g, function(m) {
+    return m.toUpperCase();
+  });
   return string;
 };
