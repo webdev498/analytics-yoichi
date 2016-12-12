@@ -5,7 +5,7 @@ import {
 const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
 
 describe('Kibana Utility Function:', function() {
-  it('should return kibana url', function() {
+  it('should return valid kibana url if query parameter requires x-axis value', function() {
     const parameters = {
         'data': {
           'columns': [
@@ -44,6 +44,40 @@ describe('Kibana Utility Function:', function() {
         ]
       },
       url = kibanaBaseUrl + '/api/kibana/query/alerts-type?window=1mo&type=bad-reputation-traffic';
+    expect(generateClickThroughUrl(parameters)).to.deep.equal(url);
+  });
+
+  it('should return valid kibana url if query parameter requires field value', function() {
+    const parameters = {
+        'data': {
+          'columns': [
+            {
+              'name': 'correlationIds',
+              'displayName': 'correlationIds',
+              'columnType': 'ATTRIBUTE',
+              'dataType': 'TEXT',
+              'sortable': true
+            }
+          ],
+          'rows': [
+            [
+              [
+                'CNTOKPNKMKNUMx1SROTMx1NTOKPNKTKSOx1PRNS'
+              ]
+            ]
+          ]
+        },
+        'duration': '1mo',
+        'queryParamsArray': {
+          'correlationIds': 'correlationIds[0]:fieldName'
+        },
+        'currentRowNumber': 0,
+        'pathParams': [
+          'connection-details'
+        ]
+      },
+      url = kibanaBaseUrl +
+        '/api/kibana/query/connection-details?correlationIds=CNTOKPNKMKNUMx1SROTMx1NTOKPNKTKSOx1PRNS';
     expect(generateClickThroughUrl(parameters)).to.deep.equal(url);
   });
 });
