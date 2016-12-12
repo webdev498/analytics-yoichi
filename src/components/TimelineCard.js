@@ -167,12 +167,26 @@ class TimelineCard extends React.Component {
         }
         case 'Session':
           if (props.selectedCardId !== props.data.id) {
+            let user = '',
+              machine = '';
+            if (props.data.display.User) {
+              user = props.data.display.User.value;
+            }
+            else if (props.data.User) {
+              user = props.data.User;
+            }
+            if (props.data.display.Machine) {
+              machine = props.data.display.Machine.value;
+            }
+            else if (props.data.Machine) {
+              machine = props.data.Machine;
+            }
             details = {
               id: props.id,
               selectedCardId: props.data.id,
               eventDate: props.data.Date,
-              user: props.data.display.User ? props.data.display.User.value : '',
-              machine: props.data.display.Machine ? props.data.display.Machine.value : '',
+              user: user,
+              machine: machine,
               start: props.data.Date ? props.data.Date : '',
               end: props.data.endDate ? props.data.endDate : ''
             };

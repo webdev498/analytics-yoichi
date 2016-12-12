@@ -2,7 +2,8 @@ import {
   msToTime,
   getEventTypeString,
   formatBytes,
-  formatDateInLocalTimeZone
+  formatDateInLocalTimeZone,
+  firstCharCapitalize
 } from '../utils/utils';
 
 import { getChartData } from '../components/anomalyChart';
@@ -415,6 +416,42 @@ function getAuth(row) {
   return info;
 }
 
+function getInOutSessionSummary(type, row) {
+  let info = {};
+  info[firstCharCapitalize(type) + ' Summary'] = {
+    header: true,
+    displayKey: true,
+    value: ''
+  };
+
+  if (row.session[type + '-summary']) {
+    let data = row.session[type + '-summary'];
+    info = Object.assign({}, info, {
+      'Incoming Bandwidth': {
+        displayKey: true,
+        value: getValue(data.incomingBandwidth) !== ''
+          ? formatBytes(data.incomingBandwidth, 2) : ''
+      },
+      'Outgoing Bandwidth': {
+        displayKey: true,
+        value: getValue(data.outgoingBandwidth) !== ''
+          ? formatBytes(data.outgoingBandwidth, 2) : ''
+      },
+      'Machines': {
+        displayKey: true,
+        value: getValue(data.machines) !== ''
+          ? (data.machines).toString() : ''
+      },
+      'Connections': {
+        displayKey: true,
+        value: getValue(data.connections) !== ''
+          ? (data.connections).toString() : ''
+      }
+    });
+  }
+  return info;
+}
+
 function getSession(row, info, url) {
   let startDate = row.from ? formatDateInLocalTimeZone(row.from) : '',
     endDate = row.to ? formatDateInLocalTimeZone(row.to) : '',
@@ -431,24 +468,22 @@ function getSession(row, info, url) {
       Machine: {
         displayKey: true,
         value: getValue(row.machine)
-      },
-      User: {
-        displayKey: false,
-        value: getValue(row.user)
       }
+    });
+    info = Object.assign({}, info, {
+      User: getValue(row.user)
     });
   }
 
   if (assetType === 'machine') {
     specificDetails = Object.assign({}, specificDetails, {
-      Machine: {
-        displayKey: false,
-        value: getValue(row.machine)
-      },
       User: {
         displayKey: true,
         value: getValue(row.user)
       }
+    });
+    info = Object.assign({}, info, {
+      Machine: getValue(row.machine)
     });
   }
 
@@ -462,6 +497,48 @@ function getSession(row, info, url) {
       value: endDate !== '' ? endDate.date + ' ' + endDate.time : ''
     }
   });
+
+  let inSummary = getInOutSessionSummary('in', row),
+    outSummary = getInOutSessionSummary('out', row);
+
+  info.display = Object.assign({}, info.display, inSummary, outSummary);
+
+  return info;
+}
+
+function getDhcp(row) {
+  const {data: {dhcp}} = row,
+    info = {
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      sourceDest: getSourceDestination(row),
+      display: {
+        Message: {
+          displayKey: true,
+          value: getValue(dhcp.message)
+        },
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        Severity: {
+          displayKey: true,
+          value: dhcp.severity && dhcp.severity_label ? dhcp.severity_label + ' (' + dhcp.severity + ')' : ''
+        },
+        Priority: {
+          displayKey: true,
+          value: getValue(dhcp.priority) !== '' ? (dhcp.priority).toString() : ''
+        },
+        Facility: {
+          displayKey: true,
+          value: getValue(dhcp.facility) !== '' ? (dhcp.facility).toString() : ''
+        },
+        Machine: {
+          displayKey: true,
+          value: dhcp.machine ? dhcp.machine : ''
+        }
+      }
+    };
 
   return info;
 }
@@ -512,6 +589,8 @@ function getDetails(row, url) {
       return getRDP(row);
     case 'auth':
       return getAuth(row);
+    case 'dhcp':
+      return getDhcp(row);
     default:
       return getOther(row, url);
   }

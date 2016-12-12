@@ -106,3 +106,26 @@ export function formatDateInLocalTimeZone(value) {
   dateTime.time = moment(localDateTime).format('HH:mm:ss.SSS');
   return dateTime;
 }
+
+export function firstCharCapitalize(string) {
+  if (string === undefined) {
+    return string;
+  }
+  else {
+    if (string.toLowerCase() === 'ip') {
+      return string.toUpperCase();
+    }
+    if (string.includes('_')) {
+      string = string.replace('_', ' ');
+    }
+
+    string = string.toLowerCase().replace(/\b\w/g, function(m) {
+      return m.toUpperCase();
+    });
+
+    if (string.includes(' Ip')) {
+      string = string.replace(' Ip', ' IP');
+    }
+  }
+  return string;
+};
