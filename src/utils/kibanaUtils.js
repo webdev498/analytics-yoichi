@@ -77,13 +77,13 @@ export function getQueryParamsFromKey(parameters, key, value) {
       dateTime2 = pair.toDate;
       queryParam = 'from=' + dateTime1 + '&to=' + dateTime2;
       break;
-    case 'tooltipValueInLowerCase': {
+    case 'xAxisValueInLowerCase': {
       toolText = dataObj.toolText;
       const sectionName = toolText.split(',');
       queryParam = key + '=' + (sectionName[0]).toLowerCase();
       break;
     }
-    case 'tooltipValueAsItIs': {
+    case 'xAxisValueAsItIs': {
       toolText = dataObj.toolText;
       const sectionName = toolText.split(',');
       queryParam = key + '=' + sectionName[0];

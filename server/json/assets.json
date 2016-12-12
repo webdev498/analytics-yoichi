@@ -277,7 +277,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "tooltipValueAsItIs": ""
+            "xAxisValueAsItIs": ""
           }
         }
       }

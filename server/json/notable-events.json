@@ -362,7 +362,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "tooltipValueAsItIs": ""
+            "xAxisValueAsItIs": ""
           }
         }
       },
@@ -428,7 +428,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "tooltipValueAsItIs": ""
+            "xAxisValueAsItIs": ""
           }
         }
       },
@@ -493,7 +493,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "tooltipValueAsItIs": ""
+            "xAxisValueAsItIs": ""
           }
         }
       }
