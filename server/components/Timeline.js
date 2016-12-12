@@ -431,12 +431,20 @@ function getSession(row, info, url) {
       Machine: {
         displayKey: true,
         value: getValue(row.machine)
+      },
+      User: {
+        displayKey: false,
+        value: getValue(row.user)
       }
     });
   }
 
   if (assetType === 'machine') {
     specificDetails = Object.assign({}, specificDetails, {
+      Machine: {
+        displayKey: false,
+        value: getValue(row.machine)
+      },
       User: {
         displayKey: true,
         value: getValue(row.user)
