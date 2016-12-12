@@ -362,7 +362,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "message": ""
+            "tooltipValueAsItIs": ""
           }
         }
       },
@@ -428,7 +428,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "message": ""
+            "tooltipValueAsItIs": ""
           }
         }
       },
@@ -493,7 +493,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "message": ""
+            "tooltipValueAsItIs": ""
           }
         }
       }

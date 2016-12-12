@@ -2,11 +2,7 @@ import React from 'react';
 import {Colors} from 'theme/colors';
 import {getArrowIcon} from 'utils/graphUtils';
 
-import {
-  generateQueryParams,
-  generateClickThroughUrl,
-  generatePathParams
-} from 'utils/kibanaUtils';
+import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const styles = {
   card: {
@@ -81,16 +77,15 @@ class MetricsCard extends React.Component {
       }
 
       let parameters = {
-          data: props.data,
-          duration: props.duration,
-          dataObj,
-          queryParamsArray: props.kibana.queryParams
-        },
-        queryParams = generateQueryParams(parameters),
-        pathParams = generatePathParams(props.kibana.pathParams);
+        data: props.data,
+        duration: props.duration,
+        dataObj,
+        queryParamsArray: props.kibana.queryParams,
+        pathParams: props.kibana.pathParams
+      };
 
       return () => {
-        this.context.clickThrough(generateClickThroughUrl(pathParams, queryParams));
+        this.context.clickThrough(generateClickThroughUrl(parameters));
       };
     }
 

@@ -199,7 +199,7 @@
           ],
           "queryParams": {
             "window": "",
-            "type": ""
+            "tooltipValueInLowerCase": ""
           }
         }
       },
@@ -255,7 +255,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "ip": ""
+            "tooltipValueAsItIs": ""
           }
         }
       }
@@ -496,7 +496,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "ip": ""
+            "tooltipValueAsItIs": ""
           }
         }
       }
@@ -913,7 +913,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "username": "data.auth.username",
+            "username": "data.auth.username:fieldName",
             "status": "success"
           }
         }
@@ -994,7 +994,7 @@
           ],
           "queryParams": {
             "fromAndToBasedOnToday": "",
-            "username": "data.auth.username",
+            "username": "data.auth.username:fieldName",
             "status": "fail"
           }
         }

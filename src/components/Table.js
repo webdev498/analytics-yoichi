@@ -17,11 +17,7 @@ import {
 } from 'utils/utils';
 
 import {getCountryNameByCountryCode} from 'utils/countryUtils';
-import {
-  generateQueryParams,
-  generateClickThroughUrl,
-  generatePathParams
-} from 'utils/kibanaUtils';
+import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const {Table, Tr, Td, unsafe} = Reactable;
 
@@ -87,15 +83,14 @@ const generateDataSource = (props) => {
         mainObject = generateRowObject(rowDetails, mainObject);
         if (props.kibana) {
           let parameters = {
-              data: props.data,
-              duration: props.duration,
-              queryParamsArray: props.kibana.queryParams,
-              currentRowNumber: d,
-              nestedResult: nestedResult
-            },
-            queryParams = generateQueryParams(parameters),
-            pathParams = generatePathParams(props.kibana.pathParams);
-          mainObject.rowClickUrl = generateClickThroughUrl(pathParams, queryParams);
+            data: props.data,
+            duration: props.duration,
+            queryParamsArray: props.kibana.queryParams,
+            currentRowNumber: d,
+            nestedResult: nestedResult,
+            pathParams: props.kibana.pathParams
+          };
+          mainObject.rowClickUrl = generateClickThroughUrl(parameters);
         }
         columnText = '';
         chartValue = '';

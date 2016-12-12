@@ -9,11 +9,7 @@ import {
   isUndefined,
   kFormatter
 } from 'utils/utils';
-import {
-  generateQueryParams,
-  generateClickThroughUrl,
-  generatePathParams
-} from 'utils/kibanaUtils';
+import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const styles = {
   chartCaption: {
@@ -402,15 +398,14 @@ function getDataPlotClickUrl(props, dataObj) {
   }
 
   let parameters = {
-      data: props.data,
-      duration: props.duration,
-      dataObj: dataObj,
-      queryParamsArray: props.kibana.queryParams
-    },
-    queryParams = generateQueryParams(parameters),
-    pathParams = generatePathParams(props.kibana.pathParams);
+    data: props.data,
+    duration: props.duration,
+    dataObj: dataObj,
+    queryParamsArray: props.kibana.queryParams,
+    pathParams: props.kibana.pathParams
+  };
 
-  return generateClickThroughUrl(pathParams, queryParams);
+  return generateClickThroughUrl(parameters);
 }
 
 class HorizontalBarChart extends React.Component {

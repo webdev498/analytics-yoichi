@@ -394,7 +394,7 @@
           ],
           "queryParams": {
             "window": "",
-            "type": ""
+            "tooltipValueInLowerCase": ""
           }
         }
       },

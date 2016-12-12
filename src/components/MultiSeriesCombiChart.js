@@ -9,11 +9,7 @@ import {
   generateRawData,
   isUndefined
 } from 'utils/utils';
-import {
-  generateQueryParams,
-  generateClickThroughUrl,
-  generatePathParams
-} from 'utils/kibanaUtils';
+import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const chart = {
   'showvalues': '0',
@@ -335,14 +331,14 @@ export function getDataPlotClickUrl(props, dataObj) {
     return;
   }
   let parameters = {
-      data: props.data,
-      duration: props.duration,
-      dataObj: dataObj,
-      queryParamsArray: props.kibana.queryParams
-    },
-    queryParams = generateQueryParams(parameters),
-    pathParams = generatePathParams(props.kibana.pathParams);
-  return generateClickThroughUrl(pathParams, queryParams);
+    data: props.data,
+    duration: props.duration,
+    dataObj: dataObj,
+    queryParamsArray: props.kibana.queryParams,
+    pathParams: props.kibana.pathParams
+  };
+
+  return generateClickThroughUrl(parameters);
 }
 
 class MultiSeriesCombiChart extends React.Component {

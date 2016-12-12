@@ -5,11 +5,7 @@ import {Colors} from 'theme/colors';
 import { generateRawData, isUndefined, getColorRanges } from 'utils/utils';
 import {getCountryIDByCountryCode} from 'utils/countryUtils';
 
-import {
-  generateQueryParams,
-  generateClickThroughUrl,
-  generatePathParams
-} from 'utils/kibanaUtils';
+import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const styles = {
   chartCaption: {
@@ -139,14 +135,14 @@ function getEntityClickUrl(props, dataObj) {
     return;
   }
   let parameters = {
-      data: props.data,
-      duration: props.duration,
-      dataObj: dataObj,
-      queryParamsArray: props.kibana.queryParams
-    },
-    queryParams = generateQueryParams(parameters),
-    pathParams = generatePathParams(props.kibana.pathParams);
-  return generateClickThroughUrl(pathParams, queryParams);
+    data: props.data,
+    duration: props.duration,
+    dataObj: dataObj,
+    queryParamsArray: props.kibana.queryParams,
+    pathParams: props.kibana.pathParams
+  };
+
+  return generateClickThroughUrl(parameters);
 }
 
 class WorldMap extends React.Component {

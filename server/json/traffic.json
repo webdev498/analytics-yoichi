@@ -563,7 +563,7 @@
             "connection-details"
           ],
           "queryParams": {
-            "correlationIds": "correlationIds[0]"
+            "correlationIds": "correlationIds[0]:fieldName"
           }
         }
       }

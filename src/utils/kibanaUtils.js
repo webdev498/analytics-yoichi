@@ -10,35 +10,6 @@ import {getCountryCodeByCountryName} from 'utils/countryUtils';
 
 const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
 
-export function generatePathParams(pathParamArray) {
-  let pathParams = '';
-  for (let i = 0; i < pathParamArray.length; i++) {
-    if (pathParams === '') {
-      pathParams = pathParamArray[i];
-    }
-    else {
-      pathParams += '/' + pathParamArray[i];
-    }
-  }
-  return pathParams;
-}
-
-export function generateQueryParams(parameters) {
-  let {queryParamsArray} = parameters,
-    queryParams = '';
-  for (let key in queryParamsArray) {
-    if (!isUndefined(key)) {
-      if (queryParams === '') {
-        queryParams = '?' + generateQueryParam(parameters, key);
-      }
-      else {
-        queryParams += '&' + generateQueryParam(parameters, key);
-      }
-    }
-  }
-  return queryParams;
-}
-
 export function getColumnIndex(columns, value) {
   let columnIndex = '';
   for (let c = 0; c < columns.length; c++) {
@@ -106,23 +77,18 @@ export function getQueryParamsFromKey(parameters, key, value) {
       dateTime2 = pair.toDate;
       queryParam = 'from=' + dateTime1 + '&to=' + dateTime2;
       break;
-    case 'type': {
+    case 'tooltipValueInLowerCase': {
       toolText = dataObj.toolText;
       const sectionName = toolText.split(',');
       queryParam = key + '=' + (sectionName[0]).toLowerCase();
       break;
     }
-    case 'message': {
+    case 'tooltipValueAsItIs': {
       toolText = dataObj.toolText;
       const sectionName = toolText.split(',');
       queryParam = key + '=' + sectionName[0];
       break;
     }
-    case 'ip':
-      toolText = dataObj.toolText;
-      const IP = toolText.split(',');
-      queryParam = key + '=' + IP[0];
-      break;
     case 'country':
       let label = dataObj.label,
         countryName = label.split(','),
@@ -153,10 +119,11 @@ export function generateQueryParam(parameters, key) {
   let {queryParamsArray} = parameters,
     value = queryParamsArray[key],
     queryParam = '',
-    fromAPIResponse = true;
-
-  if (value === 'success' || value === 'fail') {
     fromAPIResponse = false;
+
+  if (value.includes(':fieldName')) {
+    value = value.replace(':fieldName', '');
+    fromAPIResponse = true;
   }
 
   if (value !== '' && fromAPIResponse) {
@@ -168,6 +135,17 @@ export function generateQueryParam(parameters, key) {
   return queryParam;
 }
 
-export function generateClickThroughUrl(pathParams, queryParams) {
+export function generateQueryParams(parameters) {
+  let {queryParamsArray} = parameters,
+    queryParams = '';
+  for (let key in queryParamsArray) {
+    queryParams += (queryParams === '' ? '?' : '&') + generateQueryParam(parameters, key);
+  }
+  return queryParams;
+}
+
+export function generateClickThroughUrl(parameters) {
+  let queryParams = generateQueryParams(parameters),
+    pathParams = (parameters.pathParams).join('/');
   return kibanaBaseUrl + '/api/kibana/query/' + pathParams + queryParams;
 }
