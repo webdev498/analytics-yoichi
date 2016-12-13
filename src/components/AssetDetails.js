@@ -283,7 +283,7 @@ class AssetDetail extends React.Component {
     radarChartOptions.paletteColors = getColor(score);
 
     const radarChartProps = {
-      radarChartOptions,
+      chartOptions: radarChartOptions,
       'attributes': {
         'chartWidth': '100%',
         'chartHeight': '240',
