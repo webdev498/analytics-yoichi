@@ -215,14 +215,22 @@ class AlertDetails extends React.Component {
     if (!data) return null;
 
     if (this.alertType !== 'anomaly') {
-      let options = Object.assign({}, props.options, {
-        body: data.data.rank_alert.chartsFilter
-      });
+      let options = props.options || {},
+        meta = Object.assign({}, alertActivity.meta);
+
+      if (data.data.rank_alert.chartsFilter) {
+        options = Object.assign(options, {
+          body: data.data.rank_alert.chartsFilter
+        });
+      }
+      else {
+        meta.api = null;
+      }
 
       return (
         <ParentCard
           id='alert-activity'
-          meta={alertActivity.meta}
+          meta={meta}
           params={props.params}
           options={options}
           attributes={alertActivity.attributes}
