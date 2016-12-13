@@ -18,20 +18,10 @@ import ContextualMenu from '../components/ContextualMenu';
 
 import './styles/_network.scss';
 
-const style = {
-  undoGraph: {
-    bottom: '118px',
-    left: '33px',
-    position: 'absolute',
-    cursor: 'pointer',
-    display: 'none'
-  },
-  resetGraph: {
-    bottom: '148px',
-    left: '33px',
-    position: 'absolute',
-    cursor: 'pointer',
-    display: 'none'
+const styles = {
+  graphWrap: {
+    display: 'flex',
+    height: '100%'
   },
   loader: {
     position: 'absolute',
@@ -1220,14 +1210,15 @@ class NetworkGraph extends React.Component {
       } = details,
       otherParameters = '',
       params = {};
-    if (!isUndefined(parameters) && !isUndefined(parameters.length)) {
+
+    if (Array.isArray(parameters)) {
       parameters.forEach((parameter) => {
         if (parameter.userInput === true) {
-          otherParameters += '&' + parameter.name + '=' + document.getElementById(parameter.id).value;
+          otherParameters += `&${parameter.name}=${document.getElementById(parameter.id).value}`;
           params[parameter.name] = document.getElementById(parameter.id).value;
         }
         else {
-          otherParameters += '&' + parameter.name + '=' + parameter.value;
+          otherParameters += `&${parameter.name}=${parameter.value}`;
           params[parameter.name] = parameter.value;
         }
       });
@@ -1245,6 +1236,7 @@ class NetworkGraph extends React.Component {
           'count': 10
         }, params)
       };
+
       props.fetchApiData(props.timelineId, apiObj, {}, {});
 
       selectedNodesForExtendingGraph.push({
@@ -1270,8 +1262,7 @@ class NetworkGraph extends React.Component {
         method: 'GET',
         headers: defaultHeaders
       })
-      .then(response => response.json()
-      )
+      .then(response => response.json())
       .catch(error => {
         this.setState({
           isFetching: false
@@ -1458,10 +1449,15 @@ class NetworkGraph extends React.Component {
     }
 
     return (
-      <div style={{display: 'flex', height: '100%'}}>
-        {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
-          text={state.loaderText} /> : null}
-        <div ref={(ref) => this.networkGraph = ref} style={props.attributes.canvasStyle}
+      <div style={styles.graphWrap}>
+        {
+          state.isFetching
+          ? <Loader loaderStyle={styles.loader} text={state.loaderText} />
+          : null
+        }
+
+        <div ref={(ref) => this.networkGraph = ref}
+          style={props.attributes.canvasStyle}
           id='network-graph'>
           {
             assetData
@@ -1469,6 +1465,7 @@ class NetworkGraph extends React.Component {
             : this.loadNetworkGraph(props.data, state.loadAgain, props.duration)
           }
         </div>
+
         {
           state.actionsData && state.actionsData.length > 0
           ? <ContextualMenu
