@@ -460,6 +460,11 @@ export function getPosition(el) {
   return {x: lx, y: ly};
 }
 
+export function autoScrollTo(id, decreasePositionBy) {
+  let position = getPosition(document.getElementById(id));
+  window.scrollTo(0, position.y - decreasePositionBy);
+}
+
 export function getColor(score, severity) {
   let color = '';
   if (!score) {

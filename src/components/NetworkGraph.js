@@ -6,7 +6,8 @@ import {
   isUndefined,
   isNull,
   whatIsIt,
-  formatDateInLocalTimeZone
+  formatDateInLocalTimeZone,
+  autoScrollTo
 } from 'utils/utils';
 import {getCountryNameByCountryCode} from 'utils/countryUtils';
 import Cookies from 'cookies-js';
@@ -1254,8 +1255,7 @@ class NetworkGraph extends React.Component {
         'timeWindow': timeWindow
       });
 
-      let position = getPosition(document.getElementById('primary-timeline'));
-      window.scrollTo(0, position.y - this.decreasePositionBy);
+      autoScrollTo('primary-timeline', this.decreasePositionBy);
     }
     else {
       const accessToken = Cookies.get('access_token'),

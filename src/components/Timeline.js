@@ -6,7 +6,12 @@ import ParentCard from 'containers/ParentCard';
 import TabsWidget from 'components/TabsWidget';
 
 import {Colors} from 'theme/colors';
-import { formatDateInLocalTimeZone, isUndefined, getPosition } from 'utils/utils';
+import {
+  formatDateInLocalTimeZone,
+  isUndefined,
+  getPosition,
+  autoScrollTo
+} from 'utils/utils';
 import { TIMELINE_CARD, CONTEXTUAL_MENU_CARD } from 'Constants';
 
 const styles = {
@@ -320,9 +325,10 @@ class Timeline extends React.Component {
   }
 
   displayContextualMenuCards() {
-    const {state, props} = this,
-      position = getPosition(document.getElementById('primary-timeline'));
-    window.scrollTo(0, position.y - this.decreasePositionBy);
+    const {state, props} = this;
+
+    autoScrollTo('primary-timeline', this.decreasePositionBy);
+
     return (
       <div>
         <div style={{
