@@ -259,9 +259,7 @@ function cardTests(ctx, props, cardType, assetType) {
       if (value) {
         expect(value).to.be.an('object');
         for (let [displayKey, displayValue] of Object.entries(value)) {
-          if (displayKey === 'sourceDest') {
-          }
-          else {
+          if (displayKey !== 'sourceDest') {
             expect(displayValue).to.be.an('object');
             expect(displayValue).to.have.property('displayKey');
             expect(displayValue).to.have.property('value');
