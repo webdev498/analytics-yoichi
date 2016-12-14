@@ -266,9 +266,7 @@ class AssetDetail extends React.Component {
   }
 
   toggleChart(type) {
-    console.log(type);
     return () => {
-      console.log(type);
       if (this.state[type]) {
         this.setState({[type]: false});
       }
@@ -285,7 +283,7 @@ class AssetDetail extends React.Component {
     radarChartOptions.paletteColors = getColor(score);
 
     const radarChartProps = {
-      radarChartOptions,
+      chartOptions: radarChartOptions,
       'attributes': {
         'chartWidth': '100%',
         'chartHeight': '240',

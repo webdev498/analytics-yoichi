@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+
 import {Search} from 'layouts/CoreLayout/Search';
 
 describe('<Search />', () => {

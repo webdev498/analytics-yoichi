@@ -35,7 +35,9 @@
                 "assetId": ":pathParam",
                 "type": ":pathParam"
               },
-              "queryParams": {},
+              "queryParams": {
+                "window": ""
+              },
               "id": "sessionDetail"
             }
           ],
@@ -99,9 +101,6 @@
             "width": "100%",
             "backgroundSize": "20px 20px",
             "backgroundImage": "linear-gradient(to right, #F1F1F3 1px, transparent 1px), linear-gradient(to bottom, #F1F1F3 1px, #FAFAFB 1px)"
-          },
-          "bodyStyle": {
-            "height": "100%"
           },
           "canvasStyle": {
             "height": "95%",

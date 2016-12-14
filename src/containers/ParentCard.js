@@ -438,13 +438,11 @@ export class ParentCard extends React.Component {
           : null
         }
 
-        <div style={props.attributes.bodyStyle}>
-          {
-            props.isError && (props.meta.showErrorMessage !== false)
-            ? this.getErrorElement()
-            : React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})
-          }
-        </div>
+        {
+          props.isError && (props.meta.showErrorMessage !== false)
+          ? this.getErrorElement()
+          : React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})
+        }
       </Card>
     );
   }
