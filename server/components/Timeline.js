@@ -301,8 +301,7 @@ function getRankAlert(row) {
         },
         Score: {
           displayKey: true,
-          // value: getValue(rank_alert.score) !== '' ? (rank_alert.score).toString() : ''
-          value: getValue(rank_alert.score) !== '' ? rank_alert.score : ''
+          value: getValue(rank_alert.score) !== '' ? (rank_alert.score).toString() : ''
         }
       }
     };
