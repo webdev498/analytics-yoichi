@@ -322,10 +322,11 @@ class AssetDetail extends React.Component {
   getSessionChart() {
     const props = {
       chartOptions: this.props.chart.sessionChartOptions,
-      'attributes': {
-        'chartWidth': '100%',
-        'chartHeight': '350',
-        'style': styles.chart,
+      attributes: {
+        containerBackgroundOpacity: 0,
+        chartWidth: '100%',
+        chartHeight: '350',
+        style: styles.chart,
         id: 'session-chart'
       },
       data: this.props.data.sessionDetail

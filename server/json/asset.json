@@ -47,8 +47,7 @@
         "attributes": {
           "style": {
             "width": "300px",
-            "flex": "0 0 300px",
-            "backgroundColor": "#F7F7F9"
+            "flex": "0 0 300px"
           }
         },
         "chart": {
