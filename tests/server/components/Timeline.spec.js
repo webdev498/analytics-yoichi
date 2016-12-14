@@ -1,7 +1,10 @@
 import Timeline from '../../../server/components/Timeline';
 
-function getCtx(data) {
-  return { tempData: { json() { return Object.assign({}, data); } } };
+function getCtx(data, url) {
+  return {
+    tempData: { json() { return Object.assign({}, data); } },
+    request: {url: url}
+  };
 }
 
 const columns = [
@@ -244,7 +247,7 @@ const http = {
   'type': 'http'
 };
 
-function cardTests(ctx, props) {
+function cardTests(ctx, props, cardType, assetType) {
   const {normalizeData: {normalizeData: result}} = ctx;
   expect(result).to.be.an('array');
   expect(result).to.have.lengthOf(1);
@@ -252,11 +255,36 @@ function cardTests(ctx, props) {
   const [card] = result;
   expect(card).to.be.an('object');
   for (let [key, value] of Object.entries(props)) {
-    if (value) {
-      expect(card).to.have.property(key, value);
+    if (key === 'display') {
+      if (value) {
+        expect(value).to.be.an('object');
+        for (let [displayKey, displayValue] of Object.entries(value)) {
+          if (displayKey === 'sourceDest') {
+          }
+          else {
+            expect(displayValue).to.be.an('object');
+            expect(displayValue).to.have.property('displayKey');
+            expect(displayValue).to.have.property('value');
+          }
+        }
+        if (cardType === 'session' && assetType === 'user') {
+          expect(value).to.have.property('Machine');
+        }
+        if (cardType === 'session' && assetType === 'machine') {
+          expect(value).to.have.property('User');
+        }
+      }
+      else {
+        expect(card).to.have.property(key);
+      }
     }
     else {
-      expect(card).to.have.property(key);
+      if (value) {
+        expect(card).to.have.property(key, value);
+      }
+      else {
+        expect(card).to.have.property(key);
+      }
     }
   }
 }
@@ -327,7 +355,7 @@ describe('Timeline DAL', () => {
 
     cardTests(ctx, {
       'id': 'sshId',
-      'Date': null,
+      'Date': '2016-11-08T04:54:15.228',
       'display': {
         'sourceDest': null,
         'Type': {
@@ -671,54 +699,68 @@ describe('Timeline DAL', () => {
     });
   });
 
-  it('returns session card', async function() {
-    const session = {
-      'lastSeen': '2016-10-30T00:15:01.271',
-      'machine': 'demo-slave-2.aws.demo.ranksoftwareinc.com',
-      'session': {
-        'ready': true,
-        'updated': '2016-10-30T00:15:01.907',
-        'durationMs': 2
-      },
-      'origin': 'live',
-      'from': '2016-10-30T00:00:00.000',
-      'pid': '23634',
-      'to': '2016-10-30T00:00:00.000',
-      'id': 'sessionId',
-      'type': 'LOGON',
-      'user': 'root'
-    };
-
-    const ctx = getCtx({columns, rows: [[session]]});
-    await Timeline(ctx);
-
-    cardTests(ctx, {
-      'id': 'sessionId',
-      'Date': '2016-10-30T00:00:00.000',
-      'Type': 'Session',
-      'endDate': '2016-10-30T00:00:00.000',
-      'display': {
-        'Start Date': {
-          displayKey: true,
-          value: '30 Oct 2016 05:30:00.000'
+  describe('returns session card', () => {
+    const urls = {
+        user: {
+          url: 'analytics/reporting/execute/taf_asset_session_details?window=1mo&asset=root&type=user&user=root'
         },
-        'End Date': {
-          displayKey: true,
-          value: '30 Oct 2016 05:30:00.000'
-        },
-        'Machine': {
-          displayKey: true,
-          value: 'demo-slave-2.aws.demo.ranksoftwareinc.com'
-        },
-        'User': {
-          displayKey: true,
-          value: 'root'
-        },
-        'Duration': {
-          displayKey: true,
-          value: '2'
+        machine: {
+          url: 'analytics/reporting/execute/taf_asset_session_details?window=1mo&asset=demo&type=machine&machine=demo'
         }
-      }
+      },
+      session = {
+        'lastSeen': '2016-10-30T00:15:01.271',
+        'machine': 'demo-slave-2.aws.demo.ranksoftwareinc.com',
+        'session': {
+          'ready': true,
+          'updated': '2016-10-30T00:15:01.907',
+          'durationMs': 2
+        },
+        'origin': 'live',
+        'from': '2016-10-30T00:00:00.000',
+        'pid': '23634',
+        'to': '2016-10-30T00:00:00.000',
+        'id': 'sessionId',
+        'type': 'LOGON',
+        'user': 'root'
+      },
+      sessionCardMachine = {
+        'id': 'sessionId',
+        'Date': '2016-10-30T00:00:00.000',
+        'Type': 'Session',
+        'endDate': '2016-10-30T00:00:00.000',
+        'display': {
+          'User': {
+            displayKey: true,
+            value: 'root'
+          }
+        }
+      },
+      sessionCardUser = {
+        'id': 'sessionId',
+        'Date': '2016-10-30T00:00:00.000',
+        'Type': 'Session',
+        'endDate': '2016-10-30T00:00:00.000',
+        'display': {
+          'Machine': {
+            displayKey: true,
+            value: 'demo-slave-2.aws.demo.ranksoftwareinc.com'
+          }
+        }
+      };
+
+    it('if asset type is user, then session card should display Machine and not User', async function() {
+      const ctx = getCtx({columns, rows: [[session]]}, urls.user.url);
+      await Timeline(ctx);
+
+      cardTests(ctx, sessionCardUser, 'session', 'user');
+    });
+
+    it('if asset type is machine, then session card should display User and not Machine', async function() {
+      const ctx = getCtx({columns, rows: [[session]]}, urls.machine.url);
+      await Timeline(ctx);
+
+      cardTests(ctx, sessionCardMachine, 'session', 'machine');
     });
   });
 

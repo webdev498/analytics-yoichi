@@ -301,7 +301,8 @@ function getRankAlert(row) {
         },
         Score: {
           displayKey: true,
-          value: getValue(rank_alert.score) !== '' ? (rank_alert.score).toString() : ''
+          // value: getValue(rank_alert.score) !== '' ? (rank_alert.score).toString() : ''
+          value: getValue(rank_alert.score) !== '' ? rank_alert.score : ''
         }
       }
     };
@@ -597,10 +598,10 @@ function getDetails(row, url) {
 }
 
 export default async function Timeline(ctx, next) {
-  let parsedData = await ctx.tempData.json(),
-    url = await ctx.request.url;
+  let parsedData = await ctx.tempData.json();
+
   if (!parsedData.errorCode) {
-    const normalizeData = parsedData.rows.map((row) => (getDetails(row[0], url)));
+    const normalizeData = parsedData.rows.map((row) => (getDetails(row[0], ctx.request.url)));
     parsedData.normalizeData = normalizeData;
     ctx.normalizeData = parsedData;
   }
