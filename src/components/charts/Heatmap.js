@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Colors} from 'theme/colors';
+import {isUndefined} from 'utils/utils';
 
 const chart = {
   showLabel: 0,
@@ -8,7 +9,8 @@ const chart = {
   'yAxisName': '',
   'xAxisLabelsOnTop': '1',
   'plottooltext': `<div id='nameDiv' style='font-size: 12px; border-bottom: 1px dashed #666666;
-                    font-weight:bold; padding-bottom: 3px; margin-bottom: 5px; display: inline-block; color: #888888;' >
+                    font-weight:bold; padding-bottom: 3px; margin-bottom: 5px; display: inline-block; color: #888888;
+                    background-color: #e5e5e5' >
                     $rowLabel :</div>{br}Value : <b>$dataValue</b>{br} $columnLabel`,
   // Cosmetics
   'baseFontColor': Colors.grape,
@@ -39,7 +41,7 @@ const colorrange = {
   'gradient': '0',
   'minvalue': '0',
   'color': [{
-    'code': 'EdEdEd',
+    'code': Colors.arctic,
     'minvalue': '0',
     'maxvalue': 1
   }, {
@@ -79,11 +81,14 @@ class Heatmap extends React.Component {
     FusionCharts.ready(function() {
       const mapProps = props.attributes;
 
+      const {containerBackgroundOpacity: opacity} = mapProps;
+
       const fusioncharts = new FusionCharts({
         type: 'heatmap',
         renderAt: mapProps.id,
         width: mapProps.chartWidth ? mapProps.chartWidth : '100%',
         height: mapProps.chartHeight ? mapProps.chartHeight : '400',
+        containerBackgroundOpacity: isUndefined(opacity) ? 1 : opacity,
         dataFormat: 'json',
         dataSource: getDataSource(props)
       });
