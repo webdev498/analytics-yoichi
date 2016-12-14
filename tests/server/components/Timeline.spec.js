@@ -353,7 +353,7 @@ describe('Timeline DAL', () => {
 
     cardTests(ctx, {
       'id': 'sshId',
-      'Date': '2016-11-08T04:54:15.228',
+      'Date': null,
       'display': {
         'sourceDest': null,
         'Type': {
