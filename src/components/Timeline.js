@@ -75,6 +75,7 @@ class Timeline extends React.Component {
     };
 
     this.decreaseHeightBy = 120;
+    this.decreasePositionBy = 250;
     this.currentTabId = 0;
     this.currentTab = 'DETAILS';
     this.apiObj = {};
@@ -164,7 +165,7 @@ class Timeline extends React.Component {
     return (
       <div style={this.style.card}
         ref={this.card === CONTEXTUAL_MENU_CARD ? 'secondaryTimeline' : 'primaryTimeline'}
-        id={this.card === CONTEXTUAL_MENU_CARD ? 'secondaryTimeline' : 'primaryTimeline'}>
+        id={this.card === CONTEXTUAL_MENU_CARD ? 'secondary-timeline' : 'primary-timeline'}>
         {
           rows.map((event, index) => {
             let dateString = (event.Date) ? event.Date : '',
@@ -224,8 +225,8 @@ class Timeline extends React.Component {
   }
 
   getApiObj(pageNumber, type) {
-    const {state, props} = this,
-      {params, attributes, meta, tabs, timelineType, alertType, trafficFilter} = props;
+    const {props} = this,
+      {attributes, meta, tabs, timelineType, alertType, trafficFilter} = props;
 
     let queryParams = Object.assign({},
       meta.api && meta.api.queryParams,
@@ -325,7 +326,9 @@ class Timeline extends React.Component {
   }
 
   displayContextualMenuCards() {
-    const {state, props} = this;
+    const {state, props} = this,
+      position = getPosition(document.getElementById('primary-timeline'));
+    window.scrollTo(0, position.y - this.decreasePositionBy);
     return (
       <div>
         <div style={{
@@ -371,12 +374,12 @@ class Timeline extends React.Component {
       //   (this.refs.secondaryTimeline.offsetHeight - this.decreaseHeightBy) + 'px';
 
       // For now, I am using 'document' object here.
-      if (document.getElementById('secondaryTimeline') &&
-        document.getElementById('secondaryTimeline').offsetHeight) {
-        if (document.getElementById('secondaryTimeline').offsetHeight >
-          document.getElementById('primaryTimeline').offsetHeight) {
+      if (document.getElementById('secondary-timeline') &&
+        document.getElementById('secondary-timeline').offsetHeight) {
+        if (document.getElementById('secondary-timeline').offsetHeight >
+          document.getElementById('primary-timeline').offsetHeight) {
           this.refs.primaryTimeline.style.height =
-            (document.getElementById('secondaryTimeline').offsetHeight - this.decreaseHeightBy) + 'px';
+            (document.getElementById('secondary-timeline').offsetHeight - this.decreaseHeightBy) + 'px';
         }
       }
     }
@@ -451,8 +454,6 @@ class Timeline extends React.Component {
                     {
                       setTimeout(() => {
                         this.setPrimaryTimelineHeight();
-                        let position = getPosition(document.getElementById(state.selectedCardId));
-                        window.scrollTo(0, position.y);
                       }, 2000)
                     }
                   </div>

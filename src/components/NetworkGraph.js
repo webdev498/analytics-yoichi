@@ -637,6 +637,7 @@ class NetworkGraph extends React.Component {
 
     this.nodeObjects = {};
     this.edgeObjects = {};
+    this.decreasePositionBy = 120;
 
     this.state = {
       nodes: [],
@@ -1253,7 +1254,8 @@ class NetworkGraph extends React.Component {
         'timeWindow': timeWindow
       });
 
-      window.scrollTo(0, 750);
+      let position = getPosition(document.getElementById('primary-timeline'));
+      window.scrollTo(0, position.y - this.decreasePositionBy);
     }
     else {
       const accessToken = Cookies.get('access_token'),
