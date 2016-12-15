@@ -5,35 +5,30 @@ import {isUndefined} from 'utils/utils';
 const chart = {
   showLabel: 0,
   showValues: 0,
-  'xAxisName': '',
-  'yAxisName': '',
-  'xAxisLabelsOnTop': '1',
-  'plottooltext': `<div id='nameDiv' style='font-size: 12px; border-bottom: 1px dashed #666666;
-                    font-weight:bold; padding-bottom: 3px; margin-bottom: 5px; display: inline-block; color: #888888;
-                    background-color: #e5e5e5' >
+  xAxisName: '',
+  yAxisName: '',
+  xAxisLabelsOnTop: '1',
+  plottooltext: `<div id='nameDiv' style='font-size: 12px; border-bottom: 1px dashed #666666;
+                    font-weight:bold; padding-bottom: 3px; margin-bottom: 5px; display: inline-block; color: #888888;' >
                     $rowLabel :</div>{br}Value : <b>$dataValue</b>{br} $columnLabel`,
   // Cosmetics
-  'baseFontColor': Colors.grape,
-  'baseFont': 'Open Sans, sans-serif',
-  'captionFontSize': '14',
-  'subcaptionFontSize': '14',
-  'subcaptionFontBold': '0',
-  'showBorder': '0',
-  'bgColor': 'transparent',
-  'showShadow': '0',
-  'usePlotGradientColor': '0',
-  'canvasBgColor': 'transparent',
-  'canvasBorderAlpha': '0',
-  'legendBgAlpha': '0',
-  'legendBorderAlpha': '0',
-  'legendShadow': '0',
-  'legendItemFontSize': '10',
-  'legendItemFontColor': '#666666',
-  'toolTipBorderThickness': '0',
-  'toolTipBgAlpha': '80',
-  'toolTipBorderRadius': '2',
-  'toolTipPadding': '5',
-  showPlotBorder: 0,
+  baseFontColor: Colors.grape,
+  baseFont: 'Open Sans, sans-serif',
+  captionFontSize: '14',
+  subcaptionFontSize: '14',
+  subcaptionFontBold: '0',
+  showBorder: '0',
+  bgColor: 'transparent',
+  showShadow: '0',
+  usePlotGradientColor: '0',
+  canvasBgColor: Colors.white,
+  canvasBorderAlpha: '0',
+  legendBgAlpha: '0',
+  legendBorderAlpha: '1',
+  legendShadow: '0',
+  legendItemFontSize: '10',
+  legendItemFontColor: '#666666',
+  toolTipPadding: '5',
   showLegend: 0
 };
 
