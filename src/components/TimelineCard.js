@@ -316,7 +316,6 @@ class TimelineCard extends React.Component {
   render() {
     const {props, props: {data}} = this;
     this.cardType = this.getCardType(data);
-    console.log(this.cardType);
     this.isClickCard = this.clickCards.includes(this.cardType);
     this.isLoadDetails = this.loadDetailsCards.includes(this.cardType);
     this.displayFlex = data.isIconDisplay || this.isLoadDetails ? {display: 'flex'} : {};
@@ -335,7 +334,7 @@ class TimelineCard extends React.Component {
       styles.timelineCard,
       alertStyle,
       {
-        width: props.data.chart ? '800px' : '350px',
+        width: props.data.chart ? '800px' : props.data.display.summary ? '400px' : '350px',
         cursor: this.isClickCard ? 'pointer' : 'auto',
         backgroundColor
       }
