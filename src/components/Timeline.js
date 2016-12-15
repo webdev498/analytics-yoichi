@@ -13,6 +13,12 @@ const styles = {
   dateSpan: {
     fontSize: '12px',
     color: Colors.grape
+  },
+  rightArrow: {
+    display: 'block',
+    bottom: 0,
+    position: 'absolute',
+    right: '460px'
   }
 };
 
@@ -54,13 +60,14 @@ class Timeline extends React.Component {
     super(props);
 
     this.state = {
-      'totalCount': 0,
-      'totalPage': 0,
-      'currentPage': 1,
-      'filter': '',
-      'rows': [],
-      'nextPageStart': 0,
-      'selectedCardId': ''
+      totalCount: 0,
+      totalPage: 0,
+      currentPage: 1,
+      filter: '',
+      rows: [],
+      nextPageStart: 0,
+      selectedCardId: '',
+      highlightCardId: ''
     };
 
     this.pagination = {
@@ -104,11 +111,15 @@ class Timeline extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const {props} = this;
+
+    if (nextProps.eventData !== props.eventData) {
+      this.setState({highlightCardId: nextProps.eventData});
+    }
+
     if (!nextProps.data) {
       return;
     }
-
-    const {props} = this;
 
     // if api object has loadOnce property it implies that the general function
     // for duration update will not be called, component has to manage on its own.
@@ -161,10 +172,10 @@ class Timeline extends React.Component {
       {props, state} = this,
       {attributes, chart} = props;
 
+    const type = this.card === CONTEXTUAL_MENU_CARD ? 'secondaryTimeline' : 'primaryTimeline';
+
     return (
-      <div style={this.style.card}
-        ref={this.card === CONTEXTUAL_MENU_CARD ? 'secondaryTimeline' : 'primaryTimeline'}
-        id={this.card === CONTEXTUAL_MENU_CARD ? 'secondaryTimeline' : 'primaryTimeline'}>
+      <div style={this.style.card} ref={type} id={type}>
         {
           rows.map((event, index) => {
             let dateString = (event.Date) ? event.Date : '',
@@ -186,13 +197,15 @@ class Timeline extends React.Component {
                     selectedCardId={state.selectedCardId}
                     card={this.card}
                     attributes={attributes}
-                    chart={chart} />
+                    chart={chart}
+                    highlightCardId={state.highlightCardId} />
                   {this.card === CONTEXTUAL_MENU_CARD ? this.displayDate(dateString, this.card) : null}
                 </div>
               );
             }
           })
         }
+
         <PaginationWidget size={state.totalPage}
           currentPage={state.currentPage}
           maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}
@@ -224,8 +237,8 @@ class Timeline extends React.Component {
   }
 
   getApiObj(pageNumber, type) {
-    const {state, props} = this,
-      {params, attributes, meta, tabs, timelineType, alertType, trafficFilter} = props;
+    const {props} = this,
+      {attributes, meta, tabs, timelineType, alertType, trafficFilter} = props;
 
     let queryParams = Object.assign({},
       meta.api && meta.api.queryParams,
@@ -421,6 +434,8 @@ class Timeline extends React.Component {
             onTabChange={this.onTabChange} />
           : null
         }
+
+        {/* Move this to a seperate function */}
         {
           ((props.data &&
           !isUndefined(state.rows) &&
@@ -439,14 +454,13 @@ class Timeline extends React.Component {
               {
                 state.selectedCardId !== ''
                 ? <div>
+
                   {this.displayContextualMenuCards()}
-                  <div id='collapse-contextual-menu' style={{
-                    bottom: 0,
-                    position: 'absolute',
-                    right: '460px'
-                  }}>
-                    <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collaseContextualMenu()} />
-                  </div>
+
+                  <img style={styles.rightArrow}
+                    src='/img/rightArrow.png'
+                    onClick={this.collaseContextualMenu()} />
+
                   <div style={{color: 'transparent'}}>
                     {
                       setTimeout(() => {

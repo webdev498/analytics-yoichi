@@ -220,12 +220,13 @@ class TimelineCard extends React.Component {
       },
       uiConfig = chartData.uiConfig;
 
-    chartData.chart = chart.chartOptions;
-    chartData.chart.divlineThickness = 1;
-    chartData.chart.xAxisName = uiConfig.xAxisLabel;
-    chartData.chart.yAxisName = uiConfig.yAxisLabel;
-    chartData.chart.canvasBgColor = 'transparent';
-    chartData.chart.bgColor = 'transparent';
+    chartData.chart = Object.assign(chart.chartOptions, {
+      divlineThickness: 1,
+      xAxisName: uiConfig.xAxisLabel,
+      yAxisName: uiConfig.yAxisLabel,
+      canvasBgColor: 'transparent',
+      bgColor: 'transparent'
+    });
 
     chartProps.data = JSON.parse(JSON.stringify(chartData));
     delete chartProps.data.uiConfig;
@@ -281,16 +282,23 @@ class TimelineCard extends React.Component {
       styles.list = Object.assign({}, styles.list, {paddingLeft: '20px'});
     }
 
+    let backgroundColor = Colors.white;
+    if ((props.selectedCardId === props.data.id) || (props.highlightCardId === props.data.id)) {
+      backgroundColor = Colors.cloud;
+    }
+
+    const style = Object.assign(
+      styles.timelineCard,
+      styles.alert,
+      {
+        width: props.data.chart ? '800px' : '350px', // These widths are not provided by Rose.
+        cursor: this.isClickCard ? 'pointer' : 'auto',
+        backgroundColor
+      }
+    );
+
     return (
-      <Card
-        style={
-          Object.assign({}, styles.timelineCard, {
-            width: props.data.chart ? '800px' : '350px', // These widths are not provided by Rose.
-            cursor: this.isClickCard ? 'pointer' : 'auto',
-            backgroundColor: (
-              (props.selectedCardId !== '' && props.selectedCardId === props.data.id))
-              ? Colors.cloud : Colors.white}, styles.alert)
-        }
+      <Card style={style}
         onClick={this.handleCardClick()}
         key={props.id}>
         <div style={{display: 'flex'}}>
@@ -299,8 +307,8 @@ class TimelineCard extends React.Component {
             ? this.getAnomalyChart(props.data.chart)
             : null
           }
-          <ul className='no-list-style'
-            style={styles.list}>
+
+          <ul className='no-list-style' style={styles.list}>
             {this.getDetails(props.data)}
           </ul>
         </div>

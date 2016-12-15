@@ -617,7 +617,8 @@ function openFullMalwareReport(fullMalwareReportLink) {
 class NetworkGraph extends React.Component {
   static propTypes = {
     duration: PropTypes.string,
-    params: PropTypes.object
+    params: PropTypes.object,
+    broadcastEvent: PropTypes.func
   }
 
   constructor(props) {
@@ -985,32 +986,23 @@ class NetworkGraph extends React.Component {
   }
 
   loadNodeEdgeContextMenu(selected, selectedIDs, network) {
-    let nodeType = '',
-      edgeType = '',
-      nodeID = selectedIDs.nodes[0],
-      edgeID = selectedIDs.edges[0],
-      selectedNodeDetails = [],
-      selectedNodesForExtendingGraph = [];
+    let nodeID = selectedIDs.nodes[0],
+      edgeID = selectedIDs.edges[0];
 
     switch (selected) {
       case 'node':
         let nodeDetails = {
-          network: network,
-          nodeID: nodeID,
-          nodeType: nodeType,
-          selectedNodeDetails: selectedNodeDetails,
-          selected: selected,
-          selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
+          network,
+          nodeID,
+          selected
         };
         this.loadNodeContextMenu(nodeDetails);
         break;
       case 'edge':
         let edgeDetails = {
-          network: network,
-          edgeID: edgeID,
-          edgeType: edgeType,
-          selectedNodeDetails: selectedNodeDetails,
-          selected: selected
+          network,
+          edgeID,
+          selected
         };
         this.loadEdgeContextMenu(edgeDetails);
         break;
@@ -1019,87 +1011,95 @@ class NetworkGraph extends React.Component {
     }
   }
 
+  highlightAnomalyChart(nodeObject) {
+    this.props.broadcastEvent('primary-timeline', nodeObject.id);
+  }
+
   loadNodeContextMenu(nodeDetails) {
-    let {network, nodeID, nodeType, selectedNodeDetails, selected, selectedNodesForExtendingGraph} = nodeDetails,
-      {state} = this;
+    let {network, nodeID, selected} = nodeDetails,
+      {state} = this,
+      nodeType,
+      selectedNodeDetails = [];
 
-    if (!isUndefined(nodeID)) {
-      state.nodes.forEach((nodeObject) => {
-        let node = network.body.nodes[nodeObject.id];
-        if (nodeObject.id === nodeID) {
-          selectedNodeDetails.push(nodeObject.nodeDetails);
-          nodeType = nodeObject.type;
-          node.setOptions({
-            image: getIcon(nodeObject.type, nodeObject.status, 'SELECTED')
-          });
+    state.nodes.forEach((nodeObject) => {
+      let node = network.body.nodes[nodeObject.id];
+      if (nodeObject.id === nodeID) {
+        selectedNodeDetails.push(nodeObject.nodeDetails);
+        nodeType = nodeObject.type;
+        node.setOptions({
+          image: getIcon(nodeObject.type, nodeObject.status, 'SELECTED')
+        });
+
+        if (nodeObject.type === 'anomaly') {
+          this.highlightAnomalyChart(nodeObject);
         }
-        else {
-          node.setOptions({
-            image: getIcon(nodeObject.type, nodeObject.status, 'INACTIVE')
-          });
-        }
-      });
+      }
+      else {
+        node.setOptions({
+          image: getIcon(nodeObject.type, nodeObject.status, 'INACTIVE')
+        });
+      }
+    });
 
-      let notNodeId = this.nodeObjects[nodeID] ? this.nodeObjects[nodeID].notNodeId : '';
+    let notNodeId = this.nodeObjects[nodeID] ? this.nodeObjects[nodeID].notNodeId : '';
 
-      let sourceDetails = {
-        contextMenuType: selected,
-        network: network,
-        itemId: nodeID,
-        itemType: nodeType,
-        notNodeId: notNodeId
-      };
+    let sourceDetails = {
+      contextMenuType: selected,
+      network: network,
+      itemId: nodeID,
+      itemType: nodeType,
+      notNodeId: notNodeId
+    };
 
-      this.ContextualMenu.getContextMenu(sourceDetails);
+    this.ContextualMenu.getContextMenu(sourceDetails);
 
-      selectedNodesForExtendingGraph.push({
-        nodeID: nodeID,
-        reportId: '',
-        timeWindow: timeWindow
-      });
+    let selectedNodesForExtendingGraph = [{
+      nodeID: nodeID,
+      reportId: '',
+      timeWindow: timeWindow
+    }];
 
-      let states = {
-        loadAgain: false,
-        selectedNodeDetails: selectedNodeDetails,
-        showContextMenu: true,
-        selectedNode: nodeID,
-        selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
-      };
-      this.setState(states);
-    }
+    let states = {
+      loadAgain: false,
+      selectedNodeDetails,
+      showContextMenu: true,
+      selectedNode: nodeID,
+      selectedNodesForExtendingGraph
+    };
+    this.setState(states);
   }
 
   loadEdgeContextMenu(edgeDetails) {
-    let {network, edgeID, edgeType, selectedNodeDetails, selected} = edgeDetails,
-      {state} = this;
+    let {network, edgeID, selected} = edgeDetails,
+      {state} = this,
+      edgeType,
+      selectedNodeDetails = [];
 
-    if (!isUndefined(edgeID)) {
-      state.edges.forEach((edgeObject) => {
-        if (edgeObject.id === edgeID) {
-          selectedNodeDetails.push(edgeObject.edgeDetails);
-          edgeType = edgeObject.type;
-        }
-      });
+    state.edges.forEach((edgeObject) => {
+      if (edgeObject.id === edgeID) {
+        selectedNodeDetails.push(edgeObject.edgeDetails);
+        edgeType = edgeObject.type;
+      }
+    });
 
-      let notNodeId = this.edgeObjects[edgeID] ? this.edgeObjects[edgeID].notNodeId : '';
+    let notNodeId = this.edgeObjects[edgeID] ? this.edgeObjects[edgeID].notNodeId : '';
 
-      let sourceDetails = {
-        contextMenuType: selected,
-        network: network,
-        itemId: edgeID,
-        itemType: edgeType,
-        notNodeId: notNodeId
-      };
+    let sourceDetails = {
+      contextMenuType: selected,
+      network,
+      itemId: edgeID,
+      itemType: edgeType,
+      notNodeId
+    };
 
-      this.ContextualMenu.getContextMenu(sourceDetails);
+    this.ContextualMenu.getContextMenu(sourceDetails);
 
-      let states = {
-        loadAgain: false,
-        selectedNodeDetails: selectedNodeDetails,
-        showContextMenu: true
-      };
-      this.setState(states);
-    }
+    let states = {
+      loadAgain: false,
+      selectedNodeDetails,
+      showContextMenu: true
+    };
+    this.setState(states);
   }
 
   loadGraph(load) {
