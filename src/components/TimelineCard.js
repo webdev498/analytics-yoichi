@@ -6,7 +6,6 @@ import {getCountryNameByCountryCode} from 'utils/countryUtils';
 import MultiSeriesCombiChart from 'components/MultiSeriesCombiChart';
 
 let styles = {
-  alert: {},
   list: {
     width: '100%'
   },
@@ -289,18 +288,17 @@ class TimelineCard extends React.Component {
       score = data.display.Score ? data.display.Score.value : '',
       severity = data.display.Severity ? data.display.Severity.value : '';
 
-    switch (isAlert) {
-      case 'alert':
-        styles.alert = {
-          borderLeft: '5px solid ' + getColor(score, severity),
-          paddingLeft: '18px'
-        };
-        break;
-      default:
-        styles.alert = {
-          paddingLeft: '22px'
-        };
-        break;
+    if (isAlert === 'alert') {
+      return {
+        borderLeft: '5px solid ' + getColor(score, severity),
+        paddingLeft: '18px'
+      };
+    }
+    else {
+      return {
+        paddingLeft: '22px',
+        borderLeft: 0
+      };
     }
   }
 
@@ -322,7 +320,7 @@ class TimelineCard extends React.Component {
     this.isClickCard = this.clickCards.includes(this.cardType);
     this.isLoadDetails = this.loadDetailsCards.includes(this.cardType);
     this.displayFlex = data.isIconDisplay || this.isLoadDetails ? {display: 'flex'} : {};
-    this.getAlertBorder(data);
+    const alertStyle = this.getAlertBorder(data);
 
     if (props.data.chart) {
       styles.list = Object.assign({}, styles.list, {paddingLeft: '20px'});
@@ -335,7 +333,7 @@ class TimelineCard extends React.Component {
 
     const style = Object.assign(
       styles.timelineCard,
-      styles.alert,
+      alertStyle,
       {
         width: props.data.chart ? '800px' : '350px',
         cursor: this.isClickCard ? 'pointer' : 'auto',
@@ -346,7 +344,7 @@ class TimelineCard extends React.Component {
     return (
       <Card style={style}
         onClick={this.handleCardClick()}
-        key={props.id}>
+        key={data.id}>
         <div style={{display: 'flex'}}>
           {
             props.data.chart
