@@ -417,37 +417,16 @@ function getAuth(row) {
 }
 
 function getInOutSessionSummary(type, row) {
-  let info = {};
-  info[firstCharCapitalize(type) + ' Summary'] = {
-    header: true,
-    displayKey: true,
-    value: ''
-  };
-
-  if (row.session[type + '-summary']) {
-    let data = row.session[type + '-summary'];
-    info = Object.assign({}, info, {
-      'Incoming Bandwidth': {
-        displayKey: true,
-        value: getValue(data.incomingBandwidth) !== ''
-          ? formatBytes(data.incomingBandwidth, 2) : ''
-      },
-      'Outgoing Bandwidth': {
-        displayKey: true,
-        value: getValue(data.outgoingBandwidth) !== ''
-          ? formatBytes(data.outgoingBandwidth, 2) : ''
-      },
-      'Machines': {
-        displayKey: true,
-        value: getValue(data.machines) !== ''
-          ? (data.machines).toString() : ''
-      },
-      'Connections': {
-        displayKey: true,
-        value: getValue(data.connections) !== ''
-          ? (data.connections).toString() : ''
-      }
-    });
+  let info = {},
+    data = row.session[type + '-summary'];
+  type = type === 'in' ? 'Internal' : 'External';
+  if (data) {
+    info[type] = {
+      IncomingBandwidth: getValue(data.incomingBandwidth) !== '' ? formatBytes(data.incomingBandwidth, 2) : '',
+      OutgoingBandwidth: getValue(data.outgoingBandwidth) !== '' ? formatBytes(data.outgoingBandwidth, 2) : '',
+      Machines: getValue(data.machines) !== '' ? data.machines : '',
+      Connections: getValue(data.connections) !== '' ? data.connections : ''
+    };
   }
   return info;
 }
@@ -501,7 +480,9 @@ function getSession(row, info, url) {
   let inSummary = getInOutSessionSummary('in', row),
     outSummary = getInOutSessionSummary('out', row);
 
-  info.display = Object.assign({}, info.display, inSummary, outSummary);
+  info.display = Object.assign({}, info.display, {
+    summary: Object.assign({}, inSummary, outSummary)
+  });
 
   return info;
 }

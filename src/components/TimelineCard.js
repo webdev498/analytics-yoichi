@@ -94,6 +94,24 @@ class TimelineCard extends React.Component {
         if (key === 'sourceDest') {
           return this.getSourceDestination(data);
         }
+        else if (key === 'summary') {
+          return (
+            <li style={{...styles.listItem}} key='summary'>
+              <div style={{alignItems: 'center'}}>
+                {
+                  data.display.summary.Internal
+                  ? this.displayInOutSummary(data.display.summary.Internal, 'Internal')
+                  : null
+                }
+                {
+                  data.display.summary.External
+                  ? this.displayInOutSummary(data.display.summary.External, 'External')
+                  : null
+                }
+              </div>
+            </li>
+          );
+        }
         return this.displayDetails(key, index, data);
       })
     );
@@ -124,8 +142,23 @@ class TimelineCard extends React.Component {
         </li>
       );
     }
-
     return null;
+  }
+
+  displayInOutSummary(data, type) {
+    return (
+      <div style={{display: 'flex'}}>
+        <div>{type}:</div>
+        <div><img src='/img/incoming-bandwidth.png' /></div>
+        <div>{data.IncomingBandwidth}</div>
+        <div><img src='/img/outgoing-bandwidth.png' /></div>
+        <div>{data.OutgoingBandwidth}</div>
+        <div><img src='/img/machines.png' /></div>
+        <div>{data.Machines}</div>
+        <div><img src='/img/connections.png' /></div>
+        <div>{data.Connections}</div>
+      </div>
+    );
   }
 
   getSourceDestination(data) {
