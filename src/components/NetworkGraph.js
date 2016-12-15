@@ -19,20 +19,10 @@ import ContextualMenu from '../components/ContextualMenu';
 
 import './styles/_network.scss';
 
-const style = {
-  undoGraph: {
-    bottom: '118px',
-    left: '33px',
-    position: 'absolute',
-    cursor: 'pointer',
-    display: 'none'
-  },
-  resetGraph: {
-    bottom: '148px',
-    left: '33px',
-    position: 'absolute',
-    cursor: 'pointer',
-    display: 'none'
+const styles = {
+  graphWrap: {
+    display: 'flex',
+    height: '100%'
   },
   loader: {
     position: 'absolute',
@@ -628,7 +618,8 @@ function openFullMalwareReport(fullMalwareReportLink) {
 class NetworkGraph extends React.Component {
   static propTypes = {
     duration: PropTypes.string,
-    params: PropTypes.object
+    params: PropTypes.object,
+    broadcastEvent: PropTypes.func
   }
 
   constructor(props) {
@@ -997,32 +988,23 @@ class NetworkGraph extends React.Component {
   }
 
   loadNodeEdgeContextMenu(selected, selectedIDs, network) {
-    let nodeType = '',
-      edgeType = '',
-      nodeID = selectedIDs.nodes[0],
-      edgeID = selectedIDs.edges[0],
-      selectedNodeDetails = [],
-      selectedNodesForExtendingGraph = [];
+    let nodeID = selectedIDs.nodes[0],
+      edgeID = selectedIDs.edges[0];
 
     switch (selected) {
       case 'node':
         let nodeDetails = {
-          network: network,
-          nodeID: nodeID,
-          nodeType: nodeType,
-          selectedNodeDetails: selectedNodeDetails,
-          selected: selected,
-          selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
+          network,
+          nodeID,
+          selected
         };
         this.loadNodeContextMenu(nodeDetails);
         break;
       case 'edge':
         let edgeDetails = {
-          network: network,
-          edgeID: edgeID,
-          edgeType: edgeType,
-          selectedNodeDetails: selectedNodeDetails,
-          selected: selected
+          network,
+          edgeID,
+          selected
         };
         this.loadEdgeContextMenu(edgeDetails);
         break;
@@ -1031,87 +1013,95 @@ class NetworkGraph extends React.Component {
     }
   }
 
+  highlightAnomalyChart(nodeObject) {
+    this.props.broadcastEvent('primary-timeline', nodeObject.id);
+  }
+
   loadNodeContextMenu(nodeDetails) {
-    let {network, nodeID, nodeType, selectedNodeDetails, selected, selectedNodesForExtendingGraph} = nodeDetails,
-      {state} = this;
+    let {network, nodeID, selected} = nodeDetails,
+      {state} = this,
+      nodeType,
+      selectedNodeDetails = [];
 
-    if (!isUndefined(nodeID)) {
-      state.nodes.forEach((nodeObject) => {
-        let node = network.body.nodes[nodeObject.id];
-        if (nodeObject.id === nodeID) {
-          selectedNodeDetails.push(nodeObject.nodeDetails);
-          nodeType = nodeObject.type;
-          node.setOptions({
-            image: getIcon(nodeObject.type, nodeObject.status, 'SELECTED')
-          });
+    state.nodes.forEach((nodeObject) => {
+      let node = network.body.nodes[nodeObject.id];
+      if (nodeObject.id === nodeID) {
+        selectedNodeDetails.push(nodeObject.nodeDetails);
+        nodeType = nodeObject.type;
+        node.setOptions({
+          image: getIcon(nodeObject.type, nodeObject.status, 'SELECTED')
+        });
+
+        if (nodeObject.type === 'anomaly') {
+          this.highlightAnomalyChart(nodeObject);
         }
-        else {
-          node.setOptions({
-            image: getIcon(nodeObject.type, nodeObject.status, 'INACTIVE')
-          });
-        }
-      });
+      }
+      else {
+        node.setOptions({
+          image: getIcon(nodeObject.type, nodeObject.status, 'INACTIVE')
+        });
+      }
+    });
 
-      let notNodeId = this.nodeObjects[nodeID] ? this.nodeObjects[nodeID].notNodeId : '';
+    let notNodeId = this.nodeObjects[nodeID] ? this.nodeObjects[nodeID].notNodeId : '';
 
-      let sourceDetails = {
-        contextMenuType: selected,
-        network: network,
-        itemId: nodeID,
-        itemType: nodeType,
-        notNodeId: notNodeId
-      };
+    let sourceDetails = {
+      contextMenuType: selected,
+      network: network,
+      itemId: nodeID,
+      itemType: nodeType,
+      notNodeId: notNodeId
+    };
 
-      this.ContextualMenu.getContextMenu(sourceDetails);
+    this.ContextualMenu.getContextMenu(sourceDetails);
 
-      selectedNodesForExtendingGraph.push({
-        nodeID: nodeID,
-        reportId: '',
-        timeWindow: timeWindow
-      });
+    let selectedNodesForExtendingGraph = [{
+      nodeID: nodeID,
+      reportId: '',
+      timeWindow: timeWindow
+    }];
 
-      let states = {
-        loadAgain: false,
-        selectedNodeDetails: selectedNodeDetails,
-        showContextMenu: true,
-        selectedNode: nodeID,
-        selectedNodesForExtendingGraph: selectedNodesForExtendingGraph
-      };
-      this.setState(states);
-    }
+    let states = {
+      loadAgain: false,
+      selectedNodeDetails,
+      showContextMenu: true,
+      selectedNode: nodeID,
+      selectedNodesForExtendingGraph
+    };
+    this.setState(states);
   }
 
   loadEdgeContextMenu(edgeDetails) {
-    let {network, edgeID, edgeType, selectedNodeDetails, selected} = edgeDetails,
-      {state} = this;
+    let {network, edgeID, selected} = edgeDetails,
+      {state} = this,
+      edgeType,
+      selectedNodeDetails = [];
 
-    if (!isUndefined(edgeID)) {
-      state.edges.forEach((edgeObject) => {
-        if (edgeObject.id === edgeID) {
-          selectedNodeDetails.push(edgeObject.edgeDetails);
-          edgeType = edgeObject.type;
-        }
-      });
+    state.edges.forEach((edgeObject) => {
+      if (edgeObject.id === edgeID) {
+        selectedNodeDetails.push(edgeObject.edgeDetails);
+        edgeType = edgeObject.type;
+      }
+    });
 
-      let notNodeId = this.edgeObjects[edgeID] ? this.edgeObjects[edgeID].notNodeId : '';
+    let notNodeId = this.edgeObjects[edgeID] ? this.edgeObjects[edgeID].notNodeId : '';
 
-      let sourceDetails = {
-        contextMenuType: selected,
-        network: network,
-        itemId: edgeID,
-        itemType: edgeType,
-        notNodeId: notNodeId
-      };
+    let sourceDetails = {
+      contextMenuType: selected,
+      network,
+      itemId: edgeID,
+      itemType: edgeType,
+      notNodeId
+    };
 
-      this.ContextualMenu.getContextMenu(sourceDetails);
+    this.ContextualMenu.getContextMenu(sourceDetails);
 
-      let states = {
-        loadAgain: false,
-        selectedNodeDetails: selectedNodeDetails,
-        showContextMenu: true
-      };
-      this.setState(states);
-    }
+    let states = {
+      loadAgain: false,
+      selectedNodeDetails,
+      showContextMenu: true
+    };
+    this.setState(states);
   }
 
   loadGraph(load) {
@@ -1222,14 +1212,15 @@ class NetworkGraph extends React.Component {
       } = details,
       otherParameters = '',
       params = {};
-    if (!isUndefined(parameters) && !isUndefined(parameters.length)) {
+
+    if (Array.isArray(parameters)) {
       parameters.forEach((parameter) => {
         if (parameter.userInput === true) {
-          otherParameters += '&' + parameter.name + '=' + document.getElementById(parameter.id).value;
+          otherParameters += `&${parameter.name}=${document.getElementById(parameter.id).value}`;
           params[parameter.name] = document.getElementById(parameter.id).value;
         }
         else {
-          otherParameters += '&' + parameter.name + '=' + parameter.value;
+          otherParameters += `&${parameter.name}=${parameter.value}`;
           params[parameter.name] = parameter.value;
         }
       });
@@ -1247,6 +1238,7 @@ class NetworkGraph extends React.Component {
           'count': 10
         }, params)
       };
+
       props.fetchApiData(props.timelineId, apiObj, {}, {});
 
       selectedNodesForExtendingGraph.push({
@@ -1272,8 +1264,7 @@ class NetworkGraph extends React.Component {
         method: 'GET',
         headers: defaultHeaders
       })
-      .then(response => response.json()
-      )
+      .then(response => response.json())
       .catch(error => {
         this.setState({
           isFetching: false
@@ -1460,10 +1451,15 @@ class NetworkGraph extends React.Component {
     }
 
     return (
-      <div style={{display: 'flex', height: '100%'}}>
-        {state.isFetching ? <Loader style={{}} loaderStyle={style.loader}
-          text={state.loaderText} /> : null}
-        <div ref={(ref) => this.networkGraph = ref} style={props.attributes.canvasStyle}
+      <div style={styles.graphWrap}>
+        {
+          state.isFetching
+          ? <Loader loaderStyle={styles.loader} text={state.loaderText} />
+          : null
+        }
+
+        <div ref={(ref) => this.networkGraph = ref}
+          style={props.attributes.canvasStyle}
           id='network-graph'>
           {
             assetData
@@ -1471,6 +1467,7 @@ class NetworkGraph extends React.Component {
             : this.loadNetworkGraph(props.data, state.loadAgain, props.duration)
           }
         </div>
+
         {
           state.actionsData && state.actionsData.length > 0
           ? <ContextualMenu

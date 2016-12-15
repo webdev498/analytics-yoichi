@@ -10,7 +10,7 @@ import './styles/_contextualMenu.scss';
 
 const styles = {
     contextualMenu: {
-      width: '259px',
+      width: '260px',
       backgroundColor: Colors.contextBG,
       position: 'absolute',
       top: '0px',
@@ -23,14 +23,14 @@ const styles = {
       marginTop: '35px'
     },
     collapseContextualMenu: {
-      left: '24px',
       position: 'absolute',
+      left: '25px',
       bottom: '25px'
     },
     expandContextualMenu: {
-      bottom: '25px',
-      right: '24px',
       position: 'absolute',
+      bottom: '25px',
+      right: '25px',
       display: 'none'
     },
     selectedDetails: {
@@ -45,7 +45,7 @@ const styles = {
     },
     notificationMessage: {
       top: 0,
-      right: '259px',
+      right: '260px',
       fontSize: '16px',
       position: 'absolute',
       padding: '20px',
@@ -55,11 +55,11 @@ const styles = {
     }
   },
   notificationMessage = {
-    width: '259px'
+    width: '260px'
   },
   actionTable = {
     border: '0',
-    width: '259',
+    width: '260',
     cellPadding: '10',
     cellSpacing: '10'
   };
@@ -81,7 +81,7 @@ function checkForUserInputs(parameters) {
 function updateDOM(table) {
   document.getElementById('actions').appendChild(table);
   document.getElementById('notification-message').style.width = notificationMessage.width;
-  document.getElementById('contextual-menu').style.width = '259px';
+  document.getElementById('contextual-menu').style.width = '260px';
   document.getElementById('right-arrow').style.display = 'block';
   document.getElementById('contextual-menu-contents').style.display = 'block';
   document.getElementById('expand-contextual-menu').style.display = 'none';
@@ -170,7 +170,7 @@ class ContextualMenu extends React.Component {
   displayActions(actions, sourceDetails, table) {
     let {itemId, itemType} = sourceDetails;
     for (let j = 0; j < actions.length; j++) {
-      let details = {
+      const details = {
           parameters: actions[j].parameters,
           index: j,
           itemId: itemId,
@@ -179,14 +179,15 @@ class ContextualMenu extends React.Component {
         },
         parameters = this.generateParameters(details);
 
-      details = {
+      const updatedDetails = {
         actions: actions,
         table: table,
         index: j,
         parameters: parameters,
         sourceDetails: sourceDetails
       };
-      table = this.createHTML(details);
+
+      table = this.createHTML(updatedDetails);
     }
     return table;
   }
@@ -350,7 +351,7 @@ class ContextualMenu extends React.Component {
         document.getElementById('expand-contextual-menu').style.display = 'block';
       }
       if (action === 'expand') {
-        document.getElementById('contextual-menu').style.width = '259px';
+        document.getElementById('contextual-menu').style.width = '260px';
         document.getElementById('right-arrow').style.display = 'block';
         document.getElementById('contextual-menu-contents').style.display = 'block';
         document.getElementById('expand-contextual-menu').style.display = 'none';
@@ -371,7 +372,7 @@ class ContextualMenu extends React.Component {
               style={{...styles.selectedDetails}}>
               {props.selectedDetails}
             </div>
-            <div id='actions'></div>
+            <div id='actions' />
           </div>
 
           <div id='collapse-contextual-menu' style={styles.collapseContextualMenu}>
@@ -383,7 +384,7 @@ class ContextualMenu extends React.Component {
           <img id='left-arrow' src='/img/menu.png' onClick={this.collapseExpand('expand')} />
         </div>
 
-        <div style={{...styles.notificationMessage}} id='notification-message'></div>
+        <div style={{...styles.notificationMessage}} id='notification-message' />
       </div>
     );
   }
