@@ -422,10 +422,10 @@ function getInOutSessionSummary(type, row) {
   type = type === 'in' ? 'Internal' : 'External';
   if (data) {
     info[type] = {
-      IncomingBandwidth: getValue(data.incomingBandwidth) !== '' ? formatBytes(data.incomingBandwidth, 2) : '',
-      OutgoingBandwidth: getValue(data.outgoingBandwidth) !== '' ? formatBytes(data.outgoingBandwidth, 2) : '',
-      Machines: getValue(data.machines) !== '' ? data.machines : '',
-      Connections: getValue(data.connections) !== '' ? data.connections : ''
+      IncomingBandwidth: getValue(data.incomingBandwidth) !== '' ? formatBytes(data.incomingBandwidth, 2) : '0 Bytes',
+      OutgoingBandwidth: getValue(data.outgoingBandwidth) !== '' ? formatBytes(data.outgoingBandwidth, 2) : '0 Bytes',
+      Machines: getValue(data.machines) !== '' ? data.machines : '0',
+      Connections: getValue(data.connections) !== '' ? data.connections : '0'
     };
   }
   return info;

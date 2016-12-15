@@ -97,18 +97,16 @@ class TimelineCard extends React.Component {
         else if (key === 'summary') {
           return (
             <li style={{...styles.listItem}} key='summary'>
-              <div style={{alignItems: 'center'}}>
-                {
-                  data.display.summary.Internal
-                  ? this.displayInOutSummary(data.display.summary.Internal, 'Internal')
-                  : null
-                }
-                {
-                  data.display.summary.External
-                  ? this.displayInOutSummary(data.display.summary.External, 'External')
-                  : null
-                }
-              </div>
+              {
+                data.display.summary.Internal
+                ? this.displayInOutSummary(data.display.summary.Internal, 'Internal')
+                : null
+              }
+              {
+                data.display.summary.External
+                ? this.displayInOutSummary(data.display.summary.External, 'External')
+                : null
+              }
             </li>
           );
         }
@@ -147,16 +145,16 @@ class TimelineCard extends React.Component {
 
   displayInOutSummary(data, type) {
     return (
-      <div style={{display: 'flex'}}>
-        <div>{type}:</div>
+      <div style={{display: 'flex', alignItems: 'center', width: '100%'}}>
+        <div style={{width: '20%'}}>{type}:</div>
         <div><img src='/img/incoming-bandwidth.png' /></div>
-        <div>{data.IncomingBandwidth}</div>
+        <div style={{width: '20%'}}>{data.IncomingBandwidth}</div>
         <div><img src='/img/outgoing-bandwidth.png' /></div>
-        <div>{data.OutgoingBandwidth}</div>
+        <div style={{width: '20%'}}>{data.OutgoingBandwidth}</div>
         <div><img src='/img/machines.png' /></div>
-        <div>{data.Machines}</div>
+        <div style={{width: '10%'}}>{data.Machines}</div>
         <div><img src='/img/connections.png' /></div>
-        <div>{data.Connections}</div>
+        <div style={{width: '10%'}}>{data.Connections}</div>
       </div>
     );
   }
@@ -320,6 +318,7 @@ class TimelineCard extends React.Component {
   render() {
     const {props, props: {data}} = this;
     this.cardType = this.getCardType(data);
+    console.log(this.cardType);
     this.isClickCard = this.clickCards.includes(this.cardType);
     this.isLoadDetails = this.loadDetailsCards.includes(this.cardType);
     this.displayFlex = data.isIconDisplay || this.isLoadDetails ? {display: 'flex'} : {};
@@ -338,11 +337,11 @@ class TimelineCard extends React.Component {
       styles.timelineCard,
       styles.alert,
       {
-        width: props.data.chart ? '800px' : '350px', // These widths are not provided by Rose.
+        width: props.data.chart ? '800px' : '350px',
         cursor: this.isClickCard ? 'pointer' : 'auto',
         backgroundColor
       }
-    );
+    ); // These widths are not provided by Rose.
 
     return (
       <Card style={style}
