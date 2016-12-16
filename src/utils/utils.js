@@ -462,8 +462,7 @@ export function getPosition(el) {
 
 export function autoScrollTo(id, decreasePositionBy) {
   let position = getPosition(document.getElementById(id));
-  console.log(position);
-  window.scrollTo(0, position.y - decreasePositionBy);
+   window.scrollTo(0, position.y - decreasePositionBy);
 }
 
 export function getColor(score, severity) {
