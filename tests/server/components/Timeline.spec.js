@@ -756,7 +756,7 @@ describe('Timeline DAL', () => {
     it('if asset type is machine, then session card should display User and not Machine', async function() {
       const ctx = getCtx({columns, rows: [[session]]}, urls.machine.url);
       await Timeline(ctx);
-      expect(sessionCardMachine.display).to.have.property('Machine');
+      expect(sessionCardMachine.display).to.have.property('User');
     });
   });
 
