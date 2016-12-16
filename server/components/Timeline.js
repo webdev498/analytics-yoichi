@@ -2,8 +2,7 @@ import {
   msToTime,
   getEventTypeString,
   formatBytes,
-  formatDateInLocalTimeZone,
-  firstCharCapitalize
+  formatDateInLocalTimeZone
 } from '../utils/utils';
 
 import { getChartData } from '../components/anomalyChart';

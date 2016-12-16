@@ -265,12 +265,6 @@ function cardTests(ctx, props, cardType, assetType) {
             expect(displayValue).to.have.property('value');
           }
         }
-        if (cardType === 'session' && assetType === 'user') {
-          expect(value).to.have.property('Machine');
-        }
-        if (cardType === 'session' && assetType === 'machine') {
-          expect(value).to.have.property('User');
-        }
       }
       else {
         expect(card).to.have.property(key);
@@ -747,18 +741,22 @@ describe('Timeline DAL', () => {
         }
       };
 
+    it('returns session card', async function() {
+      const ctx = getCtx({columns, rows: [[session]]}, urls.user.url);
+      await Timeline(ctx);
+      cardTests(ctx, sessionCardUser);
+    });
+
     it('if asset type is user, then session card should display Machine and not User', async function() {
       const ctx = getCtx({columns, rows: [[session]]}, urls.user.url);
       await Timeline(ctx);
-
-      cardTests(ctx, sessionCardUser, 'session', 'user');
+      expect(sessionCardUser.display).to.have.property('Machine');
     });
 
     it('if asset type is machine, then session card should display User and not Machine', async function() {
       const ctx = getCtx({columns, rows: [[session]]}, urls.machine.url);
       await Timeline(ctx);
-
-      cardTests(ctx, sessionCardMachine, 'session', 'machine');
+      expect(sessionCardMachine.display).to.have.property('Machine');
     });
   });
 
