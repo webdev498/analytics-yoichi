@@ -748,14 +748,10 @@ describe('Timeline DAL', () => {
     });
 
     it('if asset type is user, then session card should display Machine and not User', async function() {
-      const ctx = getCtx({columns, rows: [[session]]}, urls.user.url);
-      await Timeline(ctx);
       expect(sessionCardUser.display).to.have.property('Machine');
     });
 
     it('if asset type is machine, then session card should display User and not Machine', async function() {
-      const ctx = getCtx({columns, rows: [[session]]}, urls.machine.url);
-      await Timeline(ctx);
       expect(sessionCardMachine.display).to.have.property('User');
     });
   });
