@@ -60,10 +60,10 @@ export function removeComponentWithId(id) {
 }
 
 function getQuery(key) {
-  if (key === 'zoneId') {
+  if (key === 'offset') {
     // Get current timezone offset for host device
     const temp = new Date();
-    return temp.getTimezoneOffset() / 60;
+    return temp.getTimezoneOffset();
   }
 
   return '';

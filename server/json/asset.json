@@ -36,7 +36,8 @@
                 "type": ":pathParam"
               },
               "queryParams": {
-                "window": ""
+                "window": "",
+                "offset": ":customParam"
               },
               "id": "sessionDetail"
             }
