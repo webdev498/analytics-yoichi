@@ -1,8 +1,6 @@
 import Timeline from '../../../server/components/Timeline';
 
-function getCtx(data) {
-  return { tempData: { json() { return Object.assign({}, data); } } };
-}
+import {getCtx} from '../../testUtils';
 
 const columns = [
   {

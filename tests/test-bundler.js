@@ -50,15 +50,17 @@ if (!Array.prototype.includes) {
     var k;
     if (n >= 0) {
       k = n;
-    } else {
+    }
+    else {
       k = len + n;
-      if (k < 0) {k = 0;}
+      if (k < 0) { k = 0; }
     }
     var currentElement;
     while (k < len) {
       currentElement = O[k];
+      // NaN !== NaN
       if (searchElement === currentElement ||
-         (searchElement !== searchElement && currentElement !== currentElement)) { // NaN !== NaN
+         (searchElement !== searchElement && currentElement !== currentElement)) { // eslint-disable-line
         return true;
       }
       k++;
@@ -78,8 +80,8 @@ const inManifest = (path) => ~__karmaWebpackManifest__.indexOf(path);
 const testsContext = require.context('./', true, /\.spec\.js$/);
 
 // only run tests that have changed after the first pass.
-const testsToRun = testsContext.keys().filter(inManifest)
-;(testsToRun.length ? testsToRun : testsContext.keys()).forEach(testsContext);
+const testsToRun = testsContext.keys().filter(inManifest);
+(testsToRun.length ? testsToRun : testsContext.keys()).forEach(testsContext);
 
 // require all `src/**/*.js` except for `main.js` (for isparta coverage reporting)
 // const componentsContext = require.context('../src/', true, /^((?!main).)*\.js$/);

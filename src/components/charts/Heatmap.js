@@ -61,7 +61,7 @@ class Heatmap extends React.Component {
       return {
         chart: Object.assign({}, props.chartOptions, chart),
         dataset,
-        columns,
+        columns: columns || {},
         colorrange
       };
     }
