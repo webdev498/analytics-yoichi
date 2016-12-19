@@ -343,6 +343,7 @@ class TimelineCard extends React.Component {
     return (
       <Card style={style}
         onClick={this.handleCardClick()}
+        ref={data.id}
         key={data.id}>
         <div style={{display: 'flex'}}>
           {

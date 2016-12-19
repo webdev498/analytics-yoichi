@@ -183,6 +183,7 @@ class Timeline extends React.Component {
       <div style={this.style.card} ref={type} id={type}>
         {
           rows.map((event, index) => {
+            console.log(JSON.stringify(event));
             let dateString = (event.Date) ? event.Date : '',
               cardId = 'card' + index,
               backgroundColor = (this.card === CONTEXTUAL_MENU_CARD) ? {backgroundColor: Colors.contextBG} : {},

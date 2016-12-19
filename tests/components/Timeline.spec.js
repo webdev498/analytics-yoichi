@@ -5,6 +5,7 @@ import {spy} from 'sinon';
 
 import Timeline from 'components/Timeline';
 import TabsWidget from 'components/TabsWidget';
+import TimelineCard from 'components/TimelineCard';
 import PaginationWidget from 'components/PaginationWidget';
 import {wrapThemeProvider} from '../testUtils';
 
@@ -12,7 +13,39 @@ let props = {
   id: 'timeline',
   meta: {id: 'testId', api: {}},
   data: {
-    normalizeData: [],
+    normalizeData: [
+      {
+        'id': 'OikKAfhyT',
+        'Type': 'Rank Alert',
+        'Date': '2016-12-16T00:32:54.468',
+        'display': {
+          'sourceDest': {
+            'source': {
+              'ip': '121.18.238.114'
+            },
+            'dest': {
+              'ip': '172.31.7.62'
+            }
+          },
+          'Description': {
+            'displayKey': true,
+            'value': 'SSH Brute Force Attack Attempt'
+          },
+          'Message': {
+            'displayKey': true,
+            'value': '121.18.238.114 attempted to connect to 172.31.7.62 102 times'
+          },
+          'Category': {
+            'displayKey': true,
+            'value': 'suspicious-login'
+          },
+          'Score': {
+            'displayKey': true,
+            'value': '5'
+          }
+        }
+      }
+    ],
     options: {
       customParams: {}
     }
@@ -175,4 +208,42 @@ describe('<Timeline />', () => {
     expect(component.props().data.options.customParams).to.be.defined;
     expect(component.props().data.options.customParams).to.be.an('object');
   });
+
+  it('should have no. of cards', () => {
+    let component = mountTimelineComponent();
+    expect(component.find('div')).exist;
+    expect(component.find('div')).to.have.length(2);
+    expect(component.ref('primaryTimeline').text()).to.equal('121.18.238.114 attempted to connect to 172.31.7.62');
+  });
+
+  describe('Pagination', () => {
+    it('exists', () => {
+      props.data = Object.assign(props.data, {
+        total: 15,
+        next: 10
+      });
+      const timeline = mountTimeline(true),
+        {data, attributes} = props;
+      timeline.setState({ totalCount: data.total });
+      timeline.setState({ totalPage: Math.ceil(data.total / attributes.noOfEventsPerPage) });
+      timeline.setState({ currentPage: 1 });
+      timeline.setState({ nextPageStart: data.next });
+      expect(PaginationWidget).to.exist;
+      // let child = timeline.childAt(4);
+      // // let childProps = child.props();
+      // expect(child.type).to.equal('div');
+    });
+  });
+
+  // it('check the instance', () => {
+  //   const wrapper = mount(<Timeline />);
+  //   const inst = wrapper.instance();
+  //   expect(inst).to.be.instanceOf(Timeline);
+  // });
+
+  // it('should have correct API parameters', () => {
+  //   props.timelineType = timelineType ? timelineType : 'primary';
+  //   let component = shallow(wrapThemeProvider(<Timeline {...props} />));
+  //   let component.instance().getContextualMenuApiObj();
+  // });
 });
