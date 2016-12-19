@@ -71,7 +71,7 @@
           },
           "sessionChartOptions": {
             "labelDisplay": "rotate",
-            "labelFontSize": "9",
+            "labelFontSize": "10",
             "labelPadding": "3",
             "showLimits": "0",
             "showDivLineValues": "0",
