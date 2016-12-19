@@ -66,7 +66,7 @@ export function getChartData(chart) {
         let dataValue = currentValue === 0 ? 0 : Math.log10(currentValue);
         dataValue = dataValue.toFixed(2);
 
-        let label = `${seriesname}, ${item[xAxis.index]}, ${dataValue}, ${currentValue}`;
+        let label = `${seriesname}, ${item[xAxis.index]}, ${currentValue}`;
 
         const val = item[yAxis.index];
         return (val === 0) ? null : {'value': dataValue, toolText: label};
@@ -81,7 +81,7 @@ export function getChartData(chart) {
         let dataValue = val === 0 ? 0 : Math.log10(val);
         dataValue = dataValue.toFixed(2);
 
-        let label = `${seriesname}, ${item[xAxis.index]}, ${dataValue}, ${val}`;
+        let label = `${seriesname}, ${item[xAxis.index]}, ${val}`;
 
         return {
           'value': dataValue,

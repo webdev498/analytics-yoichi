@@ -267,7 +267,7 @@ class TimelineCard extends React.Component {
     chartData.chart = Object.assign(chart.chartOptions, {
       divlineThickness: 1,
       xAxisName: uiConfig.xAxisLabel,
-      yAxisName: uiConfig.yAxisLabel,
+      yAxisName: uiConfig.yAxisLabel || 'Log Scale',
       canvasBgColor: 'transparent',
       bgColor: 'transparent'
     });
