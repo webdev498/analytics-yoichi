@@ -36,7 +36,8 @@
                 "type": ":pathParam"
               },
               "queryParams": {
-                "window": ""
+                "window": "",
+                "offset": ":customParam"
               },
               "id": "sessionDetail"
             }
@@ -70,11 +71,18 @@
           },
           "sessionChartOptions": {
             "labelDisplay": "rotate",
-            "labelFontSize": "9",
+            "labelFontSize": "10",
             "labelPadding": "3",
             "showLimits": "0",
             "showDivLineValues": "0",
-            "paletteColors": "#2bd8d0"
+            "paletteColors": "#2bd8d0",
+            "yAxisValuesStep": 3,
+            "toolTipBorderThickness": "1",
+            "toolTipBgAlpha": "100",
+            "toolTipBorderRadius": "2",
+            "showplotborder": 1,
+            "plotBorderColor": "#cbcbd1",
+            "plotBorderAlpha": 60
           }
         }
       },

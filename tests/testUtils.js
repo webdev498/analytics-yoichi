@@ -26,3 +26,26 @@ export function wrapThemeProvider(component) {
     </MuiThemeProvider>
   );
 }
+
+export function getCtx(data, url) {
+  return {
+    tempData: { json() { return Object.assign({}, data); } },
+    request: {url: url || ''}
+  };
+}
+
+export function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function mochaAsync(fn) {
+  return async (done) => {
+    try {
+      await fn();
+    }
+    catch (err) {
+    }
+  };
+};

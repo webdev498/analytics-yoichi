@@ -59,6 +59,16 @@ export function removeComponentWithId(id) {
   };
 }
 
+function getQuery(key) {
+  if (key === 'offset') {
+    // Get current timezone offset for host device
+    const temp = new Date();
+    return temp.getTimezoneOffset();
+  }
+
+  return '';
+}
+
 function getUrl(api, duration, routerParams) {
   const {queryParams: query, path, pathParams} = api;
 
@@ -96,6 +106,10 @@ function getUrl(api, duration, routerParams) {
 
       if ((key === 'window' || key === 'timeShift') && (query[key] === '')) {
         queryString += `${queryKey}=${encodeURI(duration)}&`;
+      }
+      // if query value is :customParam, then it is unique case and handled differently for everycase.
+      else if (('' + query[key]).endsWith(':customParam')) {
+        queryString += `${queryKey}=${encodeURI(getQuery(key))}&`;
       }
       // if query value is :pathParam, it implies use path param of the current url.
       else if (('' + query[key]).endsWith(':pathParam')) {

@@ -2,8 +2,13 @@ import {getColumnIndex} from '../utils/chartUtils';
 import {militaryTimeToNormalTime} from '../utils/utils';
 
 export function getData(data) {
-  const {rows, columns} = data,
-    yAxis = getColumnIndex(columns, 'minutesOfActivity'),
+  const {rows, columns} = data;
+
+  if (!(rows && rows.length > 0)) {
+    return;
+  }
+
+  const yAxis = getColumnIndex(columns, 'minutesOfActivity'),
     dayIndex = getColumnIndex(columns, 'dayOfWeek'),
     hourIndex = getColumnIndex(columns, 'hourOfDay'),
     dataObj = [];
@@ -23,13 +28,12 @@ export function getData(data) {
   });
 
   return {
-    columns: {},
     dataset: [{data: dataObj}]
   };
 };
 
 
-export default async function Heatmap(ctx, next) {
+export default async function Heatmap(ctx) {
   let parsedData = await ctx.tempData.json();
   if (!parsedData.errorCode) {
     const normalizeData = getData(parsedData);
