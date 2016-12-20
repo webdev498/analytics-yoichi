@@ -927,6 +927,7 @@ class NetworkGraph extends React.Component {
 
         if (i === 0) {
           this.deselect(deselectedNode);
+          this.toggleHighlightAnomalyChart(deselectedNode, false);
         }
         i++;
       }
@@ -1011,8 +1012,8 @@ class NetworkGraph extends React.Component {
     }
   }
 
-  highlightAnomalyChart(nodeObject) {
-    this.props.broadcastEvent('primary-timeline', nodeObject.id);
+  toggleHighlightAnomalyChart(nodeObject, set = true) {
+    this.props.broadcastEvent('primary-timeline', {id: nodeObject.id, set});
   }
 
   loadNodeContextMenu(nodeDetails) {
@@ -1031,7 +1032,7 @@ class NetworkGraph extends React.Component {
         });
 
         if (nodeObject.type === 'anomaly') {
-          this.highlightAnomalyChart(nodeObject);
+          this.toggleHighlightAnomalyChart(nodeObject);
         }
       }
       else {

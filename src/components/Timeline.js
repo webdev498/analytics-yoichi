@@ -118,8 +118,14 @@ class Timeline extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {props} = this;
 
-    if (nextProps.eventData !== props.eventData) {
-      this.setState({highlightCardId: nextProps.eventData});
+    if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
+      const {id, set} = nextProps.eventData;
+      if (set === true) {
+        this.setState({highlightCardId: id});
+      }
+      else {
+        this.setState({highlightCardId: ''});
+      }
     }
 
     if (!nextProps.data) {
