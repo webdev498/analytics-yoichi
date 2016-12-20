@@ -100,8 +100,7 @@ describe('CoreLayout', () => {
       const { component } = setup(true);
 
       const content = component.props.children[2],
-        loaderWrap = content.props.children[0],
-        loader = loaderWrap.props.children;
+        loader = content.props.children[0];
 
       expect(loader.type).to.equal(Loader);
     });
