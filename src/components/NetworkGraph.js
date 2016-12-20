@@ -917,20 +917,18 @@ class NetworkGraph extends React.Component {
   deselectNode(network) {
     return (event) => {
       let i = 0;
-      for (let nodeObject in this.nodeObjects) {
-        let deselectedNode = this.nodeObjects[nodeObject],
+      for (let obj in this.nodeObjects) {
+        let deselectedNode = this.nodeObjects[obj],
           node = network.body.nodes[deselectedNode.id];
 
-        if (!isUndefined(deselectedNode)) {
-          node.setOptions({
-            image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
-          });
+        node.setOptions({
+          image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
+        });
 
-          if (i === 0) {
-            this.deselect(deselectedNode);
-          }
-          i++;
+        if (i === 0) {
+          this.deselect(deselectedNode);
         }
+        i++;
       }
     };
   }
