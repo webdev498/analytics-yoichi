@@ -408,79 +408,9 @@ class Timeline extends React.Component {
     }
   }
 
-  loadTabs() {
-    const {props} = this,
-      {tabs, timelineType} = props;
-    let tabNames = [];
-    if (tabs) {
-      for (let tab in tabs) {
-        tabNames.push(tab);
-      }
-    }
-    if (tabs && tabNames.length > 1 && timelineType === 'primary') {
-      return (
-        <TabsWidget
-          tabs={tabNames}
-          style={{paddingLeft: '85px', paddingBottom: '17px'}}
-          onTabChange={this.onTabChange} />
-      );
-    }
-    return null;
-  }
-
-  displayNoResultsMessage() {
-    const {state, props} = this;
-    if (((props.data &&
-      !isUndefined(state.rows) &&
-      state.rows.length === 0 &&
-      this.card === TIMELINE_CARD) || props.errorData)) {
-      return (
-        <div style={{paddingLeft: '85px'}}>No additional results were found.</div>
-      );
-    }
-    return null;
-  }
-
-  displayTimeline() {
-    const {state, props} = this,
-      {attributes} = props;
-
-    if (state.rows && state.rows.length > 0) {
-      return (
-        <div style={
-            attributes.otherStyles.flex && state.selectedCardId !== ''
-            ? attributes.otherStyles.flex : {}
-          }>
-          {this.displayCard()}
-          {
-            state.selectedCardId !== ''
-            ? <div>
-
-              {this.displayContextualMenuCards()}
-
-              <img style={styles.rightArrow}
-                src='/img/rightArrow.png'
-                onClick={this.collaseContextualMenu()} />
-
-              <div style={{color: 'transparent'}}>
-                {
-                  setTimeout(() => {
-                    this.setPrimaryTimelineHeight();
-                  }, 2000)
-                }
-              </div>
-            </div>
-            : null
-          }
-        </div>
-      );
-    }
-    return null;
-  }
-
   render() {
     const {state, props} = this,
-      {errorData, meta} = props;
+      {attributes, tabs, errorData, timelineType, meta} = props;
 
     if (errorData) {
       state.rows = [];
@@ -489,13 +419,63 @@ class Timeline extends React.Component {
     this.style.card = this.card === TIMELINE_CARD && state.selectedCardId !== '' ? this.style.card : {};
     this.apiObj = meta.api;
 
+    let tabNames = [];
+    if (tabs) {
+      for (let tab in tabs) {
+        tabNames.push(tab);
+      }
+    }
+
     return (
       <div id={props.attributes.id}>
-        {this.loadTabs()}
+        {
+          tabs && tabNames.length > 1 && timelineType === 'primary'
+          ? <TabsWidget
+            tabs={tabNames}
+            style={{paddingLeft: '85px', paddingBottom: '17px'}}
+            onTabChange={this.onTabChange} />
+          : null
+        }
 
-        {this.displayNoResultsMessage()}
+        {/* Move this to a seperate function */}
+        {
+          ((props.data &&
+          !isUndefined(state.rows) &&
+          state.rows.length === 0 &&
+          this.card === TIMELINE_CARD) || props.errorData)
+          ? <div style={{paddingLeft: '85px'}}>No additional results were found.</div>
+          : null
+        }
+        {
+          (state.rows && state.rows.length > 0)
+            ? <div style={
+                attributes.otherStyles.flex && state.selectedCardId !== ''
+                ? attributes.otherStyles.flex : {}
+              }>
+              {this.displayCard()}
+              {
+                state.selectedCardId !== ''
+                ? <div>
 
-        {this.displayTimeline()}
+                  {this.displayContextualMenuCards()}
+
+                  <img style={styles.rightArrow}
+                    src='/img/rightArrow.png'
+                    onClick={this.collaseContextualMenu()} />
+
+                  <div style={{color: 'transparent'}}>
+                    {
+                      setTimeout(() => {
+                        this.setPrimaryTimelineHeight();
+                      }, 2000)
+                    }
+                  </div>
+                </div>
+                : null
+              }
+            </div>
+          : null
+        }
       </div>
     );
   }
