@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import Card from 'material-ui/Card/Card';
+import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
 import {getColor} from 'utils/utils';
 import {getCountryNameByCountryCode} from 'utils/countryUtils';
@@ -146,7 +147,11 @@ class TimelineCard extends React.Component {
     return (
       <div style={{display: 'flex', alignItems: 'center', width: '100%'}}>
         <div style={{width: '20%'}}>{type}:</div>
-        <div><img src='/img/incoming-bandwidth.png' /></div>
+        <div>
+          <FontIcon className='material-icons'
+            style={{}}>
+            ic_vertical_align_bottom
+          </FontIcon></div>
         <div style={{width: '20%'}}>{data.IncomingBandwidth}</div>
         <div><img src='/img/outgoing-bandwidth.png' /></div>
         <div style={{width: '20%'}}>{data.OutgoingBandwidth}</div>
