@@ -177,17 +177,7 @@ describe('<TimelineCard />', () => {
   it('simulates card click', () => {
     const onClick = spy();
     const wrapper = mountTimelineCard();
-    //   <TimelineCard {...props}>
-    //     <Card onClick={onClick} />
-    //   </TimelineCard>
-    // );
     wrapper.find(Card).simulate('click');
     expect(onClick).to.have.property('callCount', 1);
   });
-
-  // it('check the instance', () => {
-  //   const wrapper = mount(<TimelineCard />);
-  //   const inst = wrapper.instance();
-  //   expect(inst).to.be.instanceOf(TimelineCard);
-  // });
 });

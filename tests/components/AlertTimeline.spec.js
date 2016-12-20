@@ -61,17 +61,6 @@ describe('<AlertTimeline />', () => {
     expect(component.props().updateRoute).to.be.a('function');
   });
 
-  // it('call updateRoute', () => {
-  //   let updateRoute = spy(),
-  //     component = mount(<TimelineCard {...props} updateRoute={updateRoute} />);
-  //   expect(component.props().updateRoute.callCount).to.equal(0);
-  // });
-
-  // it('call getContextualMenuApiObj', () => {
-  //   let component = mountTimelineCardComponent();
-  //   expect(component.props().getContextualMenuApiObj.callCount).to.equal(1);
-  // });
-
   // it('check the instance', () => {
   //   const wrapper = mount(<TimelineCard />);
   //   const inst = wrapper.instance();

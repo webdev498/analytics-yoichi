@@ -229,17 +229,8 @@ describe('<Timeline />', () => {
       timeline.setState({ currentPage: 1 });
       timeline.setState({ nextPageStart: data.next });
       expect(PaginationWidget).to.exist;
-      // let child = timeline.childAt(4);
-      // // let childProps = child.props();
-      // expect(child.type).to.equal('div');
     });
   });
-
-  // it('check the instance', () => {
-  //   const wrapper = mount(<Timeline />);
-  //   const inst = wrapper.instance();
-  //   expect(inst).to.be.instanceOf(Timeline);
-  // });
 
   // it('should have correct API parameters', () => {
   //   props.timelineType = timelineType ? timelineType : 'primary';
