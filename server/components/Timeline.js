@@ -5,7 +5,7 @@ import {
   formatDateInLocalTimeZone
 } from '../utils/utils';
 
-import { getChartData } from '../components/anomalyChart';
+import { getSingleChartData } from '../components/anomalyChart';
 
 function getValue(value) {
   return value || '';
@@ -350,7 +350,7 @@ function getAnomaly(row) {
       id: getValue(row.id),
       Type: getEventTypeString(row.type),
       Date: getValue(row.date),
-      chart: anomaly.context ? getChartData(anomaly.context) : {},
+      chart: anomaly.context ? getSingleChartData(anomaly.context) : {},
       isIconDisplay: true,
       display: {
         Impact: {
