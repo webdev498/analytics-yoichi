@@ -231,10 +231,4 @@ describe('<Timeline />', () => {
       expect(PaginationWidget).to.exist;
     });
   });
-
-  // it('should have correct API parameters', () => {
-  //   props.timelineType = timelineType ? timelineType : 'primary';
-  //   let component = shallow(wrapThemeProvider(<Timeline {...props} />));
-  //   let component.instance().getContextualMenuApiObj();
-  // });
 });
