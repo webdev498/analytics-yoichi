@@ -28,11 +28,11 @@ const alertActivity = {
       'showYAxisValues': '1',
       'xAxisNameFontSize': '10',
       'yAxisNameFontSize': '10',
-      'labelFontSize': '8',
+      'labelFontSize': '9',
       'drawAnchors': '1',
       'anchorRadius': '1',
       'showlegend': '0',
-      'outCnvBaseFontSize': '8'
+      'outCnvBaseFontSize': '9'
     }
   },
   'attributes': {
@@ -120,11 +120,11 @@ const timeline = {
               'showYAxisValues': '1',
               'xAxisNameFontSize': '10',
               'yAxisNameFontSize': '10',
-              'labelFontSize': '8',
+              'labelFontSize': '9',
               'drawAnchors': '1',
               'anchorRadius': '1',
               'showlegend': '0',
-              'outCnvBaseFontSize': '8'
+              'outCnvBaseFontSize': '9'
             }
           },
           'attributes': {

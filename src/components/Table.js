@@ -90,8 +90,6 @@ const generateDataSource = (props) => {
             nestedResult: nestedResult,
             pathParams: props.kibana.pathParams
           };
-          console.log(JSON.stringify(parameters));
-          console.log(generateClickThroughUrl(parameters));
           mainObject.rowClickUrl = generateClickThroughUrl(parameters);
         }
         columnText = '';

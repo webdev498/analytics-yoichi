@@ -85,11 +85,11 @@ const userCharts = [
       'showYAxisValues': '1',
       'xAxisNameFontSize': '10',
       'yAxisNameFontSize': '10',
-      'labelFontSize': '8',
+      'labelFontSize': '9',
       'drawAnchors': '1',
       'anchorRadius': '1',
       'showlegend': '0',
-      'outCnvBaseFontSize': '8'
+      'outCnvBaseFontSize': '9'
     },
     'chartData': {
       'fieldMapping': [
@@ -170,11 +170,11 @@ const userCharts = [
       'showYAxisValues': '1',
       'xAxisNameFontSize': '10',
       'yAxisNameFontSize': '10',
-      'labelFontSize': '8',
+      'labelFontSize': '9',
       'drawAnchors': '1',
       'anchorRadius': '1',
       'showlegend': '0',
-      'outCnvBaseFontSize': '8'
+      'outCnvBaseFontSize': '9'
     },
     'chartData': {
       'fieldMapping': [
@@ -257,9 +257,9 @@ const userCharts = [
       'showYAxisValues': '1',
       'xAxisNameFontSize': '10',
       'yAxisNameFontSize': '10',
-      'labelFontSize': '8',
+      'labelFontSize': '9',
       'showlegend': '0',
-      'outCnvBaseFontSize': '8'
+      'outCnvBaseFontSize': '9'
     },
     'chartData': {
       'fieldMapping': [
@@ -338,9 +338,9 @@ const userCharts = [
       'showYAxisValues': '1',
       'xAxisNameFontSize': '10',
       'yAxisNameFontSize': '10',
-      'labelFontSize': '8',
+      'labelFontSize': '9',
       'showlegend': '0',
-      'outCnvBaseFontSize': '8'
+      'outCnvBaseFontSize': '9'
     },
     'chartData': {
       'fieldMapping': [
@@ -421,11 +421,11 @@ const machineCharts = [
       'showYAxisValues': '1',
       'xAxisNameFontSize': '10',
       'yAxisNameFontSize': '10',
-      'labelFontSize': '8',
+      'labelFontSize': '9',
       'drawAnchors': '1',
       'anchorRadius': '1',
       'showlegend': '0',
-      'outCnvBaseFontSize': '8'
+      'outCnvBaseFontSize': '9'
     },
     'chartData': {
       'fieldMapping': [
@@ -506,11 +506,11 @@ const machineCharts = [
       'showYAxisValues': '1',
       'xAxisNameFontSize': '10',
       'yAxisNameFontSize': '10',
-      'labelFontSize': '8',
+      'labelFontSize': '9',
       'drawAnchors': '1',
       'anchorRadius': '1',
       'showlegend': '0',
-      'outCnvBaseFontSize': '8'
+      'outCnvBaseFontSize': '9'
     },
     'chartData': {
       'fieldMapping': [
@@ -593,9 +593,9 @@ const machineCharts = [
       'showYAxisValues': '1',
       'xAxisNameFontSize': '10',
       'yAxisNameFontSize': '10',
-      'labelFontSize': '8',
+      'labelFontSize': '9',
       'showlegend': '0',
-      'outCnvBaseFontSize': '8'
+      'outCnvBaseFontSize': '9'
     },
     'chartData': {
       'fieldMapping': [
@@ -674,9 +674,9 @@ const machineCharts = [
       'showYAxisValues': '1',
       'xAxisNameFontSize': '10',
       'yAxisNameFontSize': '10',
-      'labelFontSize': '8',
+      'labelFontSize': '9',
       'showlegend': '0',
-      'outCnvBaseFontSize': '8'
+      'outCnvBaseFontSize': '9'
     },
     'chartData': {
       'fieldMapping': [

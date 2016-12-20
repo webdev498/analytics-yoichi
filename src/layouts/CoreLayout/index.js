@@ -160,16 +160,14 @@ export class CoreLayout extends React.Component {
           showSearch={state.showSearch} />
 
         <div style={styles.base}>
-          <div style={styles.content}>
-            {
-              (props.auth.isLoading)
-              ? <Loader />
-              : <PageContent
-                location={props.location}
-                params={props.params}
-                history={this.context.router} />
-            }
-          </div>
+          {
+            props.auth.isLoading
+            ? <Loader />
+            : <PageContent
+              location={props.location}
+              params={props.params}
+              history={this.context.router} />
+          }
 
           {
             showKibana && kibanaUrl !== ''

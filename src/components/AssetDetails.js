@@ -78,12 +78,11 @@ const styles = {
     fontSize: '18px'
   },
   value: {
-    fontWeight: '300',
     fontSize: '16px',
     marginLeft: 'auto'
   },
   heading: {
-    fontWeight: '300',
+    fontWeight: 'normal',
     margin: 0
   },
   text: {
@@ -100,6 +99,7 @@ const styles = {
   },
   change: {
     fontSize: '11px',
+    fontWeight: 'bold',
     marginLeft: '15px',
     display: 'inline-flex',
     textAlign: 'right'
