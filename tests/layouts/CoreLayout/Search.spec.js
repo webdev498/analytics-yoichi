@@ -1,18 +1,22 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
+import {wrapThemeProvider} from '../../testUtils';
 import {Search} from 'layouts/CoreLayout/Search';
+
+import {spy} from 'sinon';
 
 describe('<Search />', () => {
   let component, props;
 
   beforeEach(function() {
     props = {
-      auth: {}
+      auth: {},
+      toggleSearch: spy()
     };
 
-    component = mount(<Search {...props} />);
-    component = component.find('ParentCard');
+    component = shallow(wrapThemeProvider(<Search {...props} />));
+    component = component.find('Search');
   });
 
   it('should exist', () => {
