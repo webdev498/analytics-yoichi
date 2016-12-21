@@ -185,7 +185,10 @@ const timeline = {
             'style': {
               'width': '100%',
               'height': '100%',
-              'backgroundColor': '#EBEBEF'
+              'backgroundColor': '#EBEBEF',
+              'borderWidth': '8px',
+              'borderLeftStyle': 'solid',
+              'borderImage': 'linear-gradient(to right, rgba(0, 0, 0, 0), #cbcbd1) 50 100%'
             },
             'otherStyles': {
               'flex': {},
