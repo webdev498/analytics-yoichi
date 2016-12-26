@@ -67,7 +67,8 @@ function getDetailsArrow(selected) {
 
 class TimelineCard extends React.Component {
   static propTypes = {
-    data: PropTypes.object
+    data: PropTypes.object,
+    broadcastEvent: PropTypes.func
   }
 
   constructor(props) {
@@ -172,6 +173,10 @@ class TimelineCard extends React.Component {
     );
   }
 
+  toggleHighlightNetworkNode(id) {
+    this.props.broadcastEvent('network-graph', {id});
+  }
+
   handleCardClick() {
     const {props} = this;
     let details = {
@@ -192,6 +197,11 @@ class TimelineCard extends React.Component {
               eventDate: props.data.Date
             };
           }
+
+          // on click of any anomaly card, remove the highlight.
+          props.setHighlightCard(props.data.id, false);
+
+          this.toggleHighlightNetworkNode(props.data.id);
           props.getContextualMenuApiObj(details);
           break;
         }

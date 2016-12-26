@@ -102,6 +102,7 @@ class Timeline extends React.Component {
 
     this.fetchData = this.fetchData.bind(this);
     this.getContextualMenuApiObj = this.getContextualMenuApiObj.bind(this);
+    this.setHighlightCard = this.setHighlightCard.bind(this);
     this.onTabChange = this.onTabChange.bind(this);
   }
 
@@ -120,12 +121,7 @@ class Timeline extends React.Component {
 
     if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
       const {id, set} = nextProps.eventData;
-      if (set === true) {
-        this.setState({highlightCardId: id});
-      }
-      else {
-        this.setState({highlightCardId: ''});
-      }
+      this.setHighlightCard(id, set);
     }
 
     if (!nextProps.data) {
@@ -149,6 +145,15 @@ class Timeline extends React.Component {
     }
 
     this.state.selectedCardId = '';
+  }
+
+  setHighlightCard(id, set) {
+    if (set === true) {
+      this.setState({highlightCardId: id});
+    }
+    else {
+      this.setState({highlightCardId: ''});
+    }
   }
 
   setRows(props) {
@@ -209,7 +214,9 @@ class Timeline extends React.Component {
                     card={this.card}
                     attributes={attributes}
                     chart={chart}
-                    highlightCardId={state.highlightCardId} />
+                    highlightCardId={state.highlightCardId}
+                    broadcastEvent={props.broadcastEvent}
+                    setHighlightCard={this.setHighlightCard} />
                   {this.card === CONTEXTUAL_MENU_CARD ? this.displayDate(dateString, this.card) : null}
                 </div>
               );

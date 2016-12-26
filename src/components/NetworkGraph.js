@@ -671,6 +671,16 @@ class NetworkGraph extends React.Component {
     this.undoOrResetGraph = this.undoOrResetGraph.bind(this);
     this.isGraphExtended = this.isGraphExtended.bind(this);
     this.updateNodeAndEdgeObjects = this.updateNodeAndEdgeObjects.bind(this);
+
+    this.network = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {props} = this;
+
+    if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
+      // const {id} = nextProps.eventData;
+    }
   }
 
   getNodesEdges(data) {
@@ -850,6 +860,8 @@ class NetworkGraph extends React.Component {
           : networkGraphDefaultOptions.height
       }),
       network = new vis.Network(this.networkGraph, networkData, options);
+
+    this.network = network;
 
     if (networkData.nodes.length <= 10) {
       network.setOptions(physicsFalse);
