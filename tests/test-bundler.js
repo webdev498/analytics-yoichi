@@ -1,3 +1,5 @@
+import React from 'react';
+
 // ---------------------------------------
 // Test Environment Setup
 // ---------------------------------------
@@ -8,6 +10,11 @@ import chaiAsPromised from 'chai-as-promised';
 import chaiEnzyme from 'chai-enzyme';
 import chaiImmutable from 'chai-immutable';
 
+function FusionCharts() {
+  this.render = function() {};
+}
+FusionCharts.ready = function() {};
+
 chai.use(chaiImmutable);
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
@@ -17,6 +24,7 @@ global.chai = chai;
 global.sinon = sinon;
 global.expect = chai.expect;
 global.should = chai.should();
+global.FusionCharts = FusionCharts;
 
 if (!String.prototype.includes) {
   String.prototype.includes = function(search, start) { // eslint-disable-line

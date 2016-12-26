@@ -69,7 +69,7 @@ class Heatmap extends React.Component {
 
   renderChart() {
     const {props, props: {data}, getDataSource} = this;
-    if (!(data && data.rows && data.rows.length !== 0)) {
+    if (!(data.rows && data.rows.length !== 0)) {
       return;
     }
 
