@@ -156,21 +156,10 @@ describe('<MultiSeriesCombiChart />', function() {
 
   it('generateCategoryArray should return category array.', function() {
     const rows = [
-      [
-        '2016-07-20T06:50:00.000',
-        'low',
-        0
+        [ '2016-07-20T06:50:00.000', 'low', 0 ],
+        [ '2016-07-20T06:50:00.000', 'medium', 0 ],
+        [ '2016-07-20T06:50:00.000', 'high', 0 ]
       ],
-      [
-        '2016-07-20T06:50:00.000',
-        'medium',
-        0
-      ],
-      [
-        '2016-07-20T06:50:00.000',
-        'high',
-        0
-      ]],
       index = 0,
       dateDisplayFormat = 'HH:mm',
       category = [{'label': '12:20', 'toolText': '20 Jul 2016 12:20'}];
