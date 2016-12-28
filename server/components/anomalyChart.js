@@ -90,6 +90,7 @@ export function getChartData(chart) {
       });
     }
 
+    // TODO use color constansts.
     let chartConfig = {};
     if (value.toLowerCase() === 'line') {
       chartConfig.color = '#60E2DC';
@@ -132,6 +133,7 @@ function sortData(unordered) {
   return ordered;
 }
 
+// TODO, refactor to remove combination condition.
 export default function(parsedData) {
   if (parsedData && !parsedData.errorCode) {
     const keys = Object.keys(parsedData),

@@ -33,6 +33,7 @@ app.use(convert(historyApiFallback({
   // on direct landing to alert page it is not routing correctly to index.html due to '.' in the route,
   // therefore included this custom rewrites.
   rewrites: [
+    // TODO remove this
     {
       from: /\/alert-new/,
       to: '/index.html'
