@@ -12,11 +12,11 @@ target
 .settings
 .project
 
-src/static/bower_components
-src/layout.js
+client/static/bower_components
+client/layout.js
 
 # Environment files
-src/static/env.js
+client/static/env.js
 serverEnv.js
 
 *.json.gzip

@@ -23,7 +23,7 @@
     "deploy": "better-npm-run deploy",
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod",
-    "build:i18n": "rm -rf _translations && BABEL_ENV=i18n babel --quiet src > /dev/null",
+    "build:i18n": "rm -rf _translations && BABEL_ENV=i18n babel --quiet client > /dev/null",
     "build:i18n:langs": "npm run build:i18n && babel-node --babelrc=false scripts/i18nToXliff.js",
     "flow:check": "babel-node bin/flow-check",
     "codecov": "cat coverage/*/lcov.info | codecov"

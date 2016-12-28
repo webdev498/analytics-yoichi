@@ -73,7 +73,7 @@ if (config.coverage_enabled) {
     test: /\.(js|jsx)$/,
     include: new RegExp(config.dir_client),
     loader: 'isparta',
-    exclude: ['/node_modules/', '/src/static/bower_components/']
+    exclude: ['/node_modules/', '/client/static/bower_components/']
   }];
 }
 

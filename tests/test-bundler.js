@@ -89,8 +89,8 @@ const testsContext = require.context('./', true, /\.spec\.js$/);
 const testsToRun = testsContext.keys().filter(inManifest);
 (testsToRun.length ? testsToRun : testsContext.keys()).forEach(testsContext);
 
-// require all `src/**/*.js` except for `main.js` (for isparta coverage reporting)
-// const componentsContext = require.context('../src/', true, /^((?!main).)*\.js$/);
-const componentsContext = require.context('../src/', true, /^static/);
+// require all `client/**/*.js` except for `main.js` (for isparta coverage reporting)
+// const componentsContext = require.context('../client/', true, /^((?!main).)*\.js$/);
+const componentsContext = require.context('../client/', true, /^static/);
 
 componentsContext.keys().forEach(componentsContext);
