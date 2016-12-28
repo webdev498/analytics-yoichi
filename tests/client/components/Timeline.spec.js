@@ -6,7 +6,7 @@ import {spy} from 'sinon';
 import Timeline from 'components/Timeline';
 import TabsWidget from 'components/TabsWidget';
 import PaginationWidget from 'components/PaginationWidget';
-import {wrapThemeProvider} from '../testUtils';
+import {wrapThemeProvider} from '../../testUtils';
 
 let props = {
   id: 'timeline',

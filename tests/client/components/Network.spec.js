@@ -14,7 +14,7 @@ import NetworkGraph, {
 } from 'components/NetworkGraph';
 import Loader from 'components/Loader';
 import {Colors} from 'theme/colors';
-import {wrapThemeProvider} from '../testUtils';
+import {wrapThemeProvider} from '../../testUtils';
 
 let props = {
   id: 'NetworkGraph',

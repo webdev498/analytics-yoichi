@@ -28,8 +28,6 @@
   "rules": {
     "semi" : [2, "always"],
     "max-len": [2, 120, 2],
-    "flow-vars/define-flow-type": 1,
-    "flow-vars/use-flow-type": 1,
     "space-before-function-paren": [2, "never"],
     "brace-style": [2, "stroustrup", { "allowSingleLine": true }],
     "one-var": [0, {

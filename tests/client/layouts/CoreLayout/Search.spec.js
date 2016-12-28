@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import {wrapThemeProvider} from '../../testUtils';
+import {wrapThemeProvider} from '../../../testUtils';
 import {Search} from 'layouts/CoreLayout/Search';
 
 import {spy} from 'sinon';

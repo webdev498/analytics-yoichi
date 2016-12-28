@@ -15,7 +15,7 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem/MenuItem';
 import Paper from 'material-ui/Paper';
 
-import { simulateEvent } from '../../testUtils';
+import { simulateEvent } from '../../../testUtils';
 
 injectTapEventPlugin();
 

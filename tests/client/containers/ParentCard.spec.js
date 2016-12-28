@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
 import {ParentCard} from 'containers/ParentCard';
-import {wrapThemeProvider} from '../testUtils';
+import {wrapThemeProvider} from '../../testUtils';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppTheme from 'theme/AppTheme';
