@@ -20,18 +20,18 @@ export function requestApiData(id, api) {
   };
 }
 
-export function receiveApiData(id, json) {
+export function receiveApiData(id, data) {
   return {
     type: RECEIVE_API_DATA,
-    data: json,
+    data,
     id
   };
 }
 
-export function errorApiData(id, ex, api) {
+export function errorApiData(id, errorData, api) {
   return {
     type: ERROR_API_DATA,
-    errorData: ex,
+    errorData,
     id,
     api
   };
@@ -69,8 +69,12 @@ function getQuery(key) {
   return '';
 }
 
-function getUrl(api, duration, routerParams) {
+export function getUrl(api, duration = '1h', routerParams) {
   const {queryParams: query, path, pathParams} = api;
+
+  if (!query || !path || !pathParams) {
+    return '';
+  }
 
   let url = path;
 
@@ -138,7 +142,10 @@ function callApi(api, duration, params, options, dispatch) {
     }, headers),
     body = options && JSON.stringify(options.body);
 
-  return fetch(getUrl(api, duration, params), {
+  const url = getUrl(api, duration, params);
+  if (!url) return;
+
+  return fetch(url, {
     method: api.method || 'GET',
     headers: defaultHeaders,
     body

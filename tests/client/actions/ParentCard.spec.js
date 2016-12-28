@@ -122,5 +122,64 @@ describe('ParentCard Actions', () => {
       expect(url).to.be.a('string');
       expect(url).to.equal(baseUrl + '/api/test');
     });
+
+    it('should use routerParams for string substitutions', () => {
+      const api = getApiObj('/api/alert/{alertId}', null, {alertId: ':pathParam'}),
+        routerParams = {alertId: 'alertId'},
+        url = getUrl(api, null, routerParams);
+
+      expect(url).to.equal(`${baseUrl}/api/alert/${routerParams.alertId}`);
+    });
+
+    it('should use both routerParams and pathParams for string substitutions in path string', () => {
+      const api = getApiObj('/api/alert/{alertId}/{other}', null, {alertId: ':pathParam', other: 'test'}),
+        routerParams = {alertId: 'alertId'},
+        url = getUrl(api, null, routerParams);
+
+      expect(url).to.equal(`${baseUrl}/api/alert/${routerParams.alertId}/test`);
+    });
+
+    it('should add query string as provided by queryParams', () => {
+      const api = getApiObj('/api/alert', {a: '1', b: '2'}),
+        url = getUrl(api);
+
+      expect(url).to.equal(`${baseUrl}/api/alert?a=1&b=2`);
+    });
+
+    it('should add query to url with string substitutions for query keys using routerParams', () => {
+      const query = {'type:pathParam': 'assetId:pathParam', a: 1},
+        routerParams = {type: 'test', assetId: 'testId'},
+        api = getApiObj('/api/alert', query),
+        url = getUrl(api, '1h', routerParams);
+
+      expect(url).to.equal(`${baseUrl}/api/alert?${routerParams.type}=${routerParams.assetId}&a=1`);
+    });
+
+    it('should add duration of 1d for query window and timeShift', () => {
+      const query = {window: '', timeShift: ''},
+        api = getApiObj('/api/alert', query),
+        url = getUrl(api, '1d');
+
+      expect(url).to.equal(`${baseUrl}/api/alert?window=1d&timeShift=1d`);
+    });
+
+    it('should add query string with string substitutions for query values using routerParams', () => {
+      const query = { date: 'date:pathParam', window: '' },
+        routerParams = {date: '12/11/2006'},
+        api = getApiObj('/api/alert', query),
+        url = getUrl(api, '1d', routerParams);
+
+      expect(url).to.equal(`${baseUrl}/api/alert?date=${routerParams.date}&window=1d`);
+    });
+
+    it('should return url with path substitutions, query substitutions, and window duration', () => {
+      const query = { date: 'date:pathParam', window: '', 'type:pathParam': 'assetId:pathParam' },
+        routerParams = {date: '12/11/2006', type: 'test', assetId: 'testId'},
+        api = getApiObj('/api/alert', query),
+        url = getUrl(api, '1d', routerParams),
+        str = `${baseUrl}/api/alert?date=${routerParams.date}&window=1d&${routerParams.type}=${routerParams.assetId}`;
+
+      expect(url).to.equal(str);
+    });
   });
 });
