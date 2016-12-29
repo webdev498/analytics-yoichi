@@ -6,7 +6,7 @@ import {spy} from 'sinon';
 import Card from 'material-ui/Card/Card';
 import TimelineCard from 'components/TimelineCard';
 import MultiSeriesCombiChart from 'components/MultiSeriesCombiChart';
-import {wrapThemeProvider} from '../testUtils';
+import {wrapThemeProvider} from '../../testUtils';
 import {getColor} from 'utils/utils';
 
 let props = {

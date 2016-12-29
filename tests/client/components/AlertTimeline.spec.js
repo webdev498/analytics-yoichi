@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
 import AlertTimeline from 'components/AlertTimeline';
-import {wrapThemeProvider} from '../testUtils';
+import {wrapThemeProvider} from '../../testUtils';
 
 let props = {
   id: 'alertTimeline',
