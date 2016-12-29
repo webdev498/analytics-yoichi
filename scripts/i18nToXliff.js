@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { sync as globSync } from 'glob';
 import { sync as mkdirpSync } from 'mkdirp';
-import * as i18n from '../src/i18n';
+import * as i18n from '../client/i18n';
 
 const MESSAGES_PATTERN = './_translations/**/*.json';
 const LANG_DIR = './_translations/lang/';

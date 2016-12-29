@@ -8,6 +8,11 @@ import chaiAsPromised from 'chai-as-promised';
 import chaiEnzyme from 'chai-enzyme';
 import chaiImmutable from 'chai-immutable';
 
+function FusionCharts() {
+  this.render = function() {};
+}
+FusionCharts.ready = function() {};
+
 chai.use(chaiImmutable);
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
@@ -17,6 +22,7 @@ global.chai = chai;
 global.sinon = sinon;
 global.expect = chai.expect;
 global.should = chai.should();
+global.FusionCharts = FusionCharts;
 
 if (!String.prototype.includes) {
   String.prototype.includes = function(search, start) { // eslint-disable-line
@@ -69,6 +75,26 @@ if (!Array.prototype.includes) {
   };
 }
 
+if (!String.prototype.startsWith) {
+  String.prototype.startsWith = function(searchString, position) { // eslint-disable-line
+    position = position || 0;
+    return this.substr(position, searchString.length) === searchString;
+  };
+}
+
+if (!String.prototype.endsWith) {
+  String.prototype.endsWith = function(searchString, position) { // eslint-disable-line
+    var subjectString = this.toString();
+    if (typeof position !== 'number' || !isFinite(position) ||
+        Math.floor(position) !== position || position > subjectString.length) {
+      position = subjectString.length;
+    }
+    position -= searchString.length;
+    var lastIndex = subjectString.lastIndexOf(searchString, position);
+    return lastIndex !== -1 && lastIndex === position;
+  };
+}
+
 // ---------------------------------------
 // Require Tests
 // ---------------------------------------
@@ -83,8 +109,8 @@ const testsContext = require.context('./', true, /\.spec\.js$/);
 const testsToRun = testsContext.keys().filter(inManifest);
 (testsToRun.length ? testsToRun : testsContext.keys()).forEach(testsContext);
 
-// require all `src/**/*.js` except for `main.js` (for isparta coverage reporting)
-// const componentsContext = require.context('../src/', true, /^((?!main).)*\.js$/);
-const componentsContext = require.context('../src/', true, /^static/);
+// require all `client/**/*.js` except for `main.js` (for isparta coverage reporting)
+// const componentsContext = require.context('../client/', true, /^((?!main).)*\.js$/);
+const componentsContext = require.context('../client/', true, /^static/);
 
 componentsContext.keys().forEach(componentsContext);

@@ -8,7 +8,7 @@
   "exclude": [
     "node_module",
     "dist",
-    "src/static/bower_components",
-    "src/static/other_components"
+    "client/static/bower_components",
+    "client/static/other_components"
   ]
 }

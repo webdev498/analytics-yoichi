@@ -20,10 +20,10 @@
 
     <properties>
         <exec.plugin.version>1.3.2</exec.plugin.version>
-        <sonar.sources>src</sonar.sources>
+        <sonar.sources>client</sonar.sources>
         <sonar.exclusions>
-            src/static/bower_components/**/*,
-            src/static/other_components/**/*
+            client/static/bower_components/**/*,
+            client/static/other_components/**/*
         </sonar.exclusions>
     </properties>
 
@@ -49,7 +49,7 @@
                             <directory>node_modules</directory>
                         </fileset>
                         <fileset>
-                            <directory>src/static/bower_components</directory>
+                            <directory>client/static/bower_components</directory>
                         </fileset>
                     </filesets>
                 </configuration>
