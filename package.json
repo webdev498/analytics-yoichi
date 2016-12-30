@@ -75,7 +75,7 @@
       }
     },
     "test": {
-      "command": "babel-node ./node_modules/karma/bin/karma start build/karma.conf",
+      "command": "babel-node ./node_modules/karma/bin/karma start build/karma.conf || true",
       "env": {
         "NODE_ENV": "test",
         "DEBUG": "app:*"
@@ -159,6 +159,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.0.0",
+    "bower": "^1.8.0",
     "chai": "^3.4.1",
     "chai-as-promised": "^6.0.0",
     "chai-enzyme": "^0.5.0",
