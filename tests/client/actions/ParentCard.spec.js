@@ -1,6 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {fakeServer, spy} from 'sinon';
+import {Map, fromJS} from 'immutable';
 
 import {
   REQUEST_API_DATA,
@@ -202,7 +203,7 @@ describe('ParentCard Actions', () => {
       },
       params = {},
       json = { total: 0, next: -1, rows: [], columns: [] },
-      jsonRes = JSON.stringify({ total: 0, next: -1, rows: [], columns: [] });
+      jsonRes = JSON.stringify(json);
 
     beforeEach(function() {
       server = fakeServer.create();
@@ -300,5 +301,93 @@ describe('ParentCard Actions', () => {
     });
   });
 
-  context('fetchApiData function', () => { });
+  context('fetchApiData function', () => {
+    let server, id, apiData, auth, store;
+
+    const api = {
+        path: '/api/{reportId}',
+        pathParams: { reportId: 'test' },
+        queryParams: {}
+      },
+      params = {},
+      json = { total: 0, next: -1, rows: [], columns: [] },
+      jsonRes = JSON.stringify(json);
+
+    beforeEach(function() {
+      server = fakeServer.create();
+      id = 'testId';
+      apiData = fromJS({duration: '1h', components: {}});
+      auth = { cookies: { access_token: '', token_type: '' } };
+      store = mockStore({ apiData, auth });
+    });
+
+    afterEach(function() {
+      server.restore();
+    });
+
+    it('should dispatch REQUEST_API_DATA state', () => {
+      server.respondWith('GET', `${baseUrl}/api/test`, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
+
+      const dispatchCall = store.dispatch(fetchApiData(id, api, params, {})),
+        actions = store.getActions(),
+        requestAction = actions[0];
+
+      expect(actions).to.have.length(1);
+      expect(requestAction).to.have.a.property('type', REQUEST_API_DATA);
+      expect(requestAction).to.have.a.property('id', id);
+      expect(requestAction).to.have.a.property('api');
+
+      server.respond();
+      return dispatchCall;
+    });
+
+    it('should dispatch RECEIVE_API_DATA state, after REQUEST_API_DATA', () => {
+      server.respondWith('GET', `${baseUrl}/api/test`, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
+
+      const dispatchCall = store.dispatch(fetchApiData(id, api, params, {}))
+        .then(res => {
+          const actions = store.getActions(),
+            requestAction = actions[0],
+            responseAction = actions[1];
+
+          expect(actions).to.have.length(2);
+
+          expect(requestAction).to.have.a.property('type', 'REQUEST_API_DATA');
+          expect(requestAction).to.have.a.property('id', id);
+          expect(requestAction).to.have.a.property('api');
+
+          expect(responseAction).to.have.a.property('type', 'RECEIVE_API_DATA');
+          expect(responseAction).to.have.a.property('id', id);
+          expect(responseAction).to.have.a.property('data');
+        });
+
+      server.respond();
+      return dispatchCall;
+    });
+
+    it('should dispatch ERROR_API_DATA state, after REQUEST_API_DATA', () => {
+      server.respondWith('GET', `${baseUrl}/api/test`, [ 400, { 'Content-Type': 'application/json' }, jsonRes ]);
+
+      const dispatchCall = store.dispatch(fetchApiData(id, api, params, {}))
+        .then(res => {
+          const actions = store.getActions(),
+            requestAction = actions[0],
+            errorAction = actions[1];
+
+          expect(actions).to.have.length(2);
+
+          expect(requestAction).to.have.a.property('type', 'REQUEST_API_DATA');
+          expect(requestAction).to.have.a.property('id', id);
+          expect(requestAction).to.have.a.property('api');
+
+          expect(errorAction).to.have.a.property('type', 'ERROR_API_DATA');
+          expect(errorAction).to.have.a.property('id', id);
+          expect(errorAction).to.have.a.property('errorData');
+          expect(errorAction).to.have.a.property('api');
+        });
+
+      server.respond();
+      return dispatchCall;
+    });
+  });
 });
