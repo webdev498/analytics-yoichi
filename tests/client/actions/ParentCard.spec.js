@@ -283,7 +283,21 @@ describe('ParentCard Actions', () => {
       return apiObj;
     });
 
-    it('should call logUtil, if the reponse is 401');
+    it('should call logoutUtil, if the reponse is 401', () => {
+      server.respondWith('GET', `${baseUrl}/api/test`, [ 401, { 'Content-Type': 'application/json' }, jsonRes ]);
+
+      const apiObj = callApi(api, '1h', params, {}, dispatch)
+        .then(res => {
+          expect(dispatch).to.be.called;
+
+          const firstCallArgs = dispatch.firstCall.args[0];
+          expect(firstCallArgs).to.have.a.property('type', 'SET_COOKIES');
+          expect(firstCallArgs).to.have.a.property('data', null);
+        });
+
+      server.respond();
+      return apiObj;
+    });
   });
 
   context('fetchApiData function', () => { });
