@@ -20,7 +20,8 @@ const webpackConfig = {
   },
   module: {},
   externals: {
-    'react/addons': true
+    'react/addons': true,
+    fs: '{}'
   }
 };
 // ------------------------------------

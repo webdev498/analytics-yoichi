@@ -1,3 +1,7 @@
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {fakeServer, spy} from 'sinon';
+
 import {
   REQUEST_API_DATA,
   RECEIVE_API_DATA,
@@ -14,10 +18,15 @@ import {
   changeTimeRange,
   componentEvent,
   removeComponentWithId,
-  getUrl
+  getUrl,
+  callApi,
+  fetchApiData
 } from 'actions/ParentCard';
 
 import {baseUrl} from 'config';
+
+const middlewares = [ thunk ];
+const mockStore = configureMockStore(middlewares);
 
 function getApiObj(path, query, pathParams) {
   return {
@@ -92,7 +101,7 @@ describe('ParentCard Actions', () => {
     expect(removeComponentState).to.have.a.property('type', REMOVE_COMPONENT);
   });
 
-  describe('getUrl function', () => {
+  context('getUrl function', () => {
     it('should throw an error if api param is not passed', () => {
       try { getUrl(); }
       catch (ex) {
@@ -182,4 +191,100 @@ describe('ParentCard Actions', () => {
       expect(url).to.equal(str);
     });
   });
+
+  context('callApi function', () => {
+    let server, dispatch;
+
+    const api = {
+        path: '/api/{reportId}',
+        pathParams: { reportId: 'test' },
+        queryParams: {}
+      },
+      params = {},
+      json = { total: 0, next: -1, rows: [], columns: [] },
+      jsonRes = JSON.stringify({ total: 0, next: -1, rows: [], columns: [] });
+
+    beforeEach(function() {
+      server = fakeServer.create();
+      dispatch = spy();
+    });
+
+    afterEach(function() {
+      server.restore();
+    });
+
+    it('should have authorization and other set headers in the request', () => {
+      server.respondWith('GET', `${baseUrl}/api/test`, function(req) {
+        expect(req).to.have.a.property('errorFlag', false);
+        expect(req).to.have.a.property('requestHeaders');
+
+        const headers = req.requestHeaders;
+        expect(headers).to.have.a.property('authorization');
+        expect(headers.authorization).to.be.a('string');
+        expect(headers).to.have.a.property('a', '1');
+        expect(headers).to.have.a.property('content-type': 'application/json');
+
+        req.respond(200, { 'Content-Type': 'application/json' }, jsonRes);
+      });
+
+      const apiJSON = Object.assign({}, api, {headers: {a: 1}}),
+        apiObj = callApi(apiJSON, '1h', params, {}, dispatch);
+      server.respond();
+      return apiObj;
+    });
+
+    it('should make the get request', () => {
+      server.respondWith('GET', `${baseUrl}/api/test`, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
+
+      const apiObj = callApi(api, '1h', params, {}, dispatch)
+        .then(res => {
+          expect(res).to.be.an.object;
+          expect(res).to.deep.equal(json);
+          expect(dispatch.callCount).to.equal(0);
+        });
+
+      server.respond();
+      return apiObj;
+    });
+
+    it('should throw error response for 400 response', () => {
+      server.respondWith('GET', `${baseUrl}/api/test`, [ 400, { 'Content-Type': 'application/json' }, jsonRes ]);
+
+      const apiObj = callApi(api, '1h', params, {}, dispatch)
+        .then(res => {
+          throw new Error({message: 'This should not be called'});
+        })
+        .catch(ex => {
+          expect(ex).to.be.an.object;
+          expect(ex.constructor).to.equal(Error);
+
+          const res = ex.response;
+          expect(res).to.have.a.property('status', 400);
+          expect(res).to.have.a.property('ok', false);
+          expect(dispatch.callCount).to.equal(0);
+        });
+
+      server.respond();
+      return apiObj;
+    });
+
+    it('should make POST request', () => {
+      server.respondWith('POST', `${baseUrl}/api/test`, [ 200, {'Content-Type': 'application/json'}, jsonRes ]);
+
+      const postApi = Object.assign({}, api, {method: 'POST'});
+      const apiObj = callApi(postApi, '1h', params, {body: {a: 1}}, dispatch)
+        .then(res => {
+          expect(res).to.be.an.object;
+          expect(res).to.deep.equal(json);
+          expect(dispatch.callCount).to.equal(0);
+        });
+
+      server.respond();
+      return apiObj;
+    });
+
+    it('should call logUtil, if the reponse is 401');
+  });
+
+  context('fetchApiData function', () => { });
 });

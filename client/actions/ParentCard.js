@@ -132,7 +132,7 @@ export function getUrl(api, duration = '1h', routerParams) {
   return baseUrl + url + queryString;
 }
 
-function callApi(api, duration, params, options, dispatch) {
+export function callApi(api, duration, params, options, dispatch) {
   const accessToken = cookies.access_token,
     tokenType = cookies.token_type,
     headers = (api && api.headers) || {},
