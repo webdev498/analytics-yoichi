@@ -6,7 +6,8 @@ export function generateDataSource(chartProperties, duration) {
     dataSet = [],
     dataObject = [],
     dataSeries = {},
-    {chartValue, chartOptions} = chartProperties;
+    {data, chartOptions} = chartProperties,
+    chartValue = data[0].value;
 
   for (let key in chartValue) {
     let dataPoint = {

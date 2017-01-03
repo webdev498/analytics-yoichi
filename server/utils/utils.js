@@ -177,3 +177,114 @@ export function getParameterByName(name, url) {
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+function addZero(x, n) {
+  while (x.toString().length < n) {
+    x = '0' + x;
+  }
+  return x;
+}
+
+// Format Date in YYYY-MM-DDThh:mm:ss format
+export function formatDate(date) {
+  let dd = date.getDate();
+  let mm = date.getMonth() + 1;// January is 0!
+  let yyyy = (date.getFullYear());
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+
+  let hh = addZero(date.getHours(), 2);
+  let min = addZero(date.getMinutes(), 2);
+  let ss = addZero(date.getSeconds(), 2);
+  let milisec = addZero(date.getMilliseconds(), 3);
+  milisec = (milisec !== '' || milisec !== 0 || milisec !== '0') ? '.' + milisec : milisec;
+
+  let formattedDateString = yyyy + '-' + mm + '-' + dd + 'T' + hh + ':' + min + ':' + ss + milisec;
+
+  return formattedDateString;
+}
+
+function getFromDate(params, todayDate, fromDate) {
+  if (params.functionName === 'hour') {
+    fromDate.setHours(todayDate.getHours() - params.diffInUnits);
+  }
+  else if (params.functionName === 'date') {
+    fromDate.setDate(todayDate.getDate() - params.diffInUnits);
+  }
+  else if (params.functionName === 'month') {
+    fromDate.setMonth(todayDate.getMonth() - params.diffInUnits);
+  }
+  return fromDate;
+}
+
+// Function to get from and to dates for the specific time window
+export function getTimePairFromWindow(timeWindow, dateString) {
+  const timeDifferences = {
+    '1h': {
+      diffInMin: 5,
+      functionName: 'hour',
+      diffInUnits: 1
+    },
+    '6h': {
+      diffInMin: 15,
+      functionName: 'hour',
+      diffInUnits: 6
+    },
+    '12h': {
+      diffInMin: 30,
+      functionName: 'hour',
+      diffInUnits: 12
+    },
+    '24h': {
+      diffInMin: 60,
+      functionName: 'date',
+      diffInUnits: 1
+    },
+    '48h': {
+      diffInMin: 120,
+      functionName: 'date',
+      diffInUnits: 2
+    },
+    '1d': {
+      diffInMin: 60,
+      functionName: 'date',
+      diffInUnits: 1
+    },
+    '1w': {
+      diffInMin: 1440,
+      functionName: 'date',
+      diffInUnits: 7
+    },
+    '1mo': {
+      diffInMin: 10080,
+      functionName: 'month',
+      diffInUnits: 1
+    }
+  };
+  let dateString1 = '',
+    dateString2 = '';
+
+  if (dateString !== '') {
+    dateString = dateString.replace(/-/g, '/');
+    let dateParameter = new Date(Date.parse((dateString).toString()));
+    dateString1 = formatDate(dateParameter);
+
+    let timeDifference = timeDifferences[timeWindow] ? timeDifferences[timeWindow].diffInMin : 5,
+      toDate = dateParameter;
+    toDate.setMinutes(toDate.getMinutes() + timeDifference);
+    dateString2 = formatDate(toDate);
+    return {fromDate: dateString1, toDate: dateString2};
+  }
+  else {
+    let todayDate = new Date(),
+      fromDate = todayDate;
+    fromDate = getFromDate(timeDifferences[timeWindow], todayDate, fromDate);
+    dateString1 = formatDate(new Date());
+    dateString2 = formatDate(fromDate);
+    return {fromDate: dateString2, toDate: dateString1};
+  }
+}

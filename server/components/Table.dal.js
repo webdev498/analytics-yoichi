@@ -80,8 +80,6 @@ function getDetails(rawData, ctx) {
   reportId = reportId.split('/');
   reportId = reportId[reportId.length - 1];
 
-  console.log(ctx);
-
   const fileName = `../dalJSON/${reportId}.json`,
     filePath = path.join(__dirname, fileName);
 

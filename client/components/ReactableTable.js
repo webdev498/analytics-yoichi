@@ -20,6 +20,7 @@ const styles = {
 function loadChartComponentInTableRow(tableColumn, duration) {
   switch (tableColumn.chartType) {
     case 'area2d':
+      console.log('tableColumn', tableColumn);
       return (
         <Area2DAsSparkLineChart chartProperties={tableColumn} duration={duration} />
       );
@@ -93,7 +94,7 @@ export class TableCard extends React.Component {
                 : null
               }
               {
-                !text.header && index === 0
+                !text.header && index === 0 && data.length > 1
                 ? <span style={styles.header}>{text.value}</span>
                 : text.value + ' '
               }

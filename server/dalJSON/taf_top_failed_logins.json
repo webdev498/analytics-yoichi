@@ -1,0 +1,56 @@
+{
+  "tableOptions": {
+    "itemsPerPage": 5
+  },
+  "tableData": {
+    "fieldMapping": [
+      {
+        "reportId": "taf_top_failed_logins",
+        "columns": [
+          {
+            "data": [
+              {
+                "fieldName": "data.auth.username"
+              }
+            ],
+            "style": {
+              "width": "70%"
+            },
+            "type": "text",
+            "columnNameToDisplay": "USER NAME"
+          },
+          {
+            "data": [
+              {
+                "fieldName": "count"
+              }
+            ],
+            "attributes": {
+              "chartWidth": "100%",
+              "chartType": "area2d",
+              "id": "FailedLogins",
+              "chartHeight": "75"
+            },
+            "style": {
+              "width": "30%"
+            },
+            "type": "chart",
+            "columnNameToDisplay": "LOGINS"
+          }
+        ]
+      }
+    ],
+    "nestedResult": true,
+    "emptyValueMessage": "(Empty)"
+  },
+  "kibana": {
+    "pathParams": [
+      "login-details"
+    ],
+    "queryParams": {
+      "fromAndToBasedOnToday": "",
+      "username": "data.auth.username:fieldName",
+      "status": "fail"
+    }
+  }
+}

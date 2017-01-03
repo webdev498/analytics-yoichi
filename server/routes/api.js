@@ -57,7 +57,10 @@ router
 .get('/analytics/reporting/execute/taf_alert_highpriority', table)
 .get('/analytics/reporting/execute/taf_top_longest_connections', table)
 .get('/analytics/reporting/execute/taf_top_longest_user_agents', table)
-.get('/analytics/reporting/execute/taf_top_shortest_user_agent', table)
+.get('/analytics/reporting/execute/taf_top_shortest_user_agents', table)
+.get('/analytics/reporting/execute/taf_least_used_software', table)
+.get('/analytics/reporting/execute/taf_top_successful_logins', table)
+.get('/analytics/reporting/execute/taf_top_failed_logins', table)
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);
