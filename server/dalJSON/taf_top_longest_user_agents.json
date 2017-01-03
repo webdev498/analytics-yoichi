@@ -1,0 +1,47 @@
+{
+  "tableOptions": {
+    "itemsPerPage": 5
+  },
+  "tableData": {
+    "fieldMapping": [
+      {
+        "reportId": "taf_top_longest_user_agents",
+        "columns": [
+          {
+            "data": [
+              {
+                "fieldName": "data.http.userAgent"
+              }
+            ],
+            "style": {
+              "width": "70%",
+              "wordBreak": "break-all"
+            },
+            "type": "text",
+            "columnNameToDisplay": "LONGEST USER AGENT"
+          },
+          {
+            "data": [
+              {
+                "fieldName": "count"
+              }
+            ],
+            "attributes": {
+              "chartWidth": "100%",
+              "chartType": "area2d",
+              "id": "connection",
+              "chartHeight": "75"
+            },
+            "style": {
+              "width": "30%"
+            },
+            "type": "chart",
+            "columnNameToDisplay": "CONNECTIONS"
+          }
+        ]
+      }
+    ],
+    "nestedResult": true,
+    "emptyValueMessage": "(Empty)"
+  }
+}

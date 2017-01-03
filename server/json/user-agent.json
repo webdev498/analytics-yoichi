@@ -197,7 +197,7 @@
               "Accept": "application/json;report-format=nested"
             },
             "pathParams": {
-              "reportId": "taf_top_longest_user_agents,taf_top_shortest_user_agents"
+              "reportId": "taf_top_longest_user_agents"
             },
             "queryParams": {
               "window": ""
@@ -205,10 +205,7 @@
           },
           "title": "Longest User Agents"
         },
-        "name": "Table",
-        "tableOptions": {
-          "itemsPerPage": 5
-        },
+        "name": "ReactableTable",
         "attributes": {
           "style": {
             "marginRight": "33px",
@@ -216,50 +213,8 @@
           },
           "id": "LongestUserAgents"
         },
-        "tableData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_top_longest_user_agents",
-              "columns": [
-                {
-                  "data": [
-                    {
-                      "fieldName": "data.http.userAgent"
-                    }
-                  ],
-                  "style": {
-                    "width": "70%",
-                    "wordBreak": "break-all"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "LONGEST USER AGENT"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "count"
-                    }
-                  ],
-                  "attributes": {
-                    "chartWidth": "100%",
-                    "chartType": "area2d",
-                    "id": "connection",
-                    "chartHeight": "75"
-                  },
-                  "style": {
-                    "width": "30%"
-                  },
-                  "type": "chart",
-                  "columnNameToDisplay": "CONNECTIONS"
-                }
-              ]
-            }
-          ],
-          "nestedResult": true,
-          "emptyValueMessage": "(Empty)"
-        },
         "id": "longest-user-agents",
-        "type": "Table"
+        "type": "ReactableTable"
       },
       {
         "meta": {
@@ -270,7 +225,7 @@
               "Accept": "application/json;report-format=nested"
             },
             "pathParams": {
-              "reportId": "taf_top_longest_user_agents,taf_top_shortest_user_agents"
+              "reportId": "taf_top_shortest_user_agents"
             },
             "queryParams": {
               "window": ""
@@ -278,60 +233,15 @@
           },
           "title": "Shortest User Agents"
         },
-        "name": "Table",
-        "tableOptions": {
-          "itemsPerPage": 5
-        },
+        "name": "ReactableTable",
         "attributes": {
           "style": {
             "width": "100%"
           },
           "id": "ShortestUserAgents"
         },
-        "tableData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_top_shortest_user_agents",
-              "columns": [
-                {
-                  "data": [
-                    {
-                      "fieldName": "data.http.userAgent"
-                    }
-                  ],
-                  "style": {
-                    "width": "70%",
-                    "wordBreak": "break-all"
-                  },
-                  "type": "text",
-                  "columnNameToDisplay": "SHORTEST USER AGENT"
-                },
-                {
-                  "data": [
-                    {
-                      "fieldName": "count"
-                    }
-                  ],
-                  "attributes": {
-                    "chartWidth": "100%",
-                    "chartType": "area2d",
-                    "id": "bandwidth",
-                    "chartHeight": "75"
-                  },
-                  "style": {
-                    "width": "30%"
-                  },
-                  "type": "chart",
-                  "columnNameToDisplay": "CONNECTIONS"
-                }
-              ]
-            }
-          ],
-          "nestedResult": true,
-          "emptyValueMessage": "(Empty)"
-        },
         "id": "shortest-user-agents",
-        "type": "Table"
+        "type": "ReactableTable"
       }
     ]
   ]

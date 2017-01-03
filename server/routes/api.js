@@ -56,6 +56,8 @@ router
 .get('/session/activity/live/:type/:assetId', HeatMap)
 .get('/analytics/reporting/execute/taf_alert_highpriority', table)
 .get('/analytics/reporting/execute/taf_top_longest_connections', table)
+.get('/analytics/reporting/execute/taf_top_longest_user_agents', table)
+.get('/analytics/reporting/execute/taf_top_shortest_user_agent', table)
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);
