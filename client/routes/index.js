@@ -43,7 +43,7 @@ export default (store) => {
 
       { /* Routes requiring login */ }
       <Route onEnter={requireLogin} component={CoreLayout}>
-        <Redirect from='dashboard' to='/' />
+        <Redirect from='loggedIn' to='/' />
         <IndexRoute />
         {getRoutes()}
       </Route>
