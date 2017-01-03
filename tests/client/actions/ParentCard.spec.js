@@ -21,7 +21,8 @@ import {
   removeComponentWithId,
   getUrl,
   callApi,
-  fetchApiData
+  fetchApiData,
+  updateApiData
 } from 'actions/ParentCard';
 
 import {baseUrl} from 'config';
@@ -388,6 +389,56 @@ describe('ParentCard Actions', () => {
 
       server.respond();
       return dispatchCall;
+    });
+  });
+
+  context('updateApiData function', () => {
+    let apiData, auth, store;
+    beforeEach(function() {
+      apiData = fromJS({duration: '1h', components: {}});
+      auth = { cookies: { access_token: '', token_type: '' } };
+    });
+
+    it('should do nothing if duration is not updated', () => {
+      store = mockStore({ apiData, auth });
+      store.dispatch(updateApiData({param: '1h'}, {}));
+      const actions = store.getActions();
+      expect(actions).to.have.length(0);
+    });
+
+    it('should do update duration', () => {
+      store = mockStore({ apiData, auth });
+      store.dispatch(updateApiData({param: '1d'}, {}));
+      const actions = store.getActions();
+      expect(actions).to.have.length(1);
+      expect(actions[0]).to.have.a.property('type', 'TIME_INTERVAL_UPDATE');
+      expect(actions[0]).to.have.a.property('data', '1d');
+    });
+
+    it('should request data for all the components with api object', () => {
+      const api = { path: '/api/{reportId}', pathParams: { reportId: 'test' }, queryParams: {} },
+        id = 'a1',
+        id2 = 'a2',
+        dataMap1 = Map({ id, data: {}, api }),
+        dataMap2 = Map({ id: id2, data: {}, api });
+
+      let data = fromJS({
+        duration: '1h',
+        components: {}
+      });
+
+      data = data.updateIn(['components'], val => val.set(id, dataMap1));
+      data = data.updateIn(['components'], val => val.set(id2, dataMap2));
+
+      store = mockStore({ apiData: data, auth });
+      store.dispatch(updateApiData({param: '1d'}, {}));
+
+      const actions = store.getActions();
+      expect(actions).to.have.length(3);
+      expect(actions[1]).to.have.a.property('type', 'REQUEST_API_DATA');
+      expect(actions[1]).to.have.a.property('id', id);
+      expect(actions[2]).to.have.a.property('type', 'REQUEST_API_DATA');
+      expect(actions[2]).to.have.a.property('id', id2);
     });
   });
 });
