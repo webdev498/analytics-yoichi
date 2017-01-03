@@ -85,14 +85,10 @@ function getDetails(rawData, ctx) {
 
   let tableJson = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-  // console.log(tableJson);
-
   let columns = rawData.columns,
     processedData = [];
 
-  // if (columns.length === 1 && columns[0].name === 'json') {
   processedData = processData(rawData, tableJson, url);
-  // }
 
   return {
     processedData,

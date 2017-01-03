@@ -20,7 +20,6 @@ const styles = {
 function loadChartComponentInTableRow(tableColumn, duration) {
   switch (tableColumn.chartType) {
     case 'area2d':
-      console.log('tableColumn', tableColumn);
       return (
         <Area2DAsSparkLineChart chartProperties={tableColumn} duration={duration} />
       );
@@ -119,8 +118,6 @@ export class TableCard extends React.Component {
       {tableJson: {tableOptions}, normalizeData} = data,
       id = attributes.id;
 
-    console.log(props);
-
     return (
       <div>
         <Table id={id}
@@ -192,83 +189,11 @@ export class TableCard extends React.Component {
   }
 
   render() {
-    // console.log(props);
-
     return (
       <div>
         {this.loadTable()}
       </div>
     );
-
-    // generateDataSource(props);
-    /*return (
-      <div>
-        <Table id={id}
-          style={{width: '100%'}}
-          className='threatTable'
-          sortable={props.tableOptions.sortable}
-          filterable={props.tableOptions.filterable}
-          defaultSort={props.tableOptions.defaultSort}
-          filterBy={props.search}
-          itemsPerPage={tableDataSource.length > props.tableOptions.itemsPerPage ? props.tableOptions.itemsPerPage : 0}
-          pageButtonLimit={5}
-          currentPage={0}
-          hideFilterInput
-          previousPageLabel={'<<'} nextPageLabel={'>>'}>
-          {
-            tableDataSource.map(function(tableRow, index) {
-              return (
-                <Tr onClick={that.handleRowClick(tableRow, index)}
-                  style={{'cursor': 'pointer'}}
-                  key={`tr${id}${index}`}>
-                  {tableRow.columns.map(function(tableColumn, indexCol) {
-                    if (tableColumn.columnType === 'chart') {
-                      return (
-                        <Td column={tableColumn.columnName}
-                          value={tableColumn.chartValue}
-                          style={tableColumn.columnStyle}
-                          key={`td${id}${indexCol}`}>
-                          {loadChartComponentInTableRow(tableColumn, props.duration)}
-                        </Td>
-                      );
-                    }
-                    if (tableColumn.columnType === 'durationWidget') {
-                      return (
-                        <Td column={tableColumn.columnName}
-                          value={tableColumn.timeValueSort}
-                          style={tableColumn.columnStyle}
-                          key={`td${id}${indexCol}`}>
-                          <DurationWidget timeValue={tableColumn.timeValue} />
-                        </Td>
-                      );
-                    }
-                    if (tableColumn.columnType === 'scoreWidget') {
-                      return (
-                        <Td column={tableColumn.columnName}
-                          value={tableColumn.chartValue}
-                          style={tableColumn.columnStyle}
-                          key={`td${id}${indexCol}`}>
-                          <ScoreWidget scoreValue={tableColumn.chartValue} />
-                        </Td>
-                      );
-                    }
-                    if (tableColumn.columnType === 'text') {
-                      return (
-                        <Td column={tableColumn.columnName}
-                          style={{...tableColumn.columnStyle, 'wordBreak': 'break-all'}}
-                          key={`td${id}${indexCol}`}>
-                          {tableColumn.columnText}
-                        </Td>
-                      );
-                    }
-                  })}
-                </Tr>
-              );
-            })
-          }
-        </Table>
-      </div>
-    );*/
   }
 }
 
