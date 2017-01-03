@@ -3,3 +3,10 @@
   margin: 0 auto;
   height: 400px;
 }
+
+input:required {
+  box-shadow: none;
+}
+input:invalid {
+  box-shadow: none;
+}

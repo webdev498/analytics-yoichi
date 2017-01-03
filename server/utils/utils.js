@@ -113,3 +113,55 @@ export function firstCharCapitalize(string) {
   });
   return string;
 };
+
+// Function to generate row data
+export function generateRawData(fieldMapping, apiData) {
+  let rawData = {};
+  if (apiData === null) {
+    return;
+  }
+  for (let i = 0; i < fieldMapping.length; i++) {
+    let currentChartData = fieldMapping[i];
+    if (!rawData.hasOwnProperty(currentChartData.reportId)) {
+      rawData[currentChartData.reportId] = apiData[currentChartData.reportId] !== undefined
+        ? apiData[currentChartData.reportId]
+        : apiData;
+    }
+  }
+  return rawData;
+}
+
+export function isUndefined(value) {
+  return value === undefined;
+}
+
+// Function to get field value from object name specified in layout JSON
+export function getIndexFromObjectName(inputArray) {
+  let {fieldName, dataArray: fieldValue} = inputArray;
+  let fieldValueArray = fieldName.includes('.') ? fieldName.split('.') : [fieldName];
+
+  fieldValueArray.forEach((arrayValue) => {
+    if (!arrayValue.includes('[') && !arrayValue.includes(']')) {
+      fieldValue = fieldValue[arrayValue];
+    }
+    else {
+      let tempArray = arrayValue.split('[');
+      let arrayName = tempArray[0],
+        arrayIndex = tempArray[1].replace('[', '');
+      arrayIndex = arrayIndex.replace(']', '');
+      if (!isUndefined(fieldValue)) {
+        fieldValue = fieldValue[arrayName];
+      }
+      if (!isUndefined(fieldValue)) {
+        fieldValue = fieldValue[arrayIndex];
+      }
+    }
+
+    if (isUndefined(fieldValue)) {
+      fieldValue = '';
+      return false;
+    }
+  });
+
+  return fieldValue;
+}

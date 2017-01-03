@@ -11,6 +11,8 @@ import {loginUrl, responseType, clientId, redirectUri, defaultRoute} from 'confi
 
 import {Colors} from 'theme/colors';
 
+import './login.scss';
+
 const styles = {
   card: {
     width: '300px',
