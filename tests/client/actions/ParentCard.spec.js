@@ -23,7 +23,8 @@ import {
   callApi,
   fetchApiData,
   updateApiData,
-  broadcastEvent
+  broadcastEvent,
+  removeComponent
 } from 'actions/ParentCard';
 
 import {baseUrl} from 'config';
@@ -485,6 +486,21 @@ describe('ParentCard Actions', () => {
       expect(actions[0]).to.have.a.property('type', PARENT_CARD_EVENT);
       expect(actions[0]).to.have.a.property('id', id);
       expect(actions[0]).to.have.a.property('eventData');
+    });
+  });
+
+  context('removeComponent function', () => {
+    it('should dispatch REMOVE_COMPONENT', () => {
+      const apiData = fromJS({duration: '1h', components: {}}),
+        auth = { cookies: { access_token: '', token_type: '' } },
+        store = mockStore({ apiData, auth }),
+        id = 'testId';
+
+      store.dispatch(removeComponent(id));
+      const actions = store.getActions();
+      expect(actions).to.have.length(1);
+      expect(actions[0]).to.have.a.property('type', REMOVE_COMPONENT);
+      expect(actions[0]).to.have.a.property('id', id);
     });
   });
 });
