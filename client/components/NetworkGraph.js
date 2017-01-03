@@ -9,7 +9,7 @@ import {
   formatDateInLocalTimeZone,
   autoScrollTo
 } from 'utils/utils';
-import {getCountryNameByCountryCode} from 'utils/countryUtils';
+import {countryNameFull} from 'utils/countryUtils';
 import Cookies from 'cookies-js';
 import vis from 'vis';
 import {baseUrl, networkGraphDefaultOptions, hierarchicalNetwork, applyHierarchicalNetwork} from 'config';
@@ -56,8 +56,8 @@ export function createNodeObject(dataNode) {
     nodeType = dataNode.type ? dataNode.type : '';
 
   if (dataNode.type === 'country') {
-    idDisplay = (!isUndefined(getCountryNameByCountryCode[idDisplay]))
-      ? getCountryNameByCountryCode[idDisplay]
+    idDisplay = (!isUndefined(countryNameFull[idDisplay]))
+      ? countryNameFull[idDisplay]
       : idDisplay;
   }
   else if (dataNode.type === 'time') {
@@ -255,11 +255,11 @@ function handleNodeMetaData(metadata, nodeObject) {
           break;
         case 'country':
           nodeObject.label += newLine1 +
-            getCountryNameByCountryCode[metadata[metadataType]];
+            countryNameFull[metadata[metadataType]];
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            getCountryNameByCountryCode[metadata[metadataType]];
+            countryNameFull[metadata[metadataType]];
           nodeObject.nodeDetails.push(<li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b>
-            &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
+            &nbsp;{countryNameFull[metadata[metadataType]]}</li>);
           break;
         case 'anomalyDate':
           let dateTimeAnomaly = formatDateInLocalTimeZone(metadata[metadataType]),

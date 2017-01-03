@@ -6,7 +6,7 @@ import {
 } from 'Constants';
 
 import {isUndefined, getTimePairFromWindow} from 'utils/utils';
-import {getCountryCodeByCountryName} from 'utils/countryUtils';
+import {countryName} from 'utils/countryUtils';
 
 const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
 
@@ -92,7 +92,7 @@ export function getQueryParamsFromKey(parameters, key, value) {
     case 'country':
       let label = dataObj.label,
         countryName = label.split(','),
-        countryCode = getCountryCodeByCountryName[countryName[0]];
+        countryCode = countryName[countryName[0]];
       queryParam = key + '=' + countryCode;
       break;
     case 'scoreRange':

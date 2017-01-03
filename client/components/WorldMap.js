@@ -3,7 +3,7 @@ import WorldMapLegends from 'components/WorldMapLegends';
 import {Colors} from 'theme/colors';
 
 import { generateRawData, isUndefined, getColorRanges } from 'utils/utils';
-import {getCountryIDByCountryCode} from 'utils/countryUtils';
+import {countryCode} from 'utils/countryUtils';
 
 import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
@@ -75,7 +75,7 @@ export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
           let countryCode = rows[n][columnIndexArray[0]],
             value = rows[n][columnIndexArray[3]];
           if (currentChartData.connection === 'secure' || currentChartData.connection === 'malicious') {
-            obj1.id = getCountryIDByCountryCode(countryCode);
+            obj1.id = countryCode(countryCode);
             obj1.countryCode = countryCode;
             obj1.value = value.toString();
             if (value !== null && parseInt(value) !== 0) {

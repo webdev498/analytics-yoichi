@@ -6,9 +6,16 @@ import DurationWidget from 'components/widgets/DurationWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
 import AssetIcon from 'components/widgets/AssetIcon';
 
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
+import {countryName} from 'utils/countryUtils';
 
-const {Table, Tr, Td, unsafe} = Reactable;
+const {Table, Tr, Td} = Reactable;
+
+const styles = {
+  header: {
+    fontWeight: '600',
+    fontSize: '14px'
+  }
+};
 
 function loadChartComponentInTableRow(tableColumn, duration) {
   switch (tableColumn.chartType) {
@@ -66,13 +73,35 @@ export class TableCard extends React.Component {
     };
   }
 
+  displayCountryFlag(data) {
+    let countryFlag = countryName[data.value];
+    countryFlag = countryFlag ? 'flag-icon flag-icon-' + countryFlag.toLowerCase() : '';
+    return (
+      <span className={countryFlag} rel='tooltip' title={data.value} />
+    );
+  }
+
   displayText(data) {
     return (
       <div>
-        {data.map(function(text, index) {
+        {data.map((text, index) => {
           return (
             <div>
-              {text.value}
+              {
+                text.header
+                ? <span style={styles.header}>{text.header + ': '}</span>
+                : null
+              }
+              {
+                !text.header && index === 0
+                ? <span style={styles.header}>{text.value}</span>
+                : text.value + ' '
+              }
+              {
+                text.header && text.header === 'Country'
+                ? this.displayCountryFlag(text)
+                : null
+              }
             </div>
           );
         })}
@@ -81,8 +110,7 @@ export class TableCard extends React.Component {
   }
 
   loadTable() {
-    const {props} = this,
-      that = this;
+    const {props} = this;
     if (!props.data) {
       return;
     }
@@ -107,12 +135,12 @@ export class TableCard extends React.Component {
           hideFilterInput
           previousPageLabel={'<<'} nextPageLabel={'>>'}>
           {
-            normalizeData.map(function(row, index) {
+            normalizeData.map((row, index) => {
               return (
-                <Tr onClick={that.handleRowClick(row, index)}
+                <Tr onClick={this.handleRowClick(row, index)}
                   style={{'cursor': 'pointer'}}
                   key={`tr${id}${index}`}>
-                  {row.columns.map(function(column, indexCol) {
+                  {row.columns.map((column, indexCol) => {
                     if (column.type === 'chart') {
                       return (
                         <Td column={column.name}
@@ -148,7 +176,7 @@ export class TableCard extends React.Component {
                         <Td column={column.name}
                           style={{...column.style, 'wordBreak': 'break-all'}}
                           key={`td${id}${indexCol}`}>
-                          {that.displayText(column.data)}
+                          {this.displayText(column.data)}
                         </Td>
                       );
                     }

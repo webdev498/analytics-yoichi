@@ -9,7 +9,7 @@ import FontIcon from 'material-ui/FontIcon';
 import {Colors} from 'theme/colors';
 
 import {formatBytes, getColor} from 'utils/utils';
-import {getCountryNameByCountryCode} from 'utils/countryUtils';
+import {countryNameFull} from 'utils/countryUtils';
 import {getArrowIcon} from 'utils/graphUtils';
 
 const styles = {
@@ -244,7 +244,7 @@ class AssetDetail extends React.Component {
 
     reports.taf_asset_top_dest_countries.rows.forEach(([country, count]) => {
       details.push({
-        heading: getCountryNameByCountryCode[country],
+        heading: countryNameFull[country],
         value: {value: count.toLocaleString()}
       });
     });
@@ -257,7 +257,7 @@ class AssetDetail extends React.Component {
 
     reports.taf_asset_top_source_countries.rows.forEach(([country, count]) => {
       details.push({
-        heading: getCountryNameByCountryCode[country],
+        heading: countryNameFull[country],
         value: {value: count.toLocaleString()}
       });
     });

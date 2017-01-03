@@ -7,7 +7,7 @@ import {
   firstCharCapitalize
 } from '../utils/utils';
 
-import {getCountryNameByCountryCode} from '../utils/countryUtils';
+import {countryNameFull} from '../utils/countryUtils';
 
 export function generateIndividualRowData(rowColumnDetails) {
   let {currentColumnType, currentColumnDataArray, columnsArray, currentDataRows,
@@ -211,7 +211,7 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText)
     else if (name === 'country') {
       columnText.push({
         header: firstCharCapitalize(displayName),
-        value: getCountryNameByCountryCode[fieldValue.toUpperCase()],
+        value: countryNameFull[fieldValue.toUpperCase()],
         flag: fieldValue
       });
     }

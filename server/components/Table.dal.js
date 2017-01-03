@@ -1,5 +1,6 @@
 import {
-  generateRawData
+  generateRawData,
+  getParameterByName
 } from '../utils/utils';
 
 import {
@@ -7,10 +8,12 @@ import {
   generateRowObject
 } from '../utils/tableUtils';
 
+import {generateClickThroughUrl} from '../utils/kibanaUtils';
+
 const fs = require('fs');
 const path = require('path');
 
-function processData(data, tableJson) {
+function processData(data, tableJson, url) {
   const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.tableData;
     // tableOptions = tableJson.tableOptions,
   let tableDataSource = [];
@@ -50,17 +53,17 @@ function processData(data, tableJson) {
           row: rows[d]
         };
         mainObject = generateRowObject(rowDetails, mainObject);
-        // if (props.kibana) {
-          // let parameters = {
-          //   data: props.data,
-          //   duration: props.duration,
-          //   queryParamsArray: props.kibana.queryParams,
-          //   currentRowNumber: d,
-          //   nestedResult: nestedResult,
-          //   pathParams: props.kibana.pathParams
-          // };
-          // mainObject.rowClickUrl = generateClickThroughUrl(parameters);
-        // }
+        if (tableJson.kibana) {
+          let parameters = {
+            data: data,
+            duration: getParameterByName('window', url),
+            queryParamsArray: tableJson.kibana.queryParams,
+            currentRowNumber: d,
+            nestedResult: nestedResult,
+            pathParams: tableJson.kibana.pathParams
+          };
+          mainObject.rowClickUrl = generateClickThroughUrl(parameters);
+        }
         columnText = [];
       }
       tableDataSource.push(mainObject);
@@ -77,6 +80,8 @@ function getDetails(rawData, ctx) {
   reportId = reportId.split('/');
   reportId = reportId[reportId.length - 1];
 
+  console.log(ctx);
+
   const fileName = `../dalJSON/${reportId}.json`,
     filePath = path.join(__dirname, fileName);
 
@@ -87,9 +92,9 @@ function getDetails(rawData, ctx) {
   let columns = rawData.columns,
     processedData = [];
 
-  if (columns.length === 1 && columns[0].name === 'json') {
-    processedData = processData(rawData, tableJson);
-  }
+  // if (columns.length === 1 && columns[0].name === 'json') {
+  processedData = processData(rawData, tableJson, url);
+  // }
 
   return {
     processedData,

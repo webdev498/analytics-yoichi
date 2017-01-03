@@ -33,8 +33,7 @@
           {
             "data": [
               {
-                "fieldName": "data.rank_alert.description",
-                "displayName": "description"
+                "fieldName": "data.rank_alert.description"
               },
               {
                 "fieldName": "data.rank_alert.message",

@@ -1,7 +1,7 @@
 /* eslint object-property-newline:0 */
 
 // Function to get Country ID by passing Country Code
-export function getCountryIDByCountryCode(countryCode) {
+export function countryCode(countryCode) {
   const countryID = {'AG': '01', 'BS': '02', 'BB': '03', 'BZ': '04', 'CA': '05', 'CR': '06',
     'CU': '07', 'DM': '08', 'DO': '09', 'SV': '10', 'GD': '11', 'GT': '12', 'HT': '13', 'HN': '14', 'JM': '15',
     'MX': '16', 'NI': '17', 'PA': '18', 'KN': '19', 'LC': '20', 'VC': '21', 'TT': '22', 'US': '23', 'GL': '24',
@@ -31,7 +31,7 @@ export function getCountryIDByCountryCode(countryCode) {
   return countryID[countryCode];
 }
 
-export const getCountryCodeByCountryName = {
+export const countryName = {
   'Antigua and Barbuda': 'AG',
   'Bahamas': 'BS',
   'Barbados': 'BB',
@@ -149,7 +149,7 @@ export const getCountryCodeByCountryName = {
   'Nepal': 'NP',
   'Pakistan': 'PK',
   'Philippines': 'PH',
-  'Russia': 'RU',
+  'Russian Federation': 'RU',
   'Singapore': 'G',
   'Sri Lanka': 'LK',
   'Tajikistan': 'TJ',
@@ -238,7 +238,7 @@ export const getCountryCodeByCountryName = {
   'Kosovo': 'KO'
 };
 
-export const getCountryNameByCountryCode = {
+export const countryNameFull = {
   'AD': 'Andorra',
   'AE': 'United Arab Emirates',
   'AF': 'Afghanistan',

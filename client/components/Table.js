@@ -16,7 +16,7 @@ import {
   formatDateInLocalTimeZone
 } from 'utils/utils';
 
-import {getCountryNameByCountryCode} from 'utils/countryUtils';
+import {countryNameFull} from 'utils/countryUtils';
 import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const {Table, Tr, Td, unsafe} = Reactable;
@@ -323,7 +323,7 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText,
     else if (!isUndefined(displayName) && displayName.toLowerCase() === 'countryflag') {
       let fieldValueToDisplay = fieldValue.toUpperCase();
       columnText += newLine + '<span class="heading">Country: </span>' +
-      getCountryNameByCountryCode[fieldValueToDisplay] + ' ' + generateColumnTextForDisplayingCountryFlag(fieldValue);
+      countryNameFull[fieldValueToDisplay] + ' ' + generateColumnTextForDisplayingCountryFlag(fieldValue);
     }
     else if (!isUndefined(displayName) && displayName.toLowerCase() === 'description') {
       fieldValue = '<span class="description">' + fieldValue + '</span>';
@@ -398,7 +398,7 @@ export function generateColumnTextForDisplayingDate(fieldValue) {
 
 export function generateColumnTextForDisplayingCountryFlag(fieldValue) {
   if (fieldValue !== '' && fieldValue !== null) {
-    let country = getCountryNameByCountryCode[fieldValue.toUpperCase()];
+    let country = countryNameFull[fieldValue.toUpperCase()];
     fieldValue = ' <span class="flag-icon flag-icon-' + fieldValue.toLowerCase() +
       '" rel="tooltip" title="' + country + '"></span>';
   }
