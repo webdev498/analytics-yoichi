@@ -22,7 +22,8 @@ import {
   getUrl,
   callApi,
   fetchApiData,
-  updateApiData
+  updateApiData,
+  broadcastEvent
 } from 'actions/ParentCard';
 
 import {baseUrl} from 'config';
@@ -439,6 +440,51 @@ describe('ParentCard Actions', () => {
       expect(actions[1]).to.have.a.property('id', id);
       expect(actions[2]).to.have.a.property('type', 'REQUEST_API_DATA');
       expect(actions[2]).to.have.a.property('id', id2);
+    });
+  });
+
+  context('broadcastEvent function', () => {
+    let auth;
+    beforeEach(function() {
+      auth = { cookies: { access_token: '', token_type: '' } };
+    });
+
+    it('should do nothing if there are no components', () => {
+      let apiData = fromJS({duration: '1h', components: {}}),
+        store = mockStore({ apiData, auth });
+
+      store.dispatch(broadcastEvent('testId', {data: 'test'}));
+      const actions = store.getActions();
+      expect(actions).to.have.length(0);
+    });
+
+    it('should do nothing if the specified id is not in the list of components', () => {
+      const api = null, id = 'a1', dataMap = Map({ id, data: {}, api });
+
+      let data = fromJS({ duration: '1h', components: {} });
+      data = data.updateIn(['components'], val => val.set(id, dataMap));
+
+      let store = mockStore({ apiData: data, auth });
+      store.dispatch(broadcastEvent('testId', {data: 'test'}));
+
+      const actions = store.getActions();
+      expect(actions).to.have.length(0);
+    });
+
+    it('should dispatch PARENT_CARD_EVENT if the id is available in list of components', () => {
+      const api = null, id = 'testId', dataMap = Map({ id, data: {}, api });
+
+      let data = fromJS({ duration: '1h', components: {} });
+      data = data.updateIn(['components'], val => val.set(id, dataMap));
+
+      let store = mockStore({ apiData: data, auth });
+      store.dispatch(broadcastEvent(id, {data: 'test'}));
+
+      const actions = store.getActions();
+      expect(actions).to.have.length(1);
+      expect(actions[0]).to.have.a.property('type', PARENT_CARD_EVENT);
+      expect(actions[0]).to.have.a.property('id', id);
+      expect(actions[0]).to.have.a.property('eventData');
     });
   });
 });
