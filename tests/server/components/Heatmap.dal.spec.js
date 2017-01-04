@@ -1,5 +1,5 @@
 import {getCtx, getRandomIntInclusive} from '../../testUtils';
-import Heatmap from '../../../server/components/Heatmap.dal';
+import Heatmap from '../../../server/components/HeatMap.dal.js';
 
 const columns = [
   {

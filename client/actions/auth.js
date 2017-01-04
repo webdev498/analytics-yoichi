@@ -93,8 +93,15 @@ export function logoutUtil(dispatch) {
 
   dispatch(setHeaders(null));
 
-  // redirect to login page
-  dispatch(push('/login'));
+  let redirectRoute = '/login';
+  if (window.global && window.global.redirectOnTokenExpiry) {
+    redirectRoute = window.global.redirectOnTokenExpiry;
+    window.open(redirectRoute, '_self');
+  }
+  else {
+    // redirect to login page
+    dispatch(push(redirectRoute));
+  }
 }
 
 export function logout() {

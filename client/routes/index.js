@@ -6,6 +6,28 @@ import NonLoggedLayout from 'layouts/NonLoggedLayout';
 
 import {isLoggedIn} from 'actions/auth';
 
+const defaultRoutes = [
+  {to: 'alerts'},
+  {to: 'alert/:alertId/:date'},
+  {to: 'country'},
+  {to: 'traffic'},
+  {to: 'assets'},
+  {to: 'asset/:type/:assetId'},
+  {to: 'user-agent'},
+  {to: 'summary-page'},
+  {to: 'notable-events'}
+];
+
+function getRoutes() {
+  let routes = defaultRoutes;
+  if (window.global && window.global.routes) {
+    routes = window.global.routes;
+  }
+  return routes.map((r, i) => (
+    <Route path={r.to} key={`route${i}`} />
+  ));
+}
+
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
     if (!isLoggedIn(nextState.location, store)) {
@@ -21,19 +43,9 @@ export default (store) => {
 
       { /* Routes requiring login */ }
       <Route onEnter={requireLogin} component={CoreLayout}>
-        <Redirect from='dashboard' to='/' />
+        <Redirect from='loggedIn' to='/' />
         <IndexRoute />
-        <Route path='alerts' />
-        <Route path='alert/:alertId/:date' />
-        <Route path='country' />
-        <Route path='traffic' />
-        <Route path='assets' />
-        <Route path='asset/:type/:assetId' />
-        <Route path='user-agent' />
-        <Route path='summary-page' />
-        <Route path='network-graph' />
-        <Route path='timeline-graph' />
-        <Route path='notable-events' />
+        {getRoutes()}
       </Route>
 
       { /* Catch all route */ }

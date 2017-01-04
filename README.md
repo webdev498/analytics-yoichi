@@ -9,10 +9,22 @@ And add env.js to client/static/
 window.global = {
   baseUrl: '',
   redirectUri: 'http://localhost:3000/dashboard?',
+  redirectOnTokenExpiry: 'http://localhost:3000/login',
   defaultRoute: '/',
   loginUrl: 'https://api.ranksoftwareinc.com/oauth/authorize',
   kibanaBaseUrl: 'https://demo.ranksoftwareinc.com',
-  openKibanaInNewWindow: false
+  openKibanaInNewWindow: false,
+  routes: [
+    {to: 'alerts'},
+    {to: 'alert/:alertId/:date'},
+    {to: 'country'},
+    {to: 'traffic'},
+    {to: 'assets'},
+    {to: 'asset/:type/:assetId'},
+    {to: 'user-agent'},
+    {to: 'summary-page'},
+    {to: 'notable-events'}
+  ]
 };
 
 ```

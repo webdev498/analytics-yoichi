@@ -158,7 +158,7 @@
             {
               "reportId": "taf_login_failure_by_type",
               "columns": [
-                "data.winevent.SubStatus"
+                "data.login.subStatus"
               ],
               "axis": "x"
             },
@@ -209,7 +209,7 @@
             {
               "reportId": "taf_login_failure_by_user",
               "columns": [
-                "data.winevent.TargetUserName"
+                "data.login.user"
               ],
               "axis": "x"
             },

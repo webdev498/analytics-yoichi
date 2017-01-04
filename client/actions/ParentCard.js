@@ -132,7 +132,7 @@ export function getUrl(api, duration = '1h', routerParams) {
   return baseUrl + url + queryString;
 }
 
-function callApi(api, duration, params, options, dispatch) {
+export function callApi(api, duration, params, options, dispatch) {
   const accessToken = cookies.access_token,
     tokenType = cookies.token_type,
     headers = (api && api.headers) || {},
@@ -179,7 +179,7 @@ export function fetchApiData(id, api, params, options) {
     if (Array.isArray(api)) {
       const arr = api.map(apiObj => callApi(apiObj, currentDuration, params, options, dispatch));
 
-      Promise.all(arr)
+      return Promise.all(arr)
       .then(results => {
         const json = {};
 
@@ -196,7 +196,7 @@ export function fetchApiData(id, api, params, options) {
       });
     }
     else {
-      callApi(api, currentDuration, params, options, dispatch)
+      return callApi(api, currentDuration, params, options, dispatch)
       .then(json => {
         json.options = options;
         dispatch(receiveApiData(id, {json, api}));
