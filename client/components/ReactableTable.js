@@ -17,19 +17,76 @@ const styles = {
   }
 };
 
-function loadChartComponentInTableRow(tableColumn, duration) {
-  switch (tableColumn.chartType) {
+function loadComponent(column) {
+  switch (column.type) {
+    case 'chart':
+      loadChartComponent(column);
+      break;
+    case 'durationWidget':
+      return (
+        <DurationWidget timeValue={column.data[0].value} />
+      );
+    case 'scoreWidget':
+      return (
+        <ScoreWidget scoreValue={column.data[0].value} />
+      );
+    case 'text':
+      displayText(column.data);
+      break;
+    default:
+      break;
+  }
+}
+
+function loadChartComponent(column) {
+  switch (column.chartType) {
     case 'area2d':
       return (
-        <Area2DAsSparkLineChart chartProperties={tableColumn} duration={duration} />
+        <Area2DAsSparkLineChart chartProperties={column} duration={column.duration} />
       );
     case 'assetIcon':
       return (
-        <AssetIcon asset={tableColumn} />
+        <AssetIcon asset={column} />
       );
     default:
       break;
   }
+}
+
+function displayText(data) {
+  return (
+    <div>
+      {data.map((text, index) => {
+        return (
+          <div key={`${text.header}${index}`}>
+            {
+              text.header
+              ? <span style={styles.header}>{text.header + ': '}</span>
+              : null
+            }
+            {
+              !text.header && index === 0 && data.length > 1
+              ? <span style={styles.header}>{text.value}</span>
+              : text.value + ' '
+            }
+            {
+              text.header && text.header === 'Country'
+              ? displayCountryFlag(text)
+              : null
+            }
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function displayCountryFlag(data) {
+  let countryFlag = countryName[data.value];
+  countryFlag = countryFlag ? 'flag-icon flag-icon-' + countryFlag.toLowerCase() : '';
+  return (
+    <span className={countryFlag} rel='tooltip' title={data.value} />
+  );
 }
 
 function rowClick(context, tableRow) {
@@ -73,42 +130,6 @@ export class TableCard extends React.Component {
     };
   }
 
-  displayCountryFlag(data) {
-    let countryFlag = countryName[data.value];
-    countryFlag = countryFlag ? 'flag-icon flag-icon-' + countryFlag.toLowerCase() : '';
-    return (
-      <span className={countryFlag} rel='tooltip' title={data.value} />
-    );
-  }
-
-  displayText(data) {
-    return (
-      <div>
-        {data.map((text, index) => {
-          return (
-            <div>
-              {
-                text.header
-                ? <span style={styles.header}>{text.header + ': '}</span>
-                : null
-              }
-              {
-                !text.header && index === 0 && data.length > 1
-                ? <span style={styles.header}>{text.value}</span>
-                : text.value + ' '
-              }
-              {
-                text.header && text.header === 'Country'
-                ? this.displayCountryFlag(text)
-                : null
-              }
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-
   loadTable() {
     const {props} = this;
     if (!props.data) {
@@ -118,73 +139,60 @@ export class TableCard extends React.Component {
       {tableJson: {tableOptions}, normalizeData} = data,
       id = attributes.id;
 
+    console.log(props.search);
+
     return (
-      <div>
-        <Table id={id}
-          style={{width: '100%'}}
-          className='threatTable'
-          sortable={tableOptions.sortable}
-          filterable={tableOptions.filterable}
-          defaultSort={tableOptions.defaultSort}
-          filterBy={props.search}
-          itemsPerPage={normalizeData.length > tableOptions.itemsPerPage ? tableOptions.itemsPerPage : 0}
-          pageButtonLimit={5}
-          currentPage={0}
-          hideFilterInput
-          previousPageLabel={'<<'} nextPageLabel={'>>'}>
-          {
-            normalizeData.map((row, index) => {
-              return (
-                <Tr onClick={this.handleRowClick(row, index)}
-                  style={{'cursor': 'pointer'}}
-                  key={`tr${id}${index}`}>
-                  {row.columns.map((column, indexCol) => {
-                    if (column.type === 'chart') {
-                      return (
-                        <Td column={column.name}
-                          value={column.data[0].value}
-                          style={column.style}
-                          key={`td${id}${indexCol}`}>
-                          {loadChartComponentInTableRow(column, props.duration)}
-                        </Td>
-                      );
-                    }
-                    if (column.type === 'durationWidget') {
-                      return (
-                        <Td column={column.name}
-                          value={column.data[0].sortValue}
-                          style={column.style}
-                          key={`td${id}${indexCol}`}>
-                          <DurationWidget timeValue={column.data[0].value} />
-                        </Td>
-                      );
-                    }
-                    if (column.type === 'scoreWidget') {
-                      return (
-                        <Td column={column.name}
-                          value={column.data[0].value}
-                          style={column.style}
-                          key={`td${id}${indexCol}`}>
-                          <ScoreWidget scoreValue={column.data[0].value} />
-                        </Td>
-                      );
-                    }
-                    if (column.type === 'text') {
-                      return (
-                        <Td column={column.name}
-                          style={{...column.style, 'wordBreak': 'break-all'}}
-                          key={`td${id}${indexCol}`}>
-                          {this.displayText(column.data)}
-                        </Td>
-                      );
-                    }
-                  })}
-                </Tr>
-              );
-            })
-          }
-        </Table>
-      </div>
+      <Table id={id}
+        style={{width: '100%'}}
+        className='threatTable'
+        sortable={tableOptions.sortable}
+        filterable={tableOptions.filterable}
+        defaultSort={tableOptions.defaultSort}
+        filterBy={props.search}
+        itemsPerPage={normalizeData.length > tableOptions.itemsPerPage ? tableOptions.itemsPerPage : 0}
+        pageButtonLimit={5}
+        currentPage={0}
+        hideFilterInput
+        previousPageLabel={'<<'} nextPageLabel={'>>'}>
+        {
+          normalizeData.map((row, index) => {
+            return (
+              <Tr onClick={this.handleRowClick(row, index)}
+                style={{'cursor': 'pointer'}}
+                key={`tr${id}${index}`}>
+                {row.columns.map((column, indexCol) => {
+                  column = Object.assign({}, column, {
+                    key: `td${id}${indexCol}`,
+                    duration: props.duration
+                  });
+                  if (column.type === 'text') {
+                    return (
+                      <Td column={column.name}
+                        style={{...column.style, 'wordBreak': 'break-all'}}
+                        key={column.key}>
+                        {displayText(column.data)}
+                      </Td>
+                    );
+                  }
+                  else {
+                    let {data} = column,
+                      value = column.type === 'durationWidget' ? data[0].sortValue : data[0].value;
+
+                    return (
+                      <Td column={column.name}
+                        value={value}
+                        style={column.style}
+                        key={column.key}>
+                        {loadComponent(column)}
+                      </Td>
+                    );
+                  }
+                })}
+              </Tr>
+            );
+          })
+        }
+      </Table>
     );
   }
 
