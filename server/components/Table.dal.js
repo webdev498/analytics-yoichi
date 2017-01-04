@@ -15,7 +15,6 @@ const path = require('path');
 
 function processData(data, tableJson, url) {
   const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.tableData;
-    // tableOptions = tableJson.tableOptions,
   let tableDataSource = [];
 
   let rawData = generateRawData(fieldMapping, data);
@@ -80,15 +79,11 @@ function getDetails(rawData, ctx) {
   reportId = reportId.split('/');
   reportId = reportId[reportId.length - 1];
 
-  const fileName = `../dalJSON/${reportId}.json`,
+  const fileName = `../dalJson/${reportId}.json`,
     filePath = path.join(__dirname, fileName);
 
-  let tableJson = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-
-  let columns = rawData.columns,
-    processedData = [];
-
-  processedData = processData(rawData, tableJson, url);
+  let tableJson = JSON.parse(fs.readFileSync(filePath, 'utf8')),
+    processedData = processData(rawData, tableJson, url);
 
   return {
     processedData,
