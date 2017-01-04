@@ -1,10 +1,9 @@
 import Cookies from 'cookies-js';
 import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR, SET_COOKIES} from 'Constants';
 import {baseUrl} from 'config';
-
 import { push } from 'react-router-redux';
 
-import {parseQuery} from 'utils/utils';
+import {parseQuery, fetchData} from 'utils/utils';
 
 export function userDetailsLoading() {
   return {
@@ -26,7 +25,7 @@ export function userDetailsError(errorData) {
   };
 }
 
-export function setHeaders(cookies) {
+export function setCookies(cookies) {
   return {
     type: SET_COOKIES,
     data: cookies
@@ -36,18 +35,11 @@ export function setHeaders(cookies) {
 export function fetchUserData() {
   return function(dispatch, getState) {
     const cookies = getState().auth.cookies,
-      accessToken = cookies.access_token,
-      tokenType = cookies.token_type,
-      authorizationHeader = {
-        'Authorization': `${tokenType} ${accessToken}`
-      };
+      url = `${baseUrl}/api/user/profile`;
 
     dispatch(userDetailsLoading());
 
-    return fetch(baseUrl + '/api/user/profile', {
-      method: 'GET',
-      headers: authorizationHeader
-    })
+    return fetchData(url, cookies)
     .then(response => response.json())
     .then(json => {
       dispatch(userDetailsLoaded(json));
@@ -69,15 +61,15 @@ export function isLoggedIn(location, store) {
     Cookies.set('access_token', accessToken, { path: '/' });
     Cookies.set('token_type', tokenType, { path: '/' });
 
-    store.dispatch(setHeaders({
-      'access_token': accessToken,
-      'token_type': tokenType
+    store.dispatch(setCookies({
+      access_token: accessToken,
+      token_type: tokenType
     }));
 
     return true;
   }
   else {
-    store.dispatch(setHeaders({
+    store.dispatch(setCookies({
       'access_token': Cookies.get('access_token'),
       'token_type': Cookies.get('token_type')
     }));
@@ -91,7 +83,7 @@ export function logoutUtil(dispatch) {
   Cookies('access_token', undefined);
   Cookies('token_type', undefined);
 
-  dispatch(setHeaders(null));
+  dispatch(setCookies(null));
 
   let redirectRoute = '/login';
   if (window.global && window.global.redirectOnTokenExpiry) {
