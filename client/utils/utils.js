@@ -499,3 +499,16 @@ export function getFieldValue(data, fieldName) {
     return data[fieldName];
   }
 }
+
+export function fetchData(url, cookies) {
+  let accessToken = cookies.access_token,
+    tokenType = cookies.token_type,
+    authorizationHeader = {
+      'Authorization': `${tokenType} ${accessToken}`
+    };
+
+  return fetch(url, {
+    method: 'GET',
+    headers: authorizationHeader
+  });
+}

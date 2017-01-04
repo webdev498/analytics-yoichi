@@ -3,7 +3,9 @@ import {
   RECEIVE_ACTIONS_LIST,
   ERROR_ACTIONS_LIST
 } from 'Constants';
+
 import {baseUrl} from 'config';
+import {fetchData} from 'utils/utils';
 
 export function actionsListRequest() {
   return {
@@ -28,18 +30,11 @@ export function actionsListError(json, errorData) {
 export function fetchActionsList() {
   return function(dispatch, getState) {
     const cookies = getState().auth.cookies,
-      accessToken = cookies.access_token,
-      tokenType = cookies.token_type,
-      authorizationHeader = {
-        'Authorization': `${tokenType} ${accessToken}`
-      };
+      url = `${baseUrl}/api/analytics/actions/list?mediaType=json`;
 
     dispatch(actionsListRequest());
 
-    return fetch(baseUrl + '/api/analytics/actions/list?mediaType=json', {
-      method: 'GET',
-      headers: authorizationHeader
-    })
+    return fetchData(url, cookies)
     .then(response => response.json())
     .then(json => {
       dispatch(actionsListRecieve(json));
