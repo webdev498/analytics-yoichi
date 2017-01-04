@@ -5,7 +5,7 @@ import Card from 'material-ui/Card/Card';
 import FontIcon from 'material-ui/FontIcon';
 import Loader from 'components/Loader';
 
-import {fetchApiData, removeComponent, broadcastEvent} from 'actions/ParentCard';
+import {fetchApiData, removeComponent, broadcastEvent} from 'actions/parentCard';
 import {Colors} from 'theme/colors';
 import {updateRoute} from 'actions/core';
 
