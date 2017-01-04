@@ -10,7 +10,7 @@
           {
             "data": [
               {
-                "fieldName": "data.auth.username"
+                "fieldName": "data.login.user"
               }
             ],
             "style": {
@@ -49,7 +49,7 @@
     ],
     "queryParams": {
       "fromAndToBasedOnToday": "",
-      "username": "data.auth.username:fieldName",
+      "username": "data.login.user:fieldName",
       "status": "success"
     }
   }
