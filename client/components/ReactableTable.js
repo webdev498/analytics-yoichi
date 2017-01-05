@@ -139,7 +139,7 @@ export class TableCard extends React.Component {
       {tableJson: {tableOptions}, normalizeData} = data,
       id = attributes.id;
 
-    console.log(props.search);
+    console.log(props.search, tableOptions);
 
     return (
       <Table id={id}
@@ -164,7 +164,7 @@ export class TableCard extends React.Component {
                   column = Object.assign({}, column, {
                     key: `td${id}${indexCol}`,
                     duration: props.duration
-                  });
+                  });console.log(column);
                   if (column.type === 'text') {
                     return (
                       <Td column={column.name}

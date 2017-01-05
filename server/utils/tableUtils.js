@@ -4,10 +4,70 @@ import {
   msToTime,
   formatBytes,
   formatDateInLocalTimeZone,
-  firstCharCapitalize
+  firstCharCapitalize,
+  generateRawData,
+  getParameterByName
 } from '../utils/utils';
 
 import {countryNameFull} from '../utils/countryUtils';
+import {generateClickThroughUrl} from '../utils/kibanaUtils';
+
+export function processData(data, tableJson, url) {
+  const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.tableData;
+  let tableDataSource = [];
+
+  let rawData = generateRawData(fieldMapping, data);
+
+  for (let i = 0; i < fieldMapping.length; i++) {
+    let currentTableData = fieldMapping[i],
+      {rows, columns} = rawData[currentTableData.reportId],
+      columnText = [];
+
+    for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
+      let mainObject = {columns: []};
+
+      // Calculate column index from API response
+      for (let a = 0; a < currentTableData.columns.length; a++) {
+        let currentColumnType = currentTableData.columns[a].type,
+          currentColumnDataArray = currentTableData.columns[a].data,
+          rowColumnDetails = {
+            currentColumnType: currentColumnType,
+            currentColumnDataArray: currentColumnDataArray,
+            columnsArray: columns,
+            currentDataRows: rows[d],
+            columnText: columnText,
+            nestedResult: nestedResult,
+            emptyValueMessage: emptyValueMessage,
+            currentColumnIndex: a
+          };
+
+        let rowDetails = {
+          currentColumnType: currentColumnType,
+          currentTableData: currentTableData.columns[a],
+          columnText: generateIndividualRowData(rowColumnDetails),
+          rowNumber: d,
+          row: rows[d]
+        };
+        mainObject = generateRowObject(rowDetails, mainObject);
+        if (tableJson.kibana) {
+          let parameters = {
+            data: data,
+            duration: getParameterByName('window', url),
+            queryParamsArray: tableJson.kibana.queryParams,
+            currentRowNumber: d,
+            nestedResult: nestedResult,
+            pathParams: tableJson.kibana.pathParams
+          };
+          mainObject.rowClickUrl = generateClickThroughUrl(parameters);
+        }
+        columnText = [];
+      }
+      tableDataSource.push(mainObject);
+    }
+  }
+
+  return tableDataSource;
+}
 
 export function generateIndividualRowData(rowColumnDetails) {
   let {currentColumnType, currentColumnDataArray, columnsArray, currentDataRows,
@@ -45,9 +105,7 @@ export function generateIndividualRowData(rowColumnDetails) {
     }
   }// Column data loop ends
 
-  return {
-    columnText: columnText
-  };
+  return columnText;
 }
 
 export function generateRowObject(rowDetails, mainObject) {
