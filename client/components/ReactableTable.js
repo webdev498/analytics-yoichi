@@ -30,9 +30,6 @@ function loadComponent(column) {
       return (
         <ScoreWidget scoreValue={column.data[0].value} />
       );
-    case 'text':
-      displayText(column.data);
-      break;
     default:
       break;
   }
@@ -53,12 +50,12 @@ function loadChartComponent(column) {
   }
 }
 
-function displayText(data) {
+function loadText(data) {
   return (
     <div>
       {data.map((text, index) => {
         return (
-          <div key={`${text.header}${index}`}>
+          <div>
             {
               text.header
               ? <span style={styles.header}>{text.header + ': '}</span>
@@ -138,9 +135,7 @@ export class TableCard extends React.Component {
     const {data, attributes} = props,
       {tableJson: {tableOptions}, normalizeData} = data,
       id = attributes.id;
-
-    console.log(props.search, tableOptions);
-
+    console.log(tableOptions);
     return (
       <Table id={id}
         style={{width: '100%'}}
@@ -153,7 +148,8 @@ export class TableCard extends React.Component {
         pageButtonLimit={5}
         currentPage={0}
         hideFilterInput
-        previousPageLabel={'<<'} nextPageLabel={'>>'}>
+        previousPageLabel={'<<'}
+        nextPageLabel={'>>'}>
         {
           normalizeData.map((row, index) => {
             return (
@@ -164,13 +160,15 @@ export class TableCard extends React.Component {
                   column = Object.assign({}, column, {
                     key: `td${id}${indexCol}`,
                     duration: props.duration
-                  });console.log(column);
+                  });
                   if (column.type === 'text') {
+                    let value = column.data[0] ? column.data[0].value : '';
                     return (
                       <Td column={column.name}
+                        value={value}
                         style={{...column.style, 'wordBreak': 'break-all'}}
                         key={column.key}>
-                        {displayText(column.data)}
+                        {loadText(column.data)}
                       </Td>
                     );
                   }
