@@ -12,7 +12,8 @@ import {
   setCookies,
   fetchUserData,
   isLoggedIn,
-  logoutUtil
+  logoutUtil,
+  logout
 } from 'actions/auth';
 
 const middlewares = [ thunk ];
@@ -156,5 +157,17 @@ describe('auth actions', () => {
     });
   });
 
-  // context('logout function');
+  context('logout function', function() {
+    it('should call logoutUtil function to logout user by Setting cookies to null', function() {
+      const store = mockStore({});
+      store.dispatch(logout());
+      const actions = store.getActions();
+      expect(actions).to.have.length(2);
+
+      const action = actions[0];
+      expect(action).to.have.a.property('type', SET_COOKIES);
+      expect(action).to.have.a.property('data');
+      expect(action.data).to.be.an.null;
+    });
+  });
 });
