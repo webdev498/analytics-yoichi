@@ -1,12 +1,13 @@
 import {
   REQUEST_LAYOUT_DATA,
   RECEIVE_LAYOUT_DATA,
-  ERROR_LAYOUT_DATA
+  ERROR_LAYOUT_DATA,
+  defaultLayoutPath
 } from 'Constants';
 
 import {baseUrl} from 'config';
-import {logoutUtil} from './auth';
 import { push } from 'react-router-redux';
+import {fetchData, getSearchUrl} from 'utils/utils';
 
 export function requestPageData(id) {
   return {
@@ -31,7 +32,16 @@ export function errorPageData(id, ex) {
   };
 }
 
-function getUrl(id) {
+export function getUrl(id) {
+  if (typeof id !== 'string') return;
+
+  if (id === '/') {   // if path id is / then layout id is summary-page.
+    return defaultLayoutPath;
+  }
+  else if (id.includes('/')) { // if id has path params, then first part of the url is used to fetch layout json.
+    id = id.slice(0, id.indexOf('/', 1));
+  }
+
   return `${baseUrl}/api/layout${id}`;
 }
 
@@ -41,42 +51,17 @@ export function fetchLayoutData(id) {
   // thus making it able to dispatch actions itself.
 
   return function(dispatch, getState) {
-    const cookies = getState().auth.cookies,
-      accessToken = cookies.access_token,
-      tokenType = cookies.token_type,
-      authorizationHeader = {
-        'Authorization': `${tokenType} ${accessToken}`
-      };
+    const cookies = getState().auth.cookies;
 
     dispatch(requestPageData(id));
 
-    // if path id is / then layout id is summary-page.
-    id = (id === '/') ? '/summary-page' : id;
-
-    // if id has path params, then first part of the url is used to fetch layout json.
-    let urlId = id.indexOf('/', 1) > -1 ? id.slice(0, id.indexOf('/', 1)) : id;
-
-    return fetch(getUrl(urlId), {
-      method: 'GET',
-      headers: authorizationHeader
-    })
-    .then(response => {
-      const status = response.status;
-      // if auth token expires, logout.
-      if (status === 401) {
-        logoutUtil(dispatch);
-      }
-      else if (status !== 200) {
-        console.log(response);
-        dispatch(errorPageData(id, {message: response.statusText}));
-      }
-      else {
-        return response.json();
-      }
-    })
+    return fetchData(getUrl(id), cookies, dispatch)
     .then(json => {
       if (json) {
         dispatch(receivePageData(id, {json}));
+      }
+      else {
+        dispatch(errorPageData(id, {'msg': 'Json not loaded correctly from server'}));
       }
     })
     .catch(ex => {
@@ -93,7 +78,7 @@ export function fetchSearchData(auth, query) {
       'Authorization': `${tokenType} ${accessToken}`
     };
 
-  let url = `/api/analytics/reporting/execute/taf_search_assets?term=${encodeURIComponent(query)}`;
+  let url = getSearchUrl(query);
   return fetch(url, {
     method: 'GET',
     headers: authorizationHeader

@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import {Colors} from 'theme/colors';
+import {logoutUtil} from 'actions/auth';
 
 // Function to convert milliseconds to time
 export function msToTime(duration) {
@@ -500,7 +501,7 @@ export function getFieldValue(data, fieldName) {
   }
 }
 
-export function fetchData(url, cookies) {
+export function fetchData(url, cookies, dispatch) {
   let accessToken = cookies.access_token,
     tokenType = cookies.token_type,
     authorizationHeader = {
@@ -512,10 +513,17 @@ export function fetchData(url, cookies) {
     headers: authorizationHeader
   })
   .then(res => {
-    if (!res.ok) {
+    if (res.status === 401) {   // if auth token expires, logout.
+      logoutUtil(dispatch);
+    }
+    else if (!res.ok) {
       throw new Error({data: res.json()});
     }
 
     return res.json();
   });
 }
+
+export function getSearchUrl(query) {
+  return `/api/analytics/reporting/execute/taf_search_assets?term=${encodeURIComponent(query)}`;
+};

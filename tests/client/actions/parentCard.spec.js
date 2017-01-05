@@ -40,7 +40,7 @@ function getApiObj(path, query, pathParams) {
   };
 }
 
-describe('parentCard Actions', () => {
+describe('parentCard Redux Actions', () => {
   it('should return the state for REQUEST_API_DATA', () => {
     const id = 'testId',
       api = {test: 'value'},

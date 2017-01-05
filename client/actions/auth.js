@@ -37,7 +37,7 @@ export function fetchUserData() {
 
     dispatch(userDetailsLoading());
 
-    return fetchData(profileUrl, cookies)
+    return fetchData(profileUrl, cookies, dispatch)
     .then(json => {
       dispatch(userDetailsLoaded(json));
     })

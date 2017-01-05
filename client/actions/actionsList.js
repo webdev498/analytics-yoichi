@@ -34,7 +34,7 @@ export function fetchActionsList() {
 
     dispatch(actionsListRequest());
 
-    return fetchData(url, cookies)
+    return fetchData(url, cookies, dispatch)
     .then(json => {
       dispatch(actionsListRecieve(json));
     })
