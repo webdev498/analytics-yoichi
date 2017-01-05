@@ -1,9 +1,7 @@
-import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR, SET_COOKIES} from 'Constants';
+import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR, SET_COOKIES, profileUrl} from 'Constants';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import {spy} from 'sinon';
-
-import {baseUrl} from 'config';
+import {fakeServer, spy} from 'sinon';
 
 import {
   userDetailsLoading,
@@ -51,7 +49,55 @@ describe('auth actions', () => {
     expect(state).to.have.a.property('data', cookies);
   });
 
-  // context('fetchUserData function');
+  context('fetchUserData function', function() {
+    let server, auth, store;
+
+    const json = {__authDetails: {}, taf: {}},
+      jsonRes = JSON.stringify(json);
+
+    beforeEach(function() {
+      server = fakeServer.create();
+      auth = { cookies: { access_token: '', token_type: '' } };
+      store = mockStore({ auth });
+    });
+
+    afterEach(function() {
+      server.restore();
+    });
+
+    it('should call profile url and dispatch USER_DETAILS_LOADING and USER_DETAILS_LOADED events', () => {
+      server.respondWith('GET', profileUrl, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
+      const apiObj = store.dispatch(fetchUserData())
+        .then(res => {
+          const actions = store.getActions();
+          expect(actions).to.have.length(2);
+          expect(actions[0]).to.have.a.property('type', USER_DETAILS_LOADING);
+
+          expect(actions[1]).to.have.a.property('type', USER_DETAILS_LOADED);
+          expect(actions[1]).to.have.a.property('data');
+          expect(actions[1].data).to.deep.equal(json);
+        });
+
+      server.respond();
+      return apiObj;
+    });
+
+    it('should call profile url, dispatch USER_DETAILS_LOADING and USER_DETAILS_ERROR events in case of error', () => {
+      server.respondWith('GET', profileUrl, [ 400, { 'Content-Type': 'application/json' }, jsonRes ]);
+      const apiObj = store.dispatch(fetchUserData())
+        .then(res => {
+          const actions = store.getActions();
+          expect(actions).to.have.length(2);
+          expect(actions[0]).to.have.a.property('type', USER_DETAILS_LOADING);
+          expect(actions[1]).to.have.a.property('type', USER_DETAILS_ERROR);
+          expect(actions[1]).to.have.a.property('errorData');
+          expect(actions[1].data).to.be.an.object;
+        });
+
+      server.respond();
+      return apiObj;
+    });
+  });
 
   context('isLoggedIn function', () => {
     let store;

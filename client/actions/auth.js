@@ -1,6 +1,5 @@
 import Cookies from 'cookies-js';
-import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR, SET_COOKIES} from 'Constants';
-import {baseUrl} from 'config';
+import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR, SET_COOKIES, profileUrl} from 'Constants';
 import { push } from 'react-router-redux';
 
 import {parseQuery, fetchData} from 'utils/utils';
@@ -34,13 +33,11 @@ export function setCookies(cookies) {
 
 export function fetchUserData() {
   return function(dispatch, getState) {
-    const cookies = getState().auth.cookies,
-      url = `${baseUrl}/api/user/profile`;
+    const cookies = getState().auth.cookies;
 
     dispatch(userDetailsLoading());
 
-    return fetchData(url, cookies)
-    .then(response => response.json())
+    return fetchData(profileUrl, cookies)
     .then(json => {
       dispatch(userDetailsLoaded(json));
     })

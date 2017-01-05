@@ -510,5 +510,12 @@ export function fetchData(url, cookies) {
   return fetch(url, {
     method: 'GET',
     headers: authorizationHeader
+  })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error({data: res.json()});
+    }
+
+    return res.json();
   });
 }
