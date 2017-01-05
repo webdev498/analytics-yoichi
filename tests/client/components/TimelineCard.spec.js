@@ -72,9 +72,6 @@ let props = {
   },
   updateRoute: spy(),
   getContextualMenuApiObj: spy()
-  // chart: '',
-  // selectedCardId: '',
-  // highlightCardId: '',
 };
 
 function renderTimelineCard() {

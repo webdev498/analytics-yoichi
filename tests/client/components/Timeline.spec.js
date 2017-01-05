@@ -5,7 +5,6 @@ import {spy} from 'sinon';
 
 import Timeline from 'components/Timeline';
 import TabsWidget from 'components/TabsWidget';
-import TimelineCard from 'components/TimelineCard';
 import PaginationWidget from 'components/PaginationWidget';
 import {wrapThemeProvider} from '../../testUtils';
 
@@ -208,27 +207,4 @@ describe('<Timeline />', () => {
     expect(component.props().data.options.customParams).to.be.defined;
     expect(component.props().data.options.customParams).to.be.an('object');
   });
-
-  // it('should have no. of cards', () => {
-  //   let component = mountTimelineComponent();
-  //   expect(component.find('div')).exist;
-  //   expect(component.find('div')).to.have.length(2);
-  //   expect(component.ref('primaryTimeline').text()).to.equal('121.18.238.114 attempted to connect to 172.31.7.62');
-  // });
-
-  // describe('Pagination', () => {
-  //   it('exists', () => {
-  //     props.data = Object.assign(props.data, {
-  //       total: 15,
-  //       next: 10
-  //     });
-  //     const timeline = mountTimeline(true),
-  //       {data, attributes} = props;
-  //     timeline.setState({ totalCount: data.total });
-  //     timeline.setState({ totalPage: Math.ceil(data.total / attributes.noOfEventsPerPage) });
-  //     timeline.setState({ currentPage: 1 });
-  //     timeline.setState({ nextPageStart: data.next });
-  //     expect(PaginationWidget).to.exist;
-  //   });
-  // });
 });
