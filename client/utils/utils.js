@@ -416,7 +416,7 @@ export function nFormatter(num, digits, {numberStyle}) {
 
 export function parseQuery(qstr) {
   const query = {},
-    arr = qstr.substr(1).split('&');
+    arr = qstr.split('&');
 
   arr.forEach(val => {
     const b = val.split('=');

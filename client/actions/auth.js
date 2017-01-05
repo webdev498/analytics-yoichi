@@ -51,12 +51,16 @@ export function fetchUserData() {
 }
 
 export function isLoggedIn(location, store) {
-  let hash = location && location.hash;
+  const hash = location && location.hash,
+    accessToken = Cookies.get('access_token'),
+    tokenType = Cookies.get('token_type');
 
   if (hash) {
-    const query = parseQuery(hash),
+    const query = parseQuery(hash.substr(1)),
       accessToken = query['access_token'],
       tokenType = query['token_type'];
+
+    if (!accessToken || !tokenType) return false;
 
     Cookies.set('access_token', accessToken, { path: '/' });
     Cookies.set('token_type', tokenType, { path: '/' });
@@ -70,12 +74,12 @@ export function isLoggedIn(location, store) {
   }
   else {
     store.dispatch(setCookies({
-      'access_token': Cookies.get('access_token'),
-      'token_type': Cookies.get('token_type')
+      access_token: accessToken,
+      token_type: tokenType
     }));
   }
 
-  return Cookies.get('access_token') && Cookies.get('token_type');
+  return accessToken && tokenType;
 }
 
 export function logoutUtil(dispatch) {
