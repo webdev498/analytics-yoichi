@@ -32,7 +32,7 @@ const alertActivity = {
       'drawAnchors': '1',
       'anchorRadius': '1',
       'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+      'outCnvBaseFontSize': '8'
     }
   },
   'attributes': {
@@ -124,7 +124,7 @@ const timeline = {
               'drawAnchors': '1',
               'anchorRadius': '1',
               'showlegend': '0',
-              'outCnvBaseFontSize': '9'
+              'outCnvBaseFontSize': '8'
             }
           },
           'attributes': {
