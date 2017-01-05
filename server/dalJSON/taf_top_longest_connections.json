@@ -15,7 +15,7 @@
               "width": "10%"
             },
             "type": "text",
-            "columnNameToDisplay": "END DATE"
+            "header": "END DATE"
           },
           {
             "data": [
@@ -28,7 +28,7 @@
               "width": "15%"
             },
             "type": "durationWidget",
-            "columnNameToDisplay": "DURATION"
+            "header": "DURATION"
           },
           {
             "data": [
@@ -48,7 +48,7 @@
               "width": "35%"
             },
             "type": "text",
-            "columnNameToDisplay": "DETAILS"
+            "header": "DETAILS"
           },
           {
             "data": [
@@ -85,7 +85,7 @@
               "width": "20%"
             },
             "type": "text",
-            "columnNameToDisplay": "SOURCE"
+            "header": "SOURCE"
           },
           {
             "data": [
@@ -122,7 +122,7 @@
               "width": "20%"
             },
             "type": "text",
-            "columnNameToDisplay": "DESTINATION"
+            "header": "DESTINATION"
           }
         ]
       }

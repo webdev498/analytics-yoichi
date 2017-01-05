@@ -20,8 +20,7 @@ const styles = {
 function loadComponent(column) {
   switch (column.type) {
     case 'chart':
-      loadChartComponent(column);
-      break;
+      return loadChartComponent(column);
     case 'durationWidget':
       return (
         <DurationWidget timeValue={column.data[0].value} />
@@ -55,7 +54,7 @@ function loadText(data) {
     <div>
       {data.map((text, index) => {
         return (
-          <div>
+          <div key={`column${index}`}>
             {
               text.header
               ? <span style={styles.header}>{text.header + ': '}</span>
@@ -135,7 +134,7 @@ export class TableCard extends React.Component {
     const {data, attributes} = props,
       {tableJson: {tableOptions}, normalizeData} = data,
       id = attributes.id;
-    console.log(tableOptions);
+
     return (
       <Table id={id}
         style={{width: '100%'}}
@@ -156,36 +155,30 @@ export class TableCard extends React.Component {
               <Tr onClick={this.handleRowClick(row, index)}
                 style={{'cursor': 'pointer'}}
                 key={`tr${id}${index}`}>
-                {row.columns.map((column, indexCol) => {
-                  column = Object.assign({}, column, {
-                    key: `td${id}${indexCol}`,
-                    duration: props.duration
-                  });
-                  if (column.type === 'text') {
-                    let value = column.data[0] ? column.data[0].value : '';
-                    return (
-                      <Td column={column.name}
-                        value={value}
-                        style={{...column.style, 'wordBreak': 'break-all'}}
-                        key={column.key}>
-                        {loadText(column.data)}
-                      </Td>
-                    );
-                  }
-                  else {
-                    let {data} = column,
-                      value = column.type === 'durationWidget' ? data[0].sortValue : data[0].value;
+                {
+                  row.columns.map((column, indexCol) => {
+                    column = Object.assign({}, column, {
+                      key: `td${id}${indexCol}`,
+                      duration: props.duration
+                    });
+
+                    let value = column.data[0] ? column.data[0].value : '',
+                      style = column.type === 'text' ? {...column.style, 'wordBreak': 'break-all'} : {...column.style};
 
                     return (
                       <Td column={column.name}
                         value={value}
-                        style={column.style}
+                        style={style}
                         key={column.key}>
-                        {loadComponent(column)}
+                        {
+                          column.type === 'text'
+                          ? loadText(column.data)
+                          : loadComponent(column)
+                        }
                       </Td>
                     );
                   }
-                })}
+                )}
               </Tr>
             );
           })

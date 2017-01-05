@@ -17,7 +17,7 @@
               "width": "80%"
             },
             "type": "text",
-            "columnNameToDisplay": "SOFTWARE NAME"
+            "header": "SOFTWARE NAME"
           },
           {
             "data": [
@@ -29,7 +29,7 @@
               "width": "20%"
             },
             "type": "text",
-            "columnNameToDisplay": "COUNT"
+            "header": "COUNT"
           }
         ]
       }

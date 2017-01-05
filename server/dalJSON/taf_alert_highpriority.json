@@ -14,7 +14,7 @@
               "width": "12%"
             },
             "type": "scoreWidget",
-            "columnNameToDisplay": "RANK SCORE"
+            "header": "RANK SCORE"
           },
           {
             "data": [
@@ -28,7 +28,7 @@
               "minWidth": "115px"
             },
             "type": "text",
-            "columnNameToDisplay": "DATE"
+            "header": "DATE"
           },
           {
             "data": [
@@ -44,7 +44,7 @@
               "width": "38%"
             },
             "type": "text",
-            "columnNameToDisplay": "DETAILS"
+            "header": "DETAILS"
           },
           {
             "data": [
@@ -73,7 +73,7 @@
               "width": "20%"
             },
             "type": "text",
-            "columnNameToDisplay": "SOURCE"
+            "header": "SOURCE"
           },
           {
             "data": [
@@ -102,7 +102,7 @@
               "width": "20%"
             },
             "type": "text",
-            "columnNameToDisplay": "DESTINATION"
+            "header": "DESTINATION"
           }
         ]
       }

@@ -23,38 +23,38 @@ export function processData(data, tableJson, url) {
       {rows, columns} = rawData[tableData.reportId],
       columnText = [];
 
-    for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
+    for (let j = 0, rowsLen = rows.length; j < rowsLen; j++) {
       let rowObject = {columns: []};
 
       // Calculate column index from API response
-      for (let a = 0; a < tableData.columns.length; a++) {
-        let columnType = tableData.columns[a].type,
-          columnData = tableData.columns[a].data,
+      for (let k = 0; k < tableData.columns.length; k++) {
+        let columnType = tableData.columns[k].type,
+          columnData = tableData.columns[k].data,
           rowColumnDetails = {
             columnType,
             columnData,
-            columnsArray: columns,
-            dataRows: rows[d],
+            columns,
+            dataRows: rows[j],
             columnText,
             nestedResult,
             emptyValueMessage,
-            columnIndex: a
+            columnIndex: k
+          },
+          rowDetails = {
+            columnType,
+            columnData: tableData.columns[k],
+            columnText: getDataBasedOnResponse(rowColumnDetails),
+            rowNumber: j,
+            row: rows[j]
           };
 
-        let rowDetails = {
-          columnType,
-          currentTableData: tableData.columns[a],
-          columnText: generateIndividualRowData(rowColumnDetails),
-          rowNumber: d,
-          row: rows[d]
-        };
         rowObject = generateRowObject(rowDetails, rowObject);
         if (tableJson.kibana) {
           let parameters = {
             data,
             duration: getParameterByName('window', url),
             queryParamsArray: tableJson.kibana.queryParams,
-            currentRowNumber: d,
+            currentRowNumber: j,
             nestedResult,
             pathParams: tableJson.kibana.pathParams
           };
@@ -69,37 +69,37 @@ export function processData(data, tableJson, url) {
   return tableDataSource;
 }
 
-export function generateIndividualRowData(rowColumnDetails) {
-  let {columnType, columnData, columnsArray, dataRows,
+export function getDataBasedOnResponse(rowColumnDetails) {
+  let {columnType, columnData, columns, dataRows,
     columnText, nestedResult, emptyValueMessage, columnIndex} = rowColumnDetails;
 
-  for (let cd = 0; cd < columnData.length; cd++) {
-    if (columnsArray.length === 1 && columnsArray[0].name === 'json') {
+  for (let i = 0; i < columnData.length; i++) {
+    if (columns.length === 1 && columns[0].name === 'json') {
       // This condition is if API response returns a single column with one JSON object. e.g. recent alerts table
       let columnDetails = {
         columnType,
-        columnData: columnData[cd],
+        columnData: columnData[i],
         dataRows,
         columnText: columnText
       };
-      columnText = getColumnDataWhenApiReturnsSingleColumn(columnDetails);
+      columnText = getDataBySingleColumnResponse(columnDetails);
     }
     else {
       // This else condition is if API response returns multiple columns
       // Calculate column index from API response
-      for (let i = 0; i < columnsArray.length; i++) {
-        if (columnsArray[i].name === columnData[cd].fieldName) {
+      for (let j = 0; j < columns.length; j++) {
+        if (columns[j].name === columnData[i].fieldName) {
           let columnDetails = {
             columnType,
-            columnData: columnData[cd],
+            columnData: columnData[i],
             dataRows,
             columnText,
-            columnIndex: i,
+            columnIndex: j,
             columnIndexLayoutJSON: columnIndex,
             nestedResult,
             emptyValueMessage
           };
-          columnText = getColumnDataWhenApiReturnsMultipleColumns(columnDetails);
+          columnText = getDataByMultiColumnsResponse(columnDetails);
         }
       }
     }
@@ -109,21 +109,28 @@ export function generateIndividualRowData(rowColumnDetails) {
 }
 
 export function generateRowObject(rowDetails, rowObject) {
-  let {columnType, currentTableData, columnText, rowNumber, row} = rowDetails,
+  let {
+      columnType,
+      columnData: {header, style, attributes},
+      columnText,
+      rowNumber,
+      row
+    } = rowDetails,
     rowObj = {
       type: columnType,
-      name: currentTableData.columnNameToDisplay,
-      style: currentTableData.style
+      name: header,
+      style
     };
   switch (columnType) {
     case 'chart':
+      let {id, chartType, chartWidth, chartHeight} = attributes;
       rowObj = Object.assign(rowObj, {
         data: columnText,
-        chartId: currentTableData.attributes.id + rowNumber,
-        chartType: currentTableData.attributes.chartType,
-        chartWidth: currentTableData.attributes.chartWidth,
-        chartHeight: currentTableData.attributes.chartHeight,
-        row: row
+        chartId: id + rowNumber,
+        chartType,
+        chartWidth,
+        chartHeight,
+        row
       });
       columnText = '';
       rowObject.columns.push(rowObj);
@@ -140,7 +147,7 @@ export function generateRowObject(rowDetails, rowObject) {
       sortValue = sortValue.timeString;
       rowObj = Object.assign(rowObj, {
         data: columnText,
-        sortValue: sortValue
+        sortValue
       });
       columnText = '';
       rowObject.columns.push(rowObj);
@@ -158,7 +165,7 @@ export function generateRowObject(rowDetails, rowObject) {
   return rowObject;
 }
 
-export function getColumnDataWhenApiReturnsSingleColumn(columnDetails) {
+export function getDataBySingleColumnResponse(columnDetails) {
   let {columnType, columnData, dataRows, columnText} = columnDetails;
 
   let fieldValue = '',
@@ -184,7 +191,7 @@ export function getColumnDataWhenApiReturnsSingleColumn(columnDetails) {
   return getColumnText(columnDetails);
 }
 
-export function getColumnDataWhenApiReturnsMultipleColumns(columnDetails) {
+export function getDataByMultiColumnsResponse(columnDetails) {
   let {columnType, columnData, dataRows,
     columnText, chartValue, timeValue, columnIndex, columnIndexLayoutJSON, nestedResult,
     emptyValueMessage} = columnDetails,
@@ -225,7 +232,7 @@ export function calculateFieldValueForNestedResult(columnDetails) {
       if (columnIndexLayoutJSON === 0) {
         fieldValue = (key !== '') ? key : emptyValueMessage;
       }
-      if (columnIndexLayoutJSON === 1) {
+      else if (columnIndexLayoutJSON === 1) {
         fieldValue = dataRows[key];
       }
     }

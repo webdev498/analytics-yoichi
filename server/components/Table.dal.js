@@ -5,7 +5,7 @@ import {
 const fs = require('fs');
 const path = require('path');
 
-function getDetails(rawData, url) {
+function getData(rawData, url) {
   let reportId = url.split('?');
   reportId = reportId[0];
   reportId = reportId.split('/');
@@ -27,9 +27,9 @@ export default async function Table(ctx, next) {
   let rawData = await ctx.tempData.json();
 
   if (!rawData.errorCode) {
-    const details = getDetails(rawData, ctx.request.url);
-    rawData.normalizeData = details.processedData;
-    rawData.tableJson = details.tableJson;
+    const dataObj = getData(rawData, ctx.request.url);
+    rawData.normalizeData = dataObj.processedData;
+    rawData.tableJson = dataObj.tableJson;
     ctx.normalizeData = rawData;
   }
 };
