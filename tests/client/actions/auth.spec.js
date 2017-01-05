@@ -1,6 +1,7 @@
 import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR, SET_COOKIES} from 'Constants';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import {spy} from 'sinon';
 
 import {baseUrl} from 'config';
 
@@ -9,7 +10,9 @@ import {
   userDetailsLoaded,
   userDetailsError,
   setCookies,
-  isLoggedIn
+  fetchUserData,
+  isLoggedIn,
+  logoutUtil
 } from 'actions/auth';
 
 const middlewares = [ thunk ];
@@ -103,7 +106,55 @@ describe('auth actions', () => {
     });
   });
 
-  // context('logoutUtil function');
+  context('logoutUtil function', () => {
+    beforeEach(function() {
+      this.store = mockStore({});
+    });
+
+    it('should return SET_COOKIES state, with null data', function() {
+      logoutUtil(this.store.dispatch);
+      const actions = this.store.getActions();
+      expect(actions).to.have.length(2);
+
+      const action = actions[0];
+      expect(action).to.have.a.property('type', SET_COOKIES);
+      expect(action).to.have.a.property('data');
+      expect(action.data).to.be.an.null;
+    });
+
+    it('should call window.open for redirection if redirectOnTokenExpiry config variable is set', function() {
+      // set config variable for window object
+      window.global = {
+        redirectOnTokenExpiry: '/test'
+      };
+
+      const openFn = window.open;
+      window.open = spy();
+
+      logoutUtil(this.store.dispatch);
+      const actions = this.store.getActions();
+      expect(actions).to.have.length(1);
+
+      const action = actions[0];
+      expect(action).to.have.a.property('type', SET_COOKIES);
+      expect(action).to.have.a.property('data');
+      expect(action.data).to.be.an.null;
+
+      expect(window.open).to.be.calledOnce;
+
+      // reverting window config
+      delete window.global;
+      window.open = openFn;
+    });
+
+    it('should call react router for redirection', function() {
+      logoutUtil(this.store.dispatch);
+      const actions = this.store.getActions();
+      expect(actions).to.have.length(2);
+      expect(actions[0]).to.have.a.property('type', SET_COOKIES);
+      expect(actions[1]).to.have.a.property('type', '@@router/CALL_HISTORY_METHOD');
+    });
+  });
 
   // context('logout function');
 });
