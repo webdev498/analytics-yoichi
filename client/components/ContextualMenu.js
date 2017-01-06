@@ -1,10 +1,10 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 import {
   isUndefined,
   firstCharCapitalize,
   whatIsIt
-} from 'utils/utils';
+} from '../../commons/utils/utils';
 
 import './styles/_contextualMenu.scss';
 

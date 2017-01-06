@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import AssetIcon from 'components/widgets/AssetIcon';
 
-import {Colors} from 'theme/colors';
+import {Colors} from '../../../commons/colors';
 
 const styles = {
   wrap: {

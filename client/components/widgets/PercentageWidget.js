@@ -1,6 +1,6 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../../commons/colors';
 
 function setOverlayDivBackground(style, color) {
   style.overlayDiv = Object.assign(style.overlayDiv,

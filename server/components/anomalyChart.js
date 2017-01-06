@@ -1,7 +1,7 @@
 import {
   getColumnIndex,
   getDataByIndex
-} from '../utils/chartUtils';
+} from '../../commons/utils/chartUtils';
 
 function checkIfColumnExist(cols, item) {
   let flag = false;

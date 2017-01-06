@@ -4,7 +4,7 @@ import {baseUrl} from 'config';
 
 import { push } from 'react-router-redux';
 
-import {parseQuery} from 'utils/utils';
+import {parseQuery} from '../../commons/utils/utils';
 
 export function userDetailsLoading() {
   return {

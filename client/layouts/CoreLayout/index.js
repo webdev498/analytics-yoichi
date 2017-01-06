@@ -9,7 +9,7 @@ import { fetchUserData, logout } from 'actions/auth';
 import { fetchActionsList } from 'actions/actionsList';
 
 import Loader from 'components/Loader';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../../commons/colors';
 import 'styles/core.scss';
 
 const openKibanaInNewWindow = window.global && window.global.openKibanaInNewWindow;

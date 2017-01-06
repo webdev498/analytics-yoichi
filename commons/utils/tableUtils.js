@@ -9,7 +9,7 @@ import {
   getParameterByName
 } from '../utils/utils';
 
-import {countryNameFull} from '../utils/countryUtils';
+import {getCountryName} from '../utils/countryUtils';
 import {generateClickThroughUrl} from '../utils/kibanaUtils';
 
 export function processData(data, tableJson, url) {
@@ -276,7 +276,7 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText)
     else if (name === 'country') {
       columnText.push({
         header: firstCharCapitalize(displayName),
-        value: countryNameFull[fieldValue.toUpperCase()],
+        value: getCountryName[fieldValue.toUpperCase()],
         flag: fieldValue
       });
     }

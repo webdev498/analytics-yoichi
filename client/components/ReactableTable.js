@@ -6,7 +6,7 @@ import DurationWidget from 'components/widgets/DurationWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
 import AssetIcon from 'components/widgets/AssetIcon';
 
-import {countryName} from 'utils/countryUtils';
+import {getCountryCode} from '../../commons/utils/countryUtils';
 
 const {Table, Tr, Td} = Reactable;
 
@@ -29,6 +29,10 @@ function loadComponent(column) {
       return (
         <ScoreWidget scoreValue={column.data[0].value} />
       );
+    case 'assetIcon':
+      return (
+        <AssetIcon asset={column} />
+      );
     default:
       break;
   }
@@ -39,10 +43,6 @@ function loadChartComponent(column) {
     case 'area2d':
       return (
         <Area2DAsSparkLineChart chartProperties={column} duration={column.duration} />
-      );
-    case 'assetIcon':
-      return (
-        <AssetIcon asset={column} />
       );
     default:
       break;
@@ -60,6 +60,10 @@ function loadText(data) {
               ? <span style={styles.header}>{text.header + ': '}</span>
               : null
             }
+            { /* The following condition checks
+              if header not exists and it is a first row in that column and
+              it is having multiple rows in that column,
+              then 'header' style should apply to that text otherwise display it as normal text. */ }
             {
               !text.header && index === 0 && data.length > 1
               ? <span style={styles.header}>{text.value}</span>
@@ -78,7 +82,7 @@ function loadText(data) {
 }
 
 function displayCountryFlag(data) {
-  let countryFlag = countryName[data.value];
+  let countryFlag = getCountryCode[data.value];
   countryFlag = countryFlag ? 'flag-icon flag-icon-' + countryFlag.toLowerCase() : '';
   return (
     <span className={countryFlag} rel='tooltip' title={data.value} />
@@ -92,7 +96,7 @@ function rowClick(context, tableRow) {
   context.clickThrough(tableRow.rowClickUrl);
 }
 
-export class TableCard extends React.Component {
+export class ReactableTable extends React.Component {
   constructor(props) {
     super(props);
     this.handleRowClick = this.handleRowClick.bind(this);
@@ -196,8 +200,8 @@ export class TableCard extends React.Component {
   }
 }
 
-TableCard.contextTypes = {
+ReactableTable.contextTypes = {
   clickThrough: React.PropTypes.func
 };
 
-export default TableCard;
+export default ReactableTable;

@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 import CardHeader from 'material-ui/Card/CardHeader';
 
 const styles = {

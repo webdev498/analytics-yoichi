@@ -1,8 +1,8 @@
 import React from 'react';
-import {Colors} from 'theme/colors';
-import {getArrowIcon} from 'utils/graphUtils';
+import {Colors} from '../../commons/colors';
+import {getArrowIcon} from '../../commons/utils/graphUtils';
 
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
+import {generateClickThroughUrl} from '../../commons/utils/kibanaUtils';
 
 const styles = {
   card: {

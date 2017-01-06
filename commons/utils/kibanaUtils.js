@@ -3,12 +3,11 @@ import {
   LOW_SCORE_RANGE,
   MEDIUM_SCORE_RANGE,
   HIGH_SCORE_RANGE
-} from 'Constants';
+} from '../../client/Constants';
 
-import {isUndefined, getTimePairFromWindow} from 'utils/utils';
-import {countryName} from 'utils/countryUtils';
-
-const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
+import {isUndefined, getTimePairFromWindow} from '../utils/utils';
+import {getCountryCode} from '../utils/countryUtils';
+import {kibanaBaseUrl} from '../../serverEnv';
 
 export function getColumnIndex(columns, value) {
   let columnIndex = '';
@@ -92,7 +91,7 @@ export function getQueryParamsFromKey(parameters, key, value) {
     case 'country':
       let label = dataObj.label,
         countryName = label.split(','),
-        countryCode = countryName[countryName[0]];
+        countryCode = getCountryCode[countryName[0]];
       queryParam = key + '=' + countryCode;
       break;
     case 'scoreRange':

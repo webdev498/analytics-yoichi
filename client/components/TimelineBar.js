@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 import moment from 'moment';
 
 let baseHeight = 900,

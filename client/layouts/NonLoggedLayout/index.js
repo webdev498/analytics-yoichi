@@ -1,7 +1,7 @@
 import React from 'react';
 import Login from './login';
 
-import {Colors} from 'theme/colors';
+import {Colors} from '../../../commons/colors';
 
 const styles = {
   wrap: {

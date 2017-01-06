@@ -5,12 +5,12 @@ import TimelineCard from 'components/TimelineCard';
 import ParentCard from 'containers/ParentCard';
 import TabsWidget from 'components/TabsWidget';
 
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 import {
   formatDateInLocalTimeZone,
   isUndefined,
   autoScrollTo
-} from 'utils/utils';
+} from '../../commons/utils/utils';
 import { TIMELINE_CARD, CONTEXTUAL_MENU_CARD } from 'Constants';
 
 const styles = {

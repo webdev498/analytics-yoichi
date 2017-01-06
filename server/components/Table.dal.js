@@ -1,6 +1,6 @@
 import {
   processData
-} from '../utils/tableUtils';
+} from '../../commons/utils/tableUtils';
 
 const fs = require('fs');
 const path = require('path');

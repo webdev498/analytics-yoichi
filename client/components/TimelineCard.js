@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react';
 import Card from 'material-ui/Card/Card';
-import {Colors} from 'theme/colors';
-import {getColor} from 'utils/utils';
-import {countryNameFull} from 'utils/countryUtils';
+import {Colors} from '../../commons/colors';
+import {getColor} from '../../commons/utils/utils';
+import {getCountryName} from '../../commons/utils/countryUtils';
 import MultiSeriesCombiChart from 'components/MultiSeriesCombiChart';
 
 let styles = {
@@ -34,7 +34,7 @@ let styles = {
 
 function getSourceDestination(data) {
   if (data.ip) {
-    let country = data.country ? countryNameFull[data.country.toUpperCase()] : '';
+    let country = data.country ? getCountryName[data.country.toUpperCase()] : '';
     return (
       <span>
         <span> {data.ip} </span>

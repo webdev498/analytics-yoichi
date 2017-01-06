@@ -1,4 +1,4 @@
-import {getFieldValue} from 'utils/utils';
+import {getFieldValue} from '../../commons/utils/utils';
 
 export function renderRelatedComponents(props, type) {
   let {meta, data, params, options} = props,

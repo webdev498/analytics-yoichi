@@ -1,6 +1,6 @@
 import React from 'react';
-import {Colors} from 'theme/colors';
-import {getColor} from 'utils/utils';
+import {Colors} from '../../../commons/colors';
+import {getColor} from '../../../commons/utils/utils';
 
 class ScoreWidget extends React.Component {
   render() {

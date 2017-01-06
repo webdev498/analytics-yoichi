@@ -1,10 +1,10 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 import {
   getIndexFromColumnName,
   isUndefined
-} from 'utils/utils';
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
+} from '../../commons/utils/utils';
+import {generateClickThroughUrl} from '../../commons/utils/kibanaUtils';
 
 const chart = {
   'labelFontSize': '11',

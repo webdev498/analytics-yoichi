@@ -1,13 +1,13 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 import moment from 'moment';
 import {
   getIndexFromColumnName
-} from 'utils/utils';
+} from '../../commons/utils/utils';
 
 import {
   calculateDateDisplayFormat
-} from 'utils/dateUtils';
+} from '../../commons/utils/dateUtils';
 
 export function formatDate(date, dateDisplayFormat) {
   let localTimeNew = moment.utc(date).toDate();

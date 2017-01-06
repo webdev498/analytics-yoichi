@@ -3,7 +3,7 @@ import {
   getEventTypeString,
   formatBytes,
   formatDateInLocalTimeZone
-} from '../utils/utils';
+} from '../../commons/utils/utils';
 
 import { getSingleChartData } from '../components/anomalyChart';
 

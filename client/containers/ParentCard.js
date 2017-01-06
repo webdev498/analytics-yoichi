@@ -6,7 +6,7 @@ import FontIcon from 'material-ui/FontIcon';
 import Loader from 'components/Loader';
 
 import {fetchApiData, removeComponent, broadcastEvent} from 'actions/ParentCard';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 import {updateRoute} from 'actions/core';
 
 const styles = {
