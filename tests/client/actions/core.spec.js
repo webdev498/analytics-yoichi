@@ -95,7 +95,38 @@ describe('corelayout Redux Actions', () => {
   });
 
   context('fetchLayoutData function', function() {
-    it('should dispatch RECEIVE_LAYOUT_DATA with json data');
+    let server, auth, store;
+
+    const json = {__authDetails: {}, taf: {}},
+      jsonRes = JSON.stringify(json);
+
+    beforeEach(function() {
+      server = fakeServer.create();
+      auth = { cookies: { access_token: '', token_type: '' } };
+      store = mockStore({ auth });
+    });
+
+    afterEach(function() {
+      server.restore();
+    });
+
+    it('should dispatch RECEIVE_LAYOUT_DATA with json data', () => {
+      // server.respondWith('GET', [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
+      // const apiObj = store.dispatch(fetchUserData())
+      //   .then(res => {
+      //     const actions = store.getActions();
+      //     expect(actions).to.have.length(2);
+      //     expect(actions[0]).to.have.a.property('type', USER_DETAILS_LOADING);
+
+      //     expect(actions[1]).to.have.a.property('type', USER_DETAILS_LOADED);
+      //     expect(actions[1]).to.have.a.property('data');
+      //     expect(actions[1].data).to.deep.equal(json);
+      //   });
+
+      // server.respond();
+      // return apiObj;
+    });
+
     it('should dispatch ERROR_LAYOUT_DATA with error "Json not loaded correctly from server"');
     it('should dispatch ERROR_LAYOUT_DATA with error server error');
   });

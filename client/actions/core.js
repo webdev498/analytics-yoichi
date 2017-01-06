@@ -35,11 +35,12 @@ export function errorPageData(id, ex) {
 export function getUrl(id) {
   if (typeof id !== 'string') return;
 
+  const pathArr = id.split('/');
   if (id === '/') {   // if path id is / then layout id is summary-page.
     return defaultLayoutPath;
   }
-  else if (id.includes('/')) { // if id has path params, then first part of the url is used to fetch layout json.
-    id = id.slice(0, id.indexOf('/', 1));
+  else if (pathArr.length > 2) { // if id has path params, then first part of the url is used to fetch layout json.
+    id = pathArr.slice(0, 2).join('/');
   }
 
   return `${baseUrl}/api/layout${id}`;
@@ -54,7 +55,6 @@ export function fetchLayoutData(id) {
     const cookies = getState().auth.cookies;
 
     dispatch(requestPageData(id));
-
     return fetchData(getUrl(id), cookies, dispatch)
     .then(json => {
       if (json) {
