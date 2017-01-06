@@ -70,6 +70,7 @@ export function fetchLayoutData(id) {
   };
 };
 
+// TODO, update this method, and the search state in the redux.
 export function fetchSearchData(auth, query) {
   const cookies = auth.cookies,
     accessToken = cookies.access_token,

@@ -1,7 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import {fakeServer, spy} from 'sinon';
-
+import {fakeServer} from 'sinon';
 import {
   REQUEST_LAYOUT_DATA,
   RECEIVE_LAYOUT_DATA,
@@ -14,9 +13,7 @@ import {
   receivePageData,
   errorPageData,
   getUrl,
-  fetchLayoutData,
-  fetchSearchData,
-  updateRoute
+  fetchLayoutData
 } from 'actions/core';
 
 import {baseUrl} from 'config';
@@ -169,7 +166,21 @@ describe('corelayout Redux Actions', () => {
     });
   });
 
-  // context('fetchSearchData function', function() {
+  context('fetchSearchData function', function() {
+    // it('should call search url', () => {
+    //   const server = fakeServer.create(),
+    //     auth = { cookies: { access_token: '', token_type: '' } },
+    //     json = {},
+    //     jsonRes = JSON.stringify(json),
+    //     query = 'hello';
 
-  // });
+    //   server.respondWith('GET', getSearchUrl(query), function(req) {
+    //     return [ 200, { 'Content-Type': 'application/json' }, jsonRes ];
+    //   });
+
+    //   const apiObj = fetchSearchData(auth, query);
+    //   server.respond();
+    //   return apiObj;
+    // });
+  });
 });
