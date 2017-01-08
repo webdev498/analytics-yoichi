@@ -170,11 +170,4 @@ describe('<TimelineCard />', () => {
     const wrapper = mountTimelineCard();
     expect(wrapper.find(Card)).to.have.style('borderLeft', '5px solid rgb(239, 89, 118)');
   });
-
-  it('simulates card click', () => {
-    const onClick = spy();
-    const wrapper = mountTimelineCard();
-    wrapper.find(Card).simulate('click');
-    expect(onClick).to.have.property('callCount', 1);
-  });
 });

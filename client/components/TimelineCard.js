@@ -28,8 +28,7 @@ let styles = {
     height: 'auto',
     fontSize: '14px',
     overflowWrap: 'break-word',
-    marginBottom: '20px',
-    zIndex: -1
+    marginBottom: '20px'
   }
 };
 
