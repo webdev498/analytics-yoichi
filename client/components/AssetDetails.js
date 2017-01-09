@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-import RadarChart from 'components/RadarChart';
+import RadarChart from 'components/charts/RadarChart';
 import Heatmap from 'components/charts/Heatmap';
 import AssetWidget from 'components/widgets/AssetWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
