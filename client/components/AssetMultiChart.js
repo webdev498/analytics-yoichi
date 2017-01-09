@@ -160,7 +160,7 @@ const userCharts = [
       'id': 'success-login-count-chart'
     },
     'id': 'success-login-count',
-    'type': 'MultiSeriesColumn2d'
+    'type': 'charts/MultiSeriesColumn2d'
   },
   {
     'chartOptions': {
@@ -245,7 +245,7 @@ const userCharts = [
       'id': 'failed-login-count-chart'
     },
     'id': 'FailedLoginCount',
-    'type': 'MultiSeriesColumn2d'
+    'type': 'charts/MultiSeriesColumn2d'
   },
   {
     'chartOptions': {
@@ -496,7 +496,7 @@ const machineCharts = [
       'id': 'success-login-count-chart'
     },
     'id': 'success-login-count',
-    'type': 'MultiSeriesColumn2d'
+    'type': 'charts/MultiSeriesColumn2d'
   },
   {
     'chartOptions': {
@@ -581,7 +581,7 @@ const machineCharts = [
       'id': 'failed-login-count-chart'
     },
     'id': 'FailedLoginCount',
-    'type': 'MultiSeriesColumn2d'
+    'type': 'charts/MultiSeriesColumn2d'
   },
   {
     'chartOptions': {
