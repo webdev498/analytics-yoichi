@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react';
 import Reactable from 'reactable';
 
-import AngularGaugeChart from 'components/AngularGaugeChart';
 import Area2DAsSparkLineChart from 'components/charts/Area2DAsSparkLineChart';
 import DurationWidget from 'components/widgets/DurationWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
@@ -407,10 +406,6 @@ export function generateColumnTextForDisplayingCountryFlag(fieldValue) {
 
 function loadChartComponentInTableRow(tableColumn, duration) {
   switch (tableColumn.chartType) {
-    case 'angulargauge':
-      return (
-        <AngularGaugeChart chartProperties={tableColumn} />
-      );
     case 'area2d':
       return (
         <Area2DAsSparkLineChart chartProperties={tableColumn} duration={duration} />
