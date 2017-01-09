@@ -56,7 +56,7 @@
           "id": "NetworkGraph"
         },
         "id": "network-graph",
-        "type": "NetworkGraph/index",
+        "type": "networkGraph/index",
         "timelineId": "primary-timeline"
       }
     ],
