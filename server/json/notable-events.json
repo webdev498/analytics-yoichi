@@ -194,7 +194,7 @@
           "chartHeight": "350"
         },
         "id": "login-failure-by-type",
-        "type": "ParetoChart"
+        "type": "charts/ParetoChart"
       },
       {
         "chartOptions": {
@@ -244,7 +244,7 @@
           "chartHeight": "350"
         },
         "id": "login-failure-by-user",
-        "type": "ParetoChart"
+        "type": "charts/ParetoChart"
       }
     ],
     [
@@ -355,7 +355,7 @@
           "chartHeight": "350"
         },
         "id": "account-management-events-by-type",
-        "type": "ParetoChart",
+        "type": "charts/ParetoChart",
         "kibana": {
           "pathParams": [
             "management-events"
@@ -421,7 +421,7 @@
           "chartHeight": "350"
         },
         "id": "computer-management-events-by-type",
-        "type": "ParetoChart",
+        "type": "charts/ParetoChart",
         "kibana": {
           "pathParams": [
             "management-events"
@@ -486,7 +486,7 @@
           "chartHeight": "350"
         },
         "id": "security-group-management-events-by-type",
-        "type": "ParetoChart",
+        "type": "charts/ParetoChart",
         "kibana": {
           "pathParams": [
             "management-events"

@@ -192,7 +192,7 @@
           "chartHeight": "350"
         },
         "id": "alert-by-type",
-        "type": "ParetoChart",
+        "type": "charts/ParetoChart",
         "kibana": {
           "pathParams": [
             "alerts-type"
@@ -248,7 +248,7 @@
           "chartHeight": "350"
         },
         "id": "top-attacked-entities",
-        "type": "ParetoChart",
+        "type": "charts/ParetoChart",
         "kibana": {
           "pathParams": [
             "attacked-entity-details"
@@ -360,7 +360,7 @@
           "chartHeight": "350"
         },
         "id": "at-risk-asset-by-risk",
-        "type": "ParetoChart"
+        "type": "charts/ParetoChart"
       }
     ],
     [
