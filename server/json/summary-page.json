@@ -310,7 +310,7 @@
           "id": "atRiskAssetsByTime"
         },
         "id": "at-risk-assets-by-time",
-        "type": "StandardChart"
+        "type": "charts/StandardChart"
       },
       {
         "chartOptions": {

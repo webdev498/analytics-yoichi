@@ -296,7 +296,7 @@
           "id": "loginFailureByTime"
         },
         "id": "login-failure-by-time",
-        "type": "StandardChart"
+        "type": "charts/StandardChart"
       }
     ],
     [
