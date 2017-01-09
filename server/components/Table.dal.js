@@ -11,7 +11,7 @@ function getData(rawData, url) {
   reportId = reportId.split('/');
   reportId = reportId[reportId.length - 1];
 
-  const fileName = `../dalJson/${reportId}.json`,
+  const fileName = `../dalJson/table/${reportId}.json`,
     filePath = path.join(__dirname, fileName);
 
   let tableJson = JSON.parse(fs.readFileSync(filePath, 'utf8')),

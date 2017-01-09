@@ -1,8 +1,8 @@
 import {
   generateClickThroughUrl
-} from 'utils/kibanaUtils';
+} from '../../../commons/utils/kibanaUtils';
 
-const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
+import {kibanaBaseUrl} from '../../../serverEnv';
 
 describe('Kibana Utility Function:', function() {
   it('should return valid kibana url if query parameter requires x-axis value', function() {

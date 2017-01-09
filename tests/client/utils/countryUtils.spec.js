@@ -1,9 +1,9 @@
 import {
-  countryCode
-} from 'utils/countryUtils';
+  getCountryId
+} from '../../../commons/utils/countryUtils';
 
 describe('countryUtils', function() {
-  it('countryCode should return country id.', function() {
-    expect(countryCode('IN')).to.deep.equal('104');
+  it('getCountryId should return country id.', function() {
+    expect(getCountryId('IN')).to.deep.equal('104');
   });
 });

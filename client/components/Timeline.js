@@ -87,6 +87,7 @@ class Timeline extends React.Component {
 
     this.decreaseHeightBy = 120;
     this.decreasePositionBy = 250;
+    this.topMargin = 86;
     this.currentTabId = 0;
     this.currentTab = 'DETAILS';
     this.apiObj = {};
@@ -359,9 +360,9 @@ class Timeline extends React.Component {
         <div style={{
           width: '450px',
           position: 'absolute',
-          top: 0,
+          top: 182,
           right: 0,
-          height: '100%'
+          bottom: 0
         }}>
           <ParentCard
             key={state.selectedCardId}
@@ -403,8 +404,10 @@ class Timeline extends React.Component {
         document.getElementById('secondaryTimeline').offsetHeight) {
         if (document.getElementById('secondaryTimeline').offsetHeight >
           document.getElementById('primaryTimeline').offsetHeight) {
+          console.log(document.getElementById('secondaryTimeline').offsetHeight, this.decreaseHeightBy, this.topMargin);
           this.refs.primaryTimeline.style.height =
-            (document.getElementById('secondaryTimeline').offsetHeight - this.decreaseHeightBy) + 'px';
+            ((document.getElementById('secondaryTimeline').offsetHeight) - this.decreaseHeightBy +
+              this.topMargin) + 'px';
         }
       }
     }

@@ -13,7 +13,7 @@ import NetworkGraph, {
   createEdgeObject
 } from 'components/NetworkGraph';
 import Loader from 'components/Loader';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../../commons/colors';
 import {wrapThemeProvider} from '../../testUtils';
 
 let props = {

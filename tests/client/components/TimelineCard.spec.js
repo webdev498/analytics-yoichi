@@ -7,7 +7,6 @@ import Card from 'material-ui/Card/Card';
 import TimelineCard from 'components/TimelineCard';
 import MultiSeriesCombiChart from 'components/MultiSeriesCombiChart';
 import {wrapThemeProvider} from '../../testUtils';
-import {getColor} from 'utils/utils';
 
 let props = {
   id: 'timelineCard',
