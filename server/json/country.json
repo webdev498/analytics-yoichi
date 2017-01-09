@@ -204,7 +204,7 @@
               "chartHeight": "450"
             },
             "id": "outgoing-traffic-world-map",
-            "type": "WorldMap",
+            "type": "maps/WorldMap",
             "kibana": {
               "pathParams": [
                 "destination-country-details"
@@ -410,7 +410,7 @@
               "chartHeight": "450"
             },
             "id": "world-map",
-            "type": "WorldMap",
+            "type": "maps/WorldMap",
             "kibana": {
               "pathParams": [
                 "source-country-details"

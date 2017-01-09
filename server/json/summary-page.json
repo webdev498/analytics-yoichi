@@ -685,7 +685,7 @@
           "chartHeight": "350"
         },
         "id": "Outgoingworld-map",
-        "type": "WorldMap",
+        "type": "maps/WorldMap",
         "kibana": {
           "pathParams": [
             "destination-country-details"
@@ -753,7 +753,7 @@
           "chartHeight": "350"
         },
         "id": "world-map",
-        "type": "WorldMap",
+        "type": "maps/WorldMap",
         "kibana": {
           "pathParams": [
             "source-country-details"
