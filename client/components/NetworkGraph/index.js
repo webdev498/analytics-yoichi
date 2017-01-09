@@ -14,10 +14,10 @@ import Cookies from 'cookies-js';
 import vis from 'vis';
 import {baseUrl, networkGraphDefaultOptions, hierarchicalNetwork, applyHierarchicalNetwork} from 'config';
 
-import Loader from '../components/Loader';
-import ContextualMenu from '../components/ContextualMenu';
+import Loader from 'components/Loader';
+import ContextualMenu from 'components/ContextualMenu';
 
-import './styles/_network.scss';
+import './_network.scss';
 
 const styles = {
   graphWrap: {

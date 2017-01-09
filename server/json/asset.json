@@ -88,8 +88,7 @@
       },
       {
         "id": "network-graph",
-        "type": "NetworkGraph",
-        "name": "NetworkGraph",
+        "type": "NetworkGraph/index",
         "meta": {
           "showHeader": true,
           "api": {
