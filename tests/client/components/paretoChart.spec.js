@@ -1,10 +1,8 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 
-import ParetoChart, {
-  generateDataSource
-}
-from 'components/ParetoChart';
+import ParetoChart, { generateDataSource }
+from 'components/charts/ParetoChart';
 
 const rawData = {
     'total': -1,

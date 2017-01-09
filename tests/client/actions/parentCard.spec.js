@@ -25,7 +25,7 @@ import {
   updateApiData,
   broadcastEvent,
   removeComponent
-} from 'actions/ParentCard';
+} from 'actions/parentCard';
 
 import {baseUrl} from 'config';
 
@@ -40,7 +40,7 @@ function getApiObj(path, query, pathParams) {
   };
 }
 
-describe('ParentCard Actions', () => {
+describe('parentCard Redux Actions', () => {
   it('should return the state for REQUEST_API_DATA', () => {
     const id = 'testId',
       api = {test: 'value'},

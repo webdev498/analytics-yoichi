@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ScatterChart, {
   generateChartDataSource
-} from 'components/ScatterChart';
+} from 'components/charts/ScatterChart';
 
 function shallowRender(component) {
   const renderer = TestUtils.createRenderer();

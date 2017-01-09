@@ -3,7 +3,7 @@ import Card from 'material-ui/Card/Card';
 import {Colors} from '../../commons/colors';
 import {getColor} from '../../commons/utils/utils';
 import {getCountryName} from '../../commons/utils/countryUtils';
-import MultiSeriesCombiChart from 'components/MultiSeriesCombiChart';
+import MultiSeriesCombiChart from 'components/charts/MultiSeriesCombiChart';
 
 let styles = {
   list: {

@@ -8,7 +8,7 @@ import MultiSeriesCombiChart, {
   generateChartDataSetForDynamicSeries,
   generateChartDataSetForFixedSeries,
   generateDataArray
-} from 'components/MultiSeriesCombiChart';
+} from 'components/charts/MultiSeriesCombiChart';
 
 function shallowRender(component) {
   const renderer = TestUtils.createRenderer();

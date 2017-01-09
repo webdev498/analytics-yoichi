@@ -14,7 +14,6 @@ const defaultRoutes = [
   {to: 'assets'},
   {to: 'asset/:type/:assetId'},
   {to: 'user-agent'},
-  {to: 'summary-page'},
   {to: 'notable-events'}
 ];
 

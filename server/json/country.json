@@ -204,7 +204,7 @@
               "chartHeight": "450"
             },
             "id": "outgoing-traffic-world-map",
-            "type": "WorldMap",
+            "type": "maps/WorldMap",
             "kibana": {
               "pathParams": [
                 "destination-country-details"
@@ -263,7 +263,7 @@
                   "chartHeight": "200"
                 },
                 "id": "OutgoingTopCountries",
-                "type": "HorizontalBarChart"
+                "type": "charts/HorizontalBarChart"
               },
               {
                 "chartOptions": {},
@@ -308,7 +308,7 @@
                   "chartHeight": "200"
                 },
                 "id": "OutgoingTopBandwidth",
-                "type": "HorizontalBarChart"
+                "type": "charts/HorizontalBarChart"
               }
             ],
             "meta": {
@@ -410,7 +410,7 @@
               "chartHeight": "450"
             },
             "id": "world-map",
-            "type": "WorldMap",
+            "type": "maps/WorldMap",
             "kibana": {
               "pathParams": [
                 "source-country-details"
@@ -469,7 +469,7 @@
                   "chartHeight": "200"
                 },
                 "id": "IncomingTopCountries",
-                "type": "HorizontalBarChart"
+                "type": "charts/HorizontalBarChart"
               },
               {
                 "chartOptions": {},
@@ -514,7 +514,7 @@
                   "chartHeight": "200"
                 },
                 "id": "IncomingTopBandwidth",
-                "type": "HorizontalBarChart"
+                "type": "charts/HorizontalBarChart"
               }
             ],
             "meta": {

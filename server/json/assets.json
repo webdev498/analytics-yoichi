@@ -196,7 +196,7 @@
           "id": "PieChartConnections"
         },
         "id": "pie-chart-connections",
-        "type": "PieChart"
+        "type": "charts/PieChart"
       },
       {
         "chartOptions": {
@@ -270,7 +270,7 @@
           "id": "HorizontalBarChartConnections"
         },
         "id": "horizontal-bar-chart-connections",
-        "type": "HorizontalBarChart",
+        "type": "charts/HorizontalBarChart",
         "kibana": {
           "pathParams": [
             "ip-connection-details"
@@ -334,7 +334,7 @@
           "id": "PieChartBandwidth"
         },
         "id": "pie-chart-bandwidth",
-        "type": "PieChart"
+        "type": "charts/PieChart"
       },
       {
         "chartOptions": {
@@ -408,7 +408,7 @@
           "id": "HorizontalBarChartBandwidth"
         },
         "id": "horizontal-bar-chart-bandwidth",
-        "type": "HorizontalBarChart"
+        "type": "charts/HorizontalBarChart"
       }
     ]
   ]

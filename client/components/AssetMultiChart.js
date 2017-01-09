@@ -13,7 +13,7 @@ const protocolChart = {
     }
   },
   'id': 'connections-by-protocol',
-  'type': 'HorizontalBarChart',
+  'type': 'charts/HorizontalBarChart',
   'meta': {
     'showHeader': true,
     'showRefresh': false,
@@ -160,7 +160,7 @@ const userCharts = [
       'id': 'success-login-count-chart'
     },
     'id': 'success-login-count',
-    'type': 'MultiSeriesColumn2d'
+    'type': 'charts/MultiSeriesColumn2d'
   },
   {
     'chartOptions': {
@@ -245,7 +245,7 @@ const userCharts = [
       'id': 'failed-login-count-chart'
     },
     'id': 'FailedLoginCount',
-    'type': 'MultiSeriesColumn2d'
+    'type': 'charts/MultiSeriesColumn2d'
   },
   {
     'chartOptions': {
@@ -326,7 +326,7 @@ const userCharts = [
       'id': 'successful-logins-by-user'
     },
     'id': 'SuccessfulLoginsByUser',
-    'type': 'MultiSeriesCombiChart'
+    'type': 'charts/MultiSeriesCombiChart'
   },
   {
     'chartOptions': {
@@ -407,7 +407,7 @@ const userCharts = [
       'id': 'failed-logins-by-user'
     },
     'id': 'FailedLoginsByUser',
-    'type': 'MultiSeriesCombiChart'
+    'type': 'charts/MultiSeriesCombiChart'
   },
   protocolChart
 ];
@@ -496,7 +496,7 @@ const machineCharts = [
       'id': 'success-login-count-chart'
     },
     'id': 'success-login-count',
-    'type': 'MultiSeriesColumn2d'
+    'type': 'charts/MultiSeriesColumn2d'
   },
   {
     'chartOptions': {
@@ -581,7 +581,7 @@ const machineCharts = [
       'id': 'failed-login-count-chart'
     },
     'id': 'FailedLoginCount',
-    'type': 'MultiSeriesColumn2d'
+    'type': 'charts/MultiSeriesColumn2d'
   },
   {
     'chartOptions': {
@@ -662,7 +662,7 @@ const machineCharts = [
       'id': 'successful-logins-by-user'
     },
     'id': 'SuccessfulLoginsByUser',
-    'type': 'MultiSeriesCombiChart'
+    'type': 'charts/MultiSeriesCombiChart'
   },
   {
     'chartOptions': {
@@ -743,7 +743,7 @@ const machineCharts = [
       'id': 'failed-logins-by-user'
     },
     'id': 'FailedLoginsByUser',
-    'type': 'MultiSeriesCombiChart'
+    'type': 'charts/MultiSeriesCombiChart'
   },
   protocolChart
 ];

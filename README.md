@@ -8,7 +8,7 @@ And add env.js to client/static/
 ```
 window.global = {
   baseUrl: '',
-  redirectUri: 'http://localhost:3000/dashboard?',
+  redirectUri: 'http://localhost:3000/loggedIn?',
   redirectOnTokenExpiry: 'http://localhost:3000/login',
   defaultRoute: '/',
   loginUrl: 'https://api.ranksoftwareinc.com/oauth/authorize',
@@ -22,7 +22,6 @@ window.global = {
     {to: 'assets'},
     {to: 'asset/:type/:assetId'},
     {to: 'user-agent'},
-    {to: 'summary-page'},
     {to: 'notable-events'}
   ]
 };

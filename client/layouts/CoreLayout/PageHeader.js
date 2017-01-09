@@ -11,7 +11,7 @@ import AppTheme from 'theme/AppTheme';
 
 import Image from 'components/widgets/Image';
 
-import {updateApiData} from 'actions/ParentCard';
+import {updateApiData} from 'actions/parentCard';
 import {logout} from 'actions/auth';
 
 import { connect } from 'react-redux';

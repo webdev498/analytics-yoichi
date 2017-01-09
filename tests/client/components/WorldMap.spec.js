@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import WorldMap, {
   generateChartDataSource
-} from 'components/WorldMap';
+} from 'components/maps/WorldMap';
 
 function shallowRender(component) {
   const renderer = TestUtils.createRenderer();

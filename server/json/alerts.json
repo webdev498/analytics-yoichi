@@ -257,7 +257,7 @@
           "chartHeight": "350"
         },
         "id": "alert-by-type",
-        "type": "ParetoChart",
+        "type": "charts/ParetoChart",
         "kibana": {
           "pathParams": [
             "alerts-type"
@@ -343,7 +343,7 @@
           "chartHeight": "350"
         },
         "id": "alert-priority-chart",
-        "type": "MultiSeriesCombiChart",
+        "type": "charts/MultiSeriesCombiChart",
         "kibana": {
           "pathParams": [
             "alerts-score"

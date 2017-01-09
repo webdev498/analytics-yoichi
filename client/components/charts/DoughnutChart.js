@@ -188,24 +188,24 @@ class DoughnutChart extends React.Component {
           <div className='card1 text-center'>
             <div className='percentage1 chart2'>{doughnutAttributes.displayPercentage2}</div>
             <div className='donut-chart chart2' style={doughnutAttributes.chart2Background}>
-              <div className='slice one' style={doughnutAttributes.chart2SliceOneStyle}></div>
-              <div className='slice two' style={doughnutAttributes.chart2SliceTwoStyle}></div>
-              <div className='chart-center'><span></span></div>
+              <div className='slice one' style={doughnutAttributes.chart2SliceOneStyle} />
+              <div className='slice two' style={doughnutAttributes.chart2SliceTwoStyle} />
+              <div className='chart-center'><span /></div>
             </div>
           </div>
           <div className='card2'>
             <div className='donut-chart chart1' style={doughnutAttributes.chart1Background}>
-              <div className='slice one' style={doughnutAttributes.chart1SliceOneStyle}></div>
-              <div className='slice two' style={doughnutAttributes.chart1SliceTwoStyle}></div>
+              <div className='slice one' style={doughnutAttributes.chart1SliceOneStyle} />
+              <div className='slice two' style={doughnutAttributes.chart1SliceTwoStyle} />
               <div className='chart-center'><span>{doughnutAttributes.displayPercentage1}</span></div>
             </div>
           </div>
         </div>
         <div className='text-center' id='connectionsPercentage'><br /><br />
           <span style={doughnutAttributes.percentage2Color}>{doughnutAttributes.displayPercentage2}</span>
-            &nbsp;{props.meta.legend[0]}
+          {props.meta.legend[0]}
           <span style={doughnutAttributes.percentage1Color}> {doughnutAttributes.displayPercentage1}</span>
-            &nbsp;{props.meta.legend[1]}
+          {props.meta.legend[1]}
         </div><br /><br />
       </div>
     );

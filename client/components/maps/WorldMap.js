@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import WorldMapLegends from 'components/WorldMapLegends';
+import WorldMapLegends from './WorldMapLegends';
 import {Colors} from '../../commons/colors';
 
 import { generateRawData, isUndefined, getColorRanges } from '../../commons/utils/utils';

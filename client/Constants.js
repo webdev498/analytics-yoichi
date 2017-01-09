@@ -1,3 +1,5 @@
+import {baseUrl} from 'config';
+
 export const REQUEST_API_DATA = 'REQUEST_API_DATA';
 export const RECEIVE_API_DATA = 'RECEIVE_API_DATA';
 export const ERROR_API_DATA = 'ERROR_API_DATA';
@@ -27,6 +29,9 @@ export const CONTEXTUAL_MENU_CARD = 'CONTEXTUAL_MENU_CARD';
 export const LOW_SCORE_RANGE = [1, 34];
 export const MEDIUM_SCORE_RANGE = [35, 64];
 export const HIGH_SCORE_RANGE = [65, 100];
+
+export const profileUrl = `${baseUrl}/api/user/profile`;
+export const defaultLayoutPath = `${baseUrl}/api/layout/summary-page`;
 
 export const CHART_COLORS = [
   '2BD8D0',

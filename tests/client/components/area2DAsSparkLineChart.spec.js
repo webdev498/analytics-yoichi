@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 
 import Area2DAsSparkLineChart, {
   generateDataSource
-} from 'components/Area2DAsSparkLineChart';
+} from 'components/charts/Area2DAsSparkLineChart';
 
 function shallowRender(component) {
   const renderer = TestUtils.createRenderer();

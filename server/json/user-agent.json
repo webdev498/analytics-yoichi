@@ -184,7 +184,7 @@
           "chartHeight": "300"
         },
         "id": "user-agent-length",
-        "type": "ScatterChart"
+        "type": "charts/ScatterChart"
       }
     ],
     [

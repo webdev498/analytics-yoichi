@@ -192,7 +192,7 @@
           "chartHeight": "350"
         },
         "id": "alert-by-type",
-        "type": "ParetoChart",
+        "type": "charts/ParetoChart",
         "kibana": {
           "pathParams": [
             "alerts-type"
@@ -248,7 +248,7 @@
           "chartHeight": "350"
         },
         "id": "top-attacked-entities",
-        "type": "ParetoChart",
+        "type": "charts/ParetoChart",
         "kibana": {
           "pathParams": [
             "attacked-entity-details"
@@ -310,7 +310,7 @@
           "id": "atRiskAssetsByTime"
         },
         "id": "at-risk-assets-by-time",
-        "type": "StandardChart"
+        "type": "charts/StandardChart"
       },
       {
         "chartOptions": {
@@ -360,7 +360,7 @@
           "chartHeight": "350"
         },
         "id": "at-risk-asset-by-risk",
-        "type": "ParetoChart"
+        "type": "charts/ParetoChart"
       }
     ],
     [
@@ -415,7 +415,7 @@
           "id": "PieChartConnections"
         },
         "id": "pie-chart-connections",
-        "type": "PieChart"
+        "type": "charts/PieChart"
       },
       {
         "chartOptions": {
@@ -489,7 +489,7 @@
           "id": "HorizontalBarChartConnections"
         },
         "id": "horizontal-bar-chart-connections",
-        "type": "HorizontalBarChart",
+        "type": "charts/HorizontalBarChart",
         "kibana": {
           "pathParams": [
             "ip-connection-details"
@@ -553,7 +553,7 @@
           "id": "PieChartBandwidth"
         },
         "id": "pie-chart-bandwidth",
-        "type": "PieChart"
+        "type": "charts/PieChart"
       },
       {
         "chartOptions": {
@@ -623,7 +623,7 @@
           "id": "HorizontalBarChartBandwidth"
         },
         "id": "horizontal-bar-chart-bandwidth",
-        "type": "HorizontalBarChart"
+        "type": "charts/HorizontalBarChart"
       }
     ],
     [
@@ -685,7 +685,7 @@
           "chartHeight": "350"
         },
         "id": "Outgoingworld-map",
-        "type": "WorldMap",
+        "type": "maps/WorldMap",
         "kibana": {
           "pathParams": [
             "destination-country-details"
@@ -753,7 +753,7 @@
           "chartHeight": "350"
         },
         "id": "world-map",
-        "type": "WorldMap",
+        "type": "maps/WorldMap",
         "kibana": {
           "pathParams": [
             "source-country-details"
