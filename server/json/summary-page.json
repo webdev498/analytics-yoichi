@@ -489,7 +489,7 @@
           "id": "HorizontalBarChartConnections"
         },
         "id": "horizontal-bar-chart-connections",
-        "type": "HorizontalBarChart",
+        "type": "charts/HorizontalBarChart",
         "kibana": {
           "pathParams": [
             "ip-connection-details"
@@ -623,7 +623,7 @@
           "id": "HorizontalBarChartBandwidth"
         },
         "id": "horizontal-bar-chart-bandwidth",
-        "type": "HorizontalBarChart"
+        "type": "charts/HorizontalBarChart"
       }
     ],
     [

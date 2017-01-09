@@ -386,7 +386,7 @@
           "id": "TopConnectionsByProtocol"
         },
         "id": "top-connections-by-protocol",
-        "type": "HorizontalBarChart"
+        "type": "charts/HorizontalBarChart"
       }
     ],
     [

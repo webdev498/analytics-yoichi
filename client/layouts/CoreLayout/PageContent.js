@@ -46,7 +46,6 @@ export class PageContent extends React.Component {
   }
 
   renderComponent(componentDetails) {
-    console.log('components/' + componentDetails.type);
     const elm = React.createFactory(require('components/' + componentDetails.type).default, null);
 
     let childrenArray = [];

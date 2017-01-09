@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import HorizontalBarChart, {
   generateDataArray,
   generateDataSource
-} from 'components/HorizontalBarChart';
+} from 'components/charts/HorizontalBarChart';
 
 function shallowRender(component) {
   const renderer = TestUtils.createRenderer();

@@ -13,7 +13,7 @@ const protocolChart = {
     }
   },
   'id': 'connections-by-protocol',
-  'type': 'HorizontalBarChart',
+  'type': 'charts/HorizontalBarChart',
   'meta': {
     'showHeader': true,
     'showRefresh': false,
