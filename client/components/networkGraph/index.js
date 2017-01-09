@@ -1457,7 +1457,7 @@ class NetworkGraph extends React.Component {
     const {props, state} = this;
 
     let assetData;
-    if (props.data && !Array.isArray(props.data)) {
+    if (props.data && props.params.assetId) {
       assetData = generateDataFromAssetDetails(props.data);
     }
 
