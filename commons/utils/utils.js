@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import {Colors} from '../colors';
-import {logoutUtil} from 'actions/auth';
+// import {logoutUtil} from '../../client/actions/auth';
 
 // Function to convert milliseconds to time
 export function msToTime(duration) {
@@ -548,7 +548,7 @@ export function militaryTimeToNormalTime(time) {
 
   return timeValue;
 }
-
+/*
 export function fetchData(url, cookies, dispatch) {
   let accessToken = cookies.access_token,
     tokenType = cookies.token_type,
@@ -574,4 +574,4 @@ export function fetchData(url, cookies, dispatch) {
 
 export function getSearchUrl(query) {
   return `/api/analytics/reporting/execute/taf_search_assets?term=${encodeURIComponent(query)}`;
-};
+};*/

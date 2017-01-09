@@ -1,11 +1,11 @@
 import React, {PropTypes} from 'react';
-import {Colors} from '../../commons/colors';
+import {Colors} from '../../../commons/colors';
 import {
   generateRawData,
   getIndexFromObjectName,
   getIndexFromColumnName,
   checkForUndefinedChartOptionObject
-} from '../../commons/utils/utils';
+} from '../../../commons/utils/utils';
 
 import PercentageWidget from 'components/widgets/PercentageWidget';
 

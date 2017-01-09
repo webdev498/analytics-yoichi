@@ -7,10 +7,9 @@ import {
   firstCharCapitalize,
   generateRawData,
   getParameterByName
-} from '../utils/utils';
+} from '../../commons/utils/utils';
 
-import {getCountryName} from '../utils/countryUtils';
-import {generateClickThroughUrl} from '../utils/kibanaUtils';
+import {getCountryName} from '../../commons/utils/countryUtils';
 
 export function processData(data, tableJson, url) {
   const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.tableData;
@@ -58,7 +57,7 @@ export function processData(data, tableJson, url) {
             nestedResult,
             pathParams: tableJson.kibana.pathParams
           };
-          rowObject.rowClickUrl = generateClickThroughUrl(parameters);
+          // rowObject.rowClickUrlParams = parameters;
         }
         columnText = [];
       }

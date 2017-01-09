@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Colors} from '../../commons/colors';
+import {Colors} from '../../../commons/colors';
 import {
   firstCharCapitalize,
   getPosition,
@@ -8,8 +8,8 @@ import {
   whatIsIt,
   formatDateInLocalTimeZone,
   autoScrollTo
-} from '../../commons/utils/utils';
-import {getCountryName} from '../../commons/utils/countryUtils';
+} from '../../../commons/utils/utils';
+import {getCountryName} from '../../../commons/utils/countryUtils';
 import Cookies from 'cookies-js';
 import vis from 'vis';
 import {baseUrl, networkGraphDefaultOptions, hierarchicalNetwork, applyHierarchicalNetwork} from 'config';

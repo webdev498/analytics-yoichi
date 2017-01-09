@@ -2,7 +2,7 @@ import React from 'react';
 import {Colors} from '../../commons/colors';
 import {getArrowIcon} from '../../commons/utils/graphUtils';
 
-import {generateClickThroughUrl} from '../../commons/utils/kibanaUtils';
+import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const styles = {
   card: {

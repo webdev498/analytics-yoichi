@@ -3,11 +3,12 @@ import {
   LOW_SCORE_RANGE,
   MEDIUM_SCORE_RANGE,
   HIGH_SCORE_RANGE
-} from '../../client/Constants';
+} from '../Constants';
 
-import {isUndefined, getTimePairFromWindow} from '../utils/utils';
-import {getCountryCode} from '../utils/countryUtils';
-import {kibanaBaseUrl} from '../../serverEnv';
+import {isUndefined, getTimePairFromWindow} from '../../commons/utils/utils';
+import {getCountryCode} from '../../commons/utils/countryUtils';
+
+const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
 
 export function getColumnIndex(columns, value) {
   let columnIndex = '';
