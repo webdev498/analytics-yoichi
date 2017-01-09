@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import SummaryWidget from 'components/widgets/SummaryWidget';
 import {
   formatDateInLocalTimeZone
-} from 'utils/utils';
+} from '../../commons/utils/utils';
 
 const styles = {
   card: {

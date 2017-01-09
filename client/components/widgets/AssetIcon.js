@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import FontIcon from 'material-ui/FontIcon';
 
-import {Colors} from 'theme/colors';
+import {Colors} from '../../../commons/colors';
 
 const styles = {
   icon: {

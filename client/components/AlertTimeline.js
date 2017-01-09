@@ -32,7 +32,7 @@ const alertActivity = {
       'drawAnchors': '1',
       'anchorRadius': '1',
       'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+      'outCnvBaseFontSize': '8'
     }
   },
   'attributes': {
@@ -124,7 +124,7 @@ const timeline = {
               'drawAnchors': '1',
               'anchorRadius': '1',
               'showlegend': '0',
-              'outCnvBaseFontSize': '9'
+              'outCnvBaseFontSize': '8'
             }
           },
           'attributes': {
@@ -185,7 +185,9 @@ const timeline = {
             'style': {
               'width': '100%',
               'height': '100%',
-              'backgroundColor': '#EBEBEF'
+              'backgroundColor': '#EBEBEF',
+              'borderLeft': '1px solid #EBEBEF',
+              'boxShadow': '-5px 0px 14px -3px #cbcbd1'
             },
             'otherStyles': {
               'flex': {},

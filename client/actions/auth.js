@@ -2,7 +2,7 @@ import Cookies from 'cookies-js';
 import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR, SET_COOKIES, profileUrl} from 'Constants';
 import { push } from 'react-router-redux';
 
-import {parseQuery, fetchData} from 'utils/utils';
+import {parseQuery, fetchData} from '../../commons/utils/utils';
 
 export function userDetailsLoading() {
   return {

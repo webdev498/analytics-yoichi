@@ -1,12 +1,13 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 
 export function generateDataSource(chartProperties, duration) {
   let dataSourceObject = {},
     dataSet = [],
     dataObject = [],
     dataSeries = {},
-    {chartValue, chartOptions} = chartProperties;
+    {data, chartOptions} = chartProperties,
+    chartValue = data[0].value;
 
   for (let key in chartValue) {
     let dataPoint = {

@@ -1,0 +1,56 @@
+{
+  "tableOptions": {
+    "itemsPerPage": 5
+  },
+  "tableData": {
+    "fieldMapping": [
+      {
+        "reportId": "taf_top_successful_logins",
+        "columns": [
+          {
+            "data": [
+              {
+                "fieldName": "data.login.user"
+              }
+            ],
+            "style": {
+              "width": "70%"
+            },
+            "type": "text",
+            "header": "USER NAME"
+          },
+          {
+            "data": [
+              {
+                "fieldName": "count"
+              }
+            ],
+            "attributes": {
+              "chartWidth": "100%",
+              "chartType": "area2d",
+              "id": "SuccessfulLogins",
+              "chartHeight": "75"
+            },
+            "style": {
+              "width": "30%"
+            },
+            "type": "chart",
+            "header": "LOGINS"
+          }
+        ]
+      }
+    ],
+    "nestedResult": true,
+    "emptyValueMessage": "(Empty)"
+  },
+  "kibana": {
+    "pathParams": [
+      "login-details"
+    ],
+    "queryParams": {
+      "fromAndToBasedOnToday": "",
+      "username": "data.login.user:fieldName",
+      "status": "success"
+    }
+  }
+}

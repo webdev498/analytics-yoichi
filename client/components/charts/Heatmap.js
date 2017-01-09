@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
-import {isUndefined} from 'utils/utils';
+import {Colors} from '../../../commons/colors';
+import {isUndefined} from '../../../commons/utils/utils';
 
 const chart = {
   showLabel: 0,

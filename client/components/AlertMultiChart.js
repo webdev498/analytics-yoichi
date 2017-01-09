@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {formatDate} from 'utils/dateUtils';
+import {formatDate} from '../../commons/utils/dateUtils';
 import MultiSeriesLineChart from 'components/charts/MultiSeriesLineChart';
 import MultiSeriesCombiChart from 'components/charts/MultiSeriesCombiChart';
 

@@ -9,7 +9,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import {loginUrl, responseType, clientId, redirectUri, defaultRoute} from 'config';
 
-import {Colors} from 'theme/colors';
+import {Colors} from '../../../commons/colors';
+
+import './login.scss';
 
 const styles = {
   card: {

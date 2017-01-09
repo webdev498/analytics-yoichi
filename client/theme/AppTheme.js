@@ -1,4 +1,4 @@
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 
 const AppTheme = {
   fontFamily: '"Open Sans", sans-serif',

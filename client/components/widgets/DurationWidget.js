@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
-import {msToTime} from 'utils/utils';
-import {Colors} from 'theme/colors';
+import {msToTime} from '../../../commons/utils/utils';
+import {Colors} from '../../../commons/colors';
 
 class DurationWidget extends React.Component {
   static propTypes = {

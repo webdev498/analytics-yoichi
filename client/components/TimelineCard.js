@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react';
 import Card from 'material-ui/Card/Card';
-import {Colors} from 'theme/colors';
-import {getColor} from 'utils/utils';
-import {getCountryNameByCountryCode} from 'utils/countryUtils';
+import {Colors} from '../../commons/colors';
+import {getColor} from '../../commons/utils/utils';
+import {getCountryName} from '../../commons/utils/countryUtils';
 import MultiSeriesCombiChart from 'components/charts/MultiSeriesCombiChart';
 
 let styles = {
@@ -34,7 +34,7 @@ let styles = {
 
 function getSourceDestination(data) {
   if (data.ip) {
-    let country = data.country ? getCountryNameByCountryCode[data.country.toUpperCase()] : '';
+    let country = data.country ? getCountryName[data.country.toUpperCase()] : '';
     return (
       <span>
         <span> {data.ip} </span>
@@ -294,11 +294,11 @@ class TimelineCard extends React.Component {
   }
 
   getAlertBorder(data) {
-    let isAlert = (this.cardType === 'Alert' || this.cardType === 'Rank Alert') ? 'alert' : 'other',
-      score = data.display.Score ? data.display.Score.value : '',
-      severity = data.display.Severity ? data.display.Severity.value : '';
+    let isAlert = (this.cardType === 'Alert' || this.cardType === 'Rank Alert') ? 'alert' : 'other';
 
     if (isAlert === 'alert') {
+      let score = data.display.Score ? data.display.Score.value : '',
+        severity = data.display.Severity ? data.display.Severity.value : '';
       return {
         borderLeft: '5px solid ' + getColor(score, severity),
         paddingLeft: '18px'
@@ -340,11 +340,19 @@ class TimelineCard extends React.Component {
       backgroundColor = Colors.cloud;
     }
 
+    let cardWidth = '350px';
+    if (props.data.chart) { // if card contains chart (e.g. Anomaly Chart)
+      cardWidth = '800px';
+    }
+    else if (props.data.display && props.data.display.summary) { // if card contains In and Out Summary of Session
+      cardWidth = '400px';
+    }
+
     const style = Object.assign(
       styles.timelineCard,
       alertStyle,
       {
-        width: props.data.chart ? '800px' : props.data.display.summary ? '400px' : '350px',
+        width: cardWidth,
         cursor: this.isClickCard ? 'pointer' : 'auto',
         backgroundColor
       }

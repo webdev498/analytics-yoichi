@@ -1,6 +1,6 @@
 import React from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 
 const styles = {
   tab: {

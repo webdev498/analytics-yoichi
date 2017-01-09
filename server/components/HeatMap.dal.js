@@ -1,5 +1,5 @@
-import {getColumnIndex} from '../utils/chartUtils';
-import {militaryTimeToNormalTime} from '../utils/utils';
+import {getColumnIndex} from '../../commons/utils/chartUtils';
+import {militaryTimeToNormalTime} from '../../commons/utils/utils';
 
 export function getData(data) {
   const {rows, columns} = data;

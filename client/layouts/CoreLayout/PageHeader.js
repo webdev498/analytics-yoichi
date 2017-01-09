@@ -16,7 +16,7 @@ import {logout} from 'actions/auth';
 
 import { connect } from 'react-redux';
 
-import {Colors} from 'theme/colors';
+import {Colors} from '../../../commons/colors';
 import { Link } from 'react-router';
 
 

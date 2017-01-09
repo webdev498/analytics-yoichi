@@ -12,7 +12,39 @@ let props = {
   id: 'timeline',
   meta: {id: 'testId', api: {}},
   data: {
-    normalizeData: [],
+    normalizeData: [
+      {
+        'id': 'OikKAfhyT',
+        'Type': 'Rank Alert',
+        'Date': '2016-12-16T00:32:54.468',
+        'display': {
+          'sourceDest': {
+            'source': {
+              'ip': '121.18.238.114'
+            },
+            'dest': {
+              'ip': '172.31.7.62'
+            }
+          },
+          'Description': {
+            'displayKey': true,
+            'value': 'SSH Brute Force Attack Attempt'
+          },
+          'Message': {
+            'displayKey': true,
+            'value': '121.18.238.114 attempted to connect to 172.31.7.62 102 times'
+          },
+          'Category': {
+            'displayKey': true,
+            'value': 'suspicious-login'
+          },
+          'Score': {
+            'displayKey': true,
+            'value': '5'
+          }
+        }
+      }
+    ],
     options: {
       customParams: {}
     }

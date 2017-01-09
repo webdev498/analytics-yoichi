@@ -6,11 +6,11 @@ import AssetWidget from 'components/widgets/AssetWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
 
 import FontIcon from 'material-ui/FontIcon';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 
-import {formatBytes, getColor} from 'utils/utils';
-import {getCountryNameByCountryCode} from 'utils/countryUtils';
-import {getArrowIcon} from 'utils/graphUtils';
+import {formatBytes, getColor} from '../../commons/utils/utils';
+import {getCountryName} from '../../commons/utils/countryUtils';
+import {getArrowIcon} from '../../commons/utils/graphUtils';
 
 const styles = {
   assetWidget: {
@@ -244,7 +244,7 @@ class AssetDetail extends React.Component {
 
     reports.taf_asset_top_dest_countries.rows.forEach(([country, count]) => {
       details.push({
-        heading: getCountryNameByCountryCode[country],
+        heading: getCountryName[country],
         value: {value: count.toLocaleString()}
       });
     });
@@ -257,7 +257,7 @@ class AssetDetail extends React.Component {
 
     reports.taf_asset_top_source_countries.rows.forEach(([country, count]) => {
       details.push({
-        heading: getCountryNameByCountryCode[country],
+        heading: getCountryName[country],
         value: {value: count.toLocaleString()}
       });
     });

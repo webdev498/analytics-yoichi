@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
-import {formatDate} from 'utils/dateUtils';
+import {Colors} from '../../commons/colors';
+import {formatDate} from '../../commons/utils/dateUtils';
 
 const chart = {
   'baseFont': 'Open Sans, sans-serif',

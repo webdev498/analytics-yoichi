@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import {Colors} from 'theme/colors';
+import {Colors} from '../colors';
 import {logoutUtil} from 'actions/auth';
 
 // Function to convert milliseconds to time
@@ -499,6 +499,54 @@ export function getFieldValue(data, fieldName) {
   else {
     return data[fieldName];
   }
+}
+
+export function getParameterByName(name, url) {
+  if (!url) {
+    url = window.location.href;
+  }
+  name = name.replace(/[\[\]]/g, '\\$&');
+  let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+    results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+export function getEventTypeString(typeName) {
+  const typeStrings = {
+    conn: 'Connection',
+    ssh: 'SSH',
+    dns: 'DNS',
+    http: 'HTTP',
+    ssl: 'SSL',
+    files: 'File',
+    rank_alert: 'Rank Alert',
+    alert: 'Alert',
+    sysmon: 'Sysmon',
+    report: 'Report',
+    anomaly: 'Anomaly',
+    auth: 'Auth'
+  };
+
+  return typeStrings[typeName] ? typeStrings[typeName] : typeName;
+};
+
+export function militaryTimeToNormalTime(time) {
+  time = time.toString().split(':'); // convert to array
+
+  const hours = Number(time[0]);
+
+  let timeValue = '';
+  if (hours > 12) {
+    timeValue += hours - 12;
+  }
+  else {
+    timeValue += hours === 0 ? 12 : hours;
+  }
+  timeValue += (hours >= 12) ? ' PM' : ' AM';  // get AM/PM
+
+  return timeValue;
 }
 
 export function fetchData(url, cookies, dispatch) {

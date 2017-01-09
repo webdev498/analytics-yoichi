@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 
 const chart = {
   'baseFont': 'Open Sans, sans-serif',

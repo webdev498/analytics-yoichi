@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import { Link } from 'react-router';
 
 import FontIcon from 'material-ui/FontIcon';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../../commons/colors';
 
 import './Sidebar.scss';
 

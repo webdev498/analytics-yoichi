@@ -9,7 +9,7 @@ import {
   isUndefined,
   getTimePairFromWindow,
   getColorRanges
-} from 'utils/utils';
+} from '../../../commons/utils/utils';
 
 describe('Utility Function:', function() {
   it('msToTime should convert milliseconds to time.', function() {

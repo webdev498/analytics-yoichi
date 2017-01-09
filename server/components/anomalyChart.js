@@ -1,7 +1,7 @@
 import {
   getColumnIndex,
   getDataByIndex
-} from '../utils/chartUtils';
+} from '../../commons/utils/chartUtils';
 
 function checkIfColumnExist(cols, item) {
   let flag = false;
@@ -14,13 +14,33 @@ function checkIfColumnExist(cols, item) {
   return flag;
 }
 
-export function getChartData(chart) {
+function getChartData(input) {
+  if (input.rows) {
+    input = {0: input};
+  }
+
+  let charts = {};
+  Object.keys(input).map((i) => {
+    let chart = input[i],
+      {rows} = chart;
+
+    if (rows.length === 0) {
+      return charts;
+    }
+
+    charts[i] = getSingleChartData(chart);
+  });
+
+  return charts;
+}
+
+export function getSingleChartData(chart) {
   let charts = {};
   const {rows, columns, uiConfig} = chart,
     xAxis = getColumnIndex(columns, null, 'DIMENSION');
 
   if (rows.length === 0) {
-    return;
+    return charts;
   }
 
   const outlierIndex = getColumnIndex(columns, 'outlier');

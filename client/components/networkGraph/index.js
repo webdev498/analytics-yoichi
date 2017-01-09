@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Colors} from 'theme/colors';
+import {Colors} from '../../commons/colors';
 import {
   firstCharCapitalize,
   getPosition,
@@ -8,8 +8,8 @@ import {
   whatIsIt,
   formatDateInLocalTimeZone,
   autoScrollTo
-} from 'utils/utils';
-import {getCountryNameByCountryCode} from 'utils/countryUtils';
+} from '../../commons/utils/utils';
+import {getCountryName} from '../../commons/utils/countryUtils';
 import Cookies from 'cookies-js';
 import vis from 'vis';
 import {baseUrl, networkGraphDefaultOptions, hierarchicalNetwork, applyHierarchicalNetwork} from 'config';
@@ -56,8 +56,8 @@ export function createNodeObject(dataNode) {
     nodeType = dataNode.type ? dataNode.type : '';
 
   if (dataNode.type === 'country') {
-    idDisplay = (!isUndefined(getCountryNameByCountryCode[idDisplay]))
-      ? getCountryNameByCountryCode[idDisplay]
+    idDisplay = (!isUndefined(getCountryName[idDisplay]))
+      ? getCountryName[idDisplay]
       : idDisplay;
   }
   else if (dataNode.type === 'time') {
@@ -255,11 +255,11 @@ function handleNodeMetaData(metadata, nodeObject) {
           break;
         case 'country':
           nodeObject.label += newLine1 +
-            getCountryNameByCountryCode[metadata[metadataType]];
+            getCountryName[metadata[metadataType]];
           nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            getCountryNameByCountryCode[metadata[metadataType]];
+            getCountryName[metadata[metadataType]];
           nodeObject.nodeDetails.push(<li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b>
-            &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
+            &nbsp;{getCountryName[metadata[metadataType]]}</li>);
           break;
         case 'anomalyDate':
           let dateTimeAnomaly = formatDateInLocalTimeZone(metadata[metadataType]),

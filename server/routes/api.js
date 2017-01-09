@@ -8,6 +8,7 @@ import layoutRoutes from './layouts';
 import timeline from '../components/Timeline';
 import anomalyChart from '../components/anomalyChart';
 import HeatMap from '../components/HeatMap.dal.js';
+import table from '../components/Table.dal';
 
 const router = new KoaRouter({
   prefix: '/api'
@@ -53,6 +54,13 @@ router
 .get('/analytics/reporting/execute/taf_events_between_source_and_dest', timeline)
 .get('/anomaly/:alertId/timeline', timeline)
 .get('/session/activity/live/:type/:assetId', HeatMap)
+.get('/analytics/reporting/execute/taf_alert_highpriority', table)
+.get('/analytics/reporting/execute/taf_top_longest_connections', table)
+.get('/analytics/reporting/execute/taf_top_longest_user_agents', table)
+.get('/analytics/reporting/execute/taf_top_shortest_user_agents', table)
+.get('/analytics/reporting/execute/taf_least_used_software', table)
+.get('/analytics/reporting/execute/taf_top_successful_logins', table)
+.get('/analytics/reporting/execute/taf_top_failed_logins', table)
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);
