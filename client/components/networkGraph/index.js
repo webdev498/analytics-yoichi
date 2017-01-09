@@ -547,7 +547,7 @@ function getActionsByTypes(actionsData) {
 
 function isNodeOrEdgeAlreadyExists(array, id) {
   let exists = false;
-  array.forEach((value) => {
+  array.forEach(value => {
     if (value.id === id) {
       exists = true;
     }
@@ -650,7 +650,6 @@ class NetworkGraph extends React.Component {
       loadAgain: true
     };
 
-    this.getNodesEdges = this.getNodesEdges.bind(this);
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
     this.createNetworkGraph = this.createNetworkGraph.bind(this);
     this.getGraphAndActions = this.getGraphAndActions.bind(this);
@@ -683,52 +682,6 @@ class NetworkGraph extends React.Component {
     }
   }
 
-  getNodesEdges(data) {
-    let nodes = [],
-      edges = [],
-      dataNodes = data.nodes,
-      dataEdges = data.edges;
-
-    if (!isUndefined(dataNodes)) {
-      dataNodes.forEach((dataNode) => {
-        let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id;
-        if (isUndefined(this.nodeObjects[nodeId])) {
-          dataNode.nodeTypeDisplay = dataNode.type ? firstCharCapitalize(dataNode.type) : '';
-          let nodeObject = createNodeObject(dataNode);
-          nodes.push(nodeObject);
-          this.nodeObjects[nodeId] = nodeObject;
-        }
-      });
-    }
-
-    if (!isUndefined(dataEdges)) {
-      let alreadyAddedEdges = [];
-      dataEdges.forEach((dataEdge) => {
-        if (isUndefined(this.edgeObjects[dataEdge.id]) && !isNodeOrEdgeAlreadyExists(alreadyAddedEdges, dataEdge.id)) {
-          let edgesInSameDirection = [];
-          dataEdges.forEach((edgeInSameDirection) => {
-            if (dataEdge.id !== edgeInSameDirection.id &&
-              dataEdge.source === edgeInSameDirection.source &&
-              dataEdge.target === edgeInSameDirection.target) {
-              edgesInSameDirection.push(edgeInSameDirection);
-              alreadyAddedEdges.push(edgeInSameDirection);
-            }
-          });
-
-          let edgeObject = createEdgeObject(dataEdge, edgesInSameDirection);
-          edges.push(edgeObject);
-          this.edgeObjects[dataEdge.target] = edgeObject;
-          this.edgeObjects[edgeObject.id] = edgeObject;
-        }
-      });
-    }
-
-    return {
-      'nodes': nodes,
-      'edges': edges
-    };
-  }
-
   updateNodeAndEdgeObjects(updatedNodes, updatedEdges) {
     let tempNodeObjects = {},
       tempEdgeObjects = {};
@@ -758,90 +711,6 @@ class NetworkGraph extends React.Component {
       }
     }
     this.edgeObjects = Object.assign({}, tempEdgeObjects);
-  }
-
-  loadNetworkGraph(data, loadAgain, duration) {
-    if (timeWindow !== duration) {
-      timeWindow = duration;
-      return;
-    }
-
-    if (!loadAgain && timeWindow === duration) {
-      return;
-    }
-
-    if (!data) {
-      return;
-    }
-
-    let networkData = this.getGraphAndActions(data);
-
-    if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
-      if (networkData.nodes.length > 0) {
-        this.createNetworkGraph(networkData);
-        this.state.loadAgain = false;
-      }
-      else {
-        document.getElementById('network-graph').innerHTML = 'No additional results were found.';
-      }
-    }
-  }
-
-  getGraphAndActions(data) {
-    let networkData = {
-      nodes: [],
-      edges: []
-    };
-    if (this.state.nodesListStatus === 'default') {
-      let nodes = [],
-        edges = [],
-        nodesEdges = this.mergeMultipleGraphs(nodes, edges, data);
-      this.state.nodes = nodesEdges.nodes;
-      this.state.edges = nodesEdges.edges;
-      this.state.originalNodesEdges = {
-        nodes: Object.assign([], nodesEdges.nodes),
-        edges: Object.assign([], nodesEdges.edges)
-      };
-      const actionsData = this.context.store.getState().actions;
-      this.state.actionsData = getActionsByTypes(actionsData.list.actions);
-
-      networkData = {
-        nodes: nodesEdges.nodes,
-        edges: nodesEdges.edges
-      };
-    }
-    return networkData;
-  }
-
-  mergeMultipleGraphs(nodes, edges, data) {
-    let isGraphExtended = false;
-
-    data.forEach((graph) => {
-      let nodesEdges = this.getNodesEdges(graph);
-
-      if (!isUndefined(nodesEdges.nodes)) {
-        nodesEdges.nodes.forEach((node) => {
-          if (isNodeOrEdgeAlreadyExists(nodes, node.id) === false) {
-            nodes.push(node);
-            isGraphExtended = true;
-          }
-        });
-      }
-
-      if (!isUndefined(nodesEdges.edges)) {
-        nodesEdges.edges.forEach((edge) => {
-          if (isNodeOrEdgeAlreadyExists(edges, edge.id) === false) {
-            edges.push(edge);
-            isGraphExtended = true;
-          }
-        });
-      }
-    });
-    return {
-      nodes: nodes,
-      edges: edges,
-      isGraphExtended: isGraphExtended
-    };
   }
 
   createNetworkGraph(networkData) {
@@ -1453,12 +1322,146 @@ class NetworkGraph extends React.Component {
     };
   }
 
+  getNodesEdges(data) {
+    let nodes = [],
+      edges = [],
+      dataNodes = data.nodes,
+      dataEdges = data.edges;
+
+    if (!isUndefined(dataNodes)) {
+      dataNodes.forEach((dataNode) => {
+        let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id;
+        if (isUndefined(this.nodeObjects[nodeId])) {
+          dataNode.nodeTypeDisplay = dataNode.type ? firstCharCapitalize(dataNode.type) : '';
+          let nodeObject = createNodeObject(dataNode);
+          nodes.push(nodeObject);
+          this.nodeObjects[nodeId] = nodeObject;
+        }
+      });
+    }
+
+    if (!isUndefined(dataEdges)) {
+      let alreadyAddedEdges = [];
+      dataEdges.forEach((dataEdge) => {
+        if (isUndefined(this.edgeObjects[dataEdge.id]) && !isNodeOrEdgeAlreadyExists(alreadyAddedEdges, dataEdge.id)) {
+          let edgesInSameDirection = [];
+          dataEdges.forEach((edgeInSameDirection) => {
+            if (dataEdge.id !== edgeInSameDirection.id &&
+              dataEdge.source === edgeInSameDirection.source &&
+              dataEdge.target === edgeInSameDirection.target) {
+              edgesInSameDirection.push(edgeInSameDirection);
+              alreadyAddedEdges.push(edgeInSameDirection);
+            }
+          });
+
+          let edgeObject = createEdgeObject(dataEdge, edgesInSameDirection);
+          edges.push(edgeObject);
+          this.edgeObjects[dataEdge.target] = edgeObject;
+          this.edgeObjects[edgeObject.id] = edgeObject;
+        }
+      });
+    }
+
+    return {
+      nodes,
+      edges
+    };
+  }
+
+  mergeMultipleGraphs(data) {
+    let isGraphExtended = false,
+      nodes = [],
+      edges = [];
+
+    data.forEach(graph => {
+      let nodesEdges = this.getNodesEdges(graph);
+
+      nodesEdges.nodes.forEach((node) => {
+        if (!isNodeOrEdgeAlreadyExists(nodes, node.id)) {
+          nodes.push(node);
+          isGraphExtended = true;
+        }
+      });
+
+      nodesEdges.edges.forEach((edge) => {
+        if (!isNodeOrEdgeAlreadyExists(edges, edge.id)) {
+          edges.push(edge);
+          isGraphExtended = true;
+        }
+      });
+    });
+
+    return {
+      nodes,
+      edges,
+      isGraphExtended
+    };
+  }
+
+  getGraphAndActions(data) {
+    let networkData = { nodes: [], edges: [] };
+
+    if (this.state.nodesListStatus === 'default') {
+      let nodesEdges = this.mergeMultipleGraphs(data);
+
+      this.state.nodes = nodesEdges.nodes;
+      this.state.edges = nodesEdges.edges;
+      this.state.originalNodesEdges = {
+        nodes: Object.assign([], nodesEdges.nodes),
+        edges: Object.assign([], nodesEdges.edges)
+      };
+
+      const actionsData = this.context.store.getState().actions;
+      this.state.actionsData = getActionsByTypes(actionsData.list.actions);
+
+      networkData = {
+        nodes: nodesEdges.nodes,
+        edges: nodesEdges.edges
+      };
+    }
+
+    return networkData;
+  }
+
+  loadNetworkGraph(data, loadAgain, duration) {
+    if (timeWindow !== duration) {
+      timeWindow = duration;
+      return;
+    }
+
+    if (!loadAgain && timeWindow === duration) {
+      return;
+    }
+
+    if (!data) {
+      return;
+    }
+
+    let networkData = this.getGraphAndActions(data);
+
+    if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
+      if (networkData.nodes.length > 0) {
+        this.createNetworkGraph(networkData);
+        this.state.loadAgain = false;
+      }
+      else {
+        document.getElementById('network-graph').innerHTML = 'No additional results were found.';
+      }
+    }
+  }
+
   render() {
     const {props, state} = this;
 
+<<<<<<< Updated upstream
     let assetData;
     if (props.data && !Array.isArray(props.data)) {
       assetData = generateDataFromAssetDetails(props.data);
+=======
+    let data = props.data;
+    if (props.data && props.params.assetId) {
+      data = generateDataFromAssetDetails(data);
+>>>>>>> Stashed changes
     }
 
     return (
@@ -1472,11 +1475,7 @@ class NetworkGraph extends React.Component {
         <div ref={(ref) => this.networkGraph = ref}
           style={props.attributes.canvasStyle}
           id='network-graph'>
-          {
-            assetData
-            ? this.loadNetworkGraph(assetData, state.loadAgain, props.duration)
-            : this.loadNetworkGraph(props.data, state.loadAgain, props.duration)
-          }
+          { this.loadNetworkGraph(data, state.loadAgain, props.duration) }
         </div>
 
         {
