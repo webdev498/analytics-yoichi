@@ -196,7 +196,7 @@
           "id": "PieChartConnections"
         },
         "id": "pie-chart-connections",
-        "type": "PieChart"
+        "type": "charts/PieChart"
       },
       {
         "chartOptions": {
@@ -334,7 +334,7 @@
           "id": "PieChartBandwidth"
         },
         "id": "pie-chart-bandwidth",
-        "type": "PieChart"
+        "type": "charts/PieChart"
       },
       {
         "chartOptions": {
