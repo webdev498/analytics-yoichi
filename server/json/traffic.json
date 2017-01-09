@@ -208,7 +208,7 @@
           "id": "HistogramChart1"
         },
         "id": "histogram-chart1",
-        "type": "MultiSeriesCombiChart"
+        "type": "charts/MultiSeriesCombiChart"
       },
       {
         "chartOptions": {
@@ -272,7 +272,7 @@
           "id": "HistogramChart2"
         },
         "id": "histogram-chart2",
-        "type": "MultiSeriesCombiChart"
+        "type": "charts/MultiSeriesCombiChart"
       }
     ],
     [
@@ -338,7 +338,7 @@
           "id": "HistogramChart3"
         },
         "id": "histogram-chart3",
-        "type": "MultiSeriesCombiChart"
+        "type": "charts/MultiSeriesCombiChart"
       },
       {
         "chartOptions": {

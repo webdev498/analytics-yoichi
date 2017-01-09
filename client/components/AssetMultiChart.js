@@ -326,7 +326,7 @@ const userCharts = [
       'id': 'successful-logins-by-user'
     },
     'id': 'SuccessfulLoginsByUser',
-    'type': 'MultiSeriesCombiChart'
+    'type': 'charts/MultiSeriesCombiChart'
   },
   {
     'chartOptions': {
@@ -407,7 +407,7 @@ const userCharts = [
       'id': 'failed-logins-by-user'
     },
     'id': 'FailedLoginsByUser',
-    'type': 'MultiSeriesCombiChart'
+    'type': 'charts/MultiSeriesCombiChart'
   },
   protocolChart
 ];
@@ -662,7 +662,7 @@ const machineCharts = [
       'id': 'successful-logins-by-user'
     },
     'id': 'SuccessfulLoginsByUser',
-    'type': 'MultiSeriesCombiChart'
+    'type': 'charts/MultiSeriesCombiChart'
   },
   {
     'chartOptions': {
@@ -743,7 +743,7 @@ const machineCharts = [
       'id': 'failed-logins-by-user'
     },
     'id': 'FailedLoginsByUser',
-    'type': 'MultiSeriesCombiChart'
+    'type': 'charts/MultiSeriesCombiChart'
   },
   protocolChart
 ];

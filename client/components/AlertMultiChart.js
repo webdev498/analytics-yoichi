@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {formatDate} from 'utils/dateUtils';
-import MultiSeriesLineChart from './MultiSeriesLineChart';
-import MultiSeriesCombiChart from './MultiSeriesCombiChart';
+import MultiSeriesLineChart from 'components/MultiSeriesLineChart';
+import MultiSeriesCombiChart from 'components/charts/MultiSeriesCombiChart';
 
 const styles = {
   title: {
