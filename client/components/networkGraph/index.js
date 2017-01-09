@@ -547,7 +547,7 @@ function getActionsByTypes(actionsData) {
 
 function isNodeOrEdgeAlreadyExists(array, id) {
   let exists = false;
-  array.forEach(value => {
+  array.forEach((value) => {
     if (value.id === id) {
       exists = true;
     }
@@ -650,9 +650,8 @@ class NetworkGraph extends React.Component {
       loadAgain: true
     };
 
+    this.getNodesEdges = this.getNodesEdges.bind(this);
     this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
-    this.createNetworkGraph = this.createNetworkGraph.bind(this);
-    this.getGraphAndActions = this.getGraphAndActions.bind(this);
     this.deselectNode = this.deselectNode.bind(this);
     this.deselectEdge = this.deselectEdge.bind(this);
     this.deselect = this.deselect.bind(this);
@@ -680,6 +679,52 @@ class NetworkGraph extends React.Component {
     if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
       // const {id} = nextProps.eventData;
     }
+  }
+
+  getNodesEdges(data) {
+    let nodes = [],
+      edges = [],
+      dataNodes = data.nodes,
+      dataEdges = data.edges;
+
+    if (!isUndefined(dataNodes)) {
+      dataNodes.forEach((dataNode) => {
+        let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id;
+        if (isUndefined(this.nodeObjects[nodeId])) {
+          dataNode.nodeTypeDisplay = dataNode.type ? firstCharCapitalize(dataNode.type) : '';
+          let nodeObject = createNodeObject(dataNode);
+          nodes.push(nodeObject);
+          this.nodeObjects[nodeId] = nodeObject;
+        }
+      });
+    }
+
+    if (!isUndefined(dataEdges)) {
+      let alreadyAddedEdges = [];
+      dataEdges.forEach((dataEdge) => {
+        if (isUndefined(this.edgeObjects[dataEdge.id]) && !isNodeOrEdgeAlreadyExists(alreadyAddedEdges, dataEdge.id)) {
+          let edgesInSameDirection = [];
+          dataEdges.forEach((edgeInSameDirection) => {
+            if (dataEdge.id !== edgeInSameDirection.id &&
+              dataEdge.source === edgeInSameDirection.source &&
+              dataEdge.target === edgeInSameDirection.target) {
+              edgesInSameDirection.push(edgeInSameDirection);
+              alreadyAddedEdges.push(edgeInSameDirection);
+            }
+          });
+
+          let edgeObject = createEdgeObject(dataEdge, edgesInSameDirection);
+          edges.push(edgeObject);
+          this.edgeObjects[dataEdge.target] = edgeObject;
+          this.edgeObjects[edgeObject.id] = edgeObject;
+        }
+      });
+    }
+
+    return {
+      'nodes': nodes,
+      'edges': edges
+    };
   }
 
   updateNodeAndEdgeObjects(updatedNodes, updatedEdges) {
@@ -713,65 +758,35 @@ class NetworkGraph extends React.Component {
     this.edgeObjects = Object.assign({}, tempEdgeObjects);
   }
 
-  createNetworkGraph(networkData) {
-    const that = this,
-      {props} = this,
-      {attributes} = props;
+  mergeMultipleGraphs(nodes, edges, data) {
+    let isGraphExtended = false;
 
-    networkGraphDefaultOptions.layout = applyHierarchicalNetwork
-      ? Object.assign(networkGraphDefaultOptions.layout, hierarchicalNetwork)
-      : networkGraphDefaultOptions.layout;
+    data.forEach((graph) => {
+      let nodesEdges = this.getNodesEdges(graph);
 
-    let options = Object.assign(networkGraphDefaultOptions,
-      {
-        height: (!isUndefined(attributes.canvasStyle.height))
-          ? attributes.canvasStyle.height
-          : networkGraphDefaultOptions.height
-      }),
-      network = new vis.Network(this.networkGraph, networkData, options);
+      if (!isUndefined(nodesEdges.nodes)) {
+        nodesEdges.nodes.forEach((node) => {
+          if (isNodeOrEdgeAlreadyExists(nodes, node.id) === false) {
+            nodes.push(node);
+            isGraphExtended = true;
+          }
+        });
+      }
 
-    this.network = network;
-
-    if (networkData.nodes.length <= 10) {
-      network.setOptions(physicsFalse);
-    }
-    else {
-      network.setOptions(physicsTrue);
-    }
-
-    network.on('selectNode', this.loadContextMenu(network, 'node'));
-    network.on('selectEdge', this.loadContextMenu(network, 'edge'));
-    network.on('deselectNode', this.deselectNode(network));
-    network.on('deselectEdge', this.deselectEdge());
-
-    network.on('dragStart', this.loadContextMenu(network, 'node'));
-
-    network.on('hoverNode', function(params) {
-      let hoverNode = params.node,
-        node = network.body.nodes[hoverNode];
-      node = that.setHoverBlurNodeImage('hover', hoverNode, node);
+      if (!isUndefined(nodesEdges.edges)) {
+        nodesEdges.edges.forEach((edge) => {
+          if (isNodeOrEdgeAlreadyExists(edges, edge.id) === false) {
+            edges.push(edge);
+            isGraphExtended = true;
+          }
+        });
+      }
     });
-
-    network.on('blurNode', function(params) {
-      let blurNode = params.node,
-        node = network.body.nodes[blurNode];
-      node = that.setHoverBlurNodeImage('blur', blurNode, node);
-    });
-
-    document.getElementsByClassName('vis-up')[0].style.visibility = 'hidden';
-    document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
-    document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
-    document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
-
-    let undoDiv = document.createElement('div');
-    undoDiv.id = 'undo';
-    undoDiv.className = 'vis-button vis-undo';
-    document.getElementsByClassName('vis-navigation')[0].appendChild(undoDiv);
-
-    let resetDiv = document.createElement('div');
-    resetDiv.id = 'reset';
-    resetDiv.className = 'vis-button vis-reset';
-    document.getElementsByClassName('vis-navigation')[0].appendChild(resetDiv);
+    return {
+      nodes: nodes,
+      edges: edges,
+      isGraphExtended: isGraphExtended
+    };
   }
 
   setHoverBlurNodeImage(event, nodeID, node) {
@@ -1322,95 +1337,82 @@ class NetworkGraph extends React.Component {
     };
   }
 
-  getNodesEdges(data) {
-    let nodes = [],
-      edges = [],
-      dataNodes = data.nodes,
-      dataEdges = data.edges;
+  createNetworkGraph(networkData) {
+    const that = this,
+      {props} = this,
+      {attributes} = props;
 
-    if (!isUndefined(dataNodes)) {
-      dataNodes.forEach((dataNode) => {
-        let nodeId = dataNode.nodeId ? dataNode.nodeId : dataNode.id;
-        if (isUndefined(this.nodeObjects[nodeId])) {
-          dataNode.nodeTypeDisplay = dataNode.type ? firstCharCapitalize(dataNode.type) : '';
-          let nodeObject = createNodeObject(dataNode);
-          nodes.push(nodeObject);
-          this.nodeObjects[nodeId] = nodeObject;
-        }
-      });
+    networkGraphDefaultOptions.layout = applyHierarchicalNetwork
+      ? Object.assign(networkGraphDefaultOptions.layout, hierarchicalNetwork)
+      : networkGraphDefaultOptions.layout;
+
+    let options = Object.assign(networkGraphDefaultOptions,
+      {
+        height: (!isUndefined(attributes.canvasStyle.height))
+          ? attributes.canvasStyle.height
+          : networkGraphDefaultOptions.height
+      }),
+      network = new vis.Network(this.networkGraph, networkData, options);
+
+    this.network = network;
+
+    if (networkData.nodes.length <= 10) {
+      network.setOptions(physicsFalse);
+    }
+    else {
+      network.setOptions(physicsTrue);
     }
 
-    if (!isUndefined(dataEdges)) {
-      let alreadyAddedEdges = [];
-      dataEdges.forEach((dataEdge) => {
-        if (isUndefined(this.edgeObjects[dataEdge.id]) && !isNodeOrEdgeAlreadyExists(alreadyAddedEdges, dataEdge.id)) {
-          let edgesInSameDirection = [];
-          dataEdges.forEach((edgeInSameDirection) => {
-            if (dataEdge.id !== edgeInSameDirection.id &&
-              dataEdge.source === edgeInSameDirection.source &&
-              dataEdge.target === edgeInSameDirection.target) {
-              edgesInSameDirection.push(edgeInSameDirection);
-              alreadyAddedEdges.push(edgeInSameDirection);
-            }
-          });
+    network.on('selectNode', this.loadContextMenu(network, 'node'));
+    network.on('selectEdge', this.loadContextMenu(network, 'edge'));
+    network.on('deselectNode', this.deselectNode(network));
+    network.on('deselectEdge', this.deselectEdge());
 
-          let edgeObject = createEdgeObject(dataEdge, edgesInSameDirection);
-          edges.push(edgeObject);
-          this.edgeObjects[dataEdge.target] = edgeObject;
-          this.edgeObjects[edgeObject.id] = edgeObject;
-        }
-      });
-    }
+    network.on('dragStart', this.loadContextMenu(network, 'node'));
 
-    return {
-      nodes,
-      edges
-    };
-  }
-
-  mergeMultipleGraphs(data) {
-    let isGraphExtended = false,
-      nodes = [],
-      edges = [];
-
-    data.forEach(graph => {
-      let nodesEdges = this.getNodesEdges(graph);
-
-      nodesEdges.nodes.forEach((node) => {
-        if (!isNodeOrEdgeAlreadyExists(nodes, node.id)) {
-          nodes.push(node);
-          isGraphExtended = true;
-        }
-      });
-
-      nodesEdges.edges.forEach((edge) => {
-        if (!isNodeOrEdgeAlreadyExists(edges, edge.id)) {
-          edges.push(edge);
-          isGraphExtended = true;
-        }
-      });
+    network.on('hoverNode', function(params) {
+      let hoverNode = params.node,
+        node = network.body.nodes[hoverNode];
+      node = that.setHoverBlurNodeImage('hover', hoverNode, node);
     });
 
-    return {
-      nodes,
-      edges,
-      isGraphExtended
-    };
+    network.on('blurNode', function(params) {
+      let blurNode = params.node,
+        node = network.body.nodes[blurNode];
+      node = that.setHoverBlurNodeImage('blur', blurNode, node);
+    });
+
+    document.getElementsByClassName('vis-up')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
+
+    let undoDiv = document.createElement('div');
+    undoDiv.id = 'undo';
+    undoDiv.className = 'vis-button vis-undo';
+    document.getElementsByClassName('vis-navigation')[0].appendChild(undoDiv);
+
+    let resetDiv = document.createElement('div');
+    resetDiv.id = 'reset';
+    resetDiv.className = 'vis-button vis-reset';
+    document.getElementsByClassName('vis-navigation')[0].appendChild(resetDiv);
   }
 
   getGraphAndActions(data) {
-    let networkData = { nodes: [], edges: [] };
-
+    let networkData = {
+      nodes: [],
+      edges: []
+    };
     if (this.state.nodesListStatus === 'default') {
-      let nodesEdges = this.mergeMultipleGraphs(data);
-
+      let nodes = [],
+        edges = [],
+        nodesEdges = this.mergeMultipleGraphs(nodes, edges, data);
       this.state.nodes = nodesEdges.nodes;
       this.state.edges = nodesEdges.edges;
       this.state.originalNodesEdges = {
         nodes: Object.assign([], nodesEdges.nodes),
         edges: Object.assign([], nodesEdges.edges)
       };
-
       const actionsData = this.context.store.getState().actions;
       this.state.actionsData = getActionsByTypes(actionsData.list.actions);
 
@@ -1419,7 +1421,6 @@ class NetworkGraph extends React.Component {
         edges: nodesEdges.edges
       };
     }
-
     return networkData;
   }
 
@@ -1453,15 +1454,9 @@ class NetworkGraph extends React.Component {
   render() {
     const {props, state} = this;
 
-<<<<<<< Updated upstream
-    let assetData;
-    if (props.data && !Array.isArray(props.data)) {
-      assetData = generateDataFromAssetDetails(props.data);
-=======
     let data = props.data;
     if (props.data && props.params.assetId) {
       data = generateDataFromAssetDetails(data);
->>>>>>> Stashed changes
     }
 
     return (
