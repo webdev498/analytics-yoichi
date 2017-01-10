@@ -29,7 +29,7 @@
         "type": "MetricsCard",
         "title": "High Priority Alerts",
         "clickData": {
-          "tableId": "RecentAlerts",
+          "tableId": "RecentAnomalies",
           "filterText": "",
           "page": "/alerts"
         }
@@ -62,7 +62,7 @@
         "type": "MetricsCard",
         "title": "High Priority Malware",
         "clickData": {
-          "tableId": "RecentAlerts",
+          "tableId": "RecentAnomalies",
           "filterText": "malware",
           "page": "/alerts"
         }

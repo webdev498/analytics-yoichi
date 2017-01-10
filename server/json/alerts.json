@@ -29,7 +29,7 @@
         "type": "MetricsCard",
         "title": "High Priority Alerts",
         "clickData": {
-          "tableId": "RecentAlerts",
+          "tableId": "RecentAnomalies",
           "filterText": "",
           "page": "/alerts"
         }
@@ -62,7 +62,7 @@
         "type": "MetricsCard",
         "title": "High Priority Malware",
         "clickData": {
-          "tableId": "RecentAlerts",
+          "tableId": "RecentAnomalies",
           "filterText": "malware",
           "page": "/alerts"
         }
@@ -155,16 +155,16 @@
               "window": ""
             }
           },
-          "title": "Recent Alerts"
+          "title": "Recent Anomalies"
         },
         "name": "ReactableTable",
         "attributes": {
           "style": {
             "width": "100%"
           },
-          "id": "RecentAlerts"
+          "id": "RecentAnomalies"
         },
-        "id": "RecentAlerts",
+        "id": "RecentAnomalies",
         "type": "ReactableTable",
         "openAlertDetails": true
       },
@@ -241,7 +241,7 @@
               "window": ""
             }
           },
-          "title": "Alert by type"
+          "title": "Anomalies by Type"
         },
         "attributes": {
           "chartWidth": "100%",

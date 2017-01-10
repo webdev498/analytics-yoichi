@@ -20,7 +20,7 @@ describe('WorldMap Component: ', function() {
     const props = {
       'attributes': {'id': 'OutgoingTrafficWorldMap'},
       'meta': {
-        'title': 'Outgoing Traffic Heatmap'
+        'title': 'Outgoing Traffic Threat Map'
       },
       'data': null
     };

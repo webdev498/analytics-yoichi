@@ -29,7 +29,7 @@
         "type": "MetricsCard",
         "title": "High Priority Alerts",
         "clickData": {
-          "tableId": "RecentAlerts",
+          "tableId": "RecentAnomalies",
           "filterText": "",
           "page": "/alerts"
         }
@@ -62,7 +62,7 @@
         "type": "MetricsCard",
         "title": "High Priority Malware",
         "clickData": {
-          "tableId": "RecentAlerts",
+          "tableId": "RecentAnomalies",
           "filterText": "malware",
           "page": "/alerts"
         }
@@ -176,7 +176,7 @@
               "window": ""
             }
           },
-          "title": "Alert by type"
+          "title": "Anomalies by Type"
         },
         "attributes": {
           "chartWidth": "100%",
@@ -293,7 +293,7 @@
               "window": ""
             }
           },
-          "title": "At Risk Asset Count by Time"
+          "title": "End points at Risk"
         },
         "attributes": {
           "chartWidth": "100%",
@@ -661,7 +661,7 @@
               "window": ""
             }
           },
-          "title": "Outgoing Traffic Heatmap"
+          "title": "Outgoing Traffic Threat Map"
         },
         "attributes": {
           "chartWidth": "100%",
@@ -730,7 +730,7 @@
               "window": ""
             }
           },
-          "title": "Incoming Traffic Heatmap"
+          "title": "Incoming Traffic Threat Map"
         },
         "attributes": {
           "chartWidth": "100%",
