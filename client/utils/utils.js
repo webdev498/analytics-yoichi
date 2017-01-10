@@ -26,3 +26,15 @@ export function fetchData(url, cookies, dispatch) {
 export function getSearchUrl(query) {
   return `/api/analytics/reporting/execute/taf_search_assets?term=${encodeURIComponent(query)}`;
 };
+
+export function parseQuery(qstr) {
+  const query = {},
+    arr = qstr.split('&');
+
+  arr.forEach(val => {
+    const b = val.split('=');
+    query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+  });
+
+  return query;
+}

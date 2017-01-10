@@ -10,6 +10,7 @@ import {
 } from '../../commons/utils/utils';
 
 import {getCountryName} from '../../commons/utils/countryUtils';
+import {generateClickThroughUrl} from './kibanaUtils';
 
 export function processData(data, tableJson, url) {
   const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.tableData;
@@ -57,7 +58,7 @@ export function processData(data, tableJson, url) {
             nestedResult,
             pathParams: tableJson.kibana.pathParams
           };
-          // rowObject.rowClickUrlParams = parameters;
+          rowObject.rowClickUrl = generateClickThroughUrl(parameters);
         }
         columnText = [];
       }

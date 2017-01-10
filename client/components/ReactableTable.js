@@ -7,9 +7,9 @@ import ScoreWidget from 'components/widgets/ScoreWidget';
 import AssetIcon from 'components/widgets/AssetIcon';
 
 import {getCountryCode} from '../../commons/utils/countryUtils';
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const {Table, Tr, Td} = Reactable;
+const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
 
 const styles = {
   header: {
@@ -91,10 +91,10 @@ function displayCountryFlag(data) {
 }
 
 function rowClick(context, tableRow) {
-  if (!tableRow.rowClickUrlParams) {
+  if (!tableRow.rowClickUrl) {
     return;
   }
-  let rowClickUrl = generateClickThroughUrl(tableRow.rowClickUrlParams);
+  let rowClickUrl = kibanaBaseUrl + tableRow.rowClickUrl;
   context.clickThrough(rowClickUrl);
 }
 
