@@ -30,7 +30,13 @@
               "chartWidth": "100%",
               "chartType": "area2d",
               "id": "connection",
-              "chartHeight": "75"
+              "chartHeight": "75",
+              "chartOptions": {
+                "xAxisNameFontSize": "8",
+                "yAxisNameFontSize": "8",
+                "xAxisName": "Time",
+                "yAxisName": "Connections"
+              }
             },
             "style": {
               "width": "30%"

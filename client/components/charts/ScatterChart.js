@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react';
-import {Colors} from '../../commons/colors';
+import {Colors} from '../../../commons/colors';
 import {
   generateRawData,
   getXYIndexFromColumnNames
-} from '../../commons/utils/utils';
+} from '../../../commons/utils/utils';
 
 export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
   let dataSourceObject = {},

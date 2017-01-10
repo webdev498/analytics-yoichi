@@ -1,12 +1,12 @@
 import React, {PropTypes} from 'react';
 import moment from 'moment';
-import {Colors} from '../../commons/colors';
+import {Colors} from '../../../commons/colors';
 import {
   getIndexFromColumnName
-} from '../../commons/utils/utils';
+} from '../../../commons/utils/utils';
 import {
   calculateDateDisplayFormat
-} from '../../commons/utils/dateUtils';
+} from '../../../commons/utils/dateUtils';
 
 export function generateDataSource(data, chartOptions, fieldMapping, duration) {
   const graphBars = [];

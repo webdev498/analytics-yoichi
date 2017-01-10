@@ -7,10 +7,10 @@ import {
   firstCharCapitalize,
   generateRawData,
   getParameterByName
-} from '../utils/utils';
+} from '../../commons/utils/utils';
 
-import {getCountryName} from '../utils/countryUtils';
-import {generateClickThroughUrl} from '../utils/kibanaUtils';
+import {getCountryName} from '../../commons/utils/countryUtils';
+import {generateClickThroughUrl} from './kibanaUtils';
 
 export function processData(data, tableJson, url) {
   const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.tableData;
@@ -123,13 +123,14 @@ export function generateRowObject(rowDetails, rowObject) {
     };
   switch (columnType) {
     case 'chart':
-      let {id, chartType, chartWidth, chartHeight} = attributes;
+      let {id, chartType, chartWidth, chartHeight, chartOptions} = attributes;
       rowObj = Object.assign(rowObj, {
         data: columnText,
         chartId: id + rowNumber,
         chartType,
         chartWidth,
         chartHeight,
+        chartOptions,
         row
       });
       columnText = '';

@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import Reactable from 'reactable';
 
-import Area2DAsSparkLineChart from 'components/Area2DAsSparkLineChart';
+import Area2DAsSparkLineChart from 'components/charts/Area2DAsSparkLineChart';
 import DurationWidget from 'components/widgets/DurationWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
 import AssetIcon from 'components/widgets/AssetIcon';
@@ -9,6 +9,7 @@ import AssetIcon from 'components/widgets/AssetIcon';
 import {getCountryCode} from '../../commons/utils/countryUtils';
 
 const {Table, Tr, Td} = Reactable;
+const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
 
 const styles = {
   header: {
@@ -93,7 +94,8 @@ function rowClick(context, tableRow) {
   if (!tableRow.rowClickUrl) {
     return;
   }
-  context.clickThrough(tableRow.rowClickUrl);
+  let rowClickUrl = kibanaBaseUrl + tableRow.rowClickUrl;
+  context.clickThrough(rowClickUrl);
 }
 
 export class ReactableTable extends React.Component {

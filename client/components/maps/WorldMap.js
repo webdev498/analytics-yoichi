@@ -1,11 +1,11 @@
 import React, {PropTypes} from 'react';
 import WorldMapLegends from './WorldMapLegends';
-import {Colors} from '../../commons/colors';
+import {Colors} from '../../../commons/colors';
 
-import { generateRawData, isUndefined, getColorRanges } from '../../commons/utils/utils';
-import {getCountryId} from '../../commons/utils/countryUtils';
+import { generateRawData, isUndefined, getColorRanges } from '../../../commons/utils/utils';
+import {getCountryId} from '../../../commons/utils/countryUtils';
 
-import {generateClickThroughUrl} from '../../commons/utils/kibanaUtils';
+import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const styles = {
   chartCaption: {

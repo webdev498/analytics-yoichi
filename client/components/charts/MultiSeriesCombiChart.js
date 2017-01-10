@@ -1,15 +1,15 @@
 import React, {PropTypes} from 'react';
-import {Colors} from '../../commons/colors';
+import {Colors} from '../../../commons/colors';
 import moment from 'moment';
 import {
   calculateDateDisplayFormat,
   calculateDateDisplayFormatForHistogram
-} from '../../commons/utils/dateUtils';
+} from '../../../commons/utils/dateUtils';
 import {
   generateRawData,
   isUndefined
-} from '../../commons/utils/utils';
-import {generateClickThroughUrl} from '../../commons/utils/kibanaUtils';
+} from '../../../commons/utils/utils';
+import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const chart = {
   'showvalues': '0',

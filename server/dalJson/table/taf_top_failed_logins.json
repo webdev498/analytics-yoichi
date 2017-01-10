@@ -49,7 +49,7 @@
     ],
     "queryParams": {
       "fromAndToBasedOnToday": "",
-      "username": "data.login.user:fieldName",
+      "user": "data.login.user:fieldName",
       "status": "fail"
     }
   }

@@ -1,13 +1,10 @@
 import moment from 'moment';
-import {
-  LOW_SCORE_RANGE,
-  MEDIUM_SCORE_RANGE,
-  HIGH_SCORE_RANGE
-} from '../../client/Constants';
+import {isUndefined, getTimePairFromWindow} from '../../commons/utils/utils';
+import {getCountryCode} from '../../commons/utils/countryUtils';
 
-import {isUndefined, getTimePairFromWindow} from '../utils/utils';
-import {getCountryCode} from '../utils/countryUtils';
-import {kibanaBaseUrl} from '../../serverEnv';
+const LOW_SCORE_RANGE = [1, 34],
+  MEDIUM_SCORE_RANGE = [35, 64],
+  HIGH_SCORE_RANGE = [65, 100];
 
 export function getColumnIndex(columns, value) {
   let columnIndex = '';
@@ -141,10 +138,4 @@ export function generateQueryParams(parameters) {
     queryParams += (queryParams === '' ? '?' : '&') + generateQueryParam(parameters, key);
   }
   return queryParams;
-}
-
-export function generateClickThroughUrl(parameters) {
-  let queryParams = generateQueryParams(parameters),
-    pathParams = (parameters.pathParams).join('/');
-  return kibanaBaseUrl + '/api/kibana/query/' + pathParams + queryParams;
 }

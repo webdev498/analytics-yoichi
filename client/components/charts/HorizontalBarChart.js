@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Colors} from '../../commons/colors';
+import {Colors} from '../../../commons/colors';
 import {
   generateRawData,
   getColumnIndexArrayFromColumnName,
@@ -8,8 +8,8 @@ import {
   getColorRanges,
   isUndefined,
   kFormatter
-} from '../../commons/utils/utils';
-import {generateClickThroughUrl} from '../../commons/utils/kibanaUtils';
+} from '../../../commons/utils/utils';
+import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const styles = {
   chartCaption: {
