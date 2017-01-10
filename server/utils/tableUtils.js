@@ -123,13 +123,14 @@ export function generateRowObject(rowDetails, rowObject) {
     };
   switch (columnType) {
     case 'chart':
-      let {id, chartType, chartWidth, chartHeight} = attributes;
+      let {id, chartType, chartWidth, chartHeight, chartOptions} = attributes;
       rowObj = Object.assign(rowObj, {
         data: columnText,
         chartId: id + rowNumber,
         chartType,
         chartWidth,
         chartHeight,
+        chartOptions,
         row
       });
       columnText = '';
