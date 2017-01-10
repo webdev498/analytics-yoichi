@@ -5,7 +5,7 @@ import Card from 'material-ui/Card/Card';
 import FontIcon from 'material-ui/FontIcon';
 import Loader from 'components/Loader';
 
-import {fetchApiData, removeComponent, broadcastEvent} from 'actions/ParentCard';
+import {fetchApiData, removeComponent, broadcastEvent} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
 import {updateRoute} from 'actions/core';
 
@@ -234,7 +234,6 @@ export class ParentCard extends React.Component {
 
     if (eventData) {
       const {type, data} = eventData;
-
       if (type === 'updateSearch') {
         this.myTextInput.value = data;
         this.setState({
@@ -404,10 +403,6 @@ export class ParentCard extends React.Component {
         {statusText}
       </div>
     );
-  }
-
-  handleMalwareClick() {
-
   }
 
   render() {
