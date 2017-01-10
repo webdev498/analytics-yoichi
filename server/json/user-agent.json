@@ -28,14 +28,10 @@
         "id": "1",
         "type": "MetricsCard",
         "title": "High Priority Alerts",
-        "kibana": {
-          "pathParams": [
-            "alerts-score"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": "",
-            "scoreRange": ""
-          }
+        "clickData": {
+          "tableId": "RecentAlerts",
+          "filterText": "",
+          "page": "/alerts"
         }
       },
       {
