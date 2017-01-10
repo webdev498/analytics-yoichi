@@ -5,14 +5,16 @@ import {
   getPosition,
   isUndefined,
   isNull,
-  whatIsIt,
-  formatDateInLocalTimeZone,
   autoScrollTo
 } from 'utils/utils';
-import {getCountryNameByCountryCode} from 'utils/countryUtils';
+
 import Cookies from 'cookies-js';
 import vis from 'vis';
 import {baseUrl, networkGraphDefaultOptions, hierarchicalNetwork, applyHierarchicalNetwork} from 'config';
+
+import {createNodeObject} from './GraphNode';
+import {createEdgeObject} from './GraphEdge';
+import {getIcon} from './GraphUtils';
 
 import Loader from 'components/Loader';
 import ContextualMenu from 'components/ContextualMenu';
@@ -49,438 +51,6 @@ let timeWindow = '1h',
     nodes: [],
     edges: []
   };
-
-export function createNodeObject(dataNode) {
-  let nodeId = dataNode.nodeId ? dataNode.nodeId : '',
-    idDisplay = dataNode.label ? dataNode.label : (dataNode.id ? dataNode.id : dataNode.nodeId),
-    nodeType = dataNode.type ? dataNode.type : '';
-
-  if (dataNode.type === 'country') {
-    idDisplay = (!isUndefined(getCountryNameByCountryCode[idDisplay]))
-      ? getCountryNameByCountryCode[idDisplay]
-      : idDisplay;
-  }
-  else if (dataNode.type === 'time') {
-    let dateTime = formatDateInLocalTimeZone(idDisplay);
-    idDisplay = dateTime.date + ' ' + dateTime.time;
-  }
-
-  let nodeObject = {
-    id: nodeId,
-    notNodeId: dataNode.id ? dataNode.id : '',
-    type: nodeType,
-    label: '  ' + idDisplay,
-    title: '<b>' + dataNode.nodeTypeDisplay + ':</b> ' + idDisplay,
-    nodeDetails: [],
-    actions: (!isNull(dataNode.actions) && !isUndefined(dataNode.actions)) ? dataNode.actions : [],
-    borderWidth: '0',
-    font: {
-      face: 'Open Sans',
-      color: Colors.pebble,
-      size: '11',
-      align: 'left'
-    },
-    shape: 'image',
-    color: {
-      color: Colors.networkNodeLabel,
-      highlight: Colors.turquoise
-    },
-    actionData: dataNode.actionData ? dataNode.actionData : {}
-  };
-
-  nodeObject.nodeDetails.push(<li key='nodeId'><b>{dataNode.nodeTypeDisplay}:</b> {idDisplay}</li>);
-
-  let metaDataObject = handleNodeMetaData(dataNode.metadata, nodeObject),
-    nodeStatus = metaDataObject.nodeStatus;
-  nodeObject = metaDataObject.nodeObject;
-  nodeObject.image = getIcon(dataNode.type, nodeStatus, 'INACTIVE');
-  return nodeObject;
-}
-
-export function createEdgeObject(dataEdge, edgesInSameDirection) {
-  let edgeObject = {
-      id: dataEdge.id,
-      notNodeId: dataEdge.id ? dataEdge.id : '',
-      type: [],
-      from: dataEdge.source,
-      to: dataEdge.target,
-      arrows: {
-        to: {
-          scaleFactor: 0.5
-        },
-        arrowStrikethrough: false
-      },
-      label: dataEdge.label ? dataEdge.label + '\n\n\n' : '',
-      title: dataEdge.label ? dataEdge.label : '',
-      font: {
-        face: 'Open Sans',
-        color: Colors.pebble,
-        size: '11',
-        align: 'left'
-      },
-      length: 1000,
-      smooth: {
-        type: 'discrete'
-      },
-      color: {
-        color: Colors.pebble,
-        highlight: Colors.turquoise
-      },
-      edgeDetails: [],
-      actionData: dataEdge.actionData ? dataEdge.actionData : {}
-    },
-    edgesTypes = [];
-
-  if (displayEdgeAsDashLine(dataEdge.type)) {
-    edgeObject.dashes = true;
-  }
-
-  if (dataEdge.type) {
-    edgeObject.type.push(dataEdge.type);
-  }
-
-  edgesTypes.push(
-    <li key='1'>{edgesInSameDirection.length > 0 ? '1. ' : ''}{dataEdge.label}</li>
-  );
-
-  if (edgesInSameDirection.length > 0) {
-    edgesInSameDirection.forEach((edgeInSameDirection, index) => {
-      edgeObject.type.push(edgeInSameDirection.type);
-      edgeObject.title += '<br />' + edgeInSameDirection.label;
-      edgesTypes.push(
-        <li key={index + 2}>{index + 2}. {edgeInSameDirection.label}</li>
-      );
-    });
-  }
-
-  let metaDataObject = handleEdgeMetaData(dataEdge.metadata, edgeObject);
-  edgeObject = metaDataObject.edgeObject;
-
-  edgeObject.edgeDetails.push(
-    <ul className='no-list-style'>
-      <li key='edgeType'><b>Edge Type:</b>
-        <ol style={{padding: 0}}>
-          {edgesTypes}
-        </ol>
-      </li>
-      <li key='source'><b>Source:</b> {dataEdge.source}</li>
-      <li key='target'><b>Target:</b> {dataEdge.target}</li>
-      {metaDataObject.edgeMetaData}
-    </ul>
-  );
-
-  return edgeObject;
-}
-
-function displayEdgeAsDashLine(type) {
-  let dashes = false;
-  switch (type) {
-    case 'ioc':
-      dashes = true;
-      break;
-    default:
-      break;
-  }
-  return dashes;
-}
-
-function handleEdgeMetaData(metadata, edgeObject) {
-  edgeObject.metadata = metadata;
-  let edgeMetaData = [];
-  for (let metadataType in metadata) {
-    let metadataTypeLower = metadataType.toLowerCase();
-    if (metadataTypeLower === 'date' || metadataTypeLower === 'datetime') {
-      let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
-      edgeObject.title += '<br />' + dateTime.date + ' ' + dateTime.time;
-      edgeMetaData.push(<li key='date'> {dateTime.date} {dateTime.time}</li>);
-    }
-    else {
-      edgeObject.title += '<br /><b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-        metadata[metadataType];
-      edgeMetaData.push(
-        <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
-      );
-    }
-  }
-  return {
-    edgeMetaData: edgeMetaData,
-    edgeObject: edgeObject
-  };
-}
-
-function handleNodeMetaData(metadata, nodeObject) {
-  let nodeStatus = 'safe',
-    isNameDisplayed = false;
-  nodeObject.metadata = metadata;
-  for (let metadataType in metadata) {
-    let metadataTypeLower = metadataType.toLowerCase(),
-      newLine1 = '\n  ',
-      newLine2 = '<br />';
-
-    metadataTypeLower = (metadataTypeLower === 'date' ||
-      metadataTypeLower === 'start_date' ||
-      metadataTypeLower === 'end_date')
-    ? 'date'
-    : metadataTypeLower;
-
-    metadataTypeLower = (nodeObject.type === 'anomaly' && metadataTypeLower === 'date')
-      ? 'anomalyDate'
-      : nodeObject.type === 'anomaly' && (metadataTypeLower === 'start_date' || metadataTypeLower === 'end_date')
-        ? 'date'
-        : nodeObject.type !== 'anomaly' &&
-          (metadataTypeLower === 'date' || metadataTypeLower === 'start_date' || metadataTypeLower === 'end_date')
-          ? 'date'
-          : metadataTypeLower;
-
-    let displayMetaData = (metadataTypeLower !== '' &&
-      metadataTypeLower !== 'coordinates' &&
-      metadataTypeLower !== 'multiple');
-
-    if (displayMetaData) {
-      switch (metadataTypeLower) {
-        case 'reputation':
-          let parameters = {
-              values: metadata[metadataType],
-              nodeStatus: nodeStatus,
-              nodeObject: nodeObject,
-              newLine: {
-                newLine1: newLine1,
-                newLine2: newLine2
-              }
-            },
-            tempObject = handleReputationMetaData(parameters);
-
-          nodeObject = tempObject.nodeObject;
-          nodeStatus = tempObject.nodeStatus;
-          break;
-        case 'country':
-          nodeObject.label += newLine1 +
-            getCountryNameByCountryCode[metadata[metadataType]];
-          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            getCountryNameByCountryCode[metadata[metadataType]];
-          nodeObject.nodeDetails.push(<li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b>
-            &nbsp;{getCountryNameByCountryCode[metadata[metadataType]]}</li>);
-          break;
-        case 'anomalyDate':
-          let dateTimeAnomaly = formatDateInLocalTimeZone(metadata[metadataType]),
-            time = nodeObject.type === 'anomaly' ? '' : ' ' + dateTimeAnomaly.time;
-          nodeObject.label += newLine1 + dateTimeAnomaly.date + time;
-          if (nodeObject.type === 'anomaly' &&
-            ((!isUndefined(metadata.multiple) && !metadata.multiple) || isUndefined(metadata.multiple))) {
-            nodeObject.title += newLine2 + dateTimeAnomaly.date + time;
-          }
-          nodeObject.nodeDetails.push(
-            <li key={metadataType}>{dateTimeAnomaly.date}{time}</li>
-          );
-          break;
-        case 'date':
-          let dateTime = formatDateInLocalTimeZone(metadata[metadataType]);
-          nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
-            dateTime.date + ' ' + dateTime.time;
-          nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-            dateTime.date + ' ' + dateTime.time;
-          nodeObject.nodeDetails.push(
-            <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {dateTime.date} {dateTime.time}</li>
-          );
-          break;
-        case 'displayname':
-          if (!isNameDisplayed) {
-            nodeObject.title += newLine2 + '<b>Name:</b> ' + metadata[metadataType];
-            nodeObject.nodeDetails.push(<li key={metadataType}><b>Name:</b> {metadata[metadataType]}</li>);
-            isNameDisplayed = true;
-          }
-          break;
-        default:
-          if (isNameDisplayed && metadataTypeLower === 'name') {
-            break;
-          }
-          if (metadataTypeLower === 'title') {
-            nodeObject.label += newLine1 + firstCharCapitalize(metadataType) + ': ' +
-              addNewlines(metadata[metadataType]);
-          }
-          if (whatIsIt(metadata[metadataType]) === 'Array') {
-            let metadataArray = metadata[metadataType];
-            nodeObject.nodeDetails.push(
-              <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b></li>
-            );
-            metadataArray.forEach((value, index) => {
-              nodeObject.nodeDetails.push(
-                <li key={metadataType + index}>{index + 1}. {value}</li>
-              );
-            });
-          }
-          else {
-            nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + ':</b> ' +
-              metadata[metadataType];
-            nodeObject.nodeDetails.push(
-              <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b> {metadata[metadataType]}</li>
-            );
-          }
-          if (metadataTypeLower === 'name') {
-            isNameDisplayed = true;
-          }
-          break;
-      }
-    }
-  }
-
-  nodeObject.status = nodeStatus;
-
-  return {
-    nodeObject: nodeObject,
-    nodeStatus: nodeStatus
-  };
-}
-
-function handleReputationMetaData(parameters) {
-  let {values, nodeStatus, nodeObject, newLine} = parameters,
-    {newLine1, newLine2} = newLine,
-    label = '',
-    title = '',
-    nodeDetails = '';
-
-  if (!isUndefined(values)) {
-    if (!isUndefined(values.reputation) && (values.reputation).length > 0 && whatIsIt(values.reputation) === 'Array') {
-      let newLine = {
-          newLine1: newLine1,
-          newLine2: newLine2
-        },
-        value = {
-          label: label,
-          title: title,
-          nodeDetails: nodeDetails
-        },
-        reputationText = createReputationText(values.reputation, newLine, value);
-      label = reputationText.label;
-      title = reputationText.title;
-      nodeDetails = reputationText.nodeDetails;
-    }
-
-    if (!isUndefined(values[0]) && !isUndefined(values[0].reputation) &&
-      whatIsIt(values[0].reputation) === 'Array') {
-      let newLine = {
-          newLine1: newLine1,
-          newLine2: newLine2
-        },
-        value = {
-          label: label,
-          title: title,
-          nodeDetails: nodeDetails
-        },
-        reputationText = parseReputationText(values, newLine, value);
-      label = reputationText.label;
-      title = reputationText.title;
-      nodeDetails = reputationText.nodeDetails;
-    }
-  }
-  nodeStatus = 'safe';
-
-  if (label !== '') {
-    let key = 'nodeDetails_' + nodeObject.id;
-    nodeObject.label += newLine1 + label;
-    nodeObject.title += newLine2 + title;
-    if (nodeDetails.includes('<br />')) {
-      let tempNodeDetails = nodeDetails.split('<br />');
-      tempNodeDetails.forEach((nodeDetail, index) => {
-        key = key + '_' + index;
-        nodeObject.nodeDetails.push(<li key={key}>{nodeDetail}</li>);
-      });
-    }
-    else {
-      nodeObject.nodeDetails.push(<li key={key}>{nodeDetails}</li>);
-    }
-
-    nodeStatus = (label.includes('Scanning Host')) ? 'scan' : 'malicious';
-  }
-
-  return {
-    nodeObject: nodeObject,
-    nodeStatus: nodeStatus
-  };
-}
-
-function createReputationText(values, newLine, value) {
-  let {label, title, nodeDetails} = value,
-    value1 = '',
-    value2 = '',
-    {newLine1, newLine2} = newLine,
-    newLine3 = ',\n  ',
-    newLine4 = ',<br />';
-
-  values.forEach((data) => {
-    newLine1 = (label === '') ? '' : '\n  ';
-    newLine2 = (label === '') ? '' : '<br />';
-    newLine3 = (value1 === '') ? '' : ',\n  ';
-    newLine4 = (value1 === '') ? '' : ',<br />';
-    value1 += newLine3 + data;
-    value2 += newLine4 + data;
-  });
-
-  label += newLine1 + 'Reputation: ' + value1;
-  title += newLine2 + '<b>Reputation:</b> ' + value2;
-  nodeDetails += newLine2 + 'Reputation: ' + value2;
-  return {
-    label: label,
-    title: title,
-    nodeDetails: nodeDetails
-  };
-}
-
-function parseReputationText(values, newLine, value) {
-  let {label, title, nodeDetails} = value,
-    {newLine1, newLine2} = newLine;
-
-  values.forEach((data) => {
-    newLine1 = (label === '') ? '' : '\n  ';
-    newLine2 = (label === '') ? '' : '<br />';
-
-    for (let valueType in data) {
-      if (valueType === 'reputation') {
-        if ((data[valueType]).length > 0) {
-          let newLine = {
-              newLine1: newLine1,
-              newLine2: newLine2
-            },
-            value = {
-              label: label,
-              title: title,
-              nodeDetails: nodeDetails
-            },
-            reputationText = createReputationText(data[valueType], newLine, value);
-          label = reputationText.label;
-          title = reputationText.title;
-          nodeDetails = reputationText.nodeDetails;
-        }
-      }
-      else {
-        title += newLine2 + '<b>Reputation ' + firstCharCapitalize(valueType) + ':</b> ' +
-          data[valueType] + '<br />';
-        nodeDetails += newLine2 + 'Reputation ' + firstCharCapitalize(valueType) + ': ' +
-          data[valueType] + '<br />';
-      }
-    }
-  });
-  return {
-    label: label,
-    title: title,
-    nodeDetails: nodeDetails
-  };
-}
-
-function getIcon(nodeType, nodeStatus, nodeAction) {
-  nodeType = nodeType.toLowerCase();
-  if (nodeType === 'anomaly') {
-    nodeStatus = 'malicious';
-  }
-  const iconPath = '/img/Node-' + nodeStatus + '-' + nodeAction + '/' + nodeType + '-' + nodeStatus + '.png';
-
-  if (nodeType !== '') {
-    return iconPath;
-  }
-  else {
-    return '/img/inactive.png';
-  }
-}
 
 export function generateDataFromAssetDetails(data) {
   const assetData = [];
@@ -553,19 +123,6 @@ function isNodeOrEdgeAlreadyExists(array, id) {
     }
   });
   return exists;
-}
-
-function addNewlines(str) {
-  let char = 15;
-  if (str.length > char) {
-    let result = '';
-    while (str.length > 0) {
-      result += str.substring(0, char) + '\n  ';
-      str = str.substring(char);
-    }
-    return result;
-  }
-  return str;
 }
 
 function displayActionAsSelected(actionsCount, actionId) {
@@ -650,19 +207,12 @@ class NetworkGraph extends React.Component {
       loadAgain: true
     };
 
-    this.getNodesEdges = this.getNodesEdges.bind(this);
-    this.loadNetworkGraph = this.loadNetworkGraph.bind(this);
-    this.createNetworkGraph = this.createNetworkGraph.bind(this);
-    this.getGraphAndActions = this.getGraphAndActions.bind(this);
     this.deselectNode = this.deselectNode.bind(this);
     this.deselectEdge = this.deselectEdge.bind(this);
-    this.deselect = this.deselect.bind(this);
     this.setHoverBlurNodeImage = this.setHoverBlurNodeImage.bind(this);
 
     this.loadContextMenu = this.loadContextMenu.bind(this);
     this.loadNodeEdgeContextMenu = this.loadNodeEdgeContextMenu.bind(this);
-    this.loadNodeContextMenu = this.loadNodeContextMenu.bind(this);
-    this.loadEdgeContextMenu = this.loadEdgeContextMenu.bind(this);
 
     this.loadGraph = this.loadGraph.bind(this);
     this.extendGraph = this.extendGraph.bind(this);
@@ -760,59 +310,6 @@ class NetworkGraph extends React.Component {
     this.edgeObjects = Object.assign({}, tempEdgeObjects);
   }
 
-  loadNetworkGraph(data, loadAgain, duration) {
-    if (timeWindow !== duration) {
-      timeWindow = duration;
-      return;
-    }
-
-    if (!loadAgain && timeWindow === duration) {
-      return;
-    }
-
-    if (!data) {
-      return;
-    }
-
-    let networkData = this.getGraphAndActions(data);
-
-    if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
-      if (networkData.nodes.length > 0) {
-        this.createNetworkGraph(networkData);
-        this.state.loadAgain = false;
-      }
-      else {
-        document.getElementById('network-graph').innerHTML = 'No additional results were found.';
-      }
-    }
-  }
-
-  getGraphAndActions(data) {
-    let networkData = {
-      nodes: [],
-      edges: []
-    };
-    if (this.state.nodesListStatus === 'default') {
-      let nodes = [],
-        edges = [],
-        nodesEdges = this.mergeMultipleGraphs(nodes, edges, data);
-      this.state.nodes = nodesEdges.nodes;
-      this.state.edges = nodesEdges.edges;
-      this.state.originalNodesEdges = {
-        nodes: Object.assign([], nodesEdges.nodes),
-        edges: Object.assign([], nodesEdges.edges)
-      };
-      const actionsData = this.context.store.getState().actions;
-      this.state.actionsData = getActionsByTypes(actionsData.list.actions);
-
-      networkData = {
-        nodes: nodesEdges.nodes,
-        edges: nodesEdges.edges
-      };
-    }
-    return networkData;
-  }
-
   mergeMultipleGraphs(nodes, edges, data) {
     let isGraphExtended = false;
 
@@ -842,67 +339,6 @@ class NetworkGraph extends React.Component {
       edges: edges,
       isGraphExtended: isGraphExtended
     };
-  }
-
-  createNetworkGraph(networkData) {
-    const that = this,
-      {props} = this,
-      {attributes} = props;
-
-    networkGraphDefaultOptions.layout = applyHierarchicalNetwork
-      ? Object.assign(networkGraphDefaultOptions.layout, hierarchicalNetwork)
-      : networkGraphDefaultOptions.layout;
-
-    let options = Object.assign(networkGraphDefaultOptions,
-      {
-        height: (!isUndefined(attributes.canvasStyle.height))
-          ? attributes.canvasStyle.height
-          : networkGraphDefaultOptions.height
-      }),
-      network = new vis.Network(this.networkGraph, networkData, options);
-
-    this.network = network;
-
-    if (networkData.nodes.length <= 10) {
-      network.setOptions(physicsFalse);
-    }
-    else {
-      network.setOptions(physicsTrue);
-    }
-
-    network.on('selectNode', this.loadContextMenu(network, 'node'));
-    network.on('selectEdge', this.loadContextMenu(network, 'edge'));
-    network.on('deselectNode', this.deselectNode(network));
-    network.on('deselectEdge', this.deselectEdge());
-
-    network.on('dragStart', this.loadContextMenu(network, 'node'));
-
-    network.on('hoverNode', function(params) {
-      let hoverNode = params.node,
-        node = network.body.nodes[hoverNode];
-      node = that.setHoverBlurNodeImage('hover', hoverNode, node);
-    });
-
-    network.on('blurNode', function(params) {
-      let blurNode = params.node,
-        node = network.body.nodes[blurNode];
-      node = that.setHoverBlurNodeImage('blur', blurNode, node);
-    });
-
-    document.getElementsByClassName('vis-up')[0].style.visibility = 'hidden';
-    document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
-    document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
-    document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
-
-    let undoDiv = document.createElement('div');
-    undoDiv.id = 'undo';
-    undoDiv.className = 'vis-button vis-undo';
-    document.getElementsByClassName('vis-navigation')[0].appendChild(undoDiv);
-
-    let resetDiv = document.createElement('div');
-    resetDiv.id = 'reset';
-    resetDiv.className = 'vis-button vis-reset';
-    document.getElementsByClassName('vis-navigation')[0].appendChild(resetDiv);
   }
 
   setHoverBlurNodeImage(event, nodeID, node) {
@@ -1453,12 +889,123 @@ class NetworkGraph extends React.Component {
     };
   }
 
+  createNetworkGraph(networkData) {
+    const that = this,
+      {props} = this,
+      {attributes} = props;
+
+    networkGraphDefaultOptions.layout = applyHierarchicalNetwork
+      ? Object.assign(networkGraphDefaultOptions.layout, hierarchicalNetwork)
+      : networkGraphDefaultOptions.layout;
+
+    let options = Object.assign(networkGraphDefaultOptions,
+      {
+        height: (!isUndefined(attributes.canvasStyle.height))
+          ? attributes.canvasStyle.height
+          : networkGraphDefaultOptions.height
+      }),
+      network = new vis.Network(this.networkGraph, networkData, options);
+
+    this.network = network;
+
+    if (networkData.nodes.length <= 10) {
+      network.setOptions(physicsFalse);
+    }
+    else {
+      network.setOptions(physicsTrue);
+    }
+
+    network.on('selectNode', this.loadContextMenu(network, 'node'));
+    network.on('selectEdge', this.loadContextMenu(network, 'edge'));
+    network.on('deselectNode', this.deselectNode(network));
+    network.on('deselectEdge', this.deselectEdge());
+
+    network.on('dragStart', this.loadContextMenu(network, 'node'));
+
+    network.on('hoverNode', function(params) {
+      let hoverNode = params.node,
+        node = network.body.nodes[hoverNode];
+      node = that.setHoverBlurNodeImage('hover', hoverNode, node);
+    });
+
+    network.on('blurNode', function(params) {
+      let blurNode = params.node,
+        node = network.body.nodes[blurNode];
+      node = that.setHoverBlurNodeImage('blur', blurNode, node);
+    });
+
+    document.getElementsByClassName('vis-up')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-down')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-left')[0].style.visibility = 'hidden';
+    document.getElementsByClassName('vis-right')[0].style.visibility = 'hidden';
+
+    let undoDiv = document.createElement('div');
+    undoDiv.id = 'undo';
+    undoDiv.className = 'vis-button vis-undo';
+    document.getElementsByClassName('vis-navigation')[0].appendChild(undoDiv);
+
+    let resetDiv = document.createElement('div');
+    resetDiv.id = 'reset';
+    resetDiv.className = 'vis-button vis-reset';
+    document.getElementsByClassName('vis-navigation')[0].appendChild(resetDiv);
+  }
+
+  getGraphAndActions(data) {
+    let networkData = { nodes: [], edges: [] };
+    if (this.state.nodesListStatus === 'default') {
+      let nodes = [],
+        edges = [],
+        nodesEdges = this.mergeMultipleGraphs(nodes, edges, data);
+      this.state.nodes = nodesEdges.nodes;
+      this.state.edges = nodesEdges.edges;
+      this.state.originalNodesEdges = {
+        nodes: Object.assign([], nodesEdges.nodes),
+        edges: Object.assign([], nodesEdges.edges)
+      };
+      const actionsData = this.context.store.getState().actions;
+      this.state.actionsData = getActionsByTypes(actionsData.list.actions);
+
+      networkData = {
+        nodes: nodesEdges.nodes,
+        edges: nodesEdges.edges
+      };
+    }
+    return networkData;
+  }
+
+  loadNetworkGraph(data, loadAgain, duration) {
+    if (timeWindow !== duration) {
+      timeWindow = duration;
+      return;
+    }
+
+    if (!loadAgain && timeWindow === duration) {
+      return;
+    }
+
+    if (!data) {
+      return;
+    }
+
+    let networkData = this.getGraphAndActions(data);
+
+    if (!isNull(this.networkGraph) && !isUndefined(this.networkGraph)) {
+      if (networkData.nodes.length > 0) {
+        this.createNetworkGraph(networkData);
+        this.state.loadAgain = false;
+      }
+      else {
+        document.getElementById('network-graph').innerHTML = 'No additional results were found.';
+      }
+    }
+  }
+
   render() {
     const {props, state} = this;
 
-    let assetData;
-    if (props.data && !Array.isArray(props.data)) {
-      assetData = generateDataFromAssetDetails(props.data);
+    let data = props.data;
+    if (props.data && props.params.assetId) {
+      data = generateDataFromAssetDetails(data);
     }
 
     return (
@@ -1472,11 +1019,7 @@ class NetworkGraph extends React.Component {
         <div ref={(ref) => this.networkGraph = ref}
           style={props.attributes.canvasStyle}
           id='network-graph'>
-          {
-            assetData
-            ? this.loadNetworkGraph(assetData, state.loadAgain, props.duration)
-            : this.loadNetworkGraph(props.data, state.loadAgain, props.duration)
-          }
+          { this.loadNetworkGraph(data, state.loadAgain, props.duration) }
         </div>
 
         {
