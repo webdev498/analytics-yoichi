@@ -86,10 +86,6 @@ export function generateDataSource(data, chartOptions, fieldMapping, updateChart
 };
 
 function getDataPlotClickUrl(props, dataObj) {
-  if (!props.kibana) {
-    return;
-  }
-
   let parameters = {
     data: props.data,
     duration: props.duration,
@@ -106,6 +102,34 @@ class ParetoChart extends React.Component {
     attributes: PropTypes.object
   }
 
+  constructor(props) {
+    super(props);
+    this.handleGraphClick = this.handleGraphClick.bind(this);
+  }
+
+  handleGraphClick(dataObj) {
+    const {props} = this,
+      {clickData} = props;
+
+    let filterText = '';
+    if (clickData.filterText.startsWith(':')) {
+      filterText = dataObj.toolText.split(',')[0];
+    }
+
+    if (props.history.isActive(clickData.page)) {
+      props.broadcastEvent(clickData.tableId, {data: filterText, type: 'updateSearch'});
+    }
+    else {
+      // this is to enable to call the broadcastEvent when user is on some other page other than '/alerts'
+      //  so that this event can be called after the page load
+      window.sessionStorage.broadcastEvent = JSON.stringify({
+        id: clickData.tableId,
+        data: {data: filterText, type: 'updateSearch'}
+      });
+      props.history.push(clickData.page);
+    }
+  }
+
   renderChart(props) {
     if (!props.data) {
       return;
@@ -117,7 +141,8 @@ class ParetoChart extends React.Component {
 
     const {data, chartOptions, updateChartOptions, chartData} = props,
       fieldMapping = chartData.fieldMapping,
-      {clickThrough} = this.context;
+      {clickThrough} = this.context,
+      handleGraphClick = this.handleGraphClick;
 
     FusionCharts.ready(function() {
       const mapProps = props.attributes;
@@ -132,9 +157,14 @@ class ParetoChart extends React.Component {
         dataSource: generateDataSource(data, chartOptions, fieldMapping, updateChartOptions),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            const url = getDataPlotClickUrl(props, dataObj);
-            if (url !== '' && !isUndefined(url)) {
-              clickThrough(url);
+            if (props.kibana) {
+              const url = getDataPlotClickUrl(props, dataObj);
+              if (url !== '' && !isUndefined(url)) {
+                clickThrough(url);
+              }
+            }
+            else if (props.clickData) {
+              handleGraphClick(dataObj);
             }
           }
         }

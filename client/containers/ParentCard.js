@@ -126,6 +126,7 @@ export class ParentCard extends React.Component {
   }
 
   static propTypes = {
+    id: PropTypes.string.isRequired,
     meta: PropTypes.object.isRequired,
     updateRoute: PropTypes.func.isRequired,
     history: PropTypes.object
@@ -220,6 +221,26 @@ export class ParentCard extends React.Component {
     }
   }
 
+  runEvent(eventData, nextProps) {
+    const {type, data} = eventData;
+    if (type === 'updateSearch') {
+      this.myTextInput.value = data;
+      this.setState({
+        search: data,
+        clearIconStyle: {
+          color: Colors.white,
+          background: Colors.grape
+        },
+        searchTextStyle: {
+          paddingLeft: '53px'
+        }
+      });
+
+      console.log(nextProps.attributes.id);
+      autoScrollTo(nextProps.attributes.id, 80);
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const {data, eventData} = nextProps;
     let {meta: {fetchDataFor}} = nextProps;
@@ -233,23 +254,18 @@ export class ParentCard extends React.Component {
       });
     }
 
-    if (eventData) {
-      const {type, data} = eventData;
-      if (type === 'updateSearch') {
-        this.myTextInput.value = data;
-        this.setState({
-          search: data,
-          clearIconStyle: {
-            color: Colors.white,
-            background: Colors.grape
-          },
-          searchTextStyle: {
-            paddingLeft: '53px'
-          }
-        });
+    if (nextProps.data && window.sessionStorage.broadcastEvent) {
+      const {id, data} = JSON.parse(window.sessionStorage.broadcastEvent);
+      if (id !== this.props.id) return;
+      // timeout is to allow the data to be rendered first.
+      setTimeout(() => {
+        delete window.sessionStorage.broadcastEvent;
+        this.runEvent(data, nextProps);
+      }, 600);
+    }
 
-        autoScrollTo(nextProps.attributes.id, 80);
-      }
+    if (eventData) {
+      this.runEvent(eventData, nextProps);
     }
   }
 

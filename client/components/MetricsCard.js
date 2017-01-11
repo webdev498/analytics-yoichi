@@ -97,27 +97,13 @@ class MetricsCard extends React.Component {
         else {
           // this is to enable to call the broadcastEvent when user is on some other page other than '/alerts'
           //  so that this event can be called after the page load
-          window.sessionStorage.broadcastEvent = props.id;
+          window.sessionStorage.broadcastEvent = JSON.stringify({
+            id: clickData.tableId,
+            data: {data: clickData.filterText, type: 'updateSearch'}
+          });
           props.history.push(clickData.page);
         }
       };
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.data &&
-      nextProps.clickData &&
-      nextProps.history.isActive(nextProps.clickData.page) &&
-      window.sessionStorage.broadcastEvent
-    ) {
-      if (window.sessionStorage.broadcastEvent === nextProps.id) {
-        // timeout is to allow the data to be rendered first.
-        setTimeout(function() {
-          delete window.sessionStorage.broadcastEvent;
-          const {clickData} = nextProps;
-          nextProps.broadcastEvent(clickData.tableId, {data: clickData.filterText, type: 'updateSearch'});
-        }, 500);
-      }
     }
   }
 

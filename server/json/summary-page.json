@@ -245,14 +245,10 @@
         },
         "id": "top-attacked-entities",
         "type": "charts/ParetoChart",
-        "kibana": {
-          "pathParams": [
-            "attacked-entity-details"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": "",
-            "xAxisValueAsItIs": "ip"
-          }
+        "clickData": {
+          "tableId": "RecentAnomalies",
+          "filterText": ":DIMENSION",
+          "page": "/alerts"
         }
       }
     ],
