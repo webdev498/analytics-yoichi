@@ -7,6 +7,7 @@ import Loader from 'components/Loader';
 
 import {fetchApiData, removeComponent, broadcastEvent} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
+import {autoScrollTo} from '../../commons/utils/utils';
 import {updateRoute} from 'actions/core';
 
 const styles = {
@@ -246,6 +247,8 @@ export class ParentCard extends React.Component {
             paddingLeft: '53px'
           }
         });
+
+        autoScrollTo(nextProps.attributes.id, 80);
       }
     }
   }
