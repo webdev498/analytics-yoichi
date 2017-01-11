@@ -27,13 +27,8 @@ class ScatterChart extends React.Component {
       };
 
     normalizeData.forEach((row) => {
-      let {x, y, toolText} = row,
-        dataPoint = {
-          x,
-          y,
-          toolText
-        };
-      dataObject.push(dataPoint);
+      let {x, y, toolText} = row;
+      dataObject.push({x, y, toolText});
       dataSeries.data = dataObject;
       dataSet.push(dataSeries);
     });
