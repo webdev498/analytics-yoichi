@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
-import moment from 'moment';
+import {getDateTimeInLocalTimeZone} from '../../../commons/utils/utils';
 import {DEFAULT_FONT} from 'Constants';
 
 export function generateDataSource(chartProperties, duration) {
@@ -12,11 +12,8 @@ export function generateDataSource(chartProperties, duration) {
     chartValue = data[0].value;
 
   for (let key in chartValue) {
-    let localTime = moment.utc(key).toDate();
-    localTime = moment(localTime).format('D MMM');
-
     let dataPoint = {
-      label: localTime,
+      label: getDateTimeInLocalTimeZone(key, 'D MMM'),
       value: '0'
     };
     if (chartValue[key][0] !== 0 && chartValue[key][0] !== '') {

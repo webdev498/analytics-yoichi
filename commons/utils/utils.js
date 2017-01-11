@@ -548,6 +548,13 @@ export function militaryTimeToNormalTime(time) {
 
   return timeValue;
 }
+
+export function getDateTimeInLocalTimeZone(dateTime, format) {
+  let localDateTime = moment.utc(dateTime).toDate();
+  localDateTime = moment(localDateTime).format(format);
+  return localDateTime;
+}
+
 /*
 export function fetchData(url, cookies, dispatch) {
   let accessToken = cookies.access_token,
