@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
+import {DEFAULT_FONT} from 'Constants';
 
 class ScatterChart extends React.Component {
   static propTypes = {
@@ -48,7 +49,7 @@ class ScatterChart extends React.Component {
       'bgAlpha': '0',
       'canvasBgAlpha': '0',
       'labelFontSize': '10',
-      'baseFont': 'Open Sans, sans-serif',
+      'baseFont': DEFAULT_FONT,
       'baseFontColor': Colors.pebble,
       'xAxisNameFontSize': '13',
       'yAxisNameFontSize': '13',

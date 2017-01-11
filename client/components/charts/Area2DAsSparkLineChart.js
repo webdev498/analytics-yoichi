@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
 import moment from 'moment';
+import {DEFAULT_FONT} from 'Constants';
 
 export function generateDataSource(chartProperties, duration) {
   let dataSourceObject = {},
@@ -51,9 +52,9 @@ export function generateDataSource(chartProperties, duration) {
     'chartRightMargin': '0',
     'minimizetendency': '1',
     'xAxisNameFontColor': Colors.grape,
-    'xAxisNameFont': 'Open Sans, sans-serif',
+    'xAxisNameFont': DEFAULT_FONT,
     'yAxisNameFontColor': Colors.grape,
-    'yAxisNameFont': 'Open Sans, sans-serif',
+    'yAxisNameFont': DEFAULT_FONT,
     'labelDisplay': 'wrap',
     'rotateLabels': '1',
     'slantLabels': '1',
