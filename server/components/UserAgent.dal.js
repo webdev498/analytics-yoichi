@@ -11,7 +11,7 @@ function processData(rawData) {
       for (let userAgent in row[userAgentLen]) {
         let connection = row[userAgentLen][userAgent][0];
         connections += connection;
-        userAgent = userAgent || '<empty>';
+        userAgent = userAgent !== '' ? userAgent : '< empty >';
         details += userAgent + ', ' + connection + '{br}';
       }
 
