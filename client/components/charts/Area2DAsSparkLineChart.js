@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
+import moment from 'moment';
 
 export function generateDataSource(chartProperties, duration) {
   let dataSourceObject = {},
@@ -10,8 +11,11 @@ export function generateDataSource(chartProperties, duration) {
     chartValue = data[0].value;
 
   for (let key in chartValue) {
+    let localTime = moment.utc(key).toDate();
+    localTime = moment(localTime).format('D MMM');
+
     let dataPoint = {
-      label: '',
+      label: localTime,
       value: '0'
     };
     if (chartValue[key][0] !== 0 && chartValue[key][0] !== '') {
@@ -32,7 +36,8 @@ export function generateDataSource(chartProperties, duration) {
     'axisLineAlpha': '25',
     'divLineAlpha': '0',
     'showValues': '0',
-    'showYAxisValues': '0',
+    'showXAxisValues': '1',
+    'showYAxisValues': '1',
     'showAlternateHGridColor': '0',
     'showPlotBorder': '1',
     'plotBorderColor': Colors.areaSparkLineChart.border,
@@ -44,7 +49,15 @@ export function generateDataSource(chartProperties, duration) {
     'chartBottomMargin': '0',
     'chartLeftMargin': '0',
     'chartRightMargin': '0',
-    'minimizetendency': '1'
+    'minimizetendency': '1',
+    'xAxisNameFontColor': Colors.grape,
+    'xAxisNameFont': 'Open Sans, sans-serif',
+    'yAxisNameFontColor': Colors.grape,
+    'yAxisNameFont': 'Open Sans, sans-serif',
+    'labelDisplay': 'wrap',
+    'rotateLabels': '1',
+    'slantLabels': '1',
+    'labelFontSize': '11'
   }, chartOptions);
 
   if (dataSet.length > 0) {

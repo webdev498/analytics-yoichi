@@ -14,7 +14,7 @@
               }
             ],
             "style": {
-              "width": "70%",
+              "width": "50%",
               "wordBreak": "break-all"
             },
             "type": "text",
@@ -30,16 +30,10 @@
               "chartWidth": "100%",
               "chartType": "area2d",
               "id": "connection",
-              "chartHeight": "75",
-              "chartOptions": {
-                "xAxisNameFontSize": "8",
-                "yAxisNameFontSize": "8",
-                "xAxisName": "Time",
-                "yAxisName": "Connections"
-              }
+              "chartHeight": "120"
             },
             "style": {
-              "width": "30%"
+              "width": "50%"
             },
             "type": "chart",
             "header": "CONNECTIONS"
