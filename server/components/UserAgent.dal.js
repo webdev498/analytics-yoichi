@@ -6,18 +6,18 @@ function processData(rawData) {
     for (let userAgentLen in row) {
       let dataPoint = {},
         connections = 0,
-        toolText = '';
+        details = '';
 
       for (let userAgent in row[userAgentLen]) {
         let connection = row[userAgentLen][userAgent][0];
         connections += connection;
-        userAgent = userAgent ? ', ' + userAgent : '';
-        toolText += userAgentLen + userAgent + ', ' + connection + '{br}';
+        userAgent = userAgent || '<empty>';
+        details += userAgent + ', ' + connection + '{br}';
       }
 
       dataPoint.x = parseInt(userAgentLen);
       dataPoint.y = connections;
-      dataPoint.toolText = toolText;
+      dataPoint.toolText = details;
       processedData.push(dataPoint);
     }
   });
