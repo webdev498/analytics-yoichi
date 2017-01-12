@@ -189,14 +189,10 @@
         },
         "id": "alert-by-type",
         "type": "charts/ParetoChart",
-        "kibana": {
-          "pathParams": [
-            "alerts-type"
-          ],
-          "queryParams": {
-            "window": "",
-            "xAxisValueInLowerCase": "type"
-          }
+        "clickData": {
+          "tableId": "RecentAnomalies",
+          "filterText": ":type",
+          "page": "/alerts"
         }
       },
       {

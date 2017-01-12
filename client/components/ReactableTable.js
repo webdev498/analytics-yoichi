@@ -170,7 +170,6 @@ export class ReactableTable extends React.Component {
 
                     let value = column.data[0] ? column.data[0].value : '',
                       style = column.type === 'text' ? {...column.style, 'wordBreak': 'break-all'} : {...column.style};
-
                     return (
                       <Td column={column.name}
                         value={value}

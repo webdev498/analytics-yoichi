@@ -236,7 +236,6 @@ export class ParentCard extends React.Component {
         }
       });
 
-      console.log(nextProps.attributes.id);
       autoScrollTo(nextProps.attributes.id, 80);
     }
   }
