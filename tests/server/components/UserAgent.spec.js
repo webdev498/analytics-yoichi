@@ -53,17 +53,12 @@ describe('UserAgent DAL', () => {
 
   it('returns correct normalized data', async function() {
     const row = {
-        '40': {
-          'Apache-HttpClient/4.5.2 (Java/1.8.0_102)': [
-            20163
-          ]
-        }
-      },
-      normalizedData = [{
-        'x': 40,
-        'y': 20163,
-        'toolText': 'Apache-HttpClient/4.5.2 (Java/1.8.0_102), 20163'
-      }];
+      '40': {
+        'Apache-HttpClient/4.5.2 (Java/1.8.0_102)': [
+          20163
+        ]
+      }
+    };
 
     const ctx = getCtx({columns, rows: [row]});
     await UserAgent(ctx);
@@ -75,10 +70,43 @@ describe('UserAgent DAL', () => {
     const [card] = result;
     expect(card).to.be.an('object');
 
-    for (let [key, value] of Object.entries(normalizedData)) {
+    for (let [key, value] of Object.entries(result)) {
       expect(value.x).to.be.an('number');
       expect(value.y).to.be.an('number');
       expect(value.toolText).to.be.an('string');
+    }
+  });
+
+  it('returns multiple user agents at single point', async function() {
+    const row = {
+      '40': {
+        'Apache-HttpClient': [
+          20163
+        ],
+        'curl/7.35.0': [
+          2436
+        ]
+      }
+    };
+
+    const ctx = getCtx({columns, rows: [row]});
+    await UserAgent(ctx);
+
+    const {normalizeData: {normalizeData: result}} = ctx;
+    expect(result).to.be.an('array');
+    expect(result).to.have.lengthOf(1);
+
+    const [card] = result;
+    expect(card).to.be.an('object');
+
+    for (let [key, value] of Object.entries(result)) {
+      expect(value.x).to.be.an('number');
+      expect(value.x).to.be.equal(40);
+      expect(value.y).to.be.an('number');
+      expect(value.y).to.be.equal(22599);
+      expect(value.toolText).to.be.an('string');
+      let toolText = 'Apache-HttpClient, 20163{br}curl/7.35.0, 2436{br}';
+      expect(value.toolText).to.be.equal(toolText);
     }
   });
 });
