@@ -207,8 +207,8 @@
     [
       {
         "chartOptions": {
-          "xAxisname": "ALERT TYPES",
-          "pYAxisname": "ALERT COUNT",
+          "xAxisname": "ANOMALY TYPES",
+          "pYAxisname": "ANOMALY COUNT",
           "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0"
         },

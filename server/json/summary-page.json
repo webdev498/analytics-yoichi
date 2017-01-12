@@ -143,8 +143,8 @@
     [
       {
         "chartOptions": {
-          "xAxisname": "ALERT TYPES",
-          "pYAxisname": "ALERT COUNT",
+          "xAxisname": "ANOMALY TYPES",
+          "pYAxisname": "ANOMALY COUNT",
           "paletteColors": "#2bd8d0"
         },
         "chartData": {
