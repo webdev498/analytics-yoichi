@@ -45,3 +45,5 @@ export const CHART_COLORS = [
   '009999',
   '66CDAA'
 ];
+
+export const DEFAULT_FONT = 'Open Sans, sans-serif';

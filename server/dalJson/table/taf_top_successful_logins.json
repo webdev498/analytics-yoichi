@@ -14,7 +14,7 @@
               }
             ],
             "style": {
-              "width": "70%"
+              "width": "40%"
             },
             "type": "text",
             "header": "USER NAME"
@@ -29,16 +29,10 @@
               "chartWidth": "100%",
               "chartType": "area2d",
               "id": "SuccessfulLogins",
-              "chartHeight": "75",
-              "chartOptions": {
-                "xAxisNameFontSize": "8",
-                "yAxisNameFontSize": "8",
-                "xAxisName": "Time",
-                "yAxisName": "Login Count"
-              }
+              "chartHeight": "120"
             },
             "style": {
-              "width": "30%"
+              "width": "60%"
             },
             "type": "chart",
             "header": "LOGINS"

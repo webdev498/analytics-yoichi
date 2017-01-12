@@ -9,6 +9,7 @@ import timeline from '../components/Timeline';
 import anomalyChart from '../components/anomalyChart';
 import HeatMap from '../components/HeatMap.dal.js';
 import table from '../components/Table.dal';
+import userAgent from '../components/UserAgent.dal.js';
 
 const router = new KoaRouter({
   prefix: '/api'
@@ -19,7 +20,8 @@ const agentOptions = {
 };
 
 const agent = new https.Agent(agentOptions),
-  timeout = timeoutDuration || 1000 * 60;
+  timeout = timeoutDuration || 1000 * 60,
+  reportingApiBasePath = '/analytics/reporting/execute/';
 
 router
 .get('/layout/*', layoutRoutes)
@@ -44,23 +46,24 @@ router
   ctx.body = ctx.normalizeData || res.body;
 })
 .get('/alert/traffic', timeline)
-.get('/analytics/reporting/execute/taf_alert_by_asset', timeline)
+.get(reportingApiBasePath + 'taf_alert_by_asset', timeline)
 .get('/anomaly/:anomalyId/events', timeline)
-.get('/analytics/reporting/execute/taf_asset_session_details', timeline)
-.get('/analytics/reporting/execute/taf_asset_session_event_details', timeline)
-.get('/analytics/reporting/execute/taf_events_between_source_and_dest_same_type_as_edge', timeline)
-.get('/analytics/reporting/execute/taf_events_with_protocol', timeline)
-.get('/analytics/reporting/execute/taf_events_with_country', timeline)
-.get('/analytics/reporting/execute/taf_events_between_source_and_dest', timeline)
+.get(reportingApiBasePath + 'taf_asset_session_details', timeline)
+.get(reportingApiBasePath + 'taf_asset_session_event_details', timeline)
+.get(reportingApiBasePath + 'taf_events_between_source_and_dest_same_type_as_edge', timeline)
+.get(reportingApiBasePath + 'taf_events_with_protocol', timeline)
+.get(reportingApiBasePath + 'taf_events_with_country', timeline)
+.get(reportingApiBasePath + 'taf_events_between_source_and_dest', timeline)
 .get('/anomaly/:alertId/timeline', timeline)
 .get('/session/activity/live/:type/:assetId', HeatMap)
-.get('/analytics/reporting/execute/taf_alert_highpriority', table)
-.get('/analytics/reporting/execute/taf_top_longest_connections', table)
-.get('/analytics/reporting/execute/taf_top_longest_user_agents', table)
-.get('/analytics/reporting/execute/taf_top_shortest_user_agents', table)
-.get('/analytics/reporting/execute/taf_least_used_software', table)
-.get('/analytics/reporting/execute/taf_top_successful_logins', table)
-.get('/analytics/reporting/execute/taf_top_failed_logins', table)
+.get(reportingApiBasePath + 'taf_alert_highpriority', table)
+.get(reportingApiBasePath + 'taf_top_longest_connections', table)
+.get(reportingApiBasePath + 'taf_top_longest_user_agents', table)
+.get(reportingApiBasePath + 'taf_top_shortest_user_agents', table)
+.get(reportingApiBasePath + 'taf_least_used_software', table)
+.get(reportingApiBasePath + 'taf_top_successful_logins', table)
+.get(reportingApiBasePath + 'taf_top_failed_logins', table)
+.get(reportingApiBasePath + 'taf_user_agent_unique_with_name', userAgent)
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;
   console.log('url', url);
