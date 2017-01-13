@@ -20,7 +20,7 @@ function getData(rawData, url) {
     reportId = reportId + '-' + type;
   }
 
-  const fileName = `../dalJson/table/${reportId}.json`,
+  const fileName = `../json/table/${reportId}.json`,
     filePath = path.join(__dirname, fileName);
 
   let tableJson = JSON.parse(fs.readFileSync(filePath, 'utf8')),
