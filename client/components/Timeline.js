@@ -23,6 +23,14 @@ const styles = {
     bottom: 0,
     position: 'absolute',
     right: '460px'
+  },
+  secondaryTimeline: {
+    width: '450px',
+    position: 'absolute',
+    top: '182px',
+    right: 0,
+    bottom: 0,
+    zIndex: '1'
   }
 };
 
@@ -357,13 +365,7 @@ class Timeline extends React.Component {
 
     return (
       <div>
-        <div style={{
-          width: '450px',
-          position: 'absolute',
-          top: 182,
-          right: 0,
-          bottom: 0
-        }}>
+        <div style={styles.secondaryTimeline}>
           <ParentCard
             key={state.selectedCardId}
             id={state.selectedCardId}

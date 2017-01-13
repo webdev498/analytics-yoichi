@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
 
-import Card from 'material-ui/Card/Card';
 import FontIcon from 'material-ui/FontIcon';
 import Loader from 'components/Loader';
 
@@ -13,11 +12,13 @@ import {updateRoute} from 'actions/core';
 const styles = {
   wrap: {
     position: 'relative',
+    backgroundColor: 'white',
     borderRadius: 0,
     padding: '33px',
     boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
   },
   childwrap: {
+    backgroundColor: 'white',
     position: 'relative',
     borderRadius: 0,
     boxShadow: Colors.white + ' 0px 0px 0px',
@@ -442,7 +443,7 @@ export class ParentCard extends React.Component {
     cardStyle = tempCardStyle;
 
     return (
-      <Card style={cardStyle} id={props.id}>
+      <div style={cardStyle} id={props.id}>
         {props.isFetching ? <Loader /> : null}
 
         {
@@ -456,7 +457,7 @@ export class ParentCard extends React.Component {
           ? this.getErrorElement()
           : React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})
         }
-      </Card>
+      </div>
     );
   }
 }
