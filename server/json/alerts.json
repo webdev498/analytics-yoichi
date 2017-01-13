@@ -14,7 +14,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -47,7 +46,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -80,7 +78,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#2bd8d0"
@@ -116,7 +113,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#2bd8d0"
@@ -157,7 +153,6 @@
           },
           "title": "Recent Anomalies"
         },
-        "name": "ReactableTable",
         "attributes": {
           "style": {
             "width": "100%"
@@ -183,7 +178,6 @@
           },
           "title": "High Risk Assets"
         },
-        "name": "Table",
         "tableOptions": {
           "itemsPerPage": 5,
           "sortable": ["SCORE"],
@@ -264,7 +258,7 @@
         "chartOptions": {
           "linealpha": "0",
           "paletteColors": "#2BD8D0, #6CD3B4, #B6CD94, #FCC875, #05E9F5",
-          "yAxisName": "ALERT COUNT",
+          "yAxisName": "ANOMALY COUNT",
           "drawAnchors": "1",
           "legendPosition": "right",
           "baseFont": "Open Sans, sans-serif"
@@ -321,7 +315,7 @@
               "window": ""
             }
           },
-          "title": "Alert priority"
+          "title": "Anomaly Priority"
         },
         "attributes": {
           "chartWidth": "100%",

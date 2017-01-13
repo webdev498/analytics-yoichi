@@ -14,7 +14,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -47,7 +46,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -80,7 +78,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#2bd8d0"
@@ -116,7 +113,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#2bd8d0"
@@ -142,6 +138,18 @@
     ],
     [
       {
+        "meta": {
+          "showHeader": true,
+          "title": "Outgoing Traffic Threat Map"
+        },
+        "attributes": {
+          "style": {
+            "width": "100%"
+          },
+          "id": "OutgoingTrafficHeatMap"
+        },
+        "id": "outgoing-traffic-heatMap",
+        "type": "CompoundCard",
         "children": [
           {
             "chartOptions": {},
@@ -180,8 +188,7 @@
                 "queryParams": {
                   "window": ""
                 }
-              },
-              "title": "Outgoing Traffic Threat Map"
+              }
             },
             "attributes": {
               "chartWidth": "100%",
@@ -319,7 +326,6 @@
                 }
               }
             },
-            "name": "CompoundCard",
             "attributes": {
               "style": {
                 "width": "30%",
@@ -330,24 +336,23 @@
             "id": "OutgoingTrafficHeatMapLegends",
             "type": "CompoundCard"
           }
-        ],
-        "meta": {
-          "showHeader": true,
-          "title": "Outgoing Traffic HeatMap"
-        },
-        "name": "CompoundCard",
-        "attributes": {
-          "style": {
-            "width": "100%"
-          },
-          "id": "OutgoingTrafficHeatMap"
-        },
-        "id": "outgoing-traffic-heatMap",
-        "type": "CompoundCard"
+        ]
       }
     ],
     [
       {
+        "meta": {
+          "showHeader": true,
+          "title": "Incoming Traffic Threat Map"
+        },
+        "attributes": {
+          "style": {
+            "width": "100%"
+          },
+          "id": "IncomingTrafficHeatMap"
+        },
+        "id": "incoming-traffic-heatMap",
+        "type": "CompoundCard",
         "children": [
           {
             "chartOptions": {},
@@ -386,8 +391,7 @@
                 "queryParams": {
                   "window": ""
                 }
-              },
-              "title": "Incoming Traffic Threat Map"
+              }
             },
             "attributes": {
               "chartWidth": "100%",
@@ -525,7 +529,6 @@
                 }
               }
             },
-            "name": "CompoundCard",
             "attributes": {
               "style": {
                 "width": "30%",
@@ -536,20 +539,7 @@
             "id": "IncomingTrafficHeatMapLegends",
             "type": "CompoundCard"
           }
-        ],
-        "meta": {
-          "showHeader": true,
-          "title": "Incoming Traffic HeatMap"
-        },
-        "name": "CompoundCard",
-        "attributes": {
-          "style": {
-            "width": "100%"
-          },
-          "id": "IncomingTrafficHeatMap"
-        },
-        "id": "incoming-traffic-heatMap",
-        "type": "CompoundCard"
+        ]
       }
     ]
   ]

@@ -26,7 +26,7 @@ describe('<MultiSeriesCombiChart />', function() {
     const props = {
       'attributes': {'id': 'AlertPriorityChart'},
       'meta': {
-        'title': 'Alert priority'
+        'title': 'Anomaly Priority'
       },
       'data': null
     };
