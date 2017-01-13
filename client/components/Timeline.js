@@ -23,14 +23,6 @@ const styles = {
     bottom: 0,
     position: 'absolute',
     right: '460px'
-  },
-  secondaryTimeline: {
-    width: '450px',
-    position: 'absolute',
-    top: '182px',
-    right: 0,
-    bottom: 0,
-    zIndex: '1'
   }
 };
 
@@ -359,13 +351,27 @@ class Timeline extends React.Component {
   }
 
   displayContextualMenuCards() {
-    const {state, props} = this;
+    const {state, props} = this,
+      {tabs} = props;
+
+    let tabNames = [];
+    if (tabs) {
+      for (let tab in tabs) {
+        tabNames.push(tab);
+      }
+    }
 
     autoScrollTo('primaryTimeline', this.decreasePositionBy);
 
     return (
       <div>
-        <div style={styles.secondaryTimeline}>
+        <div style={{
+          width: '450px',
+          position: 'absolute',
+          top: tabs && tabNames.length > 1 ? 182 : 0,
+          right: 0,
+          bottom: 0
+        }}>
           <ParentCard
             key={state.selectedCardId}
             id={state.selectedCardId}
