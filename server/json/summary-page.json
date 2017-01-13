@@ -14,7 +14,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -47,7 +46,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -80,7 +78,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#2bd8d0"
@@ -116,7 +113,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#2bd8d0"
