@@ -1,8 +1,9 @@
 {
-  "tableOptions": {
-    "itemsPerPage": 5
+  "options": {
+    "itemsPerPage": 5,
+    "rowClickable": true
   },
-  "tableData": {
+  "data": {
     "fieldMapping": [
       {
         "reportId": "taf_top_failed_logins",

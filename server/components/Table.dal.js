@@ -1,6 +1,9 @@
 import {
   processData
 } from '../utils/tableUtils';
+import {
+  getParameterByName
+} from '../../commons/utils/utils';
 
 const fs = require('fs');
 const path = require('path');
@@ -16,6 +19,11 @@ function getData(rawData, url) {
 
   let tableJson = JSON.parse(fs.readFileSync(filePath, 'utf8')),
     processedData = processData(rawData, tableJson, url);
+
+  if (!tableJson.data) {
+    let type = getParameterByName('type', url);
+    tableJson = tableJson[type];
+  }
 
   return {
     processedData,

@@ -1,8 +1,8 @@
 {
-  "tableOptions": {
+  "options": {
     "itemsPerPage": 5
   },
-  "tableData": {
+  "data": {
     "fieldMapping": [
       {
         "reportId": "taf_top_longest_user_agents",

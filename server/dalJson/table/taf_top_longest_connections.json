@@ -1,5 +1,5 @@
 {
-  "tableData": {
+  "data": {
     "fieldMapping": [
       {
         "reportId": "taf_top_longest_connections",
@@ -128,7 +128,7 @@
       }
     ]
   },
-  "tableOptions": {
+  "options": {
     "filterable": [],
     "itemsPerPage": 5,
     "sortable": [
@@ -141,7 +141,8 @@
     "defaultSort": {
       "column": "DURATION",
       "direction": "asc"
-    }
+    },
+    "rowClickable": true
   },
   "kibana": {
     "pathParams": [
