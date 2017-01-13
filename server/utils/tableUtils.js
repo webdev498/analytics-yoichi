@@ -13,11 +13,6 @@ import {getCountryName} from '../../commons/utils/countryUtils';
 import {generateClickThroughUrl} from './kibanaUtils';
 
 export function processData(data, tableJson, url) {
-  if (!tableJson.data) {
-    let type = getParameterByName('type', url);
-    tableJson = tableJson[type];
-  }
-
   const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.data;
   let tableDataSource = [];
 

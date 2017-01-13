@@ -9,21 +9,22 @@ const fs = require('fs');
 const path = require('path');
 
 function getData(rawData, url) {
-  let reportId = url.split('?');
+  let reportId = url.split('?'),
+    type = getParameterByName('type', url);
+
   reportId = reportId[0];
   reportId = reportId.split('/');
   reportId = reportId[reportId.length - 1];
+
+  if (type && type !== '') {
+    reportId = reportId + '-' + type;
+  }
 
   const fileName = `../dalJson/table/${reportId}.json`,
     filePath = path.join(__dirname, fileName);
 
   let tableJson = JSON.parse(fs.readFileSync(filePath, 'utf8')),
     processedData = processData(rawData, tableJson, url);
-
-  if (!tableJson.data) {
-    let type = getParameterByName('type', url);
-    tableJson = tableJson[type];
-  }
 
   return {
     processedData,
