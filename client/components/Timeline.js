@@ -370,7 +370,8 @@ class Timeline extends React.Component {
           position: 'absolute',
           top: tabs && tabNames.length > 1 ? 182 : 0,
           right: 0,
-          bottom: 0
+          bottom: 0,
+          zIndex: 1
         }}>
           <ParentCard
             key={state.selectedCardId}
