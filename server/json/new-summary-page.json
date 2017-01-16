@@ -1,0 +1,498 @@
+{
+  "layout": [
+    [
+      {
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_alert_count_time_shifted"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
+        },
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#F69275"
+          },
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #F69275"
+          }
+        },
+        "id": "1",
+        "type": "MetricsCard",
+        "title": "High Priority Anomalies",
+        "clickData": {
+          "tableId": "RecentAnomalies",
+          "filterText": "",
+          "page": "/threat-analytics-reports"
+        }
+      },
+      {
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_malware_count_time_shifted"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
+        },
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#F69275"
+          },
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #F69275"
+          }
+        },
+        "id": "2",
+        "type": "MetricsCard",
+        "title": "High Priority Malware",
+        "clickData": {
+          "tableId": "RecentAnomalies",
+          "filterText": "malware",
+          "page": "/threat-analytics-reports"
+        }
+      },
+      {
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_event_count_time_shifted"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
+        },
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#2bd8d0"
+          },
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #2bd8d0"
+          }
+        },
+        "id": "3",
+        "type": "MetricsCard",
+        "title": "Events Processed",
+        "kibana": {
+          "pathParams": [
+            "traffic-details"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": ""
+          }
+        }
+      },
+      {
+        "meta": {
+          "showHeader": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_asset_count_time_shifted"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
+        },
+        "name": "MetricsCard",
+        "attributes": {
+          "countStyle": {
+            "color": "#2bd8d0"
+          },
+          "style": {
+            "marginRight": "3px",
+            "width": "25%",
+            "borderTop": "6px solid #2bd8d0"
+          }
+        },
+        "id": "4",
+        "type": "MetricsCard",
+        "title": "Assets Monitored",
+        "kibana": {
+          "pathParams": [
+            "assets-all"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": ""
+          }
+        }
+      }
+    ],
+    [
+      {
+        "chartOptions": {
+          "xAxisname": "ENTITIES",
+          "pYAxisname": "ALERT COUNT"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_top_entity_with_alerts",
+              "columns": [
+                "destination.name"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_top_entity_with_alerts",
+              "columns": [
+                "count"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_top_entity_with_alerts"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Top Attacked Entities"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "width": "50%",
+            "marginRight": "33px"
+          },
+          "id": "TopAttackedEntities",
+          "chartHeight": "350"
+        },
+        "id": "top-attacked-entities",
+        "type": "charts/ParetoChart",
+        "clickData": {
+          "tableId": "RecentAnomalies",
+          "filterText": ":DIMENSION",
+          "page": "/threat-analytics-reports"
+        }
+      },
+      {
+        "chartOptions": {
+          "xAxisname": "ANOMALY TYPES",
+          "pYAxisname": "ANOMALY COUNT",
+          "paletteColors": "#2bd8d0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_threat_trend",
+              "columns": [
+                "data.rank_alert.category"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_threat_trend",
+              "columns": [
+                "date"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_threat_trend"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Anomaly by Type"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "width": "50%"
+          },
+          "id": "AlertByType",
+          "chartHeight": "350"
+        },
+        "id": "alert-by-type",
+        "type": "charts/ParetoChart",
+        "kibana": {
+          "pathParams": [
+            "alerts-type"
+          ],
+          "queryParams": {
+            "window": "",
+            "xAxisValueInLowerCase": "type"
+          }
+        }
+      }
+    ],
+    [
+      {
+        "chartOptions": {
+          "xAxisname": "TIME",
+          "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
+          "paletteColors": "#C9EDDF, #60E2DC"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_at_risk_assets_by_time",
+              "columns": [
+                "risk.lastUpdated"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_at_risk_assets_by_time",
+              "columns": [
+                "id"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_at_risk_assets_by_time"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "End points at Risk"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "chartType": "area2d",
+          "style": {
+            "marginRight": "33px",
+            "width": "50%"
+          },
+          "chartHeight": "350",
+          "id": "atRiskAssetsByTime"
+        },
+        "id": "at-risk-assets-by-time",
+        "type": "charts/StandardChart"
+      },
+      {
+        "chartOptions": {
+          "xAxisname": "SCORE",
+          "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
+          "paletteColors": "#2bd8d0",
+          "showCumulativeLine": "0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_at_risk_assets_by_risk",
+              "columns": [
+                "risk.score"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_at_risk_assets_by_risk",
+              "columns": [
+                "id"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_at_risk_assets_by_risk"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "At Risk Asset Count by Score"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "width": "50%"
+          },
+          "id": "atRiskAssetByRisk",
+          "chartHeight": "350"
+        },
+        "id": "at-risk-asset-by-risk",
+        "type": "charts/ParetoChart"
+      }
+    ],
+    [
+      {
+        "chartOptions": {},
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_dest_bad_reputation_countries",
+              "columns": [
+                "destination.country",
+                "pos_x",
+                "pos_y",
+                "connections"
+              ],
+              "connection": "malicious"
+            },
+            {
+              "reportId": "taf_dest_countries",
+              "columns": [
+                "destination.country",
+                "pos_x",
+                "pos_y",
+                "connections"
+              ],
+              "connection": "secure"
+            }
+          ]
+        },
+        "meta": {
+          "subTitle": "NUMBER OF OUTGOING CONNECTIONS BY COUNTRY",
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_dest_countries,taf_dest_bad_reputation_countries"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Outgoing Traffic Threat Map"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "chartCaption": {},
+          "loaderStyle": {
+            "marginTop": "-30px"
+          },
+          "style": {
+            "marginRight": "33px",
+            "width": "50%"
+          },
+          "legendStyle": {
+            "width": "15%",
+            "marginLeft": "-15%"
+          },
+          "id": "OutgoingTrafficWorldMap",
+          "chartHeight": "350"
+        },
+        "id": "Outgoingworld-map",
+        "type": "maps/WorldMap",
+        "kibana": {
+          "pathParams": [
+            "destination-country-details"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "country": ""
+          }
+        }
+      },
+      {
+        "chartOptions": {},
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_source_bad_reputation_countries",
+              "columns": [
+                "source.country",
+                "pos_x",
+                "pos_y",
+                "connections"
+              ],
+              "connection": "malicious"
+            },
+            {
+              "reportId": "taf_source_countries",
+              "columns": [
+                "source.country",
+                "pos_x",
+                "pos_y",
+                "connections"
+              ],
+              "connection": "secure"
+            }
+          ]
+        },
+        "meta": {
+          "subTitle": "NUMBER OF INCOMING CONNECTIONS BY COUNTRY",
+          "showHeader": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_source_countries,taf_source_bad_reputation_countries"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Incoming Traffic Threat Map"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "chartCaption": {},
+          "loaderStyle": {
+            "marginTop": "-30px"
+          },
+          "style": {
+            "width": "50%"
+          },
+          "legendStyle": {
+            "width": "15%",
+            "marginLeft": "-15%"
+          },
+          "id": "IncomingTrafficWorldMap",
+          "chartHeight": "350"
+        },
+        "id": "world-map",
+        "type": "maps/WorldMap",
+        "kibana": {
+          "pathParams": [
+            "source-country-details"
+          ],
+          "queryParams": {
+            "fromAndToBasedOnToday": "",
+            "country": ""
+          }
+        }
+      }
+    ]
+  ]
+}
