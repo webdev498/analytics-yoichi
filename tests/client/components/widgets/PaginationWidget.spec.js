@@ -14,7 +14,6 @@ let props = {
   currentPage: 1,
   maxNumbersOnLeftRight: 5,
   fetchData: spy(),
-  onPrevPageChanged: spy(),
   type: 'primary',
   style: {}
 };
