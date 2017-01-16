@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-import PaginationWidget from 'components/PaginationWidget';
+import PaginationWidget from 'components/widgets/PaginationWidget';
 import TimelineCard from 'components/TimelineCard';
 import ParentCard from 'containers/ParentCard';
 import TabsWidget from 'components/TabsWidget';

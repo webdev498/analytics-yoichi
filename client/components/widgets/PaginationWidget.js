@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-function getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftRight) {
+export function getPaginationButtonsLimits(pageCount, currentPage, maxNumbersOnLeftRight) {
   let start = currentPage - maxNumbersOnLeftRight,
     end = currentPage + maxNumbersOnLeftRight;
 
@@ -76,7 +76,7 @@ class PaginationWidget extends React.Component {
       pageCount = this.props.size,
       currentPage = this.props.currentPage,
       maxNumbersOnLeftRight = this.props.maxNumbersOnLeftRight,
-      limits = getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftRight),
+      limits = getPaginationButtonsLimits(pageCount, currentPage, maxNumbersOnLeftRight),
       start = limits.start,
       end = limits.end;
 
@@ -84,7 +84,9 @@ class PaginationWidget extends React.Component {
       for (let i = start; i <= end; i++) {
         if (i === start) {
           li.push(<li key='Prev'>
-            <button onClick={this.onPrevPageChanged(this.props.currentPage)}>&lt;&lt;</button>
+            <button
+              className='prev-pagination-link'
+              onClick={this.onPrevPageChanged(this.props.currentPage)}>&lt;&lt;</button>
           </li>);
         }
 
@@ -92,12 +94,16 @@ class PaginationWidget extends React.Component {
           li.push(<li key={i} className='active'><button>{i}</button></li>);
         }
         else {
-          li.push(<li key={i} ><button onClick={this.onPageChanged(i)}>{i}</button></li>);
+          li.push(<li key={i} className='pagination-link'>
+            <button className='pagination-link' onClick={this.onPageChanged(i)}>{i}</button>
+          </li>);
         }
 
         if (i === end) {
           li.push(<li key='Next'>
-            <button onClick={this.onNextPageChanged(this.props.currentPage, pageCount)}>&gt;&gt;</button>
+            <button
+              className='next-pagination-link'
+              onClick={this.onNextPageChanged(this.props.currentPage, pageCount)}>&gt;&gt;</button>
           </li>);
         }
       }

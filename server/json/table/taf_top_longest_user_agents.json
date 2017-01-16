@@ -30,7 +30,10 @@
               "chartWidth": "100%",
               "chartType": "area2d",
               "id": "connection",
-              "chartHeight": "120"
+              "chartHeight": "120",
+              "chartOptions": {
+                "labelFontSize": "9"
+              }
             },
             "style": {
               "width": "50%"

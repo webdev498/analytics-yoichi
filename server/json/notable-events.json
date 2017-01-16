@@ -289,6 +289,9 @@
           "style": {
             "width": "100%"
           },
+          "chartOptions": {
+            "labelFontSize": "9"
+          },
           "id": "loginFailureByTime"
         },
         "id": "login-failure-by-time",

@@ -5,7 +5,7 @@ import {spy} from 'sinon';
 
 import Timeline from 'components/Timeline';
 import TabsWidget from 'components/TabsWidget';
-import PaginationWidget from 'components/PaginationWidget';
+import PaginationWidget from 'components/widgets/PaginationWidget';
 import {wrapThemeProvider} from '../../testUtils';
 
 let props = {
@@ -100,7 +100,7 @@ let props = {
 };
 
 function renderTimeline(timelineType) {
-  props.timelineType = timelineType ? timelineType : 'primary';
+  props.timelineType = timelineType || 'primary';
   let component = shallow(wrapThemeProvider(<Timeline {...props} />));
   return component.find('Timeline');
 }
