@@ -109,8 +109,14 @@ function mountTimeline() {
   return mount(<Timeline {...props} />);
 }
 
-function mountTimelineComponent() {
-  let component = mount(<Timeline {...props} />);
+function mountTimelineComponent(updatedProps) {
+  let component;
+  if (updatedProps) {
+    component = mount(<Timeline {...updatedProps} />);
+  }
+  else {
+    component = mount(<Timeline {...props} />);
+  }
   return component.find('Timeline');
 }
 
