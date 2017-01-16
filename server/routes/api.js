@@ -63,6 +63,7 @@ router
 .get(reportingApiBasePath + 'taf_least_used_software', table)
 .get(reportingApiBasePath + 'taf_top_successful_logins', table)
 .get(reportingApiBasePath + 'taf_top_failed_logins', table)
+.get(reportingApiBasePath + 'taf_top_at_risk_assets', table)
 .get(reportingApiBasePath + 'taf_user_agent_unique_with_name', userAgent)
 .post('*', async function(ctx, next) {
   const url = ctx.request.url;

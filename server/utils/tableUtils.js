@@ -13,7 +13,7 @@ import {getCountryName} from '../../commons/utils/countryUtils';
 import {generateClickThroughUrl} from './kibanaUtils';
 
 export function processData(data, tableJson, url) {
-  const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.tableData;
+  const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.data;
   let tableDataSource = [];
 
   let rawData = generateRawData(fieldMapping, data);

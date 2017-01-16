@@ -1,5 +1,5 @@
 {
-  "tableData": {
+  "data": {
     "fieldMapping": [
       {
         "reportId": "taf_alert_highpriority",
@@ -121,7 +121,7 @@
       }
     ]
   },
-  "tableOptions": {
+  "options": {
     "filterable": [
       "DATE",
       "DETAILS",
@@ -140,6 +140,7 @@
     "defaultSort": {
       "column": "RANK SCORE",
       "direction": "desc"
-    }
+    },
+    "rowClickable": true
   }
 }

@@ -1,23 +1,24 @@
 {
-  "tableOptions": {
+  "options": {
     "itemsPerPage": 5
   },
-  "tableData": {
+  "data": {
     "fieldMapping": [
       {
-        "reportId": "taf_top_successful_logins",
+        "reportId": "taf_top_shortest_user_agents",
         "columns": [
           {
             "data": [
               {
-                "fieldName": "data.login.user"
+                "fieldName": "data.http.userAgent"
               }
             ],
             "style": {
-              "width": "40%"
+              "width": "50%",
+              "wordBreak": "break-all"
             },
             "type": "text",
-            "header": "USER NAME"
+            "header": "SHORTEST USER AGENT"
           },
           {
             "data": [
@@ -28,29 +29,19 @@
             "attributes": {
               "chartWidth": "100%",
               "chartType": "area2d",
-              "id": "SuccessfulLogins",
+              "id": "bandwidth",
               "chartHeight": "120"
             },
             "style": {
-              "width": "60%"
+              "width": "50%"
             },
             "type": "chart",
-            "header": "LOGINS"
+            "header": "# CONNECTIONS"
           }
         ]
       }
     ],
     "nestedResult": true,
     "emptyValueMessage": "(Empty)"
-  },
-  "kibana": {
-    "pathParams": [
-      "login-details"
-    ],
-    "queryParams": {
-      "fromAndToBasedOnToday": "",
-      "user": "data.login.user:fieldName",
-      "status": "success"
-    }
   }
 }

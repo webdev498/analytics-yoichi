@@ -15,7 +15,8 @@ const styles = {
   header: {
     fontWeight: '600',
     fontSize: '14px'
-  }
+  },
+  row: {}
 };
 
 function loadComponent(column) {
@@ -138,18 +139,22 @@ export class ReactableTable extends React.Component {
       return;
     }
     const {data, attributes} = props,
-      {tableJson: {tableOptions}, normalizeData} = data,
+      {tableJson: {options}, normalizeData} = data,
       id = attributes.id;
+
+    styles.row = options.rowClickable
+      ? Object.assign(styles.row, {'cursor': 'pointer'})
+      : {};
 
     return (
       <Table id={id}
         style={{width: '100%'}}
         className='threatTable'
-        sortable={tableOptions.sortable}
-        filterable={tableOptions.filterable}
-        defaultSort={tableOptions.defaultSort}
+        sortable={options.sortable}
+        filterable={options.filterable}
+        defaultSort={options.defaultSort}
         filterBy={props.search}
-        itemsPerPage={normalizeData.length > tableOptions.itemsPerPage ? tableOptions.itemsPerPage : 0}
+        itemsPerPage={normalizeData.length > options.itemsPerPage ? options.itemsPerPage : 0}
         pageButtonLimit={5}
         currentPage={0}
         hideFilterInput
@@ -159,7 +164,7 @@ export class ReactableTable extends React.Component {
           normalizeData.map((row, index) => {
             return (
               <Tr onClick={this.handleRowClick(row, index)}
-                style={{'cursor': 'pointer'}}
+                style={styles.row}
                 key={`tr${id}${index}`}>
                 {
                   row.columns.map((column, indexCol) => {

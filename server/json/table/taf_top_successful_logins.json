@@ -1,11 +1,12 @@
 {
-  "tableOptions": {
-    "itemsPerPage": 5
+  "options": {
+    "itemsPerPage": 5,
+    "rowClickable": true
   },
-  "tableData": {
+  "data": {
     "fieldMapping": [
       {
-        "reportId": "taf_top_failed_logins",
+        "reportId": "taf_top_successful_logins",
         "columns": [
           {
             "data": [
@@ -28,7 +29,7 @@
             "attributes": {
               "chartWidth": "100%",
               "chartType": "area2d",
-              "id": "FailedLogins",
+              "id": "SuccessfulLogins",
               "chartHeight": "120"
             },
             "style": {
@@ -50,7 +51,7 @@
     "queryParams": {
       "fromAndToBasedOnToday": "",
       "user": "data.login.user:fieldName",
-      "status": "fail"
+      "status": "success"
     }
   }
 }
