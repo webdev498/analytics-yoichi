@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-export function getPaginationButtonsLimits(pageCount, currentPage, maxNumbersOnLeftRight) {
+export function getPaginationButtonsRange(pageCount, currentPage, maxNumbersOnLeftRight) {
   let start = currentPage - maxNumbersOnLeftRight,
     end = currentPage + maxNumbersOnLeftRight;
 
@@ -22,7 +22,7 @@ export function getPaginationButtonsLimits(pageCount, currentPage, maxNumbersOnL
     }
     end = pageCount;
   }
-  // console.log(pageCount, currentPage, maxNumbersOnLeftRight, start, end);
+
   return {
     start: start,
     end: end
@@ -76,7 +76,7 @@ class PaginationWidget extends React.Component {
       pageCount = this.props.pageCount,
       currentPage = this.props.currentPage,
       maxNumbersOnLeftRight = this.props.maxNumbersOnLeftRight,
-      limits = getPaginationButtonsLimits(pageCount, currentPage, maxNumbersOnLeftRight),
+      limits = getPaginationButtonsRange(pageCount, currentPage, maxNumbersOnLeftRight),
       start = limits.start,
       end = limits.end;
 

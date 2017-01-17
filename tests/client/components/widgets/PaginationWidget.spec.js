@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
 import PaginationWidget, {
-  getPaginationButtonsLimits
+  getPaginationButtonsRange
 } from 'components/widgets/PaginationWidget';
 import {wrapThemeProvider} from '../../../testUtils';
 
@@ -66,13 +66,13 @@ describe('<PaginationWidget />', () => {
     expect(component.props().fetchData).to.be.a('function');
   });
 
-  describe('getPaginationButtonsLimits function: should return valid buttons range', () => {
+  describe('getPaginationButtonsRange function: should return valid buttons range', () => {
     it('if current page is first page', () => {
       const component = renderPaginationWidget(),
         pageCount = component.props().pageCount,
         currentPage = component.props().currentPage,
         maxNumbersOnLeftRight = component.props().maxNumbersOnLeftRight,
-        limits = getPaginationButtonsLimits(pageCount, currentPage, maxNumbersOnLeftRight);
+        limits = getPaginationButtonsRange(pageCount, currentPage, maxNumbersOnLeftRight);
       expect(limits).to.be.an('object');
       expect(limits.start).to.equal(1);
       expect(limits.end).to.equal(11);
@@ -92,7 +92,7 @@ describe('<PaginationWidget />', () => {
         pageCount = component.props().pageCount,
         currentPage = component.props().currentPage,
         maxNumbersOnLeftRight = component.props().maxNumbersOnLeftRight,
-        limits = getPaginationButtonsLimits(pageCount, currentPage, maxNumbersOnLeftRight);
+        limits = getPaginationButtonsRange(pageCount, currentPage, maxNumbersOnLeftRight);
       expect(limits).to.be.an('object');
       expect(limits.start).to.equal(1);
       expect(limits.end).to.equal(9);
@@ -112,7 +112,7 @@ describe('<PaginationWidget />', () => {
         pageCount = component.props().pageCount,
         currentPage = component.props().currentPage,
         maxNumbersOnLeftRight = component.props().maxNumbersOnLeftRight,
-        limits = getPaginationButtonsLimits(pageCount, currentPage, maxNumbersOnLeftRight);
+        limits = getPaginationButtonsRange(pageCount, currentPage, maxNumbersOnLeftRight);
       expect(limits).to.be.an('object');
       expect(limits.start).to.equal(3);
       expect(limits.end).to.equal(11);
@@ -132,7 +132,7 @@ describe('<PaginationWidget />', () => {
         pageCount = component.props().pageCount,
         currentPage = component.props().currentPage,
         maxNumbersOnLeftRight = component.props().maxNumbersOnLeftRight,
-        limits = getPaginationButtonsLimits(pageCount, currentPage, maxNumbersOnLeftRight);
+        limits = getPaginationButtonsRange(pageCount, currentPage, maxNumbersOnLeftRight);
       expect(limits).to.be.an('object');
       expect(limits.start).to.equal(16);
       expect(limits.end).to.equal(24);
