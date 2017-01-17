@@ -157,7 +157,7 @@ describe('<PaginationWidget />', () => {
     expect(component.find('ul').childAt(0).key()).to.be.defined;
   });
 
-  it('it paginates to Prev page on click of Prev button', () => {
+  it('it paginates to 2 page on click of 2 button', () => {
     const onPrevPageChanged = sinon.spy(),
       onNextPageChanged = sinon.spy(),
       wrapper = mount(
