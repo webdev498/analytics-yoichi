@@ -157,24 +157,37 @@ describe('<PaginationWidget />', () => {
     expect(component.find('ul').childAt(0).key()).to.be.defined;
   });
 
-  it('it paginates to 2 page on click of 2 button', () => {
+  describe('should paginate correctly', () => {
     const onPrevPageChanged = sinon.spy(),
       onNextPageChanged = sinon.spy(),
+      onPageChanged = sinon.spy(),
       wrapper = mount(
         <PaginationWidget {...props}>
           <ul className='pagination'>
             <li key='Prev'><button className='prev-pagination-link' onClick={onPrevPageChanged()}>&lt;&lt;</button></li>
+            <li key='2'><button className='pagination-link-2' onClick={onPageChanged()}>&gt;&gt;</button></li>
             <li key='Next'><button className='next-pagination-link' onClick={onNextPageChanged()}>&gt;&gt;</button></li>
           </ul>
         </PaginationWidget>
       );
-    wrapper.find('.prev-pagination-link').simulate('click');
-    expect(onPrevPageChanged.calledOnce).to.equal(true);
-    expect(onPrevPageChanged.callCount).to.equal(1);
 
-    wrapper.find('.next-pagination-link').simulate('click');
-    expect(onNextPageChanged.calledOnce).to.equal(true);
-    expect(onNextPageChanged.callCount).to.equal(1);
+    it('it paginates to Prev page on click of Prev button', () => {
+      wrapper.find('.prev-pagination-link').simulate('click');
+      expect(onPrevPageChanged.calledOnce).to.equal(true);
+      expect(onPrevPageChanged.callCount).to.equal(1);
+    });
+
+    it('it paginates to Next page on click of Next button', () => {
+      wrapper.find('.next-pagination-link').simulate('click');
+      expect(onNextPageChanged.calledOnce).to.equal(true);
+      expect(onNextPageChanged.callCount).to.equal(1);
+    });
+
+    it('it paginates to 2 page on click of 2 button', () => {
+      wrapper.find('.pagination-link-2').simulate('click');
+      expect(onPageChanged.calledOnce).to.equal(true);
+      expect(onPageChanged.callCount).to.equal(1);
+    });
   });
 
   it('should have active class for the current page button', () => {
