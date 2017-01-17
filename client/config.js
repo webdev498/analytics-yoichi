@@ -27,8 +27,7 @@ export const networkGraphDefaultOptions = {
     physics: false
   },
   layout: {
-    improvedLayout: true,
-    randomSeed: 2
+    improvedLayout: true
   }
 };
 
