@@ -94,7 +94,7 @@ class PaginationWidget extends React.Component {
           li.push(<li key={i} className='active'><button>{i}</button></li>);
         }
         else {
-          li.push(<li key={i} className='pagination-link'>
+          li.push(<li key={i}>
             <button className='pagination-link' onClick={this.onPageChanged(i)}>{i}</button>
           </li>);
         }
