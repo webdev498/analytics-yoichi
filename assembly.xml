@@ -26,6 +26,10 @@
             <outputDirectory>build</outputDirectory>
         </fileSet>
         <fileSet>
+            <directory>${basedir}/commons</directory>
+            <outputDirectory>config</outputDirectory>
+        </fileSet>
+        <fileSet>
             <directory>${basedir}/config</directory>
             <outputDirectory>config</outputDirectory>
         </fileSet>
