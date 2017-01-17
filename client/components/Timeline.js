@@ -225,7 +225,8 @@ class Timeline extends React.Component {
           })
         }
 
-        <PaginationWidget size={state.totalPage}
+        <PaginationWidget
+          pageCount={state.totalPage}
           currentPage={state.currentPage}
           maxNumbersOnLeftRight={attributes.maxNumbersOnLeftRightPagination}
           fetchData={this.fetchData}
