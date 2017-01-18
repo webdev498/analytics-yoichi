@@ -71,7 +71,8 @@ class Timeline extends React.Component {
       rows: [],
       nextPageStart: 0,
       selectedCardId: '',
-      highlightCardId: ''
+      highlightCardId: '',
+      autoScroll: true
     };
 
     this.pagination = {
@@ -104,6 +105,7 @@ class Timeline extends React.Component {
     this.fetchData = this.fetchData.bind(this);
     this.getContextualMenuApiObj = this.getContextualMenuApiObj.bind(this);
     this.setHighlightCard = this.setHighlightCard.bind(this);
+    this.setAutoScroll = this.setAutoScroll.bind(this);
     this.onTabChange = this.onTabChange.bind(this);
   }
 
@@ -130,6 +132,7 @@ class Timeline extends React.Component {
             eventDate: row.Date
           };
           this.getContextualMenuApiObj(details);
+          state.autoScroll = false;
         }
       });
     }
@@ -164,6 +167,10 @@ class Timeline extends React.Component {
     else {
       this.setState({highlightCardId: ''});
     }
+  }
+
+  setAutoScroll(autoScroll) {
+    this.setState({autoScroll});
   }
 
   setRows(props) {
@@ -226,7 +233,8 @@ class Timeline extends React.Component {
                     chart={chart}
                     highlightCardId={state.highlightCardId}
                     broadcastEvent={props.broadcastEvent}
-                    setHighlightCard={this.setHighlightCard} />
+                    setHighlightCard={this.setHighlightCard}
+                    setAutoScroll={this.setAutoScroll} />
                   {this.card === CONTEXTUAL_MENU_CARD ? this.displayDate(dateString, this.card) : null}
                 </div>
               );
@@ -371,7 +379,9 @@ class Timeline extends React.Component {
       }
     }
 
-    autoScrollTo('primaryTimeline', this.decreasePositionBy);
+    if (state.autoScroll) {
+      autoScrollTo('primaryTimeline', this.decreasePositionBy);
+    }
 
     return (
       <div>

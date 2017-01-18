@@ -200,6 +200,8 @@ class TimelineCard extends React.Component {
           // on click of any anomaly card, remove the highlight.
           props.setHighlightCard(props.data.id, false);
 
+          props.setAutoScroll(true);
+
           this.toggleHighlightNetworkNode(props.data.id);
           props.getContextualMenuApiObj(details);
           break;

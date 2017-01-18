@@ -223,18 +223,27 @@ class NetworkGraph extends React.Component {
     this.updateNodeAndEdgeObjects = this.updateNodeAndEdgeObjects.bind(this);
 
     this.network = null;
+    this.selectedNodeId = '';
   }
 
   componentWillReceiveProps(nextProps) {
-    // const {props, state} = this;
+    const {props, state} = this;
 
-    // if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
-    //   const {id} = nextProps.eventData;
-    //   console.log(nextProps.eventData, state.selectedNodeDetails);
-    //   if (state.selectedNodeDetails[0] && state.selectedNodeDetails[0].id === id) {
-    //     this.deselectNode(this.network);
-    //   }
-    // }
+    if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
+      const {id} = nextProps.eventData;
+      console.log(nextProps.eventData, state.selectedNodeDetails);
+      if (state.selectedNodeDetails[0] && state.selectedNodeDetails[0].id === id) {
+        this.deselectNode(this.network);
+      }
+      else {
+        let nodeDetails = {
+          network: this.network,
+          nodeID: id,
+          selected: 'node'
+        };
+        this.loadNodeContextMenu(nodeDetails);
+      }
+    }
   }
 
   getNodesEdges(data) {
