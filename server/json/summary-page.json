@@ -290,6 +290,9 @@
             "marginRight": "33px",
             "width": "50%"
           },
+          "chartOptions": {
+            "labelFontSize": "9"
+          },
           "chartHeight": "350",
           "id": "atRiskAssetsByTime"
         },

@@ -169,4 +169,16 @@ describe('<TimelineCard />', () => {
     const wrapper = mountTimelineCard();
     expect(wrapper.find(Card)).to.have.style('borderLeft', '5px solid rgb(239, 89, 118)');
   });
+
+  it('simulates card click events', () => {
+    const loadSecondaryTimeline = sinon.spy();
+    const wrapper = mount(wrapThemeProvider(
+      <TimelineCard {...props}>
+        <Card onClick={loadSecondaryTimeline()} />
+      </TimelineCard>
+    ));
+    wrapper.find(Card).simulate('click');
+    expect(loadSecondaryTimeline.calledOnce).to.equal(true);
+    expect(loadSecondaryTimeline.callCount).to.equal(1);
+  });
 });

@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 
-function getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftRight) {
+export function getPaginationButtonsRange(pageCount, currentPage, maxNumbersOnLeftRight) {
   let start = currentPage - maxNumbersOnLeftRight,
     end = currentPage + maxNumbersOnLeftRight;
 
@@ -31,7 +31,7 @@ function getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftR
 
 class PaginationWidget extends React.Component {
   static propTypes = {
-    size: PropTypes.number,
+    pageCount: PropTypes.number,
     currentPage: PropTypes.number,
     maxNumbersOnLeftRight: PropTypes.number,
     fetchData: PropTypes.func,
@@ -73,10 +73,10 @@ class PaginationWidget extends React.Component {
 
   render() {
     let li = [],
-      pageCount = this.props.size,
+      pageCount = this.props.pageCount,
       currentPage = this.props.currentPage,
       maxNumbersOnLeftRight = this.props.maxNumbersOnLeftRight,
-      limits = getLimitsForPaginationButtons(pageCount, currentPage, maxNumbersOnLeftRight),
+      limits = getPaginationButtonsRange(pageCount, currentPage, maxNumbersOnLeftRight),
       start = limits.start,
       end = limits.end;
 
@@ -84,7 +84,9 @@ class PaginationWidget extends React.Component {
       for (let i = start; i <= end; i++) {
         if (i === start) {
           li.push(<li key='Prev'>
-            <button onClick={this.onPrevPageChanged(this.props.currentPage)}>&lt;&lt;</button>
+            <button
+              className='prev-pagination-link'
+              onClick={this.onPrevPageChanged(this.props.currentPage)}>&lt;&lt;</button>
           </li>);
         }
 
@@ -92,12 +94,17 @@ class PaginationWidget extends React.Component {
           li.push(<li key={i} className='active'><button>{i}</button></li>);
         }
         else {
-          li.push(<li key={i} ><button onClick={this.onPageChanged(i)}>{i}</button></li>);
+          let link = 'pagination-link-' + i;
+          li.push(<li key={i}>
+            <button className={link} onClick={this.onPageChanged(i)}>{i}</button>
+          </li>);
         }
 
         if (i === end) {
           li.push(<li key='Next'>
-            <button onClick={this.onNextPageChanged(this.props.currentPage, pageCount)}>&gt;&gt;</button>
+            <button
+              className='next-pagination-link'
+              onClick={this.onNextPageChanged(this.props.currentPage, pageCount)}>&gt;&gt;</button>
           </li>);
         }
       }

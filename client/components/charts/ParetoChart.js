@@ -80,7 +80,7 @@ export function generateDataSource(data, chartOptions, fieldMapping, updateChart
   }
 
   return {
-    chart: Object.assign(chart, chartOptions),
+    chart: Object.assign({}, chart, chartOptions),
     data: graphBars
   };
 };
