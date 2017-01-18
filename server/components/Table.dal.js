@@ -33,9 +33,21 @@ function getData(rawData, url) {
 }
 
 export default async function Table(ctx, next) {
-  let rawData = await ctx.tempData.json();
+  let rawData;
+  try {
+    rawData = await ctx.tempData.json();
+  }
+  catch (error) {
+    const obj = {
+      errorCode: 400,
+      errorMessage: 'api error',
+      errorDetails: error
+    };
 
-  if (!rawData.errorCode) {
+    ctx.throw('api response error', 400, obj);
+  }
+
+  if (rawData && !rawData.errorCode) {
     const dataObj = getData(rawData, ctx.request.url);
     rawData.normalizeData = dataObj.processedData;
     rawData.tableJson = dataObj.tableJson;
