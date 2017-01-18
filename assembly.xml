@@ -27,7 +27,7 @@
         </fileSet>
         <fileSet>
             <directory>${basedir}/commons</directory>
-            <outputDirectory>config</outputDirectory>
+            <outputDirectory>commons</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>${basedir}/config</directory>
