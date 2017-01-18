@@ -124,9 +124,10 @@ class Timeline extends React.Component {
 
     if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
       const {id, set} = nextProps.eventData;
-      this.setHighlightCard(id, set);
+
       state.rows.forEach((row) => {
         if (row.id === id) {
+          this.setHighlightCard(id, set);
           let details = {
             selectedCardId: id,
             eventDate: row.Date
@@ -162,10 +163,16 @@ class Timeline extends React.Component {
 
   setHighlightCard(id, set) {
     if (set === true) {
-      this.setState({highlightCardId: id});
+      this.setState({
+        highlightCardId: id,
+        selectedCardId: id
+      });
     }
     else {
-      this.setState({highlightCardId: ''});
+      this.setState({
+        highlightCardId: '',
+        selectedCardId: ''
+      });
     }
   }
 

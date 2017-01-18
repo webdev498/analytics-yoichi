@@ -227,20 +227,24 @@ class NetworkGraph extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {props, state} = this;
+    const {props} = this;
 
     if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
       const {id} = nextProps.eventData;
-      console.log(nextProps.eventData, state.selectedNodeDetails);
-      if (state.selectedNodeDetails[0] && state.selectedNodeDetails[0].id === id) {
-        this.deselectNode(this.network);
+
+      if (id) {
+        console.log(nextProps.eventData);
+        this.deselectNodes(this.network);
+        this.network.setSelection({nodes: [], edges: []});
       }
-      else {
+
+      if (this.nodeObjects[id]) {
         let nodeDetails = {
           network: this.network,
           nodeID: id,
           selected: 'node'
         };
+        this.network.setSelection({nodes: [id], edges: []});
         this.loadNodeContextMenu(nodeDetails);
       }
     }
@@ -376,23 +380,29 @@ class NetworkGraph extends React.Component {
   }
 
   deselectNode(network) {
+    console.log('deselect1');
     return (event) => {
-      let i = 0;
-      for (let obj in this.nodeObjects) {
-        let deselectedNode = this.nodeObjects[obj],
-          node = network.body.nodes[deselectedNode.id];
-
-        node.setOptions({
-          image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
-        });
-
-        if (i === 0) {
-          this.deselect(deselectedNode);
-          this.toggleHighlightAnomalyChart(deselectedNode, false);
-        }
-        i++;
-      }
+      console.log('deselect2');
+      this.deselectNodes(network);
     };
+  }
+
+  deselectNodes(network) {
+    let i = 0;
+    for (let obj in this.nodeObjects) {
+      let deselectedNode = this.nodeObjects[obj],
+        node = network.body.nodes[deselectedNode.id];
+
+      node.setOptions({
+        image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
+      });
+
+      if (i === 0) {
+        this.deselect(deselectedNode);
+        this.toggleHighlightAnomalyChart(deselectedNode, false);
+      }
+      i++;
+    }
   }
 
   deselectEdge() {
