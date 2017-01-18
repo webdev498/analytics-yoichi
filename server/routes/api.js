@@ -26,9 +26,9 @@ const agent = new https.Agent(agentOptions),
 router
 .get('/layout/*', layoutRoutes)
 .get('*', async function(ctx, next) {
-  const url = ctx.request.url;
+  const url = serverBaseUrl + ctx.url;
   console.log('url', url);
-  const res = await fetch(serverBaseUrl + ctx.url,
+  const res = await fetch(url,
     {
       method: 'GET',
       headers: {...ctx.headers, 'Content-Type': 'application/json'},
@@ -66,9 +66,9 @@ router
 .get(reportingApiBasePath + 'taf_top_at_risk_assets', table)
 .get(reportingApiBasePath + 'taf_user_agent_unique_with_name', userAgent)
 .post('*', async function(ctx, next) {
-  const url = ctx.request.url;
+  const url = serverBaseUrl + ctx.url;
   console.log('url', url);
-  const res = fetch(serverBaseUrl + ctx.url,
+  const res = fetch(url,
     {
       method: 'POST',
       headers: ctx.headers,
