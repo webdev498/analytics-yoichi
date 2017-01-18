@@ -226,11 +226,15 @@ class NetworkGraph extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {props} = this;
+    // const {props, state} = this;
 
-    if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
-      // const {id} = nextProps.eventData;
-    }
+    // if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
+    //   const {id} = nextProps.eventData;
+    //   console.log(nextProps.eventData, state.selectedNodeDetails);
+    //   if (state.selectedNodeDetails[0] && state.selectedNodeDetails[0].id === id) {
+    //     this.deselectNode(this.network);
+    //   }
+    // }
   }
 
   getNodesEdges(data) {
@@ -817,6 +821,8 @@ class NetworkGraph extends React.Component {
 
     document.getElementById('undo').onclick = this.undoOrResetGraph(network, 'undo');
     document.getElementById('reset').onclick = this.undoOrResetGraph(network, 'reset');
+
+    this.network = network;
   }
 
   isGraphExtended(nodes, edges, extendedNodes) {
@@ -885,6 +891,7 @@ class NetworkGraph extends React.Component {
             undoGraphCount = 0;
           }
         }
+        this.network = network;
       }
     };
   }
@@ -905,8 +912,6 @@ class NetworkGraph extends React.Component {
           : networkGraphDefaultOptions.height
       }),
       network = new vis.Network(this.networkGraph, networkData, options);
-
-    this.network = network;
 
     if (networkData.nodes.length <= 10) {
       network.setOptions(physicsFalse);
@@ -948,6 +953,8 @@ class NetworkGraph extends React.Component {
     resetDiv.id = 'reset';
     resetDiv.className = 'vis-button vis-reset';
     document.getElementsByClassName('vis-navigation')[0].appendChild(resetDiv);
+
+    this.network = network;
   }
 
   getGraphAndActions(data) {

@@ -118,11 +118,20 @@ class Timeline extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {props} = this;
+    const {props, state} = this;
 
     if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
       const {id, set} = nextProps.eventData;
       this.setHighlightCard(id, set);
+      state.rows.forEach((row) => {
+        if (row.id === id) {
+          let details = {
+            selectedCardId: id,
+            eventDate: row.Date
+          };
+          this.getContextualMenuApiObj(details);
+        }
+      });
     }
 
     if (!nextProps.data) {

@@ -183,7 +183,6 @@ class TimelineCard extends React.Component {
       selectedCardId: '',
       eventDate: ''
     };
-
     return () => {
       switch (this.cardType) {
         case 'Rank Alert':
