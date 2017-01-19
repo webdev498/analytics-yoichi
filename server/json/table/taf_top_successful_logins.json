@@ -33,7 +33,7 @@
               "chartHeight": "120",
               "chartOptions": {
                 "labelFontSize": "9"
-              },
+              }
             },
             "style": {
               "width": "60%"
