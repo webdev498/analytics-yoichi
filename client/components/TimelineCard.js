@@ -341,7 +341,6 @@ class TimelineCard extends React.Component {
     }
 
     let selectedCardStyle = {
-      border: 0,
       boxShadow: 'none'
     };
     if (props.selectedCardId === props.data.id) {
@@ -359,7 +358,7 @@ class TimelineCard extends React.Component {
       cardWidth = '400px';
     }
 
-    const style = Object.assign(
+    const style = Object.assign({},
       styles.timelineCard,
       alertStyle,
       {
