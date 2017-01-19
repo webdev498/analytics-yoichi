@@ -233,7 +233,6 @@ class NetworkGraph extends React.Component {
       const {id} = nextProps.eventData;
 
       if (id) {
-        console.log(nextProps.eventData);
         this.deselectNodes(this.network);
         this.network.setSelection({nodes: [], edges: []});
       }
@@ -380,9 +379,7 @@ class NetworkGraph extends React.Component {
   }
 
   deselectNode(network) {
-    console.log('deselect1');
     return (event) => {
-      console.log('deselect2');
       this.deselectNodes(network);
     };
   }
@@ -502,9 +499,7 @@ class NetworkGraph extends React.Component {
           image: getIcon(nodeObject.type, nodeObject.status, 'SELECTED')
         });
 
-        if (nodeObject.type === 'anomaly') {
-          this.toggleHighlightAnomalyChart(nodeObject);
-        }
+        this.toggleHighlightAnomalyChart(nodeObject);
       }
       else {
         node.setOptions({
@@ -551,6 +546,8 @@ class NetworkGraph extends React.Component {
       if (edgeObject.id === edgeID) {
         selectedNodeDetails.push(edgeObject.edgeDetails);
         edgeType = edgeObject.type;
+
+        this.toggleHighlightAnomalyChart(edgeObject);
       }
     });
 

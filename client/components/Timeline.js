@@ -57,7 +57,8 @@ class Timeline extends React.Component {
     meta: PropTypes.object,
     id: PropTypes.string,
     params: PropTypes.object,
-    data: PropTypes.object
+    data: PropTypes.object,
+    broadcastEvent: PropTypes.func
   }
 
   constructor(props) {
@@ -71,7 +72,6 @@ class Timeline extends React.Component {
       rows: [],
       nextPageStart: 0,
       selectedCardId: '',
-      highlightCardId: '',
       autoScroll: true
     };
 
@@ -104,7 +104,7 @@ class Timeline extends React.Component {
 
     this.fetchData = this.fetchData.bind(this);
     this.getContextualMenuApiObj = this.getContextualMenuApiObj.bind(this);
-    this.setHighlightCard = this.setHighlightCard.bind(this);
+    this.setSelectedCardId = this.setSelectedCardId.bind(this);
     this.setAutoScroll = this.setAutoScroll.bind(this);
     this.onTabChange = this.onTabChange.bind(this);
   }
@@ -122,12 +122,16 @@ class Timeline extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {props, state} = this;
 
+    if (!nextProps.data) {
+      return;
+    }
+
     if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
       const {id, set} = nextProps.eventData;
 
       state.rows.forEach((row) => {
         if (row.id === id) {
-          this.setHighlightCard(id, set);
+          this.setSelectedCardId(id, set);
           let details = {
             selectedCardId: id,
             eventDate: row.Date
@@ -137,40 +141,35 @@ class Timeline extends React.Component {
         }
       });
     }
-
-    if (!nextProps.data) {
-      return;
-    }
-
-    // if api object has loadOnce property it implies that the general function
-    // for duration update will not be called, component has to manage on its own.
-    // therefore we are managing in here only e.g. asset page timeline component.
-    let loadOnDurationUpdate = false;
-    if (props.meta.api && props.meta.api.loadOnce) {
-      loadOnDurationUpdate = true;
-    }
-
-    if (loadOnDurationUpdate && nextProps.duration !== props.duration) {
-      this.fetchData(1, props.attributes.type);
-    }
     else {
-      this.setRows(nextProps);
-      this.pagination.isPaginated = false;
+      // if api object has loadOnce property it implies that the general function
+      // for duration update will not be called, component has to manage on its own.
+      // therefore we are managing in here only e.g. asset page timeline component.
+      let loadOnDurationUpdate = false;
+      if (props.meta.api && props.meta.api.loadOnce) {
+        loadOnDurationUpdate = true;
+      }
+
+      if (loadOnDurationUpdate && nextProps.duration !== props.duration) {
+        this.fetchData(1, props.attributes.type);
+      }
+      else {
+        this.setRows(nextProps);
+        this.pagination.isPaginated = false;
+      }
     }
 
     this.state.selectedCardId = '';
   }
 
-  setHighlightCard(id, set) {
+  setSelectedCardId(id, set) {
     if (set === true) {
       this.setState({
-        highlightCardId: id,
         selectedCardId: id
       });
     }
     else {
       this.setState({
-        highlightCardId: '',
         selectedCardId: ''
       });
     }
@@ -238,9 +237,8 @@ class Timeline extends React.Component {
                     card={this.card}
                     attributes={attributes}
                     chart={chart}
-                    highlightCardId={state.highlightCardId}
                     broadcastEvent={props.broadcastEvent}
-                    setHighlightCard={this.setHighlightCard}
+                    setSelectedCardId={this.setSelectedCardId}
                     setAutoScroll={this.setAutoScroll} />
                   {this.card === CONTEXTUAL_MENU_CARD ? this.displayDate(dateString, this.card) : null}
                 </div>
@@ -272,6 +270,7 @@ class Timeline extends React.Component {
       isPaginated: true,
       pageNumber: pageNumber
     };
+    this.toggleHighlightNetworkNode('invalid_id');
   }
 
   getApiObj(pageNumber, type) {
@@ -425,7 +424,12 @@ class Timeline extends React.Component {
         machine: ''
       };
       this.getContextualMenuApiObj(details);
+      this.toggleHighlightNetworkNode('invalid_id');
     };
+  }
+
+  toggleHighlightNetworkNode(id) {
+    this.props.broadcastEvent('network-graph', {id});
   }
 
   setPrimaryTimelineHeight() {
