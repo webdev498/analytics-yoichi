@@ -163,7 +163,7 @@ class Timeline extends React.Component {
   }
 
   setSelectedCardId(id, set) {
-    if (set === true) {
+    if (set) {
       this.setState({selectedCardId: id});
     }
     else {

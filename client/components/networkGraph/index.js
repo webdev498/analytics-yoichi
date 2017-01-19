@@ -223,7 +223,6 @@ class NetworkGraph extends React.Component {
     this.updateNodeAndEdgeObjects = this.updateNodeAndEdgeObjects.bind(this);
 
     this.network = null;
-    this.selectedNodeId = '';
   }
 
   componentWillReceiveProps(nextProps) {
