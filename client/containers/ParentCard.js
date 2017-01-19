@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
 
-import FontIcon from 'material-ui/FontIcon';
 import Loader from 'components/Loader';
+import DetailsTable from 'components/DetailsTable';
+import ParentCardHeader from './ParentCardHeader';
 
 import {fetchApiData, removeComponent, broadcastEvent} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
@@ -24,87 +25,17 @@ const styles = {
     boxShadow: Colors.white + ' 0px 0px 0px',
     border: '0px'
   },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingBottom: '50px'
-  },
-  title: {
-    textTransform: 'capitalize',
-    fontSize: '21px',
-    whiteSpace: 'nowrap'
-  },
-  iconWrap: {
-    marginLeft: 'auto',
-    textAlign: 'right'
-  },
-  refreshIcon: {
-    cursor: 'pointer',
-    fontSize: '20px',
-    color: Colors.grape,
-    fontWeight: 600,
-    height: '35px',
-    paddingTop: '7px'
-  },
-  backIcon: {
-    color: Colors.grape
-  },
-  crossIcon: {
-    fontSize: '20px'
-  },
-  inputWrap: {
-    margin: '0 20px',
-    width: '85%',
-    textAlign: 'right',
-    display: 'inline-block',
-    position: 'relative',
-    verticalAlign: 'middle'
-  },
-  searchIcon: {
-    bottom: '5px',
-    color: Colors.grape,
-    cursor: 'pointer',
-    fontSize: '21px',
-    height: '14px',
-    margin: 'auto',
-    position: 'absolute',
-    right: '12px',
-    top: 0,
-    fontWeight: 500
-  },
-  clearIcon: {
-    color: Colors.white,
-    cursor: 'initial',
-    fontSize: '21px',
-    height: '35px',
-    margin: 'auto',
-    position: 'absolute',
-    top: 0,
-    background: Colors.grape,
-    lineHeight: '35px',
-    width: '45px',
-    textAlign: 'center',
-    fontWeight: 600
-  },
-  clearDiv: {
-    color: 'transparent',
-    cursor: 'initial',
-    fontSize: '21px',
-    height: '35px',
-    margin: 'auto',
-    position: 'absolute',
-    top: 0,
-    background: 'transparent',
-    lineHeight: '35px',
-    width: '45px',
-    textAlign: 'center',
-    fontWeight: 600,
-    display: 'inline'
-  },
   error: {
     fontSize: '13px',
     fontWeight: '600',
     textAlign: 'center'
+  },
+  detailsTable: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
   }
 };
 
@@ -112,18 +43,11 @@ export class ParentCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: '',
-      clearIconStyle: {
-        color: 'transparent',
-        background: 'transparent'
-      },
-      searchTextStyle: {
-        paddingLeft: '12px'
-      }
+      showDetailsFlag: false
     };
 
     this.getData = this.getData.bind(this);
-    this.refreshData = this.refreshData.bind(this);
+    this.toggleDetailsTable = this.toggleDetailsTable.bind(this);
   }
 
   static propTypes = {
@@ -149,6 +73,14 @@ export class ParentCard extends React.Component {
     }
 
     props.fetchApiData(props.id, api, props.params, props.options);
+  }
+
+  toggleDetailsTable() {
+    this.setState({showDetailsFlag: !this.state.showDetailsFlag});
+  }
+
+  getDetailsTable() {
+    return <DetailsTable style={styles.detailsTable} />;
   }
 
   componentDidMount() {
@@ -269,64 +201,6 @@ export class ParentCard extends React.Component {
     }
   }
 
-  refreshData() {
-    this.getData();
-  };
-
-  updateSearch() {
-    return (event) => {
-      this.setState({
-        search: event.target.value
-      });
-    };
-  }
-
-  clearSearchText() {
-    return (event) => {
-      if (this.myTextInput !== null) {
-        this.myTextInput.value = '';
-      }
-      this.setState({
-        search: event.target.value
-      });
-    };
-  }
-
-  focusSearchText() {
-    return (event) => {
-      if (this.myTextInput !== null) {
-        this.myTextInput.focus();
-      }
-    };
-  }
-
-  displayClearIcon(display) {
-    return (event) => {
-      if (display) {
-        this.setState({
-          clearIconStyle: {
-            color: Colors.white,
-            background: Colors.grape
-          },
-          searchTextStyle: {
-            paddingLeft: '53px'
-          }
-        });
-      }
-      else {
-        this.setState({
-          clearIconStyle: {
-            color: 'transparent',
-            background: 'transparent'
-          },
-          searchTextStyle: {
-            paddingLeft: '12px'
-          }
-        });
-      }
-    };
-  }
-
   goBack() {
     return () => {
       this.props.history.goBack();
@@ -334,75 +208,15 @@ export class ParentCard extends React.Component {
   }
 
   getHeader() {
-    const {props} = this;
+    const {props} = this,
+      headerProps = Object.assign({}, props);
 
-    const headerStyle = props.attributes.header || {};
-
-    return <header style={{...styles.header, ...headerStyle.style}}>
-      <div>
-        <span style={{...styles.title, ...headerStyle.title}}>
-          {props.meta.title}
-        </span>
-      </div>
-
-      {
-        props.meta.showSearch
-        ? <div style={styles.inputWrap}>
-          <FontIcon className='material-icons'
-            style={{...styles.clearIcon, ...this.state.clearIconStyle}}
-            ref={(ref) => this.clearIcon = ref}>
-            close
-          </FontIcon>
-
-          <div style={{...styles.clearDiv}}
-            onClick={this.clearSearchText()} />
-
-          <input
-            id='searchText'
-            type='text'
-            className='searchText'
-            onChange={this.updateSearch()}
-            onFocus={this.displayClearIcon(true)}
-            onBlur={this.displayClearIcon(false)}
-            ref={(ref) => this.myTextInput = ref} />
-
-          <FontIcon className='material-icons'
-            style={styles.searchIcon}
-            onClick={this.focusSearchText()}>
-            search
-          </FontIcon>
-        </div>
-        : null
-      }
-
-      {
-        props.meta.showRefresh === false
-        ? null
-        : (
-          <div style={styles.iconWrap} id='refreshData'>
-            <FontIcon className='material-icons'
-              style={styles.refreshIcon}
-              onClick={this.refreshData}>
-              replay
-            </FontIcon>
-          </div>
-        )
-      }
-
-      {
-        props.meta.showBackButton === true
-        ? (
-          <div style={styles.iconWrap} id='refreshData'>
-            <FontIcon className='material-icons'
-              style={{...styles.refreshIcon, ...styles.backIcon}}
-              onClick={this.goBack()}>
-              arrow_back
-            </FontIcon>
-          </div>
-        )
-        : null
-      }
-    </header>;
+    return (
+      <ParentCardHeader
+        {...headerProps}
+        getData={this.getData}
+        goBack={this.goBack} />
+    );
   }
 
   getErrorElement() {
@@ -425,7 +239,7 @@ export class ParentCard extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props, state} = this;
 
     const childProps = Object.assign({}, props, {search: this.state.search});
     let cardStyle = {...styles.wrap, ...props.attributes.style};
@@ -442,6 +256,16 @@ export class ParentCard extends React.Component {
 
     cardStyle = tempCardStyle;
 
+    const extraProps = {
+      updateRoute: this.props.updateRoute,
+      showDetailsTable: this.toggleDetailsTable
+    };
+
+    let componentStyle = {};
+    if (state.showDetailsFlag) {
+      componentStyle = {display: 'none'};
+    }
+
     return (
       <div style={cardStyle} id={props.id}>
         {props.isFetching ? <Loader /> : null}
@@ -455,15 +279,26 @@ export class ParentCard extends React.Component {
         {
           props.isError && (props.meta.showErrorMessage !== false)
           ? this.getErrorElement()
-          : React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})
+          : (
+            <div style={componentStyle}>
+              {React.cloneElement(props.children, {...childProps, ...extraProps})}
+            </div>
+            )
         }
+
+        <div>
+          {
+            state.showDetailsFlag
+            ? this.getDetailsTable()
+            : null
+          }
+        </div>
       </div>
     );
   }
 }
 
 ParentCard.contextTypes = {
-  muiTheme: React.PropTypes.object,
   store: React.PropTypes.object
 };
 
