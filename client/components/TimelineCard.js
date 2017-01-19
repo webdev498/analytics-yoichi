@@ -340,9 +340,15 @@ class TimelineCard extends React.Component {
       styles.list = Object.assign({}, styles.list, {paddingLeft: '20px'});
     }
 
-    let backgroundColor = Colors.white;
+    let selectedCardStyle = {
+      border: 0,
+      boxShadow: 'none'
+    };
     if (props.selectedCardId === props.data.id) {
-      backgroundColor = Colors.cloud;
+      selectedCardStyle = Object.assign({}, {
+        borderColor: '#2bd8d0',
+        boxShadow: '0 0 10px #2bd8d0'
+      });
     }
 
     let cardWidth = '350px';
@@ -358,9 +364,9 @@ class TimelineCard extends React.Component {
       alertStyle,
       {
         width: cardWidth,
-        cursor: this.isClickCard ? 'pointer' : 'auto',
-        backgroundColor
-      }
+        cursor: this.isClickCard ? 'pointer' : 'auto'
+      },
+      selectedCardStyle
     ); // These widths are not provided by Rose.
 
     return (
