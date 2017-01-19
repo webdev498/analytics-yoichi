@@ -70,9 +70,7 @@ let props = {
     'id': 'timeline-component'
   },
   updateRoute: spy(),
-  getContextualMenuApiObj: spy(),
-  setHighlightCard: spy(),
-  setAutoScroll: spy()
+  getContextualMenuApiObj: spy()
 };
 
 function renderTimelineCard() {
@@ -105,10 +103,6 @@ describe('<TimelineCard />', () => {
     expect(component.props().updateRoute).to.be.a('function');
     expect(component.props().getContextualMenuApiObj).to.exist;
     expect(component.props().getContextualMenuApiObj).to.be.a('function');
-    expect(component.props().setHighlightCard).to.exist;
-    expect(component.props().setHighlightCard).to.be.a('function');
-    expect(component.props().setAutoScroll).to.exist;
-    expect(component.props().setAutoScroll).to.be.a('function');
   });
 
   it('renders the timeline card', () => {
