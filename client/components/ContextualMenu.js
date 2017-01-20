@@ -278,13 +278,22 @@ class ContextualMenu extends React.Component {
           break;
         case 'metadata':
           let paramName = (name).replace('metadata.', ''),
-            metadataValue = (!isUndefined(nodeObjects[itemId].metadata)) ? nodeObjects[itemId].metadata[paramName] : '';
+            metadataValue = (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].metadata))
+              ? nodeObjects[itemId].metadata[paramName]
+              : '';
+          metadataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].metadata))
+            ? edgeObjects[itemId].metadata[paramName]
+            : '';
           value = (!isUndefined(metadataValue)) ? metadataValue : '';
           break;
         case 'actionData':
-          let paramNameActionData = (name).replace('actionData.', ''),
-            actiondataValue = (!isUndefined(nodeObjects[itemId].actionData))
-              ? nodeObjects[itemId].actionData[paramNameActionData] : '';
+          let actionParamName = (name).replace('actionData.', ''),
+            actiondataValue = (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].actionData))
+              ? nodeObjects[itemId].actionData[actionParamName]
+              : '';
+          actiondataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].actionData))
+            ? edgeObjects[itemId].actionData[actionParamName]
+            : '';
           value = (!isUndefined(actiondataValue)) ? actiondataValue : '';
           break;
         default:

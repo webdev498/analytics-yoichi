@@ -230,7 +230,22 @@ class NetworkGraph extends React.Component {
     const {props} = this;
 
     if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
-      // const {id} = nextProps.eventData;
+      const {id} = nextProps.eventData;
+
+      if (id) {
+        this.deselectNodes(this.network);
+        this.network.setSelection({nodes: [], edges: []});
+      }
+
+      if (this.nodeObjects[id]) {
+        let nodeDetails = {
+          network: this.network,
+          nodeID: id,
+          selected: 'node'
+        };
+        this.network.setSelection({nodes: [id], edges: []});
+        this.loadNodeContextMenu(nodeDetails);
+      }
     }
   }
 
@@ -365,22 +380,26 @@ class NetworkGraph extends React.Component {
 
   deselectNode(network) {
     return (event) => {
-      let i = 0;
-      for (let obj in this.nodeObjects) {
-        let deselectedNode = this.nodeObjects[obj],
-          node = network.body.nodes[deselectedNode.id];
-
-        node.setOptions({
-          image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
-        });
-
-        if (i === 0) {
-          this.deselect(deselectedNode);
-          this.toggleHighlightAnomalyChart(deselectedNode, false);
-        }
-        i++;
-      }
+      this.deselectNodes(network);
     };
+  }
+
+  deselectNodes(network) {
+    let i = 0;
+    for (let obj in this.nodeObjects) {
+      let deselectedNode = this.nodeObjects[obj],
+        node = network.body.nodes[deselectedNode.id];
+
+      node.setOptions({
+        image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
+      });
+
+      if (i === 0) {
+        this.deselect(deselectedNode);
+        this.toggleHighlightAnomalyChart(deselectedNode, false);
+      }
+      i++;
+    }
   }
 
   deselectEdge() {
@@ -480,9 +499,7 @@ class NetworkGraph extends React.Component {
           image: getIcon(nodeObject.type, nodeObject.status, 'SELECTED')
         });
 
-        if (nodeObject.type === 'anomaly') {
-          this.toggleHighlightAnomalyChart(nodeObject);
-        }
+        this.toggleHighlightAnomalyChart(nodeObject);
       }
       else {
         node.setOptions({
@@ -529,6 +546,8 @@ class NetworkGraph extends React.Component {
       if (edgeObject.id === edgeID) {
         selectedNodeDetails.push(edgeObject.edgeDetails);
         edgeType = edgeObject.type;
+
+        this.toggleHighlightAnomalyChart(edgeObject);
       }
     });
 
@@ -583,6 +602,12 @@ class NetworkGraph extends React.Component {
       }
 
       openFullMalwareReport(fullMalwareReportLink);
+      if (fullMalwareReportLink !== '') {
+        this.setState({
+          isFetching: false
+        });
+        return;
+      }
 
       let details = {
         network: network,
@@ -818,6 +843,8 @@ class NetworkGraph extends React.Component {
 
     document.getElementById('undo').onclick = this.undoOrResetGraph(network, 'undo');
     document.getElementById('reset').onclick = this.undoOrResetGraph(network, 'reset');
+
+    this.network = network;
   }
 
   isGraphExtended(nodes, edges, extendedNodes) {
@@ -886,6 +913,7 @@ class NetworkGraph extends React.Component {
             undoGraphCount = 0;
           }
         }
+        this.network = network;
       }
     };
   }
@@ -906,8 +934,6 @@ class NetworkGraph extends React.Component {
           : networkGraphDefaultOptions.height
       }),
       network = new vis.Network(this.networkGraph, networkData, options);
-
-    this.network = network;
 
     if (networkData.nodes.length <= 10) {
       network.setOptions(physicsFalse);
@@ -949,6 +975,8 @@ class NetworkGraph extends React.Component {
     resetDiv.id = 'reset';
     resetDiv.className = 'vis-button vis-reset';
     document.getElementsByClassName('vis-navigation')[0].appendChild(resetDiv);
+
+    this.network = network;
   }
 
   getGraphAndActions(data) {

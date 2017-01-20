@@ -183,7 +183,6 @@ class TimelineCard extends React.Component {
       selectedCardId: '',
       eventDate: ''
     };
-
     return () => {
       switch (this.cardType) {
         case 'Rank Alert':
@@ -191,17 +190,23 @@ class TimelineCard extends React.Component {
           props.updateRoute(url);
           break;
         case 'Anomaly': {
+          props.setSelectedCardId(props.data.id, false);
+          props.setAutoScroll(true);
+          this.toggleHighlightNetworkNode(props.data.id);
+
           if (props.selectedCardId !== props.data.id) {
             details = {
               selectedCardId: props.data.id,
               eventDate: props.data.Date
             };
           }
-
-          // on click of any anomaly card, remove the highlight.
-          props.setHighlightCard(props.data.id, false);
-
-          this.toggleHighlightNetworkNode(props.data.id);
+          else {
+            details = {
+              selectedCardId: '',
+              eventDate: ''
+            };
+            this.toggleHighlightNetworkNode('invalid_id');
+          }
           props.getContextualMenuApiObj(details);
           break;
         }
@@ -335,9 +340,14 @@ class TimelineCard extends React.Component {
       styles.list = Object.assign({}, styles.list, {paddingLeft: '20px'});
     }
 
-    let backgroundColor = Colors.white;
-    if ((props.selectedCardId === props.data.id) || (props.highlightCardId === props.data.id)) {
-      backgroundColor = Colors.cloud;
+    let selectedCardStyle = {
+      boxShadow: 'none'
+    };
+    if (props.selectedCardId === props.data.id) {
+      selectedCardStyle = Object.assign({}, {
+        borderColor: Colors.turquoise,
+        boxShadow: '0 0 10px ' + Colors.turquoise
+      });
     }
 
     let cardWidth = '350px';
@@ -348,14 +358,14 @@ class TimelineCard extends React.Component {
       cardWidth = '400px';
     }
 
-    const style = Object.assign(
+    const style = Object.assign({},
       styles.timelineCard,
       alertStyle,
       {
         width: cardWidth,
-        cursor: this.isClickCard ? 'pointer' : 'auto',
-        backgroundColor
-      }
+        cursor: this.isClickCard ? 'pointer' : 'auto'
+      },
+      selectedCardStyle
     ); // These widths are not provided by Rose.
 
     return (
