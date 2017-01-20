@@ -135,7 +135,7 @@ describe('<PaginationWidget />', () => {
     expect(component.find('ul').childAt(0).key()).to.be.defined;
   });
 
-  it('should not display <li> if no. of pages is only one', () => {
+  it('should not display <li> if no. of pages = 1', () => {
     const newProps = {
         pageCount: 1,
         currentPage: 1,
