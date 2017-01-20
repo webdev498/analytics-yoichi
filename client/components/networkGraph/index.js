@@ -601,6 +601,12 @@ class NetworkGraph extends React.Component {
       }
 
       openFullMalwareReport(fullMalwareReportLink);
+      if (fullMalwareReportLink !== '') {
+        this.setState({
+          isFetching: false
+        });
+        return;
+      }
 
       let details = {
         network: network,

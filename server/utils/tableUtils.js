@@ -160,6 +160,13 @@ export function generateRowObject(rowDetails, rowObject) {
       columnText = '';
       rowObject.columns.push(rowObj);
       break;
+    case 'assetWidget':
+      rowObj = Object.assign(rowObj, {
+        data: columnText
+      });
+      columnText = '';
+      rowObject.columns.push(rowObj);
+      break;
     default:
       break;
   }

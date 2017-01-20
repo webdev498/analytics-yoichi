@@ -4,7 +4,7 @@ import Reactable from 'reactable';
 import Area2DAsSparkLineChart from 'components/charts/Area2DAsSparkLineChart';
 import DurationWidget from 'components/widgets/DurationWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
-import AssetIcon from 'components/widgets/AssetIcon';
+import AssetWidget from 'components/widgets/AssetWidget';
 
 import {getCountryCode} from '../../commons/utils/countryUtils';
 
@@ -31,9 +31,9 @@ function loadComponent(column) {
       return (
         <ScoreWidget scoreValue={column.data[0].value} />
       );
-    case 'assetIcon':
+    case 'assetWidget':
       return (
-        <AssetIcon asset={column} />
+        <AssetWidget data={column.data} />
       );
     default:
       break;
