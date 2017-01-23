@@ -281,9 +281,9 @@ class ContextualMenu extends React.Component {
             metadataValue = (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].metadata))
               ? nodeObjects[itemId].metadata[paramName]
               : '';
-          metadataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].metadata))
-            ? edgeObjects[itemId].metadata[paramName]
-            : '';
+          // metadataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].metadata))
+          //   ? edgeObjects[itemId].metadata[paramName]
+          //   : '';
           value = (!isUndefined(metadataValue)) ? metadataValue : '';
           break;
         case 'actionData':
@@ -291,9 +291,9 @@ class ContextualMenu extends React.Component {
             actiondataValue = (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].actionData))
               ? nodeObjects[itemId].actionData[actionParamName]
               : '';
-          actiondataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].actionData))
-            ? edgeObjects[itemId].actionData[actionParamName]
-            : '';
+          // actiondataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].actionData))
+          //   ? edgeObjects[itemId].actionData[actionParamName]
+          //   : '';
           value = (!isUndefined(actiondataValue)) ? actiondataValue : '';
           break;
         default:
