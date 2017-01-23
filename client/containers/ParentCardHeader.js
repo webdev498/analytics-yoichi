@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import React, {PropTypes} from 'react';
 
 import FontIcon from 'material-ui/FontIcon';
@@ -72,12 +73,12 @@ const styles = {
     cursor: 'initial',
     fontSize: '21px',
     height: '35px',
+    lineHeight: '35px',
+    width: '45px',
     margin: 'auto',
     position: 'absolute',
     top: 0,
     background: 'transparent',
-    lineHeight: '35px',
-    width: '45px',
     textAlign: 'center',
     fontWeight: 600,
     display: 'inline'
@@ -88,7 +89,6 @@ export default class ParentCardHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: '',
       clearIconStyle: {
         color: 'transparent',
         background: 'transparent'
@@ -97,60 +97,65 @@ export default class ParentCardHeader extends React.Component {
         paddingLeft: '12px'
       }
     };
+
+    this.clearSearchText = this.clearSearchText.bind(this);
+    this.hideClearIcon = this.hideClearIcon.bind(this);
+    this.showClearIcon = this.showClearIcon.bind(this);
+    this.focusSearchText = this.focusSearchText.bind(this);
   }
 
-  updateSearch() {
-    return (event) => {
-      this.setState({
-        search: event.target.value
-      });
-    };
+  static propTypes = {
+    clearSearch: PropTypes.func.isRequired,
+    getData: PropTypes.func.isRequired,
+    updateSearch: PropTypes.func.isRequired,
+    search: PropTypes.string.isRequired,
+    history: PropTypes.object.isRequired,
+    attributes: PropTypes.object
   }
 
-  clearSearchText() {
-    return (event) => {
-      if (this.myTextInput !== null) {
-        this.myTextInput.value = '';
-      }
-      this.setState({
-        search: event.target.value
-      });
-    };
+  clearSearchText(ev) {
+    if (this.myTextInput !== null) {
+      this.myTextInput.value = '';
+    }
+
+    this.setState({ search: '' });
+    this.props.clearSearch();
   }
 
   focusSearchText() {
-    return (event) => {
-      if (this.myTextInput !== null) {
-        this.myTextInput.focus();
-      }
-    };
+    if (this.myTextInput !== null) {
+      this.myTextInput.focus();
+    }
   }
 
-  displayClearIcon(display) {
-    return (event) => {
-      if (display) {
-        this.setState({
-          clearIconStyle: {
-            color: Colors.white,
-            background: Colors.grape
-          },
-          searchTextStyle: {
-            paddingLeft: '53px'
-          }
-        });
+  hideClearIcon() {
+    this.setState({
+      clearIconStyle: {
+        color: 'transparent',
+        background: 'transparent'
+      },
+      searchTextStyle: {
+        paddingLeft: '12px'
       }
-      else {
-        this.setState({
-          clearIconStyle: {
-            color: 'transparent',
-            background: 'transparent'
-          },
-          searchTextStyle: {
-            paddingLeft: '12px'
-          }
-        });
+    });
+  }
+
+  showClearIcon() {
+    this.setState({
+      clearIconStyle: {
+        color: Colors.white,
+        background: Colors.grape
+      },
+      searchTextStyle: {
+        paddingLeft: '53px'
       }
-    };
+    });
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (this.myTextInput && newProps.search !== this.myTextInput.value) {
+      this.myTextInput.value = newProps.search;
+    }
   }
 
   render() {
@@ -174,21 +179,20 @@ export default class ParentCardHeader extends React.Component {
             close
           </FontIcon>
 
-          <div style={{...styles.clearDiv}}
-            onClick={this.clearSearchText()} />
+          <div style={{...styles.clearDiv}} onClick={this.clearSearchText} />
 
           <input
             id='searchText'
             type='text'
             className='searchText'
-            onChange={this.updateSearch()}
-            onFocus={this.displayClearIcon(true)}
-            onBlur={this.displayClearIcon(false)}
+            onChange={props.updateSearch}
+            onFocus={this.showClearIcon}
+            onBlur={this.hideClearIcon}
             ref={(ref) => this.myTextInput = ref} />
 
           <FontIcon className='material-icons'
             style={styles.searchIcon}
-            onClick={this.focusSearchText()}>
+            onClick={this.focusSearchText}>
             search
           </FontIcon>
         </div>
@@ -202,7 +206,7 @@ export default class ParentCardHeader extends React.Component {
           <div style={styles.iconWrap}>
             <FontIcon className='material-icons'
               style={styles.refreshIcon}
-              onClick={this.refreshData}>
+              onClick={props.getData}>
               replay
             </FontIcon>
           </div>
@@ -215,7 +219,7 @@ export default class ParentCardHeader extends React.Component {
           <div style={styles.iconWrap}>
             <FontIcon className='material-icons'
               style={{...styles.refreshIcon, ...styles.backIcon}}
-              onClick={props.goBack()}>
+              onClick={props.history.goBack}>
               arrow_back
             </FontIcon>
           </div>

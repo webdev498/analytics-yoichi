@@ -43,18 +43,21 @@ export class ParentCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      search: '',
       showDetailsFlag: false
     };
 
     this.getData = this.getData.bind(this);
     this.toggleDetailsTable = this.toggleDetailsTable.bind(this);
+    this.updateSearch = this.updateSearch.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
   }
 
   static propTypes = {
     id: PropTypes.string.isRequired,
     meta: PropTypes.object.isRequired,
     updateRoute: PropTypes.func.isRequired,
-    history: PropTypes.object
+    history: PropTypes.object.isRequired
   }
 
   getData() {
@@ -157,16 +160,8 @@ export class ParentCard extends React.Component {
   runEvent(eventData, nextProps) {
     const {type, data} = eventData;
     if (type === 'updateSearch') {
-      this.myTextInput.value = data;
       this.setState({
-        search: data,
-        clearIconStyle: {
-          color: Colors.white,
-          background: Colors.grape
-        },
-        searchTextStyle: {
-          paddingLeft: '53px'
-        }
+        search: data
       });
 
       autoScrollTo(nextProps.attributes.id, 80);
@@ -201,12 +196,6 @@ export class ParentCard extends React.Component {
     }
   }
 
-  goBack() {
-    return () => {
-      this.props.history.goBack();
-    };
-  }
-
   getHeader() {
     const {props} = this,
       headerProps = Object.assign({}, props);
@@ -214,8 +203,11 @@ export class ParentCard extends React.Component {
     return (
       <ParentCardHeader
         {...headerProps}
+        search={this.state.search}
         getData={this.getData}
-        goBack={this.goBack} />
+        clearSearch={this.clearSearch}
+        updateSearch={this.updateSearch}
+        history={this.props.history} />
     );
   }
 
@@ -236,6 +228,16 @@ export class ParentCard extends React.Component {
         {statusText}
       </div>
     );
+  }
+
+  updateSearch(event) {
+    this.setState({
+      search: event.target.value
+    });
+  }
+
+  clearSearch() {
+    this.setState({search: ''});
   }
 
   render() {
