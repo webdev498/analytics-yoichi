@@ -8,11 +8,17 @@
             "data": [
               {
                 "fieldName": "info"
+              },
+              {
+                "fieldName": "type"
               }
             ],
-            "style": {
-              "width": "110px"
+            "headingStyle": {
+              "width": "110px",
+              "overflowWrap": "break-word",
+              "textTransform": "none"
             },
+            "inverse": true,
             "type": "assetWidget",
             "header": "Asset"
           },

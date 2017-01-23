@@ -189,40 +189,6 @@
         "id": "high-risk-assets",
         "type": "ReactableTable",
         "openAssetDetails": true
-      },
-      {
-        "meta": {
-          "showHeader": true,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_top_at_risk_assets"
-            },
-            "queryParams": {
-              "count": 200,
-              "window": ""
-            }
-          },
-          "title": "High Risk Assets"
-        },
-        "tableOptions": {
-          "itemsPerPage": 5,
-          "sortable": ["SCORE"],
-          "defaultSort": {
-            "column": "SCORE",
-            "direction": "desc"
-          }
-        },
-        "attributes": {
-          "style": {
-            "width": "290px",
-            "flex": "0 0 290px",
-            "marginLeft": "33px"
-          },
-          "id": "risk-assets-table"
-        },
-        "id": "risk-assets",
-        "type": "riskAssetsTable"
       }
     ],
     [

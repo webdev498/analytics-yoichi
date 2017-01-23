@@ -29,11 +29,15 @@ function loadComponent(column) {
       );
     case 'scoreWidget':
       return (
-        <ScoreWidget scoreValue={column.data[0].value} />
+        <ScoreWidget scoreValue={column.data[0].value} inverse={column.inverse} />
       );
     case 'assetWidget':
+      let data = {
+        info: column.data[0] ? column.data[0].value : {},
+        type: column.data[1] ? column.data[1].value : ''
+      };
       return (
-        <AssetWidget data={column.data} />
+        <AssetWidget data={data} headingStyle={column.headingStyle} />
       );
     default:
       break;
@@ -41,10 +45,11 @@ function loadComponent(column) {
 }
 
 function loadChartComponent(column) {
-  switch (column.chartType) {
+  let {chart, data, duration} = column;
+  switch (column.chart.type) {
     case 'area2d':
       return (
-        <Area2DAsSparkLineChart chartProperties={column} duration={column.duration} />
+        <Area2DAsSparkLineChart chart={chart} data={data} duration={duration} />
       );
     default:
       break;
@@ -173,7 +178,7 @@ export class ReactableTable extends React.Component {
                       duration: props.duration
                     });
 
-                    let value = column.data[0] ? column.data[0].value : '',
+                    let value = column.sortValue || '',
                       style = column.type === 'text' ? {...column.style, 'wordBreak': 'break-all'} : {...column.style};
                     return (
                       <Td column={column.name}

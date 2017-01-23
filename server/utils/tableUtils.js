@@ -111,16 +111,35 @@ export function getDataBasedOnResponse(rowColumnDetails) {
 export function generateRowObject(rowDetails, rowObject) {
   let {
       columnType,
-      columnData: {header, style, attributes},
+      columnData,
       columnText,
       rowNumber,
       row
     } = rowDetails,
-    rowObj = {
+    {header, style, chart, headingStyle, inverse} = columnData;
+
+  // let id = chart.id;
+  console.log(columnData, chart);
+
+  // chart = Object.assign({}, chart, {id: 'id' + rowNumber});
+  let rowObj = {
+      id: chart ? (chart.id + rowNumber.toString()) : '',
       type: columnType,
       name: header,
-      style
-    };
+      row,
+      rowNumber,
+      chart,
+      style,
+      headingStyle,
+      inverse: inverse || false
+    },
+    sortValueDefault = columnText[0] ? columnText[0].value : '',
+    sortValue = '';
+
+  columnText.forEach((column, index) => {
+    sortValue += ' ' + column.value;
+  });
+
   switch (columnType) {
     case 'chart':
       let {id, chartType, chartWidth, chartHeight, chartOptions} = attributes;
@@ -136,38 +155,13 @@ export function generateRowObject(rowDetails, rowObject) {
       columnText = '';
       rowObject.columns.push(rowObj);
       break;
-    case 'text':
-      rowObj = Object.assign(rowObj, {
-        data: columnText
-      });
-      columnText = '';
-      rowObject.columns.push(rowObj);
-      break;
-    case 'durationWidget':
-      let sortValue = msToTime(columnText);
-      sortValue = sortValue.timeString;
+    default:
       rowObj = Object.assign(rowObj, {
         data: columnText,
-        sortValue
+        sortValue: columnType === 'durationWidget' ? (msToTime(sortValueDefault)).timeString : sortValue
       });
       columnText = '';
       rowObject.columns.push(rowObj);
-      break;
-    case 'scoreWidget':
-      rowObj = Object.assign(rowObj, {
-        data: columnText
-      });
-      columnText = '';
-      rowObject.columns.push(rowObj);
-      break;
-    case 'assetWidget':
-      rowObj = Object.assign(rowObj, {
-        data: columnText
-      });
-      columnText = '';
-      rowObject.columns.push(rowObj);
-      break;
-    default:
       break;
   }
   return rowObject;
