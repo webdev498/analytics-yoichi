@@ -80,7 +80,7 @@ export function getDataBasedOnResponse(rowColumnDetails) {
         columnType,
         columnData: columnData[i],
         dataRows,
-        columnText: columnText
+        columnText
       };
       columnText = getDataBySingleColumnResponse(columnDetails);
     }
@@ -123,12 +123,9 @@ export function generateRowObject(rowDetails, rowObject) {
 
   // chart = Object.assign({}, chart, {id: 'id' + rowNumber});
   let rowObj = {
-      id: chart ? (chart.id + rowNumber.toString()) : '',
       type: columnType,
       name: header,
-      row,
       rowNumber,
-      chart,
       style,
       headingStyle,
       inverse: inverse || false
@@ -142,17 +139,15 @@ export function generateRowObject(rowDetails, rowObject) {
 
   switch (columnType) {
     case 'chart':
-      let {id, chartType, chartWidth, chartHeight, chartOptions} = attributes;
+      let {id} = chart;
+      console.log(id, rowNumber);
       rowObj = Object.assign(rowObj, {
         data: columnText,
-        chartId: id + rowNumber,
-        chartType,
-        chartWidth,
-        chartHeight,
-        chartOptions,
+        id: id + rowNumber,
+        chart,
         row
       });
-      columnText = '';
+      columnText = [];
       rowObject.columns.push(rowObj);
       break;
     default:
@@ -160,7 +155,7 @@ export function generateRowObject(rowDetails, rowObject) {
         data: columnText,
         sortValue: columnType === 'durationWidget' ? (msToTime(sortValueDefault)).timeString : sortValue
       });
-      columnText = '';
+      columnText = [];
       rowObject.columns.push(rowObj);
       break;
   }

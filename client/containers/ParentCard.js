@@ -6,7 +6,7 @@ import Loader from 'components/Loader';
 
 import {fetchApiData, removeComponent, broadcastEvent} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
-import {autoScrollTo} from '../../commons/utils/utils';
+import {autoScrollTo} from 'utils/utils';
 import {updateRoute} from 'actions/core';
 
 const styles = {

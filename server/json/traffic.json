@@ -27,7 +27,7 @@
         },
         "id": "1",
         "type": "MetricsCard",
-        "title": "High Priority Alerts",
+        "title": "High Priority Anomalies",
         "clickData": {
           "tableId": "RecentAnomalies",
           "filterText": "",

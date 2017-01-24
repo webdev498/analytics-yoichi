@@ -45,14 +45,16 @@ function loadComponent(column) {
 }
 
 function loadChartComponent(column) {
-  let {chart, data, duration} = column;
-  switch (column.chart.type) {
-    case 'area2d':
-      return (
-        <Area2DAsSparkLineChart chart={chart} data={data} duration={duration} />
-      );
-    default:
-      break;
+  let {id, chart, data, duration} = column;
+  if (column.chart) {
+    switch (column.chart.type) {
+      case 'area2d':
+        return (
+          <Area2DAsSparkLineChart id={id} chart={chart} data={data} duration={duration} />
+        );
+      default:
+        break;
+    }
   }
 }
 

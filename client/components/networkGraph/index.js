@@ -4,9 +4,10 @@ import {
   firstCharCapitalize,
   getPosition,
   isUndefined,
-  isNull,
-  autoScrollTo
+  isNull
 } from '../../../commons/utils/utils';
+
+import {autoScrollTo} from 'utils/utils';
 
 import Cookies from 'cookies-js';
 import vis from 'vis';
