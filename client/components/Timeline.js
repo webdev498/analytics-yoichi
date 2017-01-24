@@ -8,9 +8,9 @@ import TabsWidget from 'components/TabsWidget';
 import {Colors} from '../../commons/colors';
 import {
   formatDateInLocalTimeZone,
-  isUndefined,
-  autoScrollTo
+  isUndefined
 } from '../../commons/utils/utils';
+import {autoScrollTo} from 'utils/utils';
 import { TIMELINE_CARD, CONTEXTUAL_MENU_CARD } from 'Constants';
 
 const styles = {
