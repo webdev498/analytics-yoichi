@@ -67,13 +67,14 @@ const styles = {
 function checkForUserInputs(parameters) {
   let userInputParameters = [];
   if (!isUndefined(parameters.length)) {
-    for (let i = 0; i < parameters.length; i++) {
+    parameters.forEach((parameter) => {
+      // for (let i = 0; i < parameters.length; i++) {
       let tempObj = {};
-      if (parameters[i].userInput === true) {
-        tempObj.name = parameters[i].name;
+      if (parameter.userInput === true) {
+        tempObj.name = parameter.name;
         userInputParameters.push(tempObj);
       }
-    }
+    });
   }
   return userInputParameters;
 }
@@ -169,10 +170,11 @@ class ContextualMenu extends React.Component {
 
   displayActions(actions, sourceDetails, table) {
     let {itemId, itemType, contextMenuType} = sourceDetails;
-    for (let j = 0; j < actions.length; j++) {
+    actions.forEach((action, index) => {
+      // for (let j = 0; j < actions.length; j++) {
       const details = {
-          parameters: actions[j].parameters,
-          index: j,
+          parameters: action.parameters,
+          index,
           itemId,
           itemType,
           notNodeId: sourceDetails.notNodeId ? sourceDetails.notNodeId : '',
@@ -183,13 +185,13 @@ class ContextualMenu extends React.Component {
       const updatedDetails = {
         actions: actions,
         table: table,
-        index: j,
+        index,
         parameters: parameters,
         sourceDetails: sourceDetails
       };
 
       table = this.createHTML(updatedDetails);
-    }
+    });
     return table;
   }
 
@@ -200,9 +202,10 @@ class ContextualMenu extends React.Component {
       fullMalwareReportLink = '';
 
     if (!isUndefined(parameters.length)) {
-      for (let i = 0; i < parameters.length; i++) {
-        let tempObj = {},
-          parameter = parameters[i];
+      // for (let i = 0; i < parameters.length; i++) {
+      parameters.forEach((parameter) => {
+        let tempObj = {};
+          // parameter = parameters[i];
         if (parameter.userInput === false && parameter.name !== 'link') {
           let params = {
             name: parameter.name,
@@ -229,7 +232,7 @@ class ContextualMenu extends React.Component {
           fullMalwareReportLink = !isUndefined(parameter.value)
           ? parameter.value : '';
         }
-      }
+      });
 
       userInputParameters = checkForUserInputs(parameters);
     }
