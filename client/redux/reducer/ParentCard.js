@@ -16,7 +16,6 @@ function requestApi(id, state) {
   const dataMap = Map({
     id,
     isFetching: true,
-    data: null,
     isError: false
   });
 
@@ -25,13 +24,14 @@ function requestApi(id, state) {
 
 function receiveApi(id, state, action) {
   const {data} = action,
-    {json, api, query} = data;
+    {json, api, query, details} = data;
 
   const dataMap = Map({
     id,
     isFetching: false,
     isError: false,
     data: json,
+    details,
     api,
     query
   });

@@ -99,7 +99,8 @@ function getDataPlotClickUrl(props, dataObj) {
 
 class ParetoChart extends React.Component {
   static propTypes = {
-    attributes: PropTypes.object
+    attributes: PropTypes.object.isRequired,
+    showDetailsTable: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -139,7 +140,7 @@ class ParetoChart extends React.Component {
       return;
     }
 
-    const {data, chartOptions, updateChartOptions, chartData} = props,
+    const {data, chartOptions, updateChartOptions, chartData, showDetailsTable} = props,
       fieldMapping = chartData.fieldMapping,
       {clickThrough} = this.context,
       handleGraphClick = this.handleGraphClick;
@@ -165,6 +166,10 @@ class ParetoChart extends React.Component {
             }
             else if (props.clickData) {
               handleGraphClick(dataObj);
+            }
+            else {
+              console.log('here here');
+              showDetailsTable();
             }
           }
         }

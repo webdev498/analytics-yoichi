@@ -30,13 +30,7 @@ const styles = {
     fontWeight: '600',
     textAlign: 'center'
   },
-  detailsTable: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0
-  }
+  detailsTable: {}
 };
 
 export class ParentCard extends React.Component {
@@ -50,19 +44,20 @@ export class ParentCard extends React.Component {
     this.getData = this.getData.bind(this);
     this.toggleDetailsTable = this.toggleDetailsTable.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
-    this.clearSearch = this.clearSearch.bind(this);
   }
 
   static propTypes = {
     id: PropTypes.string.isRequired,
     meta: PropTypes.object.isRequired,
     updateRoute: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object,
+    data: PropTypes.object,
+    details: PropTypes.object
   }
 
-  getData() {
+  getData(apiObj) {
     const { props } = this,
-      {api} = props.meta;
+      api = apiObj || props.meta.api;
 
     if (!api) {
       const children = props.children.props.children;
@@ -79,11 +74,16 @@ export class ParentCard extends React.Component {
   }
 
   toggleDetailsTable() {
+    if (!this.state.showDetailsFlag) {
+      this.getDetailsData();
+    }
+
     this.setState({showDetailsFlag: !this.state.showDetailsFlag});
   }
 
   getDetailsTable() {
-    return <DetailsTable style={styles.detailsTable} />;
+    const {details} = this.props;
+    return <DetailsTable style={styles.detailsTable} details={details} />;
   }
 
   componentDidMount() {
@@ -117,46 +117,6 @@ export class ParentCard extends React.Component {
     }
   }
 
-  callApi(apiObj, props) {
-    const {id, api} = apiObj;
-    const {params, fetchApiData, data} = props;
-
-    if (api.method === 'POST') {
-      let body = data;
-
-      const bodyPath = api.body.replace('$customParam', ''),
-        keys = bodyPath.split('.');
-
-      keys.forEach(key => {
-        body = body[key];
-      });
-
-      // for the post request if the body is empty, then don't make request.
-      if (!body) return;
-      fetchApiData(id, api, params, {body});
-    }
-    else {
-      const {queryParams} = Object.assign({}, api);
-      const queryKeys = Object.keys(queryParams);
-
-      let customParams = null;
-      queryKeys.forEach(key => {
-        let query = queryParams[key];
-        if (typeof query === 'string' && query.includes('$customParam')) {
-          queryParams[key] = this.getQueryData(query.replace('$customParam', ''), data);
-          // this is to pass custom params such as filter to be passed
-          // to the component that is consuming this api.
-          customParams = {
-            [key]: queryParams[key]
-          };
-        }
-      });
-
-      const updatedApi = Object.assign({}, api, {queryParams});
-      fetchApiData(id, updatedApi, params, {customParams});
-    }
-  }
-
   runEvent(eventData, nextProps) {
     const {type, data} = eventData;
     if (type === 'updateSearch') {
@@ -169,17 +129,7 @@ export class ParentCard extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {data, eventData} = nextProps;
-    let {meta: {fetchDataFor}} = nextProps;
-    if (data && fetchDataFor) {
-      if (!Array.isArray(fetchDataFor)) {
-        fetchDataFor = [fetchDataFor];
-      }
-
-      fetchDataFor.forEach(apiObj => {
-        this.callApi(apiObj, nextProps);
-      });
-    }
+    const {eventData} = nextProps;
 
     if (nextProps.data && window.sessionStorage.broadcastEvent) {
       const {id, data} = JSON.parse(window.sessionStorage.broadcastEvent);
@@ -194,21 +144,6 @@ export class ParentCard extends React.Component {
     if (eventData) {
       this.runEvent(eventData, nextProps);
     }
-  }
-
-  getHeader() {
-    const {props} = this,
-      headerProps = Object.assign({}, props);
-
-    return (
-      <ParentCardHeader
-        {...headerProps}
-        search={this.state.search}
-        getData={this.getData}
-        clearSearch={this.clearSearch}
-        updateSearch={this.updateSearch}
-        history={this.props.history} />
-    );
   }
 
   getErrorElement() {
@@ -236,8 +171,27 @@ export class ParentCard extends React.Component {
     });
   }
 
-  clearSearch() {
-    this.setState({search: ''});
+  getDetailsData() {
+    const {props: {data, meta}} = this;
+    if (!data || !meta.api) return;
+
+    // create api object for getDetailsTableData,
+    // fetch data.
+    // add a way to include this in immutable maps.
+    const {interval} = data;
+    const apiObj = {
+      type: 'details',
+      path: '/api/analytics/reporting/details/{reportId}',
+      pathParams: {
+        reportId: meta.api.pathParams.reportId
+      },
+      queryParams: {
+        start: interval.from,
+        end: interval.to
+      }
+    };
+
+    this.getData(apiObj);
   }
 
   render() {
@@ -274,7 +228,13 @@ export class ParentCard extends React.Component {
 
         {
           props.meta.showHeader
-          ? this.getHeader()
+          ? <ParentCardHeader
+            {...props}
+            search={this.state.search}
+            getData={this.getData}
+            updateSearch={this.updateSearch}
+            toggleDetailsTable={this.toggleDetailsTable}
+            history={this.props.history} />
           : null
         }
 
@@ -311,12 +271,14 @@ function mapStateToProps(state, ownProps) {
     isFetching = false,
     isError = false,
     errorData = null,
-    eventData = null;
+    eventData = null,
+    details = null;
 
   if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
 
     data = propsById.get('data');
+    details = propsById.get('details');
     isFetching = propsById.get('isFetching');
     isError = propsById.get('isError');
     errorData = propsById.get('errorData');
@@ -327,6 +289,7 @@ function mapStateToProps(state, ownProps) {
 
   return {
     data,
+    details,
     isFetching,
     isError,
     errorData,

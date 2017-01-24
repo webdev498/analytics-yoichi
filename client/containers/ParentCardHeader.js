@@ -21,12 +21,11 @@ const styles = {
   },
   icon: {
     verticalAlign: 'bottom',
-    color: Colors.grape
+    color: Colors.grape,
+    cursor: 'pointer'
   },
   refreshIcon: {
-    cursor: 'pointer',
     fontSize: '20px',
-    color: Colors.grape,
     fontWeight: 600,
     height: '35px',
     paddingTop: '7px'
@@ -44,8 +43,6 @@ const styles = {
   },
   searchIcon: {
     bottom: '5px',
-    color: Colors.grape,
-    cursor: 'pointer',
     fontSize: '21px',
     height: '14px',
     margin: 'auto',
@@ -105,7 +102,6 @@ export default class ParentCardHeader extends React.Component {
   }
 
   static propTypes = {
-    clearSearch: PropTypes.func.isRequired,
     getData: PropTypes.func.isRequired,
     updateSearch: PropTypes.func.isRequired,
     search: PropTypes.string.isRequired,
@@ -114,12 +110,8 @@ export default class ParentCardHeader extends React.Component {
   }
 
   clearSearchText(ev) {
-    if (this.myTextInput !== null) {
-      this.myTextInput.value = '';
-    }
-
     this.setState({ search: '' });
-    this.props.clearSearch();
+    this.props.updateSearch({ target: {value: ''} });
   }
 
   focusSearchText() {
@@ -191,11 +183,39 @@ export default class ParentCardHeader extends React.Component {
             ref={(ref) => this.myTextInput = ref} />
 
           <FontIcon className='material-icons'
-            style={styles.searchIcon}
+            style={{...styles.searchIcon, ...styles.icon}}
             onClick={this.focusSearchText}>
             search
           </FontIcon>
         </div>
+        : null
+      }
+
+      {
+        props.meta.showComponent === true
+        ? (
+          <div style={styles.iconWrap}>
+            <FontIcon className='material-icons'
+              style={styles.icon}
+              onClick={props.toggleDetailsTable}>
+              equalizer
+            </FontIcon>
+          </div>
+        )
+        : null
+      }
+
+      {
+        props.meta.showTable === true
+        ? (
+          <div style={styles.iconWrap}>
+            <FontIcon className='material-icons'
+              style={styles.icon}
+              onClick={props.toggleDetailsTable}>
+              list
+            </FontIcon>
+          </div>
+        )
         : null
       }
 
@@ -205,7 +225,7 @@ export default class ParentCardHeader extends React.Component {
         : (
           <div style={styles.iconWrap}>
             <FontIcon className='material-icons'
-              style={styles.refreshIcon}
+              style={{...styles.refreshIcon, ...styles.icon}}
               onClick={props.getData}>
               replay
             </FontIcon>

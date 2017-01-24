@@ -21,6 +21,14 @@ export function requestApiData(id, api) {
 }
 
 export function receiveApiData(id, data) {
+  const {api, json} = data;
+  if (api.type === 'details') {
+    data.details = json;
+  }
+  else {
+    data.json = json;
+  }
+
   return {
     type: RECEIVE_API_DATA,
     data,
