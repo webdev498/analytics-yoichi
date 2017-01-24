@@ -168,14 +168,15 @@ class ContextualMenu extends React.Component {
   }
 
   displayActions(actions, sourceDetails, table) {
-    let {itemId, itemType} = sourceDetails;
+    let {itemId, itemType, contextMenuType} = sourceDetails;
     for (let j = 0; j < actions.length; j++) {
       const details = {
           parameters: actions[j].parameters,
           index: j,
-          itemId: itemId,
-          itemType: itemType,
-          notNodeId: sourceDetails.notNodeId ? sourceDetails.notNodeId : ''
+          itemId,
+          itemType,
+          notNodeId: sourceDetails.notNodeId ? sourceDetails.notNodeId : '',
+          contextMenuType
         },
         parameters = this.generateParameters(details);
 
@@ -193,7 +194,7 @@ class ContextualMenu extends React.Component {
   }
 
   generateParameters(details) {
-    let {parameters, index, itemId, itemType, notNodeId} = details,
+    let {parameters, index, itemId, itemType, notNodeId, contextMenuType} = details,
       parametersToApi = [],
       userInputParameters = [],
       fullMalwareReportLink = '';
@@ -206,9 +207,10 @@ class ContextualMenu extends React.Component {
           let params = {
             name: parameter.name,
             value: parameter.value,
-            itemId: itemId,
-            itemType: itemType,
-            notNodeId: notNodeId
+            itemId,
+            itemType,
+            notNodeId,
+            contextMenuType
           };
           tempObj.name = parameter.name;
           tempObj.value = this.getParameterValue(params);
@@ -239,7 +241,7 @@ class ContextualMenu extends React.Component {
   }
 
   getParameterValue(params) {
-    let {name, value, itemId, itemType, notNodeId} = params;
+    let {name, value, itemId, itemType, notNodeId, contextMenuType} = params;
     if (isUndefined(value)) {
       let {props} = this,
         {nodeObjects, edgeObjects} = props,
@@ -278,22 +280,34 @@ class ContextualMenu extends React.Component {
           break;
         case 'metadata':
           let paramName = (name).replace('metadata.', ''),
+            metadataValue = '';
+
+          if (contextMenuType === 'node') {
             metadataValue = (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].metadata))
               ? nodeObjects[itemId].metadata[paramName]
               : '';
-          metadataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].metadata))
-            ? edgeObjects[itemId].metadata[paramName]
-            : '';
+          }
+          else if (contextMenuType === 'edge') {
+            metadataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].metadata))
+              ? edgeObjects[itemId].metadata[paramName]
+              : '';
+          }
           value = (!isUndefined(metadataValue)) ? metadataValue : '';
           break;
         case 'actionData':
           let actionParamName = (name).replace('actionData.', ''),
+            actiondataValue = '';
+
+          if (contextMenuType === 'node') {
             actiondataValue = (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].actionData))
               ? nodeObjects[itemId].actionData[actionParamName]
               : '';
-          actiondataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].actionData))
-            ? edgeObjects[itemId].actionData[actionParamName]
-            : '';
+          }
+          else if (contextMenuType === 'edge') {
+            actiondataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].actionData))
+              ? edgeObjects[itemId].actionData[actionParamName]
+              : '';
+          }
           value = (!isUndefined(actiondataValue)) ? actiondataValue : '';
           break;
         default:
