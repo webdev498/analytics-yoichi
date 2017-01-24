@@ -12,8 +12,12 @@ export function generateDataSource(chartProperties, duration) {
     chartValue = data[0].value;
 
   for (let key in chartValue) {
+    let label = key;
+    if (new Date(key).toString() !== 'Invalid Date') {
+      label = getDateTimeInLocalTimeZone(key, 'D MMM');
+    }
     let dataPoint = {
-      label: getDateTimeInLocalTimeZone(key, 'D MMM'),
+      label,
       value: '0'
     };
     if (chartValue[key][0] !== 0 && chartValue[key][0] !== '') {
