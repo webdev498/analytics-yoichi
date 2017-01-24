@@ -451,20 +451,6 @@ export function whatIsIt(object) {
   }
 }
 
-export function getPosition(el) {
-  // yay readability
-  let lx = 0, ly = 0;
-  for (lx = 0, ly = 0;
-    el != null;
-    lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
-  return {x: lx, y: ly};
-}
-
-export function autoScrollTo(id, decreasePositionBy) {
-  let position = getPosition(document.getElementById(id));
-  window.scrollTo(0, position.y - decreasePositionBy);
-}
-
 export function getColor(score, severity) {
   let color = '';
   if (!score) {

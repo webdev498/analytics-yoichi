@@ -25,7 +25,7 @@ function getLayout() {
           'api': null
         },
         'attributes': {
-          'title': 'High Priority Alerts'
+          'title': 'High Priority Anomalies'
         }
       },
       {
