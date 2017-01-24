@@ -68,7 +68,6 @@ function checkForUserInputs(parameters) {
   let userInputParameters = [];
   if (!isUndefined(parameters.length)) {
     parameters.forEach((parameter) => {
-      // for (let i = 0; i < parameters.length; i++) {
       let tempObj = {};
       if (parameter.userInput === true) {
         tempObj.name = parameter.name;
@@ -171,7 +170,6 @@ class ContextualMenu extends React.Component {
   displayActions(actions, sourceDetails, table) {
     let {itemId, itemType, contextMenuType} = sourceDetails;
     actions.forEach((action, index) => {
-      // for (let j = 0; j < actions.length; j++) {
       const details = {
           parameters: action.parameters,
           index,
@@ -202,10 +200,8 @@ class ContextualMenu extends React.Component {
       fullMalwareReportLink = '';
 
     if (!isUndefined(parameters.length)) {
-      // for (let i = 0; i < parameters.length; i++) {
       parameters.forEach((parameter) => {
         let tempObj = {};
-          // parameter = parameters[i];
         if (parameter.userInput === false && parameter.name !== 'link') {
           let params = {
             name: parameter.name,
