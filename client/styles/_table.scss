@@ -27,7 +27,7 @@
   vertical-align: top;
  }
 
-.threatTable .reactable-page-button, .reactable-previous-page, .reactable-next-page {
+.threatTable .reactable-page-button {
   margin-left: 5px;
   margin-right: 2px;
   margin-bottom: 6px;
@@ -44,7 +44,6 @@
   margin-right: 2px;
   margin-bottom: 6px;
   padding: 3px;
-  width: 55px;
   float: left;
   cursor: pointer;
   color: $GrapeColor;
@@ -58,7 +57,6 @@
   margin-right: 2px;
   margin-bottom: 6px;
   padding: 3px;
-  width: 75px;
   float: left;
   cursor: pointer;
   color: $GrapeColor;

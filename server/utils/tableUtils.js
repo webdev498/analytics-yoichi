@@ -128,11 +128,14 @@ export function generateRowObject(rowDetails, rowObject) {
       rowNumber,
       chart,
       style,
-      headingStyle,
-      inverse: inverse || false
+      headingStyle
     },
     sortValueDefault = columnText[0] ? columnText[0].value : '',
     sortValue = '';
+
+  if (inverse) {
+    rowObj = Object.assign({}, rowObj, {inverse: true});
+  }
 
   columnText.forEach((column, index) => {
     sortValue += ' ' + column.value;

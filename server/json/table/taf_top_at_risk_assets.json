@@ -14,11 +14,10 @@
               }
             ],
             "headingStyle": {
-              "width": "110px",
+              "width": "60px",
               "overflowWrap": "break-word",
               "textTransform": "none"
             },
-            "inverse": true,
             "type": "assetWidget",
             "header": "Asset"
           },
@@ -33,6 +32,7 @@
               "width": "10%"
             },
             "type": "scoreWidget",
+            "inverse": true,
             "header": "Score"
           }
         ]
@@ -40,9 +40,7 @@
     ]
   },
   "options": {
-    "filterable": [ "ASSET", "Score" ],
     "itemsPerPage": 5,
-    "sortable": [ "ASSET", "Score" ],
     "rowClickable": true
   }
 }
