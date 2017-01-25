@@ -2,12 +2,11 @@ import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
 import {
   firstCharCapitalize,
-  getPosition,
   isUndefined,
   isNull
 } from '../../../commons/utils/utils';
 
-import {autoScrollTo} from 'utils/utils';
+import {autoScrollTo, getPosition} from 'utils/utils';
 
 import Cookies from 'cookies-js';
 import vis from 'vis';
