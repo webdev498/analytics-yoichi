@@ -113,19 +113,20 @@ export function generateRowObject(rowDetails, rowObject) {
       columnType,
       columnData,
       columnText,
-      rowNumber,
-      row
+      rowNumber
     } = rowDetails,
     {header, style, chart, headingStyle, inverse} = columnData;
 
-  // let id = chart.id;
-  console.log(columnData, chart);
+  if (chart) {
+    let tempId = chart.id;
+    chart = Object.assign({}, chart, {id: tempId + rowNumber});
+  }
 
-  // chart = Object.assign({}, chart, {id: 'id' + rowNumber});
   let rowObj = {
       type: columnType,
       name: header,
       rowNumber,
+      chart,
       style,
       headingStyle,
       inverse: inverse || false
@@ -137,28 +138,12 @@ export function generateRowObject(rowDetails, rowObject) {
     sortValue += ' ' + column.value;
   });
 
-  switch (columnType) {
-    case 'chart':
-      let {id} = chart;
-      console.log(id, rowNumber);
-      rowObj = Object.assign(rowObj, {
-        data: columnText,
-        id: id + rowNumber,
-        chart,
-        row
-      });
-      columnText = [];
-      rowObject.columns.push(rowObj);
-      break;
-    default:
-      rowObj = Object.assign(rowObj, {
-        data: columnText,
-        sortValue: columnType === 'durationWidget' ? (msToTime(sortValueDefault)).timeString : sortValue
-      });
-      columnText = [];
-      rowObject.columns.push(rowObj);
-      break;
-  }
+  rowObj = Object.assign(rowObj, {
+    data: columnText,
+    sortValue: columnType === 'durationWidget' ? (msToTime(sortValueDefault)).timeString : sortValue
+  });
+  columnText = [];
+  rowObject.columns.push(rowObj);
   return rowObject;
 }
 
