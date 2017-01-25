@@ -7,6 +7,7 @@ import ScoreWidget from 'components/widgets/ScoreWidget';
 import AssetWidget from 'components/widgets/AssetWidget';
 
 import {getCountryCode} from '../../commons/utils/countryUtils';
+import {displayEllipsis} from '../../commons/utils/utils';
 
 const {Table, Tr, Td} = Reactable;
 const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
@@ -58,7 +59,8 @@ function loadChartComponent(column) {
   }
 }
 
-function loadText(data) {
+function loadText(column) {
+  let {data, ellipsis} = column;
   return (
     <div>
       {data.map((text, index) => {
@@ -76,7 +78,7 @@ function loadText(data) {
             {
               !text.header && index === 0 && data.length > 1
               ? <span style={styles.header}>{text.value}</span>
-              : text.value + ' '
+              : displayTextWithEllipsis(text.value, ellipsis)
             }
             {
               text.header && text.header === 'Country'
@@ -87,6 +89,15 @@ function loadText(data) {
         );
       })}
     </div>
+  );
+}
+
+function displayTextWithEllipsis(value, ellipsis) {
+  let text = displayEllipsis(value, ellipsis);
+  return (
+    text === value
+    ? <span>{value + ' '}</span>
+    : <span title={value}>{text + ' '}</span>
   );
 }
 
@@ -189,7 +200,7 @@ export class ReactableTable extends React.Component {
                         key={column.key}>
                         {
                           column.type === 'text'
-                          ? loadText(column.data)
+                          ? loadText(column)
                           : loadComponent(column)
                         }
                       </Td>

@@ -18,6 +18,7 @@ export function processData(data, tableJson, url) {
 
   let rawData = generateRawData(fieldMapping, data);
 
+  // fieldMapping.forEach((tableData) => {
   for (let i = 0; i < fieldMapping.length; i++) {
     let tableData = fieldMapping[i],
       {rows, columns} = rawData[tableData.reportId],
@@ -113,7 +114,8 @@ export function generateRowObject(rowDetails, rowObject) {
       columnType,
       columnData,
       columnText,
-      rowNumber
+      rowNumber,
+      ellipsis
     } = rowDetails,
     {header, style, chart, headingStyle, inverse} = columnData;
 
@@ -128,7 +130,8 @@ export function generateRowObject(rowDetails, rowObject) {
       rowNumber,
       chart,
       style,
-      headingStyle
+      headingStyle,
+      ellipsis
     },
     sortValueDefault = columnText[0] ? columnText[0].value : '',
     sortValue = '';
