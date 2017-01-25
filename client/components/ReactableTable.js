@@ -53,12 +53,6 @@ function loadChartComponent(column) {
 }
 
 function loadText(data, ellipsis) {
-  let max = 250,
-    min = 120;
-  if (ellipsis) {
-    max = ellipsis.max;
-    min = ellipsis.min;
-  }
   return (
     <div>
       {data.map((text, index) => {
@@ -76,7 +70,7 @@ function loadText(data, ellipsis) {
             {
               !text.header && index === 0 && data.length > 1
               ? <span style={styles.header}>{text.value}</span>
-              : displayTextWithEllipsis(text.value, max, min)
+              : displayTextWithEllipsis(text.value, ellipsis)
             }
             {
               text.header && text.header === 'Country'
@@ -90,8 +84,8 @@ function loadText(data, ellipsis) {
   );
 }
 
-function displayTextWithEllipsis(value, max, min) {
-  let text = displayEllipsis(value, max, min);
+function displayTextWithEllipsis(value, ellipsis) {
+  let text = displayEllipsis(value, ellipsis);
   return (
     text === value
     ? <span>{value + ' '}</span>

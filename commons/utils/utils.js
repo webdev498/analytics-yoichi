@@ -540,7 +540,13 @@ export function getDateTimeInLocalTimeZone(dateTime, format) {
   return localDateTime;
 }
 
-export function displayEllipsis(str, max, min) {
+export function displayEllipsis(str, range) {
+  let max = 250,
+    min = 120;
+  if (range) {
+    max = range.max;
+    min = range.min;
+  }
   if (str.length > max) {
     return str.substr(0, min) + ' ... ' + str.substr(str.length - min, str.length);
   }
