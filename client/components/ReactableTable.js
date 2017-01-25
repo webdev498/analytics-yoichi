@@ -52,7 +52,8 @@ function loadChartComponent(column) {
   }
 }
 
-function loadText(data, ellipsis) {
+function loadText(column) {
+  let {data, ellipsis} = column;
   return (
     <div>
       {data.map((text, index) => {
@@ -192,7 +193,7 @@ export class ReactableTable extends React.Component {
                         key={column.key}>
                         {
                           column.type === 'text'
-                          ? loadText(column.data, column.ellipsis)
+                          ? loadText(column)
                           : loadComponent(column)
                         }
                       </Td>
