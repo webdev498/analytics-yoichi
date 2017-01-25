@@ -20,8 +20,10 @@ export function requestApiData(id, api) {
   };
 }
 
-export function receiveApiData(id, data) {
-  const {api, json} = data;
+export function receiveApiData(id, res) {
+  const {api, json} = res,
+    data = {api};
+
   if (api.type === 'details') {
     data.details = json;
   }
