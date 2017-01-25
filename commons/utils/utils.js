@@ -539,3 +539,10 @@ export function getDateTimeInLocalTimeZone(dateTime, format) {
   localDateTime = moment(localDateTime).format(format);
   return localDateTime;
 }
+
+export function displayEllipsis(str, max, min) {
+  if (str.length > max) {
+    return str.substr(0, min) + ' ... ' + str.substr(str.length - min, str.length);
+  }
+  return str;
+}
