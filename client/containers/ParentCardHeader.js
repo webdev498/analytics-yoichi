@@ -7,8 +7,7 @@ import {Colors} from '../../commons/colors';
 const styles = {
   header: {
     display: 'flex',
-    alignItems: 'center',
-    paddingBottom: '50px'
+    paddingBottom: '33px'
   },
   title: {
     textTransform: 'capitalize',
@@ -17,18 +16,19 @@ const styles = {
   },
   iconWrap: {
     marginLeft: 'auto',
-    textAlign: 'right'
+    textAlign: 'right',
+    display: 'inline-flex',
+    alignItems: 'center'
   },
   icon: {
-    verticalAlign: 'bottom',
     color: Colors.grape,
-    cursor: 'pointer'
-  },
-  refreshIcon: {
+    cursor: 'pointer',
     fontSize: '20px',
     fontWeight: 600,
-    height: '35px',
-    paddingTop: '7px'
+    marginLeft: '10px'
+  },
+  listIcon: {
+    fontSize: '26px'
   },
   crossIcon: {
     fontSize: '20px'
@@ -42,6 +42,8 @@ const styles = {
     verticalAlign: 'middle'
   },
   searchIcon: {
+    color: Colors.grape,
+    cursor: 'pointer',
     bottom: '5px',
     fontSize: '21px',
     height: '14px',
@@ -183,7 +185,7 @@ export default class ParentCardHeader extends React.Component {
             ref={(ref) => this.myTextInput = ref} />
 
           <FontIcon className='material-icons'
-            style={{...styles.searchIcon, ...styles.icon}}
+            style={styles.searchIcon}
             onClick={this.focusSearchText}>
             search
           </FontIcon>
@@ -191,61 +193,55 @@ export default class ParentCardHeader extends React.Component {
         : null
       }
 
-      {
-        props.meta.showComponent === true
-        ? (
-          <div style={styles.iconWrap}>
+      <div style={styles.iconWrap}>
+        {
+          props.showComponentIconFlag === true
+          ? (
             <FontIcon className='material-icons'
               style={styles.icon}
               onClick={props.toggleDetailsTable}>
               equalizer
             </FontIcon>
-          </div>
-        )
-        : null
-      }
+          )
+          : null
+        }
 
-      {
-        props.meta.showTable === true
-        ? (
-          <div style={styles.iconWrap}>
+        {
+          props.meta.showTable === true && props.showComponentIconFlag === false
+          ? (
+            <FontIcon className='material-icons'
+              style={{...styles.icon, ...styles.listIcon}}
+              onClick={props.toggleDetailsTable}>
+                list
+              </FontIcon>
+          )
+          : null
+        }
+
+        {
+          props.meta.showRefresh === false
+          ? null
+          : (
             <FontIcon className='material-icons'
               style={styles.icon}
-              onClick={props.toggleDetailsTable}>
-              list
-            </FontIcon>
-          </div>
-        )
-        : null
-      }
-
-      {
-        props.meta.showRefresh === false
-        ? null
-        : (
-          <div style={styles.iconWrap}>
-            <FontIcon className='material-icons'
-              style={{...styles.refreshIcon, ...styles.icon}}
               onClick={props.getData}>
               replay
             </FontIcon>
-          </div>
-        )
-      }
+          )
+        }
 
-      {
-        props.meta.showBackButton === true
-        ? (
-          <div style={styles.iconWrap}>
+        {
+          props.meta.showBackButton === true
+          ? (
             <FontIcon className='material-icons'
-              style={{...styles.refreshIcon, ...styles.backIcon}}
+              style={styles.icon}
               onClick={props.history.goBack}>
               arrow_back
             </FontIcon>
-          </div>
-        )
-        : null
-      }
+          )
+          : null
+        }
+      </div>
     </header>;
   }
 };

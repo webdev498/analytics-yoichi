@@ -38,7 +38,8 @@ export class ParentCard extends React.Component {
     super(props);
     this.state = {
       search: '',
-      showDetailsFlag: false
+      showDetailsFlag: false,
+      showComponentIconFlag: false
     };
 
     this.getData = this.getData.bind(this);
@@ -78,7 +79,10 @@ export class ParentCard extends React.Component {
       this.getDetailsData();
     }
 
-    this.setState({showDetailsFlag: !this.state.showDetailsFlag});
+    this.setState({
+      showDetailsFlag: !this.state.showDetailsFlag,
+      showComponentIconFlag: !this.state.showComponentIconFlag
+    });
   }
 
   getDetailsTable() {
@@ -230,7 +234,8 @@ export class ParentCard extends React.Component {
           props.meta.showHeader
           ? <ParentCardHeader
             {...props}
-            search={this.state.search}
+            showComponentIconFlag={state.showComponentIconFlag}
+            search={state.search}
             getData={this.getData}
             updateSearch={this.updateSearch}
             toggleDetailsTable={this.toggleDetailsTable}
@@ -277,6 +282,7 @@ function mapStateToProps(state, ownProps) {
   if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
 
+    // if (ownProps.id === 'alert-by-type') console.log(propsById.toObject());
     data = propsById.get('data');
     details = propsById.get('details');
     isFetching = propsById.get('isFetching');

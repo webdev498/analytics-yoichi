@@ -72,7 +72,6 @@ export default class DetailsTable extends React.Component {
                   row.map((col, i) => (
                     <Td column={col.title}
                       value={col.value}
-                      style={{width: '20%'}}
                       key={`td${i}`}>
                       {col.value}
                     </Td>
