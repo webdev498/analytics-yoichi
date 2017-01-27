@@ -119,12 +119,12 @@
         "name": "MetricsCard",
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#F69275"
           },
           "style": {
             "marginRight": "3px",
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #F69275"
           }
         },
         "id": "4",
@@ -862,7 +862,7 @@
               "window": ""
             }
           },
-          "title": "Inactive User"
+          "title": "Least Active User"
         },
         "attributes": {
           "chartWidth": "100%",
@@ -915,7 +915,7 @@
               "window": ""
             }
           },
-          "title": "Inactive User Agent"
+          "title": "Least Active User Agent"
         },
         "attributes": {
           "chartWidth": "100%",
