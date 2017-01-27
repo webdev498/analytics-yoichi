@@ -444,6 +444,9 @@
         },
         "meta": {
           "showHeader": true,
+          "details": {
+            "reportId": "taf_top_talkers_connections"
+          },
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -633,6 +636,9 @@
         "meta": {
           "subTitle": "NUMBER OF OUTGOING CONNECTIONS BY COUNTRY",
           "showHeader": true,
+          "details": {
+            "reportId": "taf_dest_countries"
+          },
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -693,6 +699,9 @@
         "meta": {
           "subTitle": "NUMBER OF INCOMING CONNECTIONS BY COUNTRY",
           "showHeader": true,
+          "details": {
+            "reportId": "taf_source_countries"
+          },
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {

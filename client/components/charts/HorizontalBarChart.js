@@ -9,7 +9,6 @@ import {
   isUndefined,
   kFormatter
 } from '../../../commons/utils/utils';
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const styles = {
   chartCaption: {
@@ -392,22 +391,6 @@ export function generateDataSource(rawData, chartOptions, chartData, chart) {
   return dataSourceObject;
 }
 
-function getDataPlotClickUrl(props, dataObj) {
-  if (!props.kibana) {
-    return;
-  }
-
-  let parameters = {
-    data: props.data,
-    duration: props.duration,
-    dataObj: dataObj,
-    queryParamsArray: props.kibana.queryParams,
-    pathParams: props.kibana.pathParams
-  };
-
-  return generateClickThroughUrl(parameters);
-}
-
 class HorizontalBarChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
@@ -415,38 +398,13 @@ class HorizontalBarChart extends React.Component {
   }
 
   renderChart(props) {
-    if (!props.data) {
-      // styles.noData = {
-      //   display: 'none'
-      // };
-      return;
-    }
-
-    // if (props.data.rows && props.data.rows.length === 0) {
-    //   styles.noData = {
-    //     display: 'none'
-    //   };
-    //   return;
-    // }
-
-    // if (props.data && props.chartData &&
-    //   props.chartData.fieldMapping &&
-    //   props.chartData.fieldMapping[0] &&
-    //   props.chartData.fieldMapping[0].reportId &&
-    //   props.data[props.chartData.fieldMapping[0].reportId].rows &&
-    //   props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
-    //   styles.noData = {
-    //     display: 'none'
-    //   };
-    //   return;
-    // }
+    if (!props.data) return;
 
     styles.noData = {};
 
     const data = props.data,
       fieldMapping = props.chartData.fieldMapping,
-      {chartOptions, chartData, chart} = props,
-      {clickThrough} = this.context;
+      {chartOptions, chartData, chart, showDetailsTable} = props;
 
     let rawData = {};
     rawData = generateRawData(fieldMapping, data);
@@ -462,10 +420,7 @@ class HorizontalBarChart extends React.Component {
         dataSource: generateDataSource(rawData, chartOptions, chartData, chart),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            const url = getDataPlotClickUrl(props, dataObj);
-            if (url !== '' && !isUndefined(url)) {
-              clickThrough(url);
-            }
+            showDetailsTable(dataObj);
           }
         }
       });
@@ -482,15 +437,10 @@ class HorizontalBarChart extends React.Component {
         <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>{props.meta.title}
           <span style={{fontSize: '12px', fontWeight: 'normal'}}> {props.meta.subTitle}</span>
         </div>
-        <div id={props.attributes.id} style={{...{width: '100%'}, ...styles.minHeight}}>
-        </div>
+        <div id={props.attributes.id} style={{...{width: '100%'}, ...styles.minHeight}} />
       </div>
     );
   }
 }
-
-HorizontalBarChart.contextTypes = {
-  clickThrough: React.PropTypes.func
-};
 
 export default HorizontalBarChart;

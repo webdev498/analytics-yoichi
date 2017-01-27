@@ -36,14 +36,12 @@ const styles = {
 };
 
 function getParamsAndReportId(props, dataObj) {
-  let data = props.data,
+  let {data, meta} = props,
     reportId = props.meta.api.pathParams.reportId;
 
-  if (!data.interval) {
-    const keys = Object.keys(data);
-    data = data[keys[0]];
-    reportId = keys[0];
-    if (!data.interval) return null;
+  if (meta.details) {
+    reportId = meta.details.reportId;
+    data = data[reportId];
   }
 
   const {columns, interval} = data,

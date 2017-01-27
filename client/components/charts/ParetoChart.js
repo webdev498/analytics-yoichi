@@ -128,8 +128,4 @@ class ParetoChart extends React.Component {
   }
 }
 
-ParetoChart.contextTypes = {
-  clickThrough: React.PropTypes.func
-};
-
 export default ParetoChart;
