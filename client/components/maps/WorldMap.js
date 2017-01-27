@@ -2,10 +2,8 @@ import React, {PropTypes} from 'react';
 import WorldMapLegends from './WorldMapLegends';
 import {Colors} from '../../../commons/colors';
 
-import { generateRawData, isUndefined, getColorRanges } from '../../../commons/utils/utils';
+import { generateRawData, getColorRanges } from '../../../commons/utils/utils';
 import {getCountryId} from '../../../commons/utils/countryUtils';
-
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const styles = {
   chartCaption: {
@@ -130,59 +128,20 @@ export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
   return dataSourceObject;
 }
 
-function getEntityClickUrl(props, dataObj) {
-  if (!props.kibana) {
-    return;
-  }
-  let parameters = {
-    data: props.data,
-    duration: props.duration,
-    dataObj: dataObj,
-    queryParamsArray: props.kibana.queryParams,
-    pathParams: props.kibana.pathParams
-  };
-
-  return generateClickThroughUrl(parameters);
-}
-
 class WorldMap extends React.Component {
   static propTypes = {
     attributes: PropTypes.object
   }
 
-  renderChart(props) {
-    if (!props.data) {
-      // styles.noData = {
-      //   display: 'none'
-      // };
-      return;
-    }
-
-    // if (props.data.rows && props.data.rows.length === 0) {
-    //   styles.noData = {
-    //     display: 'none'
-    //   };
-    //   return;
-    // }
-
-    // if (props.data && props.chartData &&
-    //   props.chartData.fieldMapping &&
-    //   props.chartData.fieldMapping[0] &&
-    //   props.chartData.fieldMapping[0].reportId &&
-    //   props.data[props.chartData.fieldMapping[0].reportId].rows &&
-    //   props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
-    //   styles.noData = {
-    //     display: 'none'
-    //   };
-    //   return;
-    // }
+  renderChart() {
+    const {props} = this,
+      {data, showDetailsTable, attributes} = props;
+    if (!data) { return; }
 
     styles.noData = {};
 
-    const data = props.data,
-      fieldMapping = props.chartData.fieldMapping,
-      chartOptions = props.chartOptions,
-      {clickThrough} = this.context;
+    const fieldMapping = props.chartData.fieldMapping,
+      chartOptions = props.chartOptions;
 
     let rawData = {};
     rawData = generateRawData(fieldMapping, data);
@@ -190,18 +149,15 @@ class WorldMap extends React.Component {
     FusionCharts.ready(function() {
       const fusioncharts = new FusionCharts({
         type: 'maps/worldwithcountries',
-        renderAt: props.attributes.id,
-        width: props.attributes.chartWidth ? props.attributes.chartWidth : '100%',
-        height: props.attributes.chartHeight ? props.attributes.chartHeight : '400',
+        renderAt: attributes.id,
+        width: attributes.chartWidth ? attributes.chartWidth : '100%',
+        height: attributes.chartHeight ? attributes.chartHeight : '400',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
         dataSource: generateChartDataSource(rawData, chartOptions, fieldMapping),
         events: {
           entityClick: function(eventObj, dataObj) {
-            const url = getEntityClickUrl(props, dataObj);
-            if (url !== '' && !isUndefined(url)) {
-              clickThrough(url);
-            }
+            showDetailsTable(dataObj);
           }
         }
       });
@@ -219,7 +175,7 @@ class WorldMap extends React.Component {
           {props.meta.subTitle}
         </div>
 
-        <div id={props.attributes.id} style={{...minHeight}}></div>
+        <div id={props.attributes.id} style={{...minHeight}} />
 
         {this.renderChart(props)}
 

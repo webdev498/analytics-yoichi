@@ -662,16 +662,7 @@
           "chartHeight": "350"
         },
         "id": "Outgoingworld-map",
-        "type": "maps/WorldMap",
-        "kibana": {
-          "pathParams": [
-            "destination-country-details"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": "",
-            "country": ""
-          }
-        }
+        "type": "maps/WorldMap"
       },
       {
         "chartOptions": {},
@@ -730,16 +721,7 @@
           "chartHeight": "350"
         },
         "id": "world-map",
-        "type": "maps/WorldMap",
-        "kibana": {
-          "pathParams": [
-            "source-country-details"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": "",
-            "country": ""
-          }
-        }
+        "type": "maps/WorldMap"
       }
     ],
     [

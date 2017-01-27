@@ -207,16 +207,7 @@
               "chartHeight": "450"
             },
             "id": "outgoing-traffic-world-map",
-            "type": "maps/WorldMap",
-            "kibana": {
-              "pathParams": [
-                "destination-country-details"
-              ],
-              "queryParams": {
-                "fromAndToBasedOnToday": "",
-                "country": ""
-              }
-            }
+            "type": "maps/WorldMap"
           },
           {
             "innerStyle": {
@@ -410,16 +401,7 @@
               "chartHeight": "450"
             },
             "id": "world-map",
-            "type": "maps/WorldMap",
-            "kibana": {
-              "pathParams": [
-                "source-country-details"
-              ],
-              "queryParams": {
-                "fromAndToBasedOnToday": "",
-                "country": ""
-              }
-            }
+            "type": "maps/WorldMap"
           },
           {
             "innerStyle": {

@@ -35,6 +35,44 @@ const styles = {
   detailsTable: {}
 };
 
+function getParamsAndReportId(props, dataObj) {
+  let data = props.data,
+    reportId = props.meta.api.pathParams.reportId;
+
+  if (!data.interval) {
+    const keys = Object.keys(data);
+    data = data[keys[0]];
+    reportId = keys[0];
+    if (!data.interval) return null;
+  }
+
+  const {columns, interval} = data,
+    queryParams = {
+      start: interval.from,
+      end: interval.to
+    };
+
+  columns.forEach(col => {
+    if (col.detailsAvailable) {
+      let value;
+      if (dataObj.label) {
+        let label = dataObj.label;
+        value = (label.split(',')[0]);
+      }
+      else if (dataObj.toolText) {
+        const toolText = dataObj.toolText;
+        value = (toolText.split(',')[0]).toLowerCase();
+      }
+
+      queryParams.detailsValue = value;
+      queryParams.detailsField = col.name;
+    }
+  });
+
+  return {queryParams, reportId};
+}
+
+
 export class ParentCard extends React.Component {
   constructor(props) {
     super(props);
@@ -177,40 +215,20 @@ export class ParentCard extends React.Component {
     });
   }
 
-  getQueryParams(dataObj) {
-    const {columns, interval} = this.props.data;
-
-    const queryParams = {
-      start: interval.from,
-      end: interval.to
-    };
-
-    if (dataObj.toolText) {
-      columns.forEach(col => {
-        if (col.detailsAvailable) {
-          const toolText = dataObj.toolText,
-            value = (toolText.split(',')[0]).toLowerCase();
-
-          queryParams.detailsValue = value;
-          queryParams.detailsField = col.name;
-        }
-      });
-    }
-
-    return queryParams;
-  }
-
   getDetailsData(dataObj) {
-    const {props: {data, meta}} = this;
+    const {props, props: {data, meta}} = this;
     if (!data || !meta.api) return;
+
+    let {queryParams, reportId} = getParamsAndReportId(props, dataObj);
+    if (!queryParams) return;
 
     const apiObj = {
       type: 'details',
       path: `${DETAILS_BASE_URL}/{reportId}`,
       pathParams: {
-        reportId: meta.api.pathParams.reportId
+        reportId
       },
-      queryParams: this.getQueryParams(dataObj)
+      queryParams
     };
 
     this.getData(apiObj);
