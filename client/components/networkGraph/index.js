@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
 import {
   firstCharCapitalize,
-  getPosition,
   isUndefined,
   isNull
 } from '../../../commons/utils/utils';

@@ -226,6 +226,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showTable": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -247,12 +248,7 @@
           "chartHeight": "350"
         },
         "id": "alert-by-type",
-        "type": "charts/ParetoChart",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": ":type",
-          "page": "/alerts"
-        }
+        "type": "charts/ParetoChart"
       },
       {
         "chartOptions": {

@@ -13,30 +13,48 @@ const duration = window.localStorage.rankDuration || '1h';
 const initialState = fromJS({duration, components: {}});
 
 function requestApi(id, state) {
-  const dataMap = Map({
+  let prevData = state.getIn(['components', id]);
+  let data = {};
+  if (prevData) {
+    data.data = prevData.get('data') || null;
+    data.details = prevData.get('details') || null;
+  }
+
+  data = Object.assign({}, data, {
     id,
     isFetching: true,
     isError: false
   });
 
-  return state.updateIn(['components'], val => val.set(id, dataMap));
+  return state.updateIn(['components'], val => val.set(id, Map(data)));
 }
 
+// if no prev data, or details set them null
+// if prev data or details set them with prev value, and the new values got from the call.
 function receiveApi(id, state, action) {
-  const {data} = action,
-    {json, api, query, details} = data;
+  const {data} = action;
+  let {json, api, query, details} = data;
 
-  const dataMap = Map({
+  json = json || null;
+  details = details || null;
+
+  let dataObj = {data: json, details};
+
+  let prevData = state.getIn(['components', id]);
+  if (prevData) {
+    dataObj.data = json || prevData.get('data');
+    dataObj.details = details || prevData.get('details');
+  }
+
+  dataObj = Object.assign({}, dataObj, {
     id,
     isFetching: false,
     isError: false,
-    data: json,
-    details,
     api,
     query
   });
 
-  return state.updateIn(['components'], val => val.set(id, dataMap));
+  return state.updateIn(['components'], val => val.set(id, Map(dataObj)));
 }
 
 function errorApi(id, state, action) {

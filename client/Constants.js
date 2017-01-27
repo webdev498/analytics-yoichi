@@ -33,6 +33,8 @@ export const HIGH_SCORE_RANGE = [65, 100];
 export const profileUrl = `${baseUrl}/api/user/profile`;
 export const defaultLayoutPath = `${baseUrl}/api/layout/summary-page`;
 
+export const DETAILS_BASE_URL = `/api/analytics/reporting/details`;
+
 export const CHART_COLORS = [
   '2BD8D0',
   '6CD3B4',

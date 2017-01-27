@@ -2,13 +2,15 @@ import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
 
 import Loader from 'components/Loader';
-import DetailsTable from 'components/DetailsTable';
+import DetailsTable from 'components/details';
 import ParentCardHeader from './ParentCardHeader';
 
 import {fetchApiData, removeComponent, broadcastEvent} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
 import {autoScrollTo} from 'utils/utils';
 import {updateRoute} from 'actions/core';
+
+import {DETAILS_BASE_URL} from 'Constants';
 
 const styles = {
   wrap: {
@@ -74,9 +76,9 @@ export class ParentCard extends React.Component {
     props.fetchApiData(props.id, api, props.params, props.options);
   }
 
-  toggleDetailsTable() {
+  toggleDetailsTable(dataObj) {
     if (!this.state.showDetailsFlag) {
-      this.getDetailsData();
+      this.getDetailsData(dataObj);
     }
 
     this.setState({
@@ -175,24 +177,40 @@ export class ParentCard extends React.Component {
     });
   }
 
-  getDetailsData() {
+  getQueryParams(dataObj) {
+    const {columns, interval} = this.props.data;
+
+    const queryParams = {
+      start: interval.from,
+      end: interval.to
+    };
+
+    if (dataObj.toolText) {
+      columns.forEach(col => {
+        if (col.detailsAvailable) {
+          const toolText = dataObj.toolText,
+            value = (toolText.split(',')[0]).toLowerCase();
+
+          queryParams.detailsValue = value;
+          queryParams.detailsField = col.name;
+        }
+      });
+    }
+
+    return queryParams;
+  }
+
+  getDetailsData(dataObj) {
     const {props: {data, meta}} = this;
     if (!data || !meta.api) return;
 
-    // create api object for getDetailsTableData,
-    // fetch data.
-    // add a way to include this in immutable maps.
-    const {interval} = data;
     const apiObj = {
       type: 'details',
-      path: '/api/analytics/reporting/details/{reportId}',
+      path: `${DETAILS_BASE_URL}/{reportId}`,
       pathParams: {
         reportId: meta.api.pathParams.reportId
       },
-      queryParams: {
-        start: interval.from,
-        end: interval.to
-      }
+      queryParams: this.getQueryParams(dataObj)
     };
 
     this.getData(apiObj);
@@ -282,7 +300,6 @@ function mapStateToProps(state, ownProps) {
   if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
 
-    // if (ownProps.id === 'alert-by-type') console.log(propsById.toObject());
     data = propsById.get('data');
     details = propsById.get('details');
     isFetching = propsById.get('isFetching');

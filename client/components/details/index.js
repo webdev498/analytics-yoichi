@@ -1,10 +1,8 @@
 import React, {PropTypes} from 'react';
-import {Colors} from '../../commons/colors';
+import {Colors} from '../../../commons/colors';
 
 import Reactable from 'reactable';
 const {Table, Thead, Th, Tr, Td} = Reactable;
-
-import 'react-virtualized/styles.css'; // only needs to be imported once
 
 const styles = {
   wrap: {
