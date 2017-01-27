@@ -1,10 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
-import {
-  getIndexFromColumnName,
-  isUndefined
-} from '../../../commons/utils/utils';
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
+import { getIndexFromColumnName } from '../../../commons/utils/utils';
 
 const chart = {
   'labelFontSize': '11',
@@ -85,50 +81,10 @@ export function generateDataSource(data, chartOptions, fieldMapping, updateChart
   };
 };
 
-function getDataPlotClickUrl(props, dataObj) {
-  let parameters = {
-    data: props.data,
-    duration: props.duration,
-    dataObj: dataObj,
-    queryParamsArray: props.kibana.queryParams,
-    pathParams: props.kibana.pathParams
-  };
-
-  return generateClickThroughUrl(parameters);
-}
-
 class ParetoChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object.isRequired,
-    showDetailsTable: PropTypes.func.isRequired
-  }
-
-  constructor(props) {
-    super(props);
-    this.handleGraphClick = this.handleGraphClick.bind(this);
-  }
-
-  handleGraphClick(dataObj) {
-    const {props} = this,
-      {clickData} = props;
-
-    let filterText = '';
-    if (clickData.filterText.startsWith(':')) {
-      filterText = dataObj.toolText.split(',')[0];
-    }
-
-    if (props.history.isActive(clickData.page)) {
-      props.broadcastEvent(clickData.tableId, {data: filterText, type: 'updateSearch'});
-    }
-    else {
-      // this is to enable to call the broadcastEvent when user is on some other page other than '/alerts'
-      //  so that this event can be called after the page load
-      window.sessionStorage.broadcastEvent = JSON.stringify({
-        id: clickData.tableId,
-        data: {data: filterText, type: 'updateSearch'}
-      });
-      props.history.push(clickData.page);
-    }
+    showDetailsTable: PropTypes.func
   }
 
   renderChart(props) {
@@ -141,9 +97,7 @@ class ParetoChart extends React.Component {
     }
 
     const {data, chartOptions, updateChartOptions, chartData, showDetailsTable} = props,
-      fieldMapping = chartData.fieldMapping,
-      {clickThrough} = this.context,
-      handleGraphClick = this.handleGraphClick;
+      fieldMapping = chartData.fieldMapping;
 
     FusionCharts.ready(function() {
       const mapProps = props.attributes;
@@ -158,19 +112,7 @@ class ParetoChart extends React.Component {
         dataSource: generateDataSource(data, chartOptions, fieldMapping, updateChartOptions),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            if (props.kibana) {
-              const url = getDataPlotClickUrl(props, dataObj);
-              if (url !== '' && !isUndefined(url)) {
-                clickThrough(url);
-              }
-            }
-            else if (props.clickData) {
-              handleGraphClick(dataObj);
-            }
-            else {
-              console.log('here here');
-              showDetailsTable();
-            }
+            showDetailsTable(dataObj);
           }
         }
       });

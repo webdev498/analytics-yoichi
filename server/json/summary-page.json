@@ -184,12 +184,7 @@
           "chartHeight": "350"
         },
         "id": "alert-by-type",
-        "type": "charts/ParetoChart",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": ":type",
-          "page": "/alerts"
-        }
+        "type": "charts/ParetoChart"
       },
       {
         "chartOptions": {
@@ -236,12 +231,7 @@
           "chartHeight": "350"
         },
         "id": "top-attacked-entities",
-        "type": "charts/ParetoChart",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": ":DIMENSION",
-          "page": "/alerts"
-        }
+        "type": "charts/ParetoChart"
       }
     ],
     [
