@@ -469,16 +469,7 @@
           "id": "HorizontalBarChartConnections"
         },
         "id": "horizontal-bar-chart-connections",
-        "type": "charts/HorizontalBarChart",
-        "kibana": {
-          "pathParams": [
-            "ip-connection-details"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": "",
-            "xAxisValueAsItIs": "ip"
-          }
-        }
+        "type": "charts/HorizontalBarChart"
       }
     ],
     [
