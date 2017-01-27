@@ -101,6 +101,7 @@ export default class ParentCardHeader extends React.Component {
     this.hideClearIcon = this.hideClearIcon.bind(this);
     this.showClearIcon = this.showClearIcon.bind(this);
     this.focusSearchText = this.focusSearchText.bind(this);
+    this.getData = this.getData.bind(this);
   }
 
   static propTypes = {
@@ -144,6 +145,10 @@ export default class ParentCardHeader extends React.Component {
         paddingLeft: '53px'
       }
     });
+  }
+
+  getData() {
+    this.props.getData();
   }
 
   componentWillReceiveProps(newProps) {
@@ -224,7 +229,7 @@ export default class ParentCardHeader extends React.Component {
           : (
             <FontIcon className='material-icons'
               style={styles.icon}
-              onClick={props.getData}>
+              onClick={this.getData}>
               replay
             </FontIcon>
           )
