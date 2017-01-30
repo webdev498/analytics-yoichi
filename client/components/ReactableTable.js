@@ -5,6 +5,7 @@ import Area2DAsSparkLineChart from 'components/charts/Area2DAsSparkLineChart';
 import DurationWidget from 'components/widgets/DurationWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
 import AssetWidget from 'components/widgets/AssetWidget';
+import LoadComponent from 'components/LoadComponent';
 
 import {getCountryCode} from '../../commons/utils/countryUtils';
 import {displayEllipsis} from '../../commons/utils/utils';
@@ -39,6 +40,28 @@ function loadComponent(column) {
       };
       return (
         <AssetWidget data={data} headingStyle={column.headingStyle} />
+      );
+    case 'loadComponent':
+      // let props = {
+      //   // meta: null,
+      //   // attributes: null,
+      //   id: 'test',
+      //   type: 'widgets/DurationWidget',
+      //   timeValue: column.data[0].value
+      // };
+      let props = {
+        // key: 'testing',
+        type: 'DurationWidget',
+        key: 'test',
+        // timeValue: 453464373
+        props: {
+          id: 'test',
+          type: 'widgets/DurationWidget',
+          timeValue: column.data[0].value
+        }
+      };
+      return (
+        <LoadComponent props={props} />
       );
     default:
       break;
