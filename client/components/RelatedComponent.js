@@ -62,7 +62,7 @@ export function renderRelatedComponents(props, type) {
     }
     else {
       apiObj.hideComponent = false;
-      props.fetchApiData(component.id, apiObj, params, options);
+      props.fetchApiData({id: component.id, api: apiObj, params, options});
     }
   });
 }

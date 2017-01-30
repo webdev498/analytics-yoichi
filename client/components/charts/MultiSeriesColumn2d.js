@@ -147,7 +147,7 @@ class MultiSeriesColumn2d extends React.Component {
     const {props: {meta: {api}, id, fetchApiData, params}} = this;
 
     if (api === null) {
-      fetchApiData(id, getApiObj(params), params);
+      fetchApiData({id, api: getApiObj(params), params});
     }
   }
 

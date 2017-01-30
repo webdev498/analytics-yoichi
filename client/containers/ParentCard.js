@@ -104,22 +104,24 @@ export class ParentCard extends React.Component {
     details: PropTypes.object
   }
 
-  getData(apiObj) {
-    const { props } = this,
-      api = apiObj || props.meta.api;
+  getData(apiObj, withDetails) {
+    const {props} = this,
+      {params, options, id} = props,
+      api = apiObj || props.meta.api,
+      isDetails = (withDetails === undefined) ? false : withDetails;
 
     if (!api) {
       const children = props.children.props.children;
 
       children.forEach((child) => {
         const {props: childProps} = child;
-        props.fetchApiData(childProps.id, childProps.meta.api);
+        props.fetchApiData({id: childProps.id, api: childProps.meta.api, params, options, isDetails});
       });
 
       return;
     }
 
-    props.fetchApiData(props.id, api, props.params, props.options);
+    props.fetchApiData({id, api, params, options, isDetails});
   }
 
   toggleDetailsTable(dataObj) {
@@ -231,7 +233,6 @@ export class ParentCard extends React.Component {
     if (!queryParams) return;
 
     const apiObj = {
-      type: 'details',
       path: `${DETAILS_BASE_URL}/{reportId}`,
       pathParams: {
         reportId
@@ -239,7 +240,7 @@ export class ParentCard extends React.Component {
       queryParams
     };
 
-    this.getData(apiObj);
+    this.getData(apiObj, true);
   }
 
   render() {
@@ -314,31 +315,35 @@ ParentCard.contextTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const {apiData} = state;
+  const {apiData, details} = state;
 
   let data = null,
     isFetching = false,
     isError = false,
     errorData = null,
     eventData = null,
-    details = null;
+    detailsData = null;
 
   if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
 
     data = propsById.get('data');
-    details = propsById.get('details');
     isFetching = propsById.get('isFetching');
     isError = propsById.get('isError');
     errorData = propsById.get('errorData');
     eventData = propsById.get('eventData');
   }
 
+  if (details.has(ownProps.id)) {
+    const detailsById = details.get(ownProps.id);
+    detailsData = detailsById.get('data');
+  }
+
   const duration = apiData.get('duration');
 
   return {
     data,
-    details,
+    details: detailsData,
     isFetching,
     isError,
     errorData,
