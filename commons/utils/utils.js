@@ -547,7 +547,7 @@ export function displayEllipsis(str, range) {
     max = range.max;
     min = range.min;
   }
-  if (str.length > max) {
+  if (str && str.length > max) {
     return str.substr(0, min) + ' ... ' + str.substr(str.length - min, str.length);
   }
   return str;
