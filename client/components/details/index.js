@@ -78,19 +78,6 @@ export default class DetailsTable extends React.Component {
                       key={`td${i}`}>
                       {col.value}
                     </Td>
-                    // <Td column={firstCharCapitalize(col.title)}
-                    //   value={col.value}
-                    //   key={`td${i}`}
-                    //   title={col.value}>
-                    //   {displayEllipsis(col.value)}
-                    // </Td>
-                    // <Td column={firstCharCapitalize(col.title)}
-                    //   value={col.value}
-                    //   key={`td${i}`}
-                    //   title={col.value}>
-                    //   {displayEllipsis(col.value)}
-                    //   <a>View</a>
-                    // </Td>
                   )
                 )}
               </Tr>
