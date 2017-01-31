@@ -127,14 +127,6 @@ export class ReactableTable extends React.Component {
     };
   }
 
-  handleColumnClick(dataObj) {
-    return () => {
-      const {showDetailsTable} = this.props;
-      console.log(dataObj);
-      showDetailsTable(dataObj);
-    };
-  }
-
   loadTable() {
     const {props} = this;
     if (!props.data) {

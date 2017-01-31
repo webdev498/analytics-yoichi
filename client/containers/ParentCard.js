@@ -50,8 +50,6 @@ function getParamsAndReportId(props, dataObj) {
       end: interval.to
     };
 
-  console.log(dataObj);
-
   if (dataObj.queryParams) {
     queryParams = Object.assign({}, queryParams, dataObj.queryParams);
   }
@@ -140,7 +138,7 @@ export class ParentCard extends React.Component {
     });
   }
 
-  getDetailsTable(props) {
+  getDetailsTable() {
     const {detailsState, details} = this.props;
     return <DetailsTable style={styles.detailsTable} detailsState={detailsState} details={details} />;
   }
@@ -307,7 +305,7 @@ export class ParentCard extends React.Component {
         <div style={{marginLeft: '-33px', marginRight: '-33px'}}>
           {
             state.showDetailsFlag
-            ? this.getDetailsTable(props)
+            ? this.getDetailsTable()
             : null
           }
         </div>

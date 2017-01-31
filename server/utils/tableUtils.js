@@ -59,8 +59,7 @@ export function processData(data, tableJson, url) {
             pathParams: tableJson.kibana.pathParams
           };
           rowObject.dataObj = {
-            queryParams: generateKibanaParameters(parameters),
-            itemsPerPage: tableJson.kibana.itemsPerPage ? tableJson.kibana.itemsPerPage : 3
+            queryParams: generateKibanaParameters(parameters)
           };
         }
         columnText = [];
