@@ -216,7 +216,7 @@ export function fetchApiData(input) {
 // when time range is changed.
 export function updateApiData(newDuration, params) {
   return function(dispatch, getState) {
-    const {apiData} = getState();
+    const {apiData, details} = getState();
 
     const currentDuration = apiData.get('duration');
 
@@ -235,6 +235,16 @@ export function updateApiData(newDuration, params) {
           if (api && api.loadOnce) {
             return;
           }
+
+          fetchApiData({id, api, params, options})(dispatch, getState);
+        });
+      }
+
+      if (details) {
+        details.forEach(component => {
+          const id = component.get('id');
+          const api = component.get('api');
+          const options = component.get('data') && component.get('data').options;
 
           fetchApiData({id, api, params, options})(dispatch, getState);
         });
@@ -262,6 +272,8 @@ export function broadcastEvent(id, eventData) {
 
 export function removeComponent(id) {
   return function(dispatch) {
-    removeComponentWithId(id).forEach(component => dispatch(component));
+    removeComponentWithId(id).forEach(component => {
+      dispatch(component);
+    });
   };
 }

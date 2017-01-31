@@ -47,24 +47,27 @@ function getParamsAndReportId(props, dataObj) {
   const {columns, interval} = data,
     queryParams = {
       start: interval.from,
-      end: interval.to
+      end: interval.to,
+      window: ''
     };
 
   const params = [];
-  columns.forEach(col => {
-    if (col.detailsAvailable) {
-      if (dataObj.label) {
-        const label = dataObj.label,
-          value = (label.split(',')[0]);
-        params.push({value, field: col.name});
+  if (dataObj) {
+    columns.forEach(col => {
+      if (col.detailsAvailable) {
+        if (dataObj.label) {
+          const label = dataObj.label,
+            value = (label.split(',')[0]);
+          params.push({value, field: col.name});
+        }
+        else if (dataObj.toolText) {
+          const toolText = dataObj.toolText,
+            value = (toolText.split(',')[0]).toLowerCase();
+          params.push({value, field: col.name});
+        }
       }
-      else if (dataObj.toolText) {
-        const toolText = dataObj.toolText,
-          value = (toolText.split(',')[0]).toLowerCase();
-        params.push({value, field: col.name});
-      }
-    }
-  });
+    });
+  }
 
   if (params.length === 1) {
     queryParams.detailsValue = params[0].value;
@@ -104,11 +107,11 @@ export class ParentCard extends React.Component {
     details: PropTypes.object
   }
 
-  getData(apiObj, withDetails) {
+  getData(dataObj) {
     const {props} = this,
       {params, options, id} = props,
-      api = apiObj || props.meta.api,
-      isDetails = (withDetails === undefined) ? false : withDetails;
+      isDetails = this.state.showDetailsFlag,
+      api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
 
     if (!api) {
       const children = props.children.props.children;
@@ -125,13 +128,16 @@ export class ParentCard extends React.Component {
   }
 
   toggleDetailsTable(dataObj) {
-    if (!this.state.showDetailsFlag) {
-      this.getDetailsData(dataObj);
-    }
+    const isDetails = this.state.showDetailsFlag;
 
     this.setState({
-      showDetailsFlag: !this.state.showDetailsFlag,
+      showDetailsFlag: !isDetails,
       showComponentIconFlag: !this.state.showComponentIconFlag
+    },
+    () => {
+      if (!isDetails) {
+        this.getData(dataObj);
+      }
     });
   }
 
@@ -240,7 +246,7 @@ export class ParentCard extends React.Component {
       queryParams
     };
 
-    this.getData(apiObj, true);
+    return apiObj;
   }
 
   render() {
