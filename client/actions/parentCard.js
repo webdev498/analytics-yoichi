@@ -14,6 +14,8 @@ import {
 import {baseUrl} from 'config';
 import {logoutUtil} from './auth';
 
+import {timeToMS} from '../../commons/utils/utils';
+
 let cookies = {};
 
 export function requestApiData(id, api, isDetails) {
@@ -246,6 +248,9 @@ export function updateApiData(newDuration, params) {
           const api = component.get('api');
           const options = component.get('data') && component.get('data').options;
 
+          // const start = api.queryParams.start,
+          //   interval = timeToMS(newDuration.param);
+          // api.queryParams.end = start + interval;
           fetchApiData({id, api, params, options, isDetails: true})(dispatch, getState);
         });
       }

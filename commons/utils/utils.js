@@ -2,6 +2,57 @@ import React from 'react';
 import moment from 'moment';
 import {Colors} from '../colors';
 
+const timeParams = {
+  '1h': {
+    diffInMin: 5,
+    functionName: 'hour',
+    diffInUnits: 1,
+    numOfHours: 1
+  },
+  '6h': {
+    diffInMin: 15,
+    functionName: 'hour',
+    diffInUnits: 6,
+    numOfHours: 6
+  },
+  '12h': {
+    diffInMin: 30,
+    functionName: 'hour',
+    diffInUnits: 12,
+    numOfHours: 12
+  },
+  '24h': {
+    diffInMin: 60,
+    functionName: 'date',
+    diffInUnits: 1,
+    numOfHours: 24
+  },
+  '48h': {
+    diffInMin: 120,
+    functionName: 'date',
+    diffInUnits: 2,
+    numOfHours: 48
+  },
+  '1d': {
+    diffInMin: 60,
+    functionName: 'date',
+    diffInUnits: 1,
+    numOfHours: 1 * 24
+  },
+  '1w': {
+    diffInMin: 1440,
+    functionName: 'date',
+    diffInUnits: 7,
+    numOfHours: 7 * 24
+  },
+  '1mo': {
+    diffInMin: 10080,
+    functionName: 'month',
+    diffInUnits: 1,
+    numOfHours: 31 * 24
+  }
+};
+
 // Function to convert milliseconds to time
 export function msToTime(duration) {
   let seconds = parseInt((duration / 1000) % 60),
@@ -16,6 +67,18 @@ export function msToTime(duration) {
     'timeArray': [hours, minutes, seconds],
     'timeString': hours + ' : ' + minutes + ' : ' + seconds
   };
+}
+
+// Function to convert days or hours to milliseconds
+export function timeToMS(duration) {
+  const msInHour = 1000 * 60 * 60 * 24,
+    timeSlot = timeParams[duration];
+
+  if (timeSlot) {
+    return msInHour * timeSlot.numOfHours;
+  }
+
+  return 0;
 }
 
 // Function to generate row data
@@ -206,48 +269,6 @@ function getFromDate(params, todayDate, fromDate) {
 
 // Function to get from and to dates for the specific time window
 export function getTimePairFromWindow(timeWindow, dateString) {
-  const timeDifferences = {
-    '1h': {
-      diffInMin: 5,
-      functionName: 'hour',
-      diffInUnits: 1
-    },
-    '6h': {
-      diffInMin: 15,
-      functionName: 'hour',
-      diffInUnits: 6
-    },
-    '12h': {
-      diffInMin: 30,
-      functionName: 'hour',
-      diffInUnits: 12
-    },
-    '24h': {
-      diffInMin: 60,
-      functionName: 'date',
-      diffInUnits: 1
-    },
-    '48h': {
-      diffInMin: 120,
-      functionName: 'date',
-      diffInUnits: 2
-    },
-    '1d': {
-      diffInMin: 60,
-      functionName: 'date',
-      diffInUnits: 1
-    },
-    '1w': {
-      diffInMin: 1440,
-      functionName: 'date',
-      diffInUnits: 7
-    },
-    '1mo': {
-      diffInMin: 10080,
-      functionName: 'month',
-      diffInUnits: 1
-    }
-  };
   let dateString1 = '',
     dateString2 = '';
 
@@ -256,7 +277,7 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     let dateParameter = new Date(Date.parse((dateString).toString()));
     dateString1 = formatDate(dateParameter);
 
-    let timeDifference = timeDifferences[timeWindow] ? timeDifferences[timeWindow].diffInMin : 5,
+    let timeDifference = timeParams[timeWindow] ? timeParams[timeWindow].diffInMin : 5,
       toDate = dateParameter;
     toDate.setMinutes(toDate.getMinutes() + timeDifference);
     dateString2 = formatDate(toDate);
@@ -265,7 +286,7 @@ export function getTimePairFromWindow(timeWindow, dateString) {
   else {
     let todayDate = new Date(),
       fromDate = todayDate;
-    fromDate = getFromDate(timeDifferences[timeWindow], todayDate, fromDate);
+    fromDate = getFromDate(timeParams[timeWindow], todayDate, fromDate);
     dateString1 = formatDate(new Date());
     dateString2 = formatDate(fromDate);
     return {fromDate: dateString2, toDate: dateString1};

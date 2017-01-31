@@ -140,6 +140,8 @@ export class ParentCard extends React.Component {
   }
 
   toggleDetailsTable(dataObj) {
+    if (this.props.meta.showDetails === false) return;  // don't show details, if meta showDetails set to false
+
     const isDetails = this.state.showDetailsFlag;
 
     this.setState({
