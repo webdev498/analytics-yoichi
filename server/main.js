@@ -35,10 +35,6 @@ app.use(convert(historyApiFallback({
   rewrites: [
     // TODO remove this
     {
-      from: /\/alert-new/,
-      to: '/index.html'
-    },
-    {
       from: /\/alert/,
       to: '/index.html'
     },

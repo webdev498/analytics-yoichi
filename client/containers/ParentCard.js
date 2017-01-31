@@ -287,9 +287,13 @@ export class ParentCard extends React.Component {
     };
 
     let componentStyle = {};
-    if (state.showDetailsFlag) {
+    const isDetails = state.showDetailsFlag;
+    if (isDetails) {
       componentStyle = {display: 'none'};
     }
+
+    const isComponentError = props.isError && (props.meta.showErrorMessage !== false) && !isDetails,
+      isDetailsError = props.details.isError && isDetails;
 
     return (
       <div style={cardStyle} id={props.id}>
@@ -313,8 +317,8 @@ export class ParentCard extends React.Component {
         }
 
         {
-          props.isError && (props.meta.showErrorMessage !== false)
-          ? this.getErrorElement()
+          isComponentError
+          ? this.getErrorElement(isDetails)
           : (
             <div style={componentStyle}>
               {React.cloneElement(props.children, {...childProps, ...extraProps})}
@@ -322,13 +326,19 @@ export class ParentCard extends React.Component {
             )
         }
 
-        <div>
-          {
-            state.showDetailsFlag
-            ? this.getDetailsTable()
-            : null
-          }
-        </div>
+        {
+          isDetailsError
+          ? this.getErrorElement(isDetails)
+          : (
+            <div>
+              {
+                state.showDetailsFlag
+                ? this.getDetailsTable()
+                : null
+              }
+            </div>
+            )
+        }
       </div>
     );
   }

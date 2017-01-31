@@ -14,7 +14,7 @@ import {
 import {baseUrl} from 'config';
 import {logoutUtil} from './auth';
 
-import {timeToMS} from '../../commons/utils/utils';
+// import {timeToMS} from '../../commons/utils/utils';
 
 let cookies = {};
 
