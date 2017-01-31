@@ -156,7 +156,7 @@ export class ReactableTable extends React.Component {
         filterBy={props.search}
         itemsPerPage={normalizeData.length > options.itemsPerPage ? options.itemsPerPage : 0}
         pageButtonLimit={5}
-        currentPage={0}
+        // currentPage={0}
         hideFilterInput
         previousPageLabel={'<<'}
         nextPageLabel={'>>'}>

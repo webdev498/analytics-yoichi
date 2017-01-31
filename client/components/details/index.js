@@ -12,6 +12,9 @@ const styles = {
   }
 };
 
+import {firstCharCapitalize} from '../../../commons/utils/utils';
+import './_table.scss';
+
 export default class DetailsTable extends React.Component {
   static propTypes = {
     style: PropTypes.object.isRequired
@@ -50,16 +53,18 @@ export default class DetailsTable extends React.Component {
       <div style={style}>
         <Table
           style={{width: '100%'}}
-          className='threatTable'
+          className='detailsTable'
           pageButtonLimit={5}
+          itemsPerPage={list.length > 3 ? 3 : 0}
           currentPage={0}
           hideFilterInput
           previousPageLabel={'<<'}
-          nextPageLabel={'>>'}>
+          nextPageLabel={'>>'}
+          sortable>
           <Thead>
             {
               header.map((col, i) => (
-                <Th key={`th${i}`}>{col.dataKey}</Th>
+                <Th key={`th${i}`}>{firstCharCapitalize(col.dataKey)}</Th>
               ))
             }
           </Thead>
@@ -68,11 +73,24 @@ export default class DetailsTable extends React.Component {
               <Tr key={`tr${i}`}>
                 {
                   row.map((col, i) => (
-                    <Td column={col.title}
+                    <Td column={firstCharCapitalize(col.title)}
                       value={col.value}
                       key={`td${i}`}>
                       {col.value}
                     </Td>
+                    // <Td column={firstCharCapitalize(col.title)}
+                    //   value={col.value}
+                    //   key={`td${i}`}
+                    //   title={col.value}>
+                    //   {displayEllipsis(col.value)}
+                    // </Td>
+                    // <Td column={firstCharCapitalize(col.title)}
+                    //   value={col.value}
+                    //   key={`td${i}`}
+                    //   title={col.value}>
+                    //   {displayEllipsis(col.value)}
+                    //   <a>View</a>
+                    // </Td>
                   )
                 )}
               </Tr>

@@ -112,6 +112,7 @@ class ParetoChart extends React.Component {
         dataSource: generateDataSource(data, chartOptions, fieldMapping, updateChartOptions),
         events: {
           dataplotClick: function(eventObj, dataObj) {
+            console.log(dataObj);
             showDetailsTable(dataObj);
           }
         }
