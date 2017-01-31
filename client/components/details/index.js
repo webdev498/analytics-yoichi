@@ -45,17 +45,18 @@ export default class DetailsTable extends React.Component {
   render() {
     const {props} = this;
     const style = Object.assign({}, styles.wrap, props.style);
-    if (!props.details) return null;
+    if (!props.detailsState) return null;
 
-    const {list, header} = this.getData(props.details);
+    const {list, header} = this.getData(props.detailsState);
+    let itemsPerPage = props.details && props.details.itemsPerPage ? props.details.itemsPerPage : 3;
 
     return (
-      <div style={style}>
+      <div style={style} className='details-scrollbar'>
         <Table
           style={{width: '100%'}}
           className='detailsTable'
           pageButtonLimit={5}
-          itemsPerPage={list.length > 3 ? 3 : 0}
+          itemsPerPage={list.length > itemsPerPage ? itemsPerPage : 0}
           currentPage={0}
           hideFilterInput
           previousPageLabel={'<<'}

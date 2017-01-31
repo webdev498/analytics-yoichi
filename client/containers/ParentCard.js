@@ -50,6 +50,8 @@ function getParamsAndReportId(props, dataObj) {
       end: interval.to
     };
 
+  console.log(dataObj);
+
   if (dataObj.queryParams) {
     queryParams = Object.assign({}, queryParams, dataObj.queryParams);
   }
@@ -105,7 +107,8 @@ export class ParentCard extends React.Component {
     updateRoute: PropTypes.func.isRequired,
     history: PropTypes.object,
     data: PropTypes.object,
-    details: PropTypes.object
+    details: PropTypes.object,
+    detailsState: PropTypes.object
   }
 
   getData(apiObj) {
@@ -137,9 +140,9 @@ export class ParentCard extends React.Component {
     });
   }
 
-  getDetailsTable() {
-    const {details} = this.props;
-    return <DetailsTable style={styles.detailsTable} details={details} />;
+  getDetailsTable(props) {
+    const {detailsState, details} = this.props;
+    return <DetailsTable style={styles.detailsTable} detailsState={detailsState} details={details} />;
   }
 
   componentDidMount() {
@@ -301,10 +304,10 @@ export class ParentCard extends React.Component {
             )
         }
 
-        <div>
+        <div style={{marginLeft: '-33px', marginRight: '-33px'}}>
           {
             state.showDetailsFlag
-            ? this.getDetailsTable()
+            ? this.getDetailsTable(props)
             : null
           }
         </div>
@@ -325,13 +328,13 @@ function mapStateToProps(state, ownProps) {
     isError = false,
     errorData = null,
     eventData = null,
-    details = null;
+    detailsState = null;
 
   if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
 
     data = propsById.get('data');
-    details = propsById.get('details');
+    detailsState = propsById.get('details');
     isFetching = propsById.get('isFetching');
     isError = propsById.get('isError');
     errorData = propsById.get('errorData');
@@ -342,7 +345,7 @@ function mapStateToProps(state, ownProps) {
 
   return {
     data,
-    details,
+    detailsState,
     isFetching,
     isError,
     errorData,

@@ -118,6 +118,22 @@ tr.reactable-filterer td {
 .detailsTable tr td span.title {color: $CloudColorShade1; font-weight: 600; font-size: 14px;}
 .detailsTable tr td span.heading {color: $CloudColorShade1; font-weight: 600; font-size: 13px;}
 
+.detailsTable tr th:first-child {
+  padding-left: 33px;
+}
+
+.detailsTable tr td:first-child {
+  padding-left: 33px;
+}
+
+.detailsTable tr th:last-child {
+  padding-right: 33px;
+}
+
+.detailsTable tr td:last-child {
+  padding-right: 33px;
+}
+
 .reactable-pagination tr {
 background-color: $WhiteColor !important;
 }
@@ -129,4 +145,19 @@ background-color: $WhiteColor !important;
   margin-bottom: 7px;
   margin-right: 20px;
   padding: 5px;
+}
+
+.details-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+}
+
+.details-scrollbar::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+}
+
+.details-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }

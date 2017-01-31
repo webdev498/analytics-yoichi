@@ -42,7 +42,6 @@
       "software-details"
     ],
     "queryParams": {
-      "fromAndToBasedOnToday": ""
     }
   }
 }

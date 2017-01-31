@@ -58,8 +58,10 @@ export function processData(data, tableJson, url) {
             nestedResult,
             pathParams: tableJson.kibana.pathParams
           };
-          rowObject.dataObj = {};
-          rowObject.dataObj.queryParams = generateKibanaParameters(parameters);
+          rowObject.dataObj = {
+            queryParams: generateKibanaParameters(parameters),
+            itemsPerPage: tableJson.kibana.itemsPerPage ? tableJson.kibana.itemsPerPage : 3
+          };
         }
         columnText = [];
       }
