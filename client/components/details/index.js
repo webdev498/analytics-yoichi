@@ -26,7 +26,13 @@ export default class DetailsTable extends React.Component {
     const {columns, rows} = data;
     let header = columns.map(col => col.displayName);
 
-    const list = rows.map(row => header.map((c, i) => ({title: c, value: row[i]})));
+    const list = rows.map(row => header.map((c, i) => {
+      let value = row[i];
+      if (columns[i].dataType === 'OBJECT') {
+        value = JSON.stringify(value);
+      };
+      return {title: c, value};
+    }));
 
     header = header.map(head => {
       let label = head.split('.');
