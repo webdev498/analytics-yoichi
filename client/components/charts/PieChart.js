@@ -177,7 +177,6 @@ function renderChart(props) {
     let currentChartData = fieldMapping[i],
       {rows, columns} = rawData[currentChartData.reportId],
       columnIndex = '';
-
     top10CountValue = 0;
     top10TotalValue = 0;
 
@@ -196,13 +195,20 @@ function renderChart(props) {
         countValue = getIndexFromObjectName(inputArray);
       }
 
-      if (currentChartData.reportId === 'taf_total_usage') {
+      if (currentChartData.reportId === 'taf_s3_requester' || currentChartData.reportId === 'taf_s3_ua' ){
+        columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
+        countValue = rows[d][columnIndex];
+      }
+
+      if (currentChartData.reportId === 'taf_total_usage' || currentChartData.reportId === 'taf_s3_total') {
         columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
         totalValue = rows[d][columnIndex];
       }
 
       if (currentChartData.reportId === 'taf_top_talkers_connections' ||
-       currentChartData.reportId === 'taf_top_talkers_bandwidth') {
+       currentChartData.reportId === 'taf_top_talkers_bandwidth' ||
+       currentChartData.reportId === 'taf_s3_most_frequent_useragent' ||
+       currentChartData.reportId === 'taf_s3_most_active_requester') {
         let fieldValue = '';
         columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
         fieldValue = rows[d][columnIndex];
