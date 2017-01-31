@@ -279,7 +279,11 @@ export class ParentCard extends React.Component {
 
     return (
       <div style={cardStyle} id={props.id}>
-        {props.isFetching ? <Loader /> : null}
+        {
+          props.isFetching || props.details.isFetching
+          ? <Loader />
+          : null
+        }
 
         {
           props.meta.showHeader
@@ -328,7 +332,11 @@ function mapStateToProps(state, ownProps) {
     isError = false,
     errorData = null,
     eventData = null,
-    detailsData = null;
+    detailsObj = {
+      isFetching: false,
+      isError: false,
+      data: null
+    };
 
   if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
@@ -342,14 +350,14 @@ function mapStateToProps(state, ownProps) {
 
   if (details.has(ownProps.id)) {
     const detailsById = details.get(ownProps.id);
-    detailsData = detailsById.get('data');
+    detailsObj = detailsById.toObject();
   }
 
   const duration = apiData.get('duration');
 
   return {
     data,
-    details: detailsData,
+    details: detailsObj,
     isFetching,
     isError,
     errorData,

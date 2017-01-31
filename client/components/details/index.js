@@ -17,7 +17,8 @@ import './_table.scss';
 
 export default class DetailsTable extends React.Component {
   static propTypes = {
-    style: PropTypes.object.isRequired
+    style: PropTypes.object.isRequired,
+    details: PropTypes.object.isRequired
   }
 
   getData(data) {
@@ -43,11 +44,11 @@ export default class DetailsTable extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props, props: {details}} = this;
     const style = Object.assign({}, styles.wrap, props.style);
-    if (!props.details) return null;
+    if (!details.data) return null;
 
-    const {list, header} = this.getData(props.details);
+    const {list, header} = this.getData(details.data);
 
     return (
       <div style={style}>
