@@ -110,8 +110,20 @@ export class ParentCard extends React.Component {
   getData(dataObj) {
     const {props} = this,
       {params, options, id} = props,
-      isDetails = this.state.showDetailsFlag,
-      api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
+      isDetails = this.state.showDetailsFlag;
+
+    if (isDetails) {
+      if (!dataObj) {
+        dataObj = this.dataObj;
+      }
+      else {
+        // save dataObj to be used when the details are refreshed
+        // to maintain of api object.
+        this.dataObj = dataObj;
+      }
+    }
+
+    const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
 
     if (!api) {
       const children = props.children.props.children;
