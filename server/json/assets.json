@@ -187,7 +187,7 @@
         "attributes": {
           "style": {
             "marginRight": "33px",
-            "width": "100%"
+            "width": "50%"
           },
           "id": "PieChartConnections"
         },
@@ -264,7 +264,7 @@
             "display": "none"
           },
           "style": {
-            "width": "100%"
+            "width": "50%"
           },
           "id": "HorizontalBarChartConnections"
         },
@@ -328,7 +328,7 @@
         "attributes": {
           "style": {
             "marginRight": "33px",
-            "width": "100%"
+            "width": "50%"
           },
           "id": "PieChartBandwidth"
         },
@@ -402,7 +402,7 @@
             "display": "none"
           },
           "style": {
-            "width": "100%"
+            "width": "50%"
           },
           "id": "HorizontalBarChartBandwidth"
         },
