@@ -52,8 +52,7 @@
       "login-details"
     ],
     "queryParams": {
-      "fromAndToBasedOnToday": "",
-      "user": "data.login.user:fieldName",
+      "data.login.user": "data.login.user:fieldName",
       "status": "success"
     }
   }

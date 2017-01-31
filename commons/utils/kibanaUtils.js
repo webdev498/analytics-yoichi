@@ -102,7 +102,7 @@ export function getQueryParamsFromKey(parameters, key, value) {
         queryParam = 'lowScore=' + HIGH_SCORE_RANGE[0] + '&highScore=' + HIGH_SCORE_RANGE[1];
       }
       break;
-    case 'status':
+    case 'data.login.status':
       queryParam = key + '=' + value;
       break;
     default:

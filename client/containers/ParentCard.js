@@ -44,42 +44,46 @@ function getParamsAndReportId(props, dataObj) {
     data = data[reportId];
   }
 
-  const {columns, interval} = data,
+  let {columns, interval} = data,
     queryParams = {
       start: interval.from,
       end: interval.to
     };
 
-  const params = [];
-  columns.forEach(col => {
-    if (col.detailsAvailable) {
-      if (dataObj.label) {
-        const label = dataObj.label,
-          value = (label.split(',')[0]);
-        params.push({value, field: col.name});
-      }
-      else if (dataObj.toolText) {
-        const toolText = dataObj.toolText,
-          value = (toolText.split(',')[0]).toLowerCase();
-        params.push({value, field: col.name});
-      }
-    }
-  });
-
-  if (params.length === 1) {
-    queryParams.detailsValue = params[0].value;
-    queryParams.detailsField = params[0].field;
+  if (dataObj.queryParams) {
+    queryParams = Object.assign({}, queryParams, dataObj.queryParams);
   }
-  else if (params.length > 1) {
-    params.forEach((p, i) => {
-      queryParams[`detailsValue${i + 1}`] = p.value;
-      queryParams[`detailsField${i + 1}`] = p.field;
+  else {
+    const params = [];
+    columns.forEach(col => {
+      if (col.detailsAvailable) {
+        if (dataObj.label) {
+          const label = dataObj.label,
+            value = (label.split(',')[0]);
+          params.push({value, field: col.name});
+        }
+        else if (dataObj.toolText) {
+          const toolText = dataObj.toolText,
+            value = (toolText.split(',')[0]).toLowerCase();
+          params.push({value, field: col.name});
+        }
+      }
     });
+
+    if (params.length === 1) {
+      queryParams.detailsValue = params[0].value;
+      queryParams.detailsField = params[0].field;
+    }
+    else if (params.length > 1) {
+      params.forEach((p, i) => {
+        queryParams[`detailsValue${i + 1}`] = p.value;
+        queryParams[`detailsField${i + 1}`] = p.field;
+      });
+    }
   }
 
   return {queryParams, reportId};
 }
-
 
 export class ParentCard extends React.Component {
   constructor(props) {

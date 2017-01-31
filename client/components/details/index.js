@@ -60,7 +60,11 @@ export default class DetailsTable extends React.Component {
           hideFilterInput
           previousPageLabel={'<<'}
           nextPageLabel={'>>'}
-          sortable>
+          sortable
+          defaultSort={{
+            column: firstCharCapitalize(header[0].dataKey),
+            direction: 'desc'
+          }}>
           <Thead>
             {
               header.map((col, i) => (
