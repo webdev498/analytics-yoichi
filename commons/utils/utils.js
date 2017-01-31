@@ -69,18 +69,6 @@ export function msToTime(duration) {
   };
 }
 
-// Function to convert days or hours to milliseconds
-export function timeToMS(duration) {
-  const msInHour = 1000 * 60 * 60 * 24,
-    timeSlot = timeParams[duration];
-
-  if (timeSlot) {
-    return msInHour * timeSlot.numOfHours;
-  }
-
-  return 0;
-}
-
 // Function to generate row data
 export function generateRawData(fieldMapping, apiData) {
   let rawData = {};

@@ -48,7 +48,6 @@ function getParamsAndReportId(props, dataObj) {
     queryParams = {
       start: interval.from,
       end: interval.to,
-      window: '',
       count: 100
     };
 
@@ -302,7 +301,7 @@ export class ParentCard extends React.Component {
     return (
       <div style={cardStyle} id={props.id}>
         {
-          props.isFetching || (props.detailsState && props.detailsState.isFetching)
+          props.isFetching || props.detailsState.isFetching
           ? <Loader />
           : null
         }
