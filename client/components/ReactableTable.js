@@ -91,14 +91,6 @@ function displayCountryFlag(data) {
   );
 }
 
-function rowClick(context, tableRow) {
-  if (!tableRow.rowClickUrl) {
-    return;
-  }
-  let rowClickUrl = kibanaBaseUrl + tableRow.rowClickUrl;
-  context.clickThrough(rowClickUrl);
-}
-
 export class ReactableTable extends React.Component {
   constructor(props) {
     super(props);
@@ -108,11 +100,13 @@ export class ReactableTable extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
     tableOptions: PropTypes.object,
-    data: PropTypes.object
+    data: PropTypes.object,
+    showDetailsTable: PropTypes.func
   }
 
   handleRowClick(tableRow, index) {
-    const {context, props} = this;
+    const {props} = this,
+      {showDetailsTable} = props;
 
     return () => {
       if (props.openAlertDetails) {
@@ -128,7 +122,7 @@ export class ReactableTable extends React.Component {
         props.updateRoute(url);
       }
       else {
-        rowClick(context, tableRow);
+        showDetailsTable(tableRow.dataObj);
       }
     };
   }
@@ -175,6 +169,7 @@ export class ReactableTable extends React.Component {
 
                     let value = column.data[0] ? column.data[0].value : '',
                       style = column.type === 'text' ? {...column.style, 'wordBreak': 'break-all'} : {...column.style};
+
                     return (
                       <Td column={column.name}
                         value={value}

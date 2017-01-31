@@ -743,9 +743,12 @@
         "attributes": {
           "style": {
             "marginRight": "33px",
-            "width": "100%"
+            "width": "33.33%"
           },
           "id": "LeastUsedSoftwareDetails"
+        },
+        "details": {
+          "itemsPerPage": 5
         },
         "id": "least-used-software-details",
         "type": "ReactableTable"
@@ -771,9 +774,12 @@
         "attributes": {
           "style": {
             "marginRight": "33px",
-            "width": "100%"
+            "width": "33.33%"
           },
           "id": "SuccessfulLogins"
+        },
+        "details": {
+          "itemsPerPage": 5
         },
         "id": "successful-logins",
         "type": "ReactableTable"
@@ -798,9 +804,12 @@
         "name": "ReactableTable",
         "attributes": {
           "style": {
-            "width": "100%"
+            "width": "33.33%"
           },
           "id": "FailedLogins"
+        },
+        "details": {
+          "itemsPerPage": 5
         },
         "id": "failed-logins",
         "type": "ReactableTable"

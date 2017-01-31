@@ -407,6 +407,9 @@
           },
           "id": "LongestConnections"
         },
+        "details": {
+          "itemsPerPage": 5
+        },
         "id": "longest-connections",
         "type": "ReactableTable"
       }

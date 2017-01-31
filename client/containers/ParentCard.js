@@ -44,15 +44,19 @@ function getParamsAndReportId(props, dataObj) {
     data = data[reportId];
   }
 
-  const {columns, interval} = data,
+  let {columns, interval} = data,
     queryParams = {
       start: interval.from,
       end: interval.to,
-      window: ''
+      window: '',
+      count: 100
     };
 
-  const params = [];
-  if (dataObj) {
+  if (dataObj.queryParams) {
+    queryParams = Object.assign({}, queryParams, dataObj.queryParams);
+  }
+  else {
+    const params = [];
     columns.forEach(col => {
       if (col.detailsAvailable) {
         if (dataObj.label) {
@@ -67,22 +71,21 @@ function getParamsAndReportId(props, dataObj) {
         }
       }
     });
-  }
 
-  if (params.length === 1) {
-    queryParams.detailsValue = params[0].value;
-    queryParams.detailsField = params[0].field;
-  }
-  else if (params.length > 1) {
-    params.forEach((p, i) => {
-      queryParams[`detailsValue${i + 1}`] = p.value;
-      queryParams[`detailsField${i + 1}`] = p.field;
-    });
+    if (params.length === 1) {
+      queryParams.detailsValue = params[0].value;
+      queryParams.detailsField = params[0].field;
+    }
+    else if (params.length > 1) {
+      params.forEach((p, i) => {
+        queryParams[`detailsValue${i + 1}`] = p.value;
+        queryParams[`detailsField${i + 1}`] = p.field;
+      });
+    }
   }
 
   return {queryParams, reportId};
 }
-
 
 export class ParentCard extends React.Component {
   constructor(props) {
@@ -104,7 +107,8 @@ export class ParentCard extends React.Component {
     updateRoute: PropTypes.func.isRequired,
     history: PropTypes.object,
     data: PropTypes.object,
-    details: PropTypes.object
+    details: PropTypes.object,
+    detailsState: PropTypes.object
   }
 
   getData(dataObj) {
@@ -156,8 +160,8 @@ export class ParentCard extends React.Component {
   }
 
   getDetailsTable() {
-    const {details} = this.props;
-    return <DetailsTable style={styles.detailsTable} details={details} />;
+    const {detailsState, details} = this.props;
+    return <DetailsTable style={styles.detailsTable} detailsState={detailsState} details={details} />;
   }
 
   componentDidMount() {
@@ -293,12 +297,12 @@ export class ParentCard extends React.Component {
     }
 
     const isComponentError = props.isError && (props.meta.showErrorMessage !== false) && !isDetails,
-      isDetailsError = props.details.isError && isDetails;
+      isDetailsError = props.detailsState.isError && isDetails;
 
     return (
       <div style={cardStyle} id={props.id}>
         {
-          props.isFetching || props.details.isFetching
+          props.isFetching || (props.detailsState && props.detailsState.isFetching)
           ? <Loader />
           : null
         }
@@ -330,7 +334,7 @@ export class ParentCard extends React.Component {
           isDetailsError
           ? this.getErrorElement(isDetails)
           : (
-            <div>
+            <div style={{marginLeft: '-33px', marginRight: '-33px'}}>
               {
                 state.showDetailsFlag
                 ? this.getDetailsTable()
@@ -356,7 +360,7 @@ function mapStateToProps(state, ownProps) {
     isError = false,
     errorData = null,
     eventData = null,
-    detailsObj = {
+    detailsState = {
       isFetching: false,
       isError: false,
       data: null
@@ -374,14 +378,14 @@ function mapStateToProps(state, ownProps) {
 
   if (details.has(ownProps.id)) {
     const detailsById = details.get(ownProps.id);
-    detailsObj = detailsById.toObject();
+    detailsState = detailsById.toObject();
   }
 
   const duration = apiData.get('duration');
 
   return {
     data,
-    details: detailsObj,
+    detailsState,
     isFetching,
     isError,
     errorData,

@@ -118,6 +118,22 @@ tr.reactable-filterer td {
 .detailsTable tr td span.title {color: $CloudColorShade1; font-weight: 600; font-size: 14px;}
 .detailsTable tr td span.heading {color: $CloudColorShade1; font-weight: 600; font-size: 13px;}
 
+.detailsTable tr th:first-child {
+  padding-left: 33px;
+}
+
+.detailsTable tr td:first-child {
+  padding-left: 33px;
+}
+
+.detailsTable tr th:last-child {
+  padding-right: 33px;
+}
+
+.detailsTable tr td:last-child {
+  padding-right: 33px;
+}
+
 .reactable-pagination tr {
 background-color: $WhiteColor !important;
 }

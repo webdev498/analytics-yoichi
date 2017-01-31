@@ -18,7 +18,8 @@ import './_table.scss';
 export default class DetailsTable extends React.Component {
   static propTypes = {
     style: PropTypes.object.isRequired,
-    details: PropTypes.object.isRequired
+    detailsState: PropTypes.object,
+    details: PropTypes.object
   }
 
   getData(data) {
@@ -44,24 +45,30 @@ export default class DetailsTable extends React.Component {
   }
 
   render() {
-    const {props, props: {details}} = this;
+    const {props, props: {details, detailsState}} = this;
     const style = Object.assign({}, styles.wrap, props.style);
-    if (!details.data) return null;
 
-    const {list, header} = this.getData(details.data);
+    if (!detailsState || !detailsState.data) return null;
+
+    const {list, header} = this.getData(detailsState.data);
+    let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 3;
 
     return (
-      <div style={style}>
+      <div style={style} className='details-scrollbar'>
         <Table
           style={{width: '100%'}}
           className='detailsTable'
           pageButtonLimit={5}
-          itemsPerPage={list.length > 3 ? 3 : 0}
+          itemsPerPage={list.length > itemsPerPage ? itemsPerPage : 0}
           currentPage={0}
           hideFilterInput
           previousPageLabel={'<<'}
           nextPageLabel={'>>'}
-          sortable>
+          sortable
+          defaultSort={{
+            column: firstCharCapitalize(header[0].dataKey),
+            direction: 'desc'
+          }}>
           <Thead>
             {
               header.map((col, i) => (
