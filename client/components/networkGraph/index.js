@@ -711,7 +711,7 @@ class NetworkGraph extends React.Component {
         }, params)
       };
 
-      props.fetchApiData(props.timelineId, apiObj, {}, {});
+      props.fetchApiData({id: props.timelineId, api: apiObj, params: {}, options: {}});
 
       selectedNodesForExtendingGraph.push({
         'nodeID': nodeID,

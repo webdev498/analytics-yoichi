@@ -17,7 +17,9 @@ import './_table.scss';
 
 export default class DetailsTable extends React.Component {
   static propTypes = {
-    style: PropTypes.object.isRequired
+    style: PropTypes.object.isRequired,
+    detailsState: PropTypes.object,
+    details: PropTypes.object
   }
 
   getData(data) {
@@ -43,12 +45,13 @@ export default class DetailsTable extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props, props: {details, detailsState}} = this;
     const style = Object.assign({}, styles.wrap, props.style);
-    if (!props.detailsState) return null;
 
-    const {list, header} = this.getData(props.detailsState);
-    let itemsPerPage = props.details && props.details.itemsPerPage ? props.details.itemsPerPage : 3;
+    if (!detailsState || !detailsState.data) return null;
+
+    const {list, header} = this.getData(detailsState.data);
+    let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 3;
 
     return (
       <div style={style} className='details-scrollbar'>

@@ -180,6 +180,7 @@
             "meta": {
               "subTitle": "NUMBER OF OUTGOING CONNECTIONS BY COUNTRY",
               "showHeader": false,
+              "showDetails": false,
               "details": {
                 "reportId": "taf_dest_countries"
               },
@@ -377,6 +378,7 @@
             "meta": {
               "subTitle": "NUMBER OF INCOMING CONNECTIONS BY COUNTRY",
               "showHeader": false,
+              "showDetails": false,
               "details": {
                 "reportId": "taf_source_countries"
               },

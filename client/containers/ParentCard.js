@@ -47,7 +47,8 @@ function getParamsAndReportId(props, dataObj) {
   let {columns, interval} = data,
     queryParams = {
       start: interval.from,
-      end: interval.to
+      end: interval.to,
+      window: ''
     };
 
   if (dataObj.queryParams) {
@@ -109,32 +110,51 @@ export class ParentCard extends React.Component {
     detailsState: PropTypes.object
   }
 
-  getData(apiObj) {
-    const { props } = this,
-      api = apiObj || props.meta.api;
+  getData(dataObj) {
+    const {props} = this,
+      {params, options, id} = props,
+      isDetails = this.state.showDetailsFlag;
+
+    if (isDetails) {
+      if (!dataObj) {
+        dataObj = this.dataObj;
+      }
+      else {
+        // save dataObj to be used when the details are refreshed
+        // to maintain of api object.
+        this.dataObj = dataObj;
+      }
+    }
+
+    const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
 
     if (!api) {
       const children = props.children.props.children;
 
       children.forEach((child) => {
         const {props: childProps} = child;
-        props.fetchApiData(childProps.id, childProps.meta.api);
+        props.fetchApiData({id: childProps.id, api: childProps.meta.api, params, options, isDetails});
       });
 
       return;
     }
 
-    props.fetchApiData(props.id, api, props.params, props.options);
+    props.fetchApiData({id, api, params, options, isDetails});
   }
 
   toggleDetailsTable(dataObj) {
-    if (!this.state.showDetailsFlag) {
-      this.getDetailsData(dataObj);
-    }
+    if (this.props.meta.showDetails === false) return;  // don't show details, if meta showDetails set to false
+
+    const isDetails = this.state.showDetailsFlag;
 
     this.setState({
-      showDetailsFlag: !this.state.showDetailsFlag,
+      showDetailsFlag: !isDetails,
       showComponentIconFlag: !this.state.showComponentIconFlag
+    },
+    () => {
+      if (!isDetails) {
+        this.getData(dataObj);
+      }
     });
   }
 
@@ -236,7 +256,6 @@ export class ParentCard extends React.Component {
     if (!queryParams) return;
 
     const apiObj = {
-      type: 'details',
       path: `${DETAILS_BASE_URL}/{reportId}`,
       pathParams: {
         reportId
@@ -244,7 +263,7 @@ export class ParentCard extends React.Component {
       queryParams
     };
 
-    this.getData(apiObj);
+    return apiObj;
   }
 
   render() {
@@ -277,7 +296,11 @@ export class ParentCard extends React.Component {
 
     return (
       <div style={cardStyle} id={props.id}>
-        {props.isFetching ? <Loader /> : null}
+        {
+          props.isFetching || (props.detailsState && props.detailsState.isFetching)
+          ? <Loader />
+          : null
+        }
 
         {
           props.meta.showHeader
@@ -319,31 +342,40 @@ ParentCard.contextTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  const {apiData} = state;
+  const {apiData, details} = state;
 
   let data = null,
     isFetching = false,
     isError = false,
     errorData = null,
     eventData = null,
-    detailsState = null;
+    detailsObj = {
+      isFetching: false,
+      isError: false,
+      data: null
+    };
 
   if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
 
     data = propsById.get('data');
-    detailsState = propsById.get('details');
+    detailsObj = propsById.get('details');
     isFetching = propsById.get('isFetching');
     isError = propsById.get('isError');
     errorData = propsById.get('errorData');
     eventData = propsById.get('eventData');
   }
 
+  if (details.has(ownProps.id)) {
+    const detailsById = details.get(ownProps.id);
+    detailsObj = detailsById.toObject();
+  }
+
   const duration = apiData.get('duration');
 
   return {
     data,
-    detailsState,
+    detailsState: detailsObj,
     isFetching,
     isError,
     errorData,

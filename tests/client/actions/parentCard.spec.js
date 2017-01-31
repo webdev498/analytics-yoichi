@@ -98,7 +98,7 @@ describe('parentCard Redux Actions', () => {
   it('should return the state for REMOVE_COMPONENT', () => {
     const id = 'testId',
       data = {test: 'value'},
-      removeComponentState = removeComponentWithId(id, data);
+      [removeComponentState, removeDetailsState] = removeComponentWithId(id, data);
 
     expect(removeComponentState).to.be.an.object;
     expect(removeComponentState).to.have.a.property('id', id);
