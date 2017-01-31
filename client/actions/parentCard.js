@@ -236,7 +236,7 @@ export function updateApiData(newDuration, params) {
             return;
           }
 
-          fetchApiData({id, api, params, options})(dispatch, getState);
+          fetchApiData({id, api, params, options, isDetails: false})(dispatch, getState);
         });
       }
 
@@ -246,7 +246,7 @@ export function updateApiData(newDuration, params) {
           const api = component.get('api');
           const options = component.get('data') && component.get('data').options;
 
-          fetchApiData({id, api, params, options})(dispatch, getState);
+          fetchApiData({id, api, params, options, isDetails: true})(dispatch, getState);
         });
       }
     }
