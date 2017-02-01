@@ -61,43 +61,47 @@ export default class DetailsTable extends React.Component {
 
     return (
       <div style={style} className='details-scrollbar'>
-        <Table
-          style={{width: '100%'}}
-          className='detailsTable'
-          pageButtonLimit={5}
-          itemsPerPage={list.length > itemsPerPage ? itemsPerPage : 0}
-          currentPage={0}
-          hideFilterInput
-          previousPageLabel={'<<'}
-          nextPageLabel={'>>'}
-          sortable
-          defaultSort={{
-            column: firstCharCapitalize(header[0].dataKey),
-            direction: 'desc'
-          }}>
-          <Thead>
+        {
+          list.length > 0
+          ? <Table
+            style={{width: '100%'}}
+            className='detailsTable'
+            pageButtonLimit={5}
+            itemsPerPage={list.length > itemsPerPage ? itemsPerPage : 0}
+            currentPage={0}
+            hideFilterInput
+            previousPageLabel={'<<'}
+            nextPageLabel={'>>'}
+            sortable
+            defaultSort={{
+              column: firstCharCapitalize(header[0].dataKey),
+              direction: 'desc'
+            }}>
+            <Thead>
+              {
+                header.map((col, i) => (
+                  <Th key={`th${i}`}>{firstCharCapitalize(col.dataKey)}</Th>
+                ))
+              }
+            </Thead>
             {
-              header.map((col, i) => (
-                <Th key={`th${i}`}>{firstCharCapitalize(col.dataKey)}</Th>
-              ))
-            }
-          </Thead>
-          {
-            list.map((row, i) => (
-              <Tr key={`tr${i}`}>
-                {
-                  row.map((col, i) => (
-                    <Td column={firstCharCapitalize(col.title)}
-                      value={col.value}
-                      key={`td${i}`}>
-                      {col.value}
-                    </Td>
-                  )
-                )}
-              </Tr>
-          )
-          )}
-        </Table>
+              list.map((row, i) => (
+                <Tr key={`tr${i}`}>
+                  {
+                    row.map((col, i) => (
+                      <Td column={firstCharCapitalize(col.title)}
+                        value={col.value}
+                        key={`td${i}`}>
+                        {col.value}
+                      </Td>
+                    )
+                  )}
+                </Tr>
+            )
+            )}
+          </Table>
+          : <div style={{fontSize: '12pt', marginLeft: '33px'}}>No Data Found.</div>
+        }
       </div>
     );
   }

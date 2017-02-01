@@ -9,7 +9,7 @@ class ThreatMap extends React.Component {
 
   render() {
     const {props} = this,
-      {data, chart} = props;
+      {data, chart, showDetailsTable} = props;
 
     if (!data) return null;
 
@@ -21,7 +21,8 @@ class ThreatMap extends React.Component {
             attributes={chart.worldMap.attributes}
             data={data}
             chartOptions={chart.worldMap.chartOptions}
-            chartData={chart.worldMap.chartData}></WorldMap>
+            chartData={chart.worldMap.chartData}
+            showDetailsTable={showDetailsTable}></WorldMap>
         </div>
         <div style={{width: '30%'}}>
           <HorizontalBarChart
