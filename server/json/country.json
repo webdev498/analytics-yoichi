@@ -140,18 +140,45 @@
       {
         "meta": {
           "showHeader": true,
-          "title": "Outgoing Traffic Threat Map"
+          "title": "Outgoing Traffic Threat Map",
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_dest_countries,taf_dest_bad_reputation_countries"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
         },
         "attributes": {
           "style": {
             "width": "100%"
-          },
-          "id": "OutgoingTrafficHeatMap"
+          }
         },
-        "id": "outgoing-traffic-heatMap",
-        "type": "CompoundCard",
-        "children": [
-          {
+        "id": "outgoing-threat-map",
+        "type": "ThreatMap",
+        "chart": {
+          "worldMap": {
+            "meta": {
+              "subTitle": "NUMBER OF OUTGOING CONNECTIONS BY COUNTRY"
+            },
+            "attributes": {
+              "chartWidth": "100%",
+              "loaderStyle": {
+                "marginTop": "-30px"
+              },
+              "style": {
+                "marginRight": "33px",
+                "width": "70%"
+              },
+              "legendStyle": {
+                "width": "10%",
+                "marginLeft": "-10%"
+              },
+              "id": "outgoing-world-map",
+              "chartHeight": "450"
+            },
             "chartOptions": {},
             "chartData": {
               "fieldMapping": [
@@ -176,23 +203,127 @@
                   "connection": "secure"
                 }
               ]
+            }
+          },
+          "legend1": {
+            "chartOptions": {},
+            "chartData": {
+              "displayTopFive": true,
+              "showTrendLines": false,
+              "fieldMapping": [
+                {
+                  "reportId": "taf_dest_bad_reputation_countries",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "malicious"
+                },
+                {
+                  "reportId": "taf_dest_countries",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "secure"
+                }
+              ],
+              "multipleReportIds": false
             },
             "meta": {
-              "subTitle": "NUMBER OF OUTGOING CONNECTIONS BY COUNTRY",
               "showHeader": false,
-              "showDetails": false,
-              "details": {
-                "reportId": "taf_dest_countries"
+              "title": "TOP 5 CONNECTIONS",
+              "parentWrap": false
+            },
+            "attributes": {
+              "chartCaption": {
+                "position": "absolute"
               },
-              "api": {
-                "path": "/api/analytics/reporting/execute/{reportId}",
-                "pathParams": {
-                  "reportId": "taf_dest_countries,taf_dest_bad_reputation_countries"
+              "chartWidth": "100%",
+              "style": {
+                "paddingTop": "15px"
+              },
+              "id": "outgoing-top-countries",
+              "chartHeight": "200"
+            }
+          },
+          "legend2": {
+            "chartOptions": {},
+            "chartData": {
+              "displayTopFive": true,
+              "showTrendLines": false,
+              "fieldMapping": [
+                {
+                  "reportId": "taf_dest_bad_reputation_countries",
+                  "columns": [
+                    "country_name",
+                    "bandwidth"
+                  ],
+                  "connection": "malicious"
                 },
-                "queryParams": {
-                  "window": ""
+                {
+                  "reportId": "taf_dest_countries",
+                  "columns": [
+                    "country_name",
+                    "bandwidth"
+                  ],
+                  "connection": "secure"
                 }
-              }
+              ],
+              "multipleReportIds": false
+            },
+            "meta": {
+              "subTitle": "(in bytes)",
+              "showHeader": false,
+              "title": "TOP 5 BANDWIDTH",
+              "parentWrap": false
+            },
+            "attributes": {
+              "chartCaption": {
+                "position": "absolute"
+              },
+              "chartWidth": "100%",
+              "style": {
+                "paddingTop": "15px"
+              },
+              "id": "outgoing-top-bandwidth",
+              "chartHeight": "200"
+            }
+          }
+        }
+      }
+    ],
+    [
+      {
+        "meta": {
+          "showHeader": true,
+          "title": "Incoming Traffic Threat Map",
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_source_countries,taf_source_bad_reputation_countries"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
+        },
+        "attributes": {
+          "style": {
+            "width": "100%"
+          },
+          "id": [
+            "incoming-world-map",
+            "incoming-top-connections",
+            "incoming-top-bandwidth"
+          ]
+        },
+        "id": "incoming-threat-map",
+        "type": "ThreatMap",
+        "chart": {
+          "worldMap": {
+            "meta": {
+              "subTitle": "NUMBER OF OUTGOING CONNECTIONS BY COUNTRY"
             },
             "attributes": {
               "chartWidth": "100%",
@@ -207,149 +338,9 @@
                 "width": "10%",
                 "marginLeft": "-10%"
               },
-              "id": "OutgoingTrafficWorldMap",
+              "id": "incoming-world-map",
               "chartHeight": "450"
             },
-            "id": "outgoing-traffic-world-map",
-            "type": "maps/WorldMap"
-          },
-          {
-            "innerStyle": {
-              "flexWrap": "wrap",
-              "flexDirection": "column"
-            },
-            "children": [
-              {
-                "chartOptions": {},
-                "chartData": {
-                  "displayTopFive": true,
-                  "showTrendLines": false,
-                  "fieldMapping": [
-                    {
-                      "reportId": "taf_dest_bad_reputation_countries",
-                      "columns": [
-                        "country_name",
-                        "connections"
-                      ],
-                      "connection": "malicious"
-                    },
-                    {
-                      "reportId": "taf_dest_countries",
-                      "columns": [
-                        "country_name",
-                        "connections"
-                      ],
-                      "connection": "secure"
-                    }
-                  ],
-                  "multipleReportIds": false
-                },
-                "meta": {
-                  "showHeader": false,
-                  "title": "TOP 5 CONNECTIONS",
-                  "parentWrap": false
-                },
-                "attributes": {
-                  "chartCaption": {
-                    "position": "absolute"
-                  },
-                  "chartWidth": "100%",
-                  "style": {
-                    "marginTop": "35px"
-                  },
-                  "id": "outgoing-top-countries",
-                  "chartHeight": "200"
-                },
-                "id": "OutgoingTopCountries",
-                "type": "charts/HorizontalBarChart"
-              },
-              {
-                "chartOptions": {},
-                "chartData": {
-                  "displayTopFive": true,
-                  "showTrendLines": false,
-                  "fieldMapping": [
-                    {
-                      "reportId": "taf_dest_bad_reputation_countries",
-                      "columns": [
-                        "country_name",
-                        "bandwidth"
-                      ],
-                      "connection": "malicious"
-                    },
-                    {
-                      "reportId": "taf_dest_countries",
-                      "columns": [
-                        "country_name",
-                        "bandwidth"
-                      ],
-                      "connection": "secure"
-                    }
-                  ],
-                  "multipleReportIds": false
-                },
-                "meta": {
-                  "subTitle": "(in bytes)",
-                  "showHeader": false,
-                  "title": "TOP 5 BANDWIDTH",
-                  "parentWrap": false
-                },
-                "attributes": {
-                  "chartCaption": {
-                    "position": "absolute"
-                  },
-                  "chartWidth": "100%",
-                  "style": {
-                    "marginTop": "35px"
-                  },
-                  "id": "outgoing-top-bandwidth",
-                  "chartHeight": "200"
-                },
-                "id": "OutgoingTopBandwidth",
-                "type": "charts/HorizontalBarChart"
-              }
-            ],
-            "meta": {
-              "showHeader": false,
-              "api": {
-                "path": "/api/analytics/reporting/execute/{reportId}",
-                "pathParams": {
-                  "reportId": "taf_dest_countries,taf_dest_bad_reputation_countries"
-                },
-                "queryParams": {
-                  "window": ""
-                }
-              }
-            },
-            "attributes": {
-              "style": {
-                "width": "30%",
-                "marginTop": "-30px"
-              },
-              "id": "outgoing-traffic-heatMap-legends"
-            },
-            "id": "OutgoingTrafficHeatMapLegends",
-            "type": "CompoundCard"
-          }
-        ]
-      }
-    ],
-    [
-      {
-        "meta": {
-          "showHeader": true,
-          "title": "Incoming Traffic Threat Map"
-        },
-        "attributes": {
-          "style": {
-            "width": "100%"
-          },
-          "id": "IncomingTrafficHeatMap"
-        },
-        "id": "incoming-traffic-heatMap",
-        "type": "CompoundCard",
-        "children": [
-          {
             "chartOptions": {},
             "chartData": {
               "fieldMapping": [
@@ -374,162 +365,94 @@
                   "connection": "secure"
                 }
               ]
-            },
-            "meta": {
-              "subTitle": "NUMBER OF INCOMING CONNECTIONS BY COUNTRY",
-              "showHeader": false,
-              "showDetails": false,
-              "details": {
-                "reportId": "taf_source_countries"
-              },
-              "api": {
-                "path": "/api/analytics/reporting/execute/{reportId}",
-                "pathParams": {
-                  "reportId": "taf_source_countries,taf_source_bad_reputation_countries"
-                },
-                "queryParams": {
-                  "window": ""
-                }
-              }
-            },
-            "attributes": {
-              "chartWidth": "100%",
-              "loaderStyle": {
-                "marginTop": "-30px"
-              },
-              "style": {
-                "marginRight": "33px",
-                "width": "70%"
-              },
-              "legendStyle": {
-                "width": "10%",
-                "marginLeft": "-10%"
-              },
-              "id": "IncomingTrafficWorldMap",
-              "chartHeight": "450"
-            },
-            "id": "world-map",
-            "type": "maps/WorldMap"
+            }
           },
-          {
-            "innerStyle": {
-              "flexWrap": "wrap",
-              "flexDirection": "column"
+          "legend1": {
+            "chartOptions": {},
+            "chartData": {
+              "displayTopFive": true,
+              "showTrendLines": false,
+              "fieldMapping": [
+                {
+                  "reportId": "taf_source_bad_reputation_countries",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "malicious"
+                },
+                {
+                  "reportId": "taf_source_countries",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "secure"
+                }
+              ],
+              "multipleReportIds": false
             },
-            "children": [
-              {
-                "chartOptions": {},
-                "chartData": {
-                  "displayTopFive": true,
-                  "showTrendLines": false,
-                  "fieldMapping": [
-                    {
-                      "reportId": "taf_source_bad_reputation_countries",
-                      "columns": [
-                        "country_name",
-                        "connections"
-                      ],
-                      "connection": "malicious"
-                    },
-                    {
-                      "reportId": "taf_source_countries",
-                      "columns": [
-                        "country_name",
-                        "connections"
-                      ],
-                      "connection": "secure"
-                    }
-                  ],
-                  "multipleReportIds": false
-                },
-                "meta": {
-                  "showHeader": false,
-                  "title": "TOP 5 CONNECTIONS",
-                  "parentWrap": false
-                },
-                "attributes": {
-                  "chartCaption": {
-                    "position": "absolute"
-                  },
-                  "chartWidth": "100%",
-                  "style": {
-                    "marginTop": "35px"
-                  },
-                  "id": "incoming-top-countries",
-                  "chartHeight": "200"
-                },
-                "id": "IncomingTopCountries",
-                "type": "charts/HorizontalBarChart"
-              },
-              {
-                "chartOptions": {},
-                "chartData": {
-                  "displayTopFive": true,
-                  "showTrendLines": false,
-                  "fieldMapping": [
-                    {
-                      "reportId": "taf_source_bad_reputation_countries",
-                      "columns": [
-                        "country_name",
-                        "bandwidth"
-                      ],
-                      "connection": "malicious"
-                    },
-                    {
-                      "reportId": "taf_source_countries",
-                      "columns": [
-                        "country_name",
-                        "bandwidth"
-                      ],
-                      "connection": "secure"
-                    }
-                  ],
-                  "multipleReportIds": false
-                },
-                "meta": {
-                  "subTitle": "(in bytes)",
-                  "showHeader": false,
-                  "title": "TOP 5 BANDWIDTH",
-                  "parentWrap": false
-                },
-                "attributes": {
-                  "chartCaption": {
-                    "position": "absolute"
-                  },
-                  "chartWidth": "100%",
-                  "style": {
-                    "marginTop": "35px"
-                  },
-                  "id": "incoming-top-bandwidth",
-                  "chartHeight": "200"
-                },
-                "id": "IncomingTopBandwidth",
-                "type": "charts/HorizontalBarChart"
-              }
-            ],
             "meta": {
               "showHeader": false,
-              "api": {
-                "path": "/api/analytics/reporting/execute/{reportId}",
-                "pathParams": {
-                  "reportId": "taf_source_countries,taf_source_bad_reputation_countries"
-                },
-                "queryParams": {
-                  "window": ""
-                }
-              }
+              "title": "TOP 5 CONNECTIONS",
+              "parentWrap": false
             },
             "attributes": {
-              "style": {
-                "width": "30%",
-                "marginTop": "-30px"
+              "chartCaption": {
+                "position": "absolute"
               },
-              "id": "incoming-traffic-heatmap-legends"
+              "chartWidth": "100%",
+              "style": {
+                "paddingTop": "15px"
+              },
+              "id": "incoming-top-countries",
+              "chartHeight": "200"
+            }
+          },
+          "legend2": {
+            "chartOptions": {},
+            "chartData": {
+              "displayTopFive": true,
+              "showTrendLines": false,
+              "fieldMapping": [
+                {
+                  "reportId": "taf_source_bad_reputation_countries",
+                  "columns": [
+                    "country_name",
+                    "bandwidth"
+                  ],
+                  "connection": "malicious"
+                },
+                {
+                  "reportId": "taf_source_countries",
+                  "columns": [
+                    "country_name",
+                    "bandwidth"
+                  ],
+                  "connection": "secure"
+                }
+              ],
+              "multipleReportIds": false
             },
-            "id": "IncomingTrafficHeatMapLegends",
-            "type": "CompoundCard"
+            "meta": {
+              "subTitle": "(in bytes)",
+              "showHeader": false,
+              "title": "TOP 5 BANDWIDTH",
+              "parentWrap": false
+            },
+            "attributes": {
+              "chartCaption": {
+                "position": "absolute"
+              },
+              "chartWidth": "100%",
+              "style": {
+                "paddingTop": "15px"
+              },
+              "id": "incoming-top-bandwidth",
+              "chartHeight": "200"
+            }
           }
-        ]
+        }
       }
     ]
   ]
