@@ -163,6 +163,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -211,6 +212,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -317,6 +319,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -444,6 +447,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "details": {
             "reportId": "taf_top_talkers_connections"
           },
@@ -572,7 +576,7 @@
         },
         "meta": {
           "showHeader": true,
-          "showDetailsIcon": true,
+          "showDetails": false,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -628,6 +632,7 @@
         "meta": {
           "subTitle": "NUMBER OF OUTGOING CONNECTIONS BY COUNTRY",
           "showHeader": true,
+          "showDetailsIcon": true,
           "details": {
             "reportId": "taf_dest_countries"
           },
@@ -691,6 +696,7 @@
         "meta": {
           "subTitle": "NUMBER OF INCOMING CONNECTIONS BY COUNTRY",
           "showHeader": true,
+          "showDetailsIcon": true,
           "details": {
             "reportId": "taf_source_countries"
           },
@@ -729,6 +735,7 @@
       {
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -757,6 +764,7 @@
       {
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "headers": {
@@ -788,6 +796,7 @@
       {
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "headers": {

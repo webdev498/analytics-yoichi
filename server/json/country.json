@@ -138,13 +138,15 @@
     ],
     [
       {
+        "details": {
+          "itemsPerPage": 7
+        },
         "meta": {
           "showHeader": true,
           "showDetailsIcon": true,
           "title": "Outgoing Traffic Threat Map",
           "details": {
-            "reportId": "taf_dest_countries",
-            "itemsPerPage": 7
+            "reportId": "taf_dest_countries"
           },
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
@@ -300,13 +302,15 @@
     ],
     [
       {
+        "details": {
+          "itemsPerPage": 7
+        },
         "meta": {
           "showHeader": true,
           "showDetailsIcon": true,
           "title": "Incoming Traffic Threat Map",
           "details": {
-            "reportId": "taf_source_countries",
-            "itemsPerPage": 7
+            "reportId": "taf_source_countries"
           },
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
