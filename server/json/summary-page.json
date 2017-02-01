@@ -572,7 +572,7 @@
         },
         "meta": {
           "showHeader": true,
-          "showDetails": false,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
