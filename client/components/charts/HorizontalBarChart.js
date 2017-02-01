@@ -420,7 +420,7 @@ class HorizontalBarChart extends React.Component {
         dataSource: generateDataSource(rawData, chartOptions, chartData, chart),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            showDetailsTable(dataObj);
+            showDetailsTable && showDetailsTable(dataObj);
           }
         }
       });
