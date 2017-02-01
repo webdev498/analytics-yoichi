@@ -18,7 +18,7 @@ import './_table.scss';
 export default class DetailsTable extends React.Component {
   static propTypes = {
     style: PropTypes.object.isRequired,
-    detailsState: PropTypes.object,
+    detailsData: PropTypes.object,
     details: PropTypes.object
   }
 
@@ -51,12 +51,12 @@ export default class DetailsTable extends React.Component {
   }
 
   render() {
-    const {props, props: {details, detailsState}} = this;
+    const {props, props: {details, detailsData}} = this;
     const style = Object.assign({}, styles.wrap, props.style);
 
-    if (!detailsState || !detailsState.data) return null;
+    if (!detailsData) return null;
 
-    const {list, header} = this.getData(detailsState.data);
+    const {list, header} = this.getData(detailsData);
     let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 3;
 
     return (
