@@ -107,7 +107,7 @@ export class ParentCard extends React.Component {
     history: PropTypes.object,
     data: PropTypes.object,
     details: PropTypes.object,
-    detailsState: PropTypes.object
+    detailsData: PropTypes.object
   }
 
   getData(dataObj) {
@@ -159,8 +159,8 @@ export class ParentCard extends React.Component {
   }
 
   getDetailsTable() {
-    const {detailsState, details} = this.props;
-    return <DetailsTable style={styles.detailsTable} detailsState={detailsState} details={details} />;
+    const {detailsData, details} = this.props;
+    return <DetailsTable style={styles.detailsTable} detailsData={detailsData} details={details} />;
   }
 
   componentDidMount() {
@@ -296,12 +296,12 @@ export class ParentCard extends React.Component {
     }
 
     const isComponentError = props.isError && (props.meta.showErrorMessage !== false) && !isDetails,
-      isDetailsError = props.detailsState.isError && isDetails;
+      isDetailsError = props.detailsIsError && isDetails;
 
     return (
       <div style={cardStyle} id={props.id}>
         {
-          props.isFetching || props.detailsState.isFetching
+          props.isFetching || props.detailsIsFetching
           ? <Loader />
           : null
         }
@@ -321,7 +321,7 @@ export class ParentCard extends React.Component {
 
         {
           isComponentError
-          ? this.getErrorElement(isDetails)
+          ? this.getErrorElement()
           : (
             <div style={componentStyle}>
               {React.cloneElement(props.children, {...childProps, ...extraProps})}
@@ -331,7 +331,7 @@ export class ParentCard extends React.Component {
 
         {
           isDetailsError
-          ? this.getErrorElement(isDetails)
+          ? this.getErrorElement()
           : (
             <div style={{marginLeft: '-33px', marginRight: '-33px'}}>
               {
@@ -359,11 +359,10 @@ function mapStateToProps(state, ownProps) {
     isError = false,
     errorData = null,
     eventData = null,
-    detailsState = {
-      isFetching: false,
-      isError: false,
-      data: null
-    };
+    detailsIsFetching: false,
+    detailsIsError: false,
+    detailsData: null,
+    detailsErrorData: null;
 
   if (apiData.hasIn(['components', ownProps.id])) {
     const propsById = apiData.getIn(['components', ownProps.id]);
@@ -377,19 +376,25 @@ function mapStateToProps(state, ownProps) {
 
   if (details.has(ownProps.id)) {
     const detailsById = details.get(ownProps.id);
-    detailsState = detailsById.toObject();
+    detailsIsFetching = detailsById.get('isFetching');
+    detailsIsError = detailsById.get('isError');
+    detailsData = detailsById.get('data');
+    detailsErrorData = detailsById.get('errorData');
   }
 
   const duration = apiData.get('duration');
 
   return {
     data,
-    detailsState,
     isFetching,
     isError,
     errorData,
     duration,
-    eventData
+    eventData,
+    detailsIsFetching,
+    detailsIsError,
+    detailsData,
+    detailsErrorData
   };
 }
 
