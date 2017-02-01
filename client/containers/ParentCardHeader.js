@@ -60,7 +60,7 @@ const styles = {
     height: '35px',
     margin: 'auto',
     position: 'absolute',
-    top: 0,
+    // top: 0,
     background: Colors.grape,
     lineHeight: '35px',
     width: '45px',
@@ -170,7 +170,8 @@ export default class ParentCardHeader extends React.Component {
       </div>
 
       {
-        props.meta.showSearch
+        (props.meta.showSearch && !props.meta.showTable && !props.meta.showDetails) ||
+        props.showComponentIconFlag === true
         ? <div style={styles.inputWrap}>
           <FontIcon className='material-icons'
             style={{...styles.clearIcon, ...this.state.clearIconStyle}}
@@ -247,6 +248,34 @@ export default class ParentCardHeader extends React.Component {
           : null
         }
       </div>
+      {/*{
+        props.showComponentIconFlag === true
+        ? <div style={{width: '100%'}}>
+          <FontIcon className='material-icons'
+            style={{...styles.clearIcon, ...this.state.clearIconStyle}}
+            ref={(ref) => this.clearIcon = ref}>
+            close
+          </FontIcon>
+
+          <div style={{...styles.clearDiv}} onClick={this.clearSearchText} />
+
+          <input
+            id='searchText'
+            type='text'
+            className='searchText'
+            onChange={props.updateSearch}
+            onFocus={this.showClearIcon}
+            onBlur={this.hideClearIcon}
+            ref={(ref) => this.myTextInput = ref} />
+
+          <FontIcon className='material-icons'
+            style={styles.searchIcon}
+            onClick={this.focusSearchText}>
+            search
+          </FontIcon>
+        </div>
+        : null
+      }*/}
     </header>;
   }
 };

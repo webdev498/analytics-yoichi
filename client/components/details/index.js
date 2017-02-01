@@ -57,13 +57,19 @@ export default class DetailsTable extends React.Component {
     if (!detailsData) return null;
 
     const {list, header} = this.getData(detailsData);
-    let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 3;
+    let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 3,
+      columnNames = [];
+
+    header.forEach((col) => {
+      columnNames.push(firstCharCapitalize(col.dataKey));
+    });
 
     return (
       <div style={style} className='details-scrollbar'>
         {
           list.length > 0
           ? <Table
+            id={props.id}
             style={{width: '100%'}}
             className='detailsTable'
             pageButtonLimit={5}
@@ -76,14 +82,16 @@ export default class DetailsTable extends React.Component {
             defaultSort={{
               column: firstCharCapitalize(header[0].dataKey),
               direction: 'desc'
-            }}>
-            <Thead>
+            }}
+            filterBy={props.search}
+            filterable={columnNames}>
+            { /* <Thead>
               {
                 header.map((col, i) => (
                   <Th key={`th${i}`}>{firstCharCapitalize(col.dataKey)}</Th>
                 ))
               }
-            </Thead>
+            </Thead> */ }
             {
               list.map((row, i) => (
                 <Tr key={`tr${i}`}>
@@ -91,7 +99,7 @@ export default class DetailsTable extends React.Component {
                     row.map((col, i) => (
                       <Td column={firstCharCapitalize(col.title)}
                         value={col.value}
-                        key={`td${i}`}>
+                        key={firstCharCapitalize(col.title)}>
                         {col.value}
                       </Td>
                     )

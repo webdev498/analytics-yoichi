@@ -227,6 +227,7 @@
         "meta": {
           "showHeader": true,
           "showTable": true,
+          "showSearch": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {

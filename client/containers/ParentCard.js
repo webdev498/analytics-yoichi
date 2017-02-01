@@ -107,7 +107,8 @@ export class ParentCard extends React.Component {
     history: PropTypes.object,
     data: PropTypes.object,
     details: PropTypes.object,
-    detailsData: PropTypes.object
+    detailsData: PropTypes.object,
+    attributes: PropTypes.object
   }
 
   getData(dataObj) {
@@ -159,8 +160,13 @@ export class ParentCard extends React.Component {
   }
 
   getDetailsTable() {
-    const {detailsData, details} = this.props;
-    return <DetailsTable style={styles.detailsTable} detailsData={detailsData} details={details} />;
+    const {detailsData, details, attributes} = this.props;
+    return <DetailsTable
+      id={attributes.id}
+      style={styles.detailsTable}
+      detailsData={detailsData}
+      details={details}
+      search={this.state.search} />;
   }
 
   componentDidMount() {
