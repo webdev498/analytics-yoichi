@@ -203,9 +203,6 @@
         },
         "chart": {
           "showAnnotations": false,
-          "style": {
-            "width": "100%"
-          }
         },
         "chartData": {
           "showTrendLines": true,

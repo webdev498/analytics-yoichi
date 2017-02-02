@@ -12,7 +12,7 @@ import {
 
 const styles = {
   chartCaption: {
-    width: '100%',
+    // width: '100%',
     fontFamily: 'Open Sans, sans-serif',
     fontSize: '14px',
     fontWeight: '600',
@@ -433,7 +433,7 @@ class HorizontalBarChart extends React.Component {
     const {props} = this;
     this.renderChart(props);
 
-    let chartStyle = props.chart && props.chart.style ? props.chart.style : {width: '100%'};
+    let chartStyle = props.chart && props.chart.style ? props.chart.style : {};
 
     return (
       <div style={{...props.attributes.chartBorder, ...styles.noData}}>

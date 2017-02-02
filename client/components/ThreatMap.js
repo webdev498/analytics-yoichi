@@ -30,13 +30,15 @@ class ThreatMap extends React.Component {
             attributes={chart.legend1.attributes}
             data={data}
             chartOptions={chart.legend1.chartOptions}
-            chartData={chart.legend1.chartData} />
+            chartData={chart.legend1.chartData}
+            chart={chart.legend1.chart} />
           <HorizontalBarChart
             meta={chart.legend2.meta}
             attributes={chart.legend2.attributes}
             data={data}
             chartOptions={chart.legend2.chartOptions}
-            chartData={chart.legend2.chartData} />
+            chartData={chart.legend2.chartData}
+            chart={chart.legend2.chart} />
         </div>
       </div>
     );

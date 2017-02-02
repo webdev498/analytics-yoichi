@@ -586,6 +586,11 @@
             }
           },
           "legend1": {
+            "chart": {
+              "style": {
+                "paddingTop": "15px"
+              }
+            },
             "chartOptions": {},
             "chartData": {
               "displayTopFive": true,
@@ -628,6 +633,11 @@
             }
           },
           "legend2": {
+            "chart": {
+              "style": {
+                "paddingTop": "15px"
+              }
+            },
             "chartOptions": {},
             "chartData": {
               "displayTopFive": true,
@@ -750,6 +760,11 @@
             }
           },
           "legend1": {
+            "chart": {
+              "style": {
+                "paddingTop": "15px"
+              }
+            },
             "chartOptions": {},
             "chartData": {
               "displayTopFive": true,
@@ -792,6 +807,11 @@
             }
           },
           "legend2": {
+            "chart": {
+              "style": {
+                "paddingTop": "15px"
+              }
+            },
             "chartOptions": {},
             "chartData": {
               "displayTopFive": true,
