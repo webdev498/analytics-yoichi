@@ -381,6 +381,9 @@
           },
           "id": "TopConnectionsByProtocol"
         },
+        "details": {
+          "itemsPerPage": 1
+        },
         "id": "top-connections-by-protocol",
         "type": "charts/HorizontalBarChart"
       }

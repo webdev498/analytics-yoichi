@@ -91,7 +91,10 @@ export default class DetailsTable extends React.Component {
                     row.map((col, i) => (
                       <Td column={firstCharCapitalize(col.title)}
                         value={col.value}
-                        key={firstCharCapitalize(col.title)}>
+                        key={firstCharCapitalize(col.title)}
+                        style={{
+                          wordBreak: 'break-word'
+                        }}>
                         {col.value}
                       </Td>
                     )
