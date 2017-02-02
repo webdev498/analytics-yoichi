@@ -14,7 +14,7 @@ class ThreatMap extends React.Component {
     if (!data) return null;
 
     return (
-      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+      <div style={{display: 'flex'}}>
         <div style={{width: '70%'}}>
           <WorldMap
             meta={chart.worldMap.meta}
