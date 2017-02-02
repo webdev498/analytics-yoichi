@@ -1,6 +1,7 @@
 {
   "options": {
-    "itemsPerPage": 5
+    "itemsPerPage": 5,
+    "rowClickable": true
   },
   "data": {
     "fieldMapping": [
@@ -29,7 +30,7 @@
             "attributes": {
               "chartWidth": "100%",
               "chartType": "area2d",
-              "id": "connection",
+              "id": "least-connection",
               "chartHeight": "120",
               "chartOptions": {
                 "labelFontSize": "9"
@@ -46,5 +47,10 @@
     ],
     "nestedResult": true,
     "emptyValueMessage": "(Empty)"
+  },
+  "kibana": {
+    "queryParams": {
+      "data.s3.key": "data.s3.key:fieldName"
+    }
   }
 }

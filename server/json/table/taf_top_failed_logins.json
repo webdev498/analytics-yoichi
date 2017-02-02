@@ -48,9 +48,6 @@
     "emptyValueMessage": "(Empty)"
   },
   "kibana": {
-    "pathParams": [
-      "login-details"
-    ],
     "queryParams": {
       "data.login.user": "data.login.user:fieldName",
       "status": "fail"

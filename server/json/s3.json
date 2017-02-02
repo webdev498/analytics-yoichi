@@ -161,7 +161,7 @@
         "name": "ReactableTable",
         "attributes": {
           "style": {
-            "width": "100%",
+            "width": "50%",
             "marginRight": "33px"
           },
           "id": "mostaccess"
@@ -189,7 +189,7 @@
         "name": "ReactableTable",
         "attributes": {
           "style": {
-            "width": "100%"
+            "width": "50%"
           },
           "id": "leastaccess"
         },

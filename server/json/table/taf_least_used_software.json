@@ -38,9 +38,6 @@
     "emptyValueMessage": "(Empty)"
   },
   "kibana": {
-    "pathParams": [
-      "software-details"
-    ],
     "queryParams": {
     }
   }

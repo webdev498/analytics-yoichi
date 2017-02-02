@@ -145,9 +145,6 @@
     "rowClickable": true
   },
   "kibana": {
-    "pathParams": [
-      "connection-details"
-    ],
     "queryParams": {
       "correlationIds": "correlationIds[0]:fieldName"
     }
