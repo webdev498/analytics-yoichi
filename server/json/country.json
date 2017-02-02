@@ -138,9 +138,12 @@
     ],
     [
       {
+        "details": {
+          "itemsPerPage": 7
+        },
         "meta": {
           "showHeader": true,
-          "showDetails": true,
+          "showDetailsIcon": true,
           "title": "Outgoing Traffic Threat Map",
           "details": {
             "reportId": "taf_dest_countries"
@@ -299,8 +302,12 @@
     ],
     [
       {
+        "details": {
+          "itemsPerPage": 7
+        },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "title": "Incoming Traffic Threat Map",
           "details": {
             "reportId": "taf_source_countries"

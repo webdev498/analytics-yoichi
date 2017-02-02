@@ -58,9 +58,8 @@ function getParamsAndReportId(props, dataObj) {
     const params = [];
     columns.forEach(col => {
       if (col.detailsAvailable) {
-        if (dataObj.label) {
-          const label = dataObj.label,
-            value = (label.split(',')[0]);
+        if (dataObj.shortLabel) { // TODO define this in layout json.
+          const value = dataObj.shortLabel;
           params.push({value, field: col.name});
         }
         else if (dataObj.toolText) {

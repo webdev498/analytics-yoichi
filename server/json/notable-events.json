@@ -169,6 +169,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -220,6 +221,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -333,6 +335,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -390,6 +393,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -447,6 +451,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
