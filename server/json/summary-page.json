@@ -744,7 +744,7 @@
         "attributes": {
           "style": {
             "marginRight": "33px",
-            "width": "33.33%"
+            "width": "33%"
           },
           "id": "LeastUsedSoftwareDetails"
         },
@@ -775,7 +775,7 @@
         "attributes": {
           "style": {
             "marginRight": "33px",
-            "width": "33.33%"
+            "width": "30%"
           },
           "id": "SuccessfulLogins"
         },
@@ -805,7 +805,7 @@
         "name": "ReactableTable",
         "attributes": {
           "style": {
-            "width": "33.33%"
+            "width": "30%"
           },
           "id": "FailedLogins"
         },

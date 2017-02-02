@@ -41,6 +41,13 @@ const styles = {
     position: 'relative',
     verticalAlign: 'middle'
   },
+  filterText: {
+    width: '100%',
+    textAlign: 'right',
+    position: 'relative',
+    verticalAlign: 'middle',
+    paddingBottom: '33px'
+  },
   searchIcon: {
     color: Colors.grape,
     cursor: 'pointer',
@@ -162,17 +169,107 @@ export default class ParentCardHeader extends React.Component {
 
     const headerStyle = props.attributes.header || {};
 
-    return <header style={{...styles.header, ...headerStyle.style}}>
-      <div>
-        <span style={{...styles.title, ...headerStyle.title}}>
-          {props.meta.title}
-        </span>
-      </div>
+    if (props.showComponentIconFlag) {
+      styles.header = Object.assign({}, styles.header, {
+        paddingBottom: '5px'
+      });
+    }
+    if (!props.showComponentIconFlag) {
+      styles.header = Object.assign({}, styles.header, {
+        paddingBottom: '33px'
+      });
+    }
 
+    return <div>
+      <header style={{...styles.header, ...headerStyle.style}}>
+        <div>
+          <span style={{...styles.title, ...headerStyle.title}}>
+            {props.meta.title}
+          </span>
+        </div>
+
+        {
+          props.meta.showSearch && !props.meta.showTable && !props.meta.showDetails
+          ? <div style={styles.inputWrap}>
+            <FontIcon className='material-icons'
+              style={{...styles.clearIcon, ...this.state.clearIconStyle}}
+              ref={(ref) => this.clearIcon = ref}>
+              close
+            </FontIcon>
+
+            <div style={{...styles.clearDiv}} onClick={this.clearSearchText} />
+
+            <input
+              id='searchText'
+              type='text'
+              className='searchText'
+              onChange={props.updateSearch}
+              onFocus={this.showClearIcon}
+              onBlur={this.hideClearIcon}
+              ref={(ref) => this.myTextInput = ref} />
+
+            <FontIcon className='material-icons'
+              style={styles.searchIcon}
+              onClick={this.focusSearchText}>
+              search
+            </FontIcon>
+          </div>
+          : null
+        }
+
+        <div style={styles.iconWrap}>
+          {
+            props.showComponentIconFlag === true
+            ? (
+              <FontIcon className='material-icons'
+                style={styles.icon}
+                onClick={props.toggleDetailsTable}>
+                equalizer
+              </FontIcon>
+            )
+            : null
+          }
+
+          {
+            props.meta.showTable === true && props.showComponentIconFlag === false
+            ? (
+              <FontIcon className='material-icons'
+                style={{...styles.icon, ...styles.listIcon}}
+                onClick={props.toggleDetailsTable}>
+                  list
+                </FontIcon>
+            )
+            : null
+          }
+
+          {
+            props.meta.showRefresh === false
+            ? null
+            : (
+              <FontIcon className='material-icons'
+                style={styles.icon}
+                onClick={this.getData}>
+                replay
+              </FontIcon>
+            )
+          }
+
+          {
+            props.meta.showBackButton === true
+            ? (
+              <FontIcon className='material-icons'
+                style={styles.icon}
+                onClick={props.history.goBack}>
+                arrow_back
+              </FontIcon>
+            )
+            : null
+          }
+        </div>
+      </header>
       {
-        (props.meta.showSearch && !props.meta.showTable && !props.meta.showDetails) ||
         props.showComponentIconFlag === true
-        ? <div style={styles.inputWrap}>
+        ? <div style={styles.filterText}>
           <FontIcon className='material-icons'
             style={{...styles.clearIcon, ...this.state.clearIconStyle}}
             ref={(ref) => this.clearIcon = ref}>
@@ -188,94 +285,17 @@ export default class ParentCardHeader extends React.Component {
             onChange={props.updateSearch}
             onFocus={this.showClearIcon}
             onBlur={this.hideClearIcon}
-            ref={(ref) => this.myTextInput = ref} />
+            ref={(ref) => this.myTextInput = ref}
+            style={{width: '80%'}} />
 
           <FontIcon className='material-icons'
-            style={styles.searchIcon}
+            style={{...styles.searchIcon, ...{bottom: '38px'}}}
             onClick={this.focusSearchText}>
             search
           </FontIcon>
         </div>
         : null
       }
-
-      <div style={styles.iconWrap}>
-        {
-          props.showComponentIconFlag === true
-          ? (
-            <FontIcon className='material-icons'
-              style={styles.icon}
-              onClick={props.toggleDetailsTable}>
-              equalizer
-            </FontIcon>
-          )
-          : null
-        }
-
-        {
-          props.meta.showTable === true && props.showComponentIconFlag === false
-          ? (
-            <FontIcon className='material-icons'
-              style={{...styles.icon, ...styles.listIcon}}
-              onClick={props.toggleDetailsTable}>
-                list
-              </FontIcon>
-          )
-          : null
-        }
-
-        {
-          props.meta.showRefresh === false
-          ? null
-          : (
-            <FontIcon className='material-icons'
-              style={styles.icon}
-              onClick={this.getData}>
-              replay
-            </FontIcon>
-          )
-        }
-
-        {
-          props.meta.showBackButton === true
-          ? (
-            <FontIcon className='material-icons'
-              style={styles.icon}
-              onClick={props.history.goBack}>
-              arrow_back
-            </FontIcon>
-          )
-          : null
-        }
-      </div>
-      {/*{
-        props.showComponentIconFlag === true
-        ? <div style={{width: '100%'}}>
-          <FontIcon className='material-icons'
-            style={{...styles.clearIcon, ...this.state.clearIconStyle}}
-            ref={(ref) => this.clearIcon = ref}>
-            close
-          </FontIcon>
-
-          <div style={{...styles.clearDiv}} onClick={this.clearSearchText} />
-
-          <input
-            id='searchText'
-            type='text'
-            className='searchText'
-            onChange={props.updateSearch}
-            onFocus={this.showClearIcon}
-            onBlur={this.hideClearIcon}
-            ref={(ref) => this.myTextInput = ref} />
-
-          <FontIcon className='material-icons'
-            style={styles.searchIcon}
-            onClick={this.focusSearchText}>
-            search
-          </FontIcon>
-        </div>
-        : null
-      }*/}
-    </header>;
+    </div>;
   }
 };

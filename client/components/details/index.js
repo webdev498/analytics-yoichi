@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
 
 import Reactable from 'reactable';
-const {Table, Thead, Th, Tr, Td} = Reactable;
+const {Table, Tr, Td} = Reactable;
 
 const styles = {
   wrap: {
@@ -85,13 +85,6 @@ export default class DetailsTable extends React.Component {
             }}
             filterBy={props.search}
             filterable={columnNames}>
-            { /* <Thead>
-              {
-                header.map((col, i) => (
-                  <Th key={`th${i}`}>{firstCharCapitalize(col.dataKey)}</Th>
-                ))
-              }
-            </Thead> */ }
             {
               list.map((row, i) => (
                 <Tr key={`tr${i}`}>
