@@ -187,7 +187,7 @@
         "attributes": {
           "style": {
             "marginRight": "33px",
-            "width": "100%"
+            "width": "50%"
           },
           "id": "PieChartConnections"
         },
@@ -202,7 +202,10 @@
           "chartRightMargin": "0"
         },
         "chart": {
-          "showAnnotations": false
+          "showAnnotations": false,
+          "style": {
+            "width": "100%"
+          }
         },
         "chartData": {
           "showTrendLines": true,
@@ -265,7 +268,7 @@
             "display": "none"
           },
           "style": {
-            "width": "100%"
+            "width": "50%"
           },
           "id": "HorizontalBarChartConnections"
         },
