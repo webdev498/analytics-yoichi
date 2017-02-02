@@ -64,7 +64,7 @@ function getParamsAndReportId(props, dataObj) {
         }
         else if (dataObj.toolText) {
           const toolText = dataObj.toolText,
-            value = (toolText.split(',')[0]).toLowerCase();
+            value = (toolText.split(' |')[0]);
           params.push({value, field: col.name});
         }
       }

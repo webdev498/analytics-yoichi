@@ -92,9 +92,7 @@ export default class DetailsTable extends React.Component {
                       <Td column={firstCharCapitalize(col.title)}
                         value={col.value}
                         key={firstCharCapitalize(col.title)}
-                        style={{
-                          wordBreak: 'break-word'
-                        }}>
+                        style={col.title === 'json' ? {wordBreak: 'break-word'} : {}}>
                         {col.value}
                       </Td>
                     )

@@ -55,7 +55,8 @@ export function generateDataSource(chartProperties, duration) {
     'labelDisplay': 'wrap',
     'rotateLabels': '1',
     'slantLabels': '1',
-    'labelFontSize': '11'
+    'labelFontSize': '11',
+    'toolTipSepChar': ' | '
   }, chartOptions);
 
   if (dataSet.length > 0) {

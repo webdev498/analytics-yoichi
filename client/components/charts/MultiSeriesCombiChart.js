@@ -42,7 +42,8 @@ const chart = {
   'baseFont': 'Open Sans, sans-serif',
   'baseFontColor': Colors.grape,
   'paletteColors': Colors.defaultGraphPalette,
-  'xAxisLineColor': Colors.axis
+  'xAxisLineColor': Colors.axis,
+  'toolTipSepChar': ' | '
 };
 
 export function getXindex(currentChartDataColumn, columns) {

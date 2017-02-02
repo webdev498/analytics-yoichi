@@ -21,7 +21,8 @@ const chart = {
   'divLineThickness': '1',
   'xAxisName': 'Day',
   'showValues': '0',
-  'paletteColors': Colors.LineChartPallete
+  'paletteColors': Colors.LineChartPallete,
+  'toolTipSepChar': ' | '
 };
 
 function getIndex(obj, columns) {

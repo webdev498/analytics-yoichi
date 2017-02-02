@@ -77,7 +77,8 @@ export function generateDataSource(data, chartOptions, fieldMapping, duration) {
       'paletteColors': Colors.defaultGraphPalette,
       'decimals': '2',
       'labelDisplay': 'wrap',
-      'slantLabels': '1'
+      'slantLabels': '1',
+      'toolTipSepChar': ' | '
     }, chartOptions),
     data: graphBars
   };

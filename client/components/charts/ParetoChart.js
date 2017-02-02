@@ -28,7 +28,8 @@ const chart = {
   'baseFontColor': Colors.grape,
   'paletteColors': Colors.defaultGraphPalette,
   'decimals': '2',
-  'slantLabels': '1'
+  'slantLabels': '1',
+  'toolTipSepChar': ' | '
 };
 
 export function generateDataSource(data, chartOptions, fieldMapping, updateChartOptions) {

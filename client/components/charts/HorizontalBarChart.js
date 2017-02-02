@@ -59,7 +59,7 @@ export function generateDataArray(parameters) {
           label: label1,
           value: rowsArray[d][columnIndexArray[1]],
           connection: connection,
-          toolText: rowsArray[d][columnIndexArray[0]] + ', ' + rowsArray[d][columnIndexArray[1]]
+          toolText: rowsArray[d][columnIndexArray[0]] + ' | ' + rowsArray[d][columnIndexArray[1]]
         };
 
         dataset.push(obj1);
@@ -361,7 +361,8 @@ export function generateDataSource(rawData, chartOptions, chartData, chart) {
       'labelFontSize': '11',
       'numDivLines': '4',
       'baseFont': 'Open Sans, sans-serif',
-      'baseFontColor': Colors.grape
+      'baseFontColor': Colors.grape,
+      'toolTipSepChar': ' | '
     }, chartOptions)
   };
 

@@ -120,7 +120,8 @@ export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
     'chartBottomMargin': '0',
     'bgAlpha': '0',
     'canvasTopMargin': '0',
-    'canvasBottomMargin': '0'
+    'canvasBottomMargin': '0',
+    'toolTipSepChar': ' | '
   }, chartOptions);
 
   dataSourceObject.data = [{data: dataObject}];

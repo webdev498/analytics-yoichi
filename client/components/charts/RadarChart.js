@@ -8,7 +8,8 @@ const chart = {
   'divLineAlpha': '20',
   'showBorder': '0',
   'showShadow': '0',
-  'showCanvasBorder': '0'
+  'showCanvasBorder': '0',
+  'toolTipSepChar': ' | '
 };
 class RadarChart extends React.Component {
   getDataSource() {

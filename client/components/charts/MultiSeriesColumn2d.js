@@ -29,7 +29,8 @@ const chart = {
   'legendItemFontColor': '#666666',
   'labelDisplay': 'wrap',
   'rotateLabels': '1',
-  'slantLabels': '1'
+  'slantLabels': '1',
+  'toolTipSepChar': ' | '
 };
 
 function getColumnIndex(columns, type) {
