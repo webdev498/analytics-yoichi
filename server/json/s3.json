@@ -511,20 +511,54 @@
     ],
     [
       {
+        "details": {
+          "itemsPerPage": 7,
+          "meta": {
+            "reportId": "taf_s3_top_country_download"
+          }
+        },
         "meta": {
           "showHeader": true,
-          "title": "Download Map"
+          "showDetailsIcon": true,
+          "title": "Download Map",
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_s3_top_country_download,taf_s3_bad_rep_download"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
         },
         "attributes": {
           "style": {
             "width": "100%"
-          },
-          "id": "downloadHeatMap"
+          }
         },
-        "id": "download-heatMap",
-        "type": "CompoundCard",
-        "children": [
-          {
+        "id": "download-threat-map",
+        "type": "ThreatMap",
+        "chart": {
+          "worldMap": {
+            "meta": {
+              "subTitle": "NUMBER OF FILE DOWNLOADS BY COUNTRY"
+            },
+            "attributes": {
+              "chartWidth": "100%",
+              "loaderStyle": {
+                "marginTop": "-30px"
+              },
+              "style": {
+                "marginRight": "33px",
+                "width": "70%"
+              },
+              "legendStyle": {
+                "width": "10%",
+                "marginLeft": "-10%"
+              },
+              "id": "download-world-map",
+              "chartHeight": "450"
+            },
             "chartOptions": {},
             "chartData": {
               "fieldMapping": [
@@ -549,19 +583,129 @@
                   "connection": "secure"
                 }
               ]
+            }
+          },
+          "legend1": {
+            "chartOptions": {},
+            "chartData": {
+              "displayTopFive": true,
+              "showTrendLines": false,
+              "fieldMapping": [
+                {
+                  "reportId": "taf_s3_bad_rep_download",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "malicious"
+                },
+                {
+                  "reportId": "taf_s3_top_country_download",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "secure"
+                }
+              ],
+              "multipleReportIds": false
             },
             "meta": {
-              "subTitle": "NUMBER OF FILE DOWNLOADS BY COUNTRY",
               "showHeader": false,
-              "api": {
-                "path": "/api/analytics/reporting/execute/{reportId}",
-                "pathParams": {
-                  "reportId": "taf_s3_top_country_download,taf_s3_bad_rep_download"
+              "title": "TOP 5",
+              "parentWrap": false
+            },
+            "attributes": {
+              "chartCaption": {
+                "position": "absolute"
+              },
+              "chartWidth": "100%",
+              "style": {
+                "paddingTop": "15px"
+              },
+              "id": "download-top-countries",
+              "chartHeight": "200"
+            }
+          },
+          "legend2": {
+            "chartOptions": {},
+            "chartData": {
+              "displayTopFive": true,
+              "showTrendLines": false,
+              "fieldMapping": [
+                {
+                  "reportId": "taf_s3_bad_rep_download",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "malicious"
                 },
-                "queryParams": {
-                  "window": ""
+                {
+                  "reportId": "taf_s3_top_country_download",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "secure"
                 }
-              }
+              ],
+              "multipleReportIds": false
+            },
+            "meta": {
+              "subTitle": "(in bytes)",
+              "showHeader": false,
+              "title": "TOP 5",
+              "parentWrap": false
+            },
+            "attributes": {
+              "chartCaption": {
+                "position": "absolute"
+              },
+              "chartWidth": "100%",
+              "style": {
+                "paddingTop": "15px"
+              },
+              "id": "download-top-bandwidth",
+              "chartHeight": "200"
+            }
+          }
+        }
+      }
+    ],
+    [
+      {
+        "details": {
+          "itemsPerPage": 7,
+          "meta": {
+            "reportId": "taf_s3_top_country_upload"
+          }
+        },
+        "meta": {
+          "showHeader": true,
+          "showDetailsIcon": true,
+          "title": "Upload Map",
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_s3_top_country_upload,taf_s3_bad_rep_upload"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          }
+        },
+        "attributes": {
+          "style": {
+            "width": "100%"
+          }
+        },
+        "id": "upload-threat-map",
+        "type": "ThreatMap",
+        "chart": {
+          "worldMap": {
+            "meta": {
+              "subTitle": "NUMBER OF FILE UPLOADS BY COUNTRY"
             },
             "attributes": {
               "chartWidth": "100%",
@@ -576,110 +720,9 @@
                 "width": "10%",
                 "marginLeft": "-10%"
               },
-              "id": "downloadWorldMap",
+              "id": "upload-world-map",
               "chartHeight": "450"
             },
-            "id": "downloadworld-map",
-            "type": "maps/WorldMap",
-            "details": {
-              "itemsPerPage": 7,
-              "meta": {
-                "reportId": "taf_s3_top_country_download"
-              }
-            }
-          },
-          {
-            "innerStyle": {
-              "flexWrap": "wrap",
-              "flexDirection": "column"
-            },
-            "children": [
-              {
-                "chartOptions": {},
-                "chartData": {
-                  "displayTopFive": true,
-                  "showTrendLines": false,
-                  "fieldMapping": [
-                    {
-                      "reportId": "taf_s3_bad_rep_download",
-                      "columns": [
-                        "country_name",
-                        "connections"
-                      ],
-                      "connection": "malicious"
-                    },
-                    {
-                      "reportId": "taf_s3_top_country_download",
-                      "columns": [
-                        "country_name",
-                        "connections"
-                      ],
-                      "connection": "secure"
-                    }
-                  ],
-                  "multipleReportIds": false
-                },
-                "meta": {
-                  "showHeader": false,
-                  "title": "TOP 5",
-                  "parentWrap": false
-                },
-                "attributes": {
-                  "chartCaption": {
-                    "position": "absolute"
-                  },
-                  "chartWidth": "100%",
-                  "style": {
-                    "marginTop": "35px"
-                  },
-                  "id": "download-top-countries",
-                  "chartHeight": "450px"
-                },
-                "id": "downloadTopCountries",
-                "type": "charts/HorizontalBarChart"
-              }
-            ],
-            "meta": {
-              "showHeader": false,
-              "api": {
-                "path": "/api/analytics/reporting/execute/{reportId}",
-                "pathParams": {
-                  "reportId": "taf_s3_top_country_download,taf_s3_bad_rep_download"
-                },
-                "queryParams": {
-                  "window": ""
-                }
-              }
-            },
-            "attributes": {
-              "style": {
-                "width": "30%",
-                "marginTop": "-30px"
-              },
-              "id": "download-traffic-heatmap-legends"
-            },
-            "id": "downloadTrafficHeatMapLegends",
-            "type": "CompoundCard"
-          }
-        ]
-      }
-    ],
-    [
-      {
-        "meta": {
-          "showHeader": true,
-          "title": "Upload Map"
-        },
-        "attributes": {
-          "style": {
-            "width": "100%"
-          },
-          "id": "uploadHeatMap"
-        },
-        "id": "upload-heatMap",
-        "type": "CompoundCard",
-        "children": [
-          {
             "chartOptions": {},
             "chartData": {
               "fieldMapping": [
@@ -704,122 +747,98 @@
                   "connection": "secure"
                 }
               ]
-            },
-            "meta": {
-              "subTitle": "NUMBER OF FILE UPLOADS BY COUNTRY",
-              "showHeader": false,
-              "api": {
-                "path": "/api/analytics/reporting/execute/{reportId}",
-                "pathParams": {
-                  "reportId": "taf_s3_top_country_upload,taf_s3_bad_rep_upload"
-                },
-                "queryParams": {
-                  "window": ""
-                }
-              }
-            },
-            "attributes": {
-              "chartWidth": "100%",
-              "loaderStyle": {
-                "marginTop": "-30px"
-              },
-              "style": {
-                "marginRight": "33px",
-                "width": "70%"
-              },
-              "legendStyle": {
-                "width": "10%",
-                "marginLeft": "-10%"
-              },
-              "id": "uploadWorldMap",
-              "chartHeight": "450"
-            },
-            "id": "uploadworld-map",
-            "type": "maps/WorldMap",
-            "details": {
-              "itemsPerPage": 7,
-              "meta": {
-                "reportId": "taf_s3_top_country_upload"
-              }
             }
           },
-          {
-            "innerStyle": {
-              "flexWrap": "wrap",
-              "flexDirection": "column"
-            },
-            "children": [
-              {
-                "chartOptions": {},
-                "chartData": {
-                  "displayTopFive": true,
-                  "showTrendLines": false,
-                  "fieldMapping": [
-                    {
-                      "reportId": "taf_s3_bad_rep_upload",
-                      "columns": [
-                        "country_name",
-                        "connections"
-                      ],
-                      "connection": "malicious"
-                    },
-                    {
-                      "reportId": "taf_s3_top_country_upload",
-                      "columns": [
-                        "country_name",
-                        "connections"
-                      ],
-                      "connection": "secure"
-                    }
+          "legend1": {
+            "chartOptions": {},
+            "chartData": {
+              "displayTopFive": true,
+              "showTrendLines": false,
+              "fieldMapping": [
+                {
+                  "reportId": "taf_s3_bad_rep_upload",
+                  "columns": [
+                    "country_name",
+                    "connections"
                   ],
-                  "multipleReportIds": false
+                  "connection": "malicious"
                 },
-                "meta": {
-                  "showHeader": false,
-                  "title": "TOP 5",
-                  "parentWrap": false
-                },
-                "attributes": {
-                  "chartCaption": {
-                    "position": "absolute"
-                  },
-                  "chartWidth": "100%",
-                  "style": {
-                    "marginTop": "35px"
-                  },
-                  "id": "upload-top-countries",
-                  "chartHeight": "450px"
-                },
-                "id": "uploadTopCountries",
-                "type": "charts/HorizontalBarChart"
-              }
-            ],
+                {
+                  "reportId": "taf_s3_top_country_upload",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "secure"
+                }
+              ],
+              "multipleReportIds": false
+            },
             "meta": {
               "showHeader": false,
-              "api": {
-                "path": "/api/analytics/reporting/execute/{reportId}",
-                "pathParams": {
-                  "reportId": "taf_s3_top_country_upload,taf_s3_bad_rep_upload"
-                },
-                "queryParams": {
-                  "window": ""
-                }
-              }
+              "title": "TOP 5",
+              "parentWrap": false
             },
             "attributes": {
-              "style": {
-                "width": "30%",
-                "marginTop": "-30px"
+              "chartCaption": {
+                "position": "absolute"
               },
-              "id": "upload-traffic-heatmap-legends"
+              "chartWidth": "100%",
+              "style": {
+                "paddingTop": "15px"
+              },
+              "id": "upload-top-countries",
+              "chartHeight": "200"
+            }
+          },
+          "legend2": {
+            "chartOptions": {},
+            "chartData": {
+              "displayTopFive": true,
+              "showTrendLines": false,
+              "fieldMapping": [
+                {
+                  "reportId": "taf_s3_bad_rep_upload",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "malicious"
+                },
+                {
+                  "reportId": "taf_s3_top_country_upload",
+                  "columns": [
+                    "country_name",
+                    "connections"
+                  ],
+                  "connection": "secure"
+                }
+              ],
+              "multipleReportIds": false
             },
-            "id": "uploadTrafficHeatMapLegends",
-            "type": "CompoundCard"
+            "meta": {
+              "subTitle": "(in bytes)",
+              "showHeader": false,
+              "title": "TOP 5",
+              "parentWrap": false
+            },
+            "attributes": {
+              "chartCaption": {
+                "position": "absolute"
+              },
+              "chartWidth": "100%",
+              "style": {
+                "paddingTop": "15px"
+              },
+              "id": "upload-top-bandwidth",
+              "chartHeight": "200"
+            }
           }
-        ]
+        }
       }
     ],
-    [ {
+    [
+      {
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "USER",
@@ -872,7 +891,8 @@
         },
         "id": "l-freq-req",
         "type": "charts/ParetoChart"
-      }, {
+      },
+      {
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "USER",
@@ -924,6 +944,7 @@
         },
         "id": "l-freq-ua",
         "type": "charts/ParetoChart"
-      }]
+      }
+    ]
   ]
 }
