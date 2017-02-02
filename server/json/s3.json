@@ -305,7 +305,7 @@
         "id": "uploadgraph",
         "type": "charts/StandardChart"
       }
-    ],   
+    ],
     [
       {
         "chartOptions": {},
@@ -407,7 +407,7 @@
         "id": "freq-req",
         "type": "charts/HorizontalBarChart"
       }
-    ],   
+    ],
     [
       {
         "chartOptions": {},
@@ -581,13 +581,10 @@
             },
             "id": "downloadworld-map",
             "type": "maps/WorldMap",
-            "kibana": {
-              "pathParams": [
-                "source-country-details"
-              ],
-              "queryParams": {
-                "fromAndToBasedOnToday": "",
-                "country": ""
+            "details": {
+              "itemsPerPage": 7,
+              "meta": {
+                "reportId": "taf_s3_top_country_download"
               }
             }
           },
@@ -739,13 +736,10 @@
             },
             "id": "uploadworld-map",
             "type": "maps/WorldMap",
-            "kibana": {
-              "pathParams": [
-                "source-country-details"
-              ],
-              "queryParams": {
-                "fromAndToBasedOnToday": "",
-                "country": ""
+            "details": {
+              "itemsPerPage": 7,
+              "meta": {
+                "reportId": "taf_s3_top_country_upload"
               }
             }
           },

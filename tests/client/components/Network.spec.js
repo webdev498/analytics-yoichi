@@ -11,7 +11,7 @@ import NetworkGraph, {
   generateDataFromAssetDetails,
   createNodeObject,
   createEdgeObject
-} from 'components/NetworkGraph';
+} from 'components/networkGraph';
 import Loader from 'components/Loader';
 import {Colors} from '../../../commons/colors';
 import {wrapThemeProvider} from '../../testUtils';

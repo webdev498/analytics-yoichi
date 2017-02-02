@@ -36,11 +36,11 @@ const styles = {
 };
 
 function getParamsAndReportId(props, dataObj) {
-  let {data, meta} = props,
-    reportId = props.meta.api.pathParams.reportId;
+  let {data, meta, details} = props,
+    reportId = meta.api.pathParams.reportId;
 
-  if (meta.details) {
-    reportId = meta.details.reportId;
+  if (details && details.meta) {
+    reportId = details.meta.reportId;
     data = data[reportId];
   }
 
