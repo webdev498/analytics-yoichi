@@ -166,6 +166,9 @@
           },
           "id": "mostaccess"
         },
+        "details": {
+          "itemsPerPage": 7
+        },
         "id": "most-access",
         "type": "ReactableTable"
       },
@@ -192,6 +195,9 @@
             "width": "50%"
           },
           "id": "leastaccess"
+        },
+        "details": {
+          "itemsPerPage": 7
         },
         "id": "least-access",
         "type": "ReactableTable"
