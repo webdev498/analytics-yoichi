@@ -69,7 +69,6 @@ export default class DetailsTable extends React.Component {
         {
           list.length > 0
           ? <Table
-            id={props.id}
             style={{width: '100%'}}
             className='detailsTable'
             pageButtonLimit={5}
