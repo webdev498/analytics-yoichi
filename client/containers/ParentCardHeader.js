@@ -189,7 +189,8 @@ export default class ParentCardHeader extends React.Component {
         </div>
 
         {
-          props.meta.showSearch && !props.meta.showTable && !props.meta.showDetails
+          (props.meta.showSearch && !props.meta.showDetailsIcon && !props.meta.showDetails) &&
+          !props.showComponentIconFlag
           ? <div style={styles.inputWrap}>
             <FontIcon className='material-icons'
               style={{...styles.clearIcon, ...this.state.clearIconStyle}}
