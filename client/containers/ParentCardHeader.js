@@ -213,7 +213,7 @@ export default class ParentCardHeader extends React.Component {
         }
 
         {
-          props.meta.showTable === true && props.showComponentIconFlag === false
+          props.meta.showDetailsIcon === true && props.showComponentIconFlag === false
           ? (
             <FontIcon className='material-icons'
               style={{...styles.icon, ...styles.listIcon}}
