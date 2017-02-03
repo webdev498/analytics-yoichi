@@ -279,8 +279,6 @@ export class ParentCard extends React.Component {
     const {props, props: {data, meta}} = this;
     if (!data || !meta.api) return;
 
-    console.log(props);
-
     let {queryParams, reportId} = getParamsAndReportId(props, dataObj);
     if (!queryParams) return;
 
