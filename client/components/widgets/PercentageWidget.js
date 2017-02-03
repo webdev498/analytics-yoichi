@@ -30,7 +30,7 @@ function getIcon(percentage, iconIndex, iconName) {
       height: '14px',
       width: '23px',
       position: 'absolute',
-      zIndex: '10',
+      zIndex: 1,
       backgroundColor: Colors.cloud,
       marginTop: '2px',
       marginLeft: '1px',

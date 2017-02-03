@@ -1,8 +1,6 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Colors} from '../../commons/colors';
 import {getArrowIcon} from '../../commons/utils/graphUtils';
-
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const styles = {
   card: {
@@ -66,44 +64,34 @@ function getIcon(data) {
 }
 
 class MetricsCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  static propTypes = {
+    clickData: PropTypes.object
+  }
+
   handleClick() {
-    const {props} = this,
-      {kibana, clickData} = props,
-      dataObj = {};
-
-    if (kibana) {
-      if (props.kibana.queryParams) {
-        dataObj.datasetName = 'high';
-      }
-
-      let parameters = {
-        data: props.data,
-        duration: props.duration,
-        dataObj,
-        queryParamsArray: props.kibana.queryParams,
-        pathParams: props.kibana.pathParams
-      };
-
-      return () => {
-        this.context.clickThrough(generateClickThroughUrl(parameters));
-      };
-    }
+    const {props, props: {clickData}} = this;
 
     if (clickData) {
-      return () => {
-        if (props.history.isActive(clickData.page)) {
-          props.broadcastEvent(clickData.tableId, {data: clickData.filterText, type: 'updateSearch'});
-        }
-        else {
-          // this is to enable to call the broadcastEvent when user is on some other page other than '/alerts'
-          //  so that this event can be called after the page load
-          window.sessionStorage.broadcastEvent = JSON.stringify({
-            id: clickData.tableId,
-            data: {data: clickData.filterText, type: 'updateSearch'}
-          });
-          props.history.push(clickData.page);
-        }
-      };
+      if (props.history.isActive(clickData.page)) {
+        props.broadcastEvent(clickData.tableId, {data: clickData.filterText, type: 'updateSearch'});
+      }
+      else {
+        // this is to enable to call the broadcastEvent when user is on some other page other than '/alerts'
+        //  so that this event can be called after the page load
+        window.sessionStorage.broadcastEvent = JSON.stringify({
+          id: clickData.tableId,
+          data: {data: clickData.filterText, type: 'updateSearch'}
+        });
+        props.history.push(clickData.page);
+      }
+    }
+    else {
+      this.context.clickThrough(props);
     }
   }
 
@@ -127,7 +115,7 @@ class MetricsCard extends React.Component {
         </div>
 
         <div style={styles.details}
-          onClick={this.handleClick()}>
+          onClick={this.handleClick}>
           View details
         </div>
       </div>

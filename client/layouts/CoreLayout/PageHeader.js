@@ -19,10 +19,7 @@ import { connect } from 'react-redux';
 import {Colors} from '../../../commons/colors';
 import { Link } from 'react-router';
 
-
 const muiTheme = getMuiTheme(AppTheme);
-
-const openKibanaInNewWindow = window.global && window.global.openKibanaInNewWindow;
 
 const TimeRanges = [
   {
@@ -130,9 +127,7 @@ export class PageHeader extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     updateApiData: PropTypes.func.isRequired,
-    hideKibana: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
-    showKibana: PropTypes.bool.isRequired,
     params: PropTypes.object.isRequired,
     duration: PropTypes.string.isRequired
   }
@@ -156,12 +151,6 @@ export class PageHeader extends React.Component {
     const {props} = this,
       name = props.auth.user ? props.auth.user.name : '';
 
-    let kibanaStyle = {display: 'none'};
-
-    if (props.showKibana) {
-      kibanaStyle = {...styles.menuStyle, color: Colors.navigation};
-    }
-
     const title = (
       <div style={styles.logoWrap}>
         <Link to='/' style={styles.label}>
@@ -179,17 +168,6 @@ export class PageHeader extends React.Component {
       <AppBar title={title}
         style={{...styles.appBar, ...props.style}}
         showMenuIconButton={false}>
-
-        {
-          openKibanaInNewWindow
-          ? null
-          : <MenuItem
-            ref='backBtn'
-            style={{...kibanaStyle}}
-            onClick={this.props.hideKibana}>
-            Back to Summary
-          </MenuItem>
-        }
 
         <DropDownMenu
           ref='dropDown'

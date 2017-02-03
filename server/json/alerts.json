@@ -90,15 +90,7 @@
         },
         "id": "3",
         "type": "MetricsCard",
-        "title": "Events Processed",
-        "kibana": {
-          "pathParams": [
-            "traffic-details"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
-          }
-        }
+        "title": "Events Processed"
       },
       {
         "meta": {
@@ -125,15 +117,7 @@
         },
         "id": "4",
         "type": "MetricsCard",
-        "title": "Assets Monitored",
-        "kibana": {
-          "pathParams": [
-            "assets-all"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
-          }
-        }
+        "title": "Assets Monitored"
       }
     ],
     [
