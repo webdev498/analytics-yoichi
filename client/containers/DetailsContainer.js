@@ -178,13 +178,19 @@ class DetailsContainer extends React.Component {
             <span>Exit</span>
           </div>
 
-          <h2>Title</h2>
+          <h2>{props.title}</h2>
 
           <div style={styles.iconWrap}>
             <FontIcon className='material-icons'
               style={styles.icon}
               onClick={this.getDetailsData}>
               replay
+            </FontIcon>
+
+            <FontIcon className='material-icons'
+              style={styles.icon}
+              onClick={props.hideDetails}>
+              close
             </FontIcon>
           </div>
         </header>
