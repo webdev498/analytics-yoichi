@@ -9,8 +9,8 @@
   padding: 10px;
   height: 45px;
   font-size: 13px;
-  background: $WhiteColor;
-  color: $GrapeColor;
+  background: #DFF7F9;
+  color: #24293D;
   text-align: left;
   cursor: pointer;
   font-weight: normal;
@@ -24,6 +24,7 @@
   color: $GrapeColor;
   vertical-align: top;
   height: 45px;
+  border-right: 1px solid #F2F2F4;
  }
 
 .detailsTable .reactable-page-button {
@@ -74,7 +75,7 @@
 }
 
 .detailsTable th.reactable-header-sort-desc, .detailsTable th.reactable-header-sort-asc {
-  background: $WhiteColor;
+  /*background: $WhiteColor;*/
 }
 
 .detailsTable th.reactable-header-sort-desc:after {
@@ -107,8 +108,8 @@ tr.reactable-filterer td {
   width: 100%;
 }
 
-.detailsTable tr:nth-child(even) {background: $WhiteColor}
-.detailsTable tr:nth-child(odd) {background: $CloudColorShade2;}
+.detailsTable tr:nth-child(even) {background: $CloudColorShade2}
+.detailsTable tr:nth-child(odd) {background: $WhiteColor;}
 
 .detailsTable tr:nth-child(even) td div.scoreWidget {background: $CoralColorShade1}
 .detailsTable tr:nth-child(odd) td div.scoreWidget {background: $CoralColorShade2}
@@ -132,6 +133,11 @@ tr.reactable-filterer td {
 
 .detailsTable tr td:last-child {
   padding-right: 33px;
+  border-right: 0;
+}
+
+.detailsTable .reactable-data tr:last-child {
+  border-bottom: 1px solid #F2F2F4;
 }
 
 .reactable-pagination tr {

@@ -366,7 +366,7 @@
           "id": "TopConnectionsByProtocol"
         },
         "details": {
-          "itemsPerPage": 1
+          "itemsPerPage": 3
         },
         "id": "top-connections-by-protocol",
         "type": "charts/HorizontalBarChart"

@@ -62,7 +62,7 @@ export default class DetailsTable extends React.Component {
       columnNames = [];
 
     header.forEach((col) => {
-      columnNames.push(firstCharCapitalize(col.dataKey));
+      columnNames.push((col.dataKey).toUpperCase());
     });
 
     return (
@@ -80,7 +80,7 @@ export default class DetailsTable extends React.Component {
             nextPageLabel={'>>'}
             sortable
             defaultSort={{
-              column: firstCharCapitalize(header[0].dataKey),
+              column: (header[0].dataKey).toUpperCase(),
               direction: 'desc'
             }}
             filterBy={props.search}
@@ -90,9 +90,9 @@ export default class DetailsTable extends React.Component {
                 <Tr key={`tr${i}`}>
                   {
                     row.map((col, i) => (
-                      <Td column={firstCharCapitalize(col.title)}
+                      <Td column={(col.title).toUpperCase()}
                         value={col.value}
-                        key={firstCharCapitalize(col.title)}
+                        key={(col.title).toUpperCase()}
                         style={col.title === 'json' ? {wordBreak: 'break-word'} : {}}>
                         {
                           whatIsIt(col.value) === 'Object' || whatIsIt(col.value) === 'Array'
