@@ -354,7 +354,6 @@ class MultiSeriesCombiChart extends React.Component {
         dataSource: generateChartDataSource(rawData, props),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            console.log(dataObj);
             showDetailsTable(dataObj);
           }
         }
