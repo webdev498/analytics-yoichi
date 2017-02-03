@@ -23,7 +23,8 @@ const styles = {
     left: '72px',
     bottom: 0,
     right: 0,
-    zIndex: 1
+    zIndex: 3,
+    overflow: 'auto'
   },
   base: {
     paddingLeft: '72px',
@@ -78,9 +79,9 @@ export class CoreLayout extends React.Component {
   getChildContext() {
     const that = this;
     return {
-      clickThrough(url) {
+      clickThrough(input) {
         that.setState({
-          url,
+          input,
           showKibana: true
         });
 
@@ -142,7 +143,8 @@ export class CoreLayout extends React.Component {
     const {props, state} = this,
       {showKibana} = this.state;
 
-    let kibanaUrl = showKibana ? this.state.url : '';
+    let kibanaUrl = showKibana ? this.state.url : '',
+      kibanaInput = {...state.input, id: 'details-view'};
 
     return (
       <div>
@@ -176,7 +178,7 @@ export class CoreLayout extends React.Component {
               ? window.open(kibanaUrl)
               : (
                 <div style={styles.kibana}>
-                  <Kibana url={this.state.url} />
+                  <Kibana {...kibanaInput} />
                 </div>
               )
             )

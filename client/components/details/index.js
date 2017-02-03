@@ -17,7 +17,7 @@ import './_table.scss';
 
 export default class DetailsTable extends React.Component {
   static propTypes = {
-    style: PropTypes.object.isRequired,
+    style: PropTypes.object,
     detailsData: PropTypes.object,
     details: PropTypes.object
   }

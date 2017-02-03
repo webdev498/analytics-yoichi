@@ -85,7 +85,8 @@ class MetricsCard extends React.Component {
       };
 
       return () => {
-        this.context.clickThrough(generateClickThroughUrl(parameters));
+        // this.context.clickThrough(generateClickThroughUrl(parameters));
+        this.context.clickThrough(props);
       };
     }
 
