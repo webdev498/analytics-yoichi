@@ -93,15 +93,7 @@
         },
         "id": "3",
         "type": "MetricsCard",
-        "title": "S3 Events Processed",
-        "kibana": {
-          "pathParams": [
-            "s3-events"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
-          }
-        }
+        "title": "S3 Events Processed"
       },
       {
         "meta": {
@@ -129,15 +121,7 @@
         },
         "id": "4",
         "type": "MetricsCard",
-        "title": "Failed S3 Events",
-        "kibana": {
-          "pathParams": [
-            "assets-all"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
-          }
-        }
+        "title": "Failed S3 Events"
       }
     ],
     [
