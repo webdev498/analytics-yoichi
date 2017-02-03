@@ -14,8 +14,7 @@ import 'styles/core.scss';
 
 const styles = {
   details: {
-    backgroundColor: Colors.arctic,
-    padding: '5px 5px 0 5px',
+    backgroundColor: Colors.cloud,
     position: 'fixed',
     top: '64px',
     left: '72px',
@@ -144,7 +143,7 @@ export class CoreLayout extends React.Component {
     let detailsInput = {...state.input, id: 'details-view'};
 
     return (
-      <div>
+      <div style={styles.wrap}>
         <Header
           title='RANK'
           params={props.params} />

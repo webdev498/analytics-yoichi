@@ -11,7 +11,6 @@ import Loader from 'components/Loader';
 const styles = {
   wrap: {
     position: 'relative',
-    height: '100%',
     border: 0,
     margin: '33px'
   },
@@ -19,7 +18,11 @@ const styles = {
     backgroundColor: Colors.turquoise,
     height: '73px',
     display: 'flex',
-    padding: '0 33px'
+    padding: '0 33px',
+    color: Colors.white
+  },
+  title: {
+    fontWeight: 'normal'
   },
   iconWrap: {
     marginLeft: 'auto',
@@ -28,9 +31,8 @@ const styles = {
     alignItems: 'center'
   },
   icon: {
-    color: Colors.grape,
     cursor: 'pointer',
-    fontSize: '20px',
+    fontSize: '24px',
     fontWeight: 600,
     marginLeft: '10px'
   },
@@ -38,7 +40,7 @@ const styles = {
     cursor: 'pointer',
     display: 'inline-flex',
     alignItems: 'center',
-    marginRight: '33px'
+    marginRight: '50px'
   },
   backIcon: {
     marginLeft: 0,
@@ -178,7 +180,7 @@ class DetailsContainer extends React.Component {
             <span>Exit</span>
           </div>
 
-          <h2>{props.title}</h2>
+          <h2 style={styles.title}>{props.title}</h2>
 
           <div style={styles.iconWrap}>
             <FontIcon className='material-icons'
