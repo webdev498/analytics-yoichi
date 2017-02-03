@@ -242,12 +242,15 @@
           ],
           "multipleReportIds": true
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "reportId": "taf_top_talkers_connections"
+          }
+        },
         "meta": {
           "showHeader": true,
           "showDetailsIcon": true,
-          "details": {
-            "reportId": "taf_top_talkers_connections"
-          },
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -270,16 +273,7 @@
           "id": "HorizontalBarChartConnections"
         },
         "id": "horizontal-bar-chart-connections",
-        "type": "charts/HorizontalBarChart",
-        "kibana": {
-          "pathParams": [
-            "ip-connection-details"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": "",
-            "xAxisValueAsItIs": "ip"
-          }
-        }
+        "type": "charts/HorizontalBarChart"
       }
     ],
     [

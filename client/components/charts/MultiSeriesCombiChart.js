@@ -327,21 +327,6 @@ export function generateChartDataSource(rawData, props) {
   return dataSourceObject;
 }
 
-export function getDataPlotClickUrl(props, dataObj) {
-  if (!props.kibana) {
-    return;
-  }
-  let parameters = {
-    data: props.data,
-    duration: props.duration,
-    dataObj: dataObj,
-    queryParamsArray: props.kibana.queryParams,
-    pathParams: props.kibana.pathParams
-  };
-
-  return generateClickThroughUrl(parameters);
-}
-
 class MultiSeriesCombiChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
@@ -355,9 +340,8 @@ class MultiSeriesCombiChart extends React.Component {
       return;
     }
 
-    const {data, attributes} = props,
+    const {data, attributes, showDetailsTable} = props,
       fieldMapping = props.chartData.fieldMapping,
-      {clickThrough} = this.context,
       rawData = generateRawData(fieldMapping, data);
 
     FusionCharts.ready(function() {
@@ -371,10 +355,8 @@ class MultiSeriesCombiChart extends React.Component {
         dataSource: generateChartDataSource(rawData, props),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            const url = getDataPlotClickUrl(props, dataObj);
-            if (url !== '' && !isUndefined(url)) {
-              clickThrough(url);
-            }
+            console.log(dataObj);
+            showDetailsTable(dataObj);
           }
         }
       });

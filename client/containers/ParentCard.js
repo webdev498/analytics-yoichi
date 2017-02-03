@@ -10,7 +10,12 @@ import {Colors} from '../../commons/colors';
 import {autoScrollTo} from 'utils/utils';
 import {updateRoute} from 'actions/core';
 
-import {DETAILS_BASE_URL} from 'Constants';
+import {
+  DETAILS_BASE_URL,
+  LOW_SCORE_RANGE,
+  MEDIUM_SCORE_RANGE,
+  HIGH_SCORE_RANGE
+} from 'Constants';
 
 const styles = {
   wrap: {
@@ -55,18 +60,10 @@ function getParamsAndReportId(props, dataObj) {
     queryParams = Object.assign({}, queryParams, dataObj.queryParams);
   }
   else {
-    const params = [];
-    columns.forEach(col => {
+    let params = [];
+    columns.forEach((col, index) => {
       if (col.detailsAvailable) {
-        if (dataObj.shortLabel) { // TODO define this in layout json.
-          const value = dataObj.shortLabel;
-          params.push({value, field: col.name});
-        }
-        else if (dataObj.toolText) {
-          const toolText = dataObj.toolText,
-            value = (toolText.split(' |')[0]);
-          params.push({value, field: col.name});
-        }
+        params = params.concat(generateParameters(index, col, dataObj));
       }
     });
 
@@ -83,6 +80,32 @@ function getParamsAndReportId(props, dataObj) {
   }
 
   return {queryParams, reportId};
+}
+
+function generateParameters(index, col, dataObj) {
+  const params = [];
+  if (dataObj.shortLabel) { // TODO define this in layout json.
+    const value = dataObj.shortLabel;
+    params.push({value, field: col.name});
+  }
+  else if (dataObj.toolText) {
+    let toolText = dataObj.toolText,
+      toolTexts = toolText.split(' |'),
+      value = '';
+    if (toolTexts.length === 2) {
+      value = (toolText.split(' |')[0]);
+    }
+    else if (toolTexts.length === 3) {
+      if (index === 0) {
+        value = (toolText.split(' |')[1]);
+      }
+      else if (index === 1) {
+        value = (toolText.split(' |')[0]);
+      }
+    }
+    params.push({value, field: col.name});
+  }
+  return params;
 }
 
 export class ParentCard extends React.Component {
