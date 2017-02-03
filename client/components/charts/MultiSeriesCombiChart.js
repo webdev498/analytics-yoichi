@@ -9,7 +9,6 @@ import {
   generateRawData,
   isUndefined
 } from '../../../commons/utils/utils';
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
 
 const chart = {
   'showvalues': '0',
@@ -106,7 +105,7 @@ export function generateCategoryArray(rows, index, dateDisplayFormat) {
   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
     let utcTime = moment.utc(rows[d][index]).format('YYYY-MM-DD HH:mm:ss.SSS'),
       localTime = moment.utc(utcTime).toDate();
-    localTime = moment(localTime).format('D MMM YYYY HH:mm');
+    localTime = moment(localTime).format('D MMM YYYY HH:mm:ss.SSS');
 
     let localTimeNew = moment.utc(rows[d][index]).toDate();
     localTimeNew = moment(localTimeNew).format(dateDisplayFormat);

@@ -329,7 +329,7 @@
           },
           "style": {
             "marginRight": "33px",
-            "width": "100%"
+            "width": "50%"
           },
           "id": "HistogramChart3"
         },
@@ -377,7 +377,7 @@
             "display": "none"
           },
           "style": {
-            "width": "100%"
+            "width": "50%"
           },
           "id": "TopConnectionsByProtocol"
         },

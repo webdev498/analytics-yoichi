@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import Loader from 'components/Loader';
 import DetailsTable from 'components/details';
@@ -10,12 +11,7 @@ import {Colors} from '../../commons/colors';
 import {autoScrollTo} from 'utils/utils';
 import {updateRoute} from 'actions/core';
 
-import {
-  DETAILS_BASE_URL,
-  LOW_SCORE_RANGE,
-  MEDIUM_SCORE_RANGE,
-  HIGH_SCORE_RANGE
-} from 'Constants';
+import {DETAILS_BASE_URL} from 'Constants';
 
 const styles = {
   wrap: {
@@ -88,7 +84,7 @@ function generateParameters(index, col, dataObj) {
     const value = dataObj.shortLabel;
     params.push({value, field: col.name});
   }
-  else if (dataObj.toolText) {
+  else if (dataObj.toolText) { // TODO Discuss with Ojassvi and decide layout structure for this.
     let toolText = dataObj.toolText,
       toolTexts = toolText.split(' |'),
       value = '';
@@ -102,6 +98,10 @@ function generateParameters(index, col, dataObj) {
       else if (index === 1) {
         value = (toolText.split(' |')[0]);
       }
+    }
+    if (col.name === 'date') {
+      value = new Date(value).toISOString();
+      value = value.replace('Z', '');
     }
     params.push({value, field: col.name});
   }
@@ -278,6 +278,8 @@ export class ParentCard extends React.Component {
   getDetailsData(dataObj) {
     const {props, props: {data, meta}} = this;
     if (!data || !meta.api) return;
+
+    console.log(props);
 
     let {queryParams, reportId} = getParamsAndReportId(props, dataObj);
     if (!queryParams) return;
