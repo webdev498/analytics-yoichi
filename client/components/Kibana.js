@@ -6,9 +6,11 @@ import FontIcon from 'material-ui/FontIcon';
 import {fetchApiData, removeComponent} from 'actions/parentCard';
 import {DETAILS_BASE_URL} from 'Constants';
 import DetailsTable from 'components/details';
+import Loader from 'components/Loader';
 
 const styles = {
   wrap: {
+    position: 'relative',
     height: '100%',
     border: 0,
     margin: '33px'
@@ -105,6 +107,25 @@ class Kibana extends React.Component {
     hideKibana: PropTypes.func
   }
 
+  getErrorElement() {
+    const {props} = this;
+    let statusText;
+
+    try {
+      statusText = props.detailsErrorData.response.statusText;
+    }
+    catch (ex) {
+      console.log(ex, props.detailsErrorData);
+      statusText = 'Some error occured';
+    }
+
+    return (
+      <div style={styles.error}>
+        {statusText}
+      </div>
+    );
+  }
+
   getDetailsData() {
     const {props, props: {data, meta, params, options, id}} = this;
     if (!data || !meta.api) return;
@@ -138,13 +159,13 @@ class Kibana extends React.Component {
   }
 
   render() {
-    const {detailsData} = this.props,
+    const {props, props: {detailsData}} = this,
       details = {itemsPerPage: 20};
 
     return (
       <div style={styles.wrap}>
         <header style={styles.header}>
-          <div style={styles.exitWrap} onClick={this.props.hideKibana}>
+          <div style={styles.exitWrap} onClick={props.hideKibana}>
             <FontIcon className='material-icons'
               style={{...styles.icon, ...styles.backIcon}}>
                 arrow_back
@@ -164,7 +185,17 @@ class Kibana extends React.Component {
         </header>
 
         <div>
-          <DetailsTable style={styles.detailsTable} detailsData={detailsData} details={details} />
+          {
+            props.detailsIsFetching
+            ? <Loader />
+            : null
+          }
+
+          {
+            props.isDetailsError
+            ? this.getErrorElement()
+            : <DetailsTable style={styles.detailsTable} detailsData={detailsData} details={details} />
+          }
         </div>
       </div>
     );
