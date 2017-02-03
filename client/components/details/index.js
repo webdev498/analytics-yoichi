@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
+import {whatIsIt} from '../../../commons/utils/utils';
 
 import Reactable from 'reactable';
 const {Table, Tr, Td} = Reactable;
@@ -93,7 +94,11 @@ export default class DetailsTable extends React.Component {
                         value={col.value}
                         key={firstCharCapitalize(col.title)}
                         style={col.title === 'json' ? {wordBreak: 'break-word'} : {}}>
-                        {col.value}
+                        {
+                          whatIsIt(col.value) === 'Object' || whatIsIt(col.value) === 'Array'
+                          ? JSON.stringify(col.value)
+                          : col.value
+                        }
                       </Td>
                     )
                   )}
