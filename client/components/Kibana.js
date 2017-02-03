@@ -33,6 +33,7 @@ const styles = {
     marginLeft: '10px'
   },
   exitWrap: {
+    cursor: 'pointer',
     display: 'inline-flex',
     alignItems: 'center',
     marginRight: '33px'
@@ -100,7 +101,8 @@ class Kibana extends React.Component {
     data: PropTypes.object,
     params: PropTypes.object.isRequired,
     options: PropTypes.object,
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    hideKibana: PropTypes.func
   }
 
   getDetailsData() {
@@ -142,7 +144,7 @@ class Kibana extends React.Component {
     return (
       <div style={styles.wrap}>
         <header style={styles.header}>
-          <div style={styles.exitWrap}>
+          <div style={styles.exitWrap} onClick={this.props.hideKibana}>
             <FontIcon className='material-icons'
               style={{...styles.icon, ...styles.backIcon}}>
                 arrow_back

@@ -178,7 +178,7 @@ export class CoreLayout extends React.Component {
               ? window.open(kibanaUrl)
               : (
                 <div style={styles.kibana}>
-                  <Kibana {...kibanaInput} />
+                  <Kibana {...kibanaInput} hideKibana={this.hideKibana} />
                 </div>
               )
             )

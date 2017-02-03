@@ -180,7 +180,7 @@ export class PageHeader extends React.Component {
         style={{...styles.appBar, ...props.style}}
         showMenuIconButton={false}>
 
-        {
+        {/*
           openKibanaInNewWindow
           ? null
           : <MenuItem
@@ -189,7 +189,7 @@ export class PageHeader extends React.Component {
             onClick={this.props.hideKibana}>
             Back to Summary
           </MenuItem>
-        }
+        */}
 
         <DropDownMenu
           ref='dropDown'
