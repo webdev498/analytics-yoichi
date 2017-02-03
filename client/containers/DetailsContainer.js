@@ -96,7 +96,7 @@ function getParamsAndReportId(props, dataObj) {
   return {queryParams, reportId};
 }
 
-class Kibana extends React.Component {
+class DetailsContainer extends React.Component {
   static propTypes = {
     meta: PropTypes.object,
     detailsData: PropTypes.object,
@@ -104,7 +104,7 @@ class Kibana extends React.Component {
     params: PropTypes.object.isRequired,
     options: PropTypes.object,
     id: PropTypes.string.isRequired,
-    hideKibana: PropTypes.func
+    hideDetails: PropTypes.func
   }
 
   getErrorElement() {
@@ -165,7 +165,7 @@ class Kibana extends React.Component {
     return (
       <div style={styles.wrap}>
         <header style={styles.header}>
-          <div style={styles.exitWrap} onClick={props.hideKibana}>
+          <div style={styles.exitWrap} onClick={props.hideDetails}>
             <FontIcon className='material-icons'
               style={{...styles.icon, ...styles.backIcon}}>
                 arrow_back
@@ -202,7 +202,7 @@ class Kibana extends React.Component {
   }
 }
 
-Kibana.contextTypes = {
+DetailsContainer.contextTypes = {
   store: React.PropTypes.object
 };
 
@@ -232,4 +232,4 @@ function mapStateToProps(state, ownProps) {
 
 export default connect(mapStateToProps, {
   fetchApiData, removeComponent
-})(Kibana);
+})(DetailsContainer);

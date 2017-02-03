@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Header from './PageHeader';
 import Sidebar from './Sidebar';
 import PageContent from './PageContent';
-import Kibana from 'components/Kibana';
+import DetailsContainer from 'containers/DetailsContainer';
 
 import { fetchUserData, logout } from 'actions/auth';
 import { fetchActionsList } from 'actions/actionsList';
@@ -12,10 +12,8 @@ import Loader from 'components/Loader';
 import {Colors} from '../../../commons/colors';
 import 'styles/core.scss';
 
-const openKibanaInNewWindow = window.global && window.global.openKibanaInNewWindow;
-
 const styles = {
-  kibana: {
+  details: {
     backgroundColor: Colors.arctic,
     padding: '5px 5px 0 5px',
     position: 'fixed',
@@ -64,14 +62,14 @@ export class CoreLayout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showKibana: false,
+      showDetails: false,
       showFullSidebar: false,
       sidebarWidth: {width: '72px'},
       sidebar: props.auth.sidebar,
       showSearch: false
     };
 
-    this.hideKibana = this.hideKibana.bind(this);
+    this.hideDetails = this.hideDetails.bind(this);
     this.mouseOver = this.mouseOver.bind(this);
     this.mouseOut = this.mouseOut.bind(this);
   }
@@ -82,7 +80,7 @@ export class CoreLayout extends React.Component {
       clickThrough(input) {
         that.setState({
           input,
-          showKibana: true
+          showDetails: true
         });
 
         // hides the scroll from the body element when kibana is shown.
@@ -91,9 +89,9 @@ export class CoreLayout extends React.Component {
     };
   }
 
-  hideKibana() {
+  hideDetails() {
     this.setState({
-      showKibana: false
+      showDetails: false
     });
 
     // shows the scroll of the body element when kibana is hidden.
@@ -121,7 +119,7 @@ export class CoreLayout extends React.Component {
     this.props.fetchActionsList();
 
     this.context.router.listen(() => {
-      this.hideKibana();
+      this.hideDetails();
       if (this.state.showSearch) {
         this.toggleSearch();
       }
@@ -141,23 +139,19 @@ export class CoreLayout extends React.Component {
 
   render() {
     const {props, state} = this,
-      {showKibana} = this.state;
+      {showDetails} = this.state;
 
-    let kibanaUrl = showKibana ? this.state.url : '',
-      kibanaInput = {...state.input, id: 'details-view'};
+    let detailsInput = {...state.input, id: 'details-view'};
 
     return (
       <div>
         <Header
           title='RANK'
-          showKibana={showKibana}
-          hideKibana={this.hideKibana}
           params={props.params} />
 
         <Sidebar
           sidebar={this.state.sidebar}
           location={props.location}
-          hideKibana={this.hideKibana}
           toggleSearch={this.toggleSearch}
           showSearch={state.showSearch} />
 
@@ -172,15 +166,11 @@ export class CoreLayout extends React.Component {
           }
 
           {
-            showKibana && kibanaUrl !== ''
+            showDetails
             ? (
-              openKibanaInNewWindow
-              ? window.open(kibanaUrl)
-              : (
-                <div style={styles.kibana}>
-                  <Kibana {...kibanaInput} hideKibana={this.hideKibana} />
-                </div>
-              )
+              <div style={styles.details}>
+                <DetailsContainer {...detailsInput} hideDetails={this.hideDetails} />
+              </div>
             )
             : null
           }
