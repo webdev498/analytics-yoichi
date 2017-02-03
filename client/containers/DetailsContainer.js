@@ -107,6 +107,11 @@ class DetailsContainer extends React.Component {
     hideDetails: PropTypes.func
   }
 
+  constructor(props) {
+    super(props);
+    this.getDetailsData = this.getDetailsData.bind(this);
+  }
+
   getErrorElement() {
     const {props} = this;
     let statusText;
@@ -178,7 +183,7 @@ class DetailsContainer extends React.Component {
           <div style={styles.iconWrap}>
             <FontIcon className='material-icons'
               style={styles.icon}
-              onClick={this.getData}>
+              onClick={this.getDetailsData}>
               replay
             </FontIcon>
           </div>
