@@ -311,17 +311,7 @@
           "chartHeight": "350"
         },
         "details": {
-          "itemsPerPage": 3,
-          "fieldMapping": {
-            "toolText": {
-              "date": {
-                "toolTextIndex": 1
-              },
-              "data.rank_alert.score": {
-                "toolTextIndex": 0
-              }
-            }
-          }
+          "itemsPerPage": 3
         },
         "id": "alert-priority-chart",
         "type": "charts/MultiSeriesCombiChart",
