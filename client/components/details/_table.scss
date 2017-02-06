@@ -74,6 +74,10 @@
   cursor: default;
 }
 
+.detailsTable th.reactable-header-sort-desc, .detailsTable th.reactable-header-sort-asc {
+  /*background: $WhiteColor;*/
+}
+
 .detailsTable th.reactable-header-sort-desc:after {
   content: '';
   background: url('/img/Up-arrow.png') no-repeat 0 0;
