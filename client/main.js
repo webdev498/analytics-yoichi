@@ -23,7 +23,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 if (window.global && window.global.enableAnalytics) {
-	  require('autotrack');
+  require('autotrack');
 }
 
 
