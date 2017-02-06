@@ -746,7 +746,7 @@
           "id": "LeastUsedSoftwareDetails"
         },
         "details": {
-          "itemsPerPage": 5
+          "itemsPerPage": 10
         },
         "id": "least-used-software-details",
         "type": "ReactableTable"
@@ -778,7 +778,7 @@
           "id": "SuccessfulLogins"
         },
         "details": {
-          "itemsPerPage": 5
+          "itemsPerPage": 10
         },
         "id": "successful-logins",
         "type": "ReactableTable"
@@ -809,7 +809,7 @@
           "id": "FailedLogins"
         },
         "details": {
-          "itemsPerPage": 5
+          "itemsPerPage": 10
         },
         "id": "failed-logins",
         "type": "ReactableTable"

@@ -34,7 +34,8 @@ const styles = {
     cursor: 'pointer',
     fontSize: '24px',
     fontWeight: 600,
-    marginLeft: '10px'
+    marginLeft: '10px',
+    color: Colors.white
   },
   exitWrap: {
     cursor: 'pointer',

@@ -58,7 +58,7 @@ export default class DetailsTable extends React.Component {
     if (!detailsData) return null;
 
     const {list, header} = this.getData(detailsData);
-    let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 3,
+    let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 5,
       columnNames = [];
 
     header.forEach((col) => {
@@ -92,8 +92,7 @@ export default class DetailsTable extends React.Component {
                     row.map((col, i) => (
                       <Td column={(col.title).toUpperCase()}
                         value={col.value}
-                        key={(col.title).toUpperCase()}
-                        style={col.title === 'json' ? {wordBreak: 'break-word'} : {}}>
+                        key={(col.title).toUpperCase()}>
                         {
                           whatIsIt(col.value) === 'Object' || whatIsIt(col.value) === 'Array'
                           ? JSON.stringify(col.value)
@@ -106,7 +105,7 @@ export default class DetailsTable extends React.Component {
             )
             )}
           </Table>
-          : <div style={{fontSize: '12pt', marginLeft: '33px'}}>No Data Found.</div>
+          : <div style={{fontSize: '18px', marginLeft: '33px'}}>No Data Found.</div>
         }
       </div>
     );
