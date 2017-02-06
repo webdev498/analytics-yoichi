@@ -14,7 +14,7 @@
               "width": "12%"
             },
             "type": "scoreWidget",
-            "header": "RANK SCORE"
+            "header": "SCORE"
           },
           {
             "data": [
@@ -131,14 +131,14 @@
     ],
     "itemsPerPage": 5,
     "sortable": [
-      "RANK SCORE",
+      "SCORE",
       "DATE",
       "DETAILS",
       "SOURCE",
       "DESTINATION"
     ],
     "defaultSort": {
-      "column": "RANK SCORE",
+      "column": "SCORE",
       "direction": "desc"
     },
     "rowClickable": true

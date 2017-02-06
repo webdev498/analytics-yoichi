@@ -132,7 +132,7 @@ export default class ParentCardHeader extends React.Component {
   }
 
   focusSearchText() {
-    if (this.myTextInput !== null) {
+    if (this.myTextInput !== null && this.myTextInput !== undefined) {
       this.myTextInput.focus();
     }
   }
@@ -183,13 +183,13 @@ export default class ParentCardHeader extends React.Component {
   }
 
   render() {
-    const {props} = this;
+    const {props, state} = this;
 
     const headerStyle = props.attributes.header || {};
 
     return <header style={{...this.styles.header, ...headerStyle.style}}>
       {
-        this.state.showSearchBar === false
+        state.showSearchBar === false
         ? <div>
           <span style={{...this.styles.title, ...headerStyle.title}}>
             {props.meta.title}
@@ -200,10 +200,10 @@ export default class ParentCardHeader extends React.Component {
 
       {
         (props.meta.showSearch && !props.meta.showDetailsIcon && !props.meta.showDetails &&
-        !props.showComponentIconFlag) || this.state.showSearchBar === true
+        !props.showComponentIconFlag) || state.showSearchBar === true
         ? <div style={this.styles.inputWrap}>
           <FontIcon className='material-icons'
-            style={{...this.styles.clearIcon, ...this.state.clearIconStyle}}
+            style={{...this.styles.clearIcon, ...state.clearIconStyle}}
             ref={(ref) => this.clearIcon = ref}>
             close
           </FontIcon>
@@ -231,7 +231,7 @@ export default class ParentCardHeader extends React.Component {
 
       <div style={this.styles.iconWrap}>
         {
-          props.showComponentIconFlag === true && this.state.showSearchBar === false
+          props.showComponentIconFlag === true && state.showSearchBar === false
           ? (
             <FontIcon className='material-icons'
               style={this.styles.icon}
@@ -243,7 +243,7 @@ export default class ParentCardHeader extends React.Component {
         }
 
         {
-          props.showComponentIconFlag === true && this.state.showSearchBar === false
+          props.showComponentIconFlag === true && state.showSearchBar === false
           ? (
             <FontIcon className='material-icons'
               style={this.styles.icon}
@@ -268,7 +268,7 @@ export default class ParentCardHeader extends React.Component {
 
         {
           props.meta.showRefresh === false ||
-          (props.showComponentIconFlag === true && this.state.showSearchBar === true)
+          (props.showComponentIconFlag === true && state.showSearchBar === true)
           ? null
           : (
             <FontIcon className='material-icons'
@@ -288,6 +288,11 @@ export default class ParentCardHeader extends React.Component {
               arrow_back
             </FontIcon>
           )
+          : null
+        }
+        {
+          state.showSearchBar === true
+          ? this.focusSearchText()
           : null
         }
       </div>
