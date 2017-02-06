@@ -132,7 +132,7 @@ export default class ParentCardHeader extends React.Component {
   }
 
   focusSearchText() {
-    if (this.myTextInput !== null && this.myTextInput !== undefined) {
+    if (this.myTextInput !== null) {
       this.myTextInput.focus();
     }
   }
