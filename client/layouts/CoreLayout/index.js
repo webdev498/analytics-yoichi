@@ -144,9 +144,7 @@ export class CoreLayout extends React.Component {
 
     return (
       <div style={styles.wrap}>
-        <Header
-          title='RANK'
-          params={props.params} />
+        <Header params={props.params} />
 
         <Sidebar
           sidebar={this.state.sidebar}

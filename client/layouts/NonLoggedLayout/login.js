@@ -165,7 +165,7 @@ class LoginView extends React.Component {
         containerStyle={styles.container} >
         <header
           style={styles.header}>
-          <img src='/rank-logo.png' style={styles.rankLogo} alt='Rank Logo' />
+          <img src='/rank-logo.png' style={styles.rankLogo} alt='Logo' />
         </header>
 
         {this.getErrorState()}

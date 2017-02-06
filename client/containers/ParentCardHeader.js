@@ -290,11 +290,6 @@ export default class ParentCardHeader extends React.Component {
           )
           : null
         }
-        {
-          state.showSearchBar === true
-          ? this.focusSearchText()
-          : null
-        }
       </div>
     </header>;
   }

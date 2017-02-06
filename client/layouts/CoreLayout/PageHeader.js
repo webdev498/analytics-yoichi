@@ -154,7 +154,7 @@ export class PageHeader extends React.Component {
     const title = (
       <div style={styles.logoWrap}>
         <Link to='/' style={styles.label}>
-          <img src='/rank-logo.png' style={styles.rankLogo} alt='Rank Logo' />
+          <img src='/rank-logo.png' style={styles.rankLogo} alt='Logo' />
         </Link>
         <div style={styles.label}>
           <Image imageUrl='/client-logo.png'
