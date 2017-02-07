@@ -9,7 +9,8 @@ import {
   ERROR_API_DATA,
   TIME_INTERVAL_UPDATE,
   PARENT_CARD_EVENT,
-  REMOVE_COMPONENT
+  REMOVE_COMPONENT,
+  REMOVE_DETAILS_COMPONENT
 } from 'Constants';
 
 import {
@@ -40,7 +41,7 @@ function getApiObj(path, query, pathParams) {
   };
 }
 
-describe('parentCard Redux Actions', () => {
+describe('ParentCard Actions', () => {
   it('should return the state for REQUEST_API_DATA', () => {
     const id = 'testId',
       api = {test: 'value'},
@@ -305,7 +306,7 @@ describe('parentCard Redux Actions', () => {
   });
 
   context('fetchApiData function', () => {
-    let server, id, apiData, auth, store;
+    let server, id, apiData, auth, store, input;
 
     const api = {
         path: '/api/{reportId}',
@@ -322,6 +323,7 @@ describe('parentCard Redux Actions', () => {
       apiData = fromJS({duration: '1h', components: {}});
       auth = { cookies: { access_token: '', token_type: '' } };
       store = mockStore({ apiData, auth });
+      input = { id, api, params, options: {} };
     });
 
     afterEach(function() {
@@ -331,7 +333,7 @@ describe('parentCard Redux Actions', () => {
     it('should dispatch REQUEST_API_DATA state', () => {
       server.respondWith('GET', `${baseUrl}/api/test`, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
 
-      const dispatchCall = store.dispatch(fetchApiData(id, api, params, {})),
+      const dispatchCall = store.dispatch(fetchApiData(input)),
         actions = store.getActions(),
         requestAction = actions[0];
 
@@ -347,7 +349,7 @@ describe('parentCard Redux Actions', () => {
     it('should dispatch RECEIVE_API_DATA state, after REQUEST_API_DATA', () => {
       server.respondWith('GET', `${baseUrl}/api/test`, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
 
-      const dispatchCall = store.dispatch(fetchApiData(id, api, params, {}))
+      const dispatchCall = store.dispatch(fetchApiData(input))
         .then(res => {
           const actions = store.getActions(),
             requestAction = actions[0],
@@ -371,7 +373,7 @@ describe('parentCard Redux Actions', () => {
     it('should dispatch ERROR_API_DATA state, after REQUEST_API_DATA', () => {
       server.respondWith('GET', `${baseUrl}/api/test`, [ 400, { 'Content-Type': 'application/json' }, jsonRes ]);
 
-      const dispatchCall = store.dispatch(fetchApiData(id, api, params, {}))
+      const dispatchCall = store.dispatch(fetchApiData(input))
         .then(res => {
           const actions = store.getActions(),
             requestAction = actions[0],
@@ -498,9 +500,11 @@ describe('parentCard Redux Actions', () => {
 
       store.dispatch(removeComponent(id));
       const actions = store.getActions();
-      expect(actions).to.have.length(1);
+      expect(actions).to.have.length(2);
       expect(actions[0]).to.have.a.property('type', REMOVE_COMPONENT);
       expect(actions[0]).to.have.a.property('id', id);
+      expect(actions[1]).to.have.a.property('type', REMOVE_DETAILS_COMPONENT);
+      expect(actions[1]).to.have.a.property('id', id);
     });
   });
 });

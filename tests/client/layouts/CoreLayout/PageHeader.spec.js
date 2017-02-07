@@ -102,12 +102,12 @@ describe('<PageHeader />', () => {
   });
 
   describe('timeRange dropDown', function() {
-    it('should have dropdown with 7 children', () => {
+    it('should have dropdown with 8 children', () => {
       let {component} = setupPageHeaderShallow(undefined, false),
         dropDown = component.childAt(0);
 
       expect(dropDown.type()).to.equal(DropDownMenu);
-      expect(dropDown.children().length).to.equal(7);
+      expect(dropDown.children().length).to.equal(8);
       expect(dropDown.childAt(0).type()).to.equal(MenuItem);
       expect(dropDown.childAt(1).type()).to.equal(MenuItem);
       expect(dropDown.childAt(2).type()).to.equal(MenuItem);
@@ -115,7 +115,8 @@ describe('<PageHeader />', () => {
       expect(dropDown.childAt(4).type()).to.equal(MenuItem);
       expect(dropDown.childAt(5).type()).to.equal(MenuItem);
       expect(dropDown.childAt(6).type()).to.equal(MenuItem);
-      expect(dropDown.find(MenuItem).length).to.equal(7);
+      expect(dropDown.childAt(7).type()).to.equal(MenuItem);
+      expect(dropDown.find(MenuItem).length).to.equal(8);
     });
 
     it('should call time range on click', () => {
