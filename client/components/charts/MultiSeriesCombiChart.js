@@ -292,7 +292,7 @@ export function generateChartDataSource(rawData, props) {
   let annotationItems = [];
   if (!isUndefined(props.meta.subTitle)) {
     let yPadding = '370';
-    if (props.duration === '1w' || props.duration === '1mo') {
+    if (props.duration === '1w' || props.duration === '1mo' || props.duration === '2mo') {
       yPadding = '378';
     }
     annotationItems = annotationItems.concat([

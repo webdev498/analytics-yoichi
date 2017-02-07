@@ -49,6 +49,10 @@ const TimeRanges = [
   {
     text: '1 Month',
     param: '1mo'
+  },
+  {
+    text: '2 Month',
+    param: '2mo'
   }
 ];
 

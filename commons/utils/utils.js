@@ -6,50 +6,47 @@ const timeParams = {
   '1h': {
     diffInMin: 5,
     functionName: 'hour',
-    diffInUnits: 1,
-    numOfHours: 1
+    diffInUnits: 1
   },
   '6h': {
     diffInMin: 15,
     functionName: 'hour',
-    diffInUnits: 6,
-    numOfHours: 6
+    diffInUnits: 6
   },
   '12h': {
     diffInMin: 30,
     functionName: 'hour',
-    diffInUnits: 12,
-    numOfHours: 12
+    diffInUnits: 12
   },
   '24h': {
     diffInMin: 60,
     functionName: 'date',
-    diffInUnits: 1,
-    numOfHours: 24
+    diffInUnits: 1
   },
   '48h': {
     diffInMin: 120,
     functionName: 'date',
-    diffInUnits: 2,
-    numOfHours: 48
+    diffInUnits: 2
   },
   '1d': {
     diffInMin: 60,
     functionName: 'date',
-    diffInUnits: 1,
-    numOfHours: 1 * 24
+    diffInUnits: 1
   },
   '1w': {
     diffInMin: 1440,
     functionName: 'date',
-    diffInUnits: 7,
-    numOfHours: 7 * 24
+    diffInUnits: 7
   },
   '1mo': {
     diffInMin: 10080,
     functionName: 'month',
-    diffInUnits: 1,
-    numOfHours: 31 * 24
+    diffInUnits: 1
+  },
+  '2mo': {
+    diffInMin: 20160,
+    functionName: 'month',
+    diffInUnits: 2
   }
 };
 
@@ -179,6 +176,7 @@ export function translateTimeWindow(window) {
   else if (window === '1 day') return '1d';
   else if (window === '1 week') return '1w';
   else if (window === '1 month') return '1mo';
+  else if (window === '2 month') return '2mo';
 
   else if (window === '1h') return '1 hour';
   else if (window === '6h') return '6 hour';
@@ -188,6 +186,7 @@ export function translateTimeWindow(window) {
   else if (window === '1d') return '1 day';
   else if (window === '1w') return '1 week';
   else if (window === '1mo') return '1 month';
+  else if (window === '2mo') return '2 month';
   else return window;
 }
 
