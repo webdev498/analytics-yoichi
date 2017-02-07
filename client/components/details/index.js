@@ -13,7 +13,6 @@ const styles = {
   }
 };
 
-import {firstCharCapitalize} from '../../../commons/utils/utils';
 import './_table.scss';
 
 export default class DetailsTable extends React.Component {
@@ -80,7 +79,7 @@ export default class DetailsTable extends React.Component {
             nextPageLabel={'>>'}
             sortable
             defaultSort={{
-              column: (header[0].dataKey).toUpperCase(),
+              column: 'DATE',
               direction: 'desc'
             }}
             filterBy={props.search}
