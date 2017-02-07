@@ -13,7 +13,6 @@ const styles = {
   }
 };
 
-import {firstCharCapitalize} from '../../../commons/utils/utils';
 import './_table.scss';
 
 export default class DetailsTable extends React.Component {
