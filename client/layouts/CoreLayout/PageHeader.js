@@ -125,7 +125,6 @@ export class PageHeader extends React.Component {
   }
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
     updateApiData: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,

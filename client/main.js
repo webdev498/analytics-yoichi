@@ -22,6 +22,11 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 // https://github.com/zilverline/react-tap-event-plugin
 injectTapEventPlugin();
 
+if (window.global && window.global.enableAnalytics) {
+  require('autotrack');
+}
+
+
 // Configure history for react-router
 const browserHistory = useRouterHistory(createBrowserHistory)({
   queryKey: false
