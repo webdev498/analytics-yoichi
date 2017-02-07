@@ -105,7 +105,7 @@ describe('UserAgent DAL', () => {
       expect(value.y).to.be.an('number');
       expect(value.y).to.be.equal(22599);
       expect(value.toolText).to.be.an('string');
-      let toolText = 'Apache-HttpClient, 20163{br}curl/7.35.0, 2436{br}';
+      let toolText = 'Apache-HttpClient | 20163{br}curl/7.35.0 | 2436{br}';
       expect(value.toolText).to.be.equal(toolText);
     }
   });
