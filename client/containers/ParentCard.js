@@ -127,7 +127,7 @@ export class ParentCard extends React.Component {
     meta: PropTypes.object.isRequired,
     updateRoute: PropTypes.func.isRequired,
     history: PropTypes.object,
-    data: PropTypes.object,
+    data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     details: PropTypes.object,
     detailsData: PropTypes.object,
     attributes: PropTypes.object
@@ -150,18 +150,6 @@ export class ParentCard extends React.Component {
     }
 
     const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
-
-    if (!api) {
-      const children = props.children.props.children;
-
-      children.forEach((child) => {
-        const {props: childProps} = child;
-        props.fetchApiData({id: childProps.id, api: childProps.meta.api, params, options, isDetails});
-      });
-
-      return;
-    }
-
     props.fetchApiData({id, api, params, options, isDetails});
   }
 

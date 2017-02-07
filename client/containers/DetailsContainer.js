@@ -15,11 +15,10 @@ const styles = {
     margin: '33px'
   },
   header: {
-    backgroundColor: Colors.turquoise,
+    backgroundColor: Colors.white,
     height: '73px',
     display: 'flex',
-    padding: '0 33px',
-    color: Colors.white
+    padding: '0 33px'
   },
   title: {
     fontWeight: 'normal'
@@ -34,8 +33,7 @@ const styles = {
     cursor: 'pointer',
     fontSize: '24px',
     fontWeight: 600,
-    marginLeft: '10px',
-    color: Colors.white
+    marginLeft: '10px'
   },
   exitWrap: {
     cursor: 'pointer',
@@ -178,7 +176,6 @@ class DetailsContainer extends React.Component {
               style={{...styles.icon, ...styles.backIcon}}>
                 arrow_back
             </FontIcon>
-            <span>Exit</span>
           </div>
 
           <h2 style={styles.title}>{props.title}</h2>

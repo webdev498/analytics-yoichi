@@ -119,7 +119,7 @@ export default class ParentCardHeader extends React.Component {
     getData: PropTypes.func.isRequired,
     updateSearch: PropTypes.func.isRequired,
     search: PropTypes.string.isRequired,
-    history: PropTypes.object.isRequired,
+    history: PropTypes.object,
     attributes: PropTypes.object
   }
 
