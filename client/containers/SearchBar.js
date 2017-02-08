@@ -178,7 +178,6 @@ export default class SearchBar extends React.Component {
         id='searchText'
         type='text'
         style={this.styles.searchText}
-        className='searchText'
         onChange={props.updateSearch}
         onFocus={this.showClearIcon}
         onBlur={this.hideClearIcon}
