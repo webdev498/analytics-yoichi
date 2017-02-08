@@ -1,8 +1,7 @@
 import {
   REQUEST_API_DATA,
   RECEIVE_API_DATA,
-  ERROR_API_DATA,
-  TIME_INTERVAL_UPDATE
+  ERROR_API_DATA
 } from 'Constants';
 
 import {
@@ -95,7 +94,7 @@ describe('Redux Parent Card Reducer', function() {
     expect(components).to.have.key(id);
     expect(components).to.have.deep.property([id, 'isFetching'], true);
     expect(components).to.have.deep.property([id, 'isError'], false);
-    expect(components).to.have.deep.property([id, 'data'], null);
+    expect(components).to.not.have.deep.property([id, 'data']);
     expect(components).to.not.have.deep.property([id, 'api']);
     expect(components).to.not.have.deep.property([id, 'query']);
   });

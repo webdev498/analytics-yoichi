@@ -35,7 +35,7 @@ const styles = {
   detailsTable: {}
 };
 
-function getParamsAndReportId(props, dataObj) {
+function getParamsAndReportId(props, dataObj, durationUpdated) {
   let {data, meta, details} = props,
     reportId = meta.api.pathParams.reportId;
 
@@ -50,6 +50,13 @@ function getParamsAndReportId(props, dataObj) {
       end: interval.to,
       count: 100
     };
+
+  // if duration has been updated, then don't send the start and end params as they override the window param.
+  if (durationUpdated) {
+    delete queryParams.start;
+    delete queryParams.end;
+    queryParams.window = '';
+  }
 
   if (dataObj.queryParams) {
     queryParams = Object.assign({}, queryParams, dataObj.queryParams);
@@ -129,7 +136,8 @@ export class ParentCard extends React.Component {
     data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     details: PropTypes.object,
     detailsData: PropTypes.object,
-    attributes: PropTypes.object
+    attributes: PropTypes.object,
+    duration: PropTypes.string.isRequired
   }
 
   getData(dataObj) {
@@ -222,6 +230,10 @@ export class ParentCard extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {eventData} = nextProps;
 
+    if (nextProps.duration !== this.props.duration) {
+      this.durationUpdated = true;
+    }
+
     if (nextProps.data && window.sessionStorage.broadcastEvent) {
       const {id, data} = JSON.parse(window.sessionStorage.broadcastEvent);
       if (id !== this.props.id) return;
@@ -266,7 +278,7 @@ export class ParentCard extends React.Component {
     const {props, props: {data, meta}} = this;
     if (!data || !meta.api) return;
 
-    let {queryParams, reportId} = getParamsAndReportId(props, dataObj);
+    let {queryParams, reportId} = getParamsAndReportId(props, dataObj, this.durationUpdated);
     if (!queryParams) return;
 
     const apiObj = {
