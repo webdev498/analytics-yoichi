@@ -123,6 +123,12 @@ export default class ParentCardHeader extends React.Component {
     attributes: PropTypes.object
   }
 
+  componentWillReceiveProps(newProps) {
+    if (this.myTextInput && newProps.search !== this.myTextInput.value) {
+      this.myTextInput.value = newProps.search;
+    }
+  }
+
   clearSearchText(ev) {
     if (this.state.showSearchBar === true) {
       this.setState({showSearchBar: false});
@@ -176,12 +182,6 @@ export default class ParentCardHeader extends React.Component {
     this.props.getData();
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.myTextInput && newProps.search !== this.myTextInput.value) {
-      this.myTextInput.value = newProps.search;
-    }
-  }
-
   render() {
     const {props, state} = this;
 
@@ -218,7 +218,8 @@ export default class ParentCardHeader extends React.Component {
             onChange={props.updateSearch}
             onFocus={this.showClearIcon}
             onBlur={this.hideClearIcon}
-            ref={(ref) => this.myTextInput = ref} />
+            ref={(ref) => this.myTextInput = ref}
+            autoFocus={state.showSearchBar} />
 
           <FontIcon className='material-icons'
             style={this.styles.searchIcon}
