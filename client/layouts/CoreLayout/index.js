@@ -82,7 +82,7 @@ export class CoreLayout extends React.Component {
           showDetails: true
         });
 
-        // hides the scroll from the body element when kibana is shown.
+        // hides the scroll from the body element when details are shown.
         document.body.style.overflow = 'hidden';
       }
     };
@@ -93,7 +93,7 @@ export class CoreLayout extends React.Component {
       showDetails: false
     });
 
-    // shows the scroll of the body element when kibana is hidden.
+    // shows the scroll of the body element when details are shown.
     document.body.style.overflow = '';
   }
 

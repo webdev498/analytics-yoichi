@@ -162,7 +162,8 @@ describe('<MultiSeriesCombiChart />', function() {
       ],
       index = 0,
       dateDisplayFormat = 'HH:mm',
-      category = [{'label': '12:20', 'toolText': '20 Jul 2016 12:20'}];
+      category = [{ 'label': '12:20', 'toolText': '20 Jul 2016 12:20:00.000' }];
+
     expect(generateCategoryArray(rows, index, dateDisplayFormat)).to.deep.equal(category);
   });
 
