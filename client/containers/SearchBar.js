@@ -164,7 +164,7 @@ export default class SearchBar extends React.Component {
     return <div style={this.styles.inputWrap}>
       {
         this.state.showClearIcon === true || this.state.showClearIcon === false
-        ? <div style={{...styles.clearDiv}} onClick={this.clearSearchText}>
+        ? <div style={styles.clearDiv} onClick={this.clearSearchText}>
           <FontIcon className='material-icons'
             style={{...styles.clearIcon, ...this.styles.clearIcon}}
             ref={(ref) => this.clearIcon = ref}>
