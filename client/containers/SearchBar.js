@@ -90,19 +90,19 @@ export default class SearchBar extends React.Component {
   static propTypes = {
     updateSearch: PropTypes.func.isRequired,
     search: PropTypes.string.isRequired,
-    loadSearchBar: PropTypes.func.isRequired
+    loadFloatingSearchBar: PropTypes.func.isRequired
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.myTextInput && newProps.search !== this.myTextInput.value) {
-      this.myTextInput.value = newProps.search;
+    if (this.myTextInput && newProps.searchText !== this.myTextInput.value) {
+      this.myTextInput.value = newProps.searchText;
     }
   }
 
   clearSearchText() {
     const {props} = this;
-    if (props.showSearchBar === true) {
-      props.loadSearchBar(false);
+    if (props.floatingSearchBar === true) {
+      props.loadFloatingSearchBar(false);
     }
     this.props.updateSearch({ target: {value: ''} });
   }
@@ -115,7 +115,7 @@ export default class SearchBar extends React.Component {
 
   hideClearIcon() {
     const {props} = this;
-    if (props.showSearchBar === false) {
+    if (props.floatingSearchBar === false) {
       this.setState({
         clearIcon: {
           color: 'transparent',
@@ -128,7 +128,7 @@ export default class SearchBar extends React.Component {
 
   showClearIcon() {
     const {props} = this;
-    if (props.showSearchBar === false) {
+    if (props.floatingSearchBar === false) {
       this.setState({
         clearIcon: {
           color: Colors.white,
@@ -141,7 +141,7 @@ export default class SearchBar extends React.Component {
 
   render() {
     const {props} = this;
-    if (props.showSearchBar === true) {
+    if (props.floatingSearchBar === true) {
       this.state = {
         inputWrap: Object.assign({}, styles.inputWrap, styles.inputWrapSearchBar),
         searchText: Object.assign({}, styles.searchText, styles.searchTextDetails),
@@ -176,7 +176,7 @@ export default class SearchBar extends React.Component {
         onFocus={this.showClearIcon}
         onBlur={this.hideClearIcon}
         ref={(ref) => this.myTextInput = ref}
-        autoFocus={props.showSearchBar} />
+        autoFocus={props.floatingSearchBar} />
 
       <FontIcon className='material-icons'
         style={this.state.searchIcon}

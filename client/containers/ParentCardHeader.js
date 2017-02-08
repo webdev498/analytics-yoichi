@@ -48,11 +48,11 @@ export default class ParentCardHeader extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSearchBar: false
+      floatingSearchBar: false
     };
-    this.searchBar = false;
+    this.loadSearchBar = false;
 
-    this.loadSearchBar = this.loadSearchBar.bind(this);
+    this.loadFloatingSearchBar = this.loadFloatingSearchBar.bind(this);
     this.getData = this.getData.bind(this);
   }
 
@@ -64,11 +64,11 @@ export default class ParentCardHeader extends React.Component {
     attributes: PropTypes.object
   }
 
-  loadSearchBar(load) {
+  loadFloatingSearchBar(load) {
     if (load !== false) {
       load = true;
     }
-    this.setState({showSearchBar: load});
+    this.setState({floatingSearchBar: load});
   }
 
   getData() {
@@ -80,12 +80,16 @@ export default class ParentCardHeader extends React.Component {
 
     const headerStyle = props.attributes.header || {};
 
-    this.searchBar = (props.meta.showSearch && !props.meta.showDetailsIcon && !props.meta.showDetails &&
-        !props.showComponentIconFlag) || state.showSearchBar === true;
+    this.loadSearchBar = (
+      props.meta.showSearch &&
+      !props.meta.showDetailsIcon &&
+      !props.meta.showDetails &&
+      !props.showComponentIconFlag) ||
+    state.floatingSearchBar === true;
 
     return <header style={{...styles.header, ...headerStyle.style}}>
       {
-        state.showSearchBar === false
+        state.floatingSearchBar === false
         ? <div>
           <span style={{...styles.title, ...headerStyle.title}}>
             {props.meta.title}
@@ -95,22 +99,22 @@ export default class ParentCardHeader extends React.Component {
       }
 
       {
-        this.searchBar === true
+        this.loadSearchBar === true
         ? <SearchBar
-          search={props.search}
+          searchText={props.search}
           updateSearch={props.updateSearch}
-          showSearchBar={state.showSearchBar}
-          loadSearchBar={this.loadSearchBar} />
+          floatingSearchBar={state.floatingSearchBar}
+          loadFloatingSearchBar={this.loadFloatingSearchBar} />
         : null
       }
 
       <div style={styles.iconWrap}>
         {
-          props.showComponentIconFlag === true && state.showSearchBar === false
+          props.showComponentIconFlag === true && state.floatingSearchBar === false
           ? (
             <FontIcon className='material-icons'
               style={styles.icon}
-              onClick={this.loadSearchBar}>
+              onClick={this.loadFloatingSearchBar}>
               search
             </FontIcon>
           )
@@ -118,7 +122,7 @@ export default class ParentCardHeader extends React.Component {
         }
 
         {
-          props.showComponentIconFlag === true && state.showSearchBar === false
+          props.showComponentIconFlag === true && state.floatingSearchBar === false
           ? (
             <FontIcon className='material-icons'
               style={styles.icon}
@@ -143,7 +147,7 @@ export default class ParentCardHeader extends React.Component {
 
         {
           props.meta.showRefresh === false ||
-          (props.showComponentIconFlag === true && state.showSearchBar === true)
+          (props.showComponentIconFlag === true && state.floatingSearchBar === true)
           ? null
           : (
             <FontIcon className='material-icons'
