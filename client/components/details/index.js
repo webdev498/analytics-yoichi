@@ -19,12 +19,11 @@ export default class DetailsTable extends React.Component {
   static propTypes = {
     style: PropTypes.object,
     detailsData: PropTypes.object,
-    details: PropTypes.object,
-    fetchApiDataObj: PropTypes.object
+    details: PropTypes.object
   }
 
   getData(data) {
-    const {columns, rows, total} = data;
+    const {columns, rows} = data;
     let header = columns.map(col => col.displayName);
 
     const list = rows.map(row => header.map((c, i) => {
@@ -47,8 +46,7 @@ export default class DetailsTable extends React.Component {
 
     return {
       list,
-      header,
-      total
+      header
     };
   }
 
