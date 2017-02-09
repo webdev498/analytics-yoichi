@@ -1,0 +1,56 @@
+{
+  "options": {
+    "itemsPerPage": 5,
+    "rowClickable": true
+  },
+  "data": {
+    "fieldMapping": [
+      {
+        "reportId": "taf_least_launched_processes",
+        "columns": [
+          {
+            "data": [
+              {
+                "fieldName": "data.sysmon.Image"
+              }
+            ],
+            "style": {
+              "width": "50%",
+              "wordBreak": "break-all"
+            },
+            "type": "text",
+            "header": "Process"
+          },
+          {
+            "data": [
+              {
+                "fieldName": "count"
+              }
+            ],
+            "attributes": {
+              "chartWidth": "100%",
+              "chartType": "area2d",
+              "id": "least-connection",
+              "chartHeight": "120",
+              "chartOptions": {
+                "labelFontSize": "9"
+              }
+            },
+            "style": {
+              "width": "50%"
+            },
+            "type": "chart",
+            "header": "# Launches"
+          }
+        ]
+      }
+    ],
+    "nestedResult": true,
+    "emptyValueMessage": "(Empty)"
+  },
+  "kibana": {
+    "queryParams": {
+      "data.sysmon.Image": "data.sysmon.Image:fieldName"
+    }
+  }
+}

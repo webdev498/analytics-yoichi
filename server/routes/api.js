@@ -67,6 +67,10 @@ router
 .get(reportingApiBasePath + 'taf_s3_most_access_by_active_user', table)
 .get(reportingApiBasePath + 'taf_s3_most_accessed', table)
 .get(reportingApiBasePath + 'taf_s3_least_accessed', table)
+.get(reportingApiBasePath + 'taf_most_launched_processes', table)
+.get(reportingApiBasePath + 'taf_least_launched_processes', table)
+.get(reportingApiBasePath + 'taf_most_used_parent_processes', table)
+.get(reportingApiBasePath + 'taf_least_used_parent_processes', table)
 .get(reportingApiBasePath + 'taf_user_agent_unique_with_name', userAgent)
 .post('*', async function(ctx, next) {
   const url = serverBaseUrl + ctx.url;

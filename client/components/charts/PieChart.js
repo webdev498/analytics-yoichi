@@ -146,8 +146,8 @@ function renderChart(props) {
   if (!props.data) {
     return;
   }
-
-  if (props.data && props.chartData &&
+  
+ if (props.data && props.chartData &&
     props.chartData.fieldMapping &&
     props.chartData.fieldMapping[0] &&
     props.chartData.fieldMapping[0].reportId &&
@@ -195,12 +195,14 @@ function renderChart(props) {
         countValue = getIndexFromObjectName(inputArray);
       }
 
-      if (currentChartData.reportId === 'taf_s3_requester' || currentChartData.reportId === 'taf_s3_ua' ){
+      if (currentChartData.reportId === 'taf_s3_requester' || currentChartData.reportId === 'taf_s3_ua' ||
+    		  currentChartData.reportId === 'taf_sysmon_unique_process_count'  ){
         columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
         countValue = rows[d][columnIndex];
       }
 
-      if (currentChartData.reportId === 'taf_total_usage' || currentChartData.reportId === 'taf_s3_total') {
+      if (currentChartData.reportId === 'taf_total_usage' || currentChartData.reportId === 'taf_s3_total' ||
+    		  currentChartData.reportId === 'taf_sysmon_total_network_conn_count') {
         columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
         totalValue = rows[d][columnIndex];
       }
@@ -208,7 +210,8 @@ function renderChart(props) {
       if (currentChartData.reportId === 'taf_top_talkers_connections' ||
        currentChartData.reportId === 'taf_top_talkers_bandwidth' ||
        currentChartData.reportId === 'taf_s3_most_frequent_useragent' ||
-       currentChartData.reportId === 'taf_s3_most_active_requester') {
+       currentChartData.reportId === 'taf_s3_most_active_requester' ||
+       currentChartData.reportId === 'taf_processes_with_most_network_conn') {
         let fieldValue = '';
         columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
         fieldValue = rows[d][columnIndex];
