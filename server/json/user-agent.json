@@ -179,16 +179,15 @@
           },
           "title": "Longest User Agents"
         },
-        "name": "ReactableTable",
         "attributes": {
           "style": {
             "marginRight": "33px",
             "width": "100%"
           },
-          "id": "LongestUserAgents"
+          "id": "longest-user-agents"
         },
-        "id": "longest-user-agents",
-        "type": "ReactableTable"
+        "id": "LongestUserAgents",
+        "type": "List"
       },
       {
         "meta": {
@@ -213,10 +212,10 @@
           "style": {
             "width": "100%"
           },
-          "id": "ShortestUserAgents"
+          "id": "shortest-user-agents"
         },
-        "id": "shortest-user-agents",
-        "type": "ReactableTable"
+        "id": "ShortestUserAgents",
+        "type": "List"
       }
     ]
   ]

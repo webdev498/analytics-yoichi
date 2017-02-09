@@ -1,24 +1,26 @@
-.threatTable table {
-  text-align: left;
-  width:100% !important;
- }
+.threatTable {
+  table {
+    text-align: left;
+    width:100% !important;
+  }
 
-.threatTable th {
-  padding: 10px;
-  padding-bottom: 16px;
-  font-size: 13px;
-  background: $WhiteColor;
-  color: $GrapeColor;
-  text-align: left;
-  cursor: pointer;
-  font-weight: normal;
- }
+  td {
+    font-size: 13px;
+    padding: 15px;
+    color: $GrapeColor;
+    vertical-align: top;
+  }
 
-.threatTable td {
-  font-size: 13px;
-  padding: 15px;
-  color: $GrapeColor;
-  vertical-align: top;
+  th {
+    padding: 10px;
+    padding-bottom: 16px;
+    font-size: 13px;
+    background: $WhiteColor;
+    color: $GrapeColor;
+    text-align: left;
+    cursor: pointer;
+    font-weight: normal;
+  }
  }
 
 .threatTable .reactable-page-button, .reactable-previous-page, .reactable-next-page {

@@ -743,13 +743,13 @@
             "marginRight": "33px",
             "width": "33%"
           },
-          "id": "LeastUsedSoftwareDetails"
+          "id": "least-used-software-details"
         },
         "details": {
           "itemsPerPage": 10
         },
-        "id": "least-used-software-details",
-        "type": "ReactableTable"
+        "id": "LeastUsedSoftwareDetails",
+        "type": "List"
       },
       {
         "meta": {
@@ -775,13 +775,13 @@
             "marginRight": "33px",
             "width": "30%"
           },
-          "id": "SuccessfulLogins"
+          "id": "successful-logins"
         },
         "details": {
           "itemsPerPage": 10
         },
-        "id": "successful-logins",
-        "type": "ReactableTable"
+        "id": "SuccessfulLogins",
+        "type": "List"
       },
       {
         "meta": {
@@ -806,13 +806,13 @@
           "style": {
             "width": "30%"
           },
-          "id": "FailedLogins"
+          "id": "failed-logins"
         },
         "details": {
           "itemsPerPage": 10
         },
-        "id": "failed-logins",
-        "type": "ReactableTable"
+        "id": "FailedLogins",
+        "type": "List"
       }
     ]
   ]
