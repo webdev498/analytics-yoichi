@@ -314,16 +314,7 @@
           "itemsPerPage": 3
         },
         "id": "alert-priority-chart",
-        "type": "charts/MultiSeriesCombiChart",
-        "kibana": {
-          "pathParams": [
-            "alerts-score"
-          ],
-          "queryParams": {
-            "scoreRange": "",
-            "fromAndToBasedOnClickedDate": ""
-          }
-        }
+        "type": "charts/MultiSeriesCombiChart"
       }
     ]
   ]

@@ -1,30 +1,26 @@
-.threatTable table {
-  text-align: left;
-  width:100% !important;
- }
+.threatTable {
+  table {
+    text-align: left;
+    width:100% !important;
+  }
 
-.threatTable th {
-  padding: 10px;
-  padding-bottom: 16px;
-  font-size: 13px;
-  background: $WhiteColor;
-  color: $GrapeColor;
-  text-align: left;
-  cursor: pointer;
-  font-weight: normal;
- }
+  td {
+    font-size: 13px;
+    padding: 15px;
+    color: $GrapeColor;
+    vertical-align: top;
+  }
 
-// TODO remove this.
-// this is a hack to hide a column that is not to be shown.
- .reactable-th-c {
-   display: none;
- }
-
-.threatTable td {
-  font-size: 13px;
-  padding: 15px;
-  color: $GrapeColor;
-  vertical-align: top;
+  th {
+    padding: 10px;
+    padding-bottom: 16px;
+    font-size: 13px;
+    background: $WhiteColor;
+    color: $GrapeColor;
+    text-align: left;
+    cursor: pointer;
+    font-weight: normal;
+  }
  }
 
 .threatTable .reactable-page-button, .reactable-previous-page, .reactable-next-page {

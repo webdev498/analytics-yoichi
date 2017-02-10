@@ -142,19 +142,18 @@
           },
           "title": "Most Accessed Files"
         },
-        "name": "ReactableTable",
         "attributes": {
           "style": {
             "width": "50%",
             "marginRight": "33px"
           },
-          "id": "mostaccess"
+          "id": "most-access"
         },
         "details": {
           "itemsPerPage": 7
         },
-        "id": "most-access",
-        "type": "ReactableTable"
+        "id": "mostaccess",
+        "type": "List"
       },
       {
         "meta": {
@@ -173,18 +172,17 @@
           },
           "title": "Least Accessed Files"
         },
-        "name": "ReactableTable",
         "attributes": {
           "style": {
             "width": "50%"
           },
-          "id": "leastaccess"
+          "id": "least-access"
         },
         "details": {
           "itemsPerPage": 7
         },
-        "id": "least-access",
-        "type": "ReactableTable"
+        "id": "leastaccess",
+        "type": "List"
       }
     ],
     [

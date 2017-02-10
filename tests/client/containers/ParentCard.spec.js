@@ -4,14 +4,8 @@ import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
 import {ParentCard} from 'containers/ParentCard';
-import {wrapThemeProvider} from '../../testUtils';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import AppTheme from 'theme/AppTheme';
-
-const muiTheme = getMuiTheme(AppTheme);
-
-function renderParentCard(propsOptions, contextOptions) {
+function shallowRenderParentCard(propsOptions, contextOptions) {
   const child = <div>Hello World</div>;
   let props = {
     meta: {id: 'testId', api: null},
@@ -34,8 +28,8 @@ function renderParentCard(propsOptions, contextOptions) {
     }
   };
 
-  let component = shallow(wrapThemeProvider(<ParentCard {...props} />), {context});
-  return component.find('ParentCard');
+  let component = shallow(<ParentCard {...props} />, {context});
+  return component;
 }
 
 function mountParentCard(propsOptions, contextOptions) {
@@ -57,14 +51,13 @@ function mountParentCard(propsOptions, contextOptions) {
   props = Object.assign({}, props, propsOptions);
 
   let context = {
-    muiTheme,
     store: {
       subscribe: spy()
     }
   };
 
   let component = mount(<ParentCard {...props} />, {context});
-  return component.find('ParentCard');
+  return component;
 }
 
 describe('<ParentCard />', () => {
@@ -74,7 +67,7 @@ describe('<ParentCard />', () => {
 
   it('has correct props', () => {
     const style = { color: 'red' },
-      component = renderParentCard({ id: 'card', attributes: { style } });
+      component = mountParentCard({ id: 'card', attributes: { style } });
 
     expect(component.type()).to.equal(ParentCard);
     expect(component.props().id).to.equal('card');
@@ -91,11 +84,11 @@ describe('<ParentCard />', () => {
   });
 
   it('renders correct children', () => {
-    let component = renderParentCard({
+    let component = shallowRenderParentCard({
       children: <div>Test</div>
     });
 
-    expect(component.children().length).to.equal(1);
+    expect(component.children().length).to.equal(2);
     expect(component.childAt(0).type()).to.equal('div');
     expect(component.childAt(0).text()).to.equal('Test');
   });
