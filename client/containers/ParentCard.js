@@ -5,7 +5,7 @@ import Loader from 'components/Loader';
 import DetailsTable from 'components/details';
 import ParentCardHeader from './ParentCardHeader';
 
-import {fetchApiData, removeComponent, broadcastEvent} from 'actions/parentCard';
+import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
 import {autoScrollTo} from 'utils/utils';
 import {updateRoute} from 'actions/core';
@@ -179,15 +179,16 @@ export class ParentCard extends React.Component {
   }
 
   getDetailsTable() {
-    const {detailsData, details, fetchApiData} = this.props;
+    const {detailsData, details, fetchApiData, fetchNextSetOfData} = this.props;
     return <DetailsTable
       id={'details_' + this.props.id}
       style={styles.detailsTable}
       detailsData={detailsData}
       details={details}
       search={this.state.search}
-      fetchApiDataObj={this.fetchApiDataObj}
-      fetchApiData={fetchApiData} />;
+      apiObj={this.fetchApiDataObj}
+      fetchApiData={fetchApiData}
+      fetchNextSetOfData={fetchNextSetOfData} />;
   }
 
   componentDidMount() {
@@ -430,5 +431,5 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  fetchApiData, updateRoute, removeComponent, broadcastEvent
+  fetchApiData, updateRoute, removeComponent, broadcastEvent, fetchNextSetOfData
 })(ParentCard);

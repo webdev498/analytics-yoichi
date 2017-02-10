@@ -212,6 +212,24 @@ export function fetchApiData(input) {
   };
 }
 
+export function fetchNextSetOfData(apiObj, data) {
+  return function(dispatch, getState) {
+    const {id, api, params, options, isDetails} = apiObj,
+      currentDuration = getState().apiData.get('duration');
+
+    callApi(api, currentDuration, params, options, dispatch)
+    .then(json => {
+      json.options = options;
+      data = data.concat(json.rows);
+      json.rows = data;
+      dispatch(receiveApiData(id, {json, api}, isDetails));
+    })
+    .catch(ex => {
+      dispatch(errorApiData(id, ex, api, isDetails));
+    });
+  };
+}
+
 // Update api data for all the components that are visible on the page
 // when time range is changed.
 export function updateApiData(newDuration, params) {

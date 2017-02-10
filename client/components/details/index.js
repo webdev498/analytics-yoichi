@@ -6,12 +6,13 @@ import Reactable from 'reactable';
 const {Table, Tr, Td} = Reactable;
 
 const styles = {
-  wrap: {
-    backgroundColor: Colors.white,
-    width: '100%',
-    overflow: 'auto'
-  }
-};
+    wrap: {
+      backgroundColor: Colors.white,
+      width: '100%',
+      overflow: 'auto'
+    }
+  },
+  fetchLimit = 100;
 
 import './_table.scss';
 
@@ -26,26 +27,15 @@ export default class DetailsTable extends React.Component {
   constructor(props) {
     super(props);
     this.paginationDetails = {
-      data: {},
-      total: 0,
-      currentCount: 0,
+      detailsData: {},
       lastPage: 0
     };
     this.currentPage = 0;
     this.onPageChange = this.onPageChange.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.paginationDetails.total !== 0) {
-      if (!newProps.detailsData) return null;
-      let newDetailsData = this.getData(newProps.detailsData);
-      this.paginationDetails.data.rows.concat(newDetailsData.data.rows);
-      console.log(this.paginationDetails.data.rows);
-    }
-  }
-
   getData(data) {
-    const {columns, rows, total, next} = data;
+    const {columns, rows} = data;
     let header = columns.map(col => col.displayName);
 
     const list = rows.map(row => header.map((c, i) => {
@@ -68,23 +58,22 @@ export default class DetailsTable extends React.Component {
 
     return {
       list,
-      header,
-      total,
-      next
+      header
     };
   }
 
   onPageChange(page) {
     const {props} = this;
-    let {data, total, currentCount, lastPage, next} = this.paginationDetails,
+    let {detailsData, lastPage} = this.paginationDetails,
       currentPage = page + 1;
-    if (currentPage === lastPage && total > 100) {
+    if (currentPage === lastPage && detailsData.total > fetchLimit && detailsData.rows.length < detailsData.total) {
       this.currentPage = page;
-      console.log(props.fetchApiDataObj);
-      let fetchApiDataObj = props.fetchApiDataObj;
-      fetchApiDataObj.api.queryParams.from = next;
-      props.fetchApiData(fetchApiDataObj);
-      // let nextLink = document.createElement('a'),
+      let apiObj = props.apiObj;
+      apiObj.api.queryParams.from = detailsData.next;
+      // props.fetchApiData(apiObj);
+
+      props.fetchNextSetOfData(apiObj, detailsData.rows);
+      // let nextLink = document.createElement('api'),
       //   paginationRow = document.getElementsByClassName('reactable-pagination');
       // paginationRow.id = 'reactable-pagination' + this.props.id;
       // nextLink.class = 'reactable-next-page';
@@ -104,17 +93,13 @@ export default class DetailsTable extends React.Component {
     if (!detailsData) return null;
 
     const data = this.getData(detailsData),
-      {list, header, total, next} = data;
+      {list, header} = data;
     let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 5,
       lastPage = Math.ceil(list.length / itemsPerPage),
       columnNames = [];
     this.paginationDetails = {
-      data,
-      total,
-      currentCount: list.length,
-      lastPage,
-      actualPageCount: Math.ceil(total / itemsPerPage),
-      next
+      detailsData,
+      lastPage
     };
 
     header.forEach((col) => {
