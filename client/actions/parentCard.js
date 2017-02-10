@@ -218,6 +218,8 @@ export function fetchNextSetOfData(apiObj, data) {
     const {id, api, params, options, isDetails} = apiObj,
       currentDuration = getState().apiData.get('duration');
 
+    dispatch(requestApiData(id, api, isDetails));
+
     callApi(api, currentDuration, params, options, dispatch)
     .then(json => {
       json = Object.assign({}, json, {
