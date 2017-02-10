@@ -35,6 +35,12 @@ export default class DetailsTable extends React.Component {
     this.onPageChange = this.onPageChange.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.detailsData && newProps.detailsData.next === fetchLimit) {
+      this.currentPage = 0;
+    }
+  }
+
   getData(data) {
     const {columns, rows} = data;
     let header = columns.map(col => col.displayName);

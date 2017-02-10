@@ -18,7 +18,7 @@ export function getPaginationButtonsRange(pageCount, currentPage, maxNumbersOnLe
       start = 1;
     }
     else {
-      start = pageCount - (maxNumbersOnLeftRight * 2);
+        start = pageCount - (maxNumbersOnLeftRight * 2);
     }
     end = pageCount;
   }

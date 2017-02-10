@@ -133,6 +133,7 @@ export class ParentCard extends React.Component {
     id: PropTypes.string.isRequired,
     meta: PropTypes.object.isRequired,
     updateRoute: PropTypes.func.isRequired,
+    fetchNextSetOfData: PropTypes.func.isRequired,
     history: PropTypes.object,
     data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     details: PropTypes.object,

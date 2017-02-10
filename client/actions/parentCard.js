@@ -268,6 +268,9 @@ export function updateApiData(newDuration, params) {
 
           delete api.queryParams.end;
           delete api.queryParams.start;
+          if (api.queryParams.from) {
+            delete api.queryParams.from;
+          }
           api.queryParams.window = '';
           fetchApiData({id, api, params, options, isDetails: true})(dispatch, getState);
         });
