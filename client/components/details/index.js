@@ -21,7 +21,6 @@ export default class DetailsTable extends React.Component {
     style: PropTypes.object,
     detailsData: PropTypes.object,
     details: PropTypes.object,
-    id: PropTypes.string,
     fetchNextSetOfData: PropTypes.func.isRequired
   }
 

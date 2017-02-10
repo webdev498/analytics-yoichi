@@ -182,7 +182,6 @@ export class ParentCard extends React.Component {
   getDetailsTable() {
     const {detailsData, details, fetchNextSetOfData} = this.props;
     return <DetailsTable
-      id={'details_' + this.props.id}
       style={styles.detailsTable}
       detailsData={detailsData}
       details={details}
