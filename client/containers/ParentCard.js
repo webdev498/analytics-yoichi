@@ -179,7 +179,7 @@ export class ParentCard extends React.Component {
   }
 
   getDetailsTable() {
-    const {detailsData, details, fetchApiData, fetchNextSetOfData} = this.props;
+    const {detailsData, details, fetchNextSetOfData} = this.props;
     return <DetailsTable
       id={'details_' + this.props.id}
       style={styles.detailsTable}
@@ -187,7 +187,6 @@ export class ParentCard extends React.Component {
       details={details}
       search={this.state.search}
       apiObj={this.fetchApiDataObj}
-      fetchApiData={fetchApiData}
       fetchNextSetOfData={fetchNextSetOfData} />;
   }
 

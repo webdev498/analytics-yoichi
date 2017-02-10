@@ -21,7 +21,8 @@ export default class DetailsTable extends React.Component {
     style: PropTypes.object,
     detailsData: PropTypes.object,
     details: PropTypes.object,
-    id: PropTypes.string
+    id: PropTypes.string,
+    fetchNextSetOfData: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -64,25 +65,14 @@ export default class DetailsTable extends React.Component {
 
   onPageChange(page) {
     const {props} = this;
-    let {detailsData, lastPage} = this.paginationDetails,
+    let {apiObj} = props,
+      {detailsData, lastPage} = this.paginationDetails,
       currentPage = page + 1;
-    if (currentPage === lastPage && detailsData.total > fetchLimit && detailsData.rows.length < detailsData.total) {
+    if (currentPage === lastPage && detailsData.total > fetchLimit && detailsData.total > detailsData.rows.length) {
       this.currentPage = page;
-      let apiObj = props.apiObj;
       apiObj.api.queryParams.from = detailsData.next;
-      // props.fetchApiData(apiObj);
 
       props.fetchNextSetOfData(apiObj, detailsData.rows);
-      // let nextLink = document.createElement('api'),
-      //   paginationRow = document.getElementsByClassName('reactable-pagination');
-      // paginationRow.id = 'reactable-pagination' + this.props.id;
-      // nextLink.class = 'reactable-next-page';
-      // nextLink.id = 'tempNext';
-      // nextLink.href = '#page-' + (lastPage + 1);
-
-      // document.getElementsByClassName('reactable-pagination')[0].childNodes[0].childNodes[0].appendChild(nextLink);
-      // console.log(document.getElementsByClassName('reactable-pagination')[0].childNodes[0].childNodes[0]);
-      // nextLink.appendChild(document.createTextNode('>>'));
     }
   }
 
