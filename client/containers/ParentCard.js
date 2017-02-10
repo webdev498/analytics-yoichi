@@ -123,6 +123,7 @@ export class ParentCard extends React.Component {
       showComponentIconFlag: false
     };
 
+    this.fetchApiDataObj = {};
     this.getData = this.getData.bind(this);
     this.toggleDetailsTable = this.toggleDetailsTable.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
@@ -157,6 +158,7 @@ export class ParentCard extends React.Component {
     }
 
     const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
+    this.fetchApiDataObj = {id, api, params, options, isDetails};
     props.fetchApiData({id, api, params, options, isDetails});
   }
 
@@ -177,12 +179,15 @@ export class ParentCard extends React.Component {
   }
 
   getDetailsTable() {
-    const {detailsData, details} = this.props;
+    const {detailsData, details, fetchApiData} = this.props;
     return <DetailsTable
+      id={'details_' + this.props.id}
       style={styles.detailsTable}
       detailsData={detailsData}
       details={details}
-      search={this.state.search} />;
+      search={this.state.search}
+      fetchApiDataObj={this.fetchApiDataObj}
+      fetchApiData={fetchApiData} />;
   }
 
   componentDidMount() {

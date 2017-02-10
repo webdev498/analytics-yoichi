@@ -19,11 +19,33 @@ export default class DetailsTable extends React.Component {
   static propTypes = {
     style: PropTypes.object,
     detailsData: PropTypes.object,
-    details: PropTypes.object
+    details: PropTypes.object,
+    id: PropTypes.string
+  }
+
+  constructor(props) {
+    super(props);
+    this.paginationDetails = {
+      data: {},
+      total: 0,
+      currentCount: 0,
+      lastPage: 0
+    };
+    this.currentPage = 0;
+    this.onPageChange = this.onPageChange.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (this.paginationDetails.total !== 0) {
+      if (!newProps.detailsData) return null;
+      let newDetailsData = this.getData(newProps.detailsData);
+      this.paginationDetails.data.rows.concat(newDetailsData.data.rows);
+      console.log(this.paginationDetails.data.rows);
+    }
   }
 
   getData(data) {
-    const {columns, rows} = data;
+    const {columns, rows, total, next} = data;
     let header = columns.map(col => col.displayName);
 
     const list = rows.map(row => header.map((c, i) => {
@@ -46,8 +68,33 @@ export default class DetailsTable extends React.Component {
 
     return {
       list,
-      header
+      header,
+      total,
+      next
     };
+  }
+
+  onPageChange(page) {
+    const {props} = this;
+    let {data, total, currentCount, lastPage, next} = this.paginationDetails,
+      currentPage = page + 1;
+    if (currentPage === lastPage && total > 100) {
+      this.currentPage = page;
+      console.log(props.fetchApiDataObj);
+      let fetchApiDataObj = props.fetchApiDataObj;
+      fetchApiDataObj.api.queryParams.from = next;
+      props.fetchApiData(fetchApiDataObj);
+      // let nextLink = document.createElement('a'),
+      //   paginationRow = document.getElementsByClassName('reactable-pagination');
+      // paginationRow.id = 'reactable-pagination' + this.props.id;
+      // nextLink.class = 'reactable-next-page';
+      // nextLink.id = 'tempNext';
+      // nextLink.href = '#page-' + (lastPage + 1);
+
+      // document.getElementsByClassName('reactable-pagination')[0].childNodes[0].childNodes[0].appendChild(nextLink);
+      // console.log(document.getElementsByClassName('reactable-pagination')[0].childNodes[0].childNodes[0]);
+      // nextLink.appendChild(document.createTextNode('>>'));
+    }
   }
 
   render() {
@@ -56,9 +103,19 @@ export default class DetailsTable extends React.Component {
 
     if (!detailsData) return null;
 
-    const {list, header} = this.getData(detailsData);
+    const data = this.getData(detailsData),
+      {list, header, total, next} = data;
     let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 5,
+      lastPage = Math.ceil(list.length / itemsPerPage),
       columnNames = [];
+    this.paginationDetails = {
+      data,
+      total,
+      currentCount: list.length,
+      lastPage,
+      actualPageCount: Math.ceil(total / itemsPerPage),
+      next
+    };
 
     header.forEach((col) => {
       columnNames.push((col.dataKey).toUpperCase());
@@ -71,9 +128,9 @@ export default class DetailsTable extends React.Component {
           ? <Table
             style={{width: '100%'}}
             className='detailsTable'
-            pageButtonLimit={5}
+            pageButtonLimit={10}
             itemsPerPage={list.length > itemsPerPage ? itemsPerPage : 0}
-            currentPage={0}
+            currentPage={this.currentPage}
             hideFilterInput
             previousPageLabel={'<<'}
             nextPageLabel={'>>'}
@@ -83,7 +140,8 @@ export default class DetailsTable extends React.Component {
               direction: 'desc'
             }}
             filterBy={props.search}
-            filterable={columnNames}>
+            filterable={columnNames}
+            onPageChange={this.onPageChange}>
             {
               list.map((row, i) => (
                 <Tr key={`tr${i}`}>
@@ -101,7 +159,7 @@ export default class DetailsTable extends React.Component {
                     )
                   )}
                 </Tr>
-            )
+              )
             )}
           </Table>
           : <div style={{fontSize: '18px', marginLeft: '33px'}}>No Data Found.</div>
