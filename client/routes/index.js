@@ -14,7 +14,8 @@ const defaultRoutes = [
   {to: 'assets'},
   {to: 'asset/:type/:assetId'},
   {to: 'user-agent'},
-  {to: 'notable-events'}
+  {to: 'notable-events'},
+  {to: 'sysmon'}
 ];
 
 function getRoutes() {
