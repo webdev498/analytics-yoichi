@@ -74,10 +74,11 @@ export default class DetailsTable extends React.Component {
     let {apiObj} = props,
       {detailsData, lastPage} = this.paginationDetails,
       currentPage = page + 1;
-    if (currentPage === lastPage && detailsData.total > fetchLimit && detailsData.total > detailsData.rows.length) {
+    if (currentPage === lastPage &&
+      detailsData.total > fetchLimit &&
+      detailsData.total > detailsData.rows.length) {
       this.currentPage = page;
       apiObj.api.queryParams.from = detailsData.next;
-
       props.fetchNextSetOfData(apiObj, detailsData.rows);
     }
   }
@@ -88,8 +89,7 @@ export default class DetailsTable extends React.Component {
 
     if (!detailsData) return null;
 
-    const data = this.getData(detailsData),
-      {list, header} = data;
+    const {list, header} = this.getData(detailsData);
     let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 5,
       lastPage = Math.ceil(list.length / itemsPerPage),
       columnNames = [];
