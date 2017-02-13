@@ -272,8 +272,9 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText)
       });
     }
     else if (name === 'port') {
-      if (columnText[columnText.length - 1].value) {
-        columnText[columnText.length - 1].value = columnText[columnText.length - 1].value + ':' + fieldValue;
+      const val = columnText[columnText.length - 1];
+      if (val && val.value) {
+        val.value = columnText[columnText.length - 1].value + ':' + fieldValue;
       }
     }
     else if (name === 'country') {
