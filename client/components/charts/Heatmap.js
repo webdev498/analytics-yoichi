@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
 import {isUndefined} from '../../../commons/utils/utils';
+import { DEFAULT_FONT } from 'Constants';
 
 const chart = {
   showLabel: 0,
@@ -13,7 +14,7 @@ const chart = {
                     $rowLabel :</div>{br}Value : <b>$dataValue</b>{br} $columnLabel`,
   // Cosmetics
   baseFontColor: Colors.grape,
-  baseFont: 'Open Sans, sans-serif',
+  baseFont: DEFAULT_FONT,
   captionFontSize: '14',
   subcaptionFontSize: '14',
   subcaptionFontBold: '0',

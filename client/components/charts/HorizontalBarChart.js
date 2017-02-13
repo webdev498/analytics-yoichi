@@ -10,10 +10,10 @@ import {
   kFormatter
 } from '../../../commons/utils/utils';
 
+import { DEFAULT_FONT } from 'Constants';
+
 const styles = {
   chartCaption: {
-    // width: '100%',
-    fontFamily: 'Open Sans, sans-serif',
     fontSize: '14px',
     fontWeight: '600',
     color: Colors.grape
@@ -81,15 +81,15 @@ export function generateDataArray(parameters) {
         else {
           annotationItems = annotationItems.concat([
             {
-              'id': 'datasetlabel' + d,
-              'type': 'text',
-              'text': kFormatter(obj1.value) + numberSuffix + ' ',
-              'align': 'left',
-              'x': '$chartEndX - 146',
-              'y': '$dataset.0.set.' + d + '.CenterY',
-              'fontSize': '11',
-              'color': Colors.grape,
-              'font': 'Open Sans, sans-serif'
+              id: 'datasetlabel' + d,
+              type: 'text',
+              text: kFormatter(obj1.value) + numberSuffix + ' ',
+              align: 'left',
+              x: '$chartEndX - 146',
+              y: '$dataset.0.set.' + d + '.CenterY',
+              fontSize: '11',
+              color: Colors.grape,
+              font: DEFAULT_FONT
             }
           ]);
         }
@@ -253,15 +253,15 @@ export function generateDataSource(rawData, chartOptions, chartData, chart) {
           for (let j = 0; j < dataset.length; j++) {
             annotationItems = annotationItems.concat([
               {
-                'id': 'datasetlabel' + j,
-                'type': 'text',
-                'text': dataset[j].label,
-                'align': 'left',
-                'x': '$chartEndX - 146',
-                'y': '$dataset.0.set.' + j + '.CenterY',
-                'fontSize': '11',
-                'color': Colors.grape,
-                'font': 'Open Sans, sans-serif'
+                id: 'datasetlabel' + j,
+                type: 'text',
+                text: dataset[j].label,
+                align: 'left',
+                x: '$chartEndX - 146',
+                y: '$dataset.0.set.' + j + '.CenterY',
+                fontSize: '11',
+                color: Colors.grape,
+                font: DEFAULT_FONT
               }
             ]);
 
@@ -360,7 +360,7 @@ export function generateDataSource(rawData, chartOptions, chartData, chart) {
       'yAxisNameFontSize': '14',
       'labelFontSize': '11',
       'numDivLines': '4',
-      'baseFont': 'Open Sans, sans-serif',
+      'baseFont': DEFAULT_FONT,
       'baseFontColor': Colors.grape,
       'toolTipSepChar': ' | '
     }, chartOptions)

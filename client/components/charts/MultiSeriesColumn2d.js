@@ -1,36 +1,37 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
+import { DEFAULT_FONT } from 'Constants';
 
 const chart = {
-  'baseFont': 'Open Sans, sans-serif',
-  'baseFontColor': '#333333',
-  'showBorder': '0',
-  'bgColor': '#ffffff',
-  'showShadow': '0',
-  'canvasBgColor': '#ffffff',
-  'canvasBorderAlpha': '0',
-  'divLineAlpha': '50',
-  'divLineColor': Colors.cloud,
-  'divLineThickness': '1',
-  'usePlotGradientColor': '0',
-  'showplotborder': '0',
-  'valueFontColor': '#ffffff',
-  'showHoverEffect': '1',
-  'rotateValues': '1',
-  'showXAxisLine': '1',
-  'xAxisLineThickness': '1',
-  'xAxisLineColor': '#999999',
-  'showAlternateHGridColor': '0',
-  'showValues': '0',
-  'legendBgAlpha': '0',
-  'legendBorderAlpha': '0',
-  'legendShadow': '0',
-  'legendItemFontSize': '10',
-  'legendItemFontColor': '#666666',
-  'labelDisplay': 'wrap',
-  'rotateLabels': '1',
-  'slantLabels': '1',
-  'toolTipSepChar': ' | '
+  baseFont: DEFAULT_FONT,
+  baseFontColor: '#333333',
+  showBorder: '0',
+  bgColor: '#ffffff',
+  showShadow: '0',
+  canvasBgColor: '#ffffff',
+  canvasBorderAlpha: '0',
+  divLineAlpha: '50',
+  divLineColor: Colors.cloud,
+  divLineThickness: '1',
+  usePlotGradientColor: '0',
+  showplotborder: '0',
+  valueFontColor: '#ffffff',
+  showHoverEffect: '1',
+  rotateValues: '1',
+  showXAxisLine: '1',
+  xAxisLineThickness: '1',
+  xAxisLineColor: '#999999',
+  showAlternateHGridColor: '0',
+  showValues: '0',
+  legendBgAlpha: '0',
+  legendBorderAlpha: '0',
+  legendShadow: '0',
+  legendItemFontSize: '10',
+  legendItemFontColor: '#666666',
+  labelDisplay: 'wrap',
+  rotateLabels: '1',
+  slantLabels: '1',
+  toolTipSepChar: ' | '
 };
 
 function getColumnIndex(columns, type) {
@@ -108,6 +109,7 @@ class MultiSeriesColumn2d extends React.Component {
   }
 
   componentDidMount() {
+    // TODO remove this special case.
     function getApiObj(params) {
       let reportId;
       if (params.type === 'user') {
@@ -119,28 +121,28 @@ class MultiSeriesColumn2d extends React.Component {
 
       return [
         {
-          'path': '/api/analytics/reporting/execute/{reportId}',
-          'pathParams': {
-            'reportId': `${reportId}`
+          path: '/api/analytics/reporting/execute/{reportId}',
+          pathParams: {
+            reportId: `${reportId}`
           },
-          'queryParams': {
-            'window': '',
-            'user': 'assetId:pathParam',
-            'status': 'success'
+          queryParams: {
+            window: '',
+            user: 'assetId:pathParam',
+            status: 'success'
           },
-          'id': 'success'
+          id: 'success'
         },
         {
-          'path': '/api/analytics/reporting/execute/{reportId}',
-          'pathParams': {
-            'reportId': `${reportId}`
+          path: '/api/analytics/reporting/execute/{reportId}',
+          pathParams: {
+            reportId: `${reportId}`
           },
-          'queryParams': {
-            'window': '',
-            'user': 'assetId:pathParam',
-            'status': 'fail'
+          queryParams: {
+            window: '',
+            user: 'assetId:pathParam',
+            status: 'fail'
           },
-          'id': 'fail'
+          id: 'fail'
         }
       ];
     }

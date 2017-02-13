@@ -1,10 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../commons/colors';
-import {
-  isUndefined,
-  firstCharCapitalize,
-  whatIsIt
-} from '../../commons/utils/utils';
+import { isUndefined, firstCharCapitalize, whatIsIt } from '../../commons/utils/utils';
+import { DEFAULT_FONT } from 'Constants';
 
 import './styles/_contextualMenu.scss';
 
@@ -38,7 +35,7 @@ const styles = {
       width: '90%',
       color: Colors.garnet,
       fontSize: '13px',
-      fontFamily: 'Open Sans',
+      fontFamily: DEFAULT_FONT,
       overflowWrap: 'break-word',
       paddingRight: '20px',
       paddingBottom: '20px'

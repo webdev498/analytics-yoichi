@@ -190,7 +190,6 @@
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#C9EDDF, #60E2DC"
         },
         "chartData": {
@@ -244,7 +243,6 @@
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#C9EDDF, #60E2DC"
         },
         "chartData": {
@@ -352,7 +350,6 @@
         "chartOptions": {
           "showValues": "1",
           "showLabels": "1",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
@@ -850,7 +847,6 @@
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "USER",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
@@ -904,7 +900,6 @@
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "USER",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },

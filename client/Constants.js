@@ -1,4 +1,5 @@
 import {baseUrl} from './config';
+import { Colors } from '../commons/colors';
 
 export const REQUEST_API_DATA = 'REQUEST_API_DATA';
 export const RECEIVE_API_DATA = 'RECEIVE_API_DATA';
@@ -52,4 +53,19 @@ export const CHART_COLORS = [
   '66CDAA'
 ];
 
-export const DEFAULT_FONT = 'Open Sans, sans-serif';
+export const DEFAULT_FONT = 'Roboto, sans-serif';
+
+export const DEFAULT_CHART_OPTIONS = Object.freeze({
+  theme: 'zune',
+  lineColor: Colors.coral,
+  showBorder: 0,
+  chartTopMargin: 0,
+  chartBottomMargin: 0,
+  chartLeftMargin: 0,
+  chartRightMargin: 0,
+  baseFont: DEFAULT_FONT,
+  baseFontColor: Colors.grape,
+  paletteColors: Colors.defaultGraphPalette,
+  slantLabels: 1,
+  toolTipSepChar: ' | '
+});

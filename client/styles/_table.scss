@@ -1,3 +1,5 @@
+@import 'variable';
+
 .threatTable {
   table {
     text-align: left;
@@ -161,7 +163,7 @@ input:focus {
   border-radius: 4px;
   display: inline-block;
   font-size: 13px;
-  font-family: "Open Sans";
+  font-family: $DefaultFont;
 }
 .pagination > li {
   display: inline;

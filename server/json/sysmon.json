@@ -241,7 +241,6 @@
         "chartOptions": {
           "showValues": "1",
           "showLabels": "1",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
@@ -351,7 +350,6 @@
         "chartOptions": {
           "showValues": "1",
           "showLabels": "1",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
