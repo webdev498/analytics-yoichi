@@ -133,7 +133,14 @@ class AssetDetail extends React.Component {
   }
 
   getChangeElement(change) {
-    const formattedChange = parseFloat(change).toFixed(2);
+    let formattedChange;
+    if (typeof change === 'number') {
+      formattedChange = parseFloat(change).toFixed(2);
+    }
+    else {
+      formattedChange = 0;
+    }
+
     return (
       <span style={styles.change}>
         <span style={styles.percent}>{Math.abs(formattedChange)} %</span>
