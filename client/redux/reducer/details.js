@@ -60,7 +60,7 @@ function apiStates(state, action, fn) {
   return state;
 }
 
-export default function APIDataReducer(state = initialState, action) {
+export default function detailsDataReducer(state = initialState, action) {
   switch (action.type) {
     case REQUEST_DETAILS_API_DATA: {
       return apiStates(state, action, requestApi);

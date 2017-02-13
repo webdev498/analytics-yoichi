@@ -1,12 +1,11 @@
 import {
   REQUEST_API_DATA,
   RECEIVE_API_DATA,
-  ERROR_API_DATA
+  ERROR_API_DATA,
+  REMOVE_COMPONENT
 } from 'Constants';
 
-import {
-  default as parentCardReducer
-} from 'redux/reducer/ParentCard';
+import { default as parentCardReducer } from 'redux/reducer/ParentCard';
 
 import {Map, fromJS} from 'immutable';
 
@@ -16,15 +15,11 @@ function initState() {
 }
 
 function setAPIData(id, data) {
-  let state = parentCardReducer(undefined, {type: REQUEST_API_DATA, id});
-
-  state = parentCardReducer(state, {
+  return parentCardReducer(undefined, {
     type: RECEIVE_API_DATA,
     id,
     data
   });
-
-  return state;
 }
 
 describe('Redux Parent Card Reducer', function() {
@@ -45,10 +40,10 @@ describe('Redux Parent Card Reducer', function() {
 
   it('Should return the previous state if an action was not matched.', function() {
     let state = parentCardReducer(undefined, {});
-    expect(parentCardReducer(undefined, {})).to.equal(initState());
+    expect(state).to.equal(initState());
 
     state = parentCardReducer(state, {type: '@@@@@@@'});
-    expect(parentCardReducer(undefined, {})).to.equal(initState());
+    expect(state).to.equal(initState());
 
     const id = '1';
 
@@ -99,13 +94,9 @@ describe('Redux Parent Card Reducer', function() {
     expect(components).to.not.have.deep.property([id, 'query']);
   });
 
-  it('Should update the state with layout info for "RECEIVE_API_DATA" action.', function() {
+  it('Should update the state with data for "RECEIVE_API_DATA" action.', function() {
     let id = '1',
-      data = {
-        json: {},
-        api: '/test',
-        query: {test: 'test'}
-      };
+      data = { json: {}, api: '/test', query: {test: 'test'} };
 
     let state = setAPIData(id, data),
       components = state.get('components');
@@ -118,18 +109,9 @@ describe('Redux Parent Card Reducer', function() {
     expect(components).to.have.deep.property([id, 'query']);
 
     id = '2';
-    data = {
-      json: {},
-      api: '/test2',
-      query: {test: 'test2'}
-    };
+    data = { json: {}, api: '/test2', query: {test: 'test2'} };
 
-    state = parentCardReducer(state, {
-      type: RECEIVE_API_DATA,
-      id,
-      data
-    });
-
+    state = parentCardReducer(state, { type: RECEIVE_API_DATA, id, data });
     components = state.get('components');
     expect(components).to.have.property(id);
     expect(components).to.have.deep.property([id, 'isFetching'], false);
@@ -142,16 +124,27 @@ describe('Redux Parent Card Reducer', function() {
   it('Should update the state with error msg for "ERROR_API_DATA" action.', function() {
     const id = '1',
       errorData = {msg: 'error'},
-      state = parentCardReducer(state, {
-        type: ERROR_API_DATA,
-        id,
-        errorData}
-      );
+      state = parentCardReducer(state, {type: ERROR_API_DATA, id, errorData});
 
     const components = state.get('components');
     expect(components).to.have.property(id);
     expect(components).to.have.deep.property([id, 'isFetching'], false);
     expect(components).to.have.deep.property([id, 'isError'], true);
     expect(components).to.have.deep.property([id, 'errorData']);
+  });
+
+  it('Should remove component from the state', function() {
+    let id = '1',
+      data = { json: {}, api: '/test', query: { test: 'test' } };
+
+    let state = setAPIData(id, data),
+      components = state.get('components');
+
+    expect(components).to.have.property(id);
+
+    state = parentCardReducer(state, { type: REMOVE_COMPONENT, id });
+    components = state.get('components');
+
+    expect(components).to.not.have.property(id);
   });
 });
