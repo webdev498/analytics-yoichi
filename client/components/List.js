@@ -134,6 +134,7 @@ export class List extends React.Component {
 
   getHeader(normalizeData) {
     const [row] = normalizeData;
+    if (!row) return null;
 
     return <li style={styles.row}>
       {

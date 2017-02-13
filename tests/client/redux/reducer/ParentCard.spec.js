@@ -4,9 +4,7 @@ import {
   ERROR_API_DATA
 } from 'Constants';
 
-import {
-  default as parentCardReducer
-} from 'redux/reducer/ParentCard';
+import { default as parentCardReducer } from 'redux/reducer/ParentCard';
 
 import {Map, fromJS} from 'immutable';
 
