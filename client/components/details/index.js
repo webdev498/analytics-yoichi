@@ -98,16 +98,17 @@ export default class DetailsTable extends React.Component {
   }
 
   handleRowClick(row, index) {
-    const {props: {details, updateRoute}} = this,
-      {secondaryClick} = details,
-      {page, pathParams} = secondaryClick;
-
     return () => {
+      const {props: {details, updateRoute}} = this,
+        {secondaryClick} = details;
+
       if (!secondaryClick) {
         return;
       }
+
+      const {page, pathParams} = secondaryClick;
       let url = '/' + page;
-      if (pathParams !== undefined) {
+      if (pathParams) {
         for (let param in pathParams) {
           row.forEach((col) => {
             let paramName = pathParams[param];
@@ -148,7 +149,7 @@ export default class DetailsTable extends React.Component {
       columnNames.push((col.name).toUpperCase());
     });
 
-    if (details.secondaryClick) {
+    if (details && details.secondaryClick) {
       tableStyle = Object.assign({}, tableStyle, {cursor: 'pointer'});
     }
 
