@@ -311,7 +311,14 @@
           "chartHeight": "350"
         },
         "details": {
-          "itemsPerPage": 3
+          "itemsPerPage": 3,
+          "secondaryClick": {
+            "page": "alert",
+            "pathParams": {
+              "id": "id:fieldName",
+              "date": "date:fieldName"
+            }
+          }
         },
         "id": "alert-priority-chart",
         "type": "charts/MultiSeriesCombiChart"

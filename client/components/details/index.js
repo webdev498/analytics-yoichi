@@ -21,7 +21,8 @@ export default class DetailsTable extends React.Component {
     style: PropTypes.object,
     detailsData: PropTypes.object,
     details: PropTypes.object,
-    fetchNextSetOfData: PropTypes.func.isRequired
+    fetchNextSetOfData: PropTypes.func.isRequired,
+    updateRoute: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -32,6 +33,7 @@ export default class DetailsTable extends React.Component {
     };
     this.currentPage = 0;
     this.onPageChange = this.onPageChange.bind(this);
+    this.handleRowClick = this.handleRowClick.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -50,9 +52,7 @@ export default class DetailsTable extends React.Component {
       if (column.hidden === false) {
         headers.push({name: column.displayName, index});
       }
-      else {
-        hiddenHeaders.push({name: column.name, index});
-      }
+      hiddenHeaders.push({name: column.displayName, fieldName: column.name, index});
     });
 
     rows.forEach((row, index) => {
@@ -97,6 +97,36 @@ export default class DetailsTable extends React.Component {
     }
   }
 
+  handleRowClick(row, index) {
+    const {props: {details, updateRoute}} = this,
+      {secondaryClick} = details,
+      {page, pathParams} = secondaryClick;
+
+    return () => {
+      if (!secondaryClick) {
+        return;
+      }
+      let url = '/' + page;
+      if (pathParams !== undefined) {
+        for (let param in pathParams) {
+          row.forEach((col) => {
+            let paramName = pathParams[param];
+            if (paramName.includes(':fieldName')) {
+              paramName = pathParams[param].replace(':fieldName', '');
+              if (col.name === paramName) {
+                url += '/' + col.value;
+              }
+            }
+            else {
+              url += '/' + pathParams[param];
+            }
+          });
+        }
+      }
+      updateRoute(url);
+    };
+  }
+
   render() {
     const {props, props: {details, detailsData}} = this;
     const style = Object.assign({}, styles.wrap, props.style);
@@ -106,24 +136,28 @@ export default class DetailsTable extends React.Component {
     const {list, headers, hiddenList} = this.getData(detailsData);
     let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 5,
       lastPage = Math.ceil(list.length / itemsPerPage),
-      columnNames = [];
+      columnNames = [],
+      tableStyle = {width: '100%'};
+
     this.paginationDetails = {
       detailsData,
       lastPage
     };
 
-    console.log(list, headers, hiddenList);
-
     headers.forEach((col) => {
       columnNames.push((col.name).toUpperCase());
     });
+
+    if (details.secondaryClick) {
+      tableStyle = Object.assign({}, tableStyle, {cursor: 'pointer'});
+    }
 
     return (
       <div style={style} className='details-scrollbar'>
         {
           list.length > 0
           ? <Table
-            style={{width: '100%'}}
+            style={tableStyle}
             className='detailsTable'
             pageButtonLimit={10}
             itemsPerPage={list.length > itemsPerPage ? itemsPerPage : 0}
@@ -141,7 +175,7 @@ export default class DetailsTable extends React.Component {
             onPageChange={this.onPageChange}>
             {
               list.map((row, i) => (
-                <Tr key={`tr${i}`}>
+                <Tr key={`tr${i}`} onClick={this.handleRowClick(hiddenList[i], i)}>
                   {
                     row.map((col, i) => (
                       <Td column={(col.name).toUpperCase()}
