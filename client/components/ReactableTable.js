@@ -9,6 +9,7 @@ import AssetIcon from 'components/widgets/AssetIcon';
 import {getCountryCode} from '../../commons/utils/countryUtils';
 
 const {Table, Tr, Td} = Reactable;
+const kibanaBaseUrl = (window.global && window.global.kibanaBaseUrl) ? window.global.kibanaBaseUrl : '/';
 
 const styles = {
   header: {
