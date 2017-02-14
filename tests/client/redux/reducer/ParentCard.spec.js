@@ -2,7 +2,8 @@ import {
   REQUEST_API_DATA,
   RECEIVE_API_DATA,
   ERROR_API_DATA,
-  REMOVE_COMPONENT
+  REMOVE_COMPONENT,
+  PARENT_CARD_EVENT
 } from 'Constants';
 
 import { default as parentCardReducer } from 'redux/reducer/ParentCard';
@@ -134,5 +135,36 @@ describe('Redux Parent Card Reducer', function() {
 
     state = parentCardReducer(state, { type: REMOVE_COMPONENT, id });
     expect(state).to.not.have.property(id);
+  });
+
+  context('PARENT_CARD_EVENT', function() {
+    let id, data, event;
+    beforeEach(function() {
+      id = '1';
+      data = { json: {}, api: '/test', query: { test: 'test' } };
+      event = {
+        type: PARENT_CARD_EVENT,
+        id,
+        eventData: 'test'
+      };
+    });
+
+    it('Should call set eventData', function() {
+      let state = setAPIData(id, data);
+      expect(state).to.not.have.deep.property([id, 'eventData']);
+
+      state = parentCardReducer(state, event);
+      expect(state).to.have.deep.property([id, 'eventData']);
+      expect(state).to.have.deep.property([id, 'eventData'], 'test');
+    });
+
+    it('Should return the previous state if the component does not exist', function() {
+      let state = setAPIData(id, data);
+      expect(state).to.not.have.deep.property([id, 'eventData']);
+
+      const udpatedEvent = Object.assign({}, event, {id: 2}),
+        updatedState = parentCardReducer(state, udpatedEvent);
+      expect(state).to.equal(updatedState);
+    });
   });
 });

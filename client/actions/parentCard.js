@@ -217,11 +217,9 @@ export function fetchApiData(input) {
 export function updateApiData(newDuration, params) {
   return function(dispatch, getState) {
     const {apiData, details, duration} = getState();
-    console.log(getState());
     const currentDuration = duration;
 
     if (currentDuration !== newDuration.param) {
-      console.log(currentDuration, newDuration);
       dispatch(changeTimeRange(newDuration.param));
 
       if (apiData) {
