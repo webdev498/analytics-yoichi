@@ -42,29 +42,44 @@ export default class DetailsTable extends React.Component {
 
   getData(data) {
     const {columns, rows} = data;
-    let header = columns.map(col => col.displayName);
+    let list = [],
+      hiddenList = [],
+      headers = [],
+      hiddenHeaders = [];
+    columns.forEach((column, index) => {
+      if (column.hidden === false) {
+        headers.push({name: column.displayName, index});
+      }
+      else {
+        hiddenHeaders.push({name: column.name, index});
+      }
+    });
 
-    const list = rows.map(row => header.map((c, i) => {
-      let value = row[i];
-      if (columns[i].dataType === 'OBJECT') {
-        value = JSON.stringify(value);
-      };
-      return {title: c, value};
-    }));
-
-    header = header.map(head => {
-      let label = head.split('.');
-      label = label[label.length - 1];
-
-      return {
-        label,
-        dataKey: head
-      };
+    rows.forEach((row, index) => {
+      let cols = [],
+        hiddenCols = [];
+      headers.forEach((header) => {
+        row.forEach((value, colIndex) => {
+          if (header.index === colIndex) {
+            cols.push({name: header.name, value});
+          }
+        });
+      });
+      hiddenHeaders.forEach((header) => {
+        row.forEach((value, colIndex) => {
+          if (header.index === colIndex) {
+            hiddenCols.push({name: header.name, value});
+          }
+        });
+      });
+      list.push(cols);
+      hiddenList.push(hiddenCols);
     });
 
     return {
       list,
-      header
+      headers,
+      hiddenList
     };
   }
 
@@ -88,7 +103,7 @@ export default class DetailsTable extends React.Component {
 
     if (!detailsData) return null;
 
-    const {list, header} = this.getData(detailsData);
+    const {list, headers, hiddenList} = this.getData(detailsData);
     let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 5,
       lastPage = Math.ceil(list.length / itemsPerPage),
       columnNames = [];
@@ -97,8 +112,10 @@ export default class DetailsTable extends React.Component {
       lastPage
     };
 
-    header.forEach((col) => {
-      columnNames.push((col.dataKey).toUpperCase());
+    console.log(list, headers, hiddenList);
+
+    headers.forEach((col) => {
+      columnNames.push((col.name).toUpperCase());
     });
 
     return (
@@ -127,9 +144,9 @@ export default class DetailsTable extends React.Component {
                 <Tr key={`tr${i}`}>
                   {
                     row.map((col, i) => (
-                      <Td column={(col.title).toUpperCase()}
+                      <Td column={(col.name).toUpperCase()}
                         value={col.value}
-                        key={(col.title).toUpperCase()}>
+                        key={(col.name).toUpperCase()}>
                         {
                           whatIsIt(col.value) === 'Object' || whatIsIt(col.value) === 'Array'
                           ? JSON.stringify(col.value)
