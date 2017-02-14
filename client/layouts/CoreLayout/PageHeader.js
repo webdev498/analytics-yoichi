@@ -223,7 +223,7 @@ PageHeader.childContextTypes = {
 };
 
 function mapStateToProps(state) {
-  return { auth: state.auth, duration: state.apiData.get('duration') };
+  return { auth: state.auth, duration: state.duration };
 }
 
 export default connect(mapStateToProps, {

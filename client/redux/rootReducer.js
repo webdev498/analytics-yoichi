@@ -6,6 +6,7 @@ import layout from './reducer/core';
 import parentCard from './reducer/ParentCard';
 import details from './reducer/details';
 import actionsList from './reducer/actionsList';
+import duration from './reducer/duration';
 
 export default combineReducers({
   auth,
@@ -14,5 +15,6 @@ export default combineReducers({
   apiData: parentCard,
   details,
   layout,
-  actions: actionsList
+  actions: actionsList,
+  duration
 });

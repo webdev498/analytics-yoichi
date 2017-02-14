@@ -390,8 +390,8 @@ function mapStateToProps(state, ownProps) {
     detailsData: null,
     detailsErrorData: null;
 
-  if (apiData.hasIn(['components', ownProps.id])) {
-    const propsById = apiData.getIn(['components', ownProps.id]);
+  if (apiData.has(ownProps.id)) {
+    const propsById = apiData.get(ownProps.id);
 
     data = propsById.get('data');
     isFetching = propsById.get('isFetching');
@@ -408,7 +408,7 @@ function mapStateToProps(state, ownProps) {
     detailsErrorData = detailsById.get('errorData');
   }
 
-  const duration = apiData.get('duration');
+  const duration = state.duration;
 
   return {
     data,
