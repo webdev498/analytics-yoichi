@@ -212,6 +212,28 @@ export function fetchApiData(input) {
   };
 }
 
+// This function is used to fetch next set of data for server side pagination
+export function fetchNextSetOfData(apiObj, data) {
+  return function(dispatch, getState) {
+    const {id, api, params, options, isDetails} = apiObj,
+      currentDuration = getState().apiData.get('duration');
+
+    dispatch(requestApiData(id, api, isDetails));
+
+    callApi(api, currentDuration, params, options, dispatch)
+    .then(json => {
+      json = Object.assign({}, json, {
+        options,
+        rows: data.concat(json.rows)
+      });
+      dispatch(receiveApiData(id, {json, api}, isDetails));
+    })
+    .catch(ex => {
+      dispatch(errorApiData(id, ex, api, isDetails));
+    });
+  };
+}
+
 // Update api data for all the components that are visible on the page
 // when time range is changed.
 export function updateApiData(newDuration, params) {
@@ -247,6 +269,9 @@ export function updateApiData(newDuration, params) {
 
           delete api.queryParams.end;
           delete api.queryParams.start;
+          if (api.queryParams.from) {
+            delete api.queryParams.from;
+          }
           api.queryParams.window = '';
           fetchApiData({id, api, params, options, isDetails: true})(dispatch, getState);
         });

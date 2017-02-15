@@ -5,7 +5,7 @@ import Loader from 'components/Loader';
 import DetailsTable from 'components/details';
 import ParentCardHeader from './ParentCardHeader';
 
-import {fetchApiData, removeComponent, broadcastEvent} from 'actions/parentCard';
+import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
 import {autoScrollTo} from 'utils/utils';
 import {updateRoute} from 'actions/core';
@@ -123,6 +123,7 @@ export class ParentCard extends React.Component {
       showComponentIconFlag: false
     };
 
+    this.detailsApiObj = {};
     this.getData = this.getData.bind(this);
     this.toggleDetailsTable = this.toggleDetailsTable.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
@@ -132,6 +133,7 @@ export class ParentCard extends React.Component {
     id: PropTypes.string.isRequired,
     meta: PropTypes.object.isRequired,
     updateRoute: PropTypes.func.isRequired,
+    fetchNextSetOfData: PropTypes.func.isRequired,
     history: PropTypes.object,
     data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     details: PropTypes.object,
@@ -157,6 +159,7 @@ export class ParentCard extends React.Component {
     }
 
     const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
+    this.detailsApiObj = {id, api, params, options, isDetails};
     props.fetchApiData({id, api, params, options, isDetails});
   }
 
@@ -177,12 +180,14 @@ export class ParentCard extends React.Component {
   }
 
   getDetailsTable() {
-    const {detailsData, details} = this.props;
+    const {detailsData, details, fetchNextSetOfData} = this.props;
     return <DetailsTable
       style={styles.detailsTable}
       detailsData={detailsData}
       details={details}
-      search={this.state.search} />;
+      search={this.state.search}
+      apiObj={this.detailsApiObj}
+      fetchNextSetOfData={fetchNextSetOfData} />;
   }
 
   componentDidMount() {
@@ -425,5 +430,5 @@ function mapStateToProps(state, ownProps) {
 }
 
 export default connect(mapStateToProps, {
-  fetchApiData, updateRoute, removeComponent, broadcastEvent
+  fetchApiData, updateRoute, removeComponent, broadcastEvent, fetchNextSetOfData
 })(ParentCard);
