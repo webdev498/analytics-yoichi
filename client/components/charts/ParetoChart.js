@@ -1,36 +1,29 @@
 import React, {PropTypes} from 'react';
-import {Colors} from '../../../commons/colors';
 import { getIndexFromColumnName } from '../../../commons/utils/utils';
+import { DEFAULT_CHART_OPTIONS } from 'Constants';
 
-const chart = {
-  'labelFontSize': '11',
-  'showAxisLines': '1',
-  'showLabels': '1',
-  'showPercentInTooltip': '1',
-  'showValues': '1',
-  'showYAxisValues': '1',
-  'theme': 'zune',
-  'xAxisNameFontSize': '13',
-  'yAxisNameFontSize': '13',
-  'xAxisNamePadding': '20',
-  'yAxisNamePadding': '20',
-  'lineColor': Colors.coral,
-  'showXAxisLine': '0',
-  'showYAxisLine': '0',
-  'divLineIsDashed': '0',
-  'showsYAxisLine': '0',
-  'divLineAlpha': '20',
-  'chartLeftMargin': '0',
-  'chartRightMargin': '0',
-  'chartBottomMargin': '0',
-  'numDivLines': '6',
-  'baseFont': 'Open Sans, sans-serif',
-  'baseFontColor': Colors.grape,
-  'paletteColors': Colors.defaultGraphPalette,
-  'decimals': '2',
-  'slantLabels': '1',
-  'toolTipSepChar': ' | '
-};
+const chart = Object.assign({}, DEFAULT_CHART_OPTIONS, {
+  showAxisLines: '1',
+  showLabels: '1',
+  chartTopMargin: 10,
+  showPercentInTooltip: '1',
+  showValues: '1',
+  showYAxisValues: '1',
+  xAxisNameFontSize: '13',
+  yAxisNameFontSize: '13',
+  xAxisNamePadding: '20',
+  yAxisNamePadding: '20',
+  showXAxisLine: '0',
+  showYAxisLine: '0',
+  divLineIsDashed: '0',
+  showsYAxisLine: '0',
+  divLineAlpha: '20',
+  chartLeftMargin: '0',
+  chartRightMargin: '0',
+  chartBottomMargin: '0',
+  numDivLines: '6',
+  decimals: '2'
+});
 
 export function generateDataSource(data, chartOptions, fieldMapping, updateChartOptions) {
   const graphBars = [];

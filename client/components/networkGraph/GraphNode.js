@@ -1,5 +1,6 @@
 import React from 'react';
 import {Colors} from '../../../commons/colors';
+import { DEFAULT_FONT } from 'Constants';
 
 import {
   firstCharCapitalize,
@@ -310,7 +311,7 @@ export default class GraphNode {
       actions: (!isNull(node.actions) && !isUndefined(node.actions)) ? node.actions : [],
       borderWidth: '0',
       font: {
-        face: 'Open Sans',
+        face: DEFAULT_FONT,
         color: Colors.pebble,
         size: '11',
         align: 'left'
@@ -358,7 +359,7 @@ export function createNodeObject(node) {
     actions: (!isNull(node.actions) && !isUndefined(node.actions)) ? node.actions : [],
     borderWidth: '0',
     font: {
-      face: 'Open Sans',
+      face: DEFAULT_FONT,
       color: Colors.pebble,
       size: '11',
       align: 'left'

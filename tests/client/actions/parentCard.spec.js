@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {fakeServer, spy} from 'sinon';
-import {Map, fromJS} from 'immutable';
+import {Map} from 'immutable';
 
 import {
   REQUEST_API_DATA,
@@ -99,7 +99,7 @@ describe('ParentCard Actions', () => {
   it('should return the state for REMOVE_COMPONENT', () => {
     const id = 'testId',
       data = {test: 'value'},
-      [removeComponentState, removeDetailsState] = removeComponentWithId(id, data);
+      [removeComponentState] = removeComponentWithId(id, data);
 
     expect(removeComponentState).to.be.an.object;
     expect(removeComponentState).to.have.a.property('id', id);
@@ -320,7 +320,7 @@ describe('ParentCard Actions', () => {
     beforeEach(function() {
       server = fakeServer.create();
       id = 'testId';
-      apiData = fromJS({duration: '1h', components: {}});
+      apiData = Map({});
       auth = { cookies: { access_token: '', token_type: '' } };
       store = mockStore({ apiData, auth });
       input = { id, api, params, options: {} };
@@ -397,21 +397,22 @@ describe('ParentCard Actions', () => {
   });
 
   context('updateApiData function', () => {
-    let apiData, auth, store;
+    let apiData, auth, store, duration;
     beforeEach(function() {
-      apiData = fromJS({duration: '1h', components: {}});
+      apiData = Map({});
       auth = { cookies: { access_token: '', token_type: '' } };
+      duration = '1h';
     });
 
     it('should do nothing if duration is not updated', () => {
-      store = mockStore({ apiData, auth });
+      store = mockStore({ apiData, auth, duration });
       store.dispatch(updateApiData({param: '1h'}, {}));
       const actions = store.getActions();
       expect(actions).to.have.length(0);
     });
 
     it('should do update duration', () => {
-      store = mockStore({ apiData, auth });
+      store = mockStore({ apiData, auth, duration });
       store.dispatch(updateApiData({param: '1d'}, {}));
       const actions = store.getActions();
       expect(actions).to.have.length(1);
@@ -426,13 +427,10 @@ describe('ParentCard Actions', () => {
         dataMap1 = Map({ id, data: {}, api }),
         dataMap2 = Map({ id: id2, data: {}, api });
 
-      let data = fromJS({
-        duration: '1h',
-        components: {}
-      });
+      let data = Map({});
 
-      data = data.updateIn(['components'], val => val.set(id, dataMap1));
-      data = data.updateIn(['components'], val => val.set(id2, dataMap2));
+      data = data.set(id, dataMap1);
+      data = data.set(id2, dataMap2);
 
       store = mockStore({ apiData: data, auth });
       store.dispatch(updateApiData({param: '1d'}, {}));
@@ -447,14 +445,15 @@ describe('ParentCard Actions', () => {
   });
 
   context('broadcastEvent function', () => {
-    let auth;
+    let auth, duration;
     beforeEach(function() {
       auth = { cookies: { access_token: '', token_type: '' } };
+      duration = '1h';
     });
 
     it('should do nothing if there are no components', () => {
-      let apiData = fromJS({duration: '1h', components: {}}),
-        store = mockStore({ apiData, auth });
+      let apiData = Map({}),
+        store = mockStore({ apiData, auth, duration });
 
       store.dispatch(broadcastEvent('testId', {data: 'test'}));
       const actions = store.getActions();
@@ -464,8 +463,8 @@ describe('ParentCard Actions', () => {
     it('should do nothing if the specified id is not in the list of components', () => {
       const api = null, id = 'a1', dataMap = Map({ id, data: {}, api });
 
-      let data = fromJS({ duration: '1h', components: {} });
-      data = data.updateIn(['components'], val => val.set(id, dataMap));
+      let data = Map({});
+      data = data.set(id, dataMap);
 
       let store = mockStore({ apiData: data, auth });
       store.dispatch(broadcastEvent('testId', {data: 'test'}));
@@ -477,8 +476,8 @@ describe('ParentCard Actions', () => {
     it('should dispatch PARENT_CARD_EVENT if the id is available in list of components', () => {
       const api = null, id = 'testId', dataMap = Map({ id, data: {}, api });
 
-      let data = fromJS({ duration: '1h', components: {} });
-      data = data.updateIn(['components'], val => val.set(id, dataMap));
+      let data = Map({});
+      data = data.set(id, dataMap);
 
       let store = mockStore({ apiData: data, auth });
       store.dispatch(broadcastEvent(id, {data: 'test'}));
@@ -493,9 +492,9 @@ describe('ParentCard Actions', () => {
 
   context('removeComponent function', () => {
     it('should dispatch REMOVE_COMPONENT', () => {
-      const apiData = fromJS({duration: '1h', components: {}}),
+      const apiData = Map({}),
         auth = { cookies: { access_token: '', token_type: '' } },
-        store = mockStore({ apiData, auth }),
+        store = mockStore({ apiData, auth, duration: '1h' }),
         id = 'testId';
 
       store.dispatch(removeComponent(id));

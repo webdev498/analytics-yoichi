@@ -1,16 +1,18 @@
 import React from 'react';
+import { DEFAULT_FONT } from 'Constants';
 
 const chart = {
-  'caption': '',
-  'theme': 'fint',
-  'radarfillcolor': '#ffffff',
-  'baseFont': 'Open Sans, sans-serif',
-  'divLineAlpha': '20',
-  'showBorder': '0',
-  'showShadow': '0',
-  'showCanvasBorder': '0',
-  'toolTipSepChar': ' | '
+  caption: '',
+  theme: 'fint',
+  radarfillcolor: '#ffffff',
+  baseFont: DEFAULT_FONT,
+  divLineAlpha: '20',
+  showBorder: '0',
+  showShadow: '0',
+  showCanvasBorder: '0',
+  toolTipSepChar: ' | '
 };
+
 class RadarChart extends React.Component {
   getDataSource() {
     const {props} = this,

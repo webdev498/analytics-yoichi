@@ -5,44 +5,43 @@ import {
   calculateDateDisplayFormat,
   calculateDateDisplayFormatForHistogram
 } from '../../../commons/utils/dateUtils';
-import {
-  generateRawData,
-  isUndefined
-} from '../../../commons/utils/utils';
+
+import { generateRawData, isUndefined } from '../../../commons/utils/utils';
+import { DEFAULT_FONT } from 'Constants';
 
 const chart = {
-  'showvalues': '0',
-  'decimals': '3',
-  'sFormatNumberScale': '1',
-  'setadaptiveymin': '1',
-  'setadaptivesymin': '1',
-  'showborder': '0',
-  'theme': 'zune',
-  'numDivLines': '6',
-  'showAxisLines': '1',
-  'showYAxisValues': '1',
-  'labelDisplay': 'wrap',
-  'rotateLabels': '1',
-  'xAxisName': 'TIME',
-  'scrollHeight': '4',
-  'xAxisNameFontSize': '13',
-  'yAxisNameFontSize': '13',
-  'slantLabels': '1',
-  'labelFontSize': '11',
-  'xAxisNamePadding': '20',
-  'yAxisNamePadding': '20',
-  'showXAxisLine': '1',
-  'showYAxisLine': '0',
-  'divLineIsDashed': '0',
-  'divLineAlpha': '20',
-  'chartLeftMargin': '0',
-  'chartRightMargin': '0',
-  'chartBottomMargin': '0',
-  'baseFont': 'Open Sans, sans-serif',
-  'baseFontColor': Colors.grape,
-  'paletteColors': Colors.defaultGraphPalette,
-  'xAxisLineColor': Colors.axis,
-  'toolTipSepChar': ' | '
+  showvalues: '0',
+  decimals: '3',
+  sFormatNumberScale: '1',
+  setadaptiveymin: '1',
+  setadaptivesymin: '1',
+  showborder: '0',
+  theme: 'zune',
+  numDivLines: '6',
+  showAxisLines: '1',
+  showYAxisValues: '1',
+  labelDisplay: 'wrap',
+  rotateLabels: '1',
+  xAxisName: 'TIME',
+  scrollHeight: '4',
+  xAxisNameFontSize: '13',
+  yAxisNameFontSize: '13',
+  slantLabels: '1',
+  labelFontSize: '11',
+  xAxisNamePadding: '20',
+  yAxisNamePadding: '20',
+  showXAxisLine: '1',
+  showYAxisLine: '0',
+  divLineIsDashed: '0',
+  divLineAlpha: '20',
+  chartLeftMargin: '0',
+  chartRightMargin: '0',
+  chartBottomMargin: '0',
+  baseFont: DEFAULT_FONT,
+  baseFontColor: Colors.grape,
+  paletteColors: Colors.defaultGraphPalette,
+  xAxisLineColor: Colors.axis,
+  toolTipSepChar: ' | '
 };
 
 export function getXindex(currentChartDataColumn, columns) {
@@ -297,15 +296,15 @@ export function generateChartDataSource(rawData, props) {
     }
     annotationItems = annotationItems.concat([
       {
-        'id': 'unit',
-        'type': 'text',
-        'text': props.meta.subTitle,
-        'x': '$chartEndX - 633',
-        'y': '$chartEndY - ' + yPadding,
-        'fontSize': '11',
-        'color': Colors.pebble,
-        'font': 'Open Sans, sans-serif',
-        'rotateText': 'left'
+        id: 'unit',
+        type: 'text',
+        text: props.meta.subTitle,
+        x: '$chartEndX - 633',
+        y: '$chartEndY - ' + yPadding,
+        fontSize: '11',
+        color: Colors.pebble,
+        font: DEFAULT_FONT,
+        rotateText: 'left'
       }
     ]);
   }

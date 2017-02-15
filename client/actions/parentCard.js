@@ -175,7 +175,7 @@ export function fetchApiData(input) {
   // thus making it able to dispatch actions itself.
 
   return function(dispatch, getState) {
-    const currentDuration = getState().apiData.get('duration');
+    const currentDuration = getState().duration;
 
     cookies = getState().auth.cookies;
     dispatch(requestApiData(id, api, isDetails));
@@ -238,15 +238,14 @@ export function fetchNextSetOfData(apiObj, data) {
 // when time range is changed.
 export function updateApiData(newDuration, params) {
   return function(dispatch, getState) {
-    const {apiData, details} = getState();
-
-    const currentDuration = apiData.get('duration');
+    const {apiData, details, duration} = getState();
+    const currentDuration = duration;
 
     if (currentDuration !== newDuration.param) {
       dispatch(changeTimeRange(newDuration.param));
 
-      if (apiData && apiData.has('components')) {
-        const components = apiData.get('components');
+      if (apiData) {
+        const components = apiData;
         components.forEach(component => {
           const id = component.get('id');
           const api = component.get('api');
@@ -285,8 +284,8 @@ export function broadcastEvent(id, eventData) {
   return function(dispatch, getState) {
     const {apiData} = getState();
 
-    if (apiData && apiData.has('components')) {
-      const components = apiData.get('components');
+    if (apiData) {
+      const components = apiData;
 
       components.forEach(component => {
         const componentId = component.get('id');

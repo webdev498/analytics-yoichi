@@ -129,7 +129,6 @@
         "chartOptions": {
           "xAxisname": "STATUS",
           "yAxisname": "COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
@@ -181,7 +180,6 @@
         "chartOptions": {
           "xAxisname": "USER",
           "yAxisname": "COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
@@ -234,7 +232,6 @@
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#C9EDDF, #60E2DC"
         },
         "chartData": {
@@ -289,7 +286,6 @@
         "chartOptions": {
           "xAxisname": "MESSAGE",
           "yAxisname": "COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
@@ -347,7 +343,6 @@
         "chartOptions": {
           "xAxisname": "MESSAGE",
           "yAxisname": "COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
@@ -405,7 +400,6 @@
         "chartOptions": {
           "xAxisname": "MESSAGE",
           "yAxisname": "COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },

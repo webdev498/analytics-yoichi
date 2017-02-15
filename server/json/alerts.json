@@ -187,7 +187,6 @@
         "chartOptions": {
           "xAxisname": "ANOMALY TYPES",
           "pYAxisname": "ANOMALY COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0"
         },
         "chartData": {
@@ -251,8 +250,7 @@
           "paletteColors": "#2BD8D0, #6CD3B4, #B6CD94, #FCC875, #05E9F5",
           "yAxisName": "ANOMALY COUNT",
           "drawAnchors": "1",
-          "legendPosition": "right",
-          "baseFont": "Open Sans, sans-serif"
+          "legendPosition": "right"
         },
         "chartData": {
           "fieldMapping": [

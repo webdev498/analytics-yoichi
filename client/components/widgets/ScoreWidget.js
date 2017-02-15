@@ -1,6 +1,7 @@
 import React from 'react';
 import {Colors} from '../../../commons/colors';
 import {getColor} from '../../../commons/utils/utils';
+import { DEFAULT_FONT } from 'Constants';
 
 class ScoreWidget extends React.Component {
   render() {
@@ -14,7 +15,7 @@ class ScoreWidget extends React.Component {
         lineHeight: '50px',
         textAlign: 'center',
         fontSize: '24px',
-        fontFamily: 'Open Sans, sans-serif'
+        fontFamily: DEFAULT_FONT
       };
 
     let color = getColor(scoreValue);

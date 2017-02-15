@@ -2,15 +2,13 @@ import {
   REQUEST_API_DATA,
   RECEIVE_API_DATA,
   ERROR_API_DATA,
-  TIME_INTERVAL_UPDATE,
   PARENT_CARD_EVENT,
   REMOVE_COMPONENT
 } from 'Constants';
 
-import {Map, fromJS} from 'immutable';
+import {Map} from 'immutable';
 
-const duration = window.localStorage.rankDuration || '1h';
-const initialState = fromJS({duration, components: {}});
+const initialState = Map();
 
 function requestApi(id, state) {
   const dataMap = Map({
@@ -19,7 +17,7 @@ function requestApi(id, state) {
     isError: false
   });
 
-  return state.updateIn(['components'], val => val.set(id, dataMap));
+  return state.set(id, dataMap);
 }
 
 function receiveApi(id, state, action) {
@@ -35,7 +33,7 @@ function receiveApi(id, state, action) {
     query
   });
 
-  return state.updateIn(['components'], val => val.set(id, dataMap));
+  return state.set(id, dataMap);
 }
 
 function errorApi(id, state, action) {
@@ -49,7 +47,7 @@ function errorApi(id, state, action) {
     api
   });
 
-  return state.updateIn(['components'], val => val.set(id, dataMap));
+  return state.set(id, dataMap);
 }
 
 function apiStates(state, action, fn) {
@@ -74,20 +72,15 @@ export default function APIDataReducer(state = initialState, action) {
     case ERROR_API_DATA: {
       return apiStates(state, action, errorApi);
     }
-    case TIME_INTERVAL_UPDATE: {
-      const {data: duration} = action;
-      window.localStorage.rankDuration = duration;
-      return state.set('duration', duration);
-    }
     case REMOVE_COMPONENT: {
       const {id} = action;
-      return state.deleteIn(['components', id]);
+      return state.delete(id);
     }
     case PARENT_CARD_EVENT: {
       const {id, eventData} = action;
 
-      if (state.hasIn(['components', id])) {
-        return state.updateIn(['components', id], value => {
+      if (state.has(id)) {
+        return state.update(id, value => {
           const newValue = value.set('eventData', eventData);
           return newValue;
         });
