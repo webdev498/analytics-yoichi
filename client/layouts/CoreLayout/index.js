@@ -153,18 +153,12 @@ export class CoreLayout extends React.Component {
       isDetails: true
     };
 
-    detailsInput = {
-      id: 'details-view',
-      title: detailsInput.details.title,
-      meta: detailsInput.details.meta,
-      attributes: detailsInput.details.attributes,
-      style: {},
+    detailsInput = Object.assign({}, detailsInput.details, {
       details: detailsInput.details,
-      search: '',
       apiObj,
       fetchNextSetOfData,
       hideDetails: this.hideDetails
-    };
+    });
 
     return detailsInput;
   }
