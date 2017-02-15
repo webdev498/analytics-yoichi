@@ -4,7 +4,6 @@ import Header from './PageHeader';
 import Sidebar from './Sidebar';
 import PageContent from './PageContent';
 import ParentCard from 'containers/ParentCard';
-import DetailsContainer from 'containers/DetailsContainer';
 import DetailsTable from 'components/details';
 import {fetchNextSetOfData} from 'actions/parentCard';
 
@@ -139,27 +138,45 @@ export class CoreLayout extends React.Component {
     }
   }
 
+  getDetailsInput(detailsInput) {
+    detailsInput.details.meta.api.queryParams = Object.assign({},
+      detailsInput.details.meta.api.queryParams, {
+        start: detailsInput.data.interval.from,
+        end: detailsInput.data.interval.to
+      });
+
+    let apiObj = {
+      id: detailsInput.details.id,
+      api: detailsInput.details.meta.api,
+      params: {},
+      options: {},
+      isDetails: true
+    };
+
+    detailsInput = {
+      id: 'details-view',
+      title: detailsInput.details.title,
+      meta: detailsInput.details.meta,
+      attributes: detailsInput.details.attributes,
+      style: {},
+      details: detailsInput.details,
+      search: '',
+      apiObj,
+      fetchNextSetOfData,
+      hideDetails: this.hideDetails
+    };
+
+    return detailsInput;
+  }
+
   render() {
     const {props, state} = this,
       {showDetails} = this.state;
 
-    let detailsInput = {...state.input, id: 'details-view'},
-      apiObj = {};
+    let detailsInput = {};
 
-    if (showDetails && detailsInput.details) {
-      detailsInput.details.meta.api.queryParams = Object.assign({},
-        detailsInput.details.meta.api.queryParams, {
-          start: detailsInput.data.interval.from,
-          end: detailsInput.data.interval.to
-        });
-
-      apiObj = {
-        id: detailsInput.details.id,
-        api: detailsInput.details.meta.api,
-        params: {},
-        options: {},
-        isDetails: true
-      };
+    if (showDetails && state.input && state.input.details) {
+      detailsInput = this.getDetailsInput(state.input);
     }
 
     return (
@@ -186,17 +203,7 @@ export class CoreLayout extends React.Component {
             showDetails && detailsInput.details
             ? (
               <div style={styles.details}>
-                <ParentCard
-                  id='details-view'
-                  title={detailsInput.details.title}
-                  meta={detailsInput.details.meta}
-                  attributes={detailsInput.details.attributes}
-                  style={{}}
-                  details={detailsInput.details}
-                  search=''
-                  apiObj={apiObj}
-                  fetchNextSetOfData={fetchNextSetOfData}
-                  hideDetails={this.hideDetails}>
+                <ParentCard {...detailsInput}>
                   <DetailsTable />
                 </ParentCard>
               </div>
