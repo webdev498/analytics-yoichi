@@ -168,6 +168,8 @@ class DetailsContainer extends React.Component {
     const {props, props: {detailsData}} = this,
       details = {itemsPerPage: 20};
 
+    console.log('DetailsContainer Props', props);
+
     return (
       <div style={styles.wrap}>
         <header style={styles.header}>

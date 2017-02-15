@@ -21,8 +21,9 @@ export default class DetailsTable extends React.Component {
     style: PropTypes.object,
     detailsData: PropTypes.object,
     details: PropTypes.object,
-    fetchNextSetOfData: PropTypes.func.isRequired,
-    updateRoute: PropTypes.func.isRequired
+    data: PropTypes.object,
+    fetchNextSetOfData: PropTypes.func,
+    updateRoute: PropTypes.func
   }
 
   constructor(props) {
@@ -124,13 +125,20 @@ export default class DetailsTable extends React.Component {
           });
         }
       }
+      console.log('url', url);
       updateRoute(url);
     };
   }
 
   render() {
-    const {props, props: {details, detailsData}} = this;
+    let {props, props: {details, detailsData}} = this;
     const style = Object.assign({}, styles.wrap, props.style);
+
+    console.log('detailsTable', props);
+
+    if (props.data && !detailsData) {
+      detailsData = props.data;
+    }
 
     if (!detailsData) return null;
 

@@ -41,6 +41,15 @@ const styles = {
     display: 'inline-block',
     position: 'relative',
     verticalAlign: 'middle'
+  },
+  exitWrap: {
+    cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center'
+  },
+  backIcon: {
+    marginLeft: 0,
+    marginRight: '15px'
   }
 };
 
@@ -89,8 +98,18 @@ export default class ParentCardHeader extends React.Component {
 
     return <header style={{...styles.header, ...headerStyle.style}}>
       {
+        props.meta.showBackIcon === true
+        ? <div style={styles.exitWrap} onClick={props.hideDetails}>
+          <FontIcon className='material-icons'
+            style={{...styles.icon, ...styles.backIcon}}>
+              arrow_back
+          </FontIcon>
+        </div>
+        : null
+      }
+      {
         state.floatingSearchBar === false
-        ? <div>
+        ? <div style={{...headerStyle.titleWrap}}>
           <span style={{...styles.title, ...headerStyle.title}}>
             {props.meta.title}
           </span>

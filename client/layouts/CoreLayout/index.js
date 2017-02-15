@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import Header from './PageHeader';
 import Sidebar from './Sidebar';
 import PageContent from './PageContent';
+import ParentCard from 'containers/ParentCard';
 import DetailsContainer from 'containers/DetailsContainer';
+import DetailsTable from 'components/details';
+import {fetchNextSetOfData} from 'actions/parentCard';
 
 import { fetchUserData, logout } from 'actions/auth';
 import { fetchActionsList } from 'actions/actionsList';
@@ -140,7 +143,25 @@ export class CoreLayout extends React.Component {
     const {props, state} = this,
       {showDetails} = this.state;
 
-    let detailsInput = {...state.input, id: 'details-view'};
+    let detailsInput = {...state.input, id: 'details-view'},
+      apiObj = {};
+
+    if (showDetails && detailsInput.details) {
+      console.log('showDetailstest');
+      detailsInput.details.meta.api.queryParams = Object.assign({},
+        detailsInput.details.meta.api.queryParams, {
+          start: detailsInput.data.interval.from,
+          end: detailsInput.data.interval.to
+        });
+
+      apiObj = {
+        id: detailsInput.details.id,
+        api: detailsInput.details.meta.api,
+        params: {},
+        options: {},
+        isDetails: true
+      };
+    }
 
     return (
       <div style={styles.wrap}>
@@ -164,13 +185,42 @@ export class CoreLayout extends React.Component {
 
           {
             showDetails
+            ? console.log('detailsInput', detailsInput)
+            : null
+          }
+
+          {
+            showDetails && detailsInput.details
+            ? (
+              <div style={styles.details}>
+                <ParentCard
+                  id='details-view'
+                  title={detailsInput.details.title}
+                  meta={detailsInput.details.meta}
+                  attributes={detailsInput.details.attributes}
+                  style={{}}
+                  details={detailsInput.details}
+                  search=''
+                  apiObj={apiObj}
+                  fetchNextSetOfData={fetchNextSetOfData}
+                  hideDetails={this.hideDetails}>
+                  <DetailsTable />
+                </ParentCard>
+              </div>
+            )
+            : null
+          }
+
+          { /* {
+            showDetails
             ? (
               <div style={styles.details}>
                 <DetailsContainer {...detailsInput} hideDetails={this.hideDetails} />
               </div>
             )
             : null
-          }
+          } */ }
+
         </div>
       </div>
     );

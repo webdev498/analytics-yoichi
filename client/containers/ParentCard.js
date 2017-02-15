@@ -58,7 +58,7 @@ function getParamsAndReportId(props, dataObj, durationUpdated) {
     queryParams.window = '';
   }
 
-  if (dataObj.queryParams) {
+  if (dataObj && dataObj.queryParams) {
     queryParams = Object.assign({}, queryParams, dataObj.queryParams);
   }
   else {
@@ -179,6 +179,25 @@ export class ParentCard extends React.Component {
     });
   }
 
+  getDetailsData(dataObj) {
+    const {props, props: {data, meta}} = this;
+    if (!data || !meta.api) return;
+
+    let {queryParams, reportId} = getParamsAndReportId(props, dataObj, this.durationUpdated);
+
+    if (!queryParams) return;
+
+    const apiObj = {
+      path: `${DETAILS_BASE_URL}/{reportId}`,
+      pathParams: {
+        reportId
+      },
+      queryParams
+    };
+
+    return apiObj;
+  }
+
   getDetailsTable() {
     const {detailsData, details, fetchNextSetOfData, updateRoute} = this.props;
     return <DetailsTable
@@ -280,24 +299,6 @@ export class ParentCard extends React.Component {
     });
   }
 
-  getDetailsData(dataObj) {
-    const {props, props: {data, meta}} = this;
-    if (!data || !meta.api) return;
-
-    let {queryParams, reportId} = getParamsAndReportId(props, dataObj, this.durationUpdated);
-    if (!queryParams) return;
-
-    const apiObj = {
-      path: `${DETAILS_BASE_URL}/{reportId}`,
-      pathParams: {
-        reportId
-      },
-      queryParams
-    };
-
-    return apiObj;
-  }
-
   render() {
     const {props, state} = this;
 
@@ -330,6 +331,8 @@ export class ParentCard extends React.Component {
     const isComponentError = props.isError && (props.meta.showErrorMessage !== false) && !isDetails,
       isDetailsError = props.detailsIsError && isDetails;
 
+    // console.log('parentCard', props);
+
     return (
       <div style={cardStyle} id={props.id}>
         {
@@ -347,7 +350,8 @@ export class ParentCard extends React.Component {
             getData={this.getData}
             updateSearch={this.updateSearch}
             toggleDetailsTable={this.toggleDetailsTable}
-            history={this.props.history} />
+            history={this.props.history}
+            hideDetails={props.hideDetails} />
           : null
         }
 

@@ -88,6 +88,38 @@
             "borderTop": "6px solid #2bd8d0"
           }
         },
+        "details": {
+          "itemsPerPage": 10,
+          "meta": {
+            "showHeader": true,
+            "showSearch": true,
+            "showBackIcon": true,
+            "api": {
+              "path": "/api/analytics/reporting/details/{reportId}",
+              "pathParams": {
+                "reportId": "taf_event_count_time_shifted"
+              },
+              "queryParams": {
+                "count": 100
+              }
+            },
+            "title": "Events Processed"
+          },
+          "attributes": {
+            "header": {
+              "titleWrap": {
+                "alignItems": "center",
+                "display": "inline-flex"
+              }
+            },
+            "style": {
+              "marginLeft": "33px",
+              "marginRight": "33px",
+              "marginTop": "33px"
+            }
+          },
+          "id": "details-view"
+        },
         "id": "3",
         "type": "MetricsCard",
         "title": "Events Processed"
