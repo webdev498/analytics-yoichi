@@ -4,124 +4,132 @@
       {
         "meta": {
           "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_alert_count_time_shifted"
-            },
-            "queryParams": {
-              "window": ""
-            }
-          }
+          "api": null
         },
-        "name": "MetricsCard",
         "attributes": {
-          "countStyle": {
-            "color": "#F69275"
-          },
           "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
+            "width": "100%",
+            "backgroundColor": "transparent"
           }
         },
-        "id": "1",
-        "type": "MetricsCard",
-        "title": "High Priority Anomalies",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": "",
-          "page": "/alerts"
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_malware_count_time_shifted"
+        "id": "metricsBar",
+        "type": "MetricsBar",
+        "childrenComponent": [
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_alert_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
             },
-            "queryParams": {
-              "window": ""
-            }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#F69275"
-          },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
-          }
-        },
-        "id": "2",
-        "type": "MetricsCard",
-        "title": "High Priority Malware",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": "malware",
-          "page": "/alerts"
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_event_count_time_shifted"
+            "attributes": {
+              "countStyle": {
+                "color": "#F69275"
+              },
+              "style": {
+                "marginRight": "2px",
+                "width": "25%"
+              }
             },
-            "queryParams": {
-              "window": ""
+            "id": "1",
+            "type": "MetricsCard",
+            "title": "High Priority Anomalies",
+            "clickData": {
+              "tableId": "RecentAnomalies",
+              "filterText": "",
+              "page": "/alerts"
             }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
-          }
-        },
-        "id": "3",
-        "type": "MetricsCard",
-        "title": "Events Processed"
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_asset_count_time_shifted"
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_malware_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
             },
-            "queryParams": {
-              "window": ""
+            "attributes": {
+              "countStyle": {
+                "color": "#F69275"
+              },
+              "style": {
+                "marginRight": "2px",
+                "width": "25%"
+              }
+            },
+            "id": "2",
+            "type": "MetricsCard",
+            "title": "High Priority Malware",
+            "clickData": {
+              "tableId": "RecentAnomalies",
+              "filterText": "malware",
+              "page": "/alerts"
             }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_event_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
+            },
+            "attributes": {
+              "countStyle": {
+                "color": "#2BC6D6"
+              },
+              "style": {
+                "marginRight": "2px",
+                "width": "25%"
+              }
+            },
+            "id": "3",
+            "type": "MetricsCard",
+            "title": "Events Processed"
+          },
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_asset_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
+            },
+            "attributes": {
+              "countStyle": {
+                "color": "#2BC6D6"
+              },
+              "style": {
+                "marginRight": "2px",
+                "width": "25%"
+              }
+            },
+            "id": "4",
+            "type": "MetricsCard",
+            "title": "Assets Monitored"
           }
-        },
-        "id": "4",
-        "type": "MetricsCard",
-        "title": "Assets Monitored"
+        ]
       }
     ],
     [
@@ -167,7 +175,8 @@
         "attributes": {
           "chartWidth": "100%",
           "style": {
-            "marginRight": "33px",
+            "marginLeft": "30px",
+            "marginRight": "30px",
             "width": "50%"
           },
           "id": "loginFailureByType",
@@ -218,7 +227,8 @@
         "attributes": {
           "chartWidth": "100%",
           "style": {
-            "width": "50%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "id": "loginFailureByUser",
           "chartHeight": "350"
@@ -270,7 +280,9 @@
           "chartHeight": "350",
           "chartType": "area2d",
           "style": {
-            "width": "100%"
+            "width": "100%",
+            "marginLeft": "30px",
+            "marginRight": "30px"
           },
           "chartOptions": {
             "labelFontSize": "9"
@@ -330,7 +342,8 @@
         "attributes": {
           "chartWidth": "100%",
           "style": {
-            "marginRight": "33px",
+            "marginLeft": "30px",
+            "marginRight": "30px",
             "width": "33%"
           },
           "id": "AccountManagementEventsByType",
@@ -387,7 +400,7 @@
         "attributes": {
           "chartWidth": "100%",
           "style": {
-            "marginRight": "33px",
+            "marginRight": "30px",
             "width": "33%"
           },
           "id": "ComputerManagementEventsByType",
@@ -444,7 +457,8 @@
         "attributes": {
           "chartWidth": "100%",
           "style": {
-            "width": "33%"
+            "width": "33%",
+            "marginRight": "30px"
           },
           "id": "SecurityGroupManagementEventsByType",
           "chartHeight": "350"
