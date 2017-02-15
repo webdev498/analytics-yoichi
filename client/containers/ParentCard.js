@@ -17,7 +17,7 @@ const styles = {
     position: 'relative',
     backgroundColor: 'white',
     borderRadius: 0,
-    padding: '33px',
+    padding: '30px',
     boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
   },
   childwrap: {
@@ -365,7 +365,7 @@ export class ParentCard extends React.Component {
           isDetailsError
           ? this.getErrorElement()
           : (
-            <div style={{marginLeft: '-33px', marginRight: '-33px'}}>
+            <div style={{marginLeft: '-30px', marginRight: '-30px'}}>
               {
                 state.showDetailsFlag
                 ? this.getDetailsTable()
