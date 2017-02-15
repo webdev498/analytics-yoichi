@@ -14,6 +14,7 @@
             }
           }
         },
+        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -46,6 +47,7 @@
             }
           }
         },
+        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -71,7 +73,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_event_count_time_shifted"
+              "reportId": "taf_core_processes_wrong_user_time_shifted"
             },
             "queryParams": {
               "window": ""
@@ -80,50 +82,17 @@
         },
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#F69275"
           },
           "style": {
             "marginRight": "3px",
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #F69275"
           }
-        },
-        "details": {
-          "itemsPerPage": 5,
-          "meta": {
-            "showHeader": true,
-            "showSearch": true,
-            "showBack": true,
-            "showClose": true,
-            "api": {
-              "path": "/api/analytics/reporting/details/{reportId}",
-              "pathParams": {
-                "reportId": "taf_event_count_time_shifted"
-              },
-              "queryParams": {
-                "count": 100
-              }
-            },
-            "title": "Events Processed"
-          },
-          "attributes": {
-            "header": {
-              "titleWrap": {
-                "alignItems": "center",
-                "display": "inline-flex"
-              }
-            },
-            "style": {
-              "marginLeft": "33px",
-              "marginRight": "33px",
-              "marginTop": "33px"
-            }
-          },
-          "id": "details-view"
         },
         "id": "3",
         "type": "MetricsCard",
-        "title": "Events Processed"
+        "title": "Abnormal Process Users"
       },
       {
         "meta": {
@@ -131,7 +100,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_asset_count_time_shifted"
+              "reportId": "taf_core_processes_path_anomalies_time_shifted"
             },
             "queryParams": {
               "window": ""
@@ -140,50 +109,17 @@
         },
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#F69275"
           },
           "style": {
             "marginRight": "3px",
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #F69275"
           }
-        },
-        "details": {
-          "itemsPerPage": 5,
-          "meta": {
-            "showHeader": true,
-            "showSearch": true,
-            "showBack": true,
-            "showClose": true,
-            "api": {
-              "path": "/api/analytics/reporting/details/{reportId}",
-              "pathParams": {
-                "reportId": "taf_asset_count_time_shifted"
-              },
-              "queryParams": {
-                "count": 100
-              }
-            },
-            "title": "Assets Monitored"
-          },
-          "attributes": {
-            "header": {
-              "titleWrap": {
-                "alignItems": "center",
-                "display": "inline-flex"
-              }
-            },
-            "style": {
-              "marginLeft": "33px",
-              "marginRight": "33px",
-              "marginTop": "33px"
-            }
-          },
-          "id": "details-view"
         },
         "id": "4",
         "type": "MetricsCard",
-        "title": "Assets Monitored"
+        "title": "Abnormal Process Launch"
       }
     ],
     [
