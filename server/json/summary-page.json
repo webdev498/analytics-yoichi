@@ -174,7 +174,7 @@
         "attributes": {
           "chartWidth": "100%",
           "style": {
-            "marginLeft": "33px",
+            "marginLeft": "30px",
             "marginRight": "30px",
             "width": "50%"
           },
@@ -276,7 +276,7 @@
           "chartWidth": "100%",
           "chartType": "area2d",
           "style": {
-            "marginLeft": "33px",
+            "marginLeft": "30px",
             "marginRight": "30px",
             "width": "50%"
           },
@@ -387,7 +387,7 @@
         },
         "attributes": {
           "style": {
-            "marginLeft": "33px",
+            "marginLeft": "30px",
             "marginRight": "30px",
             "width": "50%"
           },
@@ -524,7 +524,7 @@
         },
         "attributes": {
           "style": {
-            "marginLeft": "33px",
+            "marginLeft": "30px",
             "marginRight": "30px",
             "width": "100%"
           },
@@ -660,7 +660,7 @@
             "marginTop": "-30px"
           },
           "style": {
-            "marginLeft": "33px",
+            "marginLeft": "30px",
             "marginRight": "30px",
             "width": "50%"
           },
@@ -760,8 +760,8 @@
         "name": "ReactableTable",
         "attributes": {
           "style": {
-            "marginLeft": "33px",
-            "marginRight": "33px",
+            "marginLeft": "30px",
+            "marginRight": "30px",
             "width": "33%"
           },
           "id": "least-used-software-details"
