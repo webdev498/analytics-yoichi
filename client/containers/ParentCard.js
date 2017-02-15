@@ -180,14 +180,15 @@ export class ParentCard extends React.Component {
   }
 
   getDetailsTable() {
-    const {detailsData, details, fetchNextSetOfData} = this.props;
+    const {detailsData, details, fetchNextSetOfData, updateRoute} = this.props;
     return <DetailsTable
       style={styles.detailsTable}
       detailsData={detailsData}
       details={details}
       search={this.state.search}
       apiObj={this.detailsApiObj}
-      fetchNextSetOfData={fetchNextSetOfData} />;
+      fetchNextSetOfData={fetchNextSetOfData}
+      updateRoute={updateRoute} />;
   }
 
   componentDidMount() {
