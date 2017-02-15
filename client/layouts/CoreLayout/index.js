@@ -147,7 +147,6 @@ export class CoreLayout extends React.Component {
       apiObj = {};
 
     if (showDetails && detailsInput.details) {
-      console.log('showDetailstest');
       detailsInput.details.meta.api.queryParams = Object.assign({},
         detailsInput.details.meta.api.queryParams, {
           start: detailsInput.data.interval.from,
@@ -184,12 +183,6 @@ export class CoreLayout extends React.Component {
           }
 
           {
-            showDetails
-            ? console.log('detailsInput', detailsInput)
-            : null
-          }
-
-          {
             showDetails && detailsInput.details
             ? (
               <div style={styles.details}>
@@ -210,17 +203,6 @@ export class CoreLayout extends React.Component {
             )
             : null
           }
-
-          { /* {
-            showDetails
-            ? (
-              <div style={styles.details}>
-                <DetailsContainer {...detailsInput} hideDetails={this.hideDetails} />
-              </div>
-            )
-            : null
-          } */ }
-
         </div>
       </div>
     );

@@ -331,8 +331,6 @@ export class ParentCard extends React.Component {
     const isComponentError = props.isError && (props.meta.showErrorMessage !== false) && !isDetails,
       isDetailsError = props.detailsIsError && isDetails;
 
-    // console.log('parentCard', props);
-
     return (
       <div style={cardStyle} id={props.id}>
         {

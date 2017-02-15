@@ -98,7 +98,7 @@ export default class ParentCardHeader extends React.Component {
 
     return <header style={{...styles.header, ...headerStyle.style}}>
       {
-        props.meta.showBackIcon === true
+        props.meta.showBack === true
         ? <div style={styles.exitWrap} onClick={props.hideDetails}>
           <FontIcon className='material-icons'
             style={{...styles.icon, ...styles.backIcon}}>
@@ -184,6 +184,18 @@ export default class ParentCardHeader extends React.Component {
               style={styles.icon}
               onClick={props.history.goBack}>
               arrow_back
+            </FontIcon>
+          )
+          : null
+        }
+
+        {
+          props.meta.showClose === true
+          ? (
+            <FontIcon className='material-icons'
+              style={styles.icon}
+              onClick={props.hideDetails}>
+              close
             </FontIcon>
           )
           : null

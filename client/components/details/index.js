@@ -23,7 +23,8 @@ export default class DetailsTable extends React.Component {
     details: PropTypes.object,
     data: PropTypes.object,
     fetchNextSetOfData: PropTypes.func,
-    updateRoute: PropTypes.func
+    updateRoute: PropTypes.func,
+    apiObj: PropTypes.object
   }
 
   constructor(props) {
@@ -125,18 +126,15 @@ export default class DetailsTable extends React.Component {
           });
         }
       }
-      console.log('url', url);
       updateRoute(url);
     };
   }
 
   render() {
-    let {props, props: {details, detailsData}} = this;
+    let {props, props: {details, detailsData, apiObj}} = this;
     const style = Object.assign({}, styles.wrap, props.style);
 
-    console.log('detailsTable', props);
-
-    if (props.data && !detailsData) {
+    if (props.data && !detailsData && !apiObj.api.queryParams.from) {
       detailsData = props.data;
     }
 
