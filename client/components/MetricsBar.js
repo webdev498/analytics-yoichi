@@ -18,7 +18,7 @@ class MetricsBar extends React.Component {
       <div style={styles.wrap}>
         {props.childrenComponent.map(child => {
           return (
-            <ParentCard {...child} key={child.id}>
+            <ParentCard {...child} key={child.id} history={props.history}>
               <MetricsCard />
             </ParentCard>
           );
