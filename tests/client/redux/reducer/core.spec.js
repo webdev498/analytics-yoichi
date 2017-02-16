@@ -77,9 +77,7 @@ describe('Redux Core Reducer', function() {
       data = {json: {layout: [[{dummy: 'data'}]]}};
 
     let state = setLayoutData(id, data);
-
     state = initState(id, state);
-
     expect(state).to.have.key(id);
     expect(state.get(id)).to.have.property('isFetching', true);
     expect(state.get(id)).to.have.property('isError', false);
@@ -89,9 +87,8 @@ describe('Redux Core Reducer', function() {
 
   it('Should update the state with layout info for "RECEIVE_LAYOUT_DATA" action.', function() {
     const id = '1',
-      data = {json: {layout: [[{dummy: 'data'}]]}};
-
-    let state = setLayoutData(id, data);
+      data = {json: {layout: [[{dummy: 'data'}]]}},
+      state = setLayoutData(id, data);
 
     expect(state).to.have.key(id);
     expect(state.get(id)).to.have.property('isFetching', false);
@@ -101,16 +98,55 @@ describe('Redux Core Reducer', function() {
   });
 
   it('Should update the state with error msg for "ERROR_LAYOUT_DATA" action.', function() {
-    const id = '1';
-    let state = initState(id);
-
-    const errorData = {msg: 'error'};
-    state = coreReducer(state, {
-      type: ERROR_LAYOUT_DATA,
-      id,
-      errorData
-    });
+    const id = '1',
+      errorData = {msg: 'error'},
+      state = coreReducer(undefined, {
+        type: ERROR_LAYOUT_DATA,
+        id,
+        errorData
+      });
 
     expect(state).to.have.key(id);
+  });
+
+  context('Location Change Action', function() {
+    it('should do nothing if state has no layouts', function() {
+      const state = coreReducer(undefined, {
+        type: '@@router/LOCATION_CHANGE',
+        payload: {pathname: '/alerts'}
+      });
+
+      expect(state).to.be.empty;
+    });
+
+    it('should do nothing if the saved layout id is same as the payload', function() {
+      const id = '/alerts',
+        data = { json: { layout: [[{ dummy: 'data' }]] } };
+
+      let state = setLayoutData(id, data);
+      expect(state).to.have.key(id);
+
+      state = coreReducer(state, {
+        type: '@@router/LOCATION_CHANGE',
+        payload: { pathname: '/alerts' }
+      });
+
+      expect(state).to.have.key(id);
+    });
+
+    it('should do remove saved layouts if id is not same as the payload', function() {
+      const id = '/alerts',
+        data = { json: { layout: [[{ dummy: 'data' }]] } };
+
+      let state = setLayoutData(id, data);
+      expect(state).to.have.key(id);
+
+      state = coreReducer(state, {
+        type: '@@router/LOCATION_CHANGE',
+        payload: { pathname: '/test' }
+      });
+
+      expect(state).to.be.empty;
+    });
   });
 });
