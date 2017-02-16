@@ -19,9 +19,9 @@ const styles = {
     fontWeight: 300
   },
   title: {
-    fontSize: '22px',
-    lineHeight: '22px',
-    fontWeight: 300,
+    fontSize: '21px',
+    lineHeight: '21px',
+    fontWeight: 'normal',
     margin: 0,
     marginBottom: '15px'
   },

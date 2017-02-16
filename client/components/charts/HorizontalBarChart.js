@@ -15,13 +15,15 @@ import { DEFAULT_FONT } from 'Constants';
 const styles = {
   chartCaption: {
     fontSize: '14px',
-    fontWeight: '600',
     color: Colors.grape
   },
   minHeight: {
     minHeight: '150px'
   },
-  noData: {}
+  noData: {},
+  subTitle: {
+    fontSize: '12px'
+  }
 };
 
 export function generateDataArray(parameters) {
@@ -438,7 +440,7 @@ class HorizontalBarChart extends React.Component {
     return (
       <div style={{...props.attributes.chartBorder, ...styles.noData}}>
         <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>{props.meta.title}
-          <span style={{fontSize: '12px', fontWeight: 'normal'}}> {props.meta.subTitle}</span>
+          <span style={styles.subTitle}> {props.meta.subTitle}</span>
         </div>
         <div id={props.attributes.id} style={{...styles.minHeight, ...chartStyle}} />
       </div>

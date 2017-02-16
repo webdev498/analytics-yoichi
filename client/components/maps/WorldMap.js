@@ -9,7 +9,7 @@ const styles = {
   chartCaption: {
     fontSize: '14px',
     color: Colors.grape,
-    fontWeight: '600',
+    fontWeight: 'normal',
     position: 'absolute',
     marginTop: '-30px'
   },
