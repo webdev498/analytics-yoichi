@@ -15,7 +15,9 @@ const styles = {
     height: '45px',
     width: '45px',
     lineHeight: '45px',
-    fontSize: '20px'
+    fontSize: '20px',
+    border: 'none',
+    boxShadow: 'none'
   },
   summaryWrap: {
     marginLeft: '10px'
