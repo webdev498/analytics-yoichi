@@ -92,7 +92,7 @@
             },
             "attributes": {
               "countStyle": {
-                "color": "#2BC6D6"
+                "color": "#03C5ED"
               },
               "style": {
                 "marginRight": "2px",
@@ -151,7 +151,7 @@
             },
             "attributes": {
               "countStyle": {
-                "color": "#2BC6D6"
+                "color": "#03C5ED"
               },
               "style": {
                 "marginRight": "2px",
@@ -267,7 +267,7 @@
         "chartOptions": {
           "xAxisname": "ANOMALY TYPES",
           "pYAxisname": "ANOMALY COUNT",
-          "paletteColors": "#2bd8d0"
+          "paletteColors": "#03c5ed"
         },
         "chartData": {
           "fieldMapping": [

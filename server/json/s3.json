@@ -95,7 +95,7 @@
             "name": "MetricsCard",
             "attributes": {
               "countStyle": {
-                "color": "#2BC6D6"
+                "color": "#03C5ED"
               },
               "style": {
                 "marginRight": "3px",
