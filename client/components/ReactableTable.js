@@ -7,7 +7,6 @@ import ScoreWidget from 'components/widgets/ScoreWidget';
 import AssetWidget from 'components/widgets/AssetWidget';
 
 import {getCountryCode} from '../../commons/utils/countryUtils';
-import {displayEllipsis} from '../../commons/utils/utils';
 
 const {Table, Tr, Td} = Reactable;
 
@@ -59,7 +58,7 @@ function loadChartComponent(column) {
 }
 
 function loadText(column) {
-  let {data, ellipsis} = column;
+  let {data} = column;
   return (
     <div>
       {data.map((text, index) => {
@@ -77,7 +76,7 @@ function loadText(column) {
             {
               !text.header && index === 0 && data.length > 1
               ? <span style={styles.header}>{text.value}</span>
-              : displayTextWithEllipsis(text.value, ellipsis)
+              : text.value
             }
             {
               text.header && text.header === 'Country'
@@ -88,15 +87,6 @@ function loadText(column) {
         );
       })}
     </div>
-  );
-}
-
-function displayTextWithEllipsis(value, ellipsis) {
-  let text = displayEllipsis(value, ellipsis);
-  return (
-    text === value
-    ? <span>{value + ' '}</span>
-    : <span title={value}>{text + ' '}</span>
   );
 }
 

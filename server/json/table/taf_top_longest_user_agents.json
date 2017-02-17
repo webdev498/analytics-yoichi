@@ -18,11 +18,7 @@
               "wordBreak": "break-all"
             },
             "type": "text",
-            "header": "LONGEST USER AGENT",
-            "ellipsis": {
-              "max": 250,
-              "min": 120
-            }
+            "header": "LONGEST USER AGENT"
           },
           {
             "data": [

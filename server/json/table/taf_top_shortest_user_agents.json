@@ -18,11 +18,7 @@
               "wordBreak": "break-all"
             },
             "type": "text",
-            "header": "SHORTEST USER AGENT",
-            "ellipsis": {
-              "max": 250,
-              "min": 120
-            }
+            "header": "SHORTEST USER AGENT"
           },
           {
             "data": [
