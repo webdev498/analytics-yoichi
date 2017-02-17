@@ -1,32 +1,56 @@
 import React, {PropTypes} from 'react';
+import FontIcon from 'material-ui/FontIcon';
 import {Colors} from '../../commons/colors';
 import {getArrowIcon} from '../../commons/utils/graphUtils';
 
+import './styles/_metricsCard.scss';
+
 const styles = {
   card: {
-    padding: '33px 33px 20px 33px'
+    padding: '30px 30px 16px 30px',
+    boxShadow: '2px 2px 2px 1px rgba(0, 0, 0, 0.2)'
   },
   wrapStyle: {
     display: 'flex'
   },
   countStyle: {
     fontSize: '35px',
-    lineHeight: '35px'
+    lineHeight: '35px',
+    fontWeight: 300
   },
-  text: {
+  title: {
     fontSize: '21px',
     lineHeight: '21px',
     fontWeight: 'normal',
     margin: 0,
-    marginBottom: '13px'
+    marginBottom: '15px'
+  },
+  detailsWrap: {
+    display: 'flex',
+    marginTop: '15px',
+    color: Colors.grape
   },
   details: {
-    paddingTop: '5px',
-    fontSize: '13px',
+    display: 'inline-block',
+    fontSize: '12px',
     marginLeft: 'auto',
     cursor: 'pointer',
-    color: Colors.grape,
-    textAlign: 'right'
+    textAlign: 'right',
+    height: '26px',
+    textTransform: 'uppercase',
+    lineHeight: '26px',
+    backgroundColor: Colors.cloud,
+    paddingLeft: '8px'
+  },
+  iconWrap: {
+    display: 'inline-block',
+    height: '26px',
+    backgroundColor: Colors.cloud
+  },
+  detailsIcon: {
+    fontSize: '20px',
+    lineHeight: '26px',
+    transform: 'rotate(-90deg)'
   },
   percentageWrap: {
     marginLeft: 'auto',
@@ -99,8 +123,8 @@ class MetricsCard extends React.Component {
     const { props } = this;
 
     return (
-      <div style={styles.card}>
-        <h3 style={styles.text}>{props.title}</h3>
+      <div style={styles.card} className='metric-card'>
+        <h3 style={styles.title}>{props.title}</h3>
 
         <div style={styles.wrapStyle}>
           <div style={{...styles.countStyle, ...props.attributes.countStyle}}>
@@ -114,9 +138,14 @@ class MetricsCard extends React.Component {
           </div>
         </div>
 
-        <div style={styles.details}
+        <div style={styles.detailsWrap}
           onClick={this.handleClick}>
-          View details
+          <span style={styles.details}>View details</span>
+          <span style={styles.iconWrap}>
+            <FontIcon style={styles.detailsIcon} className='material-icons'>
+                arrow_drop_down
+            </FontIcon>
+          </span>
         </div>
       </div>
     );

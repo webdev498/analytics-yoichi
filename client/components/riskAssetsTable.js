@@ -45,7 +45,7 @@ class riskAssetsTable extends React.Component {
               headingStyle={{width: '110px', overflowWrap: 'break-word', textTransform: 'none'}} />
           </Td>
           <Td column='score' style={{padding: '15px 0', width: '60px', textAlign: 'right'}}>
-            <ScoreWidget scoreValue={details.risk.score} inverse />
+            <ScoreWidget scoreValue={details.risk.score} />
           </Td>
         </Tr>
       );

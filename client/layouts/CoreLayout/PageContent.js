@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 
 const styles = {
   content: {
-    padding: '33px',
     position: 'relative'
   },
   error: {

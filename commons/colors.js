@@ -1,3 +1,5 @@
+export const BlueColor = '#2BC6D6';
+
 export const GarnetColor = '#24293d';
 export const GrapeColor = '#444c63';
 export const PebbleColor = GrapeColor;
@@ -76,6 +78,7 @@ export const notificationMessageBGColor = '#EBEBEF';
 export const CloudColorShades = ['#EEEEF1'];
 
 export const Colors = {
+  blue: BlueColor,
   garnet: GarnetColor,
   grape: GrapeColor,
   pebble: PebbleColor,

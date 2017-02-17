@@ -23,7 +23,9 @@ const styles = {
     width: '45px',
     lineHeight: '45px',
     fontSize: '20px',
-    marginRight: '10px'
+    marginRight: '10px',
+    border: 'none',
+    boxShadow: 'none'
   },
   scoreDetails: {
     display: 'flex',

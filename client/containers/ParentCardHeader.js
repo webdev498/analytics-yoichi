@@ -13,7 +13,8 @@ const styles = {
   title: {
     textTransform: 'capitalize',
     fontSize: '21px',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    fontWeight: 'normal'
   },
   iconWrap: {
     marginLeft: 'auto',
