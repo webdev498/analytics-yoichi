@@ -138,40 +138,44 @@ export class CoreLayout extends React.Component {
     }
   }
 
-  getDetailsInput(detailsInput) {
-    detailsInput.details.meta.api.queryParams = Object.assign({},
-      detailsInput.details.meta.api.queryParams, {
-        start: detailsInput.data.interval.from,
-        end: detailsInput.data.interval.to
+  getDetailsInput() {
+    const {state: {showDetails, input}} = this;
+    let detailsInput = input;
+    if (showDetails && detailsInput && detailsInput.details) {
+      detailsInput.details.meta.api.queryParams = Object.assign({},
+        detailsInput.details.meta.api.queryParams, {
+          start: detailsInput.data.interval.from,
+          end: detailsInput.data.interval.to
+        });
+
+      let apiObj = {
+        id: detailsInput.details.id,
+        api: detailsInput.details.meta.api,
+        params: {},
+        options: {},
+        isDetails: true
+      };
+
+      detailsInput = Object.assign({}, detailsInput.details, {
+        details: detailsInput.details,
+        apiObj,
+        fetchNextSetOfData,
+        hideDetails: this.hideDetails,
+        fullDetailsView: true
       });
-
-    let apiObj = {
-      id: detailsInput.details.id,
-      api: detailsInput.details.meta.api,
-      params: {},
-      options: {},
-      isDetails: true
-    };
-
-    detailsInput = Object.assign({}, detailsInput.details, {
-      details: detailsInput.details,
-      apiObj,
-      fetchNextSetOfData,
-      hideDetails: this.hideDetails
-    });
+    }
+    else {
+      detailsInput = {};
+    }
 
     return detailsInput;
   }
 
   render() {
     const {props, state} = this,
-      {showDetails} = this.state;
+      {showDetails, input} = this.state;
 
-    let detailsInput = {};
-
-    if (showDetails && state.input && state.input.details) {
-      detailsInput = this.getDetailsInput(state.input);
-    }
+    let detailsInput = this.getDetailsInput();
 
     return (
       <div style={styles.wrap}>
@@ -194,7 +198,7 @@ export class CoreLayout extends React.Component {
           }
 
           {
-            showDetails && detailsInput.details
+            showDetails && input.details
             ? (
               <div style={styles.details}>
                 <ParentCard {...detailsInput}>

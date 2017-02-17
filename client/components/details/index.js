@@ -131,14 +131,9 @@ export default class DetailsTable extends React.Component {
   }
 
   render() {
-    const {props, props: {details, apiObj}} = this;
+    const {props, props: {details}} = this;
     const style = Object.assign({}, styles.wrap, props.style);
     let {detailsData} = props;
-
-    // Below condition is required for full details view e.g. metrics card's details view.
-    if (props.data && !detailsData && !apiObj.api.queryParams.from) {
-      detailsData = props.data;
-    }
 
     if (!detailsData) return null;
 
