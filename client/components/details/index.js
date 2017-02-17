@@ -10,6 +10,13 @@ const styles = {
       backgroundColor: Colors.white,
       width: '100%',
       overflow: 'auto'
+    },
+    table: {
+      width: '100%'
+    },
+    noData: {
+      fontSize: '18px',
+      marginLeft: '33px'
     }
   },
   fetchLimit = 100;
@@ -130,6 +137,23 @@ export default class DetailsTable extends React.Component {
     };
   }
 
+  getRow(row) {
+    return (
+      row.map((col, i) => (
+        <Td column={(col.name).toUpperCase()}
+          value={col.value}
+          key={(col.name).toUpperCase()}>
+          {
+            whatIsIt(col.value) === 'Object' || whatIsIt(col.value) === 'Array'
+            ? JSON.stringify(col.value)
+            : col.value
+          }
+        </Td>
+        )
+      )
+    );
+  }
+
   render() {
     const {props, props: {details}} = this;
     const style = Object.assign({}, styles.wrap, props.style);
@@ -140,8 +164,7 @@ export default class DetailsTable extends React.Component {
     const {list, headers, hiddenList} = this.getData(detailsData);
     let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 5,
       lastPage = Math.ceil(list.length / itemsPerPage),
-      columnNames = [],
-      tableStyle = {width: '100%'};
+      columnNames = [];
 
     this.paginationDetails = {
       detailsData,
@@ -153,7 +176,7 @@ export default class DetailsTable extends React.Component {
     });
 
     if (details && details.secondaryClick) {
-      tableStyle = Object.assign({}, tableStyle, {cursor: 'pointer'});
+      styles.table = Object.assign({}, styles.table, {cursor: 'pointer'});
     }
 
     return (
@@ -161,7 +184,7 @@ export default class DetailsTable extends React.Component {
         {
           list.length > 0
           ? <Table
-            style={tableStyle}
+            style={styles.table}
             className='detailsTable'
             pageButtonLimit={10}
             itemsPerPage={list.length > itemsPerPage ? itemsPerPage : 0}
@@ -180,24 +203,12 @@ export default class DetailsTable extends React.Component {
             {
               list.map((row, i) => (
                 <Tr key={`tr${i}`} onClick={this.handleRowClick(hiddenList[i], i)}>
-                  {
-                    row.map((col, i) => (
-                      <Td column={(col.name).toUpperCase()}
-                        value={col.value}
-                        key={(col.name).toUpperCase()}>
-                        {
-                          whatIsIt(col.value) === 'Object' || whatIsIt(col.value) === 'Array'
-                          ? JSON.stringify(col.value)
-                          : col.value
-                        }
-                      </Td>
-                    )
-                  )}
+                  {this.getRow(row)}
                 </Tr>
               )
             )}
           </Table>
-          : <div style={{fontSize: '18px', marginLeft: '33px'}}>No Data Found.</div>
+          : <div style={styles.noData}>No Data Found.</div>
         }
       </div>
     );
