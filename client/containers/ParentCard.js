@@ -402,7 +402,7 @@ function mapStateToProps(state, ownProps) {
     const propsById = apiData.get(ownProps.id);
 
     data = propsById.get('data');
-    if (ownProps.fullDetailsView && ownProps.fullDetailsView === true) {
+    if (ownProps.fullDetailsView) {
       detailsData = propsById.get('data');
     }
     isFetching = propsById.get('isFetching');
