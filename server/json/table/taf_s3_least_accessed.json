@@ -27,12 +27,12 @@
                 "fieldName": "type"
               }
             ],
-            "attributes": {
-              "chartWidth": "100%",
-              "chartType": "area2d",
+            "chart": {
+              "width": "100%",
+              "height": "120",
+              "type": "area2d",
               "id": "least-connection",
-              "chartHeight": "120",
-              "chartOptions": {
+              "options": {
                 "labelFontSize": "9"
               }
             },

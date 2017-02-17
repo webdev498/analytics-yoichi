@@ -353,9 +353,6 @@ export class ParentCard extends React.Component {
           : null
         }
 
-        {console.log(props.children)}
-        {console.log(childProps)}
-
         {
           isComponentError
           ? this.getErrorElement()
