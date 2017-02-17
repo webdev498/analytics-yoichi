@@ -4,7 +4,9 @@ import MetricsCard from 'components/MetricsCard';
 
 const styles = {
   wrap: {
-    display: 'flex'
+    display: 'flex',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    boxShadow: '2px 2px 2px 1px rgba(0, 0, 0, 0.2)'
   }
 };
 

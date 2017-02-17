@@ -364,17 +364,13 @@ export class ParentCard extends React.Component {
         }
 
         {
-          isDetailsError
-          ? this.getErrorElement()
-          : (
-            <div style={{marginLeft: '-30px', marginRight: '-30px'}}>
-              {
-                state.showDetailsFlag
-                ? this.getDetailsTable()
-                : null
-              }
+          isDetails
+          ? isDetailsError
+            ? this.getErrorElement()
+            : <div style={{marginLeft: '-30px', marginRight: '-30px'}}>
+              { this.getDetailsTable()}
             </div>
-            )
+          : null
         }
       </div>
     );

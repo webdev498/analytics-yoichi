@@ -12,13 +12,13 @@ const styles = {
   wrap: {
     position: 'relative',
     border: 0,
-    margin: '33px'
+    margin: '30px'
   },
   header: {
     backgroundColor: Colors.white,
     height: '73px',
     display: 'flex',
-    padding: '0 33px'
+    padding: '0 30px'
   },
   title: {
     fontWeight: 'normal'

@@ -7,8 +7,7 @@ import './styles/_metricsCard.scss';
 
 const styles = {
   card: {
-    padding: '30px 30px 16px 30px',
-    boxShadow: '2px 2px 2px 1px rgba(0, 0, 0, 0.2)'
+    padding: '30px 30px 16px 30px'
   },
   wrapStyle: {
     display: 'flex'
@@ -40,12 +39,15 @@ const styles = {
     textTransform: 'uppercase',
     lineHeight: '26px',
     backgroundColor: Colors.cloud,
-    paddingLeft: '8px'
+    paddingLeft: '8px',
+    borderRadius: '4px 0 0 4px'
   },
   iconWrap: {
     display: 'inline-block',
+    cursor: 'pointer',
     height: '26px',
-    backgroundColor: Colors.cloud
+    backgroundColor: Colors.cloud,
+    borderRadius: '0 4px 4px 0'
   },
   detailsIcon: {
     fontSize: '20px',

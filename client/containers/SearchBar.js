@@ -46,7 +46,7 @@ const styles = {
   },
   clearIcon: {
     color: Colors.white,
-    cursor: 'initial',
+    cursor: 'pointer',
     fontSize: '21px',
     height: '35px',
     margin: 'auto',
