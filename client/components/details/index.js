@@ -16,7 +16,7 @@ const styles = {
     },
     noData: {
       fontSize: '18px',
-      marginLeft: '33px'
+      marginLeft: '30px'
     }
   },
   fetchLimit = 100;

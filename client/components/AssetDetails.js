@@ -29,7 +29,7 @@ const styles = {
   },
   scoreDetails: {
     display: 'flex',
-    marginTop: '33px',
+    marginTop: '30px',
     cursor: 'pointer'
   },
   scoreDesc: {

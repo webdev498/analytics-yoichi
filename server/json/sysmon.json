@@ -418,7 +418,6 @@
         "attributes": {
           "style": {
             "width": "50%",
-            "marginLeft": "30px",
             "marginRight": "30px"
           },
           "id": "least-used-parent"

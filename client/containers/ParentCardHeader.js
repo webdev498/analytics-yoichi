@@ -8,7 +8,7 @@ import {Colors} from '../../commons/colors';
 const styles = {
   header: {
     display: 'flex',
-    paddingBottom: '33px'
+    paddingBottom: '30px'
   },
   title: {
     textTransform: 'capitalize',

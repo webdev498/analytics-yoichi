@@ -81,7 +81,7 @@ export class PageContent extends React.Component {
 
       return React.DOM.section(
         {
-          style: {display: 'flex', marginBottom: '33px', justifyContent: 'space-between'},
+          style: {display: 'flex', marginBottom: '30px', justifyContent: 'space-between'},
           key: `section${index}`
         },
         children
