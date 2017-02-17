@@ -38,16 +38,16 @@ export default class DetailsTable extends React.Component {
     super(props);
     this.paginationDetails = {
       detailsData: {},
-      currentPage: 0,
       lastPage: 0
     };
+    this.currentPage = 0;
     this.onPageChange = this.onPageChange.bind(this);
     this.handleRowClick = this.handleRowClick.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.detailsData && newProps.detailsData.next === fetchLimit) {
-      this.paginationDetails.currentPage = 0;
+      this.currentPage = 0;
     }
   }
 
@@ -100,7 +100,7 @@ export default class DetailsTable extends React.Component {
     if (currentPage === lastPage &&
       detailsData.total > fetchLimit &&
       detailsData.total > detailsData.rows.length) {
-      this.paginationDetails.currentPage = page;
+      this.currentPage = page;
       apiObj.api.queryParams.from = detailsData.next;
       props.fetchNextSetOfData(apiObj, detailsData.rows);
     }
@@ -166,10 +166,10 @@ export default class DetailsTable extends React.Component {
       lastPage = Math.ceil(list.length / itemsPerPage),
       columnNames = [];
 
-    this.paginationDetails = Object.assign({}, this.paginationDetails, {
+    this.paginationDetails = {
       detailsData,
       lastPage
-    });
+    };
 
     headers.forEach((col) => {
       columnNames.push((col.name).toUpperCase());
@@ -188,7 +188,7 @@ export default class DetailsTable extends React.Component {
             className='detailsTable'
             pageButtonLimit={10}
             itemsPerPage={list.length > itemsPerPage ? itemsPerPage : 0}
-            currentPage={this.paginationDetails.currentPage}
+            currentPage={this.currentPage}
             hideFilterInput
             previousPageLabel={'<<'}
             nextPageLabel={'>>'}
