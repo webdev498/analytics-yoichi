@@ -4,124 +4,136 @@
       {
         "meta": {
           "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_alert_count_time_shifted"
-            },
-            "queryParams": {
-              "window": ""
-            }
-          }
+          "api": null
         },
-        "name": "MetricsCard",
         "attributes": {
-          "countStyle": {
-            "color": "#F69275"
-          },
           "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
+            "width": "100%",
+            "backgroundColor": "transparent"
           }
         },
-        "id": "1",
-        "type": "MetricsCard",
-        "title": "High Priority Anomalies",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": "",
-          "page": "/alerts"
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_malware_count_time_shifted"
+        "id": "metricsBar",
+        "type": "MetricsBar",
+        "childrenComponent": [
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_alert_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
             },
-            "queryParams": {
-              "window": ""
-            }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#F69275"
-          },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
-          }
-        },
-        "id": "2",
-        "type": "MetricsCard",
-        "title": "High Priority Malware",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": "malware",
-          "page": "/alerts"
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_s3_count_event"
+            "name": "MetricsCard",
+            "attributes": {
+              "countStyle": {
+                "color": "#F69275"
+              },
+              "style": {
+                "marginRight": "3px",
+                "width": "25%"
+              }
             },
-            "queryParams": {
-              "window": ""
+            "id": "1",
+            "type": "MetricsCard",
+            "title": "High Priority Anomalies",
+            "clickData": {
+              "tableId": "RecentAnomalies",
+              "filterText": "",
+              "page": "/alerts"
             }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
-          }
-        },
-        "id": "3",
-        "type": "MetricsCard",
-        "title": "S3 Events Processed"
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_s3_count_failed_event"
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_malware_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
             },
-            "queryParams": {
-              "window": ""
+            "name": "MetricsCard",
+            "attributes": {
+              "countStyle": {
+                "color": "#F69275"
+              },
+              "style": {
+                "marginRight": "3px",
+                "width": "25%"
+              }
+            },
+            "id": "2",
+            "type": "MetricsCard",
+            "title": "High Priority Malware",
+            "clickData": {
+              "tableId": "RecentAnomalies",
+              "filterText": "malware",
+              "page": "/alerts"
             }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#F69275"
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_s3_count_event"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
+            },
+            "name": "MetricsCard",
+            "attributes": {
+              "countStyle": {
+                "color": "#2bd8d0"
+              },
+              "style": {
+                "marginRight": "3px",
+                "width": "25%"
+              }
+            },
+            "id": "3",
+            "type": "MetricsCard",
+            "title": "S3 Events Processed"
+          },
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_s3_count_failed_event"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
+            },
+            "name": "MetricsCard",
+            "attributes": {
+              "countStyle": {
+                "color": "#F69275"
+              },
+              "style": {
+                "marginRight": "3px",
+                "width": "25%"
+              }
+            },
+            "id": "4",
+            "type": "MetricsCard",
+            "title": "Failed S3 Events"
           }
-        },
-        "id": "4",
-        "type": "MetricsCard",
-        "title": "Failed S3 Events"
+        ]
       }
     ],
     [
@@ -145,7 +157,8 @@
         "attributes": {
           "style": {
             "width": "50%",
-            "marginRight": "33px"
+            "marginLeft": "30px",
+            "marginRight": "30px"
           },
           "id": "most-access"
         },
@@ -174,7 +187,8 @@
         },
         "attributes": {
           "style": {
-            "width": "50%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "id": "least-access"
         },
@@ -228,7 +242,8 @@
           "chartHeight": "350",
           "chartType": "area2d",
           "style": {
-            "marginRight": "33px",
+            "marginLeft": "30px",
+            "marginRight": "30px",
             "width": "50%"
           },
           "chartOptions": {
@@ -281,7 +296,8 @@
           "chartHeight": "350",
           "chartType": "area2d",
           "style": {
-            "width": "50%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "chartOptions": {
             "labelFontSize": "9"
@@ -338,7 +354,8 @@
         },
         "attributes": {
           "style": {
-            "marginRight": "33px",
+            "marginLeft": "30px",
+            "marginRight": "30px",
             "width": "50%"
           },
           "id": "piereq"
@@ -382,7 +399,8 @@
           "chartWidth": "100%",
           "chartHeight": "350",
           "style": {
-            "width": "50%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "chartOptions": {
             "labelFontSize": "9"
@@ -439,7 +457,8 @@
         },
         "attributes": {
           "style": {
-            "marginRight": "33px",
+            "marginLeft": "30px",
+            "marginRight": "30px",
             "width": "50%"
           },
           "id": "pieua"
@@ -483,7 +502,8 @@
           "chartWidth": "100%",
           "chartHeight": "350",
           "style": {
-            "width": "50%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "chartOptions": {
             "labelFontSize": "9"
@@ -518,7 +538,9 @@
         },
         "attributes": {
           "style": {
-            "width": "100%"
+            "width": "100%",
+            "marginLeft": "30px",
+            "marginRight": "30px"
           }
         },
         "id": "download-threat-map",
@@ -534,7 +556,7 @@
                 "marginTop": "-30px"
               },
               "style": {
-                "marginRight": "33px",
+                "marginRight": "30px",
                 "width": "70%"
               },
               "legendStyle": {
@@ -692,7 +714,9 @@
         },
         "attributes": {
           "style": {
-            "width": "100%"
+            "width": "100%",
+            "marginLeft": "30px",
+            "marginRight": "30px"
           }
         },
         "id": "upload-threat-map",
@@ -708,7 +732,7 @@
                 "marginTop": "-30px"
               },
               "style": {
-                "marginRight": "33px",
+                "marginRight": "30px",
                 "width": "70%"
               },
               "legendStyle": {
@@ -886,7 +910,8 @@
           "chartHeight": "350",
           "style": {
             "width": "50%",
-            "marginRight": "33px"
+            "marginLeft": "30px",
+            "marginRight": "30px"
           },
           "chartOptions": {
             "labelFontSize": "9"
@@ -938,7 +963,8 @@
           "chartWidth": "100%",
           "chartHeight": "350",
           "style": {
-            "width": "50%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "chartOptions": {
             "labelFontSize": "9"

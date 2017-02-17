@@ -48,6 +48,8 @@
         "attributes": {
           "style": {
             "width": "300px",
+            "marginTop": "30px",
+            "marginLeft": "30px",
             "flex": "0 0 300px"
           }
         },
@@ -105,6 +107,8 @@
         "attributes": {
           "style": {
             "width": "100%",
+            "marginTop": "30px",
+            "marginRight": "30px",
             "backgroundSize": "20px 20px",
             "backgroundImage": "linear-gradient(to right, #F1F1F3 1px, transparent 1px), linear-gradient(to bottom, #F1F1F3 1px, #FAFAFB 1px)"
           },
@@ -130,6 +134,7 @@
         "attributes": {
           "style": {
             "width": "35%",
+            "marginLeft": "30px",
             "flexDirection": "column"
           },
           "id": "activity"
@@ -164,6 +169,7 @@
           "maxNumbersOnLeftRightPagination": 4,
           "style": {
             "width": "65%",
+            "marginRight": "30px",
             "backgroundColor": "#F7F7F9"
           },
           "otherStyles": {

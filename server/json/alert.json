@@ -23,6 +23,8 @@
           "style": {
             "backgroundColor": "#ffffff",
             "width": "250px",
+            "marginTop": "30px",
+            "marginLeft": "30px",
             "flex": "0 0 250px"
           }
         },
@@ -46,6 +48,8 @@
         "attributes": {
           "style": {
             "width": "100%",
+            "marginTop": "30px",
+            "marginRight": "30px",
             "backgroundSize": "20px 20px",
             "backgroundImage": "linear-gradient(to right, #F1F1F3 1px, transparent 1px), linear-gradient(to bottom, #F1F1F3 1px, #FAFAFB 1px)"
           },
@@ -78,7 +82,9 @@
         "name": "AlertTimeline",
         "attributes": {
           "style": {
-            "width": "100%"
+            "width": "100%",
+            "marginLeft": "30px",
+            "marginRight": "30px"
           }
         },
         "id": "alert-timeline",
