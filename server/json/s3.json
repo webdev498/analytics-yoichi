@@ -102,6 +102,39 @@
                 "width": "25%"
               }
             },
+            "details": {
+              "itemsPerPage": 20,
+              "meta": {
+                "showHeader": true,
+                "showSearch": true,
+                "showBack": true,
+                "showClose": true,
+                "api": {
+                  "path": "/api/analytics/reporting/details/{reportId}",
+                  "pathParams": {
+                    "reportId": "taf_s3_count_event"
+                  },
+                  "queryParams": {
+                    "count": 100
+                  }
+                },
+                "title": "Events Processed"
+              },
+              "attributes": {
+                "header": {
+                  "titleWrap": {
+                    "alignItems": "center",
+                    "display": "inline-flex"
+                  }
+                },
+                "style": {
+                  "marginLeft": "33px",
+                  "marginRight": "33px",
+                  "marginTop": "33px"
+                }
+              },
+              "id": "details-view"
+            },
             "id": "3",
             "type": "MetricsCard",
             "title": "S3 Events Processed"
@@ -128,6 +161,39 @@
                 "marginRight": "3px",
                 "width": "25%"
               }
+            },
+            "details": {
+              "itemsPerPage": 20,
+              "meta": {
+                "showHeader": true,
+                "showSearch": true,
+                "showBack": true,
+                "showClose": true,
+                "api": {
+                  "path": "/api/analytics/reporting/details/{reportId}",
+                  "pathParams": {
+                    "reportId": "taf_s3_count_failed_event"
+                  },
+                  "queryParams": {
+                    "count": 100
+                  }
+                },
+                "title": "Assets Monitored"
+              },
+              "attributes": {
+                "header": {
+                  "titleWrap": {
+                    "alignItems": "center",
+                    "display": "inline-flex"
+                  }
+                },
+                "style": {
+                  "marginLeft": "33px",
+                  "marginRight": "33px",
+                  "marginTop": "33px"
+                }
+              },
+              "id": "details-view"
             },
             "id": "4",
             "type": "MetricsCard",

@@ -91,6 +91,39 @@
             "borderTop": "6px solid #2bd8d0"
           }
         },
+        "details": {
+          "itemsPerPage": 20,
+          "meta": {
+            "showHeader": true,
+            "showSearch": true,
+            "showBack": true,
+            "showClose": true,
+            "api": {
+              "path": "/api/analytics/reporting/details/{reportId}",
+              "pathParams": {
+                "reportId": "taf_event_count_time_shifted"
+              },
+              "queryParams": {
+                "count": 100
+              }
+            },
+            "title": "Events Processed"
+          },
+          "attributes": {
+            "header": {
+              "titleWrap": {
+                "alignItems": "center",
+                "display": "inline-flex"
+              }
+            },
+            "style": {
+              "marginLeft": "33px",
+              "marginRight": "33px",
+              "marginTop": "33px"
+            }
+          },
+          "id": "details-view"
+        },
         "id": "3",
         "type": "MetricsCard",
         "title": "Events Processed"
@@ -118,6 +151,39 @@
             "width": "25%",
             "borderTop": "6px solid #2bd8d0"
           }
+        },
+        "details": {
+          "itemsPerPage": 20,
+          "meta": {
+            "showHeader": true,
+            "showSearch": true,
+            "showBack": true,
+            "showClose": true,
+            "api": {
+              "path": "/api/analytics/reporting/details/{reportId}",
+              "pathParams": {
+                "reportId": "taf_asset_count_time_shifted"
+              },
+              "queryParams": {
+                "count": 100
+              }
+            },
+            "title": "Assets Monitored"
+          },
+          "attributes": {
+            "header": {
+              "titleWrap": {
+                "alignItems": "center",
+                "display": "inline-flex"
+              }
+            },
+            "style": {
+              "marginLeft": "33px",
+              "marginRight": "33px",
+              "marginTop": "33px"
+            }
+          },
+          "id": "details-view"
         },
         "id": "4",
         "type": "MetricsCard",

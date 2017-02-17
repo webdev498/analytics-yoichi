@@ -101,6 +101,39 @@
                 "width": "25%"
               }
             },
+            "details": {
+              "itemsPerPage": 20,
+              "meta": {
+                "showHeader": true,
+                "showSearch": true,
+                "showBack": true,
+                "showClose": true,
+                "api": {
+                  "path": "/api/analytics/reporting/details/{reportId}",
+                  "pathParams": {
+                    "reportId": "taf_core_processes_wrong_user_time_shifted"
+                  },
+                  "queryParams": {
+                    "count": 100
+                  }
+                },
+                "title": "Events Processed"
+              },
+              "attributes": {
+                "header": {
+                  "titleWrap": {
+                    "alignItems": "center",
+                    "display": "inline-flex"
+                  }
+                },
+                "style": {
+                  "marginLeft": "33px",
+                  "marginRight": "33px",
+                  "marginTop": "33px"
+                }
+              },
+              "id": "details-view"
+            },
             "id": "3",
             "type": "MetricsCard",
             "title": "Abnormal Process Users"
@@ -126,6 +159,39 @@
                 "marginRight": "3px",
                 "width": "25%"
               }
+            },
+            "details": {
+              "itemsPerPage": 20,
+              "meta": {
+                "showHeader": true,
+                "showSearch": true,
+                "showBack": true,
+                "showClose": true,
+                "api": {
+                  "path": "/api/analytics/reporting/details/{reportId}",
+                  "pathParams": {
+                    "reportId": "taf_core_processes_path_anomalies_time_shifted"
+                  },
+                  "queryParams": {
+                    "count": 100
+                  }
+                },
+                "title": "Assets Monitored"
+              },
+              "attributes": {
+                "header": {
+                  "titleWrap": {
+                    "alignItems": "center",
+                    "display": "inline-flex"
+                  }
+                },
+                "style": {
+                  "marginLeft": "33px",
+                  "marginRight": "33px",
+                  "marginTop": "33px"
+                }
+              },
+              "id": "details-view"
             },
             "id": "4",
             "type": "MetricsCard",
