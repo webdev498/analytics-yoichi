@@ -74,9 +74,6 @@ export default class ParentCardHeader extends React.Component {
   }
 
   loadFloatingSearchBar(load) {
-    if (load !== false) {
-      load = true;
-    }
     this.setState({floatingSearchBar: load});
   }
 
@@ -133,7 +130,7 @@ export default class ParentCardHeader extends React.Component {
           ? (
             <FontIcon className='material-icons'
               style={styles.icon}
-              onClick={this.loadFloatingSearchBar}>
+              onClick={() => this.loadFloatingSearchBar(true)}>
               search
             </FontIcon>
           )
