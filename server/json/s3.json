@@ -128,9 +128,9 @@
                   }
                 },
                 "style": {
-                  "marginLeft": "33px",
-                  "marginRight": "33px",
-                  "marginTop": "33px"
+                  "marginLeft": "30px",
+                  "marginRight": "30px",
+                  "marginTop": "30px"
                 }
               },
               "id": "details-view"
@@ -188,9 +188,9 @@
                   }
                 },
                 "style": {
-                  "marginLeft": "33px",
-                  "marginRight": "33px",
-                  "marginTop": "33px"
+                  "marginLeft": "30px",
+                  "marginRight": "30px",
+                  "marginTop": "30px"
                 }
               },
               "id": "details-view"
