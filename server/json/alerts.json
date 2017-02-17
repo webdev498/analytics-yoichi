@@ -241,14 +241,6 @@
           },
           "title": "High Risk Assets"
         },
-        "tableOptions": {
-          "itemsPerPage": 5,
-          "sortable": ["SCORE"],
-          "defaultSort": {
-            "column": "SCORE",
-            "direction": "desc"
-          }
-        },
         "attributes": {
           "style": {
             "width": "290px",
@@ -256,10 +248,11 @@
             "marginLeft": "30px",
             "marginRight": "30px"
           },
-          "id": "risk-assets-table"
+          "id": "high-risk-assets"
         },
-        "id": "risk-assets",
-        "type": "riskAssetsTable"
+        "id": "high-risk-assets",
+        "type": "ReactableTable",
+        "openAssetDetails": true
       }
     ],
     [

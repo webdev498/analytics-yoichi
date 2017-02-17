@@ -33,6 +33,19 @@
           {
             "data": [
               {
+                "fieldName": "data.conn.duration",
+                "displayName": "duration"
+              }
+            ],
+            "style": {
+              "width": "15%"
+            },
+            "type": "loadComponent",
+            "header": "DURATIONnew"
+          },
+          {
+            "data": [
+              {
                 "fieldName": "protocol.service"
               },
               {

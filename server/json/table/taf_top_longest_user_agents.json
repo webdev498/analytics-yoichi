@@ -18,7 +18,11 @@
               "wordBreak": "break-all"
             },
             "type": "text",
-            "header": "LONGEST USER AGENT"
+            "header": "LONGEST USER AGENT",
+            "ellipsis": {
+              "max": 250,
+              "min": 120
+            }
           },
           {
             "data": [
@@ -26,12 +30,12 @@
                 "fieldName": "count"
               }
             ],
-            "attributes": {
-              "chartWidth": "100%",
-              "chartType": "area2d",
+            "chart": {
+              "width": "100%",
+              "height": "120",
+              "type": "area2d",
               "id": "connection",
-              "chartHeight": "120",
-              "chartOptions": {
+              "options": {
                 "labelFontSize": "9"
               }
             },
