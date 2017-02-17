@@ -203,7 +203,7 @@
         "chartOptions": {
           "xAxisname": "STATUS",
           "yAxisname": "COUNT",
-          "paletteColors": "#2bd8d0",
+          "paletteColors": "#03C5ED",
           "showCumulativeLine": "0"
         },
         "chartData": {
@@ -255,7 +255,7 @@
         "chartOptions": {
           "xAxisname": "USER",
           "yAxisname": "COUNT",
-          "paletteColors": "#2bd8d0",
+          "paletteColors": "#03C5ED",
           "showCumulativeLine": "0"
         },
         "chartData": {
@@ -364,7 +364,7 @@
         "chartOptions": {
           "xAxisname": "MESSAGE",
           "yAxisname": "COUNT",
-          "paletteColors": "#2bd8d0",
+          "paletteColors": "#03C5ED",
           "showCumulativeLine": "0"
         },
         "updateChartOptions": {
@@ -422,7 +422,7 @@
         "chartOptions": {
           "xAxisname": "MESSAGE",
           "yAxisname": "COUNT",
-          "paletteColors": "#2bd8d0",
+          "paletteColors": "#03C5ED",
           "showCumulativeLine": "0"
         },
         "updateChartOptions": {
@@ -479,7 +479,7 @@
         "chartOptions": {
           "xAxisname": "MESSAGE",
           "yAxisname": "COUNT",
-          "paletteColors": "#2bd8d0",
+          "paletteColors": "#03C5ED",
           "showCumulativeLine": "0"
         },
         "updateChartOptions": {
