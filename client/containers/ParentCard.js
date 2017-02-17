@@ -401,9 +401,11 @@ function mapStateToProps(state, ownProps) {
   if (apiData.has(ownProps.id)) {
     const propsById = apiData.get(ownProps.id);
 
-    data = propsById.get('data');
     if (ownProps.fullDetailsView) {
       detailsData = propsById.get('data');
+    }
+    else {
+      data = propsById.get('data');
     }
     isFetching = propsById.get('isFetching');
     isError = propsById.get('isError');
