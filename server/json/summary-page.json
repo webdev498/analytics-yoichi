@@ -251,6 +251,16 @@
           "id": "AlertByType",
           "chartHeight": "350"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "secondaryClick": {
+            "page": "alert",
+            "pathParams": {
+              "id": "id:fieldName",
+              "date": "date:fieldName"
+            }
+          }
+        },
         "id": "alert-by-type",
         "type": "charts/ParetoChart"
       },
@@ -299,6 +309,16 @@
           },
           "id": "TopAttackedEntities",
           "chartHeight": "350"
+        },
+        "details": {
+          "itemsPerPage": 5,
+          "secondaryClick": {
+            "page": "alert",
+            "pathParams": {
+              "id": "id:fieldName",
+              "date": "date:fieldName"
+            }
+          }
         },
         "id": "top-attacked-entities",
         "type": "charts/ParetoChart"

@@ -10,7 +10,7 @@ import {
 } from '../../commons/utils/utils';
 
 import {getCountryName} from '../../commons/utils/countryUtils';
-import {generateKibanaParameters} from './kibanaUtils';
+import {generateDetailsParameters} from '../../commons/utils/detailsUtils';
 
 export function processData(data, tableJson, url) {
   const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.data;
@@ -49,17 +49,17 @@ export function processData(data, tableJson, url) {
           };
 
         rowObject = generateRowObject(rowDetails, rowObject);
-        if (tableJson.kibana) {
+        if (tableJson.details) {
           let parameters = {
             data,
             duration: getParameterByName('window', url),
-            queryParamsArray: tableJson.kibana.queryParams,
+            queryParamsArray: tableJson.details.queryParams,
             currentRowNumber: j,
             nestedResult,
-            pathParams: tableJson.kibana.pathParams
+            pathParams: tableJson.details.pathParams
           };
           rowObject.dataObj = {
-            queryParams: generateKibanaParameters(parameters)
+            queryParams: generateDetailsParameters(parameters)
           };
         }
         columnText = [];

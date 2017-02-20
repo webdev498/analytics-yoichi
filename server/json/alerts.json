@@ -317,7 +317,7 @@
           "chartHeight": "350"
         },
         "details": {
-          "itemsPerPage": 3,
+          "itemsPerPage": 5,
           "secondaryClick": {
             "page": "alert",
             "pathParams": {
@@ -405,7 +405,7 @@
           "chartHeight": "350"
         },
         "details": {
-          "itemsPerPage": 3,
+          "itemsPerPage": 5,
           "secondaryClick": {
             "page": "alert",
             "pathParams": {

@@ -372,14 +372,14 @@ function getRDP(row) {
     id: getValue(row.id),
     Date: getValue(row.date),
     display: {
-    	sourceDest: getSourceDestination(row),
-        Type: {
+      sourceDest: getSourceDestination(row),
+      Type: {
         displayKey: true,
         value: getEventTypeString(row.type)
       }
     }
   };
-  
+
   return info;
 }
 
@@ -539,6 +539,43 @@ function getOther(row, url) {
   return info;
 }
 
+function getDyConn(row) {
+  const {data: {dyconn}} = row,
+    info = {
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        Service: {
+          displayKey: true,
+          value: getValue(dyconn.service)
+        },
+        State: {
+          displayKey: true,
+          value: getValue(dyconn.state)
+        },
+        'Requested Bytes': {
+          displayKey: true,
+          value: getValue(dyconn.reqBytes) !== '' ? formatBytes(dyconn.reqBytes, 2) : ''
+        },
+        'Response Bytes': {
+          displayKey: true,
+          value: getValue(dyconn.respBytes) !== '' ? formatBytes(dyconn.respBytes, 2) : ''
+        },
+        Duration: {
+          displayKey: true,
+          value: getValue(dyconn.duration) !== '' ? msToTime(dyconn.duration).timeString : ''
+        }
+      }
+    };
+
+  return info;
+}
+
 function getDetails(row, url) {
   switch (row.type.toLowerCase()) {
     case 'conn':
@@ -571,6 +608,8 @@ function getDetails(row, url) {
       return getAuth(row);
     case 'dhcp':
       return getDhcp(row);
+    case 'dyconn':
+      return getDyConn(row);
     default:
       return getOther(row, url);
   }

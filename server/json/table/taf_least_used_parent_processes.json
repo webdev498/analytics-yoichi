@@ -48,7 +48,7 @@
     "nestedResult": true,
     "emptyValueMessage": "(Empty)"
   },
-  "kibana": {
+  "details": {
     "queryParams": {
       "data.sysmon.ParentImage": "data.sysmon.ParentImage:fieldName"
     }
