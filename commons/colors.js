@@ -49,9 +49,9 @@ export const AreaSparkLineChartColor = {
 };
 
 export const DurationWidgetColor = {
-  'hour': '#9BE9E7',
-  'min': '#B9EEED',
-  'sec': '#D9F2F3'
+  hour: BarColorShade5,
+  min: BarColorShade6,
+  sec: BarColorShade7
 };
 
 export const Worldmap = {
