@@ -137,17 +137,20 @@ export default class DetailsTable extends React.Component {
     };
   }
 
+  getValue(value) {
+    if (whatIsIt(value) === 'Object' || whatIsIt(value) === 'Array') {
+      return JSON.stringify(value);
+    }
+    return value;
+  }
+
   getRow(row) {
     return (
       row.map((col, i) => (
         <Td column={(col.name).toUpperCase()}
-          value={col.value}
+          value={this.getValue(col.value)}
           key={(col.name).toUpperCase()}>
-          {
-            whatIsIt(col.value) === 'Object' || whatIsIt(col.value) === 'Array'
-            ? JSON.stringify(col.value)
-            : col.value
-          }
+          {this.getValue(col.value)}
         </Td>
         )
       )
