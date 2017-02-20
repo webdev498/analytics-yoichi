@@ -83,7 +83,7 @@ ${BarColorShade8},${BarColorShade9}`;
 
 export const TimelineBarColors = [ '#2AD8D0', '#CAEDEB' ];
 
-export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
+export const DefaultCanvasBGColors = `${BarColorShade9},${WhiteColor}`;
 
 export const NetworkNodeLabelColor = '#F2F2F4';
 
