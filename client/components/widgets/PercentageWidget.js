@@ -36,12 +36,12 @@ function getIcon(percentage, iconIndex, iconName) {
       marginLeft: '1px',
       borderTopLeftRadius: '3px',
       borderTopRightRadius: '3px',
-      borderLeft: '2px solid ' + Colors.turquoise,
-      borderTop: '2px solid ' + Colors.turquoise,
-      borderRight: '2px solid ' + Colors.turquoise
+      borderLeft: '2px solid ' + Colors.bar,
+      borderTop: '2px solid ' + Colors.bar,
+      borderRight: '2px solid ' + Colors.bar
     },
     'icon': {
-      color: Colors.turquoise
+      color: Colors.bar
     }
   };
 
@@ -49,7 +49,7 @@ function getIcon(percentage, iconIndex, iconName) {
   iconIndex = parseInt(iconIndex);
 
   if (percentageValue >= 100) {
-    setOverlayDivBackground(style, Colors.turquoise);
+    setOverlayDivBackground(style, Colors.bar);
   }
 
   if (percentageValue === 0) {
@@ -72,8 +72,8 @@ function getIcon(percentage, iconIndex, iconName) {
         setOverlayDivBorder(style, 'Top', '2px', Colors.cloud);
         setOverlayDivBorder(style, 'Left', '2px', Colors.cloud);
         setOverlayDivBorder(style, 'Right', '2px', Colors.cloud);
-        setOverlayDivBorder(style, 'Bottom', (percentageValue + 1) + 'px', Colors.turquoise);
-        setIconColor(style, Colors.turquoise);
+        setOverlayDivBorder(style, 'Bottom', (percentageValue + 1) + 'px', Colors.bar);
+        setIconColor(style, Colors.bar);
       }
     }
   }
@@ -83,7 +83,7 @@ function getIcon(percentage, iconIndex, iconName) {
       secondDigit = parseInt(percentage.charAt(1));
 
     if (iconIndex <= firstDigit) {
-      setOverlayDivBackground(style, Colors.turquoise);
+      setOverlayDivBackground(style, Colors.bar);
     }
 
     if (iconIndex > firstDigit) {
@@ -95,8 +95,8 @@ function getIcon(percentage, iconIndex, iconName) {
     }
 
     if ((percentageValue % 10) !== 0 && iconIndex === (firstDigit + 1)) {
-      setOverlayDivBorder(style, 'Bottom', (secondDigit + 1) + 'px', Colors.turquoise);
-      setIconColor(style, Colors.turquoise);
+      setOverlayDivBorder(style, 'Bottom', (secondDigit + 1) + 'px', Colors.bar);
+      setIconColor(style, Colors.bar);
     }
   }
 

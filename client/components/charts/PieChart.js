@@ -22,7 +22,7 @@ const styles = {
   },
   'percentageDisplay': {
     fontSize: '35px',
-    color: Colors.turquoise
+    color: Colors.bar
   },
   'legend1': {
     fontSize: '13px',
@@ -35,7 +35,7 @@ const styles = {
   noData: {}
 };
 
-let highlightedColor1 = Colors.turquoise,
+let highlightedColor1 = Colors.bar,
   highlightedColor2 = Colors.coral,
   nonHighlightedColor = Colors.cloud,
   pieChartAttributes = {},
@@ -146,7 +146,7 @@ function renderChart(props) {
   if (!props.data) {
     return;
   }
-  
+
  if (props.data && props.chartData &&
     props.chartData.fieldMapping &&
     props.chartData.fieldMapping[0] &&
