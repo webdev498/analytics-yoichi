@@ -309,7 +309,7 @@
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "COUNT",
-          "paletteColors": "#adecf9, #2ecff0"
+          "paletteColors": "#adecf9, #03c5ed"
         },
         "chartData": {
           "fieldMapping": [
