@@ -36,7 +36,7 @@
               "style": {
                 "marginRight": "1px",
                 "width": "25%",
-                "borderTop": "4px solid #F69275"
+                "borderTop": "5px solid #F69275"
               }
             },
             "id": "1",
@@ -102,7 +102,7 @@
               "style": {
                 "marginRight": "1px",
                 "width": "25%",
-                "borderTop": "4px solid #2BC6D6"
+                "borderTop": "5px solid #2BC6D6"
               }
             },
             "details": {
@@ -163,7 +163,7 @@
               "style": {
                 "marginRight": "1px",
                 "width": "25%",
-                "borderTop": "4px solid #2BC6D6"
+                "borderTop": "5px solid #2BC6D6"
               }
             },
             "details": {
