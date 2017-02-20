@@ -1,4 +1,4 @@
-import { Colors } from '../colors';
+import { Colors, Alerts } from '../colors';
 
 export function getColor(score, severity) {
   let color = '';
@@ -10,13 +10,13 @@ export function getColor(score, severity) {
   }
 
   if ((score !== '' && score >= 65) || severity.toLowerCase() === 'high') {
-    color = Colors.cherry;
+    color = Alerts.high;
   }
   else if ((score !== '' && score < 65 && score >= 35) || severity.toLowerCase() === 'medium') {
-    color = Colors.coral;
+    color = Alerts.medium;
   }
   else if ((score !== '' && score < 35) || severity.toLowerCase() === 'low') {
-    color = Colors.mustard;
+    color = Alerts.low;
   }
   return color;
 }

@@ -155,3 +155,9 @@ export const tertiaryPalette = {
   seafoam: SeafoamColor,
   turquoise: TurquoiseColor
 };
+
+export const Alerts = {
+  high: '#e72b44',
+  medium: '#f37133',
+  low: '#feb821'
+};
