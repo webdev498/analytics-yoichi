@@ -41,7 +41,7 @@ const colorrange = {
     'minvalue': '0',
     'maxvalue': 1
   }, {
-    'code': Colors.turquoise,
+    'code': Colors.bar,
     'minvalue': '1',
     'maxvalue': '9999999999'
   }]

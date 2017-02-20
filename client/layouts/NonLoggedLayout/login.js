@@ -35,7 +35,7 @@ const styles = {
   },
   input: {
     color: Colors.navigation,
-    borderColor: Colors.turquoise
+    borderColor: Colors.bar
   },
   floatingLabel: {
     color: Colors.navigation,
@@ -45,7 +45,7 @@ const styles = {
     color: Colors.navigation
   },
   underlineFocus: {
-    borderColor: Colors.turquoise
+    borderColor: Colors.bar
   },
   buttonWrap: {
     textAlign: 'right',
@@ -114,11 +114,11 @@ class LoginView extends React.Component {
   focusInputText1() {
     this.setState({
       floatingLabel: {
-        color: Colors.turquoise,
+        color: Colors.bar,
         fontWeight: '300'
       },
       floatingLabelFocus1: {
-        color: Colors.turquoise
+        color: Colors.bar
       }
     });
   }
@@ -126,7 +126,7 @@ class LoginView extends React.Component {
   blurInputText1() {
     this.setState({
       floatingLabel: {
-        color: Colors.turquoise,
+        color: Colors.bar,
         fontWeight: '300'
       },
       floatingLabelFocus1: {
@@ -138,11 +138,11 @@ class LoginView extends React.Component {
   focusInputText2() {
     this.setState({
       floatingLabel: {
-        color: Colors.turquoise,
+        color: Colors.bar,
         fontWeight: '300'
       },
       floatingLabelFocus2: {
-        color: Colors.turquoise
+        color: Colors.bar
       }
     });
   }
@@ -150,7 +150,7 @@ class LoginView extends React.Component {
   blurInputText2() {
     this.setState({
       floatingLabel: {
-        color: Colors.turquoise,
+        color: Colors.bar,
         fontWeight: '300'
       },
       floatingLabelFocus2: {

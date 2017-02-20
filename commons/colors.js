@@ -1,12 +1,9 @@
-export const BlueColor = '#2BC6D6';
-
 export const GarnetColor = '#24293d';
 export const GrapeColor = '#444c63';
 export const PebbleColor = GrapeColor;
 export const SmokeColor = '#cbcbd1';
 export const CloudColor = '#e5e5ea';// f0f0f2
 export const ArcticColor = '#ffffff';
-export const TurquoiseColor = '#2bd8d0';
 
 export const CherryColor = '#ef5976';
 export const CoralColor = '#F69275';
@@ -87,7 +84,7 @@ export const DefaultCanvasBGColors = `${BarColorShade9},${WhiteColor}`;
 
 export const NetworkNodeLabelColor = '#F2F2F4';
 
-export const LineChartPallete = `${CherryColor},${CoralColor},${MustardColor},${SeafoamColor},${TurquoiseColor}`;
+export const LineChartPallete = `${CherryColor},${CoralColor},${MustardColor},${SeafoamColor}`;
 
 export const contextBGColor = '#EBEBEF';
 
@@ -98,14 +95,12 @@ export const notificationMessageBGColor = '#EBEBEF';
 export const CloudColorShades = ['#EEEEF1'];
 
 export const Colors = {
-  blue: BlueColor,
   garnet: GarnetColor,
   grape: GrapeColor,
   pebble: PebbleColor,
   smoke: SmokeColor,
   cloud: CloudColor,
   arctic: ArcticColor,
-  turquoise: TurquoiseColor,
   cherry: CherryColor,
   coral: CoralColor,
   mustard: MustardColor,
@@ -129,31 +124,6 @@ export const Colors = {
   cloudShades: CloudColorShades,
   search: SearchColor,
   bar: BarColor
-};
-
-export const PrimaryPalette = {
-  garnet: GarnetColor,
-  grape: GrapeColor,
-  pebble: PebbleColor,
-  smoke: SmokeColor,
-  cloud: CloudColor,
-  arctic: ArcticColor,
-  turquoise: TurquoiseColor
-};
-
-export const SecondaryPalette = {
-  cherry: CherryColor,
-  coral: CoralColor,
-  mustard: MustardColor,
-  seafoam: SeafoamColor
-};
-
-export const tertiaryPalette = {
-  mustard: MustardColor,
-  coral: CoralColor,
-  cherry: CherryColor,
-  seafoam: SeafoamColor,
-  turquoise: TurquoiseColor
 };
 
 export const Alerts = {

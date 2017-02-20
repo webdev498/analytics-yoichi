@@ -345,8 +345,8 @@ class TimelineCard extends React.Component {
     };
     if (props.selectedCardId === props.data.id) {
       selectedCardStyle = Object.assign({}, {
-        borderColor: Colors.turquoise,
-        boxShadow: '0 0 10px ' + Colors.turquoise
+        borderColor: Colors.bar,
+        boxShadow: '0 0 10px ' + Colors.bar
       });
     }
 
