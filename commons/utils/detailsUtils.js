@@ -139,3 +139,18 @@ export function generateQueryParams(parameters) {
   }
   return queryParams;
 }
+
+export function generateDetailsParameters(parameters) {
+  let queryParams = {},
+    tempQueryParams = generateQueryParams(parameters);
+  tempQueryParams = tempQueryParams.replace('?', '');
+  tempQueryParams = tempQueryParams.split('&');
+  tempQueryParams.forEach((queryParam, index) => {
+    index++;
+    queryParam = queryParam.split('=');
+    queryParams['detailsField' + index] = queryParam[0];
+    queryParams['detailsValue' + index] = queryParam[1];
+  });
+
+  return queryParams;
+}
