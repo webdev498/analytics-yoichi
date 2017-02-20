@@ -31,12 +31,15 @@ export const BarColorShade8 = '#d4f5fc';
 export const BarColorShade9 = '#eafbfe';
 
 export const OrangeColor = '#f3763a';
-export const OrangeColorShade1 = '#f58854';
-export const OrangeColorShade2 = '#f79e73';
-export const OrangeColorShade3 = '#f9b696';
-export const OrangeColorShade4 = '#fbd1bd';
-export const OrangeColorShade5 = '#fde7dc';
-export const OrangeColorShade6 = '#fef5f1';
+export const OrangeColorShade1 = '#f47d44';
+export const OrangeColorShade2 = '#f58a57';
+export const OrangeColorShade3 = '#f6996c';
+export const OrangeColorShade4 = '#f8a984';
+export const OrangeColorShade5 = '#f9bda0';
+export const OrangeColorShade6 = '#fbceb8';
+export const OrangeColorShade7 = '#fcdccd';
+export const OrangeColorShade8 = '#fdebe2';
+export const OrangeColorShade9 = '#fef5f1';
 
 export const SearchColor = '#363E51';
 
@@ -51,16 +54,16 @@ export const DurationWidgetColor = {
   'sec': '#D9F2F3'
 };
 
-export const WorldmapLegendsColor = {
-  'secure': [
-    TurquoiseColor,
-    '#51DFD8',
-    '#71E5DF',
-    '#97ECE8',
-    '#BAF2F0',
-    '#DBF8F7'
+export const Worldmap = {
+  secure: [
+    BarColor,
+    BarColorShade1,
+    BarColorShade2,
+    BarColorShade3,
+    BarColorShade4,
+    BarColorShade5
   ],
-  'malicious': [
+  malicious: [
     OrangeColor,
     OrangeColorShade1,
     OrangeColorShade2,
@@ -78,10 +81,7 @@ export const DefaultGraphPaletteColors = `${BarColor},${BarColorShade1},${BarCol
 ${BarColorShade3},${BarColorShade4},${BarColorShade5},${BarColorShade6},${BarColorShade7},\
 ${BarColorShade8},${BarColorShade9}`;
 
-export const TimelineBarColors = [
-  '#2AD8D0',
-  '#CAEDEB'
-];
+export const TimelineBarColors = [ '#2AD8D0', '#CAEDEB' ];
 
 export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
 
@@ -119,7 +119,7 @@ export const Colors = {
   subHeadingBG: SubHeadingBGColor,
   defaultGraphPalette: DefaultGraphPaletteColors,
   defaultCanvasBG: DefaultCanvasBGColors,
-  worldmapLegends: WorldmapLegendsColor,
+  worldmap: Worldmap,
   axis: AxisColor,
   timelineBar: TimelineBarColors,
   networkNodeLabel: NetworkNodeLabelColor,

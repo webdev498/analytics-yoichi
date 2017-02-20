@@ -8,7 +8,8 @@ import ScoreWidget from 'components/widgets/ScoreWidget';
 import FontIcon from 'material-ui/FontIcon';
 import {Colors} from '../../commons/colors';
 
-import {formatBytes, getColor} from '../../commons/utils/utils';
+import {formatBytes} from '../../commons/utils/utils';
+import {getColor} from '../../commons/utils/colorUtils';
 import {getCountryName} from '../../commons/utils/countryUtils';
 import {getArrowIcon} from '../../commons/utils/graphUtils';
 

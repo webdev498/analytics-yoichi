@@ -7,9 +7,10 @@ import {
   getIndexFromObjectName,
   translateTimeWindow,
   isUndefined,
-  getTimePairFromWindow,
-  getColorRanges
+  getTimePairFromWindow
 } from '../../../commons/utils/utils';
+
+import { getColorRanges } from '../../../commons/utils/colorUtils';
 
 describe('Utility Function:', function() {
   it('msToTime should convert milliseconds to time.', function() {
