@@ -34,7 +34,8 @@
               },
               "style": {
                 "marginRight": "2px",
-                "width": "25%"
+                "width": "25%",
+                "borderTop": "4px solid #F69275"
               }
             },
             "id": "1",
@@ -43,7 +44,7 @@
             "clickData": {
               "tableId": "RecentAnomalies",
               "filterText": "",
-              "page": "/alerts"
+              "page": "/threat-analytics-reports"
             }
           },
           {
@@ -65,7 +66,8 @@
               },
               "style": {
                 "marginRight": "2px",
-                "width": "25%"
+                "width": "25%",
+                "borderTop": "4px solid #F69275"
               }
             },
             "id": "2",
@@ -74,7 +76,7 @@
             "clickData": {
               "tableId": "RecentAnomalies",
               "filterText": "malware",
-              "page": "/alerts"
+              "page": "/threat-analytics-reports"
             }
           },
           {
@@ -96,7 +98,8 @@
               },
               "style": {
                 "marginRight": "2px",
-                "width": "25%"
+                "width": "25%",
+                "borderTop": "4px solid #2BC6D6"
               }
             },
             "details": {
@@ -155,7 +158,8 @@
               },
               "style": {
                 "marginRight": "2px",
-                "width": "25%"
+                "width": "25%",
+                "borderTop": "4px solid #2BC6D6"
               }
             },
             "details": {
@@ -203,6 +207,7 @@
         "chartOptions": {
           "xAxisname": "STATUS",
           "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
@@ -255,6 +260,7 @@
         "chartOptions": {
           "xAxisname": "USER",
           "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
@@ -308,6 +314,7 @@
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#C9EDDF, #60E2DC"
         },
         "chartData": {
@@ -364,6 +371,7 @@
         "chartOptions": {
           "xAxisname": "MESSAGE",
           "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
@@ -422,6 +430,7 @@
         "chartOptions": {
           "xAxisname": "MESSAGE",
           "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
@@ -479,6 +488,7 @@
         "chartOptions": {
           "xAxisname": "MESSAGE",
           "yAxisname": "COUNT",
+          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
@@ -523,8 +533,8 @@
         "attributes": {
           "chartWidth": "100%",
           "style": {
-            "width": "33%",
-            "marginRight": "30px"
+            "marginRight": "30px",
+            "width": "33%"
           },
           "id": "SecurityGroupManagementEventsByType",
           "chartHeight": "350"
