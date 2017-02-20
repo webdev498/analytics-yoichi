@@ -34,8 +34,7 @@
               },
               "style": {
                 "marginRight": "2px",
-                "width": "25%",
-                "borderTop": "4px solid #F69275"
+                "width": "25%"
               }
             },
             "id": "1",
@@ -44,7 +43,7 @@
             "clickData": {
               "tableId": "RecentAnomalies",
               "filterText": "",
-              "page": "/threat-analytics-reports"
+              "page": "/alerts"
             }
           },
           {
@@ -66,8 +65,7 @@
               },
               "style": {
                 "marginRight": "2px",
-                "width": "25%",
-                "borderTop": "4px solid #F69275"
+                "width": "25%"
               }
             },
             "id": "2",
@@ -76,7 +74,7 @@
             "clickData": {
               "tableId": "RecentAnomalies",
               "filterText": "malware",
-              "page": "/threat-analytics-reports"
+              "page": "/alerts"
             }
           },
           {
@@ -98,8 +96,7 @@
               },
               "style": {
                 "marginRight": "2px",
-                "width": "25%",
-                "borderTop": "4px solid #2BC6D6"
+                "width": "25%"
               }
             },
             "details": {
@@ -158,8 +155,7 @@
               },
               "style": {
                 "marginRight": "2px",
-                "width": "25%",
-                "borderTop": "4px solid #2BC6D6"
+                "width": "25%"
               }
             },
             "details": {
@@ -205,8 +201,69 @@
     [
       {
         "chartOptions": {
+          "xAxisname": "ANOMALY TYPES",
+          "pYAxisname": "ANOMALY COUNT",
+          "paletteColors": "#2bd8d0"
+        },
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_threat_trend",
+              "columns": [
+                "data.rank_alert.category"
+              ],
+              "axis": "x"
+            },
+            {
+              "reportId": "taf_threat_trend",
+              "columns": [
+                "date"
+              ],
+              "axis": "y"
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "showDetailsIcon": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_threat_trend"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Anomalies by Type"
+        },
+        "attributes": {
+          "chartWidth": "100%",
+          "style": {
+            "marginLeft": "30px",
+            "marginRight": "30px",
+            "width": "50%"
+          },
+          "id": "AlertByType",
+          "chartHeight": "350"
+        },
+        "details": {
+          "itemsPerPage": 5,
+          "secondaryClick": {
+            "page": "alert",
+            "pathParams": {
+              "id": "id:fieldName",
+              "date": "date:fieldName"
+            }
+          }
+        },
+        "id": "alert-by-type",
+        "type": "charts/ParetoChart"
+      },
+      {
+        "chartOptions": {
           "xAxisname": "ENTITIES",
-          "pYAxisname": "ANOMALY COUNT"
+          "pYAxisname": "ALERT COUNT"
         },
         "chartData": {
           "fieldMapping": [
@@ -244,7 +301,6 @@
           "chartWidth": "100%",
           "style": {
             "width": "50%",
-            "marginLeft": "30px",
             "marginRight": "30px"
           },
           "id": "TopAttackedEntities",
@@ -262,66 +318,6 @@
         },
         "id": "top-attacked-entities",
         "type": "charts/ParetoChart"
-      },
-      {
-        "chartOptions": {
-          "xAxisname": "ANOMALY TYPES",
-          "pYAxisname": "ANOMALY COUNT",
-          "paletteColors": "#2bd8d0"
-        },
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_threat_trend",
-              "columns": [
-                "data.rank_alert.category"
-              ],
-              "axis": "x"
-            },
-            {
-              "reportId": "taf_threat_trend",
-              "columns": [
-                "date"
-              ],
-              "axis": "y"
-            }
-          ]
-        },
-        "meta": {
-          "showHeader": true,
-          "showDetailsIcon": true,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_threat_trend"
-            },
-            "queryParams": {
-              "window": ""
-            }
-          },
-          "title": "Anomaly by Type"
-        },
-        "attributes": {
-          "chartWidth": "100%",
-          "style": {
-            "marginRight": "30px",
-            "width": "50%"
-          },
-          "id": "AlertByType",
-          "chartHeight": "350"
-        },
-        "details": {
-          "itemsPerPage": 5,
-          "secondaryClick": {
-            "page": "alert",
-            "pathParams": {
-              "id": "id:fieldName",
-              "date": "date:fieldName"
-            }
-          }
-        },
-        "id": "alert-by-type",
-        "type": "charts/ParetoChart"
       }
     ],
     [
@@ -329,7 +325,6 @@
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#C9EDDF, #60E2DC"
         },
         "chartData": {
@@ -371,6 +366,9 @@
             "marginRight": "30px",
             "width": "50%"
           },
+          "chartOptions": {
+            "labelFontSize": "9"
+          },
           "chartHeight": "350",
           "id": "atRiskAssetsByTime"
         },
@@ -381,7 +379,6 @@
         "chartOptions": {
           "xAxisname": "SCORE",
           "yAxisname": "COUNT",
-          "baseFont": "Open Sans, sans-serif",
           "paletteColors": "#2bd8d0",
           "showCumulativeLine": "0"
         },
@@ -420,14 +417,279 @@
         "attributes": {
           "chartWidth": "100%",
           "style": {
-            "marginRight": "30px",
-            "width": "50%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "id": "atRiskAssetByRisk",
           "chartHeight": "350"
         },
         "id": "at-risk-asset-by-risk",
         "type": "charts/ParetoChart"
+      }
+    ],
+    [
+      {
+        "chartOptions": {},
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_asset_count_time_shifted",
+              "columns": [
+                "0.0"
+              ]
+            },
+            {
+              "reportId": "taf_total_usage",
+              "columns": [
+                "date"
+              ]
+            },
+            {
+              "reportId": "taf_top_talkers_connections",
+              "columns": [
+                "connections"
+              ]
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "legend": [
+            "Connections",
+            "Used by",
+            "Assets"
+          ],
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+            },
+            "queryParams": {
+              "timeShift": "",
+              "window": ""
+            }
+          },
+          "title": "Top Connections"
+        },
+        "attributes": {
+          "style": {
+            "marginLeft": "30px",
+            "marginRight": "30px",
+            "width": "50%"
+          },
+          "id": "PieChartConnections"
+        },
+        "id": "pie-chart-connections",
+        "type": "charts/PieChart"
+      },
+      {
+        "chartOptions": {
+          "showValues": "1",
+          "showLabels": "1",
+          "numberSuffix": "%",
+          "chartRightMargin": "0"
+        },
+        "chart": {
+          "showAnnotations": false
+        },
+        "chartData": {
+          "showTrendLines": true,
+          "fieldMapping": [
+            {
+              "reportId": "taf_asset_count_time_shifted",
+              "columns": [
+                "0.0"
+              ]
+            },
+            {
+              "reportId": "taf_total_usage",
+              "columns": [
+                "date"
+              ]
+            },
+            {
+              "reportId": "taf_top_talkers_connections",
+              "columns": [
+                "connections"
+              ]
+            }
+          ],
+          "reportId": "taf_top_talkers_connections",
+          "trendLines": [
+            {
+              "line": [
+                {
+                  "dashed": "1",
+                  "color": "#f69275",
+                  "valueOnRight": "1",
+                  "dashLen": "4",
+                  "dashGap": "2"
+                }
+              ]
+            }
+          ],
+          "multipleReportIds": true
+        },
+        "details": {
+          "meta": {
+            "reportId": "taf_top_talkers_connections"
+          }
+        },
+        "meta": {
+          "showHeader": true,
+          "showDetailsIcon": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+            },
+            "queryParams": {
+              "timeShift": "",
+              "window": ""
+            }
+          },
+          "title": "Top IPs Using The Most Connections"
+        },
+        "attributes": {
+          "chartCaption": {
+            "display": "none"
+          },
+          "style": {
+            "width": "50%",
+            "marginRight": "30px"
+          },
+          "id": "HorizontalBarChartConnections"
+        },
+        "id": "horizontal-bar-chart-connections",
+        "type": "charts/HorizontalBarChart"
+      }
+    ],
+    [
+      {
+        "chartOptions": {},
+        "chartData": {
+          "fieldMapping": [
+            {
+              "reportId": "taf_asset_count_time_shifted",
+              "columns": [
+                "0.0"
+              ]
+            },
+            {
+              "reportId": "taf_total_usage",
+              "columns": [
+                "bandwidth"
+              ]
+            },
+            {
+              "reportId": "taf_top_talkers_bandwidth",
+              "columns": [
+                "bandwidth"
+              ]
+            }
+          ]
+        },
+        "meta": {
+          "showHeader": true,
+          "legend": [
+            "Bandwidth ",
+            "Used by",
+            "Assets"
+          ],
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+            },
+            "queryParams": {
+              "timeShift": "",
+              "window": ""
+            }
+          },
+          "title": "Top Bandwidth"
+        },
+        "attributes": {
+          "style": {
+            "marginLeft": "30px",
+            "marginRight": "30px",
+            "width": "100%"
+          },
+          "id": "PieChartBandwidth"
+        },
+        "id": "pie-chart-bandwidth",
+        "type": "charts/PieChart"
+      },
+      {
+        "chartOptions": {
+          "showValues": "0",
+          "showLabels": "1",
+          "numberSuffix": "%"
+        },
+        "chartData": {
+          "showTrendLines": true,
+          "fieldMapping": [
+            {
+              "reportId": "taf_asset_count_time_shifted",
+              "columns": [
+                "0.0"
+              ]
+            },
+            {
+              "reportId": "taf_total_usage",
+              "columns": [
+                "bandwidth"
+              ]
+            },
+            {
+              "reportId": "taf_top_talkers_bandwidth",
+              "columns": [
+                "bandwidth"
+              ]
+            }
+          ],
+          "reportId": "taf_top_talkers_bandwidth",
+          "trendLines": [
+            {
+              "line": [
+                {
+                  "dashed": "1",
+                  "color": "#f69275",
+                  "valueOnRight": "1",
+                  "dashLen": "4",
+                  "dashGap": "2"
+                }
+              ]
+            }
+          ],
+          "multipleReportIds": true
+        },
+        "meta": {
+          "showHeader": true,
+          "showDetails": false,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+            },
+            "queryParams": {
+              "timeShift": "",
+              "window": ""
+            }
+          },
+          "title": "Top IPs Using The Highest Bandwidth"
+        },
+        "attributes": {
+          "chartCaption": {
+            "display": "none"
+          },
+          "style": {
+            "width": "100%",
+            "marginRight": "30px"
+          },
+          "id": "HorizontalBarChartBandwidth"
+        },
+        "id": "horizontal-bar-chart-bandwidth",
+        "type": "charts/HorizontalBarChart"
       }
     ],
     [
@@ -563,6 +825,102 @@
         },
         "id": "world-map",
         "type": "maps/WorldMap"
+      }
+    ],
+    [
+      {
+        "meta": {
+          "showHeader": true,
+          "showDetailsIcon": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "pathParams": {
+              "reportId": "taf_least_used_software"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Least Used Software Details"
+        },
+        "name": "ReactableTable",
+        "attributes": {
+          "style": {
+            "marginLeft": "30px",
+            "marginRight": "30px",
+            "width": "33%"
+          },
+          "id": "least-used-software-details"
+        },
+        "details": {
+          "itemsPerPage": 10
+        },
+        "id": "LeastUsedSoftwareDetails",
+        "type": "List"
+      },
+      {
+        "meta": {
+          "showHeader": true,
+          "showDetailsIcon": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "headers": {
+              "Accept": "application/json;report-format=nested"
+            },
+            "pathParams": {
+              "reportId": "taf_top_successful_logins"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Successful Logins"
+        },
+        "name": "ReactableTable",
+        "attributes": {
+          "style": {
+            "marginRight": "30px",
+            "width": "33%"
+          },
+          "id": "successful-logins"
+        },
+        "details": {
+          "itemsPerPage": 10
+        },
+        "id": "SuccessfulLogins",
+        "type": "List"
+      },
+      {
+        "meta": {
+          "showHeader": true,
+          "showDetailsIcon": true,
+          "api": {
+            "path": "/api/analytics/reporting/execute/{reportId}",
+            "headers": {
+              "Accept": "application/json;report-format=nested"
+            },
+            "pathParams": {
+              "reportId": "taf_top_failed_logins"
+            },
+            "queryParams": {
+              "window": ""
+            }
+          },
+          "title": "Failed Logins"
+        },
+        "name": "ReactableTable",
+        "attributes": {
+          "style": {
+            "width": "33%",
+            "marginRight": "30px"
+          },
+          "id": "failed-logins"
+        },
+        "details": {
+          "itemsPerPage": 10
+        },
+        "id": "FailedLogins",
+        "type": "List"
       }
     ]
   ]
