@@ -423,9 +423,6 @@
           "id": "atRiskAssetByRisk",
           "chartHeight": "350"
         },
-        "details": {
-          "itemsPerPage": 5
-        },
         "id": "at-risk-asset-by-risk",
         "type": "charts/ParetoChart"
       }
