@@ -14,8 +14,7 @@ const styles = {
   },
   countStyle: {
     fontSize: '35px',
-    lineHeight: '35px',
-    fontWeight: 300
+    lineHeight: '35px'
   },
   title: {
     fontSize: '21px',
