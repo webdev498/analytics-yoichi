@@ -372,14 +372,14 @@ function getRDP(row) {
     id: getValue(row.id),
     Date: getValue(row.date),
     display: {
-    	sourceDest: getSourceDestination(row),
-        Type: {
+      sourceDest: getSourceDestination(row),
+      Type: {
         displayKey: true,
         value: getEventTypeString(row.type)
       }
     }
   };
-  
+
   return info;
 }
 
