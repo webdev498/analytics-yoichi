@@ -266,6 +266,7 @@ class Timeline extends React.Component {
       isPaginated: true,
       pageNumber: pageNumber
     };
+    this.toggleHighlightNetworkNode('invalid_id');
   }
 
   getApiObj(pageNumber, type) {
