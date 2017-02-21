@@ -2,7 +2,8 @@ import React, {PropTypes} from 'react';
 import WorldMapLegends from './WorldMapLegends';
 import {Colors} from '../../../commons/colors';
 
-import { generateRawData, getColorRanges } from '../../../commons/utils/utils';
+import { generateRawData } from '../../../commons/utils/utils';
+import { getColorRanges } from '../../../commons/utils/colorUtils';
 import {getCountryId} from '../../../commons/utils/countryUtils';
 
 const styles = {

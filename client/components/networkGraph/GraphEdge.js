@@ -67,7 +67,7 @@ export function createEdgeObject(dataEdge, edgesInSameDirection) {
       },
       color: {
         color: Colors.pebble,
-        highlight: Colors.turquoise
+        highlight: Colors.bar
       },
       edgeDetails: [],
       actionData: dataEdge.actionData ? dataEdge.actionData : {}

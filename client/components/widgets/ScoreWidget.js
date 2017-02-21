@@ -1,6 +1,6 @@
 import React from 'react';
 import {Colors} from '../../../commons/colors';
-import {getColor} from '../../../commons/utils/utils';
+import {getColor} from '../../../commons/utils/colorUtils';
 import { DEFAULT_FONT } from 'Constants';
 
 const styles = {

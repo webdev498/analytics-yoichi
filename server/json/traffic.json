@@ -33,7 +33,8 @@
                 "color": "#F69275"
               },
               "style": {
-                "marginRight": "2px",
+                "borderTop": "5px solid #F69275",
+                "marginRight": "1px",
                 "width": "25%"
               }
             },
@@ -64,7 +65,8 @@
                 "color": "#F69275"
               },
               "style": {
-                "marginRight": "2px",
+                "borderTop": "5px solid #F69275",
+                "marginRight": "1px",
                 "width": "25%"
               }
             },
@@ -92,10 +94,11 @@
             },
             "attributes": {
               "countStyle": {
-                "color": "#2BC6D6"
+                "color": "#03C5ED"
               },
               "style": {
-                "marginRight": "2px",
+                "borderTop": "5px solid #03C5ED",
+                "marginRight": "1px",
                 "width": "25%"
               }
             },
@@ -151,10 +154,11 @@
             },
             "attributes": {
               "countStyle": {
-                "color": "#2BC6D6"
+                "color": "#03C5ED"
               },
               "style": {
-                "marginRight": "2px",
+                "borderTop": "5px solid #03C5ED",
+                "marginRight": "1px",
                 "width": "25%"
               }
             },
@@ -201,7 +205,7 @@
     [
       {
         "chartOptions": {
-          "paletteColors": "#C9EDDF, #60E2DC",
+          "paletteColors": "#adecf9, #03c5ed",
           "yAxisName": "INCOMING BANDWIDTH",
           "xAxisName": "TIME",
           "lineThickness": "2",
@@ -268,7 +272,7 @@
       },
       {
         "chartOptions": {
-          "paletteColors": "#C9EDDF, #60E2DC",
+          "paletteColors": "#adecf9, #03c5ed",
           "yAxisName": "OUTGOING BANDWIDTH",
           "xAxisName": "TIME",
           "lineThickness": "2",
@@ -336,7 +340,7 @@
     [
       {
         "chartOptions": {
-          "paletteColors": "#C9EDDF, #60E2DC",
+          "paletteColors": "#adecf9, #03c5ed",
           "yAxisName": "NO. OF CONNECTIONS",
           "xAxisName": "TIME",
           "lineThickness": "2",
@@ -403,7 +407,7 @@
       {
         "chartOptions": {
           "showValues": "1",
-          "paletteColors": "#2bd8d0",
+          "paletteColors": "#03C5ED",
           "showLabels": "1",
           "chartRightMargin": "0"
         },

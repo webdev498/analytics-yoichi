@@ -40,19 +40,6 @@ export const defaultLayoutPath = `${baseUrl}/api/layout/summary-page`;
 
 export const DETAILS_BASE_URL = `/api/analytics/reporting/details`;
 
-export const CHART_COLORS = [
-  '2BD8D0',
-  '6CD3B4',
-  'B6CD94',
-  'FCC875',
-  '05E9F5',
-  '003300',
-  'FF66FF',
-  '999999',
-  '009999',
-  '66CDAA'
-];
-
 export const DEFAULT_FONT = 'Roboto, sans-serif';
 
 export const DEFAULT_CHART_OPTIONS = Object.freeze({

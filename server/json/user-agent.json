@@ -34,9 +34,9 @@
                 "color": "#F69275"
               },
               "style": {
-                "marginRight": "2px",
+                "marginRight": "1px",
                 "width": "25%",
-                "borderTop": "4px solid #F69275"
+                "borderTop": "5px solid #F69275"
               }
             },
             "id": "1",
@@ -67,7 +67,7 @@
                 "color": "#F69275"
               },
               "style": {
-                "marginRight": "2px",
+                "marginRight": "1px",
                 "width": "25%",
                 "borderTop": "5px solid #F69275"
               }
@@ -97,12 +97,12 @@
             "name": "MetricsCard",
             "attributes": {
               "countStyle": {
-                "color": "#2BC6D6"
+                "color": "#03C5ED"
               },
               "style": {
-                "marginRight": "2px",
+                "marginRight": "1px",
                 "width": "25%",
-                "borderTop": "4px solid #2BC6D6"
+                "borderTop": "5px solid #2BC6D6"
               }
             },
             "details": {
@@ -158,12 +158,12 @@
             "name": "MetricsCard",
             "attributes": {
               "countStyle": {
-                "color": "#2BC6D6"
+                "color": "#03C5ED"
               },
               "style": {
-                "marginRight": "2px",
+                "marginRight": "1px",
                 "width": "25%",
-                "borderTop": "4px solid #2BC6D6"
+                "borderTop": "5px solid #2BC6D6"
               }
             },
             "details": {

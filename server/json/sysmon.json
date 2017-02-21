@@ -34,7 +34,8 @@
                 "color": "#F69275"
               },
               "style": {
-                "marginRight": "3px",
+                "borderTop": "5px solid #F69275",
+                "marginRight": "1px",
                 "width": "25%"
               }
             },
@@ -66,7 +67,8 @@
                 "color": "#F69275"
               },
               "style": {
-                "marginRight": "3px",
+                "borderTop": "5px solid #F69275",
+                "marginRight": "1px",
                 "width": "25%"
               }
             },
@@ -97,7 +99,8 @@
                 "color": "#F69275"
               },
               "style": {
-                "marginRight": "3px",
+                "borderTop": "5px solid #F69275",
+                "marginRight": "1px",
                 "width": "25%"
               }
             },
@@ -156,7 +159,8 @@
                 "color": "#F69275"
               },
               "style": {
-                "marginRight": "3px",
+                "borderTop": "5px solid #F69275",
+                "marginRight": "1px",
                 "width": "25%"
               }
             },
@@ -322,7 +326,7 @@
         "chartOptions": {
           "showValues": "1",
           "showLabels": "1",
-          "paletteColors": "#60E2DC",
+          "paletteColors": "#03c5ed",
           "showCumulativeLine": "0"
         },
         "chartData": {
@@ -434,7 +438,7 @@
         "chartOptions": {
           "showValues": "1",
           "showLabels": "1",
-          "paletteColors": "#60E2DC",
+          "paletteColors": "#03c5ed",
           "showCumulativeLine": "0"
         },
         "chartData": {

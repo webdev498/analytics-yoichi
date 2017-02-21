@@ -5,10 +5,11 @@ import {
   getColumnIndexArrayFromColumnName,
   getIndexFromColumnName,
   getIndexFromObjectName,
-  getColorRanges,
   isUndefined,
   kFormatter
 } from '../../../commons/utils/utils';
+
+import {getColorRanges} from '../../../commons/utils/colorUtils';
 
 import { DEFAULT_FONT } from 'Constants';
 
