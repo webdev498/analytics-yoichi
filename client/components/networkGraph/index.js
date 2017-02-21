@@ -384,7 +384,6 @@ class NetworkGraph extends React.Component {
   }
 
   deselectNodes(network) {
-    let i = 0;
     for (let obj in this.nodeObjects) {
       let deselectedNode = this.nodeObjects[obj],
         node = network.body.nodes[deselectedNode.id];
@@ -393,11 +392,8 @@ class NetworkGraph extends React.Component {
         image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
       });
 
-      if (i === 0) {
-        this.deselect(deselectedNode);
-        this.toggleHighlightAnomalyChart(deselectedNode, false);
-      }
-      i++;
+      this.deselect(deselectedNode);
+      this.toggleHighlightAnomalyChart(deselectedNode, false);
     }
   }
 
