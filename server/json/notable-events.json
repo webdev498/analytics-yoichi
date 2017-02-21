@@ -30,10 +30,10 @@
             },
             "attributes": {
               "countStyle": {
-                "color": "#F69275"
+                "color": "#f37133"
               },
               "style": {
-                "borderTop": "5px solid #F69275",
+                "borderTop": "5px solid #f37133",
                 "marginRight": "1px",
                 "width": "25%"
               }
@@ -62,10 +62,10 @@
             },
             "attributes": {
               "countStyle": {
-                "color": "#F69275"
+                "color": "#f37133"
               },
               "style": {
-                "borderTop": "5px solid #F69275",
+                "borderTop": "5px solid #f37133",
                 "marginRight": "1px",
                 "width": "25%"
               }
@@ -311,8 +311,7 @@
       {
         "chartOptions": {
           "xAxisname": "TIME",
-          "yAxisname": "COUNT",
-          "paletteColors": "#adecf9, #03c5ed"
+          "yAxisname": "COUNT"
         },
         "chartData": {
           "fieldMapping": [

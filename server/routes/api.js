@@ -27,7 +27,7 @@ router
 .get('/layout/*', layoutRoutes)
 .get('*', async function(ctx, next) {
   const url = serverBaseUrl + ctx.url;
-  console.log('url', url);
+  console.log('proxy url', url);
   const res = await fetch(url,
     {
       method: 'GET',
@@ -74,7 +74,7 @@ router
 .get(reportingApiBasePath + 'taf_user_agent_unique_with_name', userAgent)
 .post('*', async function(ctx, next) {
   const url = serverBaseUrl + ctx.url;
-  console.log('url', url);
+  console.log('proxy url', url);
   const res = fetch(url,
     {
       method: 'POST',

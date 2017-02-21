@@ -38,8 +38,6 @@ export const OrangeColorShade7 = '#fcdccd';
 export const OrangeColorShade8 = '#fdebe2';
 export const OrangeColorShade9 = '#fef5f1';
 
-export const SearchColor = '#363E51';
-
 export const AreaSparkLineChartColor = {
   area: '#adecf9',
   border: '#03c5ed'
@@ -72,13 +70,9 @@ export const Worldmap = {
 
 export const SubHeadingBGColor = '#F7F7F9';
 
-export const AxisColor = '#DADADA';
-
 export const DefaultGraphPaletteColors = `${BarColor},${BarColorShade1},${BarColorShade2},\
 ${BarColorShade3},${BarColorShade4},${BarColorShade5},${BarColorShade6},${BarColorShade7},\
 ${BarColorShade8},${BarColorShade9}`;
-
-export const TimelineBarColors = [ '#2AD8D0', '#CAEDEB' ];
 
 export const DefaultCanvasBGColors = `${BarColorShade9},${WhiteColor}`;
 
@@ -115,14 +109,11 @@ export const Colors = {
   defaultGraphPalette: DefaultGraphPaletteColors,
   defaultCanvasBG: DefaultCanvasBGColors,
   worldmap: Worldmap,
-  axis: AxisColor,
-  timelineBar: TimelineBarColors,
   networkNodeLabel: NetworkNodeLabelColor,
   contextBG: contextBGColor,
   selectedActionBG: selectedActionBGColor,
   notificationMessageBG: notificationMessageBGColor,
   cloudShades: CloudColorShades,
-  search: SearchColor,
   bar: BarColor
 };
 
@@ -131,3 +122,5 @@ export const Alerts = {
   medium: '#f37133',
   low: '#feb821'
 };
+
+export const StandardChartPalette = `${BarColorShade7}, ${BarColor}`;

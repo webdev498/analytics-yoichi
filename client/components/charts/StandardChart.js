@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import moment from 'moment';
-import {Colors} from '../../../commons/colors';
+import { Colors, StandardChartPalette } from '../../../commons/colors';
 import { getIndexFromColumnName } from '../../../commons/utils/utils';
 import { calculateDateDisplayFormat } from '../../../commons/utils/dateUtils';
 import { DEFAULT_FONT } from 'Constants';
@@ -71,7 +71,7 @@ export function generateDataSource(data, chartOptions, fieldMapping, duration) {
       numDivLines: '6',
       baseFont: DEFAULT_FONT,
       baseFontColor: Colors.pebble,
-      paletteColors: Colors.defaultGraphPalette,
+      paletteColors: StandardChartPalette,
       decimals: '2',
       labelDisplay: 'wrap',
       slantLabels: '1',

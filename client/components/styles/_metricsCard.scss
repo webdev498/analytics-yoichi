@@ -2,6 +2,6 @@
 
 .metric-card {
   &:hover {
-    background-color: $CloudColor;
+    background-color: rgba($CloudColor, 0.5);
   }
 }
