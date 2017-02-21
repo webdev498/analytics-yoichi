@@ -270,7 +270,7 @@ class Timeline extends React.Component {
       pageNumber: pageNumber
     };
     console.log('fetchData');
-    // this.toggleHighlightNetworkNode('invalid_id');
+    this.toggleHighlightNetworkNode('invalid_id');
   }
 
   getApiObj(pageNumber, type) {
