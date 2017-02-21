@@ -131,3 +131,5 @@ export const Alerts = {
   medium: '#f37133',
   low: '#feb821'
 };
+
+export const StandardChartPalette = `${BarColorShade7}, ${BarColor}`;

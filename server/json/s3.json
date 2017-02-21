@@ -273,8 +273,7 @@
       {
         "chartOptions": {
           "xAxisname": "TIME",
-          "yAxisname": "COUNT",
-          "paletteColors": "#adecf9, #03c5ed"
+          "yAxisname": "COUNT"
         },
         "chartData": {
           "fieldMapping": [
@@ -327,8 +326,7 @@
       {
         "chartOptions": {
           "xAxisname": "TIME",
-          "yAxisname": "COUNT",
-          "paletteColors": "#adecf9, #03c5ed"
+          "yAxisname": "COUNT"
         },
         "chartData": {
           "fieldMapping": [
