@@ -174,7 +174,6 @@ class TimelineCard extends React.Component {
   }
 
   toggleHighlightNetworkNode(id) {
-    console.log('toggleHighlightNetworkNode', id);
     this.props.broadcastEvent('network-graph', {id});
   }
 
@@ -193,8 +192,7 @@ class TimelineCard extends React.Component {
         case 'Anomaly': {
           props.setSelectedCardId(props.data.id, false);
           props.setAutoScroll(true);
-          console.log('handleCardClick', props.data.id);
-          this.toggleHighlightNetworkNode(props.data.id, props.selectedCardId);
+          this.toggleHighlightNetworkNode(props.data.id);
 
           if (props.selectedCardId !== props.data.id) {
             details = {

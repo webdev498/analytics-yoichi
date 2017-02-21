@@ -160,7 +160,6 @@ export class ParentCard extends React.Component {
 
     const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
     this.detailsApiObj = {id, api, params, options, isDetails};
-    console.log('parentCards', id);
     props.fetchApiData({id, api, params, options, isDetails});
   }
 

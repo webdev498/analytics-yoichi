@@ -128,11 +128,9 @@ class Timeline extends React.Component {
 
     if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
       const {id, set} = nextProps.eventData;
-      console.log('nextProps.eventData', nextProps.eventData);
 
       state.rows.forEach((row) => {
         if (row.id === id) {
-          console.log('nextProps id:', id);
           this.setSelectedCardId(id, set);
           let details = {
             selectedCardId: id,
@@ -153,7 +151,6 @@ class Timeline extends React.Component {
       }
 
       if (loadOnDurationUpdate && nextProps.duration !== props.duration) {
-        console.log('test2');
         this.fetchData(1, props.attributes.type);
       }
       else {
@@ -269,8 +266,6 @@ class Timeline extends React.Component {
       isPaginated: true,
       pageNumber: pageNumber
     };
-    console.log('fetchData');
-    this.toggleHighlightNetworkNode('invalid_id');
   }
 
   getApiObj(pageNumber, type) {
@@ -390,7 +385,7 @@ class Timeline extends React.Component {
     }
 
     return (
-      <div>
+      <div >
         <div style={{
           width: '450px',
           position: 'absolute',
