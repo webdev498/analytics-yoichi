@@ -415,10 +415,7 @@ class Timeline extends React.Component {
   }
 
   collaseContextualMenu() {
-    // const {props, state} = this;
     return () => {
-      // props.removeComponent(state.selectedCardId);
-      // this.setState({selectedCardId: ''});
       let details = {
         selectedCardId: '',
         eventDate: '',
