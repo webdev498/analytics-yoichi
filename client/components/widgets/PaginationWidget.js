@@ -49,6 +49,7 @@ class PaginationWidget extends React.Component {
   onPageChanged(pageNumber) {
     const {props} = this;
     return (event) => {
+      console.log('test1');
       props.fetchData(pageNumber, props.type);
     };
   }
