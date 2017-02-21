@@ -31,10 +31,10 @@
             "name": "MetricsCard",
             "attributes": {
               "countStyle": {
-                "color": "#F69275"
+                "color": "#f37133"
               },
               "style": {
-                "borderTop": "5px solid #F69275",
+                "borderTop": "5px solid #f37133",
                 "marginRight": "1px",
                 "width": "25%"
               }
@@ -64,10 +64,10 @@
             "name": "MetricsCard",
             "attributes": {
               "countStyle": {
-                "color": "#F69275"
+                "color": "#f37133"
               },
               "style": {
-                "borderTop": "5px solid #F69275",
+                "borderTop": "5px solid #f37133",
                 "marginRight": "1px",
                 "width": "25%"
               }
@@ -158,10 +158,10 @@
             "name": "MetricsCard",
             "attributes": {
               "countStyle": {
-                "color": "#F69275"
+                "color": "#f37133"
               },
               "style": {
-                "borderTop": "5px solid #F69275",
+                "borderTop": "5px solid #f37133",
                 "marginRight": "1px",
                 "width": "25%"
               }

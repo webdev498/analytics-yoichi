@@ -16,7 +16,7 @@
               "window": ""
             }
           },
-          "title": "Alert Detail"
+          "title": "Anomaly Details"
         },
         "name": "AlertDetail",
         "attributes": {

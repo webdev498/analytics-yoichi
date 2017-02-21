@@ -31,12 +31,12 @@
             "name": "MetricsCard",
             "attributes": {
               "countStyle": {
-                "color": "#F69275"
+                "color": "#f37133"
               },
               "style": {
                 "marginRight": "1px",
                 "width": "25%",
-                "borderTop": "5px solid #F69275"
+                "borderTop": "5px solid #f37133"
               }
             },
             "id": "1",
@@ -64,12 +64,12 @@
             "name": "MetricsCard",
             "attributes": {
               "countStyle": {
-                "color": "#F69275"
+                "color": "#f37133"
               },
               "style": {
                 "marginRight": "1px",
                 "width": "25%",
-                "borderTop": "5px solid #F69275"
+                "borderTop": "5px solid #f37133"
               }
             },
             "id": "2",
