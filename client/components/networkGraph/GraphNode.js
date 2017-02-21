@@ -319,7 +319,7 @@ export default class GraphNode {
       shape: 'image',
       color: {
         color: Colors.networkNodeLabel,
-        highlight: Colors.turquoise
+        highlight: Colors.bar
       },
       actionData: node.actionData ? node.actionData : {}
     };
@@ -367,7 +367,7 @@ export function createNodeObject(node) {
     shape: 'image',
     color: {
       color: Colors.networkNodeLabel,
-      highlight: Colors.turquoise
+      highlight: Colors.bar
     },
     actionData: node.actionData ? node.actionData : {}
   };

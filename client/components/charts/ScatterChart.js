@@ -20,9 +20,9 @@ class ScatterChart extends React.Component {
         'drawline': '0',
         'anchorsides': '0',
         'anchorradius': '6',
-        'color': Colors.turquoise,
-        'anchorbgcolor': Colors.turquoise,
-        'anchorbordercolor': Colors.turquoise,
+        'color': Colors.bar,
+        'anchorbgcolor': Colors.bar,
+        'anchorbordercolor': Colors.bar,
         'seriesname': ''
       };
 

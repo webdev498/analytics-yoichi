@@ -78,44 +78,44 @@ const protocolChart = {
 
 const userCharts = [
   {
-    'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
-      'xAxisName': 'Machines',
-      'divLineThickness': '2',
-      'showYAxisValues': '1',
-      'xAxisNameFontSize': '10',
-      'yAxisNameFontSize': '10',
-      'labelFontSize': '9',
-      'drawAnchors': '1',
-      'anchorRadius': '1',
-      'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+    chartOptions: {
+      paletteColors: '#03c5ed,#adecf9',
+      xAxisName: 'Machines',
+      divLineThickness: '2',
+      showYAxisValues: '1',
+      xAxisNameFontSize: '10',
+      yAxisNameFontSize: '10',
+      labelFontSize: '9',
+      drawAnchors: '1',
+      anchorRadius: '1',
+      showlegend: '0',
+      outCnvBaseFontSize: '9'
     },
-    'chartData': {
-      'fieldMapping': [
+    chartData: {
+      fieldMapping: [
         {
-          'columns': [ {
+          columns: [ {
             columnType: 'DIMENSION'
           } ],
-          'axis': 'x'
+          axis: 'x'
         },
         {
-          'seriesname': 'Current Logins',
-          'reportId': 'taf_asset_successful_logins_by_user_on_machines_time_shifted',
-          'columns': [ {
+          seriesname: 'Current Logins',
+          reportId: 'taf_asset_successful_logins_by_user_on_machines_time_shifted',
+          columns: [ {
             columnType: 'MEASURE',
             key: 0
           } ],
-          'axis': 'y'
+          axis: 'y'
         },
         {
-          'seriesname': 'Historic Logins',
-          'reportId': 'taf_asset_successful_logins_by_user_on_machines_time_shifted',
-          'columns': [ {
+          seriesname: 'Historic Logins',
+          reportId: 'taf_asset_successful_logins_by_user_on_machines_time_shifted',
+          columns: [ {
             columnType: 'MEASURE',
             key: 1
           } ],
-          'axis': 'y'
+          axis: 'y'
         }
       ]
     },
@@ -248,42 +248,42 @@ const userCharts = [
     'type': 'charts/MultiSeriesColumn2d'
   },
   {
-    'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
-      'xAxisName': 'TIME',
-      'lineThickness': '1',
-      'drawAnchors': '0',
-      'divLineThickness': '2',
-      'showYAxisValues': '1',
-      'xAxisNameFontSize': '10',
-      'yAxisNameFontSize': '10',
-      'labelFontSize': '9',
-      'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+    chartOptions: {
+      paletteColors: '#03c5ed,#adecf9',
+      xAxisName: 'TIME',
+      lineThickness: '1',
+      drawAnchors: '0',
+      divLineThickness: '2',
+      showYAxisValues: '1',
+      xAxisNameFontSize: '10',
+      yAxisNameFontSize: '10',
+      labelFontSize: '9',
+      showlegend: '0',
+      outCnvBaseFontSize: '9'
     },
-    'chartData': {
-      'fieldMapping': [
+    chartData: {
+      fieldMapping: [
         {
-          'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted',
-          'columns': [ 'date' ],
-          'axis': 'x'
+          reportId: 'taf_asset_all_successful_logins_by_user_time_shifted',
+          columns: [ 'date' ],
+          axis: 'x'
         },
         {
-          'seriesname': 'Current Logins',
-          'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted',
-          'columns': [ 'count[0]' ],
-          'renderas': 'Line',
-          'axis': 'y'
+          seriesname: 'Current Logins',
+          reportId: 'taf_asset_all_successful_logins_by_user_time_shifted',
+          columns: [ 'count[0]' ],
+          renderas: 'Line',
+          axis: 'y'
         },
         {
-          'seriesname': 'Historic Logins',
-          'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted',
-          'columns': [ 'count[1]' ],
-          'renderas': 'Area',
-          'axis': 'y'
+          seriesname: 'Historic Logins',
+          reportId: 'taf_asset_all_successful_logins_by_user_time_shifted',
+          columns: [ 'count[1]' ],
+          renderas: 'Area',
+          axis: 'y'
         }
       ],
-      'combinedResult': true
+      combinedResult: true
     },
     'meta': {
       'showHeader': true,
@@ -414,48 +414,48 @@ const userCharts = [
 
 const machineCharts = [
   {
-    'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
-      'xAxisName': 'Users',
-      'divLineThickness': '2',
-      'showYAxisValues': '1',
-      'xAxisNameFontSize': '10',
-      'yAxisNameFontSize': '10',
-      'labelFontSize': '9',
-      'drawAnchors': '1',
-      'anchorRadius': '1',
-      'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+    chartOptions: {
+      paletteColors: '#03c5ed,#adecf9',
+      xAxisName: 'Users',
+      divLineThickness: '2',
+      showYAxisValues: '1',
+      xAxisNameFontSize: '10',
+      yAxisNameFontSize: '10',
+      labelFontSize: '9',
+      drawAnchors: '1',
+      anchorRadius: '1',
+      showlegend: '0',
+      outCnvBaseFontSize: '9'
     },
-    'chartData': {
-      'fieldMapping': [
+    chartData: {
+      fieldMapping: [
         {
-          'columns': [ {
+          columns: [ {
             columnType: 'DIMENSION'
           } ],
-          'axis': 'x'
+          axis: 'x'
         },
         {
-          'seriesname': 'Current Logins',
-          'reportId': 'taf_asset_successful_logins_on_machine_by_users_time_shifted',
-          'columns': [ {
+          seriesname: 'Current Logins',
+          reportId: 'taf_asset_successful_logins_on_machine_by_users_time_shifted',
+          columns: [ {
             columnType: 'MEASURE',
             key: 0
           } ],
-          'axis': 'y'
+          axis: 'y'
         },
         {
-          'seriesname': 'Historic Logins',
-          'reportId': 'taf_asset_successful_logins_on_machine_by_users_time_shifted',
-          'columns': [ {
+          seriesname: 'Historic Logins',
+          reportId: 'taf_asset_successful_logins_on_machine_by_users_time_shifted',
+          columns: [ {
             columnType: 'MEASURE',
             key: 1
           } ],
-          'axis': 'y'
+          axis: 'y'
         }
       ]
     },
-    'meta': {
+    meta: {
       'showHeader': true,
       'showRefresh': false,
       'api': {
@@ -584,42 +584,42 @@ const machineCharts = [
     'type': 'charts/MultiSeriesColumn2d'
   },
   {
-    'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
-      'xAxisName': 'TIME',
-      'lineThickness': '1',
-      'drawAnchors': '0',
-      'divLineThickness': '2',
-      'showYAxisValues': '1',
-      'xAxisNameFontSize': '10',
-      'yAxisNameFontSize': '10',
-      'labelFontSize': '9',
-      'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+    chartOptions: {
+      paletteColors: '#03c5ed,#adecf9',
+      xAxisName: 'TIME',
+      lineThickness: '1',
+      drawAnchors: '0',
+      divLineThickness: '2',
+      showYAxisValues: '1',
+      xAxisNameFontSize: '10',
+      yAxisNameFontSize: '10',
+      labelFontSize: '9',
+      showlegend: '0',
+      outCnvBaseFontSize: '9'
     },
-    'chartData': {
-      'fieldMapping': [
+    chartData: {
+      fieldMapping: [
         {
-          'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted',
-          'columns': [ 'date' ],
-          'axis': 'x'
+          reportId: 'taf_asset_all_successful_logins_by_machine_time_shifted',
+          columns: [ 'date' ],
+          axis: 'x'
         },
         {
-          'seriesname': 'Current Logins',
-          'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted',
-          'columns': [ 'count[0]' ],
-          'renderas': 'Line',
-          'axis': 'y'
+          seriesname: 'Current Logins',
+          reportId: 'taf_asset_all_successful_logins_by_machine_time_shifted',
+          columns: [ 'count[0]' ],
+          renderas: 'Line',
+          axis: 'y'
         },
         {
-          'seriesname': 'Historic Logins',
-          'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted',
-          'columns': [ 'count[1]' ],
-          'renderas': 'Area',
-          'axis': 'y'
+          seriesname: 'Historic Logins',
+          reportId: 'taf_asset_all_successful_logins_by_machine_time_shifted',
+          columns: [ 'count[1]' ],
+          renderas: 'Area',
+          axis: 'y'
         }
       ],
-      'combinedResult': true
+      combinedResult: true
     },
     'meta': {
       'showHeader': true,
