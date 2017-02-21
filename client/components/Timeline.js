@@ -419,7 +419,7 @@ class Timeline extends React.Component {
         machine: ''
       };
       this.getContextualMenuApiObj(details);
-      this.toggleHighlightNetworkNode('invalid_id');
+      this.toggleHighlightNetworkNode('');
     };
   }
 

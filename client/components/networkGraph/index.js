@@ -231,10 +231,8 @@ class NetworkGraph extends React.Component {
     if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
       const {id} = nextProps.eventData;
 
-      if (id) {
-        this.deselectNodes(this.network);
-        this.network.setSelection({nodes: [], edges: []});
-      }
+      this.deselectNodes(this.network);
+      this.network.setSelection({nodes: [], edges: []});
 
       if (this.nodeObjects[id]) {
         let nodeDetails = {
@@ -393,7 +391,7 @@ class NetworkGraph extends React.Component {
       });
 
       this.deselect(deselectedNode);
-      this.toggleHighlightAnomalyChart(deselectedNode, false);
+      this.toggleHighlightAnomalyChart({id: ''}, false);
     }
   }
 
