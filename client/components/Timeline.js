@@ -26,7 +26,7 @@ const styles = {
   }
 };
 
-function getTabObj(tabs, timelineType, currentTab) {
+export function getTabObj(tabs, timelineType, currentTab) {
   let tabObj = {};
   for (let tab in tabs) {
     if (tab === currentTab) {

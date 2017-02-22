@@ -426,6 +426,16 @@
           "id": "atRiskAssetByRisk",
           "chartHeight": "350"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "secondaryClick": {
+            "page": "asset",
+            "pathParams": {
+              "type": "type:fieldName",
+              "Name": "Name:fieldName"
+            }
+          }
+        },
         "id": "at-risk-asset-by-risk",
         "type": "charts/ParetoChart"
       }
