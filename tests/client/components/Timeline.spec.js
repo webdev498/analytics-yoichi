@@ -3,7 +3,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
-import Timeline from 'components/Timeline';
+import Timeline, {getTabObj} from 'components/Timeline';
 import TabsWidget from 'components/TabsWidget';
 import PaginationWidget from 'components/widgets/PaginationWidget';
 import {wrapThemeProvider} from '../../testUtils';
@@ -105,8 +105,13 @@ function renderTimeline(timelineType) {
   return component.find('Timeline');
 }
 
-function mountTimeline() {
-  return mount(<Timeline {...props} />);
+function mountTimeline(newProps) {
+  if (newProps) {
+    return mount(<Timeline {...newProps} />);
+  }
+  else {
+    return mount(<Timeline {...props} />);
+  }
 }
 
 function mountTimelineComponent() {
@@ -206,5 +211,43 @@ describe('<Timeline />', () => {
     expect(component.props().data.options).to.be.an('object');
     expect(component.props().data.options.customParams).to.be.defined;
     expect(component.props().data.options.customParams).to.be.an('object');
+  });
+
+  it('should display message if no records exists', () => {
+    let newProps = {
+      data: {
+        normalizeData: [],
+        options: {
+          customParams: {}
+        }
+      }
+    };
+    newProps = Object.assign({}, props, newProps);
+    let component = mountTimeline(newProps);
+    expect(component.props().data).to.be.defined;
+    expect(component.state().rows).to.be.defined;
+    expect(component.state().rows).to.have.length(0);
+    // expect(component.card).to.equal('TIMELINE_CARD');
+    expect(component.find('#timeline-component').childAt(0).type()).to.equal('div');
+    expect(component.find('#timeline-component').childAt(0).text()).to.equal('No additional results were found.');
+  });
+
+  it('should display message if component returns an error', () => {
+    let newProps = {
+      errorData: {}
+    };
+    newProps = Object.assign({}, props, newProps);
+    let component = mountTimeline(newProps);
+    expect(component.find('#timeline-component').childAt(0).type()).to.equal('div');
+    expect(component.find('#timeline-component').childAt(0).text()).to.equal('No additional results were found.');
+  });
+
+  it('should return correct tab object', () => {
+    let tabObj = {path: '/api/alert/traffic', queryParams: {}, pathParams: {}};
+    expect(getTabObj(props.tabs, 'primary', 'DETAILS')).to.equal(tabObj);
+  });
+
+  it('should return null tab object if current tab is passed with incorrect value', () => {
+    expect(getTabObj(props.tabs, 'primary', 'SESSIONS')).to.equal({});
   });
 });
