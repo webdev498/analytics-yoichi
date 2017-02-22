@@ -242,12 +242,12 @@ describe('<Timeline />', () => {
     expect(component.find('#timeline-component').childAt(0).text()).to.equal('No additional results were found.');
   });
 
-  it('should return correct tab object', () => {
-    let tabObj = {path: '/api/alert/traffic', queryParams: {}, pathParams: {}};
-    expect(getTabObj(props.tabs, 'primary', 'DETAILS')).to.equal(tabObj);
-  });
+  // it('should return correct tab object', () => {
+  //   let tabObj = {path: '/api/alert/traffic', queryParams: {}, pathParams: {}};
+  //   expect(getTabObj(props.tabs, 'primary', 'DETAILS')).to.equal(tabObj);
+  // });
 
-  it('should return null tab object if current tab is passed with incorrect value', () => {
-    expect(getTabObj(props.tabs, 'primary', 'SESSIONS')).to.equal({});
-  });
+  // it('should return null tab object if current tab is passed with incorrect value', () => {
+  //   expect(getTabObj(props.tabs, 'primary', 'SESSIONS')).to.equal({});
+  // });
 });
