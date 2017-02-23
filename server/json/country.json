@@ -417,7 +417,7 @@
         "chart": {
           "worldMap": {
             "meta": {
-              "subTitle": "NUMBER OF OUTGOING CONNECTIONS BY COUNTRY"
+              "subTitle": "NUMBER OF INCOMING CONNECTIONS BY COUNTRY"
             },
             "attributes": {
               "chartWidth": "100%",

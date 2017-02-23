@@ -127,6 +127,8 @@ export function generateChartDataSource(rawData, chartOptions, fieldMapping) {
 
   dataSourceObject.data = [{data: dataObject}];
 
+  console.log(dataSourceObject);
+
   return dataSourceObject;
 }
 
@@ -159,6 +161,7 @@ class WorldMap extends React.Component {
         dataSource: generateChartDataSource(rawData, chartOptions, fieldMapping),
         events: {
           entityClick: function(eventObj, dataObj) {
+            console.log(dataObj, JSON.stringify(eventObj.sender.getJSONData()));
             showDetailsTable(dataObj);
           }
         }
