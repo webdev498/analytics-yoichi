@@ -145,8 +145,10 @@
     "rowClickable": true
   },
   "details": {
-    "queryParams": {
-      "correlationIds": "correlationIds[0]:fieldName"
+    "meta": {
+      "queryParams": {
+        "correlationIds": "correlationIds[0]:fieldName"
+      }
     }
   }
 }

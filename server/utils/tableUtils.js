@@ -53,7 +53,7 @@ export function processData(data, tableJson, url) {
           let parameters = {
             data,
             duration: getParameterByName('window', url),
-            queryParamsArray: tableJson.details.queryParams,
+            queryParamsArray: tableJson.details.meta.queryParams ? tableJson.details.meta.queryParams : {},
             currentRowNumber: j,
             nestedResult,
             pathParams: tableJson.details.pathParams

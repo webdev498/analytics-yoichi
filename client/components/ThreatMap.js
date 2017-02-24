@@ -9,7 +9,7 @@ class ThreatMap extends React.Component {
 
   render() {
     const {props} = this,
-      {data, chart, showDetailsTable} = props;
+      {data, chart, showDetailsTable, details} = props;
 
     if (!data) return null;
 
@@ -22,7 +22,8 @@ class ThreatMap extends React.Component {
             data={data}
             chartOptions={chart.worldMap.chartOptions}
             chartData={chart.worldMap.chartData}
-            showDetailsTable={showDetailsTable} />
+            showDetailsTable={showDetailsTable}
+            details={details} />
         </div>
         <div style={{width: '30%'}}>
           <HorizontalBarChart
@@ -31,14 +32,16 @@ class ThreatMap extends React.Component {
             data={data}
             chartOptions={chart.legend1.chartOptions}
             chartData={chart.legend1.chartData}
-            chart={chart.legend1.chart} />
+            chart={chart.legend1.chart}
+            loadAsLegend />
           <HorizontalBarChart
             meta={chart.legend2.meta}
             attributes={chart.legend2.attributes}
             data={data}
             chartOptions={chart.legend2.chartOptions}
             chartData={chart.legend2.chartData}
-            chart={chart.legend2.chart} />
+            chart={chart.legend2.chart}
+            loadAsLegend />
         </div>
       </div>
     );

@@ -49,8 +49,10 @@
     "emptyValueMessage": "(Empty)"
   },
   "details": {
-    "queryParams": {
-      "data.s3.key": "data.s3.key:fieldName"
+    "meta": {
+      "queryParams": {
+        "data.s3.key": "data.s3.key:fieldName"
+      }
     }
   }
 }

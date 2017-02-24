@@ -450,6 +450,16 @@
           },
           "id": "TopConnectionsByProtocol"
         },
+        "details": {
+          "meta": {
+            "queryParams": {
+              "protocol.service": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "top-connections-by-protocol",
         "type": "charts/HorizontalBarChart"
       }

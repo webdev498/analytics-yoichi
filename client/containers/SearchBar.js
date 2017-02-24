@@ -76,7 +76,7 @@ const styles = {
   }
 };
 
-export default class SearchBar extends React.Component {
+class SearchBar extends React.Component {
   constructor(props) {
     super(props);
 
@@ -148,6 +148,7 @@ export default class SearchBar extends React.Component {
 
   render() {
     const {props} = this;
+
     if (props.floatingSearchBar === true) {
       this.styles = {
         inputWrap: Object.assign({}, styles.inputWrap, styles.inputWrapDetails),
@@ -192,3 +193,5 @@ export default class SearchBar extends React.Component {
     </div>;
   }
 };
+
+export default SearchBar;

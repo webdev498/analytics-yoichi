@@ -207,7 +207,12 @@
         "details": {
           "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_dest_countries"
+            "reportId": "taf_dest_countries",
+            "queryParams": {
+              "destination.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {
@@ -383,7 +388,12 @@
         "details": {
           "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_source_countries"
+            "reportId": "taf_source_countries",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {

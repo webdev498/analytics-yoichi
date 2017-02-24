@@ -49,8 +49,10 @@
     "emptyValueMessage": "(Empty)"
   },
   "details": {
-    "queryParams": {
-      "data.sysmon.ParentImage": "data.sysmon.ParentImage:fieldName"
+    "meta": {
+      "queryParams": {
+        "data.sysmon.ParentImage": "data.sysmon.ParentImage:fieldName"
+      }
     }
   }
 }

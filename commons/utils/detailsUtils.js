@@ -141,15 +141,20 @@ export function generateQueryParams(parameters) {
 }
 
 export function generateDetailsParameters(parameters) {
-  let queryParams = {},
-    tempQueryParams = generateQueryParams(parameters);
+  let queryParams = {};
+  if (Object.keys(parameters.queryParamsArray).length === 0) {
+    return queryParams;
+  }
+  let tempQueryParams = generateQueryParams(parameters);
   tempQueryParams = tempQueryParams.replace('?', '');
   tempQueryParams = tempQueryParams.split('&');
   tempQueryParams.forEach((queryParam, index) => {
-    index++;
-    queryParam = queryParam.split('=');
-    queryParams['detailsField' + index] = queryParam[0];
-    queryParams['detailsValue' + index] = queryParam[1];
+    if (queryParam[0] !== '') {
+      index++;
+      queryParam = queryParam.split('=');
+      queryParams['detailsField' + index] = queryParam[0];
+      queryParams['detailsValue' + index] = queryParam[1];
+    }
   });
 
   return queryParams;
