@@ -149,12 +149,10 @@ export function generateDetailsParameters(parameters) {
   tempQueryParams = tempQueryParams.replace('?', '');
   tempQueryParams = tempQueryParams.split('&');
   tempQueryParams.forEach((queryParam, index) => {
-    if (queryParam[0] !== '') {
-      index++;
-      queryParam = queryParam.split('=');
-      queryParams['detailsField' + index] = queryParam[0];
-      queryParams['detailsValue' + index] = queryParam[1];
-    }
+    index++;
+    queryParam = queryParam.split('=');
+    queryParams['detailsField' + index] = queryParam[0];
+    queryParams['detailsValue' + index] = queryParam[1];
   });
 
   return queryParams;

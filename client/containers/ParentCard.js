@@ -279,7 +279,7 @@ export class ParentCard extends React.Component {
     });
     const {props} = this;
     let apiObj = this.detailsApiObj;
-    console.log('apiObj', apiObj);
+
     if (apiObj.isDetails === true) {
       props.fetchApiData(apiObj);
       this.setState({showDetailsFlag: true});
