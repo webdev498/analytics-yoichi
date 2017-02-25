@@ -273,17 +273,10 @@ export class ParentCard extends React.Component {
     );
   }
 
-  updateSearch(event, detailsApiObj) {
+  updateSearch(event) {
     this.setState({
       search: event.target.value
     });
-    const {props} = this;
-    let apiObj = this.detailsApiObj;
-
-    if (apiObj.isDetails === true) {
-      props.fetchApiData(apiObj);
-      this.setState({showDetailsFlag: true});
-    }
   }
 
   render() {
