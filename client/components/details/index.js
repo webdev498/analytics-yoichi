@@ -164,6 +164,8 @@ export default class DetailsTable extends React.Component {
 
     if (!detailsData) return null;
 
+    console.log('detailsData', detailsData);
+
     const {list, headers, hiddenList} = this.getData(detailsData);
     let itemsPerPage = details && details.itemsPerPage ? details.itemsPerPage : 5,
       lastPage = Math.ceil(list.length / itemsPerPage),
@@ -200,8 +202,8 @@ export default class DetailsTable extends React.Component {
               column: 'DATE',
               direction: 'desc'
             }}
-            filterBy={props.search}
-            filterable={columnNames}
+            // filterBy={props.search}
+            // filterable={columnNames}
             onPageChange={this.onPageChange}>
             {
               list.map((row, i) => (
