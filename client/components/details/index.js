@@ -200,8 +200,6 @@ export default class DetailsTable extends React.Component {
               column: 'DATE',
               direction: 'desc'
             }}
-            filterBy={props.search}
-            filterable={columnNames}
             onPageChange={this.onPageChange}>
             {
               list.map((row, i) => (

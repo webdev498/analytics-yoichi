@@ -139,6 +139,9 @@ export class ParentCard extends React.Component {
     }
 
     const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
+    if (api.queryParams.filter) {
+      delete api.queryParams.filter;
+    }
     this.detailsApiObj = {id, api, params, options, isDetails};
     props.fetchApiData({id, api, params, options, isDetails});
   }
@@ -277,6 +280,16 @@ export class ParentCard extends React.Component {
     this.setState({
       search: event.target.value
     });
+    const {props} = this;
+    let apiObj = Object.assign({}, this.detailsApiObj);
+
+    if (apiObj.isDetails === true) {
+      apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
+        filter: '__any ~ "' + event.target.value + '"'
+      });
+      props.fetchApiData(apiObj);
+      this.setState({showDetailsFlag: true});
+    }
   }
 
   render() {
