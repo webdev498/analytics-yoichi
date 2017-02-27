@@ -106,7 +106,7 @@ describe('<ParentCard />', () => {
     component = mountParentCard({
       meta: {
         id: 'random',
-        api: {queryParams: {filter: ''}}
+        api: {}
       }
     });
     expect(component.props().fetchApiData.callCount).to.equal(1);

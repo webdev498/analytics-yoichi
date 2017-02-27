@@ -140,8 +140,7 @@ export class ParentCard extends React.Component {
     }
 
     const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
-    // Added api object check condition since it was failing one of its parent card actions unit tests.
-    if (whatIsIt(api) === 'Object' && api.queryParams.filter) {
+    if (api.queryParams && api.queryParams.filter) {
       delete api.queryParams.filter;
     }
     this.detailsApiObj = {id, api, params, options, isDetails};
