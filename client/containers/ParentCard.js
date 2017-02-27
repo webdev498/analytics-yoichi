@@ -9,7 +9,6 @@ import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 
 import {Colors} from '../../commons/colors';
 import {autoScrollTo} from 'utils/utils';
 import {updateRoute} from 'actions/core';
-import {whatIsIt} from '../../commons/utils/utils';
 
 import {DETAILS_BASE_URL} from 'Constants';
 
