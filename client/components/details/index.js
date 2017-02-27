@@ -103,7 +103,7 @@ export default class DetailsTable extends React.Component {
       detailsData.total > detailsData.rows.length) {
       this.paginationDetails.currentPage = page;
       apiObj.api.queryParams.from = detailsData.next;
-      props.fetchNextSetOfData(apiObj, detailsData.rows);
+      props.fetchNextSetOfData(apiObj);
     }
   }
 
