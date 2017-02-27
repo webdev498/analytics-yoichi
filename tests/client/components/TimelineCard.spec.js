@@ -134,41 +134,41 @@ describe('<TimelineCard />', () => {
     expect(MultiSeriesCombiChart).to.exist;
   });
 
-  // it('display alert border', () => {
-  //   props.data = {
-  //     'id': 'OikKAsdw',
-  //     'Type': 'Rank Alert',
-  //     'Date': '2016-12-16T00:32:54.468',
-  //     'display': {
-  //       'sourceDest': {
-  //         'source': {
-  //           'ip': '121.18.238.114'
-  //         },
-  //         'dest': {
-  //           'ip': '172.31.7.62'
-  //         }
-  //       },
-  //       'Description': {
-  //         'displayKey': true,
-  //         'value': 'SSH Brute Force Attack Attempt'
-  //       },
-  //       'Message': {
-  //         'displayKey': true,
-  //         'value': '121.18.238.114 attempted to connect to 172.31.7.62 102 times'
-  //       },
-  //       'Category': {
-  //         'displayKey': true,
-  //         'value': 'suspicious-login'
-  //       },
-  //       'Score': {
-  //         'displayKey': true,
-  //         'value': '75'
-  //       }
-  //     }
-  //   };
-  //   const wrapper = mountTimelineCard();
-  //   expect(wrapper.find(Card)).to.have.style('borderLeft', '5px solid rgb(239, 89, 118)');
-  // });
+  it('display alert border', () => {
+    props.data = {
+      'id': 'OikKAsdw',
+      'Type': 'Rank Alert',
+      'Date': '2016-12-16T00:32:54.468',
+      'display': {
+        'sourceDest': {
+          'source': {
+            'ip': '121.18.238.114'
+          },
+          'dest': {
+            'ip': '172.31.7.62'
+          }
+        },
+        'Description': {
+          'displayKey': true,
+          'value': 'SSH Brute Force Attack Attempt'
+        },
+        'Message': {
+          'displayKey': true,
+          'value': '121.18.238.114 attempted to connect to 172.31.7.62 102 times'
+        },
+        'Category': {
+          'displayKey': true,
+          'value': 'suspicious-login'
+        },
+        'Score': {
+          'displayKey': true,
+          'value': '75'
+        }
+      }
+    };
+    const wrapper = mountTimelineCard();
+    expect(wrapper.find(Card)).to.have.style('borderLeft', '5px solid rgb(231, 43, 68)');
+  });
 
   it('simulates card click events', () => {
     const loadSecondaryTimeline = sinon.spy();

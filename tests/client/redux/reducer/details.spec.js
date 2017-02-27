@@ -136,13 +136,8 @@ describe('details Reducer', function() {
       data = { json: {rows: ['test3']}, api: '/test', query: { test: 'test' }, prevData: ['row1', 'row2'] },
       state = setAPIData(id, data);
 
-    state = detailsDataReducer(state, { type: RECEIVE_DETAILS_API_DATA, id, data });
-    console.log(state.data);
-    // expect(state).to.have.property(id);
-    // expect(state).to.have.deep.property([id, 'isFetching'], false);
-    // expect(state).to.have.deep.property([id, 'isError'], false);
-    // expect(state).to.have.deep.property([id, 'data']);
-    // expect(state).to.have.deep.property([id, 'api']);
-    // expect(state).to.have.deep.property([id, 'query']);
+    const udpatedEvent = Object.assign({}, event, {id: 2}),
+      updatedState = detailsDataReducer(state, udpatedEvent);
+    expect(state).to.equal(updatedState);
   });
 });

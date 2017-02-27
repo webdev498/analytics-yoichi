@@ -181,7 +181,6 @@ export function fetchApiData(input) {
     dispatch(requestApiData(id, api, isDetails));
 
     if (Array.isArray(api)) {
-      console.log(api);
       const arr = api.map(apiObj => callApi(apiObj, currentDuration, params, options, dispatch));
 
       return Promise.all(arr)
