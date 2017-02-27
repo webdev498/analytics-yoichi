@@ -133,7 +133,7 @@ describe('details Reducer', function() {
 
   it('Should concatinate previous data with new fetched data', function() {
     let id = '1',
-      data = { json: {rows: ['test3']}, api: '/test', query: { test: 'test' }, prevData: ['row1', 'row2'] },
+      data = { json: {rows: ['row3']}, api: '/test', query: { test: 'test' }, prevData: ['row1', 'row2'] },
       state = setAPIData(id, data);
 
     const udpatedEvent = Object.assign({}, event, {id: 2}),
