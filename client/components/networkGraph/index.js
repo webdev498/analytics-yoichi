@@ -17,7 +17,7 @@ import {createEdgeObject} from './GraphEdge';
 import {getIcon} from './GraphUtils';
 
 import Loader from 'components/Loader';
-import ContextualMenu from 'components/ContextualMenu';
+import ContextualMenu from './ContextualMenu';
 
 import './_network.scss';
 
@@ -204,7 +204,8 @@ class NetworkGraph extends React.Component {
       selectedNodesForExtendingGraph: [],
       actionsData: [],
       loaderText: '',
-      loadAgain: true
+      loadAgain: true,
+      sourceDetails: null
     };
 
     this.deselectNode = this.deselectNode.bind(this);
@@ -425,9 +426,10 @@ class NetworkGraph extends React.Component {
         selectedNodeDetails: '',
         actions: '',
         selectedNode: '',
-        selectedNodesForExtendingGraph: []
+        selectedNodesForExtendingGraph: [],
+        sourceDetails: null
       });
-      document.getElementById('actions').innerHTML = '';
+      // document.getElementById('actions').innerHTML = '';
       // document.getElementById('refreshData').style.marginLeft = 'auto';
     }
   }
@@ -517,7 +519,8 @@ class NetworkGraph extends React.Component {
       notNodeId: notNodeId
     };
 
-    this.ContextualMenu.getContextMenu(sourceDetails);
+    this.setState({ sourceDetails });
+    // this.ContextualMenu.getContextMenu(sourceDetails);
 
     let selectedNodesForExtendingGraph = [{
       nodeID: nodeID,
@@ -560,7 +563,8 @@ class NetworkGraph extends React.Component {
       notNodeId
     };
 
-    this.ContextualMenu.getContextMenu(sourceDetails);
+    this.setState({ sourceDetails });
+    // this.ContextualMenu.getContextMenu(sourceDetails);
 
     let states = {
       loadAgain: false,
@@ -609,16 +613,16 @@ class NetworkGraph extends React.Component {
       }
 
       let details = {
-        network: network,
-        actionId: actionId,
-        reportId: reportId,
-        nodeID: nodeID,
-        timeWindow: timeWindow,
-        parameters: parameters,
-        selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
-        contextMenuType: contextMenuType,
-        actionsCount: actionsCount,
-        actionType: actionType
+        network,
+        actionId,
+        reportId,
+        nodeID,
+        timeWindow,
+        parameters,
+        selectedNodesForExtendingGraph,
+        contextMenuType,
+        actionsCount,
+        actionType
       };
 
       this.fetchExtendedNodes(details);
@@ -901,10 +905,11 @@ class NetworkGraph extends React.Component {
             actions: '',
             selectedNode: '',
             selectedNodesForExtendingGraph: [],
-            previousNodesEdges: previousNodesEdges
+            previousNodesEdges: previousNodesEdges,
+            sourceDetails: null
           });
 
-          document.getElementById('actions').innerHTML = '';
+          // document.getElementById('actions').innerHTML = '';
           if (action === 'undo') {
             undoGraphCount--;
           }
@@ -1053,8 +1058,8 @@ class NetworkGraph extends React.Component {
         {
           state.actionsData && state.actionsData.length > 0
           ? <ContextualMenu
-            ref={(ref) => this.ContextualMenu = ref}
             showContextMenu={state.showContextMenu}
+            sourceDetails={state.sourceDetails}
             nodeObjects={this.nodeObjects}
             edgeObjects={this.edgeObjects}
             alertDate={this.state.alertDate}

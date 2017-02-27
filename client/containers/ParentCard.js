@@ -279,7 +279,15 @@ export class ParentCard extends React.Component {
     let statusText;
 
     try {
-      statusText = props.errorData.response.statusText;
+      const err = props.errorData;
+      if (err) {
+        if (err.response) {
+          statusText = err.response.statusText;
+        }
+        else {
+          statusText = err;
+        }
+      }
     }
     catch (ex) {
       console.log(ex, props.errorData);

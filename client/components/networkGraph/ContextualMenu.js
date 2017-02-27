@@ -1,18 +1,46 @@
 import React, {PropTypes} from 'react';
-import {Colors} from '../../commons/colors';
-import { isUndefined, firstCharCapitalize, whatIsIt } from '../../commons/utils/utils';
+import FontIcon from 'material-ui/FontIcon';
+import {Colors} from '../../../commons/colors';
+import { isUndefined, firstCharCapitalize, whatIsIt } from '../../../commons/utils/utils';
 import { DEFAULT_FONT } from 'Constants';
 
-import './styles/_contextualMenu.scss';
+import 'styles/_contextualMenu.scss';
 
 const styles = {
     contextualMenu: {
       width: '260px',
-      backgroundColor: Colors.contextBG,
+      backgroundColor: Colors.white,
+      border: `1px solid ${Colors.border}`,
       position: 'absolute',
       top: '0px',
       right: '0px',
       bottom: '0px'
+    },
+    arrowIcon: {
+      width: '24px',
+      transform: 'rotate(-90deg)'
+    },
+    list: {
+      listStyleType: 'none',
+      padding: 0,
+      margin: 0,
+      fontSize: '13px'
+    },
+    item: {
+      cursor: 'pointer',
+      minHeight: '60px'
+    },
+    wrapItem: {
+      display: 'flex',
+      margin: '0 15px',
+      borderBottom: `1px solid ${Colors.border}`,
+      padding: '15px 0'
+    },
+    itemContent: {
+      display: 'flex'
+    },
+    actionIcon: {
+      marginRight: '10px'
     },
     contextualMenuContents: {
       overflowX: 'hidden',
@@ -49,17 +77,24 @@ const styles = {
       backgroundColor: Colors.notificationMessageBG,
       color: Colors.garnet,
       display: 'none'
+    },
+    actionTable: {
+      border: '0',
+      width: '260px',
+      cellPadding: '10',
+      cellSpacing: '10'
     }
   },
   notificationMessage = {
     width: '260px'
-  },
-  actionTable = {
-    border: '0',
-    width: '260',
-    cellPadding: '10',
-    cellSpacing: '10'
   };
+
+function getActions(actions, data, type) {
+  if ((data.nodeType).toLowerCase() === type.toLowerCase()) {
+    actions = Object.assign(actions, data.actions);
+  }
+  return actions;
+}
 
 function checkForUserInputs(parameters) {
   let userInputParameters = [];
@@ -75,14 +110,14 @@ function checkForUserInputs(parameters) {
   return userInputParameters;
 }
 
-function updateDOM(table) {
-  document.getElementById('actions').appendChild(table);
-  document.getElementById('notification-message').style.width = notificationMessage.width;
-  document.getElementById('contextual-menu').style.width = '260px';
-  document.getElementById('right-arrow').style.display = 'block';
-  document.getElementById('contextual-menu-contents').style.display = 'block';
-  document.getElementById('expand-contextual-menu').style.display = 'none';
-}
+// function updateDOM(table) {
+//   document.getElementById('actions').appendChild(table);
+//   document.getElementById('notification-message').style.width = notificationMessage.width;
+//   document.getElementById('contextual-menu').style.width = '260px';
+//   document.getElementById('right-arrow').style.display = 'block';
+//   document.getElementById('contextual-menu-contents').style.display = 'block';
+//   document.getElementById('expand-contextual-menu').style.display = 'none';
+// }
 
 function displayTextBoxForInputParam(table, userInputParameters, index) {
   if (userInputParameters.length > 0) {
@@ -122,25 +157,13 @@ class ContextualMenu extends React.Component {
   }
 
   getContextMenu(sourceDetails) {
+    if (!sourceDetails) return null;
+
     let {props} = this,
       {nodeObjects} = props,
       actionsData = props.actions,
       actions = [],
       {itemId, itemType} = sourceDetails;
-
-    document.getElementById('actions').innerHTML = '';
-    let table = document.createElement('table');
-    table.border = actionTable.border;
-    table.width = actionTable.width;
-    table.cellPadding = actionTable.cellPadding;
-    table.cellSpacing = actionTable.cellSpacing;
-
-    function getActions(actions, data, type) {
-      if ((data.nodeType).toLowerCase() === type.toLowerCase()) {
-        actions = Object.assign(actions, data.actions);
-      }
-      return actions;
-    }
 
     actionsData.forEach((data) => {
       if (whatIsIt(itemType) === 'String') {
@@ -154,18 +177,19 @@ class ContextualMenu extends React.Component {
     });
 
     // Append the actions associated with nodes
-    if (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].actions) &&
-      nodeObjects[itemId].actions.length > 0) {
+    if (!isUndefined(nodeObjects[itemId]) &&
+        !isUndefined(nodeObjects[itemId].actions) &&
+        nodeObjects[itemId].actions.length > 0) {
       actions = Object.assign(actions, nodeObjects[itemId].actions);
     }
 
-    table = this.displayActions(actions, sourceDetails, table);
-    props.loadParent(false);
-    updateDOM(table);
+    return this.displayActions(actions, sourceDetails);
+    // props.loadParent(false);
   }
 
-  displayActions(actions, sourceDetails, table) {
+  displayActions(actions, sourceDetails) {
     let {itemId, itemType} = sourceDetails;
+    let arr = [];
     for (let j = 0; j < actions.length; j++) {
       const details = {
           parameters: actions[j].parameters,
@@ -177,16 +201,16 @@ class ContextualMenu extends React.Component {
         parameters = this.generateParameters(details);
 
       const updatedDetails = {
-        actions: actions,
-        table: table,
+        actions,
         index: j,
         parameters: parameters,
         sourceDetails: sourceDetails
       };
 
-      table = this.createHTML(updatedDetails);
+      arr.push(this.createHTML(updatedDetails));
     }
-    return table;
+
+    return <ul style={styles.list}>{arr}</ul>;
   }
 
   generateParameters(details) {
@@ -278,9 +302,6 @@ class ContextualMenu extends React.Component {
             metadataValue = (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].metadata))
               ? nodeObjects[itemId].metadata[paramName]
               : '';
-          // metadataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].metadata))
-          //   ? edgeObjects[itemId].metadata[paramName]
-          //   : '';
           value = (!isUndefined(metadataValue)) ? metadataValue : '';
           break;
         case 'actionData':
@@ -288,9 +309,6 @@ class ContextualMenu extends React.Component {
             actiondataValue = (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].actionData))
               ? nodeObjects[itemId].actionData[actionParamName]
               : '';
-          // actiondataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].actionData))
-          //   ? edgeObjects[itemId].actionData[actionParamName]
-          //   : '';
           value = (!isUndefined(actiondataValue)) ? actiondataValue : '';
           break;
         default:
@@ -302,15 +320,13 @@ class ContextualMenu extends React.Component {
 
   createHTML(details) {
     let {props} = this,
-      {actions, table, index, parameters, sourceDetails} = details,
+      {actions, index, parameters, sourceDetails} = details,
       {parametersToApi, userInputParameters, fullMalwareReportLink} = parameters;
 
-    let tr = document.createElement('tr'),
-      td1 = document.createElement('td'),
-      reportId = (!isUndefined(actions[index].reportId)) ? actions[index].reportId
+    let reportId = (!isUndefined(actions[index].reportId)) ? actions[index].reportId
       : (!isUndefined(actions[index].name) ? actions[index].name : ''),
       actionDetails = {
-        reportId: reportId,
+        reportId,
         parameters: parametersToApi,
         actionsCount: actions.length,
         actionId: 'action' + index,
@@ -319,33 +335,32 @@ class ContextualMenu extends React.Component {
         actionType: actions[index].actionType
       };
 
-    td1.appendChild(document.createTextNode(actions[index].label));
-    td1.id = 'action' + index;
-    td1.onclick = props.doAction(sourceDetails, actionDetails);
+    let li = (
+      <li style={styles.item} key={'action' + index} onClick={props.doAction(sourceDetails, actionDetails)}>
+        <div style={styles.wrapItem}>
+          <FontIcon style={styles.arrowIcon} className='material-icons'>
+            arrow_drop_down
+          </FontIcon>
 
-    let td2 = document.createElement('td');
-    if (userInputParameters.length > 0) {
-      td2.id = 'downarrow' + index;
-      td2.style = 'padding-left:0px;';
-      let downArrow = document.createElement('img');
-      downArrow.src = '/img/downarrow.png';
-      td2.appendChild(downArrow);
-    }
-    else {
-      td1.colSpan = '2';
-    }
+          <div>
+            <div style={styles.itemContent}>
+              <FontIcon style={styles.actionIcon} className='material-icons'>desktop_mac</FontIcon>
+              {actions[index].label}
+            </div>
 
-    tr.appendChild(td1);
+            {
+              userInputParameters.length > 0
+                ? <div>Arrow</div>
+                : null
+            }
+          </div>
+        </div>
+      </li>
+    );
 
-    if (userInputParameters.length > 0) {
-      tr.appendChild(td2);
-    }
+    return li;
 
-    table.appendChild(tr);
-
-    displayTextBoxForInputParam(table, userInputParameters, index);
-
-    return table;
+    // displayTextBoxForInputParam(table, userInputParameters, index);
   }
 
   collapseExpand(action) {
@@ -374,20 +389,15 @@ class ContextualMenu extends React.Component {
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...styles.contextualMenu, ...contextMenuStyle}} id='contextual-menu'>
           <div style={styles.contextualMenuContents} className='context-menu scrollbar' id='contextual-menu-contents'>
-            <div
-              style={{...styles.selectedDetails}}>
+            <div style={{...styles.selectedDetails}}>
               {props.selectedDetails}
             </div>
-            <div id='actions' />
+            {this.getContextMenu(props.sourceDetails)}
           </div>
 
           <div id='collapse-contextual-menu' style={styles.collapseContextualMenu}>
             <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collapseExpand('collapse')} />
           </div>
-        </div>
-
-        <div id='expand-contextual-menu' style={styles.expandContextualMenu}>
-          <img id='left-arrow' src='/img/menu.png' onClick={this.collapseExpand('expand')} />
         </div>
 
         <div style={{...styles.notificationMessage}} id='notification-message' />

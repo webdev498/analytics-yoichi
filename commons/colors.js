@@ -88,7 +88,20 @@ export const notificationMessageBGColor = '#EBEBEF';
 
 export const CloudColorShades = ['#EEEEF1'];
 
+export const Alerts = {
+  high: '#e72b44',
+  medium: '#f37133',
+  low: '#feb821'
+};
+
+export const StandardChartPalette = `${BarColorShade7}, ${BarColor}`;
+
+export const TextColor = GrapeColor;
+export const BorderColor = CloudColor;
+
 export const Colors = {
+  text: TextColor,
+  border: BorderColor,
   garnet: GarnetColor,
   grape: GrapeColor,
   pebble: PebbleColor,
@@ -116,11 +129,3 @@ export const Colors = {
   cloudShades: CloudColorShades,
   bar: BarColor
 };
-
-export const Alerts = {
-  high: '#e72b44',
-  medium: '#f37133',
-  low: '#feb821'
-};
-
-export const StandardChartPalette = `${BarColorShade7}, ${BarColor}`;
