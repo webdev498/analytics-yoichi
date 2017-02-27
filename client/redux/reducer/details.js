@@ -25,7 +25,7 @@ function requestApi(id, state) {
 }
 
 function receiveApi(id, state, action) {
-  let {data} = action,
+  const {data} = action,
     {json, api, query} = data;
 
   const dataMap = Map({
