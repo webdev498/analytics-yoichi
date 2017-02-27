@@ -11,8 +11,8 @@ import {Map} from 'immutable';
 const initialState = Map();
 
 function requestApi(id, state) {
-  const immutableObject = state.get(id);
-  let stateObject = immutableObject ? immutableObject.toObject() : {};
+  const immutableObject = state.get(id),
+    stateObject = immutableObject ? immutableObject.toObject() : {};
   const dataMap = Map({
     id,
     isFetching: true,
