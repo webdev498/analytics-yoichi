@@ -20,8 +20,14 @@ function requestApi(id, state) {
 }
 
 function receiveApi(id, state, action) {
-  const {data} = action,
-    {json, api, query} = data;
+  let {data} = action,
+    {json, api, query, prevData} = data;
+
+  if (api.queryParams.from && prevData) {
+    json = Object.assign({}, json, {
+      rows: prevData.concat(json.rows)
+    });
+  }
 
   const dataMap = Map({
     id,
