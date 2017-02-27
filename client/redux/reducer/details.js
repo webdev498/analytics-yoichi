@@ -1,6 +1,7 @@
 import {
   REQUEST_DETAILS_API_DATA,
   RECEIVE_DETAILS_API_DATA,
+  UPDATE_DETAILS_API_DATA,
   ERROR_DETAILS_API_DATA,
   REMOVE_DETAILS_COMPONENT
 } from 'Constants';
@@ -10,10 +11,14 @@ import {Map} from 'immutable';
 const initialState = Map();
 
 function requestApi(id, state) {
+  const immutableObject = state.get(id);
+  let stateObject = immutableObject ? immutableObject.toObject() : {};
   const dataMap = Map({
     id,
     isFetching: true,
-    isError: false
+    isError: false,
+    data: stateObject && stateObject.data ? stateObject.data : null,
+    paginateRequest: true
   });
 
   return state.set(id, dataMap);
@@ -21,11 +26,30 @@ function requestApi(id, state) {
 
 function receiveApi(id, state, action) {
   let {data} = action,
-    {json, api, query, prevData} = data;
+    {json, api, query} = data;
 
-  if (prevData) {
+  const dataMap = Map({
+    id,
+    isFetching: false,
+    isError: false,
+    data: json,
+    api,
+    query
+  });
+
+  return state.set(id, dataMap);
+}
+
+function updateApi(id, state, action) {
+  let {data} = action,
+    {json, api, query} = data;
+  const immutableObject = state.get(id);
+  let stateObject = immutableObject.toObject();
+  if (stateObject.data) {
+    let prevData = Object.assign({}, stateObject.data);
     json = Object.assign({}, json, {
-      rows: prevData.concat(json.rows)
+      next: json.next,
+      rows: prevData.rows.concat(json.rows)
     });
   }
 
@@ -35,7 +59,8 @@ function receiveApi(id, state, action) {
     isError: false,
     data: json,
     api,
-    query
+    query,
+    paginateRequest: false
   });
 
   return state.set(id, dataMap);
@@ -73,6 +98,9 @@ export default function detailsDataReducer(state = initialState, action) {
     }
     case RECEIVE_DETAILS_API_DATA: {
       return apiStates(state, action, receiveApi);
+    }
+    case UPDATE_DETAILS_API_DATA: {
+      return apiStates(state, action, updateApi);
     }
     case ERROR_DETAILS_API_DATA: {
       return apiStates(state, action, errorApi);

@@ -46,7 +46,8 @@ export default class DetailsTable extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.detailsData && newProps.detailsData.next === fetchLimit) {
+    const paginateRequest = newProps.paginateRequest || false;
+    if (newProps.detailsData && newProps.detailsData.next === fetchLimit && paginateRequest) {
       this.paginationDetails.currentPage = 0;
     }
   }
@@ -181,6 +182,8 @@ export default class DetailsTable extends React.Component {
     if (details && details.secondaryClick) {
       styles.table = Object.assign({}, styles.table, {cursor: 'pointer'});
     }
+
+    console.log(this.paginationDetails.currentPage);
 
     return (
       <div style={style} className='details-scrollbar'>

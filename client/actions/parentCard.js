@@ -7,6 +7,7 @@ import {
   REMOVE_COMPONENT,
   REQUEST_DETAILS_API_DATA,
   RECEIVE_DETAILS_API_DATA,
+  UPDATE_DETAILS_API_DATA,
   ERROR_DETAILS_API_DATA,
   REMOVE_DETAILS_COMPONENT
 } from 'Constants';
@@ -32,6 +33,10 @@ export function receiveApiData(id, data, isDetails) {
   else {
     return { type: RECEIVE_API_DATA, data, id };
   }
+}
+
+export function updateDetailsApiData(id, data) {
+  return { type: UPDATE_DETAILS_API_DATA, data, id };
 }
 
 export function errorApiData(id, errorData, api, isDetails) {
@@ -223,7 +228,7 @@ export function fetchNextSetOfData(apiObj, prevData) {
     callApi(api, currentDuration, params, options, dispatch)
     .then(json => {
       json.options = options;
-      dispatch(receiveApiData(id, {json, api, prevData}, isDetails));
+      dispatch(updateDetailsApiData(id, {json, api}));
     })
     .catch(ex => {
       dispatch(errorApiData(id, ex, api, isDetails));
