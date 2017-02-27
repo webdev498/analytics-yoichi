@@ -183,8 +183,6 @@ export default class DetailsTable extends React.Component {
       styles.table = Object.assign({}, styles.table, {cursor: 'pointer'});
     }
 
-    console.log(this.paginationDetails.currentPage);
-
     return (
       <div style={style} className='details-scrollbar'>
         {
