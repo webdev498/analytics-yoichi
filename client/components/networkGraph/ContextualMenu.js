@@ -12,12 +12,15 @@ const styles = {
       backgroundColor: Colors.white,
       border: `1px solid ${Colors.border}`,
       position: 'absolute',
-      top: '0px',
-      right: '0px',
-      bottom: '0px'
+      top: '65px',
+      right: '40px',
+      height: '306px',
+      boxShadow: `1px 1px 1px 1px ${Colors.border}`,
+      overflowY: 'auto'
     },
     arrowIcon: {
       width: '24px',
+      alignSelf: 'flex-start',
       transform: 'rotate(-90deg)'
     },
     list: {
@@ -27,25 +30,19 @@ const styles = {
       fontSize: '13px'
     },
     item: {
-      cursor: 'pointer',
-      minHeight: '60px'
+      cursor: 'pointer'
     },
     wrapItem: {
       display: 'flex',
-      margin: '0 15px',
-      borderBottom: `1px solid ${Colors.border}`,
-      padding: '15px 0'
+      padding: '15px 15px 15px 10px',
+      minHeight: '59px',
+      borderBottom: `1px solid ${Colors.border}`
     },
     itemContent: {
       display: 'flex'
     },
     actionIcon: {
       marginRight: '10px'
-    },
-    contextualMenuContents: {
-      overflowX: 'hidden',
-      overflowY: 'auto',
-      marginTop: '35px'
     },
     collapseContextualMenu: {
       position: 'absolute',
@@ -149,7 +146,6 @@ class ContextualMenu extends React.Component {
   constructor(props) {
     super(props);
 
-    this.collapseExpand = this.collapseExpand.bind(this);
     this.getContextMenu = this.getContextMenu.bind(this);
     this.displayActions = this.displayActions.bind(this);
     this.generateParameters = this.generateParameters.bind(this);
@@ -342,11 +338,8 @@ class ContextualMenu extends React.Component {
             arrow_drop_down
           </FontIcon>
 
-          <div>
-            <div style={styles.itemContent}>
-              <FontIcon style={styles.actionIcon} className='material-icons'>desktop_mac</FontIcon>
-              {actions[index].label}
-            </div>
+          <div style={styles.itemContent}>
+            {actions[index].label}
 
             {
               userInputParameters.length > 0
@@ -363,23 +356,6 @@ class ContextualMenu extends React.Component {
     // displayTextBoxForInputParam(table, userInputParameters, index);
   }
 
-  collapseExpand(action) {
-    return (event) => {
-      if (action === 'collapse') {
-        document.getElementById('contextual-menu').style.width = '0px';
-        document.getElementById('right-arrow').style.display = 'none';
-        document.getElementById('contextual-menu-contents').style.display = 'none';
-        document.getElementById('expand-contextual-menu').style.display = 'block';
-      }
-      if (action === 'expand') {
-        document.getElementById('contextual-menu').style.width = '260px';
-        document.getElementById('right-arrow').style.display = 'block';
-        document.getElementById('contextual-menu-contents').style.display = 'block';
-        document.getElementById('expand-contextual-menu').style.display = 'none';
-      }
-    };
-  }
-
   render() {
     const {props} = this;
     let contextMenuStyle = {display: props.showContextMenu ? 'block' : 'none'};
@@ -387,17 +363,10 @@ class ContextualMenu extends React.Component {
     return (
       <div>
         <div ref={(ref) => this.contextualMenu = ref}
-          style={{...styles.contextualMenu, ...contextMenuStyle}} id='contextual-menu'>
-          <div style={styles.contextualMenuContents} className='context-menu scrollbar' id='contextual-menu-contents'>
-            <div style={{...styles.selectedDetails}}>
-              {props.selectedDetails}
-            </div>
-            {this.getContextMenu(props.sourceDetails)}
-          </div>
-
-          <div id='collapse-contextual-menu' style={styles.collapseContextualMenu}>
-            <img id='right-arrow' src='/img/rightArrow.png' onClick={this.collapseExpand('collapse')} />
-          </div>
+          style={{...styles.contextualMenu, ...contextMenuStyle}}
+          id='contextual-menu'
+          className='context-menu'>
+          {this.getContextMenu(props.sourceDetails)}
         </div>
 
         <div style={{...styles.notificationMessage}} id='notification-message' />
