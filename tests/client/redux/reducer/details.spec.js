@@ -130,4 +130,19 @@ describe('details Reducer', function() {
     state = detailsDataReducer(state, {type: REMOVE_DETAILS_COMPONENT, id});
     expect(state).to.not.have.property(id);
   });
+
+  it('Should concatinate previous data with new fetched data', function() {
+    let id = '1',
+      data = { json: {rows: ['test3']}, api: '/test', query: { test: 'test' }, prevData: ['row1', 'row2'] },
+      state = setAPIData(id, data);
+
+    state = detailsDataReducer(state, { type: RECEIVE_DETAILS_API_DATA, id, data });
+    console.log(state.data);
+    // expect(state).to.have.property(id);
+    // expect(state).to.have.deep.property([id, 'isFetching'], false);
+    // expect(state).to.have.deep.property([id, 'isError'], false);
+    // expect(state).to.have.deep.property([id, 'data']);
+    // expect(state).to.have.deep.property([id, 'api']);
+    // expect(state).to.have.deep.property([id, 'query']);
+  });
 });

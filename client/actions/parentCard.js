@@ -181,6 +181,7 @@ export function fetchApiData(input) {
     dispatch(requestApiData(id, api, isDetails));
 
     if (Array.isArray(api)) {
+      console.log(api);
       const arr = api.map(apiObj => callApi(apiObj, currentDuration, params, options, dispatch));
 
       return Promise.all(arr)
@@ -223,7 +224,6 @@ export function fetchNextSetOfData(apiObj, prevData) {
     callApi(api, currentDuration, params, options, dispatch)
     .then(json => {
       json.options = options;
-      console.log('action', json);
       dispatch(receiveApiData(id, {json, api, prevData}, isDetails));
     })
     .catch(ex => {

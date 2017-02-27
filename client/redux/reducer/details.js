@@ -23,7 +23,7 @@ function receiveApi(id, state, action) {
   let {data} = action,
     {json, api, query, prevData} = data;
 
-  if (api.queryParams.from && prevData) {
+  if (prevData) {
     json = Object.assign({}, json, {
       rows: prevData.concat(json.rows)
     });

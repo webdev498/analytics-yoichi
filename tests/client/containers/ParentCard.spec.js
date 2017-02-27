@@ -17,6 +17,7 @@ function shallowRenderParentCard(propsOptions, contextOptions) {
     updateRoute: spy(),
     removeComponent: spy(),
     broadcastEvent: spy(),
+    fetchNextSetOfData: spy(),
     children: child
   };
 
@@ -45,6 +46,7 @@ function mountParentCard(propsOptions, contextOptions) {
     updateRoute: spy(),
     removeComponent: spy(),
     broadcastEvent: spy(),
+    fetchNextSetOfData: spy(),
     children: child
   };
 
@@ -81,6 +83,8 @@ describe('<ParentCard />', () => {
     expect(component.props().removeComponent).to.be.a('function');
     expect(component.props().broadcastEvent).to.exist;
     expect(component.props().broadcastEvent).to.be.a('function');
+    expect(component.props().fetchNextSetOfData).to.exist;
+    expect(component.props().fetchNextSetOfData).to.be.a('function');
   });
 
   it('renders correct children', () => {
@@ -88,7 +92,7 @@ describe('<ParentCard />', () => {
       children: <div>Test</div>
     });
 
-    expect(component.children().length).to.equal(2);
+    expect(component.children().length).to.equal(1);
     expect(component.childAt(0).type()).to.equal('div');
     expect(component.childAt(0).text()).to.equal('Test');
   });
@@ -102,7 +106,7 @@ describe('<ParentCard />', () => {
     component = mountParentCard({
       meta: {
         id: 'random',
-        api: {}
+        api: {queryParams: {filter: ''}}
       }
     });
     expect(component.props().fetchApiData.callCount).to.equal(1);

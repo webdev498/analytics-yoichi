@@ -9,6 +9,7 @@ import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 
 import {Colors} from '../../commons/colors';
 import {autoScrollTo} from 'utils/utils';
 import {updateRoute} from 'actions/core';
+import {whatIsIt} from '../../commons/utils/utils';
 
 import {DETAILS_BASE_URL} from 'Constants';
 
@@ -139,7 +140,8 @@ export class ParentCard extends React.Component {
     }
 
     const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
-    if (api.queryParams.filter) {
+    // Added api object check condition since it was failing one of its parent card actions unit tests.
+    if (whatIsIt(api) === 'Object' && api.queryParams.filter) {
       delete api.queryParams.filter;
     }
     this.detailsApiObj = {id, api, params, options, isDetails};
