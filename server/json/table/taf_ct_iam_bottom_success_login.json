@@ -11,7 +11,7 @@
           {
             "data": [
               {
-                "fieldName": "data.cloudtrail.userIdentity.userName"
+                "fieldName": "data.aws.userArn"
               }
             ],
             "style": {
@@ -50,7 +50,7 @@
   },
   "details": {
     "queryParams": {
-      "data.cloudtrail.userIdentity.userName": "data.cloudtrail.userIdentity.userName:fieldName"
+      "data.aws.userArn": "data.aws.userArn:fieldName"
     }
   }
 }

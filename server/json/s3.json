@@ -390,7 +390,7 @@
             {
               "reportId": "taf_s3_requester",
               "columns": [
-                "data.s3.requester"
+                "data.aws.userArn"
               ]
             },
             {
@@ -444,7 +444,7 @@
             {
               "reportId": "taf_s3_most_active_requester",
               "columns": [
-                "data.s3.requester",
+                "data.aws.userArn",
                 "date"
               ]
             }
@@ -493,7 +493,7 @@
             {
               "reportId": "taf_s3_ua",
               "columns": [
-                "data.s3.userAgent"
+                "data.aws.userAgent"
               ]
             },
             {
@@ -547,7 +547,7 @@
             {
               "reportId": "taf_s3_most_frequent_useragent",
               "columns": [
-                "data.s3.userAgent",
+                "data.aws.userAgent",
                 "date"
               ]
             }
@@ -947,7 +947,7 @@
             {
               "reportId": "taf_s3_least_active_requester",
               "columns": [
-                "data.s3.requester"
+                "data.aws.userArn"
               ],
               "axis": "x"
             },
@@ -1001,7 +1001,7 @@
             {
               "reportId": "taf_s3_least_frequent_useragent",
               "columns": [
-                "data.s3.userAgent"
+                "data.aws.userAgent"
               ],
               "axis": "x"
             },

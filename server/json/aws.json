@@ -203,7 +203,7 @@
             {
               "reportId": "taf_ct_events_by_user",
               "columns": [
-                "data.cloudtrail.userIdentity.userName"
+                "data.aws.userArn"
               ]
             },
             {
@@ -258,7 +258,7 @@
             {
               "reportId": "taf_ct_most_active_user",
               "columns": [
-                "data.cloudtrail.userIdentity.userName",
+                "data.aws.userArn",
                 "date"
               ]
             }
@@ -458,7 +458,7 @@
               "window": ""
             }
           },
-          "title": "Success Login by Country"
+          "title": "AWS EVENTS by Country"
         },
         "attributes": {
           "chartWidth": "100%",

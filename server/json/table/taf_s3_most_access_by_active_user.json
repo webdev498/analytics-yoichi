@@ -7,7 +7,7 @@
 			"reportId": "taf_s3_most_access_by_active_user",
 			"columns": [{
 				"data": [{
-					"fieldName": "data.s3.requester"
+					"fieldName": "data.aws.userArn"
 				}],
 				"style": {
 					"width": "50%",

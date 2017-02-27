@@ -319,7 +319,7 @@
             {
               "reportId": "taf_ct_iam_failed_by_un",
               "columns": [
-                "data.cloudtrail.userIdentity.userName"
+                "data.aws.userArn"
               ],
               "axis": "x"
             },
@@ -428,7 +428,7 @@
             {
               "reportId": "taf_ct_iam_top_non_mfa",
               "columns": [
-                "data.cloudtrail.userIdentity.userName"
+                "data.aws.userArn"
               ],
               "axis": "x"
             },

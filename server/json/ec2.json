@@ -384,7 +384,7 @@
             {
               "reportId": "taf_ct_ec2_ua",
               "columns": [
-                "data.cloudtrail.userAgent"
+                "data.aws.userAgent"
               ],
               "axis": "x"
             },
@@ -459,7 +459,7 @@
           }
         },
         "meta": {
-          "subTitle": "NUMBER OF OUTGOING CONNECTIONS BY COUNTRY",
+          "subTitle": "NUMBER EC2 CONNECTIONS BY COUNTRY",
           "showHeader": true,
           "showDetailsIcon": true,
           "api": {
@@ -471,7 +471,7 @@
               "window": ""
             }
           },
-          "title": "Success Login by Country"
+          "title": "EC2 Events by Country"
         },
         "attributes": {
           "chartWidth": "100%",
