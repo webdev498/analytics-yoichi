@@ -17,8 +17,7 @@ function requestApi(id, state) {
     id,
     isFetching: true,
     isError: false,
-    data: stateObject && stateObject.data ? stateObject.data : null,
-    paginateRequest: true
+    data: stateObject && stateObject.data ? stateObject.data : null
   });
 
   return state.set(id, dataMap);
@@ -48,7 +47,6 @@ function updateApi(id, state, action) {
   if (stateObject.data) {
     let prevData = Object.assign({}, stateObject.data);
     json = Object.assign({}, json, {
-      next: json.next,
       rows: prevData.rows.concat(json.rows)
     });
   }
@@ -59,8 +57,7 @@ function updateApi(id, state, action) {
     isError: false,
     data: json,
     api,
-    query,
-    paginateRequest: false
+    query
   });
 
   return state.set(id, dataMap);
