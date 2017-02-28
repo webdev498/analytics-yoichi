@@ -179,7 +179,7 @@ class SearchBar extends React.Component {
         id='searchText'
         type='text'
         style={this.styles.searchText}
-        onChange={props.updateSearch}
+        onKeyUp={props.updateSearch}
         onFocus={this.showClearIcon}
         onBlur={this.hideClearIcon}
         ref={(ref) => this.myTextInput = ref}
