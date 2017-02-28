@@ -1,6 +1,7 @@
 {
   "options": {
-    "itemsPerPage": 5
+    "itemsPerPage": 5,
+    "rowClickable": false
   },
   "data": {
     "fieldMapping": [
