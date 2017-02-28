@@ -8,11 +8,11 @@ const {Table, Tr, Td} = Reactable;
 const styles = {
     wrap: {
       backgroundColor: Colors.white,
-      // width: '100%',
+      width: '100%',
       overflow: 'auto'
     },
     table: {
-      // width: '100%'
+      width: '100%'
     },
     noData: {
       fontSize: '18px',
