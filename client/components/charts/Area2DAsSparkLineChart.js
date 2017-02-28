@@ -3,7 +3,7 @@ import {Colors} from '../../../commons/colors';
 import {getDateTimeInLocalTimeZone} from '../../../commons/utils/utils';
 import { DEFAULT_CHART_OPTIONS } from 'Constants';
 
-const chart = Object.assign({}, DEFAULT_CHART_OPTIONS, {
+const chartDefaultOptions = Object.assign({}, DEFAULT_CHART_OPTIONS, {
   paletteColors: Colors.areaSparkLineChart.area,
   showCanvasBorder: '0',
   usePlotGradientColor: '0',
@@ -25,21 +25,24 @@ const chart = Object.assign({}, DEFAULT_CHART_OPTIONS, {
   rotateLabels: '1'
 });
 
-export function generateDataSource(chartProperties, duration) {
+export function generateDataSource(chart, data, duration) {
   let dataSourceObject = {},
     dataSet = [],
     dataObject = [],
     dataSeries = {},
-    {data, chartOptions} = chartProperties,
-    chartValue = data[0].value;
+    value = data[0].value;
 
-  for (let key in chartValue) {
+  for (let key in value) {
+    let label = key;
+    if (new Date(key).toString() !== 'Invalid Date') {
+      label = getDateTimeInLocalTimeZone(key, 'D MMM');
+    }
     let dataPoint = {
-      label: getDateTimeInLocalTimeZone(key, 'D MMM'),
+      label,
       value: '0'
     };
-    if (chartValue[key][0] !== 0 && chartValue[key][0] !== '') {
-      dataPoint.value = chartValue[key][0];
+    if (value[key][0] !== 0 && value[key][0] !== '') {
+      dataPoint.value = value[key][0];
     }
     dataObject.push(dataPoint);
   }
@@ -47,7 +50,7 @@ export function generateDataSource(chartProperties, duration) {
   dataSeries.data = dataObject;
   dataSet.push(dataSeries);
 
-  dataSourceObject.chart = Object.assign(chart, chartOptions);
+  dataSourceObject.chart = Object.assign(chartDefaultOptions, chart.options);
 
   if (dataSet.length > 0) {
     dataSourceObject.dataset = dataSet;
@@ -56,37 +59,39 @@ export function generateDataSource(chartProperties, duration) {
   return dataSourceObject;
 }
 
-const renderChart = (props) => {
-  const chartProperties = props.chartProperties;
-
-  if (!chartProperties.chartType) {
-    return;
-  }
-
-  FusionCharts.ready(function() {
-    let fusioncharts = new FusionCharts({
-      type: chartProperties.chartType,
-      renderAt: chartProperties.chartId,
-      width: chartProperties.chartWidth,
-      height: chartProperties.chartHeight,
-      dataFormat: 'json',
-      containerBackgroundOpacity: '0',
-      dataSource: generateDataSource(chartProperties, props.duration)
-    }
-  );
-    fusioncharts.render();
-  });
-};
-
 class Area2DAsSparkLineChart extends React.Component {
   static propTypes = {
-    chartProperties: PropTypes.object
+    chart: PropTypes.object,
+    data: PropTypes.array,
+    duration: PropTypes.string
+  }
+
+  renderChart() {
+    const {props: {chart, data, duration}} = this;
+
+    if (!chart.type) {
+      return;
+    }
+
+    FusionCharts.ready(function() {
+      let fusioncharts = new FusionCharts({
+        type: chart.type,
+        renderAt: chart.id,
+        width: chart.width,
+        height: chart.height,
+        dataFormat: 'json',
+        containerBackgroundOpacity: '0',
+        dataSource: generateDataSource(chart, data, duration)
+      }
+    );
+      fusioncharts.render();
+    });
   }
 
   render() {
     const {props} = this;
     return (
-      <div id={props.chartProperties.chartId}>{renderChart(props)}</div>
+      <div id={props.chart.id}>{this.renderChart()}</div>
     );
   }
 }

@@ -18,25 +18,15 @@ let props = {
   style: {}
 };
 
-function renderPaginationWidget(newProps) {
-  let component;
-  if (newProps) {
-    component = shallow(wrapThemeProvider(<PaginationWidget {...newProps} />));
-  }
-  else {
-    component = shallow(wrapThemeProvider(<PaginationWidget {...props} />));
-  }
+function renderPaginationWidget(newProps = {}) {
+  let updatedProps = Object.assign({}, props, newProps),
+    component = shallow(wrapThemeProvider(<PaginationWidget {...updatedProps} />));
   return component.find('PaginationWidget');
 }
 
 function mountPaginationWidget(newProps) {
-  let component;
-  if (newProps) {
-    component = mount(<PaginationWidget {...newProps} />);
-  }
-  else {
-    component = mount(<PaginationWidget {...props} />);
-  }
+  let updatedProps = Object.assign({}, props, newProps),
+    component = mount(<PaginationWidget {...updatedProps} />);
   return component.find('PaginationWidget');
 }
 
@@ -66,7 +56,7 @@ describe('<PaginationWidget />', () => {
     expect(component.props().fetchData).to.be.a('function');
   });
 
-  describe('getPaginationButtonsRange function: should return valid buttons range', () => {
+  describe('getPaginationButtonsRange function', () => {
     it('if current page is first page', () => {
       const component = renderPaginationWidget(),
         pageCount = component.props().pageCount,
@@ -80,13 +70,9 @@ describe('<PaginationWidget />', () => {
 
     it('if current page is less than maxNumbersOnLeftRight specifed', () => {
       const newProps = {
-          id: 'pagination',
           pageCount: 24,
           currentPage: 3,
-          maxNumbersOnLeftRight: 4,
-          fetchData: spy(),
-          type: 'primary',
-          style: {}
+          maxNumbersOnLeftRight: 4
         },
         component = renderPaginationWidget(newProps),
         pageCount = component.props().pageCount,
@@ -100,13 +86,9 @@ describe('<PaginationWidget />', () => {
 
     it('if current page is greater than maxNumbersOnLeftRight specifed', () => {
       const newProps = {
-          id: 'pagination',
           pageCount: 24,
           currentPage: 7,
-          maxNumbersOnLeftRight: 4,
-          fetchData: spy(),
-          type: 'primary',
-          style: {}
+          maxNumbersOnLeftRight: 4
         },
         component = renderPaginationWidget(newProps),
         pageCount = component.props().pageCount,
@@ -120,13 +102,9 @@ describe('<PaginationWidget />', () => {
 
     it('if current page is last page', () => {
       const newProps = {
-          id: 'pagination',
           pageCount: 24,
           currentPage: 24,
-          maxNumbersOnLeftRight: 4,
-          fetchData: spy(),
-          type: 'primary',
-          style: {}
+          maxNumbersOnLeftRight: 4
         },
         component = renderPaginationWidget(newProps),
         pageCount = component.props().pageCount,
@@ -157,36 +135,43 @@ describe('<PaginationWidget />', () => {
     expect(component.find('ul').childAt(0).key()).to.be.defined;
   });
 
-  describe('should paginate correctly', () => {
-    const onPrevPageChanged = sinon.spy(),
-      onNextPageChanged = sinon.spy(),
-      onPageChanged = sinon.spy(),
-      wrapper = mount(
-        <PaginationWidget {...props}>
-          <ul className='pagination'>
-            <li key='Prev'><button className='prev-pagination-link' onClick={onPrevPageChanged()}>&lt;&lt;</button></li>
-            <li key='2'><button className='pagination-link-2' onClick={onPageChanged()}>&gt;&gt;</button></li>
-            <li key='Next'><button className='next-pagination-link' onClick={onNextPageChanged()}>&gt;&gt;</button></li>
-          </ul>
-        </PaginationWidget>
-      );
+  it('should not display <li> if no. of pages = 1', () => {
+    const newProps = {
+        pageCount: 1,
+        currentPage: 1,
+        maxNumbersOnLeftRight: 5
+      },
+      component = mountPaginationWidget(newProps);
+    expect(component.find('ul').children()).to.have.length(0);
+  });
+
+  describe('Pagination links', () => {
+    let newProps = {
+        pageCount: 20,
+        currentPage: 3,
+        maxNumbersOnLeftRight: 5
+      },
+      wrapper;
+    beforeEach(function() {
+      wrapper = mountPaginationWidget(newProps);
+    });
 
     it('it paginates to Prev page on click of Prev button', () => {
+      wrapper.props().fetchData.callCount = 0;
       wrapper.find('.prev-pagination-link').simulate('click');
-      expect(onPrevPageChanged.calledOnce).to.equal(true);
-      expect(onPrevPageChanged.callCount).to.equal(1);
+      expect(wrapper.props().fetchData.callCount).to.equal(1);
     });
 
     it('it paginates to Next page on click of Next button', () => {
+      wrapper.props().fetchData.callCount = 0;
       wrapper.find('.next-pagination-link').simulate('click');
-      expect(onNextPageChanged.calledOnce).to.equal(true);
-      expect(onNextPageChanged.callCount).to.equal(1);
+      expect(wrapper.props().fetchData.callCount).to.equal(1);
     });
 
     it('it paginates to 2 page on click of 2 button', () => {
+      wrapper.props().fetchData.callCount = 0;
       wrapper.find('.pagination-link-2').simulate('click');
-      expect(onPageChanged.calledOnce).to.equal(true);
-      expect(onPageChanged.callCount).to.equal(1);
+      expect(wrapper.props().fetchData.callCount).to.equal(1);
     });
   });
 
@@ -198,13 +183,9 @@ describe('<PaginationWidget />', () => {
     component.find('.next-pagination-link').simulate('click');
 
     const newProps = {
-      id: 'pagination',
       pageCount: 20,
       currentPage: 2,
-      maxNumbersOnLeftRight: 5,
-      fetchData: spy(),
-      type: 'primary',
-      style: {}
+      maxNumbersOnLeftRight: 5
     };
 
     component = mountPaginationWidget(newProps);
@@ -219,13 +200,9 @@ describe('<PaginationWidget />', () => {
     component.find('.next-pagination-link').simulate('click');
 
     const newProps = {
-      id: 'pagination',
       pageCount: 20,
       currentPage: 2,
-      maxNumbersOnLeftRight: 5,
-      fetchData: spy(),
-      type: 'primary',
-      style: {}
+      maxNumbersOnLeftRight: 5
     };
 
     component = mountPaginationWidget(newProps);

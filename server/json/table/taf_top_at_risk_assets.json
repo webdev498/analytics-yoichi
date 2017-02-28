@@ -7,72 +7,40 @@
           {
             "data": [
               {
+                "fieldName": "info"
+              },
+              {
+                "fieldName": "type"
+              }
+            ],
+            "headingStyle": {
+              "width": "60px",
+              "overflowWrap": "break-word",
+              "textTransform": "none"
+            },
+            "type": "assetWidget",
+            "header": "Asset"
+          },
+          {
+            "data": [
+              {
                 "fieldName": "risk.score"
               }
             ],
             "style": {
-              "minWidth": "50px",
+              "minWidth": "60px",
               "width": "10%"
             },
             "type": "scoreWidget",
+            "inverse": true,
             "header": "Score"
-          },
-          {
-            "data": [
-              {
-                "fieldName": "info.displayName"
-              }
-            ],
-            "style": {
-              "width": "25%"
-            },
-            "type": "text",
-            "header": "Name"
-          },
-          {
-            "data": [
-              {
-                "fieldName": "info.title"
-              }
-            ],
-            "style": {
-              "width": "25%"
-            },
-            "type": "text",
-            "header": "Title"
-          },
-          {
-            "data": [
-              {
-                "fieldName": "info.department"
-              }
-            ],
-            "style": {
-              "width": "15%"
-            },
-            "type": "text",
-            "header": "Department"
-          },
-          {
-            "data": [
-              {
-                "fieldName": "info.location"
-              }
-            ],
-            "style": {
-              "width": "25%"
-            },
-            "type": "text",
-            "header": "Location"
           }
         ]
       }
     ]
   },
   "options": {
-    "filterable": [ "Score", "Name", "Title", "Department" ],
     "itemsPerPage": 5,
-    "sortable": [ "Score", "Name", "Title", "Department" ],
     "rowClickable": true
   }
 }

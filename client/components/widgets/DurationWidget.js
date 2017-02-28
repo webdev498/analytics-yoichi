@@ -2,10 +2,9 @@ import React, {PropTypes} from 'react';
 import {msToTime} from '../../../commons/utils/utils';
 import {Colors} from '../../../commons/colors';
 
-class DurationWidget extends React.Component {
+export class DurationWidget extends React.Component {
   static propTypes = {
-    attributes: PropTypes.object,
-    tableOptions: PropTypes.object
+    timeValue: PropTypes.number
   }
 
   convertTime() {
