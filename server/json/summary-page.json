@@ -512,7 +512,8 @@
           "style": {
             "marginLeft": "30px",
             "marginRight": "30px",
-            "width": "50%"
+            "width": "50%",
+            "minWidth": "595px"
           },
           "id": "PieChartConnections"
         },
@@ -599,7 +600,8 @@
           },
           "style": {
             "width": "50%",
-            "marginRight": "30px"
+            "marginRight": "30px",
+            "minWidth": "595px"
           },
           "id": "HorizontalBarChartConnections"
         },
