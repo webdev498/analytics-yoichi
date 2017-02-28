@@ -52,3 +52,25 @@ export function autoScrollTo(id, decreasePositionBy) {
   let position = getPosition(document.getElementById(id));
   window.scrollTo(0, position.y - decreasePositionBy);
 }
+
+export function getQueryParamsForDetails(fields, dataObj) {
+  let parameters = Object.assign({}, fields);
+
+  if (dataObj.toolText) {
+    let toolTexts = dataObj.toolText.split(' |');
+    for (let parameter in parameters) {
+      let value = toolTexts[parameters[parameter].toolTextIndex];
+      if (parameter === 'date') {
+        value = new Date(value).toISOString();
+        value = value.replace('Z', '');
+      }
+      parameters[parameter].value = value;
+    }
+  }
+  else if (dataObj.shortLabel) {
+    for (let parameter in parameters) {
+      parameters[parameter].value = dataObj.shortLabel;
+    }
+  }
+  return parameters;
+}

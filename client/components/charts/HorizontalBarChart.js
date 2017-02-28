@@ -9,7 +9,8 @@ import {
   kFormatter
 } from '../../../commons/utils/utils';
 
-import {getColorRanges} from '../../../commons/utils/colorUtils';
+import { getColorRanges } from '../../../commons/utils/colorUtils';
+import { getQueryParamsForDetails } from '../../utils/utils';
 
 import { DEFAULT_FONT } from 'Constants';
 
@@ -408,7 +409,7 @@ class HorizontalBarChart extends React.Component {
 
     const data = props.data,
       fieldMapping = props.chartData.fieldMapping,
-      {chartOptions, chartData, chart, showDetailsTable} = props;
+      {chartOptions, chartData, chart, showDetailsTable, details} = props;
 
     let rawData = {};
     rawData = generateRawData(fieldMapping, data);
@@ -424,7 +425,8 @@ class HorizontalBarChart extends React.Component {
         dataSource: generateDataSource(rawData, chartOptions, chartData, chart),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            showDetailsTable && showDetailsTable(dataObj);
+            let queryParams = getQueryParamsForDetails(details.meta.queryParams, dataObj);
+            showDetailsTable && showDetailsTable(queryParams);
           }
         }
       });
@@ -440,9 +442,13 @@ class HorizontalBarChart extends React.Component {
 
     return (
       <div style={{...props.attributes.chartBorder, ...styles.noData}}>
-        <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>{props.meta.title}
-          <span style={styles.subTitle}> {props.meta.subTitle}</span>
-        </div>
+        {
+          props.loadAsLegend
+          ? <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>{props.meta.title}
+            <span style={styles.subTitle}> {props.meta.subTitle}</span>
+          </div>
+          : null
+        }
         <div id={props.attributes.id} style={{...styles.minHeight, ...chartStyle}} />
       </div>
     );

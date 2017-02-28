@@ -4,7 +4,7 @@ import Reactable from 'reactable';
 import Area2DAsSparkLineChart from 'components/charts/Area2DAsSparkLineChart';
 import DurationWidget from 'components/widgets/DurationWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
-import AssetIcon from 'components/widgets/AssetIcon';
+import AssetWidget from 'components/widgets/AssetWidget';
 
 import {getCountryCode} from '../../commons/utils/countryUtils';
 
@@ -28,11 +28,15 @@ function loadComponent(column) {
       );
     case 'scoreWidget':
       return (
-        <ScoreWidget scoreValue={column.data[0].value} />
+        <ScoreWidget scoreValue={column.data[0].value} inverse={column.inverse} />
       );
-    case 'assetIcon':
+    case 'assetWidget':
+      let data = {
+        info: column.data[0] ? column.data[0].value : {},
+        type: column.data[1] ? column.data[1].value : ''
+      };
       return (
-        <AssetIcon asset={column} />
+        <AssetWidget data={data} headingStyle={column.headingStyle} />
       );
     default:
       break;
@@ -40,17 +44,21 @@ function loadComponent(column) {
 }
 
 function loadChartComponent(column) {
-  switch (column.chartType) {
-    case 'area2d':
-      return (
-        <Area2DAsSparkLineChart chartProperties={column} duration={column.duration} />
-      );
-    default:
-      break;
+  let {chart, data, duration} = column;
+  if (column.chart) {
+    switch (column.chart.type) {
+      case 'area2d':
+        return (
+          <Area2DAsSparkLineChart chart={chart} data={data} duration={duration} />
+        );
+      default:
+        break;
+    }
   }
 }
 
-function loadText(data) {
+function loadText(column) {
+  let {data} = column;
   return (
     <div>
       {data.map((text, index) => {
@@ -68,7 +76,7 @@ function loadText(data) {
             {
               !text.header && index === 0 && data.length > 1
               ? <span style={styles.header}>{text.value}</span>
-              : text.value + ' '
+              : text.value
             }
             {
               text.header && text.header === 'Country'
@@ -166,7 +174,7 @@ export class ReactableTable extends React.Component {
                       duration: props.duration
                     });
 
-                    let value = column.data[0] ? column.data[0].value : '',
+                    let value = column.sortValue || '',
                       style = column.type === 'text' ? {...column.style, 'wordBreak': 'break-all'} : {...column.style};
 
                     return (
@@ -176,7 +184,7 @@ export class ReactableTable extends React.Component {
                         key={column.key}>
                         {
                           column.type === 'text'
-                          ? loadText(column.data)
+                          ? loadText(column)
                           : loadComponent(column)
                         }
                       </Td>

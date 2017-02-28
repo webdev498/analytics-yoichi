@@ -141,8 +141,11 @@ export function generateQueryParams(parameters) {
 }
 
 export function generateDetailsParameters(parameters) {
-  let queryParams = {},
-    tempQueryParams = generateQueryParams(parameters);
+  let queryParams = {};
+  if (Object.keys(parameters.queryParamsArray).length === 0) {
+    return queryParams;
+  }
+  let tempQueryParams = generateQueryParams(parameters);
   tempQueryParams = tempQueryParams.replace('?', '');
   tempQueryParams = tempQueryParams.split('&');
   tempQueryParams.forEach((queryParam, index) => {

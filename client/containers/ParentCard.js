@@ -39,7 +39,7 @@ function getParamsAndReportId(props, dataObj, durationUpdated) {
   let {data, meta, details} = props,
     reportId = meta.api.pathParams.reportId;
 
-  if (details && details.meta) {
+  if (details && details.meta && details.meta.reportId) {
     reportId = details.meta.reportId;
     data = data[reportId];
   }
@@ -85,30 +85,10 @@ function getParamsAndReportId(props, dataObj, durationUpdated) {
 }
 
 function generateParameters(index, col, dataObj) {
-  const params = [];
-  if (dataObj.shortLabel) { // TODO define this in layout json.
-    const value = dataObj.shortLabel;
-    params.push({value, field: col.name});
-  }
-  else if (dataObj.toolText) { // TODO Discuss with Ojassvi and decide layout structure for this.
-    let toolText = dataObj.toolText,
-      toolTexts = toolText.split(' |'),
-      value = '';
-    if (toolTexts.length === 2) {
-      value = (toolText.split(' |')[0]);
-    }
-    else if (toolTexts.length === 3) {
-      if (index === 0) {
-        value = (toolText.split(' |')[1]);
-      }
-      else if (index === 1) {
-        value = (toolText.split(' |')[0]);
-      }
-    }
-    if (col.name === 'date') {
-      value = new Date(value).toISOString();
-      value = value.replace('Z', '');
-    }
+  let params = [],
+    value = '';
+  if (dataObj && dataObj[col.name]) {
+    value = dataObj[col.name].value;
     params.push({value, field: col.name});
   }
   return params;
@@ -159,6 +139,9 @@ export class ParentCard extends React.Component {
     }
 
     const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
+    if (api.queryParams && api.queryParams.filter) {
+      delete api.queryParams.filter;
+    }
     this.detailsApiObj = {id, api, params, options, isDetails};
     props.fetchApiData({id, api, params, options, isDetails});
   }
@@ -301,10 +284,28 @@ export class ParentCard extends React.Component {
     );
   }
 
-  updateSearch(event) {
+  updateSearch(event, detailsApiObj) {
     this.setState({
       search: event.target.value
     });
+    const {props} = this;
+    let apiObj = Object.assign({}, this.detailsApiObj);
+
+    if (apiObj.isDetails === true) {
+      if (event.target.value !== '') {
+        apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
+          filter: '__any ~ "' + event.target.value + '"'
+        });
+      }
+      else {
+        if (apiObj.api.queryParams.filter) {
+          delete apiObj.api.queryParams.filter;
+        }
+      }
+      apiObj.api.queryParams.from = 0;
+      props.fetchApiData(apiObj);
+      this.setState({showDetailsFlag: true});
+    }
   }
 
   render() {

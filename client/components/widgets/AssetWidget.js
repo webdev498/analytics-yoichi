@@ -15,7 +15,6 @@ const styles = {
     fontWeight: '600'
   },
   subHeading: {
-    width: '110px',
     textTransform: 'capitalize',
     fontWeight: 'light',
     overflowWrap: 'break-word'

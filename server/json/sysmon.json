@@ -366,6 +366,16 @@
           },
           "id": "freqreq"
         },
+        "details": {
+          "meta": {
+            "queryParams": {
+              "data.sysmon.Image": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "freq-req",
         "type": "charts/HorizontalBarChart"
       }
@@ -478,6 +488,16 @@
             "labelFontSize": "9"
           },
           "id": "freqprotocols"
+        },
+        "details": {
+          "meta": {
+            "queryParams": {
+              "protocol.service": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
         },
         "id": "freq-protocols",
         "type": "charts/HorizontalBarChart"

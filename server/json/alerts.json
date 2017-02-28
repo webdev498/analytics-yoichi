@@ -245,14 +245,6 @@
           },
           "title": "High Risk Assets"
         },
-        "tableOptions": {
-          "itemsPerPage": 5,
-          "sortable": ["SCORE"],
-          "defaultSort": {
-            "column": "SCORE",
-            "direction": "desc"
-          }
-        },
         "attributes": {
           "style": {
             "width": "290px",
@@ -260,10 +252,11 @@
             "marginLeft": "30px",
             "marginRight": "30px"
           },
-          "id": "risk-assets-table"
+          "id": "high-risk-assets"
         },
-        "id": "risk-assets",
-        "type": "riskAssetsTable"
+        "id": "high-risk-assets",
+        "type": "ReactableTable",
+        "openAssetDetails": true
       }
     ],
     [
@@ -318,6 +311,14 @@
         },
         "details": {
           "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.rank_alert.category": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          },
           "secondaryClick": {
             "page": "alert",
             "pathParams": {
@@ -406,6 +407,18 @@
         },
         "details": {
           "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "date": {
+                "toolTextIndex": 1,
+                "value": ""
+              },
+              "data.rank_alert.score": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          },
           "secondaryClick": {
             "page": "alert",
             "pathParams": {

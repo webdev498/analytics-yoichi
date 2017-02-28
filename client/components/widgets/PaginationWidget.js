@@ -38,36 +38,17 @@ class PaginationWidget extends React.Component {
     type: PropTypes.string
   }
 
-  constructor(props) {
-    super(props);
-
-    this.onPageChanged = this.onPageChanged.bind(this);
-    this.onPrevPageChanged = this.onPrevPageChanged.bind(this);
-    this.onNextPageChanged = this.onNextPageChanged.bind(this);
-  }
-
-  onPageChanged(pageNumber) {
+  onPageChanged(pageNumber, pageCount, action) {
     const {props} = this;
-    return (event) => {
+    pageNumber = parseInt(pageNumber);
+    if (action === 'prev' && (pageNumber - 1) > 0) {
+      pageNumber -= 1;
+    }
+    else if (action === 'next' && (pageNumber + 1) <= pageCount) {
+      pageNumber += 1;
+    }
+    return () => {
       props.fetchData(pageNumber, props.type);
-    };
-  }
-
-  onPrevPageChanged(pageNumber) {
-    const {props} = this;
-    return (event) => {
-      if ((parseInt(pageNumber) - 1) > 0) {
-        props.fetchData(pageNumber - 1, props.type);
-      }
-    };
-  }
-
-  onNextPageChanged(pageNumber, pageSize) {
-    const {props} = this;
-    return (event) => {
-      if ((parseInt(pageNumber) + 1) <= pageSize) {
-        props.fetchData(pageNumber + 1, props.type);
-      }
     };
   }
 
@@ -86,7 +67,7 @@ class PaginationWidget extends React.Component {
           li.push(<li key='Prev'>
             <button
               className='prev-pagination-link'
-              onClick={this.onPrevPageChanged(this.props.currentPage)}>&lt;&lt;</button>
+              onClick={this.onPageChanged(this.props.currentPage, pageCount, 'prev')}>&lt;&lt;</button>
           </li>);
         }
 
@@ -96,7 +77,7 @@ class PaginationWidget extends React.Component {
         else {
           let link = 'pagination-link-' + i;
           li.push(<li key={i}>
-            <button className={link} onClick={this.onPageChanged(i)}>{i}</button>
+            <button className={link} onClick={this.onPageChanged(i, pageCount, 'page')}>{i}</button>
           </li>);
         }
 
@@ -104,7 +85,7 @@ class PaginationWidget extends React.Component {
           li.push(<li key='Next'>
             <button
               className='next-pagination-link'
-              onClick={this.onNextPageChanged(this.props.currentPage, pageCount)}>&gt;&gt;</button>
+              onClick={this.onPageChanged(this.props.currentPage, pageCount, 'next')}>&gt;&gt;</button>
           </li>);
         }
       }

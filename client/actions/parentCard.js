@@ -7,6 +7,7 @@ import {
   REMOVE_COMPONENT,
   REQUEST_DETAILS_API_DATA,
   RECEIVE_DETAILS_API_DATA,
+  UPDATE_DETAILS_API_DATA,
   ERROR_DETAILS_API_DATA,
   REMOVE_DETAILS_COMPONENT
 } from 'Constants';
@@ -32,6 +33,10 @@ export function receiveApiData(id, data, isDetails) {
   else {
     return { type: RECEIVE_API_DATA, data, id };
   }
+}
+
+export function updateDetailsApiData(id, data) {
+  return { type: UPDATE_DETAILS_API_DATA, data, id };
 }
 
 export function errorApiData(id, errorData, api, isDetails) {
@@ -213,7 +218,7 @@ export function fetchApiData(input) {
 }
 
 // This function is used to fetch next set of data for server side pagination
-export function fetchNextSetOfData(apiObj, data) {
+export function fetchNextSetOfData(apiObj) {
   return function(dispatch, getState) {
     const {id, api, params, options, isDetails} = apiObj,
       currentDuration = getState().apiData.get('duration');
@@ -222,11 +227,8 @@ export function fetchNextSetOfData(apiObj, data) {
 
     callApi(api, currentDuration, params, options, dispatch)
     .then(json => {
-      json = Object.assign({}, json, {
-        options,
-        rows: data.concat(json.rows)
-      });
-      dispatch(receiveApiData(id, {json, api}, isDetails));
+      json.options = options;
+      dispatch(updateDetailsApiData(id, {json, api}));
     })
     .catch(ex => {
       dispatch(errorApiData(id, ex, api, isDetails));

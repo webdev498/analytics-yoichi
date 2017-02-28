@@ -26,7 +26,7 @@ const styles = {
   }
 };
 
-function getTabObj(tabs, timelineType, currentTab) {
+export function getTabObj(tabs, timelineType, currentTab) {
   let tabObj = {};
   for (let tab in tabs) {
     if (tab === currentTab) {
@@ -266,7 +266,6 @@ class Timeline extends React.Component {
       isPaginated: true,
       pageNumber: pageNumber
     };
-    this.toggleHighlightNetworkNode('invalid_id');
   }
 
   getApiObj(pageNumber, type) {
@@ -390,7 +389,7 @@ class Timeline extends React.Component {
         <div style={{
           width: '450px',
           position: 'absolute',
-          top: tabs && tabNames.length > 1 ? 159 : 0,
+          top: tabs && tabNames.length > 1 ? 135 : 0,
           right: 0,
           bottom: 0,
           zIndex: 1
@@ -420,7 +419,7 @@ class Timeline extends React.Component {
         machine: ''
       };
       this.getContextualMenuApiObj(details);
-      this.toggleHighlightNetworkNode('invalid_id');
+      this.toggleHighlightNetworkNode('');
     };
   }
 

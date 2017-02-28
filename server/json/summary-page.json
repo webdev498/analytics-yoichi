@@ -253,6 +253,14 @@
         },
         "details": {
           "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.rank_alert.category": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          },
           "secondaryClick": {
             "page": "alert",
             "pathParams": {
@@ -312,6 +320,14 @@
         },
         "details": {
           "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "destination.name": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          },
           "secondaryClick": {
             "page": "alert",
             "pathParams": {
@@ -426,6 +442,24 @@
           "id": "atRiskAssetByRisk",
           "chartHeight": "350"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "risk.score": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          },
+          "secondaryClick": {
+            "page": "asset",
+            "pathParams": {
+              "type": "type:fieldName",
+              "Name": "Name:fieldName"
+            }
+          }
+        },
         "id": "at-risk-asset-by-risk",
         "type": "charts/ParetoChart"
       }
@@ -535,7 +569,13 @@
         },
         "details": {
           "meta": {
-            "reportId": "taf_top_talkers_connections"
+            "reportId": "taf_top_talkers_connections",
+            "queryParams": {
+              "source.name": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
           }
         },
         "meta": {
@@ -724,7 +764,12 @@
         },
         "details": {
           "meta": {
-            "reportId": "taf_dest_countries"
+            "reportId": "taf_dest_countries",
+            "queryParams": {
+              "destination.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {
@@ -791,7 +836,12 @@
         },
         "details": {
           "meta": {
-            "reportId": "taf_source_countries"
+            "reportId": "taf_source_countries",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {

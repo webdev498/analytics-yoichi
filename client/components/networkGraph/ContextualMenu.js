@@ -102,13 +102,13 @@ function getActions(actions, data, type) {
 function checkForUserInputs(parameters) {
   let userInputParameters = [];
   if (!isUndefined(parameters.length)) {
-    for (let i = 0; i < parameters.length; i++) {
+    parameters.forEach((parameter) => {
       let tempObj = {};
-      if (parameters[i].userInput === true) {
-        tempObj.name = parameters[i].name;
+      if (parameter.userInput === true) {
+        tempObj.name = parameter.name;
         userInputParameters.push(tempObj);
       }
-    }
+    });
   }
   return userInputParameters;
 }
@@ -202,48 +202,49 @@ class ContextualMenu extends React.Component {
   }
 
   displayActions(actions, sourceDetails) {
-    let {itemId, itemType} = sourceDetails;
+    let {itemId, itemType, contextMenuType} = sourceDetails;
     let arr = [];
-    for (let j = 0; j < actions.length; j++) {
+    actions.forEach((action, index) => {
       const details = {
-          parameters: actions[j].parameters,
-          index: j,
-          itemId: itemId,
-          itemType: itemType,
-          notNodeId: sourceDetails.notNodeId ? sourceDetails.notNodeId : ''
+          parameters: action.parameters,
+          index,
+          itemId,
+          itemType,
+          notNodeId: sourceDetails.notNodeId ? sourceDetails.notNodeId : '',
+          contextMenuType
         },
         parameters = this.generateParameters(details);
 
       const updatedDetails = {
         actions,
-        index: j,
-        parameters: parameters,
-        sourceDetails: sourceDetails
+        index,
+        parameters,
+        sourceDetails
       };
 
       arr.push(this.createHTML(updatedDetails));
-    }
+    });
 
     return <ul style={styles.list}>{arr}</ul>;
   }
 
   generateParameters(details) {
-    let {parameters, index, itemId, itemType, notNodeId} = details,
+    let {parameters, index, itemId, itemType, notNodeId, contextMenuType} = details,
       parametersToApi = [],
       userInputParameters = [],
       fullMalwareReportLink = '';
 
     if (!isUndefined(parameters.length)) {
-      for (let i = 0; i < parameters.length; i++) {
-        let tempObj = {},
-          parameter = parameters[i];
+      parameters.forEach((parameter) => {
+        let tempObj = {};
         if (parameter.userInput === false && parameter.name !== 'link') {
           let params = {
             name: parameter.name,
             value: parameter.value,
-            itemId: itemId,
-            itemType: itemType,
-            notNodeId: notNodeId
+            itemId,
+            itemType,
+            notNodeId,
+            contextMenuType
           };
           tempObj.name = parameter.name;
           tempObj.value = this.getParameterValue(params);
@@ -262,7 +263,7 @@ class ContextualMenu extends React.Component {
           fullMalwareReportLink = !isUndefined(parameter.value)
           ? parameter.value : '';
         }
-      }
+      });
 
       userInputParameters = checkForUserInputs(parameters);
     }
@@ -274,7 +275,7 @@ class ContextualMenu extends React.Component {
   }
 
   getParameterValue(params) {
-    let {name, value, itemId, itemType, notNodeId} = params;
+    let {name, value, itemId, itemType, notNodeId, contextMenuType} = params;
     if (isUndefined(value)) {
       let {props} = this,
         {nodeObjects, edgeObjects} = props,
@@ -313,16 +314,34 @@ class ContextualMenu extends React.Component {
           break;
         case 'metadata':
           let paramName = (name).replace('metadata.', ''),
+            metadataValue = '';
+
+          if (contextMenuType === 'node') {
             metadataValue = (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].metadata))
               ? nodeObjects[itemId].metadata[paramName]
               : '';
+          }
+          else if (contextMenuType === 'edge') {
+            metadataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].metadata))
+              ? edgeObjects[itemId].metadata[paramName]
+              : '';
+          }
           value = (!isUndefined(metadataValue)) ? metadataValue : '';
           break;
         case 'actionData':
           let actionParamName = (name).replace('actionData.', ''),
+            actiondataValue = '';
+
+          if (contextMenuType === 'node') {
             actiondataValue = (!isUndefined(nodeObjects[itemId]) && !isUndefined(nodeObjects[itemId].actionData))
               ? nodeObjects[itemId].actionData[actionParamName]
               : '';
+          }
+          else if (contextMenuType === 'edge') {
+            actiondataValue = (!isUndefined(edgeObjects[itemId]) && !isUndefined(edgeObjects[itemId].actionData))
+              ? edgeObjects[itemId].actionData[actionParamName]
+              : '';
+          }
           value = (!isUndefined(actiondataValue)) ? actiondataValue : '';
           break;
         default:

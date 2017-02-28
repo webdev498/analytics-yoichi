@@ -207,7 +207,12 @@
         "details": {
           "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_dest_countries"
+            "reportId": "taf_dest_countries",
+            "queryParams": {
+              "destination.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {
@@ -383,7 +388,12 @@
         "details": {
           "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_source_countries"
+            "reportId": "taf_source_countries",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {
@@ -417,7 +427,7 @@
         "chart": {
           "worldMap": {
             "meta": {
-              "subTitle": "NUMBER OF OUTGOING CONNECTIONS BY COUNTRY"
+              "subTitle": "NUMBER OF INCOMING CONNECTIONS BY COUNTRY"
             },
             "attributes": {
               "chartWidth": "100%",
