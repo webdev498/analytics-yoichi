@@ -1,3 +1,4 @@
+import ReactDOM from 'react-dom';
 import React, {PropTypes} from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import {Colors} from '../../../commons/colors';
@@ -7,84 +8,89 @@ import { DEFAULT_FONT } from 'Constants';
 import 'styles/_contextualMenu.scss';
 
 const styles = {
-    contextualMenu: {
-      width: '260px',
-      backgroundColor: Colors.white,
-      border: `1px solid ${Colors.border}`,
-      position: 'absolute',
-      top: '65px',
-      right: '40px',
-      height: '306px',
-      boxShadow: `1px 1px 1px 1px ${Colors.border}`,
-      overflowY: 'auto'
-    },
-    arrowIcon: {
-      width: '24px',
-      alignSelf: 'flex-start',
-      transform: 'rotate(-90deg)'
-    },
-    list: {
-      listStyleType: 'none',
-      padding: 0,
-      margin: 0,
-      fontSize: '13px'
-    },
-    item: {
-      cursor: 'pointer'
-    },
-    wrapItem: {
-      display: 'flex',
-      padding: '15px 15px 15px 10px',
-      minHeight: '59px',
-      borderBottom: `1px solid ${Colors.border}`
-    },
-    itemContent: {
-      display: 'flex'
-    },
-    actionIcon: {
-      marginRight: '10px'
-    },
-    collapseContextualMenu: {
-      position: 'absolute',
-      left: '25px',
-      bottom: '25px'
-    },
-    expandContextualMenu: {
-      position: 'absolute',
-      bottom: '25px',
-      right: '25px',
-      display: 'none'
-    },
-    selectedDetails: {
-      margin: '0px 24px',
-      width: '90%',
-      color: Colors.garnet,
-      fontSize: '13px',
-      fontFamily: DEFAULT_FONT,
-      overflowWrap: 'break-word',
-      paddingRight: '20px',
-      paddingBottom: '20px'
-    },
-    notificationMessage: {
-      top: 0,
-      right: '260px',
-      fontSize: '16px',
-      position: 'absolute',
-      padding: '20px',
-      backgroundColor: Colors.notificationMessageBG,
-      color: Colors.garnet,
-      display: 'none'
-    },
-    actionTable: {
-      border: '0',
-      width: '260px',
-      cellPadding: '10',
-      cellSpacing: '10'
-    }
+  contextualMenu: {
+    width: '260px',
+    backgroundColor: Colors.white,
+    border: `1px solid ${Colors.border}`,
+    position: 'absolute',
+    top: '65px',
+    right: '40px',
+    height: '306px',
+    boxShadow: `1px 1px 1px 1px ${Colors.border}`
   },
-  notificationMessage = {
-    width: '260px'
-  };
+  clearIcon: {
+    position: 'absolute',
+    top: '-35px',
+    right: 0,
+    cursor: 'pointer',
+    fontWeight: '600'
+  },
+  arrowIcon: {
+    width: '24px',
+    alignSelf: 'flex-start',
+    transform: 'rotate(-90deg)'
+  },
+  list: {
+    listStyleType: 'none',
+    padding: 0,
+    margin: 0,
+    fontSize: '13px',
+    height: '306px',
+    overflowY: 'auto'
+  },
+  item: {
+    cursor: 'pointer'
+  },
+  wrapItem: {
+    display: 'flex',
+    padding: '15px 15px 15px 10px',
+    minHeight: '59px',
+    borderBottom: `1px solid ${Colors.border}`
+  },
+  itemContent: {
+    display: 'flex'
+  },
+  actionIcon: {
+    marginRight: '10px'
+  },
+  collapseContextualMenu: {
+    position: 'absolute',
+    left: '25px',
+    bottom: '25px'
+  },
+  expandContextualMenu: {
+    position: 'absolute',
+    bottom: '25px',
+    right: '25px',
+    display: 'none'
+  },
+  selectedDetails: {
+    margin: '0px 24px',
+    width: '90%',
+    color: Colors.garnet,
+    fontSize: '13px',
+    fontFamily: DEFAULT_FONT,
+    overflowWrap: 'break-word',
+    paddingRight: '20px',
+    paddingBottom: '20px'
+  },
+  notificationMessage: {
+    top: 0,
+    right: '260px',
+    fontSize: '16px',
+    position: 'absolute',
+    padding: '20px',
+    backgroundColor: Colors.notificationMessageBG,
+    color: Colors.garnet,
+    display: 'none'
+  },
+  actionTable: {
+    border: '0',
+    width: '260px',
+    cellPadding: '10',
+    cellSpacing: '10'
+  }
+};
 
 function getActions(actions, data, type) {
   if ((data.nodeType).toLowerCase() === type.toLowerCase()) {
@@ -140,7 +146,8 @@ function displayTextBoxForInputParam(table, userInputParameters, index) {
 
 class ContextualMenu extends React.Component {
   static propTypes = {
-    actions: PropTypes.array
+    actions: PropTypes.array.isRequired,
+    showContextMenu: PropTypes.bool.isRequired
   }
 
   constructor(props) {
@@ -150,6 +157,17 @@ class ContextualMenu extends React.Component {
     this.displayActions = this.displayActions.bind(this);
     this.generateParameters = this.generateParameters.bind(this);
     this.createHTML = this.createHTML.bind(this);
+    this.close = this.close.bind(this);
+
+    this.state = {
+      showContextMenu: props.showContextMenu
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps) {
+      this.setState({showContextMenu: nextProps.showContextMenu});
+    }
   }
 
   getContextMenu(sourceDetails) {
@@ -249,9 +267,9 @@ class ContextualMenu extends React.Component {
       userInputParameters = checkForUserInputs(parameters);
     }
     return {
-      parametersToApi: parametersToApi,
-      userInputParameters: userInputParameters,
-      fullMalwareReportLink: fullMalwareReportLink
+      parametersToApi,
+      userInputParameters,
+      fullMalwareReportLink
     };
   }
 
@@ -343,7 +361,11 @@ class ContextualMenu extends React.Component {
 
             {
               userInputParameters.length > 0
-                ? <div>Arrow</div>
+                ? (
+                  <FontIcon className='material-icons'>
+                    arrow_drop_down
+                  </FontIcon>
+                )
                 : null
             }
           </div>
@@ -356,17 +378,27 @@ class ContextualMenu extends React.Component {
     // displayTextBoxForInputParam(table, userInputParameters, index);
   }
 
+  close() {
+    this.setState({ showContextMenu: false });
+  }
+
   render() {
-    const {props} = this;
-    let contextMenuStyle = {display: props.showContextMenu ? 'block' : 'none'};
+    const {props, state} = this;
+    let contextMenuStyle = {display: state.showContextMenu ? 'block' : 'none'};
 
     return (
-      <div>
+      <div style={styles.wrap}>
         <div ref={(ref) => this.contextualMenu = ref}
           style={{...styles.contextualMenu, ...contextMenuStyle}}
           id='contextual-menu'
           className='context-menu'>
           {this.getContextMenu(props.sourceDetails)}
+
+          <FontIcon style={styles.clearIcon}
+            className='material-icons'
+            onClick={this.close}>
+            clear
+          </FontIcon>
         </div>
 
         <div style={{...styles.notificationMessage}} id='notification-message' />
