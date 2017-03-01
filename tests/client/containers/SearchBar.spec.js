@@ -50,22 +50,48 @@ describe('<SearchBar />', () => {
     expect(component.props().searchText).to.equal('malware');
   });
 
-  it('should have default styles', () => {
+  it('should have required instances', () => {
     const component = mountSearchBar();
     expect(component.instance().styles).to.be.defined;
+    expect(component.instance().clearSearchText).to.be.defined;
+    expect(component.instance().hideClearIcon).to.be.defined;
+    expect(component.instance().showClearIcon).to.be.defined;
+    expect(component.instance().focusSearchText).to.be.defined;
   });
 
   it('should display clear icon if search bar is floating', () => {
     const component = mountSearchBar({floatingSearchBar: true});
     expect(component.state().showClearIcon).to.be.defined;
     expect(component.state().showClearIcon).to.equal(true);
-    expect(component.instance().styles.clearIcon).to.equal(Object{color: '#ffffff', background: '#444c63'});
+    // expect(component.instance().styles.clearIcon).to.equal(Object{color: '#ffffff', background: '#444c63'});
   });
 
   it('should not display clear icon if search bar is non-floating', () => {
     const component = mountSearchBar({floatingSearchBar: false});
     expect(component.state().showClearIcon).to.be.defined;
     expect(component.state().showClearIcon).to.equal(false);
-    expect(component.instance().styles.clearIcon).to.equal(Object{color: 'transparent', background: 'transparent'});
+    // expect(component.instance().styles.clearIcon).to.equal(Object{color: 'transparent', background: 'transparent'});
+  });
+
+  it('should show clear icon on input box focus', () => {
+    const component1 = mountSearchBar({floatingSearchBar: false});
+    component1.instance().showClearIcon();
+    expect(component1.state().showClearIcon).to.equal(true);
+
+    const component2 = mountSearchBar({floatingSearchBar: false});
+    component2.instance().focusSearchText();
+    expect(component2.state().showClearIcon).to.equal(false);
+  });
+
+  it('should hide clear icon on input box blur', () => {
+    const component1 = mountSearchBar({floatingSearchBar: false});
+    component1.instance().hideClearIcon();
+    expect(component1.state().showClearIcon).to.equal(true);
+  });
+
+  it('should hide floating search bar on click of clear icon', () => {
+    const component1 = mountSearchBar({floatingSearchBar: true});
+    component1.instance().clearSearchText();
+    expect(component1.props().floatingSearchBar).to.equal(false);
   });
 });
