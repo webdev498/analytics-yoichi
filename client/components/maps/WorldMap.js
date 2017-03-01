@@ -12,8 +12,7 @@ const styles = {
     fontSize: '14px',
     color: Colors.grape,
     fontWeight: 'normal',
-    position: 'absolute',
-    marginTop: '-30px'
+    position: 'absolute'
   },
   noData: {}
 };
@@ -179,12 +178,11 @@ class WorldMap extends React.Component {
           {props.meta.subTitle}
         </div>
 
-        <div id={props.attributes.id} style={{...minHeight}} />
-
-        {this.renderChart(props)}
+        <div id={props.attributes.id} style={{...minHeight, paddingTop: '10px'}}>
+          {this.renderChart(props)}
+        </div>
 
         <WorldMapLegends style={props.attributes.legendStyle} />
-
       </div>
     );
   }
