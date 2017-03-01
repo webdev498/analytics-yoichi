@@ -7,7 +7,7 @@ import ParentCardHeader from './ParentCardHeader';
 
 import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
-import {autoScrollTo} from 'utils/utils';
+import {autoScrollTo, debounce} from 'utils/utils';
 import {updateRoute} from 'actions/core';
 
 import {DETAILS_BASE_URL} from 'Constants';
@@ -284,17 +284,14 @@ export class ParentCard extends React.Component {
     );
   }
 
-  updateSearch(event, detailsApiObj) {
-    this.setState({
-      search: event.target.value
-    });
-    const {props} = this;
+  executeSearch() {
+    const {props, state} = this;
     let apiObj = Object.assign({}, this.detailsApiObj);
 
     if (apiObj.isDetails === true) {
-      if (event.target.value !== '') {
+      if (state.search !== '') {
         apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
-          filter: '__any ~ "' + event.target.value + '"'
+          filter: '__any ~ "' + state.search + '"'
         });
       }
       else {
@@ -304,8 +301,30 @@ export class ParentCard extends React.Component {
       }
       apiObj.api.queryParams.from = 0;
       props.fetchApiData(apiObj);
-      this.setState({showDetailsFlag: true});
+      // this.setState({showDetailsFlag: true});
     }
+  }
+
+  // executeSearchDebounced(event) {
+  //   this.setState({
+  //     search: event.target.value
+  //   }, function() {
+  //     this.executeSearch.bind(this);
+  //   });
+  // }
+
+  updateSearch(event) {
+    console.log('updateSearch');
+    this.setState({
+      search: event.target.value
+    }, function() {
+      let debounceCall = debounce(this.executeSearch.bind(this), 500);
+      debounceCall();
+    });
+    // let debounceCall = debounce(function(event) {
+    //   this.executeSearchDebounced.bind(this, event);
+    // }, 500);
+    // debounceCall();
   }
 
   render() {

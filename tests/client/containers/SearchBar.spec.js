@@ -4,7 +4,6 @@ import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
 import SearchBar from 'containers/SearchBar';
-import FontIcon from 'material-ui/FontIcon';
 import {wrapThemeProvider} from '../../testUtils';
 
 function shallowRenderSearchBar(propsOptions) {
@@ -31,12 +30,8 @@ function mountSearchBar(propsOptions) {
 
   props = Object.assign({}, props, propsOptions);
 
-  // let component = mount(wrapThemeProvider(<SearchBar {...props} />));
-  // return component;
   let component = mount(<SearchBar {...props} />);
   return component;
-  // let component = mount(wrapThemeProvider(<SearchBar {...props} />));
-  // return component.find('SearchBar');
 }
 
 describe('<SearchBar />', () => {
@@ -55,10 +50,22 @@ describe('<SearchBar />', () => {
     expect(component.props().searchText).to.equal('malware');
   });
 
+  it('should have default styles', () => {
+    const component = mountSearchBar();
+    expect(component.instance().styles).to.be.defined;
+  });
+
   it('should display clear icon if search bar is floating', () => {
     const component = mountSearchBar({floatingSearchBar: true});
-    console.log(component.state());
     expect(component.state().showClearIcon).to.be.defined;
     expect(component.state().showClearIcon).to.equal(true);
+    expect(component.instance().styles.clearIcon).to.equal(Object{color: '#ffffff', background: '#444c63'});
+  });
+
+  it('should not display clear icon if search bar is non-floating', () => {
+    const component = mountSearchBar({floatingSearchBar: false});
+    expect(component.state().showClearIcon).to.be.defined;
+    expect(component.state().showClearIcon).to.equal(false);
+    expect(component.instance().styles.clearIcon).to.equal(Object{color: 'transparent', background: 'transparent'});
   });
 });

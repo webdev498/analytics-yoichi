@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import FontIcon from 'material-ui/FontIcon';
 import {Colors} from '../../commons/colors';
 
 const styles = {
@@ -166,11 +165,11 @@ class SearchBar extends React.Component {
       {
         this.state.showClearIcon === true || this.state.showClearIcon === false
         ? <div style={styles.clearDiv} onClick={this.clearSearchText}>
-          <FontIcon className='material-icons'
+          <i className='material-icons'
             style={{...styles.clearIcon, ...this.styles.clearIcon}}
             ref={(ref) => this.clearIcon = ref}>
             close
-          </FontIcon>
+          </i>
         </div>
         : null
       }
@@ -185,11 +184,11 @@ class SearchBar extends React.Component {
         ref={(ref) => this.myTextInput = ref}
         autoFocus={props.floatingSearchBar} />
 
-      <FontIcon className='material-icons'
+      <i className='material-icons'
         style={this.styles.searchIcon}
         onClick={this.focusSearchText}>
         search
-      </FontIcon>
+      </i>
     </div>;
   }
 };
