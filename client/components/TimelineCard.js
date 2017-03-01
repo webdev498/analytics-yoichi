@@ -305,7 +305,7 @@ class TimelineCard extends React.Component {
         severity = data.display.Severity ? data.display.Severity.value : '';
       return {
         borderLeft: '5px solid ' + getColor(score, severity),
-        paddingLeft: '18px'
+        paddingLeft: '17px'
       };
     }
     else {
