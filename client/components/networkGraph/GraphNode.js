@@ -253,10 +253,12 @@ function handleNodeMetaData(metadata, nodeObject) {
           }
           if (whatIsIt(metadata[metadataType]) === 'Array') {
             let metadataArray = metadata[metadataType];
+            nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + '</b>:';
             nodeObject.nodeDetails.push(
               <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b></li>
             );
             metadataArray.forEach((value, index) => {
+              nodeObject.title += newLine2 + value;
               nodeObject.nodeDetails.push(
                 <li key={metadataType + index}>{index + 1}. {value}</li>
               );
