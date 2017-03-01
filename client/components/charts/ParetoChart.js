@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import { getIndexFromColumnName } from '../../../commons/utils/utils';
+import { getQueryParamsForDetails } from '../../utils/utils';
 import { DEFAULT_CHART_OPTIONS } from 'Constants';
 
 const chart = Object.assign({}, DEFAULT_CHART_OPTIONS, {
@@ -90,7 +91,7 @@ class ParetoChart extends React.Component {
       return;
     }
 
-    const {data, chartOptions, updateChartOptions, chartData, showDetailsTable} = props,
+    const {data, chartOptions, updateChartOptions, chartData, showDetailsTable, details} = props,
       fieldMapping = chartData.fieldMapping;
 
     FusionCharts.ready(function() {
@@ -106,7 +107,8 @@ class ParetoChart extends React.Component {
         dataSource: generateDataSource(data, chartOptions, fieldMapping, updateChartOptions),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            showDetailsTable(dataObj);
+            let queryParams = getQueryParamsForDetails(details.meta.queryParams, dataObj);
+            showDetailsTable(queryParams);
           }
         }
       });

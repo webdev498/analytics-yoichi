@@ -1,6 +1,7 @@
 {
   "options": {
-    "itemsPerPage": 5
+    "itemsPerPage": 5,
+    "rowClickable": false
   },
   "data": {
     "fieldMapping": [
@@ -26,12 +27,12 @@
                 "fieldName": "count"
               }
             ],
-            "attributes": {
-              "chartWidth": "100%",
-              "chartType": "area2d",
+            "chart": {
+              "width": "100%",
+              "height": "120",
+              "type": "area2d",
               "id": "connection",
-              "chartHeight": "120",
-              "chartOptions": {
+              "options": {
                 "labelFontSize": "9"
               }
             },

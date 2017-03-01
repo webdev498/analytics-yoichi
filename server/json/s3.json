@@ -475,6 +475,17 @@
           },
           "id": "freqreq"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.s3.requester": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "freq-req",
         "type": "charts/HorizontalBarChart"
       }
@@ -578,6 +589,17 @@
           },
           "id": "frequa"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.s3.userAgent": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "freq-ua",
         "type": "charts/HorizontalBarChart"
       }
@@ -587,7 +609,12 @@
         "details": {
           "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_s3_top_country_download"
+            "reportId": "taf_s3_top_country_download",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {
@@ -763,7 +790,12 @@
         "details": {
           "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_s3_top_country_upload"
+            "reportId": "taf_s3_top_country_upload",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {
@@ -986,6 +1018,17 @@
           },
           "id": "lfreqreq"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.s3.requester": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "l-freq-req",
         "type": "charts/ParetoChart"
       },
@@ -1038,6 +1081,17 @@
             "labelFontSize": "9"
           },
           "id": "lfrequa"
+        },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.s3.userAgent": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
         },
         "id": "l-freq-ua",
         "type": "charts/ParetoChart"

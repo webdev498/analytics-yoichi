@@ -3,7 +3,7 @@ import FontIcon from 'material-ui/FontIcon';
 import {Colors} from '../../commons/colors';
 import {getArrowIcon} from '../../commons/utils/graphUtils';
 
-import './styles/_metricsCard.scss';
+import 'styles/_metricsCard.scss';
 
 const styles = {
   card: {

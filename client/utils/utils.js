@@ -52,3 +52,54 @@ export function autoScrollTo(id, decreasePositionBy) {
   let position = getPosition(document.getElementById(id));
   window.scrollTo(0, position.y - decreasePositionBy);
 }
+
+export function getQueryParamsForDetails(fields, dataObj) {
+  let parameters = Object.assign({}, fields);
+
+  if (dataObj.toolText) {
+    let toolTexts = dataObj.toolText.split(' |');
+    for (let parameter in parameters) {
+      let value = toolTexts[parameters[parameter].toolTextIndex];
+      if (parameter === 'date') {
+        value = new Date(value).toISOString();
+        value = value.replace('Z', '');
+      }
+      parameters[parameter].value = value;
+    }
+  }
+  else if (dataObj.shortLabel) {
+    for (let parameter in parameters) {
+      parameters[parameter].value = dataObj.shortLabel;
+    }
+  }
+  return parameters;
+}
+
+// export function debounce(func, wait, immediate) {
+//   var timeout;
+//   console.log('test3');
+//   return function() {
+//     var context = this, args = arguments;
+//     var later = function() {
+//       timeout = null;
+//       if (!immediate) func.apply(context, args);
+//       console.log('test1');
+//     };
+//     var callNow = immediate && !timeout;
+//     clearTimeout(timeout);
+//     console.log('test2');
+//     timeout = setTimeout(later, wait);
+//     if (callNow) func.apply(context, args);
+//   };
+// };
+
+export function debounce(fn, delay) {
+  var timer = null;
+  return function() {
+    var context = this, args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function() {
+      fn.apply(context, args);
+    }, delay);
+  };
+}

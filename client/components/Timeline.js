@@ -14,6 +14,10 @@ import {autoScrollTo} from 'utils/utils';
 import { TIMELINE_CARD, CONTEXTUAL_MENU_CARD } from 'Constants';
 
 const styles = {
+  dateStyle: {
+    marginRight: '22px',
+    marginTop: '19px'
+  },
   dateSpan: {
     fontSize: '12px',
     color: Colors.grape
@@ -194,7 +198,7 @@ class Timeline extends React.Component {
       paddingLeft = (card === TIMELINE_CARD) ? '0px' : '10px';
 
     return (
-      <div style={{ width: '85px', paddingLeft }}>
+      <div style={{ ...styles.dateStyle, paddingLeft }}>
         <span style={styles.dateSpan}>
           {dateTime.date}<br />{dateTime.time}
         </span>
@@ -498,10 +502,7 @@ class Timeline extends React.Component {
 
     if (state.rows && state.rows.length > 0) {
       return (
-        <div style={
-            attributes.otherStyles.flex && state.selectedCardId !== ''
-            ? attributes.otherStyles.flex : {}
-          }>
+        <div style={attributes.otherStyles.flex && state.selectedCardId !== '' ? attributes.otherStyles.flex : {}}>
           {this.displayCard()}
           {
             state.selectedCardId !== ''

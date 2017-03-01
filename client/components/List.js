@@ -5,6 +5,10 @@ import {Colors} from '../../commons/colors';
 import {getCountryCode} from '../../commons/utils/countryUtils';
 
 const styles = {
+  list: {
+    marginLeft: '-30px',
+    marginRight: '-30px'
+  },
   header: {
     fontSize: '14px',
     paddingBottom: '16px'
@@ -36,13 +40,16 @@ function loadComponent(column) {
 }
 
 function loadChartComponent(column) {
-  switch (column.chartType) {
-    case 'area2d':
-      return (
-        <Area2DAsSparkLineChart chartProperties={column} duration={column.duration} />
-      );
-    default:
-      break;
+  let {chart, data, duration} = column;
+  if (column.chart) {
+    switch (column.chart.type) {
+      case 'area2d':
+        return (
+          <Area2DAsSparkLineChart chart={chart} data={data} duration={duration} />
+        );
+      default:
+        break;
+    }
   }
 }
 
@@ -148,7 +155,7 @@ export class List extends React.Component {
     </li>;
   }
 
-  loadTable() {
+  loadList() {
     const {props} = this;
     if (!props.data) { return; }
 
@@ -187,8 +194,8 @@ export class List extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.loadTable()}
+      <div style={styles.list}>
+        {this.loadList()}
       </div>
     );
   }

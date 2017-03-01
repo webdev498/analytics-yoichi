@@ -308,7 +308,13 @@
         "details": {
           "itemsPerPage": 5,
           "meta": {
-            "reportId": "taf_top_talkers_connections"
+            "reportId": "taf_top_talkers_connections",
+            "queryParams": {
+              "source.name": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
           }
         },
         "meta": {

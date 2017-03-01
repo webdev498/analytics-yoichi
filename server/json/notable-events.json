@@ -303,6 +303,17 @@
           "id": "loginFailureByUser",
           "chartHeight": "350"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.login.user": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "login-failure-by-user",
         "type": "charts/ParetoChart"
       }
@@ -418,6 +429,17 @@
           "id": "AccountManagementEventsByType",
           "chartHeight": "350"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.ad.Message": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "account-management-events-by-type",
         "type": "charts/ParetoChart"
       },
@@ -475,6 +497,17 @@
           "id": "ComputerManagementEventsByType",
           "chartHeight": "350"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.ad.Message": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "computer-management-events-by-type",
         "type": "charts/ParetoChart"
       },
@@ -531,6 +564,17 @@
           },
           "id": "SecurityGroupManagementEventsByType",
           "chartHeight": "350"
+        },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.ad.Message": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
         },
         "id": "security-group-management-events-by-type",
         "type": "charts/ParetoChart"

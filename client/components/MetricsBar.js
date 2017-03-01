@@ -1,12 +1,13 @@
 import React from 'react';
 import ParentCard from 'containers/ParentCard';
 import MetricsCard from 'components/MetricsCard';
+import { Colors } from '../../commons/colors';
 
 const styles = {
   wrap: {
     display: 'flex',
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    boxShadow: '2px 2px 2px 1px rgba(0, 0, 0, 0.2)'
+    boxShadow: `1px 1px 1px 1px ${Colors.shadow}`
   }
 };
 

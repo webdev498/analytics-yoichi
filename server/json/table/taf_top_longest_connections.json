@@ -33,6 +33,19 @@
           {
             "data": [
               {
+                "fieldName": "data.conn.duration",
+                "displayName": "duration"
+              }
+            ],
+            "style": {
+              "width": "15%"
+            },
+            "type": "loadComponent",
+            "header": "DURATIONnew"
+          },
+          {
+            "data": [
+              {
                 "fieldName": "protocol.service"
               },
               {
@@ -145,8 +158,10 @@
     "rowClickable": true
   },
   "details": {
-    "queryParams": {
-      "correlationIds": "correlationIds[0]:fieldName"
+    "meta": {
+      "queryParams": {
+        "correlationIds": "correlationIds[0]:fieldName"
+      }
     }
   }
 }

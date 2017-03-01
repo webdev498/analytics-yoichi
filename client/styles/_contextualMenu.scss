@@ -1,0 +1,15 @@
+@import 'color';
+
+.context-menu {
+  li:hover {
+    background-color: $CloudColorShade6;
+    color: $BarColor;
+    & .material-icons {
+      color: $BarColor !important;
+    }
+  }
+
+  // li:last-child > div {
+  //   border: 0 !important;
+  // }
+}

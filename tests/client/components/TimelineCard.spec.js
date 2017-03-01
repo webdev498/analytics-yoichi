@@ -167,7 +167,7 @@ describe('<TimelineCard />', () => {
       }
     };
     const wrapper = mountTimelineCard();
-    expect(wrapper.find(Card)).to.have.style('borderLeft', '5px solid rgb(239, 89, 118)');
+    expect(wrapper.find(Card)).to.have.style('borderLeft', '5px solid rgb(231, 43, 68)');
   });
 
   it('simulates card click events', () => {

@@ -10,7 +10,8 @@ import {
   TIME_INTERVAL_UPDATE,
   PARENT_CARD_EVENT,
   REMOVE_COMPONENT,
-  REMOVE_DETAILS_COMPONENT
+  REMOVE_DETAILS_COMPONENT,
+  REQUEST_DETAILS_API_DATA
 } from 'Constants';
 
 import {
@@ -23,6 +24,7 @@ import {
   getUrl,
   callApi,
   fetchApiData,
+  fetchNextSetOfData,
   updateApiData,
   broadcastEvent,
   removeComponent
@@ -506,4 +508,96 @@ describe('ParentCard Actions', () => {
       expect(actions[1]).to.have.a.property('id', id);
     });
   });
+
+  // context('fetchNextSetOfData function', () => {
+  //   let server, id, apiData, auth, store, input;
+
+  //   const api = {
+  //       path: '/api/{reportId}',
+  //       pathParams: { reportId: 'test' },
+  //       queryParams: {}
+  //     },
+  //     params = {},
+  //     json = { total: 0, next: -1, rows: [], columns: [] },
+  //     jsonRes = JSON.stringify(json);
+
+  //   beforeEach(function() {
+  //     server = fakeServer.create();
+  //     id = 'testId';
+  //     apiData = Map({});
+  //     auth = { cookies: { access_token: '', token_type: '' } };
+  //     store = mockStore({ apiData, auth });
+  //     input = { id, api, params, options: {}, isDetails: true };
+  //   });
+
+  //   afterEach(function() {
+  //     server.restore();
+  //   });
+
+  //   it('should dispatch REQUEST_DETAILS_API_DATA state', () => {
+  //     server.respondWith('GET', `${baseUrl}/api/test`, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
+
+  //     const dispatchCall = store.dispatch(fetchNextSetOfData(input)),
+  //       actions = store.getActions(),
+  //       requestAction = actions[0];
+
+  //     expect(actions).to.have.length(1);
+  //     expect(requestAction).to.have.a.property('type', REQUEST_DETAILS_API_DATA);
+  //     expect(requestAction).to.have.a.property('id', id);
+  //     expect(requestAction).to.have.a.property('api');
+
+  //     server.respond();
+  //     return dispatchCall;
+  //   });
+
+  //   it('should dispatch RECEIVE_DETAILS_API_DATA state, after REQUEST_DETAILS_API_DATA', () => {
+  //     server.respondWith('GET', `${baseUrl}/api/test`, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
+
+  //     const dispatchCall = store.dispatch(fetchNextSetOfData(input))
+  //       .then(res => {
+  //         const actions = store.getActions(),
+  //           requestAction = actions[0],
+  //           responseAction = actions[1];
+
+  //         expect(actions).to.have.length(2);
+
+  //         expect(requestAction).to.have.a.property('type', 'REQUEST_DETAILS_API_DATA');
+  //         expect(requestAction).to.have.a.property('id', id);
+  //         expect(requestAction).to.have.a.property('api');
+
+  //         expect(responseAction).to.have.a.property('type', 'RECEIVE_DETAILS_API_DATA');
+  //         expect(responseAction).to.have.a.property('id', id);
+  //         expect(responseAction).to.have.a.property('data');
+  //         expect(responseAction).to.have.a.property('prevData');
+  //       });
+
+  //     server.respond();
+  //     return dispatchCall;
+  //   });
+
+  //   it('should dispatch ERROR_DETAILS_API_DATA state, after REQUEST_DETAILS_API_DATA', () => {
+  //     server.respondWith('GET', `${baseUrl}/api/test`, [ 400, { 'Content-Type': 'application/json' }, jsonRes ]);
+
+  //     const dispatchCall = store.dispatch(fetchNextSetOfData(input))
+  //       .then(res => {
+  //         const actions = store.getActions(),
+  //           requestAction = actions[0],
+  //           errorAction = actions[1];
+
+  //         expect(actions).to.have.length(2);
+
+  //         expect(requestAction).to.have.a.property('type', 'REQUEST_DETAILS_API_DATA');
+  //         expect(requestAction).to.have.a.property('id', id);
+  //         expect(requestAction).to.have.a.property('api');
+
+  //         expect(errorAction).to.have.a.property('type', 'ERROR_DETAILS_API_DATA');
+  //         expect(errorAction).to.have.a.property('id', id);
+  //         expect(errorAction).to.have.a.property('errorData');
+  //         expect(errorAction).to.have.a.property('api');
+  //       });
+
+  //     server.respond();
+  //     return dispatchCall;
+  //   });
+  // });
 });

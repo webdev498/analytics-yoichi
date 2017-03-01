@@ -7,6 +7,7 @@ import {
 } from '../../../commons/utils/dateUtils';
 
 import { generateRawData, isUndefined } from '../../../commons/utils/utils';
+import { getQueryParamsForDetails } from '../../utils/utils';
 import { DEFAULT_FONT } from 'Constants';
 
 const chart = {
@@ -338,7 +339,7 @@ class MultiSeriesCombiChart extends React.Component {
       return;
     }
 
-    const {data, attributes, showDetailsTable} = props,
+    const {data, attributes, showDetailsTable, details} = props,
       fieldMapping = props.chartData.fieldMapping,
       rawData = generateRawData(fieldMapping, data);
 
@@ -353,7 +354,8 @@ class MultiSeriesCombiChart extends React.Component {
         dataSource: generateChartDataSource(rawData, props),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            showDetailsTable(dataObj);
+            let queryParams = getQueryParamsForDetails(details.meta.queryParams, dataObj);
+            showDetailsTable(queryParams);
           }
         }
       });

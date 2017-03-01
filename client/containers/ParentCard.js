@@ -7,7 +7,7 @@ import ParentCardHeader from './ParentCardHeader';
 
 import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
-import {autoScrollTo} from 'utils/utils';
+import {autoScrollTo, debounce} from 'utils/utils';
 import {updateRoute} from 'actions/core';
 
 import {DETAILS_BASE_URL} from 'Constants';
@@ -18,7 +18,7 @@ const styles = {
     backgroundColor: 'white',
     borderRadius: 0,
     padding: '30px',
-    boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
+    boxShadow: `0 1px 2px ${Colors.shadow}`
   },
   childwrap: {
     backgroundColor: 'white',
@@ -39,7 +39,7 @@ function getParamsAndReportId(props, dataObj, durationUpdated) {
   let {data, meta, details} = props,
     reportId = meta.api.pathParams.reportId;
 
-  if (details && details.meta) {
+  if (details && details.meta && details.meta.reportId) {
     reportId = details.meta.reportId;
     data = data[reportId];
   }
@@ -85,30 +85,10 @@ function getParamsAndReportId(props, dataObj, durationUpdated) {
 }
 
 function generateParameters(index, col, dataObj) {
-  const params = [];
-  if (dataObj.shortLabel) { // TODO define this in layout json.
-    const value = dataObj.shortLabel;
-    params.push({value, field: col.name});
-  }
-  else if (dataObj.toolText) { // TODO Discuss with Ojassvi and decide layout structure for this.
-    let toolText = dataObj.toolText,
-      toolTexts = toolText.split(' |'),
-      value = '';
-    if (toolTexts.length === 2) {
-      value = (toolText.split(' |')[0]);
-    }
-    else if (toolTexts.length === 3) {
-      if (index === 0) {
-        value = (toolText.split(' |')[1]);
-      }
-      else if (index === 1) {
-        value = (toolText.split(' |')[0]);
-      }
-    }
-    if (col.name === 'date') {
-      value = new Date(value).toISOString();
-      value = value.replace('Z', '');
-    }
+  let params = [],
+    value = '';
+  if (dataObj && dataObj[col.name]) {
+    value = dataObj[col.name].value;
     params.push({value, field: col.name});
   }
   return params;
@@ -159,6 +139,9 @@ export class ParentCard extends React.Component {
     }
 
     const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
+    if (isDetails && api.queryParams && api.queryParams.filter) {
+      delete api.queryParams.filter;
+    }
     this.detailsApiObj = {id, api, params, options, isDetails};
     props.fetchApiData({id, api, params, options, isDetails});
   }
@@ -279,7 +262,15 @@ export class ParentCard extends React.Component {
     let statusText;
 
     try {
-      statusText = props.errorData.response.statusText;
+      const err = props.errorData;
+      if (err) {
+        if (err.response) {
+          statusText = err.response.statusText;
+        }
+        else {
+          statusText = err;
+        }
+      }
     }
     catch (ex) {
       console.log(ex, props.errorData);
@@ -293,10 +284,46 @@ export class ParentCard extends React.Component {
     );
   }
 
+  executeSearch() {
+    const {props, state} = this;
+    let apiObj = Object.assign({}, this.detailsApiObj);
+
+    if (apiObj.isDetails === true) {
+      if (state.search !== '') {
+        apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
+          filter: '__any ~ "' + state.search + '"'
+        });
+      }
+      else {
+        if (apiObj.api.queryParams.filter) {
+          delete apiObj.api.queryParams.filter;
+        }
+      }
+      apiObj.api.queryParams.from = 0;
+      props.fetchApiData(apiObj);
+      // this.setState({showDetailsFlag: true});
+    }
+  }
+
+  // executeSearchDebounced(event) {
+  //   this.setState({
+  //     search: event.target.value
+  //   }, function() {
+  //     this.executeSearch.bind(this);
+  //   });
+  // }
+
   updateSearch(event) {
     this.setState({
       search: event.target.value
+    }, function() {
+      let debounceCall = debounce(this.executeSearch.bind(this), 500);
+      debounceCall();
     });
+    // let debounceCall = debounce(function(event) {
+    //   this.executeSearchDebounced.bind(this, event);
+    // }, 500);
+    // debounceCall();
   }
 
   render() {

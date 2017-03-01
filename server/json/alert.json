@@ -46,6 +46,11 @@
           "title": "Overview"
         },
         "attributes": {
+          "header": {
+            "style": {
+              "paddingRight": "50px"
+            }
+          },
           "style": {
             "width": "100%",
             "marginTop": "30px",

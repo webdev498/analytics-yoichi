@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import FontIcon from 'material-ui/FontIcon';
 import {Colors} from '../../commons/colors';
 
 const styles = {
@@ -38,7 +37,7 @@ const styles = {
     margin: 'auto',
     position: 'absolute',
     right: '12px',
-    top: 0,
+    top: '8px',
     fontWeight: 500
   },
   searchIconDetails: {
@@ -76,7 +75,7 @@ const styles = {
   }
 };
 
-export default class SearchBar extends React.Component {
+class SearchBar extends React.Component {
   constructor(props) {
     super(props);
 
@@ -133,6 +132,9 @@ export default class SearchBar extends React.Component {
       };
       this.setState({showClearIcon: false});
     }
+    // else {
+    //   this.setState({showClearIcon: false});
+    // }
   }
 
   showClearIcon() {
@@ -144,10 +146,14 @@ export default class SearchBar extends React.Component {
       };
       this.setState({showClearIcon: true});
     }
+    // else {
+    //   this.setState({showClearIcon: false});
+    // }
   }
 
   render() {
     const {props} = this;
+
     if (props.floatingSearchBar === true) {
       this.styles = {
         inputWrap: Object.assign({}, styles.inputWrap, styles.inputWrapDetails),
@@ -165,11 +171,11 @@ export default class SearchBar extends React.Component {
       {
         this.state.showClearIcon === true || this.state.showClearIcon === false
         ? <div style={styles.clearDiv} onClick={this.clearSearchText}>
-          <FontIcon className='material-icons'
+          <i className='material-icons'
             style={{...styles.clearIcon, ...this.styles.clearIcon}}
             ref={(ref) => this.clearIcon = ref}>
             close
-          </FontIcon>
+          </i>
         </div>
         : null
       }
@@ -178,17 +184,19 @@ export default class SearchBar extends React.Component {
         id='searchText'
         type='text'
         style={this.styles.searchText}
-        onChange={props.updateSearch}
+        onKeyUp={props.updateSearch}
         onFocus={this.showClearIcon}
         onBlur={this.hideClearIcon}
         ref={(ref) => this.myTextInput = ref}
         autoFocus={props.floatingSearchBar} />
 
-      <FontIcon className='material-icons'
+      <i className='material-icons'
         style={this.styles.searchIcon}
         onClick={this.focusSearchText}>
         search
-      </FontIcon>
+      </i>
     </div>;
   }
 };
+
+export default SearchBar;

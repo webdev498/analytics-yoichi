@@ -5,14 +5,14 @@ import {Colors} from '../../../commons/colors';
 import { generateRawData } from '../../../commons/utils/utils';
 import { getColorRanges } from '../../../commons/utils/colorUtils';
 import {getCountryId} from '../../../commons/utils/countryUtils';
+import { getQueryParamsForDetails } from '../../utils/utils';
 
 const styles = {
   chartCaption: {
     fontSize: '14px',
     color: Colors.grape,
     fontWeight: 'normal',
-    position: 'absolute',
-    marginTop: '-30px'
+    position: 'absolute'
   },
   noData: {}
 };
@@ -137,7 +137,7 @@ class WorldMap extends React.Component {
 
   renderChart() {
     const {props} = this,
-      {data, showDetailsTable, attributes} = props;
+      {data, showDetailsTable, attributes, details} = props;
     if (!data) { return; }
 
     styles.noData = {};
@@ -159,7 +159,8 @@ class WorldMap extends React.Component {
         dataSource: generateChartDataSource(rawData, chartOptions, fieldMapping),
         events: {
           entityClick: function(eventObj, dataObj) {
-            showDetailsTable(dataObj);
+            let queryParams = getQueryParamsForDetails(details.meta.queryParams, dataObj);
+            showDetailsTable && showDetailsTable(queryParams);
           }
         }
       });
@@ -177,12 +178,11 @@ class WorldMap extends React.Component {
           {props.meta.subTitle}
         </div>
 
-        <div id={props.attributes.id} style={{...minHeight}} />
-
-        {this.renderChart(props)}
+        <div id={props.attributes.id} style={{...minHeight, paddingTop: '10px'}}>
+          {this.renderChart(props)}
+        </div>
 
         <WorldMapLegends style={props.attributes.legendStyle} />
-
       </div>
     );
   }
