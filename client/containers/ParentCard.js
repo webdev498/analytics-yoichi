@@ -314,7 +314,6 @@ export class ParentCard extends React.Component {
   // }
 
   updateSearch(event) {
-    console.log('updateSearch');
     this.setState({
       search: event.target.value
     }, function() {

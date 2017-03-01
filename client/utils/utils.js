@@ -94,12 +94,10 @@ export function getQueryParamsForDetails(fields, dataObj) {
 // };
 
 export function debounce(fn, delay) {
-  console.log('test1');
   var timer = null;
   return function() {
     var context = this, args = arguments;
     clearTimeout(timer);
-    console.log('test2');
     timer = setTimeout(function() {
       fn.apply(context, args);
     }, delay);
