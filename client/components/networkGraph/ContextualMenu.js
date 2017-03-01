@@ -1,6 +1,4 @@
-import ReactDOM from 'react-dom';
 import React, {PropTypes} from 'react';
-import FontIcon from 'material-ui/FontIcon';
 import {Colors} from '../../../commons/colors';
 import { isUndefined, firstCharCapitalize, whatIsIt } from '../../../commons/utils/utils';
 import { DEFAULT_FONT } from 'Constants';
@@ -39,13 +37,30 @@ const styles = {
     overflowY: 'auto'
   },
   item: {
-    cursor: 'pointer'
+    cursor: 'pointer',
+    borderBottom: `1px solid ${Colors.border}`
+  },
+  userInput: {
+    margin: '0 15px'
+  },
+  inputWrap: {
+    display: 'flex',
+    height: '24px',
+    marginBottom: '15px',
+    color: Colors.text
+  },
+  inputLabel: {
+    lineHeight: '24px',
+    flexGrow: '1'
+  },
+  input: {
+    marginLeft: '10px',
+    flexGrow: '2'
   },
   wrapItem: {
     display: 'flex',
     padding: '15px 15px 15px 10px',
-    minHeight: '59px',
-    borderBottom: `1px solid ${Colors.border}`
+    minHeight: '59px'
   },
   itemContent: {
     display: 'flex'
@@ -113,37 +128,6 @@ function checkForUserInputs(parameters) {
   return userInputParameters;
 }
 
-// function updateDOM(table) {
-//   document.getElementById('actions').appendChild(table);
-//   document.getElementById('notification-message').style.width = notificationMessage.width;
-//   document.getElementById('contextual-menu').style.width = '260px';
-//   document.getElementById('right-arrow').style.display = 'block';
-//   document.getElementById('contextual-menu-contents').style.display = 'block';
-//   document.getElementById('expand-contextual-menu').style.display = 'none';
-// }
-
-function displayTextBoxForInputParam(table, userInputParameters, index) {
-  if (userInputParameters.length > 0) {
-    for (let p = 0; p < userInputParameters.length; p++) {
-      let trUserInput = document.createElement('tr');
-      let tdUserInput = document.createElement('td');
-      tdUserInput.style = 'cursor:auto;';
-      tdUserInput.appendChild(document.createTextNode(
-        firstCharCapitalize(userInputParameters[p].name + ' :')));
-      let inputParameter = document.createElement('input');
-      inputParameter.setAttribute('type', 'text');
-      inputParameter.setAttribute('style', 'color:black;');
-      inputParameter.setAttribute('placeholder', userInputParameters[p].name);
-      inputParameter.setAttribute('name', userInputParameters[p].name + index);
-      inputParameter.setAttribute('id', userInputParameters[p].name + index);
-      tdUserInput.appendChild(inputParameter);
-      trUserInput.appendChild(tdUserInput);
-      table.appendChild(trUserInput);
-    }
-  }
-  return table;
-}
-
 class ContextualMenu extends React.Component {
   static propTypes = {
     actions: PropTypes.array.isRequired,
@@ -158,8 +142,11 @@ class ContextualMenu extends React.Component {
     this.generateParameters = this.generateParameters.bind(this);
     this.createHTML = this.createHTML.bind(this);
     this.close = this.close.bind(this);
+    this.doAction = this.doAction.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
 
     this.state = {
+      showInput: [],
       showContextMenu: props.showContextMenu
     };
   }
@@ -198,7 +185,6 @@ class ContextualMenu extends React.Component {
     }
 
     return this.displayActions(actions, sourceDetails);
-    // props.loadParent(false);
   }
 
   displayActions(actions, sourceDetails) {
@@ -351,10 +337,54 @@ class ContextualMenu extends React.Component {
     return value;
   }
 
+  doAction(paramLen, sourceDetails, actionDetails, actionId) {
+    const {props} = this,
+      that = this;
+
+    if (paramLen > 0) {
+      return function() {
+        const input = [...that.state.showInput];
+        input.push(actionId);
+        that.setState({showInput: input});
+      };
+    }
+    else {
+      return function() {
+        props.doAction(sourceDetails, actionDetails)();
+      };
+    }
+  }
+
+  handleKeyPress = (event) => {
+    const {props} = this;
+    if (event.key === 'Enter') {
+      props.doAction(this.sourceDetails, this.actionDetails)();
+    }
+  }
+
+  getInputs(userInputParameters, sourceDetails, actionDetails) {
+    return userInputParameters.map((input, index) => {
+      this.sourceDetails = sourceDetails;
+      this.actionDetails = actionDetails;
+
+      const text = firstCharCapitalize(input.name);
+      return (
+        <div key={`input${index}`} style={styles.inputWrap}>
+          <label style={styles.inputLabel}>{text} :</label>
+          <input type='text'
+            id={`${input.name}${index}`}
+            style={styles.input}
+            onKeyPress={this.handleKeyPress} />
+        </div>
+      );
+    });
+  }
+
   createHTML(details) {
-    let {props} = this,
+    const {state} = this,
       {actions, index, parameters, sourceDetails} = details,
-      {parametersToApi, userInputParameters, fullMalwareReportLink} = parameters;
+      {parametersToApi, userInputParameters, fullMalwareReportLink} = parameters,
+      actionId = 'action' + index;
 
     let reportId = (!isUndefined(actions[index].reportId)) ? actions[index].reportId
       : (!isUndefined(actions[index].name) ? actions[index].name : ''),
@@ -362,18 +392,24 @@ class ContextualMenu extends React.Component {
         reportId,
         parameters: parametersToApi,
         actionsCount: actions.length,
-        actionId: 'action' + index,
+        actionId,
         actionLabel: actions[index].label,
         fullMalwareReportLink: fullMalwareReportLink,
         actionType: actions[index].actionType
       };
 
+    const inputStyle = {...styles.userInput, display: 'none'};
+    if (state.showInput.includes(actionId)) {
+      inputStyle.display = 'block';
+    }
+
     let li = (
-      <li style={styles.item} key={'action' + index} onClick={props.doAction(sourceDetails, actionDetails)}>
+      <li style={styles.item} key={actionId}
+        onClick={this.doAction(userInputParameters.length, sourceDetails, actionDetails, actionId)}>
         <div style={styles.wrapItem}>
-          <FontIcon style={styles.arrowIcon} className='material-icons'>
+          <i style={styles.arrowIcon} className='material-icons'>
             arrow_drop_down
-          </FontIcon>
+          </i>
 
           <div style={styles.itemContent}>
             {actions[index].label}
@@ -381,20 +417,21 @@ class ContextualMenu extends React.Component {
             {
               userInputParameters.length > 0
                 ? (
-                  <FontIcon className='material-icons'>
+                  <i className='material-icons'>
                     arrow_drop_down
-                  </FontIcon>
+                  </i>
                 )
                 : null
             }
           </div>
         </div>
+        <div style={inputStyle}>
+          {this.getInputs(userInputParameters, sourceDetails, actionDetails)}
+        </div>
       </li>
     );
 
     return li;
-
-    // displayTextBoxForInputParam(table, userInputParameters, index);
   }
 
   close() {
@@ -413,11 +450,11 @@ class ContextualMenu extends React.Component {
           className='context-menu'>
           {this.getContextMenu(props.sourceDetails)}
 
-          <FontIcon style={styles.clearIcon}
+          <i style={styles.clearIcon}
             className='material-icons'
             onClick={this.close}>
             clear
-          </FontIcon>
+          </i>
         </div>
 
         <div style={{...styles.notificationMessage}} id='notification-message' />
