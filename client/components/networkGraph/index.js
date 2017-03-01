@@ -125,28 +125,6 @@ function isNodeOrEdgeAlreadyExists(array, id) {
   return exists;
 }
 
-function displayActionAsSelected(actionsCount, actionId) {
-  for (let j = 0; j < actionsCount; j++) {
-    let tempId = 'action' + j;
-    let downarrowId = 'downarrow' + j;
-
-    if (tempId === actionId) {
-      document.getElementById(tempId).style.backgroundColor = Colors.selectedActionBG;
-      if (document.getElementById(downarrowId) !== undefined &&
-        document.getElementById(downarrowId) !== null) {
-        document.getElementById(downarrowId).style.backgroundColor = Colors.selectedActionBG;
-      }
-    }
-    else {
-      document.getElementById(tempId).style.backgroundColor = 'transparent';
-      if (document.getElementById(downarrowId) !== undefined &&
-        document.getElementById(downarrowId) !== null) {
-        document.getElementById(downarrowId).style.backgroundColor = 'transparent';
-      }
-    }
-  }
-}
-
 function displayNotificationMessage(message, actionId) {
   let position = getPosition(document.getElementById(actionId));
   document.getElementById('notification-message').innerHTML = message;
@@ -666,8 +644,6 @@ class NetworkGraph extends React.Component {
         isFetching: false
       });
     }
-
-    displayActionAsSelected(actionsCount, actionId);
   }
 
   fetchData(details) {
