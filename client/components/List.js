@@ -5,6 +5,10 @@ import {Colors} from '../../commons/colors';
 import {getCountryCode} from '../../commons/utils/countryUtils';
 
 const styles = {
+  list: {
+    marginLeft: '-30px',
+    marginRight: '-30px'
+  },
   header: {
     fontSize: '14px',
     paddingBottom: '16px'
@@ -151,7 +155,7 @@ export class List extends React.Component {
     </li>;
   }
 
-  loadTable() {
+  loadList() {
     const {props} = this;
     if (!props.data) { return; }
 
@@ -190,8 +194,8 @@ export class List extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.loadTable()}
+      <div style={styles.list}>
+        {this.loadList()}
       </div>
     );
   }

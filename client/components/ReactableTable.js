@@ -11,6 +11,13 @@ import {getCountryCode} from '../../commons/utils/countryUtils';
 const {Table, Tr, Td} = Reactable;
 
 const styles = {
+  tableWrap: {
+    marginLeft: '-30px',
+    marginRight: '-30px'
+  },
+  table: {
+    width: '100%'
+  },
   header: {
     fontWeight: '600',
     fontSize: '14px'
@@ -149,7 +156,7 @@ export class ReactableTable extends React.Component {
 
     return (
       <Table id={id}
-        style={{width: '100%'}}
+        style={styles.table}
         className='threatTable'
         sortable={options.sortable}
         filterable={options.filterable}
@@ -201,7 +208,7 @@ export class ReactableTable extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={styles.tableWrap}>
         {this.loadTable()}
       </div>
     );
