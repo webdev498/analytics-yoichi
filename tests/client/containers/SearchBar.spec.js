@@ -1,0 +1,71 @@
+import React from 'react';
+
+import { mount, shallow } from 'enzyme';
+import {spy} from 'sinon';
+
+import SearchBar from 'containers/SearchBar';
+import {wrapThemeProvider} from '../../testUtils';
+
+function shallowRenderSearchBar(propsOptions) {
+  let props = {
+    floatingSearchBar: true,
+    loadFloatingSearchBar: spy(),
+    updateSearch: spy(),
+    searchText: ''
+  };
+
+  props = Object.assign({}, props, propsOptions);
+
+  let component = shallow(wrapThemeProvider(<SearchBar {...props} />));
+  return component.find('SearchBar');
+}
+
+function mountSearchBar(propsOptions) {
+  let props = {
+    floatingSearchBar: true,
+    loadFloatingSearchBar: spy(),
+    updateSearch: spy(),
+    searchText: ''
+  };
+
+  props = Object.assign({}, props, propsOptions);
+
+  let component = mount(<SearchBar {...props} />);
+  return component;
+}
+
+describe('<SearchBar />', () => {
+  it('exists', () => {
+    expect(SearchBar).to.exist;
+  });
+
+  it('has correct props', () => {
+    const component = shallowRenderSearchBar({floatingSearchBar: true, searchText: 'malware'});
+
+    expect(component.props().floatingSearchBar).to.equal(true);
+    expect(component.props().loadFloatingSearchBar).to.exist;
+    expect(component.props().loadFloatingSearchBar).to.be.a('function');
+    expect(component.props().updateSearch).to.exist;
+    expect(component.props().updateSearch).to.be.a('function');
+    expect(component.props().searchText).to.equal('malware');
+  });
+
+  it('should have default styles', () => {
+    const component = mountSearchBar();
+    expect(component.instance().styles).to.be.defined;
+  });
+
+  it('should display clear icon if search bar is floating', () => {
+    const component = mountSearchBar({floatingSearchBar: true});
+    expect(component.state().showClearIcon).to.be.defined;
+    expect(component.state().showClearIcon).to.equal(true);
+    expect(component.instance().styles.clearIcon).to.equal(Object{color: '#ffffff', background: '#444c63'});
+  });
+
+  it('should not display clear icon if search bar is non-floating', () => {
+    const component = mountSearchBar({floatingSearchBar: false});
+    expect(component.state().showClearIcon).to.be.defined;
+    expect(component.state().showClearIcon).to.equal(false);
+    expect(component.instance().styles.clearIcon).to.equal(Object{color: 'transparent', background: 'transparent'});
+  });
+});

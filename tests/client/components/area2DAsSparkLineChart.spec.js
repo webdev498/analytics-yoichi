@@ -19,12 +19,12 @@ function shallowRenderWithProps(props = {}) {
 describe('Area2DAsSparkLineChart Component: ', function() {
   it('Should render as <div>', function() {
     const props = {
-      chartProperties: {chartId: 'connection0'}
+      chart: {id: 'connection0'}
     };
 
     const component = shallowRenderWithProps(props);
     expect(component.type).to.equal('div');
-    expect(component.props.id).to.equal(props.chartProperties.chartId);
+    expect(component.props.id).to.equal(props.chart.id);
   });
 
   it('generateDataSource should return data source object which is required for FusionCharts.', function() {
