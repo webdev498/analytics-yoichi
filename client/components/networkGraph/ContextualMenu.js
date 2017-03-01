@@ -14,7 +14,7 @@ const styles = {
     top: '65px',
     right: '40px',
     height: '306px',
-    boxShadow: `1px 1px 1px 1px ${Colors.border}`
+    boxShadow: `1px 1px 1px 1px ${Colors.shadow}`
   },
   clearIcon: {
     position: 'absolute',

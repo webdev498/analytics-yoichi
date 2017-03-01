@@ -98,10 +98,12 @@ export const StandardChartPalette = `${BarColorShade7}, ${BarColor}`;
 
 export const TextColor = GrapeColor;
 export const BorderColor = CloudColor;
+export const ShadowColor = SmokeColor;
 
 export const Colors = {
   text: TextColor,
   border: BorderColor,
+  shadow: ShadowColor,
   garnet: GarnetColor,
   grape: GrapeColor,
   pebble: PebbleColor,

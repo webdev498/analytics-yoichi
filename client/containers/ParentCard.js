@@ -18,7 +18,7 @@ const styles = {
     backgroundColor: 'white',
     borderRadius: 0,
     padding: '30px',
-    boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
+    boxShadow: `0 1px 2px ${Colors.shadow}`
   },
   childwrap: {
     backgroundColor: 'white',
