@@ -314,7 +314,7 @@ class AssetDetail extends React.Component {
     return (
       <div>
         <div style={styles.scoreDetails} onClick={this.toggleChart('radarChartOpen')}>
-          <ScoreWidget scoreValue={assetDetail.risk.score} style={styles.rankScore} />
+          <ScoreWidget scoreValue={assetDetail.risk.score} style={styles.rankScore} hideArrow />
           <div style={styles.scoreDesc}>
             <h3 style={{...styles.title, ...styles.scoreTitle}}>Score</h3>
             <FontIcon style={iconStyle} className='material-icons'>

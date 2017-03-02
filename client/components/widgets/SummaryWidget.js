@@ -37,7 +37,7 @@ class SummaryWidget extends React.Component {
 
     return (
       <div style={styles.wrap}>
-        <ScoreWidget style={styles.rankScore} scoreValue={data.score} />
+        <ScoreWidget style={styles.rankScore} scoreValue={data.score} hideArrow />
         <div style={styles.summaryWrap}>
           <h5 style={styles.summaryTitle}>
             Summary

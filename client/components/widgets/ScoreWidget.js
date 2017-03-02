@@ -5,6 +5,9 @@ import { DEFAULT_FONT } from 'Constants';
 
 const styles = {
   wrap: {
+    display: 'flex'
+  },
+  score: {
     color: Colors.white,
     borderRadius: '50%',
     width: '56px',
@@ -15,6 +18,10 @@ const styles = {
     fontFamily: DEFAULT_FONT,
     border: '3px solid',
     boxShadow: '0 0 2px rgba(0, 0, 0, 0.3)'
+  },
+  arrowIcon: {
+    marginLeft: '12px',
+    transform: 'rotate(-90deg)'
   },
   inverse: {
     borderRadius: 0,
@@ -38,12 +45,24 @@ class ScoreWidget extends React.Component {
       style = {...styles.inverse, color};
     }
     else {
-      style = {...styles.wrap, backgroundColor: color};
+      style = {...styles.score, backgroundColor: color};
     }
 
     return (
-      <div style={{...style, ...props.style}}>
-        {scoreValue}
+      <div style={styles.wrap}>
+        <div style={{...style, ...props.style}}>
+          {scoreValue}
+        </div>
+        {
+          props.inverse || props.hideArrow
+          ? null
+          : (
+            <i style={styles.arrowIcon} className='material-icons'>
+            arrow_drop_down
+            </i>
+          )
+        }
+
       </div>
     );
   }

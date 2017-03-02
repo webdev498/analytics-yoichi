@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import FontIcon from 'material-ui/FontIcon';
 import {Colors} from '../../commons/colors';
 import {getArrowIcon} from '../../commons/utils/graphUtils';
 
@@ -143,9 +142,9 @@ class MetricsCard extends React.Component {
           onClick={this.handleClick}>
           <span style={styles.details}>View details</span>
           <span style={styles.iconWrap}>
-            <FontIcon style={styles.detailsIcon} className='material-icons'>
+            <i style={styles.detailsIcon} className='material-icons'>
                 arrow_drop_down
-            </FontIcon>
+            </i>
           </span>
         </div>
       </div>
