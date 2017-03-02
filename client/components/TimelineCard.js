@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import Card from 'material-ui/Card/Card';
-import {Colors} from '../../commons/colors';
+import { Colors, BarColorShade3, BarColorShade5 } from '../../commons/colors';
 import {getColor} from '../../commons/utils/colorUtils';
 import {getCountryName} from '../../commons/utils/countryUtils';
 import MultiSeriesCombiChart from 'components/charts/MultiSeriesCombiChart';
@@ -345,13 +345,11 @@ class TimelineCard extends React.Component {
       styles.list = Object.assign({}, styles.list, {paddingLeft: '20px'});
     }
 
-    let selectedCardStyle = {
-      boxShadow: 'none'
-    };
+    let selectedCardStyle = { boxShadow: 'none' };
     if (props.selectedCardId === props.data.id) {
       selectedCardStyle = Object.assign({}, {
-        borderColor: Colors.bar,
-        boxShadow: '0 0 10px ' + Colors.bar
+        border: `1px solid ${BarColorShade3}`,
+        boxShadow: `0 0 Colors, BarColorShade3${BarColorShade5}`
       });
     }
 
