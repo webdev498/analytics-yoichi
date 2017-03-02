@@ -36,22 +36,28 @@ export default class DetailsTable extends React.Component {
 
   constructor(props) {
     super(props);
-    this.paginationDetails = {
-      detailsData: {},
-      currentPage: 0,
-      lastPage: 0,
-      paginateRequest: 0
+    this.state = {
+      paginationDetails: {
+        detailsData: {},
+        currentPage: 0,
+        lastPage: 0,
+        paginateRequest: 0
+      }
     };
     this.onPageChange = this.onPageChange.bind(this);
     this.handleRowClick = this.handleRowClick.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('newProps', newProps, this.paginationDetails);
-    if ((newProps.detailsData &&
-      newProps.detailsData.next === fetchLimit &&
-      this.paginationDetails.paginateRequest > 1) || newProps.search !== '') {
-      this.paginationDetails.currentPage = 0;
+    // console.log('newProps', newProps, this.state.paginationDetails); //
+    // if ((newProps.detailsData &&
+    //   newProps.detailsData.next === fetchLimit &&
+    //   this.paginationDetails.paginateRequest > 1) || newProps.search !== '') {
+    //   this.paginationDetails.currentPage = 0;
+    // }
+    if (newProps.detailsData &&
+      newProps.detailsData.next === fetchLimit) {
+      this.state.paginationDetails.currentPage = 0;
     }
   }
 
@@ -99,18 +105,19 @@ export default class DetailsTable extends React.Component {
   onPageChange(page) {
     const {props} = this;
     let {apiObj} = props,
-      {detailsData, lastPage} = this.paginationDetails,
+      {detailsData, lastPage} = this.state.paginationDetails,
       currentPage = page + 1;
     if (currentPage === lastPage &&
       detailsData.total > fetchLimit &&
       detailsData.total > detailsData.rows.length) {
-      this.paginationDetails = Object.assign({}, this.paginationDetails, {
+      this.state.paginationDetails = Object.assign({}, this.state.paginationDetails, {
         currentPage: page,
-        paginateRequest: this.paginationDetails.paginateRequest + 1
+        paginateRequest: this.state.paginationDetails.paginateRequest + 1
       });
       apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
         from: detailsData.next
       });
+      console.log('apiObj', apiObj);
       props.fetchNextSetOfData(apiObj, detailsData);
     }
   }
@@ -178,7 +185,7 @@ export default class DetailsTable extends React.Component {
       lastPage = Math.ceil(list.length / itemsPerPage),
       columnNames = [];
 
-    this.paginationDetails = Object.assign({}, this.paginationDetails, {
+    this.state.paginationDetails = Object.assign({}, this.state.paginationDetails, {
       detailsData,
       lastPage
     });
@@ -200,7 +207,7 @@ export default class DetailsTable extends React.Component {
             className='detailsTable'
             pageButtonLimit={10}
             itemsPerPage={list.length > itemsPerPage ? itemsPerPage : 0}
-            currentPage={this.paginationDetails.currentPage}
+            currentPage={this.state.paginationDetails.currentPage}
             hideFilterInput
             previousPageLabel={'<<'}
             nextPageLabel={'>>'}
