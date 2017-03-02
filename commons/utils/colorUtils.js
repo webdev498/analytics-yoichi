@@ -2,12 +2,8 @@ import { Colors, Alerts } from '../colors';
 
 export function getColor(score, severity) {
   let color = '';
-  if (!score) {
-    score = '';
-  }
-  if (!severity) {
-    severity = '';
-  }
+  score = score || '';
+  severity = severity || '';
 
   if ((score !== '' && score >= 65) || severity.toLowerCase() === 'high') {
     color = Alerts.high;

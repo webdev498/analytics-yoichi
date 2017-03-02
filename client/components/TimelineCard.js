@@ -298,22 +298,28 @@ class TimelineCard extends React.Component {
   }
 
   getAlertBorder(data) {
-    let isAlert = (this.cardType === 'Alert' || this.cardType === 'Rank Alert') ? 'alert' : 'other';
+    let isAlert = (this.cardType === 'Alert' || this.cardType === 'Rank Alert') ? 'alert' : 'other',
+      borderStyle = {
+        paddingLeft: '22px'
+      };
 
     if (isAlert === 'alert') {
       let score = data.display.Score ? data.display.Score.value : '',
         severity = data.display.Severity ? data.display.Severity.value : '';
-      return {
-        borderLeft: '5px solid ' + getColor(score, severity),
+
+      borderStyle = {
+        borderLeft: `5px solid ${getColor(score, severity)}`,
         paddingLeft: '17px'
       };
     }
-    else {
+    else if (this.cardType !== 'Session' && this.cardType !== 'Anomaly') {
       return {
-        paddingLeft: '22px',
-        borderLeft: 0
+        borderLeft: `5px solid ${Colors.bar}`,
+        paddingLeft: '17px'
       };
     }
+
+    return borderStyle;
   }
 
   getCardType(data) {
