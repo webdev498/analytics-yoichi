@@ -290,7 +290,6 @@ export class ParentCard extends React.Component {
     });
     const {props} = this;
     let apiObj = Object.assign({}, this.detailsApiObj);
-    console.log(apiObj);
     if (apiObj.isDetails === true || props.fullDetailsView === true) {
       if (event.target.value !== '') {
         apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {

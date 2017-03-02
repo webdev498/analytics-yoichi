@@ -13,7 +13,6 @@ const initialState = Map();
 function requestApi(id, state) {
   const immutableObject = state.get(id),
     stateObject = immutableObject ? immutableObject.toObject() : {};
-  console.log('stateObject', stateObject);
 
   const dataMap = Map({
     id,
@@ -47,7 +46,6 @@ function updateApi(id, state, action) {
   const immutableObject = state.get(id);
   let stateObject = immutableObject.toObject();
   if (stateObject.data) {
-    console.log('concat');
     let prevData = Object.assign({}, stateObject.data);
     json = Object.assign({}, json, {
       rows: prevData.rows.concat(json.rows)
