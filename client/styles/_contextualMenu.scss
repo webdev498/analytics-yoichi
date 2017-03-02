@@ -1,7 +1,7 @@
 @import 'color';
 
 .context-menu {
-  li:hover {
+  li:hover, li.clicked {
     background-color: $CloudColorShade6;
     color: $BarColor;
     & .material-icons {
