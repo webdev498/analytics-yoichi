@@ -301,7 +301,9 @@ export class ParentCard extends React.Component {
           delete apiObj.api.queryParams.filter;
         }
       }
-      apiObj.api.queryParams.from = 0;
+      apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
+        from: 0
+      });
       props.fetchApiData(apiObj);
       this.setState({showDetailsFlag: true});
     }

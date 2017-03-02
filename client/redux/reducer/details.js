@@ -11,13 +11,13 @@ import {Map} from 'immutable';
 const initialState = Map();
 
 function requestApi(id, state) {
-  const immutableObject = state.get(id),
-    stateObject = immutableObject ? immutableObject.toObject() : {};
+  // const immutableObject = state.get(id),
+  //   stateObject = immutableObject ? immutableObject.toObject() : {};
   const dataMap = Map({
     id,
     isFetching: true,
-    isError: false,
-    data: stateObject && stateObject.data ? stateObject.data : null
+    isError: false // ,
+    // data: stateObject && stateObject.data ? stateObject.data : null
   });
 
   return state.set(id, dataMap);
@@ -26,7 +26,7 @@ function requestApi(id, state) {
 function receiveApi(id, state, action) {
   const {data} = action,
     {json, api, query} = data;
-
+  console.log('receiveApi');
   const dataMap = Map({
     id,
     isFetching: false,
@@ -41,11 +41,18 @@ function receiveApi(id, state, action) {
 
 function updateApi(id, state, action) {
   let {data} = action,
-    {json, api, query} = data;
-  const immutableObject = state.get(id);
-  let stateObject = immutableObject.toObject();
-  if (stateObject.data) {
-    let prevData = Object.assign({}, stateObject.data);
+    {json, api, query, prevData} = data;
+  // const immutableObject = state.get(id);
+  // let stateObject = immutableObject.toObject();
+  // if (stateObject.data) {
+  //   let prevData = Object.assign({}, stateObject.data);
+  //   json = Object.assign({}, json, {
+  //     rows: prevData.rows.concat(json.rows)
+  //   });
+  // }
+  console.log('updateApi');
+  if (prevData) {
+    prevData = Object.assign({}, prevData);
     json = Object.assign({}, json, {
       rows: prevData.rows.concat(json.rows)
     });

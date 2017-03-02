@@ -47,9 +47,10 @@ export default class DetailsTable extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.detailsData &&
+    console.log('newProps', newProps, this.paginationDetails);
+    if ((newProps.detailsData &&
       newProps.detailsData.next === fetchLimit &&
-      this.paginationDetails.paginateRequest > 1) {
+      this.paginationDetails.paginateRequest > 1) || newProps.search !== '') {
       this.paginationDetails.currentPage = 0;
     }
   }
@@ -107,8 +108,10 @@ export default class DetailsTable extends React.Component {
         currentPage: page,
         paginateRequest: this.paginationDetails.paginateRequest + 1
       });
-      apiObj.api.queryParams.from = detailsData.next;
-      props.fetchNextSetOfData(apiObj);
+      apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
+        from: detailsData.next
+      });
+      props.fetchNextSetOfData(apiObj, detailsData);
     }
   }
 

@@ -218,7 +218,7 @@ export function fetchApiData(input) {
 }
 
 // This function is used to fetch next set of data for server side pagination
-export function fetchNextSetOfData(apiObj) {
+export function fetchNextSetOfData(apiObj, prevData) {
   return function(dispatch, getState) {
     const {id, api, params, options, isDetails} = apiObj,
       currentDuration = getState().apiData.get('duration');
@@ -228,7 +228,7 @@ export function fetchNextSetOfData(apiObj) {
     callApi(api, currentDuration, params, options, dispatch)
     .then(json => {
       json.options = options;
-      dispatch(updateDetailsApiData(id, {json, api}));
+      dispatch(updateDetailsApiData(id, {json, api, prevData}));
     })
     .catch(ex => {
       dispatch(errorApiData(id, ex, api, isDetails));
