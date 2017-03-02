@@ -195,7 +195,7 @@ export default class DetailsTable extends React.Component {
           ? <Table
             style={styles.table}
             className='detailsTable'
-            // pageButtonLimit={10}
+            pageButtonLimit={10}
             itemsPerPage={list.length > itemsPerPage ? itemsPerPage : 0}
             currentPage={this.paginationDetails.currentPage}
             hideFilterInput
