@@ -132,9 +132,6 @@ class SearchBar extends React.Component {
       };
       this.setState({showClearIcon: false});
     }
-    // else {
-    //   this.setState({showClearIcon: false});
-    // }
   }
 
   showClearIcon() {
@@ -146,9 +143,6 @@ class SearchBar extends React.Component {
       };
       this.setState({showClearIcon: true});
     }
-    // else {
-    //   this.setState({showClearIcon: false});
-    // }
   }
 
   render() {

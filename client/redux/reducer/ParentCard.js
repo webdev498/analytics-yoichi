@@ -11,10 +11,14 @@ import {Map} from 'immutable';
 const initialState = Map();
 
 function requestApi(id, state) {
+  console.log('id', id);
+  const immutableObject = state.get(id),
+    stateObject = immutableObject ? immutableObject.toObject() : {};
   const dataMap = Map({
     id,
     isFetching: true,
-    isError: false
+    isError: false,
+    data: stateObject && stateObject.data ? stateObject.data : null
   });
 
   return state.set(id, dataMap);
