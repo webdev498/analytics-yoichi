@@ -92,7 +92,7 @@ class SearchBar extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.myTextInput && newProps.searchText !== this.myTextInput.value) {
+    if (this.myTextInput && newProps.searchText !== this.props.searchText) {
       this.myTextInput.value = newProps.searchText;
     }
   }
@@ -134,6 +134,7 @@ class SearchBar extends React.Component {
       props.loadFloatingSearchBar(false);
     }
     this.props.updateSearch({ target: {value: ''} });
+    this.myTextInput.value = '';
   }
 
   focusSearchText = () => {

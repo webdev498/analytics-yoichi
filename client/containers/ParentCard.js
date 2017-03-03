@@ -285,10 +285,11 @@ export class ParentCard extends React.Component {
   }
 
   updateSearch(event) {
-    console.log(event);
-    this.setState({
-      search: event.target.value
-    });
+    if (!this.state.showDetailsFlag) {
+      this.setState({
+        search: event.target.value
+      });
+    }
 
     const {props} = this;
 
