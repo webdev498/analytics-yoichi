@@ -32,7 +32,6 @@
               "width": "10%"
             },
             "type": "scoreWidget",
-            "inverse": true,
             "header": "Score"
           }
         ]

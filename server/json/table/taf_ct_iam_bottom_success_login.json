@@ -1,0 +1,56 @@
+{
+  "options": {
+    "itemsPerPage": 5,
+    "rowClickable": true
+  },
+  "data": {
+    "fieldMapping": [
+      {
+        "reportId": "taf_ct_iam_bottom_success_login",
+        "columns": [
+          {
+            "data": [
+              {
+                "fieldName": "data.aws.userArn"
+              }
+            ],
+            "style": {
+              "width": "50%",
+              "wordBreak": "break-all"
+            },
+            "type": "text",
+            "header": "User Name"
+          },
+          {
+            "data": [
+              {
+                "fieldName": "type"
+              }
+            ],
+            "attributes": {
+              "chartWidth": "100%",
+              "chartType": "area2d",
+              "id": "bottom_success_login",
+              "chartHeight": "90",
+              "chartOptions": {
+                "labelFontSize": "9"
+              }
+            },
+            "style": {
+              "width": "50%"
+            },
+            "type": "chart",
+            "header": "# Logins"
+          }
+        ]
+      }
+    ],
+    "nestedResult": true,
+    "emptyValueMessage": "(Empty)"
+  },
+  "details": {
+    "queryParams": {
+      "data.aws.userArn": "data.aws.userArn:fieldName"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Colors} from '../../../commons/colors';
+import { Colors } from '../../../commons/colors';
 import { isUndefined, firstCharCapitalize, whatIsIt } from '../../../commons/utils/utils';
 import { DEFAULT_FONT } from 'Constants';
 
@@ -14,7 +14,7 @@ const styles = {
     top: '65px',
     right: '40px',
     height: '306px',
-    boxShadow: `1px 1px 1px 1px ${Colors.border}`
+    boxShadow: `1px 1px 1px 1px ${Colors.shadow}`
   },
   clearIcon: {
     position: 'absolute',
@@ -131,7 +131,8 @@ function checkForUserInputs(parameters) {
 class ContextualMenu extends React.Component {
   static propTypes = {
     actions: PropTypes.array.isRequired,
-    showContextMenu: PropTypes.bool.isRequired
+    showContextMenu: PropTypes.bool.isRequired,
+    sourceDetails: PropTypes.object
   }
 
   constructor(props) {
@@ -147,13 +148,19 @@ class ContextualMenu extends React.Component {
 
     this.state = {
       showInput: [],
-      showContextMenu: props.showContextMenu
+      showContextMenu: props.showContextMenu,
+      clicked: ''
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps) {
-      this.setState({showContextMenu: nextProps.showContextMenu});
+    const {props} = this;
+    if (nextProps && nextProps.sourceDetails && props.sourceDetails) {
+      let state = { showContextMenu: nextProps.showContextMenu };
+      if (nextProps.sourceDetails.itemId !== props.sourceDetails.itemId) {
+        state.clicked = '';
+      }
+      this.setState(state);
     }
   }
 
@@ -350,6 +357,7 @@ class ContextualMenu extends React.Component {
     }
     else {
       return function() {
+        that.setState({clicked: actionId});
         props.doAction(sourceDetails, actionDetails)();
       };
     }
@@ -403,8 +411,11 @@ class ContextualMenu extends React.Component {
       inputStyle.display = 'block';
     }
 
+    const className = state.clicked === actionId ? 'clicked' : '';
     let li = (
-      <li style={styles.item} key={actionId}
+      <li style={styles.item}
+        key={actionId}
+        className={className}
         onClick={this.doAction(userInputParameters.length, sourceDetails, actionDetails, actionId)}>
         <div style={styles.wrapItem}>
           <i style={styles.arrowIcon} className='material-icons'>
@@ -435,7 +446,10 @@ class ContextualMenu extends React.Component {
   }
 
   close() {
-    this.setState({ showContextMenu: false });
+    this.setState({
+      showContextMenu: false,
+      clicked: ''
+    });
   }
 
   render() {

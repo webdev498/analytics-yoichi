@@ -71,6 +71,18 @@ router
 .get(reportingApiBasePath + 'taf_least_launched_processes', table)
 .get(reportingApiBasePath + 'taf_most_used_parent_processes', table)
 .get(reportingApiBasePath + 'taf_least_used_parent_processes', table)
+.get(reportingApiBasePath + 'taf_ct_event_by_ua', table)
+.get(reportingApiBasePath + 'taf_ct_event_by_region', table)
+.get(reportingApiBasePath + 'taf_ct_failed_events_by_type', table)
+.get(reportingApiBasePath + 'taf_ct_ec2_top_type', table)
+.get(reportingApiBasePath + 'taf_ct_ec2_bottom_type', table)
+.get(reportingApiBasePath + 'taf_ct_ec2_top_user', table)
+.get(reportingApiBasePath + 'taf_ct_ec2_bottom_user', table)
+.get(reportingApiBasePath + 'taf_ct_iam_top_success_login',table)
+.get(reportingApiBasePath + 'taf_ct_iam_bottom_success_login',table)
+.get(reportingApiBasePath + 'taf_ct_iam_top_success_login_region',table)
+.get(reportingApiBasePath + 'taf_ct_iam_top_failed_login',table)
+.get(reportingApiBasePath + 'taf_ct_iam_top_failed_login_region',table)
 .get(reportingApiBasePath + 'taf_user_agent_unique_with_name', userAgent)
 .post('*', async function(ctx, next) {
   const url = serverBaseUrl + ctx.url;

@@ -37,7 +37,7 @@ const styles = {
     margin: 'auto',
     position: 'absolute',
     right: '12px',
-    top: 0,
+    top: '8px',
     fontWeight: 500
   },
   searchIconDetails: {

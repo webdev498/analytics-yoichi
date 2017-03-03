@@ -38,6 +38,17 @@ export const OrangeColorShade7 = '#fcdccd';
 export const OrangeColorShade8 = '#fdebe2';
 export const OrangeColorShade9 = '#fef5f1';
 
+export const CloudColorShade0 = '#e5e5ea';
+export const CloudColorShade1 = 'rgb(68, 76, 99)';
+export const CloudColorShade2 = '#F7F7F9';
+// export const CloudColorShade3 = `rgba($GarnetColor, 0.3)`;
+export const CloudColorShade4 = '#DFDFE3';
+export const CloudColorShade5 = '#CBCBD1';
+export const CloudColorShade6 = '#EAEAED';
+export const CloudColorShade7 = '#888D9A';
+export const CloudColorShade8 = '#E1E1E5';
+export const CloudColorShade9 = '#FAFAFB';
+
 export const AreaSparkLineChartColor = {
   area: '#adecf9',
   border: '#03c5ed'
@@ -98,10 +109,14 @@ export const StandardChartPalette = `${BarColorShade7}, ${BarColor}`;
 
 export const TextColor = GrapeColor;
 export const BorderColor = CloudColor;
+export const ShadowColor = SmokeColor;
+export const IconBackgroundColor = '#3e465b';
 
 export const Colors = {
   text: TextColor,
   border: BorderColor,
+  shadow: ShadowColor,
+  iconBackground: IconBackgroundColor,
   garnet: GarnetColor,
   grape: GrapeColor,
   pebble: PebbleColor,
