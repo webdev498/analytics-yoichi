@@ -147,7 +147,7 @@ function renderChart(props) {
     return;
   }
 
- if (props.data && props.chartData &&
+  if (props.data && props.chartData &&
     props.chartData.fieldMapping &&
     props.chartData.fieldMapping[0] &&
     props.chartData.fieldMapping[0].reportId &&
@@ -196,14 +196,14 @@ function renderChart(props) {
       }
 
       if (currentChartData.reportId === 'taf_s3_requester' || currentChartData.reportId === 'taf_s3_ua' ||
-    		  currentChartData.reportId === 'taf_sysmon_unique_process_count' || 
-          currentChartData.reportId === 'taf_ct_events_by_user'){
+        currentChartData.reportId === 'taf_sysmon_unique_process_count' ||
+        currentChartData.reportId === 'taf_ct_events_by_user') {
         columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
         countValue = rows[d][columnIndex];
       }
 
       if (currentChartData.reportId === 'taf_total_usage' || currentChartData.reportId === 'taf_s3_total' ||
-    		  currentChartData.reportId === 'taf_sysmon_total_network_conn_count' ||
+          currentChartData.reportId === 'taf_sysmon_total_network_conn_count' ||
           currentChartData.reportId === 'taf_ct_total') {
         columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
         totalValue = rows[d][columnIndex];
@@ -246,13 +246,14 @@ class PieChart extends React.Component {
     const {props} = this;
 
     renderChart(props);
+
     return (
       <div style={{...styles.noData}}>
         <div style={styles.pieWrap}>
           <div className='pieCard'>
             <div className='pie-chart chart' style={pieChartAttributes.chart2Background}>
-              <div className='slice one' style={pieChartAttributes.chart2SliceOneStyle}></div>
-              <div className='slice two' style={pieChartAttributes.chart2SliceTwoStyle}></div>
+              <div className='slice one' style={pieChartAttributes.chart2SliceOneStyle} />
+              <div className='slice two' style={pieChartAttributes.chart2SliceTwoStyle} />
               <div className='chart-center'>
                 <span style={pieChartAttributes.percentageTextStyle}>
                   {pieChartAttributes.displayPercentage2}
@@ -260,10 +261,12 @@ class PieChart extends React.Component {
               </div>
             </div>
           </div>
+
           <div style={{paddingLeft: '50px', paddingRight: '50px'}}>
             <PercentageWidget iconName='desktop_mac' percentage={pieChartAttributes.percentage1} />
           </div>
-          <div style={{}}>
+
+          <div>
             <span style={styles.percentageDisplay}>{pieChartAttributes.displayPercentage2}</span>
             <br />
             <span style={styles.legend1}>{props.meta.legend[0]}</span>
