@@ -291,7 +291,7 @@ function numberToReactElm(val, text, {numberStyle, textStyle} = {}) {
 }
 
 export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
-  if (bytes === '' || bytes === undefined) return '-';
+  if (bytes === '' || bytes === undefined || typeof bytes !== 'number') return '-';
 
   if (bytes === 0) {
     return numberStyle ? numberToReactElm(0, 'Byte', {numberStyle, textStyle}) : '0 Byte';
