@@ -414,6 +414,7 @@ class ContextualMenu extends React.Component {
     const className = state.clicked === actionId ? 'clicked' : '';
     let li = (
       <li style={styles.item}
+        id={actionId}
         key={actionId}
         className={className}
         onClick={this.doAction(userInputParameters.length, sourceDetails, actionDetails, actionId)}>
