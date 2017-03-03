@@ -161,7 +161,7 @@ export class CoreLayout extends React.Component {
         apiObj,
         fetchNextSetOfData,
         hideDetails: this.hideDetails,
-        fullDetailsView: true
+        isDetailsView: true
       });
     }
     else {
