@@ -2,7 +2,7 @@
 import React, {PropTypes} from 'react';
 
 import FontIcon from 'material-ui/FontIcon';
-import SearchBar from './SearchBar';
+import SearchBar from 'components/SearchBar';
 import {Colors} from '../../commons/colors';
 
 const styles = {

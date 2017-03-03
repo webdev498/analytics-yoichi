@@ -118,7 +118,7 @@ class SearchBar extends React.Component {
   }
 
   focusSearchText() {
-    if (this.myTextInput !== null) {
+    if (this.myTextInput) {
       this.myTextInput.focus();
     }
   }
@@ -158,7 +158,8 @@ class SearchBar extends React.Component {
           background: Colors.grape
         }
       };
-      this.state.showClearIcon = true;
+
+      this.state.showClearIcon = true;  // why this?
     }
 
     return <div style={this.styles.inputWrap}>

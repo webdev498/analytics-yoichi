@@ -3,7 +3,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
-import SearchBar from 'containers/SearchBar';
+import SearchBar from 'components/SearchBar';
 import {wrapThemeProvider} from '../../testUtils';
 
 function shallowRenderSearchBar(propsOptions) {
