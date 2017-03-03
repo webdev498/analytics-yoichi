@@ -315,10 +315,31 @@ export class ParentCard extends React.Component {
     }
   }
 
+  renderComponent(isDetails) {
+    const {props, state} = this,
+      childProps = Object.assign({}, props, {search: state.search}),
+      extraProps = {
+        updateRoute: this.props.updateRoute,
+        showDetailsTable: this.toggleDetailsTable
+      };
+
+    let componentStyle = {};
+    if (isDetails) {
+      componentStyle = {display: 'none'};
+    }
+
+    if (!props.fullDetailsView) {
+      return (
+        <div style={componentStyle}>
+          {React.cloneElement(props.children, {...childProps, ...extraProps})}
+        </div>
+      );
+    }
+    return null;
+  }
+
   render() {
     const {props, state} = this;
-
-    const childProps = Object.assign({}, props, {search: this.state.search});
     let cardStyle = {...styles.wrap, ...props.attributes.style};
 
     if (!props.meta.showHeader) {
@@ -333,20 +354,10 @@ export class ParentCard extends React.Component {
 
     cardStyle = tempCardStyle;
 
-    const extraProps = {
-      updateRoute: this.props.updateRoute,
-      showDetailsTable: this.toggleDetailsTable
-    };
-
-    let componentStyle = {},
-      isDetails = state.showDetailsFlag;
+    let isDetails = state.showDetailsFlag;
 
     if (props.fullDetailsView === true) {
       isDetails = props.fullDetailsView;
-    }
-
-    if (isDetails) {
-      componentStyle = {display: 'none'};
     }
 
     const isComponentError = props.isError && (props.meta.showErrorMessage !== false) && !isDetails,
@@ -377,13 +388,7 @@ export class ParentCard extends React.Component {
         {
           isComponentError
           ? this.getErrorElement()
-          : !props.fullDetailsView
-            ? (
-              <div style={componentStyle}>
-                {React.cloneElement(props.children, {...childProps, ...extraProps})}
-              </div>
-              )
-            : null
+          : this.renderComponent(isDetails)
         }
 
         {
