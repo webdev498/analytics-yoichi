@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Loader from 'components/Loader';
 import DetailsTable from 'components/details';
-import ParentCardHeader from './ParentCardHeader';
+import ParentCardHeader from 'components/ParentCardHeader';
 
 import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
@@ -285,10 +285,13 @@ export class ParentCard extends React.Component {
   }
 
   updateSearch(event) {
+    console.log(event);
     this.setState({
       search: event.target.value
     });
+
     const {props} = this;
+
     let apiObj = Object.assign({}, this.detailsApiObj);
     if (apiObj.isDetails === true || props.fullDetailsView === true) {
       if (event.target.value !== '') {
@@ -301,9 +304,11 @@ export class ParentCard extends React.Component {
           delete apiObj.api.queryParams.filter;
         }
       }
+
       apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
         from: 0
       });
+
       props.fetchApiData(apiObj);
       this.setState({showDetailsFlag: true});
     }

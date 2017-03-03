@@ -1,6 +1,8 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../commons/colors';
 
+import { debounce } from 'utils/utils';
+
 const styles = {
   inputWrap: {
     margin: '0 20px',
@@ -80,11 +82,7 @@ class SearchBar extends React.Component {
     super(props);
 
     this.updateStyles(props);
-
-    this.clearSearchText = this.clearSearchText.bind(this);
-    this.hideClearIcon = this.hideClearIcon.bind(this);
-    this.showClearIcon = this.showClearIcon.bind(this);
-    this.focusSearchText = this.focusSearchText.bind(this);
+    this.debounceSearch = debounce(props.updateSearch, 250);
   }
 
   static propTypes = {
@@ -130,7 +128,7 @@ class SearchBar extends React.Component {
     }
   }
 
-  clearSearchText() {
+  clearSearchText = () => {
     const {props} = this;
     if (props.floatingSearchBar === true) {
       props.loadFloatingSearchBar(false);
@@ -138,13 +136,13 @@ class SearchBar extends React.Component {
     this.props.updateSearch({ target: {value: ''} });
   }
 
-  focusSearchText() {
+  focusSearchText = () => {
     if (this.myTextInput) {
       this.myTextInput.focus();
     }
   }
 
-  hideClearIcon() {
+  hideClearIcon = () => {
     const {props, state} = this;
     if (props.floatingSearchBar === false) {
       this.setState({
@@ -159,8 +157,9 @@ class SearchBar extends React.Component {
     }
   }
 
-  showClearIcon() {
+  showClearIcon = () => {
     const {props, state} = this;
+
     if (props.floatingSearchBar === false) {
       this.setState({
         showClearIcon: true,
@@ -174,34 +173,41 @@ class SearchBar extends React.Component {
     }
   }
 
+  callSearch = (evt) => {
+    evt.persist();
+    this.debounceSearch(evt);
+  }
+
   render() {
     const {props, state} = this;
 
-    return <div style={state.styles.inputWrap}>
-      <div style={styles.clearDiv} onClick={this.clearSearchText}>
+    return (
+      <div style={state.styles.inputWrap}>
+        <div style={styles.clearDiv} onClick={this.clearSearchText}>
+          <i className='material-icons'
+            style={{...styles.clearIcon, ...state.styles.clearIcon}}
+            ref={(ref) => this.clearIcon = ref}>
+            close
+          </i>
+        </div>
+
+        <input
+          id='searchText'
+          type='text'
+          style={state.styles.searchText}
+          onChange={this.callSearch}
+          onFocus={this.showClearIcon}
+          onBlur={this.hideClearIcon}
+          ref={(ref) => this.myTextInput = ref}
+          autoFocus={props.floatingSearchBar} />
+
         <i className='material-icons'
-          style={{...styles.clearIcon, ...state.styles.clearIcon}}
-          ref={(ref) => this.clearIcon = ref}>
-          close
+          style={state.styles.searchIcon}
+          onClick={this.focusSearchText}>
+          search
         </i>
       </div>
-
-      <input
-        id='searchText'
-        type='text'
-        style={state.styles.searchText}
-        onChange={props.updateSearch}
-        onFocus={this.showClearIcon}
-        onBlur={this.hideClearIcon}
-        ref={(ref) => this.myTextInput = ref}
-        autoFocus={props.floatingSearchBar} />
-
-      <i className='material-icons'
-        style={state.styles.searchIcon}
-        onClick={this.focusSearchText}>
-        search
-      </i>
-    </div>;
+    );
   }
 };
 

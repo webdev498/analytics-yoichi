@@ -61,8 +61,8 @@ export default class ParentCardHeader extends React.Component {
     this.state = {
       floatingSearchBar: false
     };
-    this.loadSearchBar = false;
 
+    this.loadSearchBar = false;
     this.loadFloatingSearchBar = this.loadFloatingSearchBar.bind(this);
     this.getData = this.getData.bind(this);
   }
