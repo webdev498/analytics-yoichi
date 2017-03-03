@@ -79,17 +79,7 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.styles = {
-      inputWrap: styles.inputWrap,
-      searchText: styles.searchText,
-      searchIcon: styles.searchIcon,
-      clearIcon: {
-        color: 'transparent',
-        background: 'transparent'
-      }
-    };
-
-    this.state = {showClearIcon: false};
+    this.updateStyles(props);
 
     this.clearSearchText = this.clearSearchText.bind(this);
     this.hideClearIcon = this.hideClearIcon.bind(this);
@@ -109,6 +99,37 @@ class SearchBar extends React.Component {
     }
   }
 
+  updateStyles(newProps) {
+    if (newProps.floatingSearchBar === true) {
+      this.state = {
+        showClearIcon: true,
+        styles: {
+          inputWrap: Object.assign({}, styles.inputWrap, styles.inputWrapDetails),
+          searchText: Object.assign({}, styles.searchText, styles.searchTextDetails),
+          searchIcon: Object.assign({}, styles.searchIcon, styles.searchIconDetails),
+          clearIcon: {
+            color: Colors.white,
+            background: Colors.grape
+          }
+        }
+      };
+    }
+    else {
+      this.state = {
+        showClearIcon: false,
+        styles: {
+          inputWrap: styles.inputWrap,
+          searchText: styles.searchText,
+          searchIcon: styles.searchIcon,
+          clearIcon: {
+            color: 'transparent',
+            background: 'transparent'
+          }
+        }
+      };
+    }
+  }
+
   clearSearchText() {
     const {props} = this;
     if (props.floatingSearchBar === true) {
@@ -124,69 +145,59 @@ class SearchBar extends React.Component {
   }
 
   hideClearIcon() {
-    const {props} = this;
+    const {props, state} = this;
     if (props.floatingSearchBar === false) {
-      this.styles.clearIcon = {
-        color: 'transparent',
-        background: 'transparent'
-      };
-      this.setState({showClearIcon: false});
+      this.setState({
+        showClearIcon: false,
+        styles: Object.assign({}, state.styles, {
+          clearIcon: {
+            color: 'transparent',
+            background: 'transparent'
+          }
+        })
+      });
     }
   }
 
   showClearIcon() {
-    const {props} = this;
+    const {props, state} = this;
     if (props.floatingSearchBar === false) {
-      this.styles.clearIcon = {
-        color: Colors.white,
-        background: Colors.grape
-      };
-      this.setState({showClearIcon: true});
+      this.setState({
+        showClearIcon: true,
+        styles: Object.assign({}, state.styles, {
+          clearIcon: {
+            color: Colors.white,
+            background: Colors.grape
+          }
+        })
+      });
     }
   }
 
   render() {
-    const {props} = this;
+    const {props, state} = this;
 
-    if (props.floatingSearchBar === true) {
-      this.styles = {
-        inputWrap: Object.assign({}, styles.inputWrap, styles.inputWrapDetails),
-        searchText: Object.assign({}, styles.searchText, styles.searchTextDetails),
-        searchIcon: Object.assign({}, styles.searchIcon, styles.searchIconDetails),
-        clearIcon: {
-          color: Colors.white,
-          background: Colors.grape
-        }
-      };
-
-      this.state.showClearIcon = true;  // why this?
-    }
-
-    return <div style={this.styles.inputWrap}>
-      {
-        this.state.showClearIcon === true || this.state.showClearIcon === false
-        ? <div style={styles.clearDiv} onClick={this.clearSearchText}>
-          <i className='material-icons'
-            style={{...styles.clearIcon, ...this.styles.clearIcon}}
-            ref={(ref) => this.clearIcon = ref}>
-            close
-          </i>
-        </div>
-        : null
-      }
+    return <div style={state.styles.inputWrap}>
+      <div style={styles.clearDiv} onClick={this.clearSearchText}>
+        <i className='material-icons'
+          style={{...styles.clearIcon, ...state.styles.clearIcon}}
+          ref={(ref) => this.clearIcon = ref}>
+          close
+        </i>
+      </div>
 
       <input
         id='searchText'
         type='text'
-        style={this.styles.searchText}
-        onKeyUp={props.updateSearch}
+        style={state.styles.searchText}
+        onChange={props.updateSearch}
         onFocus={this.showClearIcon}
         onBlur={this.hideClearIcon}
         ref={(ref) => this.myTextInput = ref}
         autoFocus={props.floatingSearchBar} />
 
       <i className='material-icons'
-        style={this.styles.searchIcon}
+        style={state.styles.searchIcon}
         onClick={this.focusSearchText}>
         search
       </i>
