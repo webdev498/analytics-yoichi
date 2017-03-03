@@ -157,7 +157,8 @@
     "webpack-hot-middleware": "^2.13.0",
     "whatwg-fetch": "^0.11.0",
     "yargs": "^4.8.1",
-    "autotrack": "1.1.0"
+    "autotrack": "1.1.0",
+    "react-json-tree": "^0.5.6"
   },
   "devDependencies": {
     "babel-eslint": "^7.0.0",
