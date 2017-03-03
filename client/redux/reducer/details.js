@@ -23,7 +23,7 @@ function requestApi(id, state) {
 function receiveApi(id, state, action) {
   const {data} = action,
     {json, api, query} = data;
-  console.log('receiveApi');
+
   const dataMap = Map({
     id,
     isFetching: false,
@@ -39,7 +39,7 @@ function receiveApi(id, state, action) {
 function updateApi(id, state, action) {
   let {data} = action,
     {json, api, query, prevData} = data;
-  console.log('updateApi');
+
   if (prevData) {
     prevData = Object.assign({}, prevData);
     json = Object.assign({}, json, {
