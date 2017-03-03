@@ -201,9 +201,7 @@ export class CoreLayout extends React.Component {
             showDetails && input.details
             ? (
               <div style={styles.details}>
-                <ParentCard {...detailsInput}>
-                  <DetailsTable />
-                </ParentCard>
+                <ParentCard {...detailsInput} />
               </div>
             )
             : null

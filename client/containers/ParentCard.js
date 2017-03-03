@@ -338,8 +338,13 @@ export class ParentCard extends React.Component {
       showDetailsTable: this.toggleDetailsTable
     };
 
-    let componentStyle = {};
-    const isDetails = state.showDetailsFlag;
+    let componentStyle = {},
+      isDetails = state.showDetailsFlag;
+
+    if (props.fullDetailsView === true) {
+      isDetails = props.fullDetailsView;
+    }
+
     if (isDetails) {
       componentStyle = {display: 'none'};
     }
@@ -372,11 +377,13 @@ export class ParentCard extends React.Component {
         {
           isComponentError
           ? this.getErrorElement()
-          : (
-            <div style={componentStyle}>
-              {React.cloneElement(props.children, {...childProps, ...extraProps})}
-            </div>
-            )
+          : !props.fullDetailsView
+            ? (
+              <div style={componentStyle}>
+                {React.cloneElement(props.children, {...childProps, ...extraProps})}
+              </div>
+              )
+            : null
         }
 
         {
