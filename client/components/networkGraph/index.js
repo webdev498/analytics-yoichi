@@ -128,14 +128,14 @@ function isNodeOrEdgeAlreadyExists(array, id) {
 function displayNotificationMessage(message, actionId) {
   let position = getPosition(document.getElementById(actionId));
   document.getElementById('notification-message').innerHTML = message;
-  document.getElementById('notification-message').style.top = (position.y - 95) + 'px';
+  document.getElementById('notification-message').style.top = (position.y - 85) + 'px';
   ANIMATIONS.fadeIn(document.getElementById('notification-message'), {
     duration: 2,
     complete: function() {
       document.getElementById('notification-message').style.display = 'block';
 
       ANIMATIONS.fadeOut(document.getElementById('notification-message'), {
-        duration: 2000,
+        duration: 3000,
         complete: function() {
           document.getElementById('notification-message').style.display = 'none';
         }
