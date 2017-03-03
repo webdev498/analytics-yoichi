@@ -135,7 +135,7 @@ function displayNotificationMessage(message, actionId) {
       document.getElementById('notification-message').style.display = 'block';
 
       ANIMATIONS.fadeOut(document.getElementById('notification-message'), {
-        duration: 2000,
+        duration: 3000,
         complete: function() {
           document.getElementById('notification-message').style.display = 'none';
         }
