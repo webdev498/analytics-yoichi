@@ -46,6 +46,10 @@ function getIcon(percentage, iconIndex, iconName) {
   };
 
   let percentageValue = parseInt(percentage);
+
+  if (isNaN(percentageValue)) {
+    percentageValue = 0;
+  }
   iconIndex = parseInt(iconIndex);
 
   if (percentageValue >= 100) {

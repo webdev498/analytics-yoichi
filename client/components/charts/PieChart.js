@@ -66,7 +66,7 @@ export function generatePieChart(inputArray) {
     pieChartAttributes2 = calculatePieChartAttributes(doughnutInputArray2, 2),
     percentage1 = Math.round((inputArray.top10CountValue / parseInt(inputArray.countValue)) * 100, 2),
     percentage2 = Math.round((inputArray.top10TotalValue / parseInt(inputArray.totalValue)) * 100, 2),
-    displayPercentage1 = percentage1.toString() + '%',
+    displayPercentage1 = isNaN(percentage1) ? '0%' : percentage1.toString() + '%',
     displayPercentage2 = isNaN(percentage2) ? '0%' : percentage2.toString() + '%',
     percentage2Color = {fontWeight: 'bold', color: highlightedColor1},
     percentage1Color = {fontWeight: 'bold', color: highlightedColor2},
@@ -89,7 +89,7 @@ export function generatePieChart(inputArray) {
     percentage2Color: percentage2Color,
     displayPercentage1: displayPercentage1,
     displayPercentage2: displayPercentage2,
-    percentage1: percentage1.toString(),
+    percentage1: isNaN(percentage1) ? '0' : percentage1.toString(),
     percentageTextStyle: style.percentageText
   };
   return pieChartAttributes;
@@ -147,7 +147,7 @@ function renderChart(props) {
     return;
   }
 
- if (props.data && props.chartData &&
+  if (props.data && props.chartData &&
     props.chartData.fieldMapping &&
     props.chartData.fieldMapping[0] &&
     props.chartData.fieldMapping[0].reportId &&
@@ -196,15 +196,15 @@ function renderChart(props) {
       }
 
       if (currentChartData.reportId === 'taf_s3_requester' || currentChartData.reportId === 'taf_s3_ua' ||
-    		  currentChartData.reportId === 'taf_sysmon_unique_process_count' || 
-          currentChartData.reportId === 'taf_ct_events_by_user'){
+        currentChartData.reportId === 'taf_sysmon_unique_process_count' ||
+        currentChartData.reportId === 'taf_ct_events_by_user') {
         columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
         countValue = rows[d][columnIndex];
       }
 
       if (currentChartData.reportId === 'taf_total_usage' || currentChartData.reportId === 'taf_s3_total' ||
-    		  currentChartData.reportId === 'taf_sysmon_total_network_conn_count' ||
-          currentChartData.reportId === 'taf_ct_total') {
+        currentChartData.reportId === 'taf_sysmon_total_network_conn_count' ||
+        currentChartData.reportId === 'taf_ct_total') {
         columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
         totalValue = rows[d][columnIndex];
       }
@@ -235,6 +235,7 @@ function renderChart(props) {
   };
 
   pieChartAttributes = generatePieChart(inputArray);
+  console.log(pieChartAttributes);
 }
 
 class PieChart extends React.Component {
@@ -242,6 +243,26 @@ class PieChart extends React.Component {
     attributes: PropTypes.object,
     tableOptions: PropTypes.object
   }
+
+  displayChart() {
+    const {props} = this;
+    if (!props.data) {
+      return;
+    }
+
+    if (props.data && props.chartData &&
+      props.chartData.fieldMapping &&
+      props.chartData.fieldMapping[0] &&
+      props.chartData.fieldMapping[0].reportId &&
+      props.data[props.chartData.fieldMapping[0].reportId].rows &&
+      props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
+      styles.noData = {
+        display: 'none'
+      };
+      return;
+    }
+  }
+
   render() {
     const {props} = this;
 
