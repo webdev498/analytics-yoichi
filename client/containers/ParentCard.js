@@ -294,7 +294,7 @@ export class ParentCard extends React.Component {
     const {props} = this;
 
     let apiObj = Object.assign({}, this.detailsApiObj);
-    if (apiObj.isDetails === true || props.fullDetailsView === true) {
+    if (apiObj.isDetails === true || props.isDetailsView === true) {
       if (event.target.value !== '') {
         apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
           filter: '__any ~ "' + event.target.value + '"'
@@ -309,7 +309,7 @@ export class ParentCard extends React.Component {
       apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
         from: 0
       });
-
+      apiObj = {...apiObj, isDetails: true};
       props.fetchApiData(apiObj);
       this.setState({showDetailsFlag: true});
     }
@@ -328,7 +328,7 @@ export class ParentCard extends React.Component {
       componentStyle = {display: 'none'};
     }
 
-    if (!props.fullDetailsView) {
+    if (!props.isDetailsView) {
       return (
         <div style={componentStyle}>
           {React.cloneElement(props.children, {...childProps, ...extraProps})}
@@ -356,8 +356,8 @@ export class ParentCard extends React.Component {
 
     let isDetails = state.showDetailsFlag;
 
-    if (props.fullDetailsView === true) {
-      isDetails = props.fullDetailsView;
+    if (props.isDetailsView === true) {
+      isDetails = props.isDetailsView;
     }
 
     const isComponentError = props.isError && (props.meta.showErrorMessage !== false) && !isDetails,
@@ -425,7 +425,7 @@ function mapStateToProps(state, ownProps) {
   if (apiData.has(ownProps.id)) {
     const propsById = apiData.get(ownProps.id);
 
-    if (ownProps.fullDetailsView) {
+    if (ownProps.isDetailsView) {
       detailsData = propsById.get('data');
     }
     else {

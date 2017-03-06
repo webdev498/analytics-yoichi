@@ -111,9 +111,7 @@ export default class DetailsTable extends React.Component {
       apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
         from: detailsData.next
       });
-      apiObj = Object.assign({}, apiObj, {
-        isDetails: true
-      });
+      apiObj = {...apiObj, isDetails: true};
       props.fetchNextSetOfData(apiObj, detailsData);
     }
   }
