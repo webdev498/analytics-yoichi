@@ -49,8 +49,8 @@ export default class DetailsTable extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if ((newProps.detailsData &&
-      newProps.detailsData.next === fetchLimit)) { //  || props.search !== newProps.search
+    if (newProps.detailsData &&
+      newProps.detailsData.next === fetchLimit) {
       this.state.paginationDetails.currentPage = 0;
     }
   }

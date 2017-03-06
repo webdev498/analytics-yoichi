@@ -309,7 +309,6 @@ export class ParentCard extends React.Component {
       apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
         from: 0
       });
-      apiObj = {...apiObj, isDetails: true};
       props.fetchApiData(apiObj);
       this.setState({showDetailsFlag: true});
     }
