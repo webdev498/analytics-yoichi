@@ -319,7 +319,7 @@
             {
               "reportId": "taf_ct_iam_failed_by_un",
               "columns": [
-                "data.aws.userArn"
+                "data.cloudtrail.userIdentity.userName"
               ],
               "axis": "x"
             },
@@ -356,6 +356,17 @@
             "labelFontSize": "9"
           },
           "id": "failun"
+        },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.cloudtrail.userIdentity.userName": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
         },
         "id": "fail-un",
         "type": "charts/ParetoChart"
@@ -413,6 +424,17 @@
           },
           "id": "mfa"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.cloudtrail.additionalEventData.MFAUsed": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "mfa-used",
         "type": "charts/ParetoChart"
       },
@@ -466,6 +488,17 @@
           },
           "id": "nomfa"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.aws.userArn": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "no-mfa",
         "type": "charts/ParetoChart"
       }
@@ -498,8 +531,14 @@
           ]
         },
         "details": {
+          "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_ct_iam_success_country"
+            "reportId": "taf_ct_iam_success_country",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {
@@ -565,8 +604,14 @@
           ]
         },
         "details": {
+          "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_ct_iam_failed_country"
+            "reportId": "taf_ct_iam_failed_country",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {

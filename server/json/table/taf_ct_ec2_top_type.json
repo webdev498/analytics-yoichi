@@ -27,12 +27,12 @@
                 "fieldName": "type"
               }
             ],
-            "attributes": {
-              "chartWidth": "100%",
-              "chartType": "area2d",
-              "id": "top-types",
-              "chartHeight": "90",
-              "chartOptions": {
+            "chart": {
+              "width": "100%",
+              "height": "90",
+              "type": "area2d",
+              "id": "least-connection",
+              "options": {
                 "labelFontSize": "9"
               }
             },
@@ -49,8 +49,10 @@
     "emptyValueMessage": "(Empty)"
   },
   "details": {
-    "queryParams": {
-      "data.cloudtrail.eventName": "data.cloudtrail.eventName:fieldName"
+    "meta": {
+      "queryParams": {
+        "data.cloudtrail.eventName": "data.cloudtrail.eventName"
+      }
     }
   }
 }

@@ -368,6 +368,17 @@
           },
           "id": "region"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.cloudtrail.awsRegion": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "awsregion",
         "type": "charts/ParetoChart"
       },
@@ -422,6 +433,17 @@
           },
           "id": "ua"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.aws.userAgent": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "useragent",
         "type": "charts/ParetoChart"
       }
@@ -454,8 +476,14 @@
           ]
         },
         "details": {
+          "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_ct_ec2_event_by_country"
+            "reportId": "taf_ct_ec2_event_by_country",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {

@@ -346,6 +346,17 @@
           },
           "id": "lfreqreq"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.cloudtrail.eventSource": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "l-freq-req",
         "type": "charts/ParetoChart"
       }
@@ -415,6 +426,17 @@
     ],
     [
       {
+        "details": {
+          "itemsPerPage": 7,
+          "meta": {
+            "reportId": "taf_ct_event_by_country",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
+          }
+        },
         "chartOptions": {},
         "chartData": {
           "fieldMapping": [
@@ -439,11 +461,6 @@
               "connection": "secure"
             }
           ]
-        },
-        "details": {
-          "meta": {
-            "reportId": "taf_ct_event_by_country"
-          }
         },
         "meta": {
           "subTitle": "NUMBER OF EVENTS BY COUNTRY",
