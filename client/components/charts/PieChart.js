@@ -235,32 +235,12 @@ function renderChart(props) {
   };
 
   pieChartAttributes = generatePieChart(inputArray);
-  console.log(pieChartAttributes);
 }
 
 class PieChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
     tableOptions: PropTypes.object
-  }
-
-  displayChart() {
-    const {props} = this;
-    if (!props.data) {
-      return;
-    }
-
-    if (props.data && props.chartData &&
-      props.chartData.fieldMapping &&
-      props.chartData.fieldMapping[0] &&
-      props.chartData.fieldMapping[0].reportId &&
-      props.data[props.chartData.fieldMapping[0].reportId].rows &&
-      props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
-      styles.noData = {
-        display: 'none'
-      };
-      return;
-    }
   }
 
   render() {
