@@ -1,14 +1,12 @@
 import React, {PropTypes} from 'react';
-import Reactable from 'reactable';
 
+import { Table, Tr, Td } from 'reactable';
 import Area2DAsSparkLineChart from 'components/charts/Area2DAsSparkLineChart';
 import DurationWidget from 'components/widgets/DurationWidget';
 import ScoreWidget from 'components/widgets/ScoreWidget';
 import AssetWidget from 'components/widgets/AssetWidget';
 
 import {getCountryCode} from '../../commons/utils/countryUtils';
-
-const {Table, Tr, Td} = Reactable;
 
 const styles = {
   tableWrap: {
@@ -105,7 +103,7 @@ function displayCountryFlag(data) {
   );
 }
 
-export class ReactableTable extends React.Component {
+export class Reactable extends React.Component {
   constructor(props) {
     super(props);
     this.handleRowClick = this.handleRowClick.bind(this);
@@ -215,8 +213,8 @@ export class ReactableTable extends React.Component {
   }
 }
 
-ReactableTable.contextTypes = {
+Reactable.contextTypes = {
   clickThrough: React.PropTypes.func
 };
 
-export default ReactableTable;
+export default Reactable;

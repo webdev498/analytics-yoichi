@@ -480,7 +480,7 @@
           },
           "title": "Longest Connections"
         },
-        "name": "ReactableTable",
+        "name": "Reactable",
         "attributes": {
           "style": {
             "width": "100%",
@@ -493,7 +493,7 @@
           "itemsPerPage": 5
         },
         "id": "longest-connections",
-        "type": "ReactableTable"
+        "type": "Reactable"
       }
     ]
   ]

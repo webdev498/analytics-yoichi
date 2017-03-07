@@ -896,7 +896,7 @@
           },
           "title": "Least Used Software Details"
         },
-        "name": "ReactableTable",
+        "name": "Reactable",
         "attributes": {
           "style": {
             "marginLeft": "30px",
@@ -929,7 +929,7 @@
           },
           "title": "Successful Logins"
         },
-        "name": "ReactableTable",
+        "name": "Reactable",
         "attributes": {
           "style": {
             "marginRight": "30px",
@@ -961,7 +961,7 @@
           },
           "title": "Failed Logins"
         },
-        "name": "ReactableTable",
+        "name": "Reactable",
         "attributes": {
           "style": {
             "width": "33%",

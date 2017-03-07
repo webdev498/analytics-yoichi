@@ -292,7 +292,7 @@
           },
           "title": "Shortest User Agents"
         },
-        "name": "ReactableTable",
+        "name": "Reactable",
         "attributes": {
           "style": {
             "width": "100%",
