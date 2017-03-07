@@ -6,6 +6,7 @@
           "showHeader": true,
           "showRefresh": false,
           "showBackButton": true,
+          "showFullScreen": false,
           "api": {
             "path": "/api/alert/{alertId}",
             "pathParams": {
