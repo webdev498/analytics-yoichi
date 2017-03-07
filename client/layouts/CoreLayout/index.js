@@ -13,6 +13,8 @@ import Loader from 'components/Loader';
 import {Colors} from '../../../commons/colors';
 import 'styles/core.scss';
 
+import { hideBodyScroll, showBodyScroll } from 'utils/utils';
+
 const styles = {
   details: {
     backgroundColor: Colors.cloud,
@@ -48,16 +50,6 @@ const styles = {
     color: Colors.arctic
   }
 };
-
-function hideScroll() {
-  // hides the scroll from the body element when details are shown.
-  document.body.style.overflow = 'hidden';
-}
-
-function showScroll() {
-  // hides the scroll from the body element when details are shown.
-  document.body.style.overflow = '';
-}
 
 export class CoreLayout extends React.Component {
   static propTypes = {
@@ -95,7 +87,7 @@ export class CoreLayout extends React.Component {
           showDetails: true
         });
 
-        hideScroll();
+        hideBodyScroll();
       }
     };
   }
@@ -105,7 +97,7 @@ export class CoreLayout extends React.Component {
       showDetails: false
     });
 
-    showScroll();
+    showBodyScroll();
   }
 
   mouseOver() {

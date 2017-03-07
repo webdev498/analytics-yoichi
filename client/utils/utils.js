@@ -89,3 +89,13 @@ export function debounce(func, wait, immediate) {
     if (callNow) func.apply(context, args);
   };
 };
+
+export function hideBodyScroll() {
+  // hides the scroll from the body element when details are shown.
+  document.body.style.overflow = 'hidden';
+}
+
+export function showBodyScroll() {
+  // hides the scroll from the body element when details are shown.
+  document.body.style.overflow = '';
+}

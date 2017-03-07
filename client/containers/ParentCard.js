@@ -8,6 +8,7 @@ import ParentCardHeader from 'components/ParentCardHeader';
 import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
 import {autoScrollTo} from 'utils/utils';
+import { hideBodyScroll, showBodyScroll } from 'utils/utils';
 import {updateRoute} from 'actions/core';
 
 import {DETAILS_BASE_URL} from 'Constants';
@@ -332,7 +333,17 @@ export class ParentCard extends React.Component {
   }
 
   toggleFullView = () => {
-    this.setState({ isFullView: !this.state.isFullView });
+    this.setState(
+      { isFullView: !this.state.isFullView },
+      () => {
+        if (this.state.isFullView) {
+          hideBodyScroll();
+        }
+        else {
+          showBodyScroll();
+        }
+      }
+    );
   }
 
   renderComponent(isDetails) {
