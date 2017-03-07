@@ -20,7 +20,7 @@ const styles = {
     height: '400px',
     marginTop: '-30px'
   },
-  'percentage': {
+  'percentageDisplay': {
     fontSize: '35px',
     color: Colors.bar
   },
@@ -66,7 +66,7 @@ export function generatePieChart(inputArray) {
     pieChartAttributes2 = calculatePieChartAttributes(doughnutInputArray2, 2),
     percentage1 = Math.round((inputArray.top10CountValue / parseInt(inputArray.countValue)) * 100, 2),
     percentage2 = Math.round((inputArray.top10TotalValue / parseInt(inputArray.totalValue)) * 100, 2),
-    displayPercentage1 = isNaN(percentage1) ? '0%' : percentage1.toString() + '%',
+    displayPercentage1 = percentage1.toString() + '%',
     displayPercentage2 = isNaN(percentage2) ? '0%' : percentage2.toString() + '%',
     percentage2Color = {fontWeight: 'bold', color: highlightedColor1},
     percentage1Color = {fontWeight: 'bold', color: highlightedColor2},
@@ -89,7 +89,7 @@ export function generatePieChart(inputArray) {
     percentage2Color: percentage2Color,
     displayPercentage1: displayPercentage1,
     displayPercentage2: displayPercentage2,
-    percentage1: isNaN(percentage1) ? '0' : percentage1.toString(),
+    percentage1: percentage1.toString(),
     percentageTextStyle: style.percentageText
   };
   return pieChartAttributes;
@@ -162,8 +162,8 @@ function renderChart(props) {
   styles.noData = {};
 
   const data = props.data,
-    fieldMapping = props.chart.data.fieldMapping,
-    chartOptions = props.chart.options;
+    fieldMapping = props.chartData.fieldMapping,
+    chartOptions = props.chartOptions;
 
   let rawData = {};
 
@@ -242,7 +242,6 @@ class PieChart extends React.Component {
     attributes: PropTypes.object,
     tableOptions: PropTypes.object
   }
-
   render() {
     const {props} = this;
 
@@ -265,15 +264,15 @@ class PieChart extends React.Component {
             <PercentageWidget iconName='desktop_mac' percentage={pieChartAttributes.percentage1} />
           </div>
           <div style={{}}>
-            <span style={styles.percentage}>{pieChartAttributes.displayPercentage2}</span>
+            <span style={styles.percentageDisplay}>{pieChartAttributes.displayPercentage2}</span>
             <br />
-            <span style={styles.legend1}>{props.chart.legendText[0]}</span>
+            <span style={styles.legend1}>{props.meta.legend[0]}</span>
             <br /><br />
-            <span style={styles.legend2}>{props.chart.legendText[1]}</span>
+            <span style={styles.legend2}>{props.meta.legend[1]}</span>
             <br /><br />
-            <span style={styles.percentage}>{pieChartAttributes.displayPercentage1}</span>
+            <span style={styles.percentageDisplay}>{pieChartAttributes.displayPercentage1}</span>
             <br />
-            <span style={styles.legend1}>{props.chart.legendText[2]}</span>
+            <span style={styles.legend1}>{props.meta.legend[2]}</span>
           </div>
         </div>
       </div>

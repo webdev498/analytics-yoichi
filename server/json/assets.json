@@ -204,40 +204,42 @@
     ],
     [
       {
-        "chartOptions": {},
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_asset_count_time_shifted",
-              "columns": [
-                "0.0"
-              ]
-            },
-            {
-              "reportId": "taf_total_usage",
-              "columns": [
-                "date"
-              ]
-            },
-            {
-              "reportId": "taf_top_talkers_connections",
-              "columns": [
-                "connections"
-              ]
-            }
+        "chart": {
+          "options": {},
+          "data": {
+            "fieldMapping": [
+              {
+                "reportId": "taf_asset_count_time_shifted",
+                "columns": [
+                  "0.0"
+                ]
+              },
+              {
+                "reportId": "taf_total_usage",
+                "columns": [
+                  "date"
+                ]
+              },
+              {
+                "reportId": "taf_top_talkers_connections",
+                "columns": [
+                  "connections"
+                ]
+              }
+            ]
+          },
+          "legendText": [
+            "Connections",
+            "Used by",
+            "Assets"
           ]
         },
         "meta": {
           "showHeader": true,
-          "legend": [
-            "Connections",
-            "Used by",
-            "Assets"
-          ],
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+              "reportId": "dash_top_connections"
             },
             "queryParams": {
               "timeShift": "",
@@ -323,7 +325,7 @@
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_asset_count_time_shifted"
             },
             "queryParams": {
               "timeShift": "",
@@ -343,138 +345,6 @@
           "id": "HorizontalBarChartConnections"
         },
         "id": "horizontal-bar-chart-connections",
-        "type": "charts/HorizontalBarChart"
-      }
-    ],
-    [
-      {
-        "chartOptions": {},
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_asset_count_time_shifted",
-              "columns": [
-                "0.0"
-              ]
-            },
-            {
-              "reportId": "taf_total_usage",
-              "columns": [
-                "bandwidth"
-              ]
-            },
-            {
-              "reportId": "taf_top_talkers_bandwidth",
-              "columns": [
-                "bandwidth"
-              ]
-            }
-          ]
-        },
-        "meta": {
-          "showHeader": true,
-          "legend": [
-            "Bandwidth ",
-            "Used by",
-            "Assets"
-          ],
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
-            },
-            "queryParams": {
-              "timeShift": "",
-              "window": ""
-            }
-          },
-          "title": "Top Bandwidth"
-        },
-        "attributes": {
-          "style": {
-            "marginLeft": "30px",
-            "marginRight": "30px",
-            "width": "50%"
-          },
-          "id": "PieChartBandwidth"
-        },
-        "id": "pie-chart-bandwidth",
-        "type": "charts/PieChart"
-      },
-      {
-        "chartOptions": {
-          "showValues": "1",
-          "showLabels": "1",
-          "numberSuffix": "%",
-          "chartRightMargin": "0"
-        },
-        "chart": {
-          "showAnnotations": false
-        },
-        "chartData": {
-          "showTrendLines": true,
-          "fieldMapping": [
-            {
-              "reportId": "taf_asset_count_time_shifted",
-              "columns": [
-                "0.0"
-              ]
-            },
-            {
-              "reportId": "taf_total_usage",
-              "columns": [
-                "bandwidth"
-              ]
-            },
-            {
-              "reportId": "taf_top_talkers_bandwidth",
-              "columns": [
-                "bandwidth"
-              ]
-            }
-          ],
-          "reportId": "taf_top_talkers_bandwidth",
-          "trendLines": [
-            {
-              "line": [
-                {
-                  "dashed": "1",
-                  "color": "#f37133",
-                  "valueOnRight": "1",
-                  "dashLen": "4",
-                  "dashGap": "2"
-                }
-              ]
-            }
-          ],
-          "multipleReportIds": true
-        },
-        "meta": {
-          "showHeader": true,
-          "showDetails": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
-            },
-            "queryParams": {
-              "timeShift": "",
-              "window": ""
-            }
-          },
-          "title": "Top IPs Using The Highest Bandwidth"
-        },
-        "attributes": {
-          "chartCaption": {
-            "display": "none"
-          },
-          "style": {
-            "width": "50%",
-            "marginRight": "30px"
-          },
-          "id": "HorizontalBarChartBandwidth"
-        },
-        "id": "horizontal-bar-chart-bandwidth",
         "type": "charts/HorizontalBarChart"
       }
     ]

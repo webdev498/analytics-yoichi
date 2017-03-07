@@ -10,6 +10,7 @@ import anomalyChart from '../components/anomalyChart';
 import HeatMap from '../components/HeatMap.dal.js';
 import table from '../components/Table.dal';
 import userAgent from '../components/UserAgent.dal.js';
+import PieChart from '../components/PieChart.dal.js';
 
 const router = new KoaRouter({
   prefix: '/api'
@@ -26,8 +27,12 @@ const agent = new https.Agent(agentOptions),
 router
 .get('/layout/*', layoutRoutes)
 .get('*', async function(ctx, next) {
-  const url = serverBaseUrl + ctx.url;
-  console.log('proxy url', url);
+  let url = serverBaseUrl + ctx.url;
+  console.log('proxy url1', url);
+  if (url.includes('dash_top_connections')) {
+    url = url.replace('dash_top_connections', 'taf_total_usage,taf_top_talkers_connections,taf_asset_count_time_shifted');
+    console.log('test1', url);
+  }
   const res = await fetch(url,
     {
       method: 'GET',
@@ -78,15 +83,19 @@ router
 .get(reportingApiBasePath + 'taf_ct_ec2_bottom_type', table)
 .get(reportingApiBasePath + 'taf_ct_ec2_top_user', table)
 .get(reportingApiBasePath + 'taf_ct_ec2_bottom_user', table)
-.get(reportingApiBasePath + 'taf_ct_iam_top_success_login',table)
-.get(reportingApiBasePath + 'taf_ct_iam_bottom_success_login',table)
-.get(reportingApiBasePath + 'taf_ct_iam_top_success_login_region',table)
-.get(reportingApiBasePath + 'taf_ct_iam_top_failed_login',table)
-.get(reportingApiBasePath + 'taf_ct_iam_top_failed_login_region',table)
+.get(reportingApiBasePath + 'taf_ct_iam_top_success_login', table)
+.get(reportingApiBasePath + 'taf_ct_iam_bottom_success_login', table)
+.get(reportingApiBasePath + 'taf_ct_iam_top_success_login_region', table)
+.get(reportingApiBasePath + 'taf_ct_iam_top_failed_login', table)
+.get(reportingApiBasePath + 'taf_ct_iam_top_failed_login_region', table)
 .get(reportingApiBasePath + 'taf_user_agent_unique_with_name', userAgent)
+.get(reportingApiBasePath + 'taf_total_usage,taf_top_talkers_connections,taf_asset_count_time_shifted', PieChart)
 .post('*', async function(ctx, next) {
-  const url = serverBaseUrl + ctx.url;
-  console.log('proxy url', url);
+  let url = serverBaseUrl + ctx.url;
+  console.log('proxy url2', url);
+  if (url.includes('dash_top_connections')) {
+    url = url.replace('dash_top_connections', 'dash_top_connections2');
+  }
   const res = fetch(url,
     {
       method: 'POST',
