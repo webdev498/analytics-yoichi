@@ -576,6 +576,34 @@ function getDyConn(row) {
   return info;
 }
 
+function getResourceAccess(row) {
+	  const {data: {resourceaccess}} = row,
+	    info = {
+	      Date: getValue(row.date),
+	      display: {
+	        sourceDest: getSourceDestination(row),
+	        Type: {
+	          displayKey: true,
+	          value: getEventTypeString(row.type)
+	        },
+	        User: {
+	          displayKey: true,
+	          value: getValue(source.assets.info.displayName)
+	        },
+	        Resource: {
+		          displayKey: true,
+		          value: getValue(resource-access.resources.info.displayName)
+		    },
+	        Operation: {
+		          displayKey: true,
+		          value: getValue(resource-access.operation)
+		    }
+	      }
+	    };
+
+	  return info;
+	}
+
 function getDetails(row, url) {
   switch (row.type.toLowerCase()) {
     case 'conn':
@@ -610,6 +638,8 @@ function getDetails(row, url) {
       return getDhcp(row);
     case 'dyconn':
       return getDyConn(row);
+    case 'resource-access':
+        return getResourceAccess(row);  
     default:
       return getOther(row, url);
   }
