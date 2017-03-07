@@ -4,7 +4,6 @@ import Header from './PageHeader';
 import Sidebar from './Sidebar';
 import PageContent from './PageContent';
 import ParentCard from 'containers/ParentCard';
-import DetailsTable from 'components/details';
 import {fetchNextSetOfData} from 'actions/parentCard';
 
 import { fetchUserData, logout } from 'actions/auth';
@@ -67,7 +66,9 @@ export class CoreLayout extends React.Component {
       showFullSidebar: false,
       sidebarWidth: {width: '72px'},
       sidebar: props.auth.sidebar,
-      showSearch: false
+      showSearch: false,
+      isFullView: false,
+      elm: null
     };
 
     this.hideDetails = this.hideDetails.bind(this);
@@ -86,6 +87,9 @@ export class CoreLayout extends React.Component {
 
         // hides the scroll from the body element when details are shown.
         document.body.style.overflow = 'hidden';
+      },
+      getViewState() {
+        return that.state.isFullView;
       }
     };
   }
@@ -171,9 +175,16 @@ export class CoreLayout extends React.Component {
     return detailsInput;
   }
 
+  toggleFullView = (elm) => {
+    this.setState({
+      isFullView: !this.state.isFullView,
+      elm
+    });
+  }
+
   render() {
     const {props, state} = this,
-      {showDetails, input} = this.state;
+      { showDetails, input, isFullView, elm } = this.state;
 
     let detailsInput = this.getDetailsInput();
 
@@ -194,7 +205,8 @@ export class CoreLayout extends React.Component {
             : <PageContent
               location={props.location}
               params={props.params}
-              history={this.context.router} />
+              history={this.context.router}
+              toggleFullView={this.toggleFullView} />
           }
 
           {
@@ -206,6 +218,18 @@ export class CoreLayout extends React.Component {
             )
             : null
           }
+
+          {
+            isFullView
+              ? (
+                <div style={styles.details}>
+                  <ParentCard {...elm.props}>
+                    {React.cloneElement(elm.props.children)}
+                  </ParentCard>
+                </div>
+              )
+              : null
+          }
         </div>
       </div>
     );
@@ -213,7 +237,8 @@ export class CoreLayout extends React.Component {
 }
 
 CoreLayout.childContextTypes = {
-  clickThrough: React.PropTypes.func
+  clickThrough: React.PropTypes.func,
+  getViewState: React.PropTypes.func
 };
 
 CoreLayout.contextTypes = {

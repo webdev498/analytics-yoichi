@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 import React, {PropTypes} from 'react';
 
-import FontIcon from 'material-ui/FontIcon';
 import SearchBar from 'components/SearchBar';
 import {Colors} from '../../commons/colors';
 
@@ -26,8 +25,7 @@ const styles = {
   icon: {
     color: Colors.grape,
     cursor: 'pointer',
-    fontSize: '20px',
-    fontWeight: 600,
+    fontSize: '22px',
     marginLeft: '10px'
   },
   listIcon: {
@@ -52,6 +50,9 @@ const styles = {
   backIcon: {
     marginLeft: 0,
     marginRight: '15px'
+  },
+  fullscreenIcon: {
+    fontSize: '26px'
   }
 };
 
@@ -99,10 +100,10 @@ export default class ParentCardHeader extends React.Component {
       {
         props.meta.showBack === true
         ? <div style={styles.exitWrap} onClick={props.hideDetails}>
-          <FontIcon className='material-icons'
+          <i className='material-icons'
             style={{...styles.icon, ...styles.backIcon}}>
               arrow_back
-          </FontIcon>
+          </i>
         </div>
         : null
       }
@@ -130,11 +131,11 @@ export default class ParentCardHeader extends React.Component {
         {
           props.showComponentIconFlag === true && state.floatingSearchBar === false
           ? (
-            <FontIcon className='material-icons'
+            <i className='material-icons'
               style={styles.icon}
               onClick={() => this.loadFloatingSearchBar(true)}>
               search
-            </FontIcon>
+            </i>
           )
           : null
         }
@@ -142,11 +143,11 @@ export default class ParentCardHeader extends React.Component {
         {
           props.showComponentIconFlag === true && state.floatingSearchBar === false
           ? (
-            <FontIcon className='material-icons'
+            <i className='material-icons'
               style={styles.icon}
               onClick={props.toggleDetailsTable}>
               equalizer
-            </FontIcon>
+            </i>
           )
           : null
         }
@@ -154,11 +155,11 @@ export default class ParentCardHeader extends React.Component {
         {
           props.meta.showDetailsIcon === true && props.showComponentIconFlag === false
           ? (
-            <FontIcon className='material-icons'
+            <i className='material-icons'
               style={{...styles.icon, ...styles.listIcon}}
               onClick={props.toggleDetailsTable}>
                 list
-              </FontIcon>
+              </i>
           )
           : null
         }
@@ -168,38 +169,60 @@ export default class ParentCardHeader extends React.Component {
           (props.showComponentIconFlag === true && state.floatingSearchBar === true)
           ? null
           : (
-            <FontIcon className='material-icons'
+            <i className='material-icons'
               style={styles.icon}
               onClick={this.getData}>
               replay
-            </FontIcon>
+            </i>
           )
         }
 
         {
           props.meta.showBackButton === true
-          ? (
-            <FontIcon className='material-icons'
-              style={styles.icon}
-              onClick={props.history.goBack}>
-              arrow_back
-            </FontIcon>
-          )
-          : null
+            ? (
+              <i className='material-icons'
+                style={styles.icon}
+                onClick={props.history.goBack}>
+                arrow_back
+              </i>
+            )
+            : null
         }
 
         {
           props.meta.showClose === true
-          ? (
-            <FontIcon className='material-icons'
-              style={styles.icon}
-              onClick={props.hideDetails}>
-              close
-            </FontIcon>
-          )
-          : null
+            ? (
+              <i className='material-icons'
+                style={styles.icon}
+                onClick={props.hideDetails}>
+                close
+              </i>
+            )
+            : null
+        }
+
+        {
+          props.meta.showFullScreen === false
+            ? null
+            : (
+              this.context.getViewState()
+                ? <i className='material-icons'
+                  style={{ ...styles.icon, ...styles.fullscreenIcon }}
+                  onClick={props.toggleFullView}>
+                    fullscreen_exit
+                  </i>
+                : <i className='material-icons'
+                  style={{ ...styles.icon, ...styles.fullscreenIcon }}
+                  onClick={props.toggleFullView}>
+                    fullscreen
+                  </i>
+            )
         }
       </div>
     </header>;
   }
+};
+
+ParentCardHeader.contextTypes = {
+  getViewState: React.PropTypes.state
 };

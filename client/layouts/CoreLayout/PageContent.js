@@ -6,7 +6,6 @@ import Loader from 'components/Loader';
 import {fetchLayoutData} from 'actions/core';
 
 import { connect } from 'react-redux';
-// import staticLayout from 'layout';
 
 const styles = {
   content: {
@@ -58,6 +57,7 @@ export class PageContent extends React.Component {
     componentDetails.params = props.params;
     componentDetails.history = props.history;
     componentDetails.key = componentDetails.id;
+    componentDetails.toggleFullView = props.toggleFullView;
 
     const componentElm = elm({...componentDetails}, childrenArray);
 
@@ -72,7 +72,6 @@ export class PageContent extends React.Component {
 
   renderChildren() {
     const {layout} = this.props;
-    // const {layout} = staticLayout;
 
     const finalElmements = layout.map((section, index) => {
       const children = section.map(component => {

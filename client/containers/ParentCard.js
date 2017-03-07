@@ -119,7 +119,8 @@ export class ParentCard extends React.Component {
     details: PropTypes.object,
     detailsData: PropTypes.object,
     attributes: PropTypes.object,
-    duration: PropTypes.string.isRequired
+    duration: PropTypes.string.isRequired,
+    toggleFullView: PropTypes.func
   }
 
   getData(dataObj) {
@@ -315,6 +316,10 @@ export class ParentCard extends React.Component {
     }
   }
 
+  toggleFullView = () => {
+    this.props.toggleFullView(this);
+  }
+
   renderComponent(isDetails) {
     const {props, state} = this,
       childProps = Object.assign({}, props, {search: state.search}),
@@ -381,7 +386,8 @@ export class ParentCard extends React.Component {
             updateSearch={this.updateSearch}
             toggleDetailsTable={this.toggleDetailsTable}
             history={this.props.history}
-            hideDetails={props.hideDetails} />
+            hideDetails={props.hideDetails}
+            toggleFullView={this.toggleFullView} />
           : null
         }
 
