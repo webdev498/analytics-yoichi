@@ -57,7 +57,6 @@ export class PageContent extends React.Component {
     componentDetails.params = props.params;
     componentDetails.history = props.history;
     componentDetails.key = componentDetails.id;
-    componentDetails.toggleFullView = props.toggleFullView;
 
     const componentElm = elm({...componentDetails}, childrenArray);
 

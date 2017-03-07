@@ -49,6 +49,16 @@ const styles = {
   }
 };
 
+function hideScroll() {
+  // hides the scroll from the body element when details are shown.
+  document.body.style.overflow = 'hidden';
+}
+
+function showScroll() {
+  // hides the scroll from the body element when details are shown.
+  document.body.style.overflow = '';
+}
+
 export class CoreLayout extends React.Component {
   static propTypes = {
     fetchUserData: PropTypes.func.isRequired,
@@ -85,11 +95,7 @@ export class CoreLayout extends React.Component {
           showDetails: true
         });
 
-        // hides the scroll from the body element when details are shown.
-        document.body.style.overflow = 'hidden';
-      },
-      getViewState() {
-        return that.state.isFullView;
+        hideScroll();
       }
     };
   }
@@ -99,8 +105,7 @@ export class CoreLayout extends React.Component {
       showDetails: false
     });
 
-    // shows the scroll of the body element when details are shown.
-    document.body.style.overflow = '';
+    showScroll();
   }
 
   mouseOver() {
@@ -175,16 +180,34 @@ export class CoreLayout extends React.Component {
     return detailsInput;
   }
 
-  toggleFullView = (elm) => {
-    this.setState({
-      isFullView: !this.state.isFullView,
-      elm
-    });
+  getFullView = () => {
+    const { elm } = this.state,
+      {props} = elm,
+      updatedProps = Object.assign({}, elm.props, {
+        id: `${props.id}FullView`
+      });
+
+    updatedProps.attributes = {
+      ...updatedProps.attributes,
+      id: `${props.attributes.id}-full-view`,
+      style: {
+        width: '100%',
+        height: 'auto'
+      }
+    };
+
+    return (
+      <div style={{...styles.details, padding: '30px'}}>
+        <ParentCard {...updatedProps}>
+          {React.cloneElement(updatedProps.children)}
+        </ParentCard>
+      </div>
+    );
   }
 
   render() {
     const {props, state} = this,
-      { showDetails, input, isFullView, elm } = this.state;
+      { showDetails, input } = state;
 
     let detailsInput = this.getDetailsInput();
 
@@ -205,8 +228,7 @@ export class CoreLayout extends React.Component {
             : <PageContent
               location={props.location}
               params={props.params}
-              history={this.context.router}
-              toggleFullView={this.toggleFullView} />
+              history={this.context.router} />
           }
 
           {
@@ -218,18 +240,6 @@ export class CoreLayout extends React.Component {
             )
             : null
           }
-
-          {
-            isFullView
-              ? (
-                <div style={styles.details}>
-                  <ParentCard {...elm.props}>
-                    {React.cloneElement(elm.props.children)}
-                  </ParentCard>
-                </div>
-              )
-              : null
-          }
         </div>
       </div>
     );
@@ -237,8 +247,7 @@ export class CoreLayout extends React.Component {
 }
 
 CoreLayout.childContextTypes = {
-  clickThrough: React.PropTypes.func,
-  getViewState: React.PropTypes.func
+  clickThrough: React.PropTypes.func
 };
 
 CoreLayout.contextTypes = {

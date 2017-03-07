@@ -32,7 +32,21 @@ const styles = {
     fontWeight: '600',
     textAlign: 'center'
   },
-  detailsTable: {}
+  fullViewWrap: {
+    backgroundColor: Colors.cloud,
+    position: 'fixed',
+    top: '64px',
+    left: '72px',
+    bottom: 0,
+    right: 0,
+    zIndex: 3,
+    overflow: 'auto'
+  },
+  fullView: {
+    margin: '30px',
+    width: 'auto',
+    height: 'auto'
+  }
 };
 
 function getParamsAndReportId(props, dataObj, durationUpdated) {
@@ -100,7 +114,8 @@ export class ParentCard extends React.Component {
     this.state = {
       search: '',
       showDetailsFlag: false,
-      showComponentIconFlag: false
+      showComponentIconFlag: false,
+      isFullView: false
     };
 
     this.detailsApiObj = {};
@@ -317,7 +332,7 @@ export class ParentCard extends React.Component {
   }
 
   toggleFullView = () => {
-    this.props.toggleFullView(this);
+    this.setState({ isFullView: !this.state.isFullView });
   }
 
   renderComponent(isDetails) {
@@ -343,21 +358,17 @@ export class ParentCard extends React.Component {
     return null;
   }
 
-  render() {
-    const {props, state} = this;
-    let cardStyle = {...styles.wrap, ...props.attributes.style};
+  getView() {
+    const { props, state } = this;
+    let cardStyle = { ...styles.wrap, ...props.attributes.style };
 
     if (!props.meta.showHeader) {
-      cardStyle = {...styles.childwrap, ...props.attributes.style};
+      cardStyle = { ...styles.childwrap, ...props.attributes.style };
     }
 
-    let tempCardStyle = cardStyle;
-
-    if (props.meta.hideComponent && (!props.data)) {
-      tempCardStyle = {display: 'none'};
+    if (state.isFullView) {
+      cardStyle = { ...cardStyle, ...styles.fullView };
     }
-
-    cardStyle = tempCardStyle;
 
     let isDetails = state.showDetailsFlag;
 
@@ -368,16 +379,15 @@ export class ParentCard extends React.Component {
     const isComponentError = props.isError && (props.meta.showErrorMessage !== false) && !isDetails,
       isDetailsError = props.detailsIsError && isDetails;
 
-    return (
-      <div style={cardStyle} id={props.id}>
-        {
-          props.isFetching || props.detailsIsFetching
+    return <div style={cardStyle} id={props.id}>
+      {
+        props.isFetching || props.detailsIsFetching
           ? <Loader />
           : null
-        }
+      }
 
-        {
-          props.meta.showHeader
+      {
+        props.meta.showHeader
           ? <ParentCardHeader
             {...props}
             showComponentIconFlag={state.showComponentIconFlag}
@@ -387,26 +397,34 @@ export class ParentCard extends React.Component {
             toggleDetailsTable={this.toggleDetailsTable}
             history={this.props.history}
             hideDetails={props.hideDetails}
-            toggleFullView={this.toggleFullView} />
+            toggleFullView={this.toggleFullView}
+            isFullView={state.isFullView} />
           : null
-        }
+      }
 
-        {
-          isComponentError
+      {
+        isComponentError
           ? this.getErrorElement()
           : this.renderComponent(isDetails)
-        }
+      }
 
-        {
-          isDetails
+      {
+        isDetails
           ? isDetailsError
             ? this.getErrorElement()
-            : <div style={{marginLeft: '-30px', marginRight: '-30px'}}>
-              { this.getDetailsTable()}
+            : <div style={{ marginLeft: '-30px', marginRight: '-30px' }}>
+              {this.getDetailsTable()}
             </div>
           : null
-        }
-      </div>
+      }
+    </div>;
+  }
+
+  render() {
+    return (
+      this.state.isFullView
+        ? <div style={styles.fullViewWrap}>{this.getView()}</div>
+        : this.getView()
     );
   }
 }

@@ -205,7 +205,7 @@ export default class ParentCardHeader extends React.Component {
           props.meta.showFullScreen === false
             ? null
             : (
-              this.context.getViewState()
+              props.isFullView
                 ? <i className='material-icons'
                   style={{ ...styles.icon, ...styles.fullscreenIcon }}
                   onClick={props.toggleFullView}>
@@ -221,8 +221,4 @@ export default class ParentCardHeader extends React.Component {
       </div>
     </header>;
   }
-};
-
-ParentCardHeader.contextTypes = {
-  getViewState: React.PropTypes.state
 };
