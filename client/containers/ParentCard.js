@@ -369,6 +369,9 @@ export class ParentCard extends React.Component {
 
     if (state.isFullView) {
       childProps.attributes.chartHeight = '75%';
+      if (childProps.chart && childProps.chart.height) {
+        childProps.chart = {...props.chart, height: '75%'};
+      }
     }
 
     const componentStyle = isDetails ? { display: 'none' } : {};
@@ -391,7 +394,7 @@ export class ParentCard extends React.Component {
     }
 
     if (state.isFullView) {
-      cardStyle = props.type && props.type.startsWith('charts/')
+      cardStyle = props.type && (props.type.startsWith('charts/') || props.type.startsWith('maps/'))
                     ? { ...cardStyle, ...styles.fullViewChart }
                     : { ...cardStyle, ...styles.fullView };
     }
