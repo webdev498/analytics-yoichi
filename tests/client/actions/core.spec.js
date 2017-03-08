@@ -132,7 +132,7 @@ describe('corelayout Redux Actions', () => {
 
     it('should dispatch ERROR_LAYOUT_DATA with error "Json not loaded correctly from server"', () => {
       const id = '/';
-      server.respondWith('GET', defaultLayoutPath, [ 200, { 'Content-Type': 'application/json' }, '' ]);
+      server.respondWith('GET', defaultLayoutPath, [ 200, { 'Content-Type': 'application/json' }, '{"layout": [],}' ]);
       const apiObj = store.dispatch(fetchLayoutData(id))
         .then(res => {
           const actions = store.getActions();
@@ -197,7 +197,6 @@ describe('corelayout Redux Actions', () => {
       store.dispatch(updateRoute('/logout'));
 
       const actions = store.getActions();
-      console.log(actions);
       expect(actions).to.have.length(1);
       expect(actions[0]).to.have.a.property('type', '@@router/CALL_HISTORY_METHOD');
     });
