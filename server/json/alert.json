@@ -19,7 +19,6 @@
           },
           "title": "Anomaly Details"
         },
-        "name": "AlertDetail",
         "attributes": {
           "style": {
             "backgroundColor": "#ffffff",
@@ -86,7 +85,6 @@
             }
           }
         },
-        "name": "AlertTimeline",
         "attributes": {
           "style": {
             "width": "100%",
