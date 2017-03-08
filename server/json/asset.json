@@ -94,6 +94,7 @@
         "type": "networkGraph/index",
         "meta": {
           "showHeader": true,
+          "showFullScreen": false,
           "api": {
             "path": "/api/entity/{type}/{assetId}",
             "pathParams": {
@@ -152,6 +153,7 @@
         "meta": {
           "showHeader": true,
           "showErrorMessage": false,
+          "showFullScreen": false,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "queryParams": {

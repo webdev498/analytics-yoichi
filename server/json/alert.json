@@ -35,6 +35,7 @@
       {
         "meta": {
           "showHeader": true,
+          "showFullScreen": false,
           "api": {
             "path": "/api/analytics/graph/{alertId}",
             "pathParams": {

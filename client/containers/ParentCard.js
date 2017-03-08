@@ -7,8 +7,7 @@ import ParentCardHeader from 'components/ParentCardHeader';
 
 import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
-import {autoScrollTo} from 'utils/utils';
-import { hideBodyScroll, showBodyScroll } from 'utils/utils';
+import { autoScrollTo, hideBodyScroll, showBodyScroll } from 'utils/utils';
 import {updateRoute} from 'actions/core';
 
 import {DETAILS_BASE_URL} from 'Constants';
@@ -47,6 +46,11 @@ const styles = {
     margin: '30px',
     width: 'auto',
     height: 'auto'
+  },
+  fullViewChart: {
+    margin: '30px',
+    width: 'auto',
+    height: '95%'
   }
 };
 
@@ -200,10 +204,17 @@ export class ParentCard extends React.Component {
 
   getDetailsTable() {
     const {detailsData, details, fetchNextSetOfData, updateRoute} = this.props;
+    let detailsObj = {...details};
+
+    // during fullView show 20 rows on details view.
+    if (this.state.isFullView) {
+      detailsObj.itemsPerPage = 20;
+    }
+
     return <DetailsTable
       style={styles.detailsTable}
       detailsData={detailsData}
-      details={details}
+      details={detailsObj}
       search={this.state.search}
       apiObj={this.detailsApiObj}
       fetchNextSetOfData={fetchNextSetOfData}
@@ -348,17 +359,19 @@ export class ParentCard extends React.Component {
 
   renderComponent(isDetails) {
     const {props, state} = this,
-      childProps = Object.assign({}, props, {search: state.search}),
       extraProps = {
         updateRoute: this.props.updateRoute,
         showDetailsTable: this.toggleDetailsTable
-      };
+      },
+      childProps = {...props, search: state.search};
 
-    let componentStyle = {};
-    if (isDetails) {
-      componentStyle = {display: 'none'};
+    childProps.attributes = {...props.attributes};
+
+    if (state.isFullView) {
+      childProps.attributes.chartHeight = '75%';
     }
 
+    const componentStyle = isDetails ? { display: 'none' } : {};
     if (!props.isDetailsView) {
       return (
         <div style={componentStyle}>
@@ -378,7 +391,9 @@ export class ParentCard extends React.Component {
     }
 
     if (state.isFullView) {
-      cardStyle = { ...cardStyle, ...styles.fullView };
+      cardStyle = props.type && props.type.startsWith('charts/')
+                    ? { ...cardStyle, ...styles.fullViewChart }
+                    : { ...cardStyle, ...styles.fullView };
     }
 
     let isDetails = state.showDetailsFlag;
