@@ -14,7 +14,8 @@ import {
   errorPageData,
   getUrl,
   fetchLayoutData,
-  fetchSearchData
+  fetchSearchData,
+  updateRoute
 } from 'actions/core';
 
 import {baseUrl} from 'config';
@@ -177,12 +178,28 @@ describe('corelayout Redux Actions', () => {
         query = 'hello';
 
       server.respondWith('GET', getSearchUrl(query), function(req) {
-        return [ 200, { 'Content-Type': 'application/json' }, jsonRes ];
+        const headers = req.requestHeaders;
+        expect(headers).to.have.a.property('authorization');
+        expect(headers.authorization).to.be.a('string');
+        expect(req.url).to.equal('/api/analytics/reporting/execute/taf_search_assets?term=hello');
+        req.respond(200, { 'Content-Type': 'application/json' }, jsonRes);
       });
 
       const apiObj = fetchSearchData(auth, query);
       server.respond();
       return apiObj;
+    });
+  });
+
+  context('updateRoute function', function() {
+    it('should should dispatch push for react router', () => {
+      const store = mockStore({});
+      store.dispatch(updateRoute('/logout'));
+
+      const actions = store.getActions();
+      console.log(actions);
+      expect(actions).to.have.length(1);
+      expect(actions[0]).to.have.a.property('type', '@@router/CALL_HISTORY_METHOD');
     });
   });
 });
