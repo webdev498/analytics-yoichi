@@ -577,8 +577,7 @@ function getDyConn(row) {
 }
 
 function getResourceAccess(row) {
-	  const {data: {resourceaccess}} = row,
-	    info = {
+	  let info = {
 	      Date: getValue(row.date),
 	      display: {
 	        sourceDest: getSourceDestination(row),
@@ -588,15 +587,15 @@ function getResourceAccess(row) {
 	        },
 	        User: {
 	          displayKey: true,
-	          value: getValue(source.assets.info.displayName)
+	          value: getValue(row.source.assets[0].info.displayName)
 	        },
 	        Resource: {
 		          displayKey: true,
-		          value: getValue(resource-access.resources.info.displayName)
+		          value: getValue(row.data['resource-access'].resources[0].info.displayName)
 		    },
 	        Operation: {
 		          displayKey: true,
-		          value: getValue(resource-access.operation)
+		          value: getValue(row.data['resource-access'].operation)
 		    }
 	      }
 	    };

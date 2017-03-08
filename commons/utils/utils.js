@@ -439,7 +439,8 @@ export function getEventTypeString(typeName) {
     sysmon: 'Sysmon',
     report: 'Report',
     anomaly: 'Anomaly',
-    auth: 'Auth'
+    auth: 'Auth',
+    'resource-access': 'Resource Access'
   };
 
   return typeStrings[typeName] ? typeStrings[typeName] : typeName;
