@@ -6,7 +6,6 @@ import Loader from 'components/Loader';
 import {fetchLayoutData} from 'actions/core';
 
 import { connect } from 'react-redux';
-// import staticLayout from 'layout';
 
 const styles = {
   content: {
@@ -72,7 +71,6 @@ export class PageContent extends React.Component {
 
   renderChildren() {
     const {layout} = this.props;
-    // const {layout} = staticLayout;
 
     const finalElmements = layout.map((section, index) => {
       const children = section.map(component => {

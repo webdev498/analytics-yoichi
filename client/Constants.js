@@ -38,6 +38,7 @@ export const HIGH_SCORE_RANGE = [65, 100];
 
 export const profileUrl = `${baseUrl}/api/user/profile`;
 export const defaultLayoutPath = `${baseUrl}/api/layout/summary-page`;
+export const actionsUrl = `${baseUrl}/api/analytics/actions/list?mediaType=json`;
 
 export const DETAILS_BASE_URL = `/api/analytics/reporting/details`;
 

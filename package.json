@@ -168,6 +168,7 @@
     "chai-enzyme": "^0.5.0",
     "chai-immutable": "^1.6.0",
     "cheerio": "^0.22.0",
+    "clone": "^2.1.0",
     "codecov": "^1.0.1",
     "enzyme": "^2.3.0",
     "es6-promise": "^4.0.5",

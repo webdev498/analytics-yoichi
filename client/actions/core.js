@@ -57,12 +57,7 @@ export function fetchLayoutData(id) {
     dispatch(requestPageData(id));
     return fetchData(getUrl(id), cookies, dispatch)
     .then(json => {
-      if (json) {
-        dispatch(receivePageData(id, {json}));
-      }
-      else {
-        dispatch(errorPageData(id, {'msg': 'Json not loaded correctly from server'}));
-      }
+      dispatch(receivePageData(id, {json}));
     })
     .catch(ex => {
       dispatch(errorPageData(id, ex));

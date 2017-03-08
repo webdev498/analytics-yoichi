@@ -4,7 +4,6 @@ import Header from './PageHeader';
 import Sidebar from './Sidebar';
 import PageContent from './PageContent';
 import ParentCard from 'containers/ParentCard';
-import DetailsTable from 'components/details';
 import {fetchNextSetOfData} from 'actions/parentCard';
 
 import { fetchUserData, logout } from 'actions/auth';
@@ -13,6 +12,8 @@ import { fetchActionsList } from 'actions/actionsList';
 import Loader from 'components/Loader';
 import {Colors} from '../../../commons/colors';
 import 'styles/core.scss';
+
+import { hideBodyScroll, showBodyScroll } from 'utils/utils';
 
 const styles = {
   details: {
@@ -67,7 +68,9 @@ export class CoreLayout extends React.Component {
       showFullSidebar: false,
       sidebarWidth: {width: '72px'},
       sidebar: props.auth.sidebar,
-      showSearch: false
+      showSearch: false,
+      isFullView: false,
+      elm: null
     };
 
     this.hideDetails = this.hideDetails.bind(this);
@@ -84,8 +87,7 @@ export class CoreLayout extends React.Component {
           showDetails: true
         });
 
-        // hides the scroll from the body element when details are shown.
-        document.body.style.overflow = 'hidden';
+        hideBodyScroll();
       }
     };
   }
@@ -95,8 +97,7 @@ export class CoreLayout extends React.Component {
       showDetails: false
     });
 
-    // shows the scroll of the body element when details are shown.
-    document.body.style.overflow = '';
+    showBodyScroll();
   }
 
   mouseOver() {
@@ -171,9 +172,34 @@ export class CoreLayout extends React.Component {
     return detailsInput;
   }
 
+  getFullView = () => {
+    const { elm } = this.state,
+      {props} = elm,
+      updatedProps = Object.assign({}, elm.props, {
+        id: `${props.id}FullView`
+      });
+
+    updatedProps.attributes = {
+      ...updatedProps.attributes,
+      id: `${props.attributes.id}-full-view`,
+      style: {
+        width: '100%',
+        height: 'auto'
+      }
+    };
+
+    return (
+      <div style={{...styles.details, padding: '30px'}}>
+        <ParentCard {...updatedProps}>
+          {React.cloneElement(updatedProps.children)}
+        </ParentCard>
+      </div>
+    );
+  }
+
   render() {
     const {props, state} = this,
-      {showDetails, input} = this.state;
+      { showDetails, input } = state;
 
     let detailsInput = this.getDetailsInput();
 
