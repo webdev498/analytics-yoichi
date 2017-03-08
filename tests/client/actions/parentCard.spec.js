@@ -10,8 +10,11 @@ import {
   TIME_INTERVAL_UPDATE,
   PARENT_CARD_EVENT,
   REMOVE_COMPONENT,
-  REMOVE_DETAILS_COMPONENT,
-  REQUEST_DETAILS_API_DATA
+  REQUEST_DETAILS_API_DATA,
+  RECEIVE_DETAILS_API_DATA,
+  UPDATE_DETAILS_API_DATA,
+  ERROR_DETAILS_API_DATA,
+  REMOVE_DETAILS_COMPONENT
 } from 'Constants';
 
 import {
@@ -44,39 +47,82 @@ function getApiObj(path, query, pathParams) {
 }
 
 describe('ParentCard Actions', () => {
-  it('should return the state for REQUEST_API_DATA', () => {
-    const id = 'testId',
-      api = {test: 'value'},
-      requestApiState = requestApiData(id, api);
 
-    expect(requestApiState).to.be.an.object;
-    expect(requestApiState).to.have.a.property('type', REQUEST_API_DATA);
-    expect(requestApiState).to.have.a.property('id', id);
-    expect(requestApiState).to.have.a.property('api', api);
+  context('requestApiData function', () => {
+    it('should return the state for REQUEST_API_DATA', () => {
+      const id = 'testId',
+        api = { test: 'value' },
+        requestApiState = requestApiData(id, api);
+
+      expect(requestApiState).to.be.an.object;
+      expect(requestApiState).to.have.a.property('type', REQUEST_API_DATA);
+      expect(requestApiState).to.have.a.property('id', id);
+      expect(requestApiState).to.have.a.property('api', api);
+    });
+
+    it('should return the state for REQUEST_DETAILS_API_DATA', () => {
+      const id = 'testId',
+        api = { test: 'value' },
+        requestApiState = requestApiData(id, api, true);
+
+      expect(requestApiState).to.be.an.object;
+      expect(requestApiState).to.have.a.property('type', REQUEST_DETAILS_API_DATA);
+      expect(requestApiState).to.have.a.property('id', id);
+      expect(requestApiState).to.have.a.property('api', api);
+    });
   });
 
-  it('should return the state for RECEIVE_API_DATA', () => {
-    const id = 'testId',
-      data = {test: 'value'},
-      responseApiState = receiveApiData(id, data);
+  context('receiveApiData function', () => {
+    it('should return the state for RECEIVE_API_DATA', () => {
+      const id = 'testId',
+        data = { test: 'value' },
+        responseApiState = receiveApiData(id, data);
 
-    expect(responseApiState).to.be.an.object;
-    expect(responseApiState).to.have.a.property('type', RECEIVE_API_DATA);
-    expect(responseApiState).to.have.a.property('id', id);
-    expect(responseApiState).to.have.a.property('data', data);
+      expect(responseApiState).to.be.an.object;
+      expect(responseApiState).to.have.a.property('type', RECEIVE_API_DATA);
+      expect(responseApiState).to.have.a.property('id', id);
+      expect(responseApiState).to.have.a.property('data', data);
+    });
+
+    it('should return the state for RECEIVE_DETAILS_API_DATA', () => {
+      const id = 'testId',
+        data = { test: 'value' },
+        responseApiState = receiveApiData(id, data, true);
+
+      expect(responseApiState).to.be.an.object;
+      expect(responseApiState).to.have.a.property('type', RECEIVE_DETAILS_API_DATA);
+      expect(responseApiState).to.have.a.property('id', id);
+      expect(responseApiState).to.have.a.property('data', data);
+    });
   });
 
-  it('should return the state for ERROR_API_DATA', () => {
-    const id = 'testId',
-      errorData = {test: 'value'},
-      api = {test2: 'value2'},
-      errorApiState = errorApiData(id, errorData, api);
+  context('errorApiData function', () => {
+    it('should return the state for ERROR_API_DATA', () => {
+      const id = 'testId',
+        errorData = { test: 'value' },
+        api = { test2: 'value2' },
+        errorApiState = errorApiData(id, errorData, api);
 
-    expect(errorApiState).to.be.an.object;
-    expect(errorApiState).to.have.a.property('type', ERROR_API_DATA);
-    expect(errorApiState).to.have.a.property('id', id);
-    expect(errorApiState).to.have.a.property('errorData', errorData);
+      expect(errorApiState).to.be.an.object;
+      expect(errorApiState).to.have.a.property('type', ERROR_API_DATA);
+      expect(errorApiState).to.have.a.property('id', id);
+      expect(errorApiState).to.have.a.property('errorData', errorData);
+    });
+
+    it('should return the state for ERROR_DETAILS_API_DATA', () => {
+      const id = 'testId',
+        errorData = { test: 'value' },
+        api = { test2: 'value2' },
+        errorApiState = errorApiData(id, errorData, api, true);
+
+      expect(errorApiState).to.be.an.object;
+      expect(errorApiState).to.have.a.property('type', ERROR_DETAILS_API_DATA);
+      expect(errorApiState).to.have.a.property('id', id);
+      expect(errorApiState).to.have.a.property('errorData', errorData);
+    });
   });
+
+
 
   it('should return the state for TIME_INTERVAL_UPDATE', () => {
     const data = {duration: '1d'},
@@ -383,6 +429,64 @@ describe('ParentCard Actions', () => {
 
           expect(actions).to.have.length(2);
 
+          expect(requestAction).to.have.a.property('type', 'REQUEST_API_DATA');
+          expect(requestAction).to.have.a.property('id', id);
+          expect(requestAction).to.have.a.property('api');
+
+          expect(errorAction).to.have.a.property('type', 'ERROR_API_DATA');
+          expect(errorAction).to.have.a.property('id', id);
+          expect(errorAction).to.have.a.property('errorData');
+          expect(errorAction).to.have.a.property('api');
+        });
+
+      server.respond();
+      return dispatchCall;
+    });
+
+    it('should call multiple apis, and dispatch RECEIVE_API_DATA and REQUEST_API_DATA if all apis are successful', () => {
+      input.api = [
+        api,
+        Object.assign({}, api, {pathParams: { reportId: 'test1' }}),
+        Object.assign({}, api, {pathParams: { reportId: 'test2' }})
+      ];
+
+      server.respondWith('GET', `${baseUrl}/api/test`, [200, { 'Content-Type': 'application/json' }, jsonRes]);
+      server.respondWith('GET', `${baseUrl}/api/test1`, [200, { 'Content-Type': 'application/json' }, jsonRes]);
+      server.respondWith('GET', `${baseUrl}/api/test2`, [200, { 'Content-Type': 'application/json' }, jsonRes]);
+
+      const dispatchCall = store.dispatch(fetchApiData(input))
+        .then(res => {
+          const actions = store.getActions(),
+            requestAction = actions[0],
+            responseAction = actions[1];
+
+          expect(actions).to.have.length(2);
+
+          expect(requestAction).to.have.a.property('type', 'REQUEST_API_DATA');
+          expect(requestAction).to.have.a.property('id', id);
+          expect(requestAction).to.have.a.property('api');
+
+          expect(responseAction).to.have.a.property('type', 'RECEIVE_API_DATA');
+          expect(responseAction).to.have.a.property('id', id);
+          expect(responseAction).to.have.a.property('data');
+        });
+
+      server.respond();
+      return dispatchCall;
+    });
+
+    it('should dispatch ERROR_API_DATA and REQUEST_API_DATA, if any of the multiple apis are not successful', () => {
+      server.respondWith('GET', `${baseUrl}/api/test`, [400, { 'Content-Type': 'application/json' }, jsonRes]);
+      server.respondWith('GET', `${baseUrl}/api/test1`, [200, { 'Content-Type': 'application/json' }, jsonRes]);
+      server.respondWith('GET', `${baseUrl}/api/test2`, [200, { 'Content-Type': 'application/json' }, jsonRes]);
+
+      const dispatchCall = store.dispatch(fetchApiData(input))
+        .then(res => {
+          const actions = store.getActions(),
+            requestAction = actions[0],
+            errorAction = actions[1];
+
+          expect(actions).to.have.length(2);
           expect(requestAction).to.have.a.property('type', 'REQUEST_API_DATA');
           expect(requestAction).to.have.a.property('id', id);
           expect(requestAction).to.have.a.property('api');
