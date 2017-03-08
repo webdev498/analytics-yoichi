@@ -480,3 +480,21 @@ export function displayEllipsis(str, range) {
   }
   return str;
 }
+
+// Function to get index/value from column name/index specified in layout JSON
+export function getColumnIndexOrValue(jsonColumns, apiColumns, data) {
+  let index = '';
+  jsonColumns.forEach((jsonColumn) => {
+    if (jsonColumn.type === 'columnName') {
+      apiColumns.forEach((apiColumn, colIndex) => {
+        if (jsonColumn.name === apiColumn.name) {
+          index = colIndex;
+        }
+      });
+    }
+    else if (jsonColumn.type === 'columnIndex') {
+      index = getIndexFromObjectName({fieldName: jsonColumn.name, dataArray: data});
+    }
+  });
+  return index;
+}

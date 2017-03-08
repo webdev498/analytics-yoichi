@@ -7,10 +7,13 @@ import layoutRoutes from './layouts';
 
 import timeline from '../components/Timeline';
 import anomalyChart from '../components/anomalyChart';
-import HeatMap from '../components/HeatMap.dal.js';
+import heatMap from '../components/HeatMap.dal.js';
 import table from '../components/Table.dal';
 import userAgent from '../components/UserAgent.dal.js';
-import PieChart from '../components/PieChart.dal.js';
+import pieChart from '../components/PieChart.dal.js';
+
+import {getUrl} from '../utils/utils';
+// import {api} from './apiPaths';
 
 const router = new KoaRouter({
   prefix: '/api'
@@ -27,12 +30,8 @@ const agent = new https.Agent(agentOptions),
 router
 .get('/layout/*', layoutRoutes)
 .get('*', async function(ctx, next) {
-  let url = serverBaseUrl + ctx.url;
+  let url = await getUrl(ctx);
   console.log('proxy url1', url);
-  if (url.includes('dash_top_connections')) {
-    url = url.replace('dash_top_connections', 'taf_total_usage,taf_top_talkers_connections,taf_asset_count_time_shifted');
-    console.log('test1', url);
-  }
   const res = await fetch(url,
     {
       method: 'GET',
@@ -60,7 +59,7 @@ router
 .get(reportingApiBasePath + 'taf_events_with_country', timeline)
 .get(reportingApiBasePath + 'taf_events_between_source_and_dest', timeline)
 .get('/anomaly/:alertId/timeline', timeline)
-.get('/session/activity/live/:type/:assetId', HeatMap)
+.get('/session/activity/live/:type/:assetId', heatMap)
 .get(reportingApiBasePath + 'taf_alert_highpriority', table)
 .get(reportingApiBasePath + 'taf_top_longest_connections', table)
 .get(reportingApiBasePath + 'taf_top_longest_user_agents', table)
@@ -89,13 +88,10 @@ router
 .get(reportingApiBasePath + 'taf_ct_iam_top_failed_login', table)
 .get(reportingApiBasePath + 'taf_ct_iam_top_failed_login_region', table)
 .get(reportingApiBasePath + 'taf_user_agent_unique_with_name', userAgent)
-.get(reportingApiBasePath + 'taf_total_usage,taf_top_talkers_connections,taf_asset_count_time_shifted', PieChart)
+.get(reportingApiBasePath + 'dash_top_connections', pieChart)
 .post('*', async function(ctx, next) {
   let url = serverBaseUrl + ctx.url;
-  console.log('proxy url2', url);
-  if (url.includes('dash_top_connections')) {
-    url = url.replace('dash_top_connections', 'dash_top_connections2');
-  }
+  console.log('proxy url', url);
   const res = fetch(url,
     {
       method: 'POST',
