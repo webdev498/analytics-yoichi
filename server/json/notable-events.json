@@ -252,6 +252,17 @@
           "id": "loginFailureByType",
           "chartHeight": "350"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.login.subStatus": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "login-failure-by-type",
         "type": "charts/ParetoChart"
       },
