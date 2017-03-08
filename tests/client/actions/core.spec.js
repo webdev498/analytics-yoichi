@@ -13,10 +13,12 @@ import {
   receivePageData,
   errorPageData,
   getUrl,
-  fetchLayoutData
+  fetchLayoutData,
+  fetchSearchData
 } from 'actions/core';
 
 import {baseUrl} from 'config';
+import { getSearchUrl } from 'utils/utils';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
@@ -167,20 +169,20 @@ describe('corelayout Redux Actions', () => {
   });
 
   context('fetchSearchData function', function() {
-    // it('should call search url', () => {
-    //   const server = fakeServer.create(),
-    //     auth = { cookies: { access_token: '', token_type: '' } },
-    //     json = {},
-    //     jsonRes = JSON.stringify(json),
-    //     query = 'hello';
+    it('should call search url', () => {
+      const server = fakeServer.create(),
+        auth = { cookies: { access_token: '', token_type: '' } },
+        json = {},
+        jsonRes = JSON.stringify(json),
+        query = 'hello';
 
-    //   server.respondWith('GET', getSearchUrl(query), function(req) {
-    //     return [ 200, { 'Content-Type': 'application/json' }, jsonRes ];
-    //   });
+      server.respondWith('GET', getSearchUrl(query), function(req) {
+        return [ 200, { 'Content-Type': 'application/json' }, jsonRes ];
+      });
 
-    //   const apiObj = fetchSearchData(auth, query);
-    //   server.respond();
-    //   return apiObj;
-    // });
+      const apiObj = fetchSearchData(auth, query);
+      server.respond();
+      return apiObj;
+    });
   });
 });
