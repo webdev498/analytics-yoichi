@@ -80,12 +80,12 @@
         },
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#03C5ED"
           },
           "style": {
             "marginRight": "3px",
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #03C5ED"
           }
         },
         "details": {
@@ -140,11 +140,11 @@
         },
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#03C5ED"
           },
           "style": {
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #03C5ED"
           }
         },
         "details": {
@@ -244,8 +244,6 @@
         "chartOptions": {
           "showValues": "1",
           "showLabels": "1",
-          "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
         "chartData": {
@@ -285,6 +283,17 @@
           },
           "id": "freqreq"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.aws.userArn": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "freq-req",
         "type": "charts/HorizontalBarChart"
       }
@@ -292,10 +301,6 @@
     [
      {
         "chartOptions": {
-          "xAxisname": "SERVICE",
-          "yAxisname": "# EVENTS",
-          "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
         "chartData": {

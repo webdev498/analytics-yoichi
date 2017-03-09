@@ -80,12 +80,12 @@
         },
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#03C5ED"
           },
           "style": {
             "marginRight": "3px",
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #03C5ED"
           }
         },
         "details": {
@@ -140,11 +140,11 @@
         },
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#03C5ED"
           },
           "style": {
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #03C5ED"
           }
         },
         "details": {
@@ -316,8 +316,6 @@
         "chartOptions": {
           "xAxisname": "REGION",
           "yAxisname": "EVENTS",
-          "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
         "chartData": {
@@ -382,8 +380,6 @@
         "chartOptions": {
           "xAxisname": "USER AGENT",
           "yAxisname": "EVENTS",
-          "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
         "chartData": {
