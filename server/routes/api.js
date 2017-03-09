@@ -90,6 +90,10 @@ router
 .get(reportingApiBasePath + 'taf_user_agent_unique_with_name', userAgent)
 .get(reportingApiBasePath + 'dash_top_connections', pieChart)
 .get(reportingApiBasePath + 'dash_top_bandwidth', pieChart)
+.get(reportingApiBasePath + 'dash_most_active_cloudtrail_users', pieChart)
+.get(reportingApiBasePath + 'dash_most_active_users', pieChart)
+.get(reportingApiBasePath + 'dash_most_active_user_agents', pieChart)
+.get(reportingApiBasePath + 'dash_most_active_processes', pieChart)
 .post('*', async function(ctx, next) {
   let url = serverBaseUrl + ctx.url;
   console.log('proxy url', url);

@@ -269,40 +269,12 @@
     ],
     [
       {
-        "chartOptions": {},
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_sysmon_total_network_conn_count",
-              "columns": [
-                "count"
-              ]
-            },
-            {
-              "reportId": "taf_sysmon_unique_process_count",
-              "columns": [
-                "count"
-              ]
-            },
-            {
-              "reportId": "taf_processes_with_most_network_conn",
-              "columns": [
-                "count"
-              ]
-            }
-          ]
-        },
         "meta": {
           "showHeader": true,
-          "legend": [
-            "Network Connections",
-            "Made by",
-            "Processes"
-          ],
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_sysmon_unique_process_count,taf_processes_with_most_network_conn,taf_sysmon_total_network_conn_count"
+              "reportId": "dash_most_active_processes"
             },
             "queryParams": {
               "timeShift": "",

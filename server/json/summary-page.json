@@ -466,40 +466,12 @@
     ],
     [
       {
-        "chartOptions": {},
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_asset_count_time_shifted",
-              "columns": [
-                "0.0"
-              ]
-            },
-            {
-              "reportId": "taf_total_usage",
-              "columns": [
-                "date"
-              ]
-            },
-            {
-              "reportId": "taf_top_talkers_connections",
-              "columns": [
-                "connections"
-              ]
-            }
-          ]
-        },
         "meta": {
           "showHeader": true,
-          "legend": [
-            "Connections",
-            "Used by",
-            "Assets"
-          ],
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+              "reportId": "dash_top_connections"
             },
             "queryParams": {
               "timeShift": "",
@@ -609,40 +581,12 @@
     ],
     [
       {
-        "chartOptions": {},
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_asset_count_time_shifted",
-              "columns": [
-                "0.0"
-              ]
-            },
-            {
-              "reportId": "taf_total_usage",
-              "columns": [
-                "bandwidth"
-              ]
-            },
-            {
-              "reportId": "taf_top_talkers_bandwidth",
-              "columns": [
-                "bandwidth"
-              ]
-            }
-          ]
-        },
         "meta": {
           "showHeader": true,
-          "legend": [
-            "Bandwidth ",
-            "Used by",
-            "Assets"
-          ],
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+              "reportId": "dash_top_bandwidth"
             },
             "queryParams": {
               "timeShift": "",

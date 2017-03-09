@@ -378,40 +378,12 @@
     ],
     [
       {
-        "chartOptions": {},
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_s3_total",
-              "columns": [
-                "date"
-              ]
-            },
-            {
-              "reportId": "taf_s3_requester",
-              "columns": [
-                "data.aws.userArn"
-              ]
-            },
-            {
-              "reportId": "taf_s3_most_active_requester",
-              "columns": [
-                "date"
-              ]
-            }
-          ]
-        },
         "meta": {
           "showHeader": true,
-          "legend": [
-            "Events",
-            "Caused by",
-            "Users"
-          ],
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_s3_requester,taf_s3_most_active_requester,taf_s3_total"
+              "reportId": "dash_most_active_users"
             },
             "queryParams": {
               "timeShift": "",
@@ -492,40 +464,12 @@
     ],
     [
       {
-        "chartOptions": {},
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_s3_total",
-              "columns": [
-                "date"
-              ]
-            },
-            {
-              "reportId": "taf_s3_ua",
-              "columns": [
-                "data.aws.userAgent"
-              ]
-            },
-            {
-              "reportId": "taf_s3_most_frequent_useragent",
-              "columns": [
-                "date"
-              ]
-            }
-          ]
-        },
         "meta": {
           "showHeader": true,
-          "legend": [
-            "Events",
-            "Caused by",
-            "User Agents"
-          ],
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_s3_total,taf_s3_ua,taf_s3_most_frequent_useragent"
+              "reportId": "dash_most_active_user_agents"
             },
             "queryParams": {
               "timeShift": "",
