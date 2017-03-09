@@ -224,7 +224,7 @@ export function fetchNextSetOfData(apiObj, prevData) {
 
     dispatch(requestApiData(id, api, isDetails));
 
-    callApi(api, currentDuration, params, options, dispatch)
+    return callApi(api, currentDuration, params, options, dispatch)
     .then(json => {
       json.options = options;
       dispatch(updateDetailsApiData(id, {json, api, prevData}));
