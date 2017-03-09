@@ -76,7 +76,7 @@ pieChartApi.forEach((api) => {
 
 router
 .post('*', async function(ctx, next) {
-  let url = serverBaseUrl + ctx.url;
+  const url = serverBaseUrl + ctx.url;
   console.log('proxy url', url);
   const res = fetch(url,
     {
