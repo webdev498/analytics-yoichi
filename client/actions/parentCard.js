@@ -151,7 +151,6 @@ export function callApi(api, duration, params, options, dispatch) {
     body = options && JSON.stringify(options.body);
 
   const url = getUrl(api, duration, params);
-  if (!url) return;
 
   return fetch(url, {
     method: api.method || 'GET',

@@ -21,6 +21,7 @@ import {
   requestApiData,
   receiveApiData,
   errorApiData,
+  updateDetailsApiData,
   changeTimeRange,
   componentEvent,
   removeComponentWithId,
@@ -46,10 +47,14 @@ function getApiObj(path, query, pathParams) {
   };
 }
 
-describe('ParentCard Actions', () => {
+function getOffset() {
+  const temp = new Date();
+  return temp.getTimezoneOffset();
+}
 
+describe('ParentCard Actions', () => {
   context('requestApiData function', () => {
-    it('should return the state for REQUEST_API_DATA', () => {
+    it('should return the action for REQUEST_API_DATA', () => {
       const id = 'testId',
         api = { test: 'value' },
         requestApiState = requestApiData(id, api);
@@ -60,7 +65,7 @@ describe('ParentCard Actions', () => {
       expect(requestApiState).to.have.a.property('api', api);
     });
 
-    it('should return the state for REQUEST_DETAILS_API_DATA', () => {
+    it('should return the action for REQUEST_DETAILS_API_DATA', () => {
       const id = 'testId',
         api = { test: 'value' },
         requestApiState = requestApiData(id, api, true);
@@ -73,7 +78,7 @@ describe('ParentCard Actions', () => {
   });
 
   context('receiveApiData function', () => {
-    it('should return the state for RECEIVE_API_DATA', () => {
+    it('should return the action for RECEIVE_API_DATA', () => {
       const id = 'testId',
         data = { test: 'value' },
         responseApiState = receiveApiData(id, data);
@@ -84,7 +89,7 @@ describe('ParentCard Actions', () => {
       expect(responseApiState).to.have.a.property('data', data);
     });
 
-    it('should return the state for RECEIVE_DETAILS_API_DATA', () => {
+    it('should return the action for RECEIVE_DETAILS_API_DATA', () => {
       const id = 'testId',
         data = { test: 'value' },
         responseApiState = receiveApiData(id, data, true);
@@ -97,7 +102,7 @@ describe('ParentCard Actions', () => {
   });
 
   context('errorApiData function', () => {
-    it('should return the state for ERROR_API_DATA', () => {
+    it('should return the action for ERROR_API_DATA', () => {
       const id = 'testId',
         errorData = { test: 'value' },
         api = { test2: 'value2' },
@@ -109,7 +114,7 @@ describe('ParentCard Actions', () => {
       expect(errorApiState).to.have.a.property('errorData', errorData);
     });
 
-    it('should return the state for ERROR_DETAILS_API_DATA', () => {
+    it('should return the action for ERROR_DETAILS_API_DATA', () => {
       const id = 'testId',
         errorData = { test: 'value' },
         api = { test2: 'value2' },
@@ -122,9 +127,32 @@ describe('ParentCard Actions', () => {
     });
   });
 
+  context('updateDetailsApiData function', () => {
+    it('should return the action for UPDATE_DETAILS_API_DATA', () => {
+      const id = 'testId',
+        data = { test: 'value' },
+        responseApiState = updateDetailsApiData(id, data);
 
+      expect(responseApiState).to.be.an.object;
+      expect(responseApiState).to.have.a.property('type', UPDATE_DETAILS_API_DATA);
+      expect(responseApiState).to.have.a.property('id', id);
+      expect(responseApiState).to.have.a.property('data', data);
+    });
+  });
 
-  it('should return the state for TIME_INTERVAL_UPDATE', () => {
+  it('should return the action for ERROR_DETAILS_API_DATA', () => {
+    const id = 'testId',
+      errorData = { test: 'value' },
+      api = { test2: 'value2' },
+      errorApiState = errorApiData(id, errorData, api, true);
+
+    expect(errorApiState).to.be.an.object;
+    expect(errorApiState).to.have.a.property('type', ERROR_DETAILS_API_DATA);
+    expect(errorApiState).to.have.a.property('id', id);
+    expect(errorApiState).to.have.a.property('errorData', errorData);
+  });
+
+  it('should return the action for TIME_INTERVAL_UPDATE', () => {
     const data = {duration: '1d'},
       changeTimeState = changeTimeRange(data);
 
@@ -133,7 +161,7 @@ describe('ParentCard Actions', () => {
     expect(changeTimeState).to.have.a.property('data', data);
   });
 
-  it('should return the state for PARENT_CARD_EVENT', () => {
+  it('should return the action for PARENT_CARD_EVENT', () => {
     const id = 'testId',
       data = {test: 'value'},
       parentCardEventState = componentEvent(id, data);
@@ -144,7 +172,7 @@ describe('ParentCard Actions', () => {
     expect(parentCardEventState).to.have.a.property('eventData', data);
   });
 
-  it('should return the state for REMOVE_COMPONENT', () => {
+  it('should return the action for REMOVE_COMPONENT', () => {
     const id = 'testId',
       data = {test: 'value'},
       [removeComponentState] = removeComponentWithId(id, data);
@@ -240,6 +268,44 @@ describe('ParentCard Actions', () => {
         api = getApiObj('/api/alert', query),
         url = getUrl(api, '1d', routerParams),
         str = `${baseUrl}/api/alert?date=${routerParams.date}&window=1d&${routerParams.type}=${routerParams.assetId}`;
+
+      expect(url).to.equal(str);
+    });
+
+    it('should return url with customParams substited with corresponding values', () => {
+      const api = {
+          path: '/api/session/activity/live',
+          pathParams: {
+            assetId: ':pathParam',
+            type: ':pathParam'
+          },
+          queryParams: {
+            window: '',
+            offset: ':customParam'
+          }
+        },
+        routerParams = { type: 'test', assetId: 'testId' },
+        url = getUrl(api, '1d', routerParams),
+        str = `${baseUrl}/api/session/activity/live?window=1d&offset=${getOffset()}`;
+
+      expect(url).to.equal(str);
+    });
+
+    it('should return url with empty string for customParams if it is not defined', () => {
+      const api = {
+          path: '/api/session/activity/live',
+          pathParams: {
+            assetId: ':pathParam',
+            type: ':pathParam'
+          },
+          queryParams: {
+            window: '',
+            test: ':customParam'
+          }
+        },
+        routerParams = { type: 'test', assetId: 'testId' },
+        url = getUrl(api, '1d', routerParams),
+        str = `${baseUrl}/api/session/activity/live?window=1d&test=`;
 
       expect(url).to.equal(str);
     });
