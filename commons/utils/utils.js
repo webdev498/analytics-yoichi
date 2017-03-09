@@ -485,14 +485,15 @@ export function displayEllipsis(str, range) {
 export function getColumnIndexOrValue(jsonColumns, apiColumns, data) {
   let index = '';
   jsonColumns.forEach((jsonColumn) => {
-    if (jsonColumn.type === 'columnName') {
+    if (jsonColumn.type === 'name') {
       apiColumns.forEach((apiColumn, colIndex) => {
         if (jsonColumn.name === apiColumn.name) {
           index = colIndex;
+          console.log(index, jsonColumn.name);
         }
       });
     }
-    else if (jsonColumn.type === 'columnIndex') {
+    else if (jsonColumn.type === 'index') {
       index = getIndexFromObjectName({fieldName: jsonColumn.name, dataArray: data});
     }
   });

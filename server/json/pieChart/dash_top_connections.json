@@ -13,7 +13,7 @@
           "columns": [
             {
               "name": "0.0",
-              "type": "columnIndex"
+              "type": "index"
             }
           ],
           "returnValueIs": "countValue"
@@ -23,7 +23,7 @@
           "columns": [
             {
               "name": "date",
-              "type": "columnName"
+              "type": "name"
             }
           ],
           "returnValueIs": "totalValue"
@@ -33,7 +33,7 @@
           "columns": [
             {
               "name": "connections",
-              "type": "columnName"
+              "type": "name"
             }
           ],
           "returnValueIs": "topValue"

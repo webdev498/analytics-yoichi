@@ -53,6 +53,7 @@ let highlightedColor1 = Colors.bar,
   calculateTransform2 = 0;
 
 export function generatePieChart(inputArray) {
+  console.log(inputArray);
   pieChartAttributes = {}; // This initialization is required
   const doughnutInputArray1 = {
       countValue: inputArray.countValue,
@@ -146,95 +147,102 @@ function renderChart(props) {
   if (!props.data) {
     return;
   }
-
-  if (props.data && props.chartData &&
-    props.chartData.fieldMapping &&
-    props.chartData.fieldMapping[0] &&
-    props.chartData.fieldMapping[0].reportId &&
-    props.data[props.chartData.fieldMapping[0].reportId].rows &&
-    props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
-    styles.noData = {
-      display: 'none'
-    };
+  console.log('props', props);
+  if (!props.data.pieProps) {
     return;
   }
 
-  styles.noData = {};
 
-  const data = props.data,
-    fieldMapping = props.chart.data.fieldMapping,
-    chartOptions = props.chart.options;
+  pieChartAttributes = props.data.pieProps;
 
-  let rawData = {};
+  // if (props.data && props.chartData &&
+  //   props.chartData.fieldMapping &&
+  //   props.chartData.fieldMapping[0] &&
+  //   props.chartData.fieldMapping[0].reportId &&
+  //   props.data[props.chartData.fieldMapping[0].reportId].rows &&
+  //   props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
+  //   styles.noData = {
+  //     display: 'none'
+  //   };
+  //   return;
+  // }
 
-  highlightedColor1 = checkForUndefinedChartOptionObject(chartOptions, 'highlightedColor1', highlightedColor1);
-  highlightedColor2 = checkForUndefinedChartOptionObject(chartOptions, 'highlightedColor2', highlightedColor2);
-  nonHighlightedColor = checkForUndefinedChartOptionObject(chartOptions, 'nonHighlightedColor', nonHighlightedColor);
+  // styles.noData = {};
 
-  rawData = generateRawData(fieldMapping, data);
+  // const data = props.data,
+  //   fieldMapping = props.chart.data.fieldMapping,
+  //   chartOptions = props.chart.options;
 
-  for (let i = 0; i < fieldMapping.length; i++) {
-    let currentChartData = fieldMapping[i],
-      {rows, columns} = rawData[currentChartData.reportId],
-      columnIndex = '';
-    top10CountValue = 0;
-    top10TotalValue = 0;
+  // let rawData = {};
 
-    for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
-      if (currentChartData.reportId === 'taf_asset_count_time_shifted') {
-        let fieldValue = '',
-          fieldName = currentChartData.columns[0],
-          fieldValueArray = [],
-          inputArray = {
-            fieldName: fieldName,
-            fieldValueArray: fieldValueArray,
-            fieldValue: fieldValue,
-            dataArray: rows[d]
-          };
+  // highlightedColor1 = checkForUndefinedChartOptionObject(chartOptions, 'highlightedColor1', highlightedColor1);
+  // highlightedColor2 = checkForUndefinedChartOptionObject(chartOptions, 'highlightedColor2', highlightedColor2);
+  // nonHighlightedColor = checkForUndefinedChartOptionObject(chartOptions, 'nonHighlightedColor', nonHighlightedColor);
 
-        countValue = getIndexFromObjectName(inputArray);
-      }
+  // rawData = generateRawData(fieldMapping, data);
 
-      if (currentChartData.reportId === 'taf_s3_requester' || currentChartData.reportId === 'taf_s3_ua' ||
-        currentChartData.reportId === 'taf_sysmon_unique_process_count' ||
-        currentChartData.reportId === 'taf_ct_events_by_user') {
-        columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
-        countValue = rows[d][columnIndex];
-      }
+  // for (let i = 0; i < fieldMapping.length; i++) {
+  //   let currentChartData = fieldMapping[i],
+  //     {rows, columns} = rawData[currentChartData.reportId],
+  //     columnIndex = '';
+  //   top10CountValue = 0;
+  //   top10TotalValue = 0;
 
-      if (currentChartData.reportId === 'taf_total_usage' || currentChartData.reportId === 'taf_s3_total' ||
-        currentChartData.reportId === 'taf_sysmon_total_network_conn_count' ||
-        currentChartData.reportId === 'taf_ct_total') {
-        columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
-        totalValue = rows[d][columnIndex];
-      }
+  //   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
+  //     if (currentChartData.reportId === 'taf_asset_count_time_shifted') {
+  //       let fieldValue = '',
+  //         fieldName = currentChartData.columns[0],
+  //         fieldValueArray = [],
+  //         inputArray = {
+  //           fieldName: fieldName,
+  //           fieldValueArray: fieldValueArray,
+  //           fieldValue: fieldValue,
+  //           dataArray: rows[d]
+  //         };
 
-      if (currentChartData.reportId === 'taf_top_talkers_connections' ||
-       currentChartData.reportId === 'taf_top_talkers_bandwidth' ||
-       currentChartData.reportId === 'taf_s3_most_frequent_useragent' ||
-       currentChartData.reportId === 'taf_s3_most_active_requester' ||
-       currentChartData.reportId === 'taf_processes_with_most_network_conn' ||
-       currentChartData.reportId === 'taf_ct_most_active_user') {
-        let fieldValue = '';
-        columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
-        fieldValue = rows[d][columnIndex];
-        let value = Math.round(((fieldValue * 100) / totalValue), 2);
-        if (value > 0) {
-          top10CountValue = top10CountValue + 1;
-          top10TotalValue = top10TotalValue + parseInt(fieldValue);
-        }
-      }
-    }
-  }
+  //       countValue = getIndexFromObjectName(inputArray);
+  //     }
 
-  let inputArray = {
-    countValue: countValue,
-    top10CountValue: top10CountValue,
-    top10TotalValue: top10TotalValue,
-    totalValue: totalValue.toPrecision()
-  };
+  //     if (currentChartData.reportId === 'taf_s3_requester' || currentChartData.reportId === 'taf_s3_ua' ||
+  //       currentChartData.reportId === 'taf_sysmon_unique_process_count' ||
+  //       currentChartData.reportId === 'taf_ct_events_by_user') {
+  //       columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
+  //       countValue = rows[d][columnIndex];
+  //     }
 
-  pieChartAttributes = generatePieChart(inputArray);
+  //     if (currentChartData.reportId === 'taf_total_usage' || currentChartData.reportId === 'taf_s3_total' ||
+  //       currentChartData.reportId === 'taf_sysmon_total_network_conn_count' ||
+  //       currentChartData.reportId === 'taf_ct_total') {
+  //       columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
+  //       totalValue = rows[d][columnIndex];
+  //     }
+
+  //     if (currentChartData.reportId === 'taf_top_talkers_connections' ||
+  //      currentChartData.reportId === 'taf_top_talkers_bandwidth' ||
+  //      currentChartData.reportId === 'taf_s3_most_frequent_useragent' ||
+  //      currentChartData.reportId === 'taf_s3_most_active_requester' ||
+  //      currentChartData.reportId === 'taf_processes_with_most_network_conn' ||
+  //      currentChartData.reportId === 'taf_ct_most_active_user') {
+  //       let fieldValue = '';
+  //       columnIndex = getIndexFromColumnName(currentChartData.columns, columns);
+  //       fieldValue = rows[d][columnIndex];
+  //       let value = Math.round(((fieldValue * 100) / totalValue), 2);
+  //       if (value > 0) {
+  //         top10CountValue = top10CountValue + 1;
+  //         top10TotalValue = top10TotalValue + parseInt(fieldValue);
+  //       }
+  //     }
+  //   }
+  // }
+
+  // let inputArray = {
+  //   countValue: countValue,
+  //   top10CountValue: top10CountValue,
+  //   top10TotalValue: top10TotalValue,
+  //   totalValue: totalValue.toPrecision()
+  // };
+
+  // pieChartAttributes = generatePieChart(inputArray);
 }
 
 class PieChart extends React.Component {
@@ -247,6 +255,16 @@ class PieChart extends React.Component {
     const {props} = this;
 
     renderChart(props);
+    // if (!props.data) {
+    //   return (<div />);
+    // }
+    // if (!props.pieProps) {
+    //   return (<div />);
+    // }
+
+    // pieChartAttributes = props.pieProps;
+
+    console.log('pieChartAttributes', pieChartAttributes);
     return (
       <div style={{...styles.noData}}>
         <div style={styles.pieWrap}>
