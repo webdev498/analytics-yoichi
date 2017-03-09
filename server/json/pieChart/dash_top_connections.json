@@ -40,10 +40,12 @@
         }
       ]
     },
-    "legendText": [
-      "Connections",
-      "Used by",
-      "Assets"
-    ]
+    "legends": {
+      "title": [
+        "Connections",
+        "Assets"
+      ],
+      "label": "Used by"
+    }
   }
 }

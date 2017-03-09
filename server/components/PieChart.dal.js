@@ -7,11 +7,7 @@ import {Colors} from '../../commons/colors';
 const fs = require('fs'),
   path = require('path');
 
-function processData() {
-
-}
-
-function getData(rawData, url) {
+function getPieJson(url) { // This url is a proxy server url.
   let reportId = url.split('?');
   reportId = reportId[0];
   reportId = reportId.split('/');
@@ -19,74 +15,64 @@ function getData(rawData, url) {
 
   const fileName = `../json/pieChart/${reportId}.json`,
     filePath = path.join(__dirname, fileName),
-    json = JSON.parse(fs.readFileSync(filePath, 'utf8')),
+    json = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+  return json;
+}
+
+function processData(rawData, url) {
+  const json = getPieJson(url),
     fieldMapping = json.chart.data.fieldMapping,
     options = json.chart.options,
     data = generateRawData(fieldMapping, rawData);
 
-  let highlightedColor1 = Colors.bar,
-    highlightedColor2 = Colors.coral,
-    nonHighlightedColor = Colors.cloud,
-    pieChartAttributes = {},
-    countValue = 0,
-    totalValue = 0,
-    topTotalValue = 0,
-    topCountValue = 0;
-    // background = '',
-    // background2 = '',
-    // color = '',
-    // color2 = '',
-    // transform1 = '',
-    // transform2 = '',
-    // calculateTransform1 = 0,
-    // calculateTransform2 = 0;
-
-  // highlightedColor1 = checkForUndefinedChartOptionObject(chartOptions, 'highlightedColor1', highlightedColor1);
-  // highlightedColor2 = checkForUndefinedChartOptionObject(chartOptions, 'highlightedColor2', highlightedColor2);
-  // nonHighlightedColor = checkForUndefinedChartOptionObject(chartOptions, 'nonHighlightedColor', nonHighlightedColor);
-
-  for (let i = 0; i < fieldMapping.length; i++) {
-    let currentChartData = fieldMapping[i],
-      {rows, columns} = data[currentChartData.reportId];
-    topCountValue = 0;
-    topTotalValue = 0;
-
-    for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
-      let index = getColumnIndexOrValue(currentChartData.columns, columns, rows[d]),
-        value = getValue(currentChartData.columns[0].type, index, rows[d]);
-      if (currentChartData.returnValueIs === 'countValue') {
-        countValue = value;
-      }
-      else if (currentChartData.returnValueIs === 'totalValue') {
-        totalValue = value;
-      }
-      else if (currentChartData.returnValueIs === 'topValue') {
-        let total = Math.round(((value * 100) / totalValue), 2);
-        if (total > 0) {
-          topCountValue++;
-          topTotalValue += parseInt(value);
-        }
-      }
+  let values = {
+    default: {
+      count: 0,
+      total: 0
+    },
+    top: {
+      count: 0,
+      total: 0
     }
-  }
-
-  let inputArray = {
-    countValue: countValue,
-    topCountValue: topCountValue,
-    topTotalValue: topTotalValue,
-    totalValue: totalValue.toPrecision()
   };
 
-  pieChartAttributes = generatePieChart(inputArray);
+  fieldMapping.forEach((api) => {
+    let {rows, columns} = data[api.reportId];
+    values.top = {
+      count: 0,
+      total: 0
+    };
+
+    rows.forEach((row) => {
+      let index = getColumnIndexOrValue(api.columns, columns, row),
+        value = getValue(api.columns[0].type, index, row);
+      if (api.returnValueIs === 'countValue') {
+        values.default.count = value;
+      }
+      else if (api.returnValueIs === 'totalValue') {
+        values.default.total = value;
+      }
+      else if (api.returnValueIs === 'topValue') {
+        let total = Math.round(((value * 100) / values.default.total), 2);
+        if (total > 0) {
+          values.top.count++;
+          values.top.total += parseInt(value);
+        }
+      }
+    });
+  });
+
+  console.log(values);
+
   return {
     pieJson: json,
-    pieProps: pieChartAttributes
+    pieProps: generatePieProps(values, options)
   };
 }
 
 function getValue(columnType, index, data) {
   let value = 0;
-  console.log('columnType', columnType);
   if (columnType === 'name') {
     value = data[index];
   }
@@ -96,99 +82,82 @@ function getValue(columnType, index, data) {
   return value;
 }
 
-export function generatePieChart(inputArray) {
-  console.log(inputArray);
-  let highlightedColor1 = Colors.bar,
-    highlightedColor2 = Colors.coral;
-  let pieChartAttributes = {}; // This initialization is required
-  const doughnutInputArray1 = {
-      countValue: inputArray.countValue,
-      totalValue: inputArray.topCountValue
+export function generatePieProps(values, options) {
+  let pieProps = {};
+  let input = {
+      count: values.default.total,
+      total: values.top.total
     },
-    pieChartAttributes1 = calculatePieChartAttributes(doughnutInputArray1, 1),
-    doughnutInputArray2 = {
-      countValue: inputArray.totalValue,
-      totalValue: inputArray.topTotalValue
-    },
-    pieChartAttributes2 = calculatePieChartAttributes(doughnutInputArray2, 2),
-    percentage1 = Math.round((inputArray.topCountValue / parseInt(inputArray.countValue)) * 100, 2),
-    percentage2 = Math.round((inputArray.topTotalValue / parseInt(inputArray.totalValue)) * 100, 2),
-    displayPercentage1 = isNaN(percentage1) ? '0%' : percentage1.toString() + '%',
-    displayPercentage2 = isNaN(percentage2) ? '0%' : percentage2.toString() + '%',
-    percentage2Color = {fontWeight: 'bold', color: highlightedColor1},
-    percentage1Color = {fontWeight: 'bold', color: highlightedColor2},
-    style = {percentageText: {}};
+    styles = getPieStyles(input, options),
+    assetPercentage = Math.round((values.top.count / parseInt(values.default.count)) * 100, 2),
+    piePercentage = Math.round((values.top.total / parseInt(values.default.total)) * 100, 2),
+    percentageText = {};
 
-  if (percentage2 === 100 || isNaN(percentage2)) {
-    style.percentageText = {
+  if (piePercentage === 100 || isNaN(piePercentage)) {
+    percentageText = {
       paddingLeft: '0px'
     };
   }
 
-  pieChartAttributes = {
-    chart1Background: pieChartAttributes1.chartBackground,
-    chart1SliceOneStyle: pieChartAttributes1.chartSliceOneStyle,
-    chart1SliceTwoStyle: pieChartAttributes1.chartSliceTwoStyle,
-    chart2Background: pieChartAttributes2.chartBackground,
-    chart2SliceOneStyle: pieChartAttributes2.chartSliceOneStyle,
-    chart2SliceTwoStyle: pieChartAttributes2.chartSliceTwoStyle,
-    percentage1Color: percentage1Color,
-    percentage2Color: percentage2Color,
-    displayPercentage1: displayPercentage1,
-    displayPercentage2: displayPercentage2,
-    percentage1: isNaN(percentage1) ? '0' : percentage1.toString(),
-    percentageTextStyle: style.percentageText
+  assetPercentage = isNaN(assetPercentage) ? '0' : assetPercentage.toString();
+  piePercentage = isNaN(piePercentage) ? '0' : piePercentage.toString();
+
+  pieProps = {
+    styles: Object.assign({}, styles, percentageText),
+    assetPercentage,
+    piePercentage
   };
-  return pieChartAttributes;
+  return pieProps;
 }
 
-export function calculatePieChartAttributes(inputArray, chartId) {
-  let {countValue, totalValue} = inputArray,
-    percentage = Math.round((totalValue / parseInt(countValue)) * 100, 2);
-
-  let background = '';
-  let background2 = '';
-  let color = '';
-  let color2 = '';
-  let transform1 = '';
-  let transform2 = '';
-  let calculateTransform1 = 0;
-  let calculateTransform2 = 0;
-  let highlightedColor1 = 'red', // Colors.bar,
-    highlightedColor2 = 'blue', // Colors.coral,
-    nonHighlightedColor = Colors.cloud;
+export function getPieStyles(input, options) {
+  let {count, total} = input,
+    {highlightedColor, nonHighlightedColor} = options,
+    percentage = Math.round((total / parseInt(count)) * 100, 2);
 
   if (percentage === 0) {
-    percentage = Math.round((totalValue / parseInt(countValue)) * 100, 4);
+    percentage = Math.round((total / parseInt(count)) * 100, 4);
   }
-  if (percentage > 100) {
+  else if (percentage > 100) {
     percentage = 100;
   }
-  background = nonHighlightedColor;
-  color = (chartId === 1) ? highlightedColor2 : highlightedColor1;
-  background2 = background;
-  color2 = color;
-  transform1 = 'rotate(90deg)';
-  calculateTransform2 = (percentage / 100 * 360);
-  transform2 = 'rotate(' + calculateTransform2 + 'deg)';
+
+  highlightedColor = highlightedColor || Colors.bar;
+  nonHighlightedColor = nonHighlightedColor || Colors.cloud;
+  let sliceOneBg = highlightedColor,
+    sliceTwoBg = highlightedColor,
+    sliceOneTempBg = nonHighlightedColor,
+    sliceTwoTempBg = nonHighlightedColor,
+    sliceOneTransform = 'rotate(90deg)',
+    sliceOneCalculatedTransform = 0,
+    sliceTwoCalculatedTransform = (percentage / 100 * 360),
+    sliceTwoTransform = 'rotate(' + sliceTwoCalculatedTransform + 'deg)';
 
   if (percentage < 50) {
-    background = color;
-    color = background2;
-    color2 = background2;
-    calculateTransform1 = (percentage / 100 * 360 + 90);
-    transform1 = 'rotate(' + calculateTransform1 + 'deg)';
-    transform2 = 'rotate(0deg)';
+    sliceOneTempBg = sliceOneBg;
+    sliceOneBg = sliceTwoTempBg;
+    sliceTwoBg = sliceTwoTempBg;
+    sliceOneCalculatedTransform = (percentage / 100 * 360 + 90);
+    sliceOneTransform = 'rotate(' + sliceOneCalculatedTransform + 'deg)';
+    sliceTwoTransform = 'rotate(0deg)';
   }
 
-  const chartBackground = {background: background},
-    chartSliceOneStyle = {transform: transform1, WebkitTransform: transform1, background: color},
-    chartSliceTwoStyle = {transform: transform2, WebkitTransform: transform2, background: color2};
+  const background = {background: sliceOneTempBg},
+    sliceOne = {
+      transform: sliceOneTransform,
+      WebkitTransform: sliceOneTransform,
+      background: sliceOneBg
+    },
+    sliceTwo = {
+      transform: sliceTwoTransform,
+      WebkitTransform: sliceTwoTransform,
+      background: sliceTwoBg
+    };
 
   return {
-    chartBackground: chartBackground,
-    chartSliceOneStyle: chartSliceOneStyle,
-    chartSliceTwoStyle: chartSliceTwoStyle
+    background,
+    sliceOne,
+    sliceTwo
   };
 }
 
@@ -208,7 +177,7 @@ export default async function PieChart(ctx, next) {
   }
 
   if (rawData && !rawData.errorCode) {
-    const dataObj = getData(rawData, ctx.request.url);
+    const dataObj = processData(rawData, ctx.request.url);
     ctx.normalizeData = Object.assign({}, rawData, {
       pieProps: dataObj.pieProps,
       pieJson: dataObj.pieJson

@@ -89,6 +89,7 @@ router
 .get(reportingApiBasePath + 'taf_ct_iam_top_failed_login_region', table)
 .get(reportingApiBasePath + 'taf_user_agent_unique_with_name', userAgent)
 .get(reportingApiBasePath + 'dash_top_connections', pieChart)
+.get(reportingApiBasePath + 'dash_top_bandwidth', pieChart)
 .post('*', async function(ctx, next) {
   let url = serverBaseUrl + ctx.url;
   console.log('proxy url', url);
