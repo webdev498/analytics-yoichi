@@ -35,7 +35,7 @@ router
 .get('/layout/*', layoutRoutes)
 .get('*', async function(ctx, next) {
   let url = await getUrl(ctx);
-  console.log('proxy url1', url);
+  console.log('proxy url', url);
   const res = await fetch(url,
     {
       method: 'GET',
