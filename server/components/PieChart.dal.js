@@ -26,44 +26,55 @@ function processData(rawData, url) {
     options = json.chart.options,
     data = generateRawData(fieldMapping, rawData);
 
-  let values = {
-    default: {
-      count: 0,
-      total: 0
-    },
-    top: {
-      count: 0,
-      total: 0
-    }
-  };
+  // let values = {
+  //   default: {
+  //     count: 0,
+  //     total: 0
+  //   },
+  //   top: {
+  //     count: 0,
+  //     total: 0
+  //   }
+  // };
+  let countValue = 0,
+    totalValue = 0,
+    topCountValue = 0,
+    topTotalValue = 0;
 
   fieldMapping.forEach((api) => {
     let {rows, columns} = data[api.reportId];
-    values.top = {
-      count: 0,
-      total: 0
-    };
+    // values.top = Object.assign({}, {
+    //   count: 0,
+    //   total: 0
+    // });
+    topCountValue = 0;
+    topTotalValue = 0;
 
     rows.forEach((row) => {
       let index = getColumnIndexOrValue(api.columns, columns, row),
         value = getValue(api.columns[0].type, index, row);
       if (api.returnValueIs === 'countValue') {
-        values.default.count = value;
+        countValue = value;
       }
       else if (api.returnValueIs === 'totalValue') {
-        values.default.total = value;
+        totalValue = value;
       }
       else if (api.returnValueIs === 'topValue') {
-        let total = Math.round(((value * 100) / values.default.total), 2);
+        let total = Math.round(((value * 100) / totalValue), 2);
         if (total > 0) {
-          values.top.count++;
-          values.top.total += parseInt(value);
+          topCountValue = topCountValue + 1;
+          topTotalValue = topTotalValue + parseInt(value);
         }
       }
     });
   });
 
-  console.log(values);
+  let values = {
+    countValue,
+    totalValue,
+    topCountValue,
+    topTotalValue
+  };
 
   return {
     pieJson: json,
@@ -83,16 +94,20 @@ function getValue(columnType, index, data) {
 }
 
 export function generatePieProps(values, options) {
-  let pieProps = {};
-  let input = {
-      count: values.default.total,
-      total: values.top.total
+  let pieProps = {},
+    {totalValue, topTotalValue} = values,
+    input = {
+      count: totalValue,
+      total: topTotalValue
     },
     styles = getPieStyles(input, options),
-    assetPercentage = Math.round((values.top.count / parseInt(values.default.count)) * 100, 2),
-    piePercentage = Math.round((values.top.total / parseInt(values.default.total)) * 100, 2),
+    assetPercentage = Math.round((values.topCountValue / parseInt(values.countValue)) * 100, 2),
+    piePercentage = Math.round((values.topTotalValue / parseInt(values.totalValue)) * 100, 2),
     percentageText = {};
 
+  if (piePercentage > 100) {
+    piePercentage = 100;
+  }
   if (piePercentage === 100 || isNaN(piePercentage)) {
     percentageText = {
       paddingLeft: '0px'
