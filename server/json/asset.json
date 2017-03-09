@@ -157,10 +157,11 @@
               "window": "",
               "count": 10,
               "from": 0,
-              "user": "rank"
+              "asset": "assetId:pathParam",
+              "type": "type:pathParam"
             },
             "pathParams": {
-              "reportId": "taf_alert_by_asset,taf_asset_internal_resource_accessed_details"
+              "reportId": "taf_alert_by_asset"
             },
             "loadOnce": true
           },

@@ -489,7 +489,6 @@ export function getColumnIndexOrValue(jsonColumns, apiColumns, data) {
       apiColumns.forEach((apiColumn, colIndex) => {
         if (jsonColumn.name === apiColumn.name) {
           index = colIndex;
-          console.log(index, jsonColumn.name);
         }
       });
     }

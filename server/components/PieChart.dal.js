@@ -26,16 +26,6 @@ function processData(rawData, url) {
     options = json.chart.options,
     data = generateRawData(fieldMapping, rawData);
 
-  // let values = {
-  //   default: {
-  //     count: 0,
-  //     total: 0
-  //   },
-  //   top: {
-  //     count: 0,
-  //     total: 0
-  //   }
-  // };
   let countValue = 0,
     totalValue = 0,
     topCountValue = 0,
@@ -43,10 +33,6 @@ function processData(rawData, url) {
 
   fieldMapping.forEach((api) => {
     let {rows, columns} = data[api.reportId];
-    // values.top = Object.assign({}, {
-    //   count: 0,
-    //   total: 0
-    // });
     topCountValue = 0;
     topTotalValue = 0;
 
