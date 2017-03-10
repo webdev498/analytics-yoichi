@@ -706,9 +706,20 @@
           ],
           "multipleReportIds": true
         },
+        "details": {
+          "meta": {
+            "reportId": "taf_top_talkers_bandwidth",
+            "queryParams": {
+              "source.name": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "meta": {
           "showHeader": true,
-          "showDetails": false,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
