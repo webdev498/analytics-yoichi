@@ -76,7 +76,56 @@ const styles = {
 
 class PieChart extends React.Component {
   static propTypes = {
-    data: PropTypes.object
+    data: PropTypes.object,
+    attributes: PropTypes.object
+  }
+
+  renderChart1() {
+
+  }
+
+  renderChart() {
+    const {attributes} = this.props;
+    const dataSource = {
+      'chart': {
+        'showBorder': '0',
+        'use3DLighting': '0',
+        'enableSmartLabels': '0',
+        'startingAngle': '90',
+        'showLabels': '0',
+        'showPercentValues': '0',
+        'showLegend': '0',
+        'showTooltip': '0',
+        'decimals': '0',
+        // 'useDataPlotColorForLabels': '1',
+        'theme': 'fint',
+        chartLeftMargin: '0',
+        chartRightMargin: '0',
+        chartBottomMargin: '0',
+        showValue: '0',
+        bgcolor: Colors.white
+      },
+      'data': [
+        {
+          'value': '96'
+        },
+        {
+          'value': '4'
+        }
+      ]
+    };
+    FusionCharts.ready(function() {
+      let fusioncharts = new FusionCharts({
+        type: 'doughnut2d',
+        renderAt: attributes.id,
+        width: 400, // || '100%',
+        height: 400, // || '200',
+        dataFormat: 'json',
+        containerBackgroundOpacity: '0',
+        dataSource
+      });
+      fusioncharts.render();
+    });
   }
 
   render() {
@@ -87,11 +136,12 @@ class PieChart extends React.Component {
     }
 
     // Here, pieProps and pieJson are coming from PieChart data abstraction layer, hence it is in 'data' object.
-    const {data: {pieProps, pieJson: {chart: {legends}}}} = props;
+    const {attributes, data: {pieProps, pieJson: {chart: {legends}}}} = props;
 
     return (
       <div>
         <div style={styles.pieWrap}>
+          <div id={attributes.id}>{this.renderChart()}</div>
           <div>
             <div style={{...styles.pieChart, ...pieProps.styles.background}}>
               <div style={{...styles.sliceOne, ...pieProps.styles.sliceOne}} />
