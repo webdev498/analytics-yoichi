@@ -2,7 +2,6 @@ import {
   getColumnIndexOrValue,
   generateRawData
 } from '../../commons/utils/utils';
-import {Colors} from '../../commons/colors';
 
 const fs = require('fs'),
   path = require('path');
@@ -81,85 +80,21 @@ function getValue(columnType, index, data) {
 
 export function generatePieProps(values, options) {
   let pieProps = {},
-    {totalValue, topTotalValue} = values,
-    input = {
-      count: totalValue,
-      total: topTotalValue
-    },
-    styles = getPieStyles(input, options),
     assetPercentage = Math.round((values.topCountValue / parseInt(values.countValue)) * 100, 2),
-    piePercentage = Math.round((values.topTotalValue / parseInt(values.totalValue)) * 100, 2),
-    percentageText = {};
+    piePercentage = Math.round((values.topTotalValue / parseInt(values.totalValue)) * 100, 2);
 
   if (piePercentage > 100) {
     piePercentage = 100;
-  }
-  if (piePercentage === 100 || isNaN(piePercentage)) {
-    percentageText = {
-      paddingLeft: '0px'
-    };
   }
 
   assetPercentage = isNaN(assetPercentage) ? '0' : assetPercentage.toString();
   piePercentage = isNaN(piePercentage) ? '0' : piePercentage.toString();
 
   pieProps = {
-    styles: Object.assign({}, styles, percentageText),
     assetPercentage,
     piePercentage
   };
   return pieProps;
-}
-
-export function getPieStyles(input, options) {
-  let {count, total} = input,
-    {highlightedColor, nonHighlightedColor} = options,
-    percentage = Math.round((total / parseInt(count)) * 100, 2);
-
-  if (percentage === 0) {
-    percentage = Math.round((total / parseInt(count)) * 100, 4);
-  }
-  else if (percentage > 100) {
-    percentage = 100;
-  }
-
-  highlightedColor = highlightedColor || Colors.bar;
-  nonHighlightedColor = nonHighlightedColor || Colors.cloud;
-  let sliceOneBg = highlightedColor,
-    sliceTwoBg = highlightedColor,
-    sliceOneTempBg = nonHighlightedColor,
-    sliceTwoTempBg = nonHighlightedColor,
-    sliceOneTransform = 'rotate(90deg)',
-    sliceOneCalculatedTransform = 0,
-    sliceTwoCalculatedTransform = (percentage / 100 * 360),
-    sliceTwoTransform = 'rotate(' + sliceTwoCalculatedTransform + 'deg)';
-
-  if (percentage < 50) {
-    sliceOneTempBg = sliceOneBg;
-    sliceOneBg = sliceTwoTempBg;
-    sliceTwoBg = sliceTwoTempBg;
-    sliceOneCalculatedTransform = (percentage / 100 * 360 + 90);
-    sliceOneTransform = 'rotate(' + sliceOneCalculatedTransform + 'deg)';
-    sliceTwoTransform = 'rotate(0deg)';
-  }
-
-  const background = {background: sliceOneTempBg},
-    sliceOne = {
-      transform: sliceOneTransform,
-      WebkitTransform: sliceOneTransform,
-      background: sliceOneBg
-    },
-    sliceTwo = {
-      transform: sliceTwoTransform,
-      WebkitTransform: sliceTwoTransform,
-      background: sliceTwoBg
-    };
-
-  return {
-    background,
-    sliceOne,
-    sliceTwo
-  };
 }
 
 export default async function PieChart(ctx, next) {
