@@ -79,7 +79,7 @@ class PieChart extends React.Component {
           {
             items: [
               {
-                id: 'dyn-label-1',
+                id: 'percentage-label',
                 type: 'text',
                 text: piePercentage + '%',
                 color: Colors.white,
@@ -115,7 +115,7 @@ class PieChart extends React.Component {
     // Here, pieProps and pieJson are coming from PieChart data abstraction layer, hence it is in 'data' object.
     const {attributes, data: {pieProps, pieJson: {chart: {legends}}}} = props;
 
-    if (pieProps.piePercentage === '0') {
+    if (pieProps.piePercentage === '0' && pieProps.assetPercentage === '0') {
       return (<div>No Data Found.</div>);
     }
 
