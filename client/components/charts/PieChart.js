@@ -3,13 +3,13 @@ import {Colors} from '../../../commons/colors';
 import PercentageWidget from 'components/widgets/PercentageWidget';
 
 const styles = {
-  pieChart: {
-    position: 'relative',
-    borderRadius: '50%',
-    overflow: 'hidden',
-    width: '230px',
-    height: '230px'
-  },
+  // pieChart: {
+  //   position: 'relative',
+  //   borderRadius: '50%',
+  //   overflow: 'hidden',
+  //   width: '230px',
+  //   height: '230px'
+  // },
   pieWrap: {
     width: '100%',
     display: 'flex',
@@ -20,15 +20,15 @@ const styles = {
     height: '400px',
     marginTop: '-30px'
   },
-  chartPosition: {
-    position: 'absolute',
-    borderRadius: '50%',
-    top: '55px',
-    left: '55px',
-    width: '120px',
-    height: '120px',
-    background: Colors.white
-  },
+  // chartPosition: {
+  //   position: 'absolute',
+  //   borderRadius: '50%',
+  //   top: '55px',
+  //   left: '55px',
+  //   width: '120px',
+  //   height: '120px',
+  //   background: Colors.white
+  // },
   percentage: {
     label: {
       display: 'block',
@@ -44,22 +44,22 @@ const styles = {
       color: Colors.bar
     }
   },
-  sliceOne: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    clip: 'rect(0 230px 115px 0)'
-  },
-  sliceTwo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    clip: 'rect(0 115px 230px 0)'
-  },
+  // sliceOne: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: 0,
+  //   width: '100%',
+  //   height: '100%',
+  //   clip: 'rect(0 230px 115px 0)'
+  // },
+  // sliceTwo: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: 0,
+  //   width: '100%',
+  //   height: '100%',
+  //   clip: 'rect(0 115px 230px 0)'
+  // },
   legends: {
     title: {
       fontSize: '13px',
@@ -74,52 +74,70 @@ const styles = {
   }
 };
 
+const chart = {
+  showBorder: 0,
+  use3DLighting: 0,
+  enableSmartLabels: 0,
+  showLabels: 0,
+  showPercentValues: 0,
+  showTooltip: 0,
+  decimals: 0,
+  paletteColors: Colors.bar + ',' + Colors.cloud,
+  theme: 'fint',
+  chartLeftMargin: 30,
+  chartRightMargin: 30,
+  chartBottomMargin: 30,
+  bgcolor: Colors.white,
+  showValues: 0,
+  startingAngle: 90,
+  enableRotation: 0,
+  enableSlicing: 0
+};
+
 class PieChart extends React.Component {
   static propTypes = {
     data: PropTypes.object,
     attributes: PropTypes.object
   }
 
-  renderChart1() {
-
-  }
-
-  renderChart() {
-    const {attributes} = this.props;
-    const dataSource = {
-      'chart': {
-        'showBorder': '0',
-        'use3DLighting': '0',
-        'enableSmartLabels': '0',
-        'startingAngle': '90',
-        'showLabels': '0',
-        'showPercentValues': '0',
-        'showLegend': '0',
-        'showTooltip': '0',
-        'decimals': '0',
-        // 'useDataPlotColorForLabels': '1',
-        'theme': 'fint',
-        chartLeftMargin: '0',
-        chartRightMargin: '0',
-        chartBottomMargin: '0',
-        showValue: '0',
-        bgcolor: Colors.white
-      },
-      'data': [
+  renderChart(pieProps) {
+    const {props: {attributes}} = this,
+      {piePercentage} = pieProps,
+      dataSource = {
+        chart,
+        data: [
+          {
+            value: 100 - piePercentage.parseInt()
+          },
+          {
+            value: piePercentage.parseInt()
+          }
+        ],
+        annotations:
         {
-          'value': '96'
-        },
-        {
-          'value': '4'
+          showBelow: 0,
+          groups: [
+            {
+              items: [
+                {
+                  id: 'dyn-label-1',
+                  type: 'text',
+                  text: '%',
+                  color: '#FFFFFF',
+                  x: 260,
+                  y: 80
+                }
+              ]
+            }
+          ]
         }
-      ]
-    };
+      };
     FusionCharts.ready(function() {
       let fusioncharts = new FusionCharts({
         type: 'doughnut2d',
         renderAt: attributes.id,
-        width: 400, // || '100%',
-        height: 400, // || '200',
+        width: 350, // || '100%',
+        height: 350, // || '200',
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
         dataSource
@@ -141,8 +159,8 @@ class PieChart extends React.Component {
     return (
       <div>
         <div style={styles.pieWrap}>
-          <div id={attributes.id}>{this.renderChart()}</div>
-          <div>
+          <div id={attributes.id}>{this.renderChart(pieProps)}</div>
+          { /* <div>
             <div style={{...styles.pieChart, ...pieProps.styles.background}}>
               <div style={{...styles.sliceOne, ...pieProps.styles.sliceOne}} />
               <div style={{...styles.sliceTwo, ...pieProps.styles.sliceTwo}} />
@@ -152,7 +170,7 @@ class PieChart extends React.Component {
                 </span>
               </div>
             </div>
-          </div>
+          </div> */ }
           <div style={{paddingLeft: '50px', paddingRight: '50px'}}>
             <PercentageWidget iconName='desktop_mac' percentage={pieProps.assetPercentage} />
           </div>
