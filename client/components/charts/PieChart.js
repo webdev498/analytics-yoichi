@@ -59,8 +59,7 @@ class PieChart extends React.Component {
 
   renderChart() {
     const {props: {attributes, data}} = this,
-      {piePercentage} = data.pieProps,
-      {chart} = data.pieJson;
+      {pieProps: {piePercentage}, pieJson: {chart}} = data;
 
     const dataSource = {
       chart: Object.assign({}, chartOptions, chart.options),
