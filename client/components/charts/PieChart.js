@@ -107,7 +107,7 @@ class PieChart extends React.Component {
   render() {
     const {props} = this;
 
-    if (!props.data || !props.data.pieProps) {
+    if (!props.data || !props.data.pieProps || !props.data.pieJson) {
       return (<div />);
     }
 

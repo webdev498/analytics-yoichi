@@ -1,14 +1,10 @@
-import {
-  processData
-} from '../utils/tableUtils';
-import {
-  getParameterByName
-} from '../../commons/utils/utils';
+import {readFileThunk} from '../utils/utils';
+import {processData} from '../utils/tableUtils';
+import {getParameterByName} from '../../commons/utils/utils';
 
-const fs = require('fs');
 const path = require('path');
 
-function getData(rawData, url) {
+function getTableJsonPath(url) {
   let reportId = url.split('?'),
     type = getParameterByName('type', url);
 
@@ -23,19 +19,13 @@ function getData(rawData, url) {
   const fileName = `../json/table/${reportId}.json`,
     filePath = path.join(__dirname, fileName);
 
-  let tableJson = JSON.parse(fs.readFileSync(filePath, 'utf8')),
-    processedData = processData(rawData, tableJson, url);
-
-  return {
-    processedData,
-    tableJson
-  };
+  return filePath;
 }
 
 export default async function Table(ctx, next) {
-  let rawData;
+  let data;
   try {
-    rawData = await ctx.tempData.json();
+    data = await ctx.tempData.json();
   }
   catch (error) {
     const obj = {
@@ -47,10 +37,14 @@ export default async function Table(ctx, next) {
     ctx.throw('api response error', 400, obj);
   }
 
-  if (rawData && !rawData.errorCode) {
-    const dataObj = getData(rawData, ctx.request.url);
-    rawData.normalizeData = dataObj.processedData;
-    rawData.tableJson = dataObj.tableJson;
-    ctx.normalizeData = rawData;
+  if (data && !data.errorCode) {
+    const filePath = getTableJsonPath(ctx.request.url);
+    let tableJson = await readFileThunk(filePath);
+    tableJson = JSON.parse(tableJson.toString());
+
+    ctx.normalizeData = Object.assign({}, data, {
+      normalizeData: processData(data, tableJson, ctx.request.url),
+      tableJson
+    });
   }
 };

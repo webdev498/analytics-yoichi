@@ -1,4 +1,4 @@
-let reportingApiBasePath = '/analytics/reporting/execute/';
+const reportingApiBasePath = '/analytics/reporting/execute/';
 export const timelineApi = [
   {
     path: '/alert/traffic',
