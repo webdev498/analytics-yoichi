@@ -1,28 +1,26 @@
+import {readFileThunk} from '../utils/utils';
 import {
   getColumnIndexOrValue,
   generateRawData
 } from '../../commons/utils/utils';
 
-const fs = require('fs'),
-  path = require('path');
+const path = require('path');
 
-function getPieJson(url) { // This url is a proxy server url.
+function getPieJsonPath(url) { // This url is a proxy server url.
   let reportId = url.split('?');
   reportId = reportId[0];
   reportId = reportId.split('/');
   reportId = reportId[reportId.length - 1];
 
   const fileName = `../json/pieChart/${reportId}.json`,
-    filePath = path.join(__dirname, fileName),
-    json = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    filePath = path.join(__dirname, fileName);
 
-  return json;
+  return filePath;
 }
 
-function processData(rawData, url) {
-  const json = getPieJson(url),
-    fieldMapping = json.chart.data.fieldMapping,
-    options = json.chart.options,
+function getPieProps(rawData, pieJson) {
+  const fieldMapping = pieJson.chart.data.fieldMapping,
+    options = pieJson.chart.options,
     data = generateRawData(fieldMapping, rawData);
 
   let countValue = 0,
@@ -61,10 +59,7 @@ function processData(rawData, url) {
     topTotalValue
   };
 
-  return {
-    pieJson: json,
-    pieProps: generatePieProps(values, options)
-  };
+  return calculatePercentage(values, options);
 }
 
 function getValue(columnType, index, data) {
@@ -78,7 +73,7 @@ function getValue(columnType, index, data) {
   return value;
 }
 
-export function generatePieProps(values, options) {
+export function calculatePercentage(values, options) {
   let pieProps = {},
     assetPercentage = Math.round((values.topCountValue / parseInt(values.countValue)) * 100, 2),
     piePercentage = Math.round((values.topTotalValue / parseInt(values.totalValue)) * 100, 2);
@@ -98,9 +93,9 @@ export function generatePieProps(values, options) {
 }
 
 export default async function PieChart(ctx, next) {
-  let rawData;
+  let data;
   try {
-    rawData = await ctx.tempData.json();
+    data = await ctx.tempData.json();
   }
   catch (error) {
     const obj = {
@@ -112,11 +107,14 @@ export default async function PieChart(ctx, next) {
     ctx.throw('api response error', 400, obj);
   }
 
-  if (rawData && !rawData.errorCode) {
-    const dataObj = processData(rawData, ctx.request.url);
-    ctx.normalizeData = Object.assign({}, rawData, {
-      pieProps: dataObj.pieProps,
-      pieJson: dataObj.pieJson
+  if (data && !data.errorCode) {
+    const filePath = getPieJsonPath(ctx.request.url);
+    let pieJson = await readFileThunk(filePath);
+    pieJson = JSON.parse(pieJson.toString());
+
+    ctx.normalizeData = Object.assign({}, data, {
+      pieProps: getPieProps(data, pieJson),
+      pieJson
     });
   }
 };

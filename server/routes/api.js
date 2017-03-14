@@ -34,7 +34,7 @@ const agent = new https.Agent(agentOptions),
 router
 .get('/layout/*', layoutRoutes)
 .get('*', async function(ctx, next) {
-  let url = await getUrl(ctx);
+  const url = await getUrl(ctx);
   console.log('proxy url', url);
   const res = await fetch(url,
     {

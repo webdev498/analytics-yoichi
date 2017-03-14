@@ -4,6 +4,15 @@ const fs = require('fs'),
   path = require('path'),
   jsonFolders = ['pieChart'];
 
+export const readFileThunk = function(src) {
+  return new Promise(function(resolve, reject) {
+    fs.readFile(src, {}, function(err, data) {
+      if (err) return reject(err);
+      resolve(data);
+    });
+  });
+};
+
 export let getAllFilesFromFolder = function(dir) {
   let files = [];
 
