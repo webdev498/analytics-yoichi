@@ -1,27 +1,28 @@
-const reportingApiBasePath = '/analytics/reporting/execute/';
+import {REPORTING_API_BASE_PATH} from '../../Constants';
+
 export const pieChartApi = [
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'dash_top_connections'
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'dash_top_bandwidth'
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'dash_most_active_cloudtrail_users'
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'dash_most_active_users'
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'dash_most_active_user_agents'
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'dash_most_active_processes'
   }
 ];

@@ -1,11 +1,12 @@
-const reportingApiBasePath = '/analytics/reporting/execute/';
+import {REPORTING_API_BASE_PATH} from '../../Constants';
+
 export const timelineApi = [
   {
     path: '/alert/traffic',
     reportId: ''
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'taf_alert_by_asset'
   },
   {
@@ -13,27 +14,27 @@ export const timelineApi = [
     reportId: ''
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'taf_asset_session_details'
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'taf_asset_session_event_details'
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'taf_events_between_source_and_dest_same_type_as_edge'
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'taf_events_with_protocol'
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'taf_events_with_country'
   },
   {
-    path: reportingApiBasePath,
+    path: REPORTING_API_BASE_PATH,
     reportId: 'taf_events_between_source_and_dest'
   },
   {

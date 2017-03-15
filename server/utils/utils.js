@@ -21,10 +21,7 @@ export async function readDir(dir) {
     return new Promise(function(resolve, reject) {
       fs.readdir(dirPath, {}, function(err, data) {
         if (err) return reject(err);
-        // if dirName key is exists in 'dalJsonDir' object then only, it assigns the list of files.
-        if (dalJsonDir[dirName]) {
-          dalJsonDir[dirName] = data;
-        }
+        dalJsonDir[dirName] = data;
       });
     });
   };
@@ -44,21 +41,21 @@ export async function getUrl(ctx) {
 
   // This 'if' condition is added becasue it replaces the report id only if we used 'dash_' reportId.
   // For example: in piechart, we need more than one taf report ids,
-  // hence we cannot give dal json file name to all these three reportids like we had created table dal jsons.
-  // Hence, for pie chart, we have created report ids starting with 'dash_' word.
+  // and it is not good to give dal json file name as all these taf reportids.
+  // Hence, for pie chart, we have created dal jsons names starting with 'dash_' word.
   // So, while calling the proxy URL, we needed to replace that dash report id with taf report id.
   // So, for this reason, I have created this function.
   if (url.includes('dash_')) {
-    for (let folder in dalJsonDir) {
-      let files = dalJsonDir[folder],
+    for (let dirName in dalJsonDir) {
+      let files = dalJsonDir[dirName],
         filePath = '',
-        reportId = '';
+        dashReportId = '';
       files.every(function(file, index) { // here I have used 'every' since I wanted to break the loop.
         file = file.split('/');
-        reportId = file[file.length - 1];
-        reportId = reportId.replace('.json', '');
-        if (url.includes(reportId)) {
-          let fileName = `../json/${folder}/${reportId}.json`;
+        dashReportId = file[file.length - 1];
+        dashReportId = dashReportId.replace('.json', '');
+        if (url.includes(dashReportId)) {
+          let fileName = `../json/${dirName}/${dashReportId}.json`;
           filePath = path.join(__dirname, fileName);
           return false;
         }
@@ -70,7 +67,7 @@ export async function getUrl(ctx) {
         let dataJson = await readFileThunk(filePath);
         dataJson = JSON.parse(dataJson.toString());
         const tafReportId = dataJson.meta && dataJson.meta.api ? dataJson.meta.api.reportId : '';
-        url = url.replace(reportId, tafReportId);
+        url = url.replace(dashReportId, tafReportId);
       }
     }
   }
