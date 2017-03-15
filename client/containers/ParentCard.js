@@ -1,21 +1,24 @@
 import React, {PropTypes} from 'react';
 import { connect } from 'react-redux';
 
-import FontIcon from 'material-ui/FontIcon';
 import Loader from 'components/Loader';
+import DetailsTable from 'components/details';
+import ParentCardHeader from 'components/ParentCardHeader';
 
-import {fetchApiData, removeComponent, broadcastEvent} from 'actions/parentCard';
+import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
-import {autoScrollTo} from 'utils/utils';
+import { autoScrollTo, hideBodyScroll, showBodyScroll } from 'utils/utils';
 import {updateRoute} from 'actions/core';
+
+import {DETAILS_BASE_URL} from 'Constants';
 
 const styles = {
   wrap: {
     position: 'relative',
     backgroundColor: 'white',
     borderRadius: 0,
-    padding: '33px',
-    boxShadow: 'rgba(0, 0, 0, 0.117647) 0px 1px 2px'
+    padding: '30px',
+    boxShadow: `0 1px 2px ${Colors.shadow}`
   },
   childwrap: {
     backgroundColor: 'white',
@@ -24,131 +27,198 @@ const styles = {
     boxShadow: Colors.white + ' 0px 0px 0px',
     border: '0px'
   },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingBottom: '50px'
-  },
-  title: {
-    textTransform: 'capitalize',
-    fontSize: '21px',
-    whiteSpace: 'nowrap'
-  },
-  iconWrap: {
-    marginLeft: 'auto',
-    textAlign: 'right'
-  },
-  refreshIcon: {
-    cursor: 'pointer',
-    fontSize: '20px',
-    color: Colors.grape,
-    fontWeight: 600,
-    height: '35px',
-    paddingTop: '7px'
-  },
-  backIcon: {
-    color: Colors.grape
-  },
-  crossIcon: {
-    fontSize: '20px'
-  },
-  inputWrap: {
-    margin: '0 20px',
-    width: '85%',
-    textAlign: 'right',
-    display: 'inline-block',
-    position: 'relative',
-    verticalAlign: 'middle'
-  },
-  searchIcon: {
-    bottom: '5px',
-    color: Colors.grape,
-    cursor: 'pointer',
-    fontSize: '21px',
-    height: '14px',
-    margin: 'auto',
-    position: 'absolute',
-    right: '12px',
-    top: 0,
-    fontWeight: 500
-  },
-  clearIcon: {
-    color: Colors.white,
-    cursor: 'initial',
-    fontSize: '21px',
-    height: '35px',
-    margin: 'auto',
-    position: 'absolute',
-    top: 0,
-    background: Colors.grape,
-    lineHeight: '35px',
-    width: '45px',
-    textAlign: 'center',
-    fontWeight: 600
-  },
-  clearDiv: {
-    color: 'transparent',
-    cursor: 'initial',
-    fontSize: '21px',
-    height: '35px',
-    margin: 'auto',
-    position: 'absolute',
-    top: 0,
-    background: 'transparent',
-    lineHeight: '35px',
-    width: '45px',
-    textAlign: 'center',
-    fontWeight: 600,
-    display: 'inline'
-  },
   error: {
     fontSize: '13px',
     fontWeight: '600',
     textAlign: 'center'
+  },
+  fullViewWrap: {
+    backgroundColor: Colors.cloud,
+    position: 'fixed',
+    top: '64px',
+    left: '72px',
+    bottom: 0,
+    right: 0,
+    zIndex: 3,
+    overflow: 'auto'
+  },
+  fullView: {
+    margin: '30px',
+    width: 'auto',
+    height: 'auto'
+  },
+  fullViewChart: {
+    margin: '30px',
+    width: 'auto',
+    height: '95%'
   }
 };
+
+function getParamsAndReportId(props, dataObj, durationUpdated) {
+  let {data, meta, details} = props,
+    reportId = meta.api.pathParams.reportId;
+
+  if (details && details.meta && details.meta.reportId) {
+    reportId = details.meta.reportId;
+    data = data[reportId];
+  }
+
+  let {columns, interval} = data,
+    queryParams = {
+      start: interval.from,
+      end: interval.to,
+      count: 100
+    };
+
+  // if duration has been updated, then don't send the start and end params as they override the window param.
+  if (durationUpdated) {
+    delete queryParams.start;
+    delete queryParams.end;
+    queryParams.window = '';
+  }
+
+  if (dataObj && dataObj.queryParams) {
+    queryParams = Object.assign({}, queryParams, dataObj.queryParams);
+  }
+  else {
+    let params = [];
+    columns.forEach((col, index) => {
+      if (col.detailsAvailable) {
+        params = params.concat(generateParameters(index, col, dataObj));
+      }
+    });
+
+    if (params.length === 1) {
+      queryParams.detailsValue = params[0].value;
+      queryParams.detailsField = params[0].field;
+    }
+    else if (params.length > 1) {
+      params.forEach((p, i) => {
+        queryParams[`detailsValue${i + 1}`] = p.value;
+        queryParams[`detailsField${i + 1}`] = p.field;
+      });
+    }
+  }
+
+  return {queryParams, reportId};
+}
+
+function generateParameters(index, col, dataObj) {
+  let params = [],
+    value = '';
+  if (dataObj && dataObj[col.name]) {
+    value = dataObj[col.name].value;
+    params.push({value, field: col.name});
+  }
+  return params;
+}
 
 export class ParentCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       search: '',
-      clearIconStyle: {
-        color: 'transparent',
-        background: 'transparent'
-      },
-      searchTextStyle: {
-        paddingLeft: '12px'
-      }
+      showDetailsFlag: false,
+      showComponentIconFlag: false,
+      isFullView: false
     };
 
+    this.detailsApiObj = {};
     this.getData = this.getData.bind(this);
-    this.refreshData = this.refreshData.bind(this);
+    this.toggleDetailsTable = this.toggleDetailsTable.bind(this);
+    this.updateSearch = this.updateSearch.bind(this);
   }
 
   static propTypes = {
     id: PropTypes.string.isRequired,
     meta: PropTypes.object.isRequired,
     updateRoute: PropTypes.func.isRequired,
-    history: PropTypes.object
+    fetchNextSetOfData: PropTypes.func.isRequired,
+    history: PropTypes.object,
+    data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    details: PropTypes.object,
+    detailsData: PropTypes.object,
+    attributes: PropTypes.object,
+    duration: PropTypes.string.isRequired,
+    toggleFullView: PropTypes.func
   }
 
-  getData() {
-    const { props } = this,
-      {api} = props.meta;
+  getData(dataObj) {
+    const {props} = this,
+      {params, options, id} = props,
+      isDetails = this.state.showDetailsFlag;
 
-    if (!api) {
-      const children = props.children.props.children;
-
-      children.forEach((child) => {
-        const {props: childProps} = child;
-        props.fetchApiData(childProps.id, childProps.meta.api);
-      });
-
-      return;
+    if (isDetails) {
+      if (!dataObj) {
+        dataObj = this.dataObj;
+      }
+      else {
+        // save dataObj to be used when the details are refreshed
+        // to maintain of api object.
+        this.dataObj = dataObj;
+      }
     }
 
-    props.fetchApiData(props.id, api, props.params, props.options);
+    const api = isDetails ? this.getDetailsData(dataObj) : props.meta.api;
+    if (isDetails && api.queryParams && api.queryParams.filter) {
+      delete api.queryParams.filter;
+    }
+    this.detailsApiObj = {id, api, params, options, isDetails};
+    props.fetchApiData({id, api, params, options, isDetails});
+  }
+
+  toggleDetailsTable(dataObj) {
+    if (this.props.meta.showDetails === false) return;  // don't show details, if meta showDetails set to false
+
+    const isDetails = this.state.showDetailsFlag;
+
+    this.setState({
+      showDetailsFlag: !isDetails,
+      showComponentIconFlag: !this.state.showComponentIconFlag
+    },
+    () => {
+      if (!isDetails) {
+        this.getData(dataObj);
+      }
+    });
+  }
+
+  getDetailsData(dataObj) {
+    const {props, props: {data, meta}} = this;
+    if (!data || !meta.api) return;
+
+    let {queryParams, reportId} = getParamsAndReportId(props, dataObj, this.durationUpdated);
+
+    if (!queryParams) return;
+
+    const apiObj = {
+      path: `${DETAILS_BASE_URL}/{reportId}`,
+      pathParams: {
+        reportId
+      },
+      queryParams
+    };
+
+    return apiObj;
+  }
+
+  getDetailsTable() {
+    const {detailsData, details, fetchNextSetOfData, updateRoute} = this.props;
+    let detailsObj = {...details};
+
+    // during fullView show 20 rows on details view.
+    if (this.state.isFullView) {
+      detailsObj.itemsPerPage = 20;
+    }
+
+    return <DetailsTable
+      style={styles.detailsTable}
+      detailsData={detailsData}
+      details={detailsObj}
+      search={this.state.search}
+      apiObj={this.detailsApiObj}
+      fetchNextSetOfData={fetchNextSetOfData}
+      updateRoute={updateRoute} />;
   }
 
   componentDidMount() {
@@ -182,59 +252,11 @@ export class ParentCard extends React.Component {
     }
   }
 
-  callApi(apiObj, props) {
-    const {id, api} = apiObj;
-    const {params, fetchApiData, data} = props;
-
-    if (api.method === 'POST') {
-      let body = data;
-
-      const bodyPath = api.body.replace('$customParam', ''),
-        keys = bodyPath.split('.');
-
-      keys.forEach(key => {
-        body = body[key];
-      });
-
-      // for the post request if the body is empty, then don't make request.
-      if (!body) return;
-      fetchApiData(id, api, params, {body});
-    }
-    else {
-      const {queryParams} = Object.assign({}, api);
-      const queryKeys = Object.keys(queryParams);
-
-      let customParams = null;
-      queryKeys.forEach(key => {
-        let query = queryParams[key];
-        if (typeof query === 'string' && query.includes('$customParam')) {
-          queryParams[key] = this.getQueryData(query.replace('$customParam', ''), data);
-          // this is to pass custom params such as filter to be passed
-          // to the component that is consuming this api.
-          customParams = {
-            [key]: queryParams[key]
-          };
-        }
-      });
-
-      const updatedApi = Object.assign({}, api, {queryParams});
-      fetchApiData(id, updatedApi, params, {customParams});
-    }
-  }
-
   runEvent(eventData, nextProps) {
     const {type, data} = eventData;
     if (type === 'updateSearch') {
-      this.myTextInput.value = data;
       this.setState({
-        search: data,
-        clearIconStyle: {
-          color: Colors.white,
-          background: Colors.grape
-        },
-        searchTextStyle: {
-          paddingLeft: '53px'
-        }
+        search: data
       });
 
       autoScrollTo(nextProps.attributes.id, 80);
@@ -242,16 +264,10 @@ export class ParentCard extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {data, eventData} = nextProps;
-    let {meta: {fetchDataFor}} = nextProps;
-    if (data && fetchDataFor) {
-      if (!Array.isArray(fetchDataFor)) {
-        fetchDataFor = [fetchDataFor];
-      }
+    const {eventData} = nextProps;
 
-      fetchDataFor.forEach(apiObj => {
-        this.callApi(apiObj, nextProps);
-      });
+    if (nextProps.duration !== this.props.duration) {
+      this.durationUpdated = true;
     }
 
     if (nextProps.data && window.sessionStorage.broadcastEvent) {
@@ -269,148 +285,20 @@ export class ParentCard extends React.Component {
     }
   }
 
-  refreshData() {
-    this.getData();
-  };
-
-  updateSearch() {
-    return (event) => {
-      this.setState({
-        search: event.target.value
-      });
-    };
-  }
-
-  clearSearchText() {
-    return (event) => {
-      if (this.myTextInput !== null) {
-        this.myTextInput.value = '';
-      }
-      this.setState({
-        search: event.target.value
-      });
-    };
-  }
-
-  focusSearchText() {
-    return (event) => {
-      if (this.myTextInput !== null) {
-        this.myTextInput.focus();
-      }
-    };
-  }
-
-  displayClearIcon(display) {
-    return (event) => {
-      if (display) {
-        this.setState({
-          clearIconStyle: {
-            color: Colors.white,
-            background: Colors.grape
-          },
-          searchTextStyle: {
-            paddingLeft: '53px'
-          }
-        });
-      }
-      else {
-        this.setState({
-          clearIconStyle: {
-            color: 'transparent',
-            background: 'transparent'
-          },
-          searchTextStyle: {
-            paddingLeft: '12px'
-          }
-        });
-      }
-    };
-  }
-
-  goBack() {
-    return () => {
-      this.props.history.goBack();
-    };
-  }
-
-  getHeader() {
-    const {props} = this;
-
-    const headerStyle = props.attributes.header || {};
-
-    return <header style={{...styles.header, ...headerStyle.style}}>
-      <div>
-        <span style={{...styles.title, ...headerStyle.title}}>
-          {props.meta.title}
-        </span>
-      </div>
-
-      {
-        props.meta.showSearch
-        ? <div style={styles.inputWrap}>
-          <FontIcon className='material-icons'
-            style={{...styles.clearIcon, ...this.state.clearIconStyle}}
-            ref={(ref) => this.clearIcon = ref}>
-            close
-          </FontIcon>
-
-          <div style={{...styles.clearDiv}}
-            onClick={this.clearSearchText()} />
-
-          <input
-            id='searchText'
-            type='text'
-            className='searchText'
-            onChange={this.updateSearch()}
-            onFocus={this.displayClearIcon(true)}
-            onBlur={this.displayClearIcon(false)}
-            ref={(ref) => this.myTextInput = ref} />
-
-          <FontIcon className='material-icons'
-            style={styles.searchIcon}
-            onClick={this.focusSearchText()}>
-            search
-          </FontIcon>
-        </div>
-        : null
-      }
-
-      {
-        props.meta.showRefresh === false
-        ? null
-        : (
-          <div style={styles.iconWrap} id='refreshData'>
-            <FontIcon className='material-icons'
-              style={styles.refreshIcon}
-              onClick={this.refreshData}>
-              replay
-            </FontIcon>
-          </div>
-        )
-      }
-
-      {
-        props.meta.showBackButton === true
-        ? (
-          <div style={styles.iconWrap} id='refreshData'>
-            <FontIcon className='material-icons'
-              style={{...styles.refreshIcon, ...styles.backIcon}}
-              onClick={this.goBack()}>
-              arrow_back
-            </FontIcon>
-          </div>
-        )
-        : null
-      }
-    </header>;
-  }
-
   getErrorElement() {
     const {props} = this;
     let statusText;
 
     try {
-      statusText = props.errorData.response.statusText;
+      const err = props.errorData;
+      if (err) {
+        if (err.response) {
+          statusText = err.response.statusText;
+        }
+        else {
+          statusText = err;
+        }
+      }
     }
     catch (ex) {
       console.log(ex, props.errorData);
@@ -424,69 +312,193 @@ export class ParentCard extends React.Component {
     );
   }
 
-  render() {
+  updateSearch(event) {
+    if (!this.state.showDetailsFlag) {
+      this.setState({
+        search: event.target.value
+      });
+    }
+
     const {props} = this;
 
-    const childProps = Object.assign({}, props, {search: this.state.search});
-    let cardStyle = {...styles.wrap, ...props.attributes.style};
+    let apiObj = Object.assign({}, this.detailsApiObj);
+    if (apiObj.isDetails === true || props.isDetailsView === true) {
+      if (event.target.value !== '') {
+        apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
+          filter: '__any ~ "' + event.target.value + '"'
+        });
+      }
+      else {
+        if (apiObj.api.queryParams.filter) {
+          delete apiObj.api.queryParams.filter;
+        }
+      }
+
+      apiObj.api.queryParams = Object.assign({}, apiObj.api.queryParams, {
+        from: 0
+      });
+      apiObj = {...apiObj, isDetails: true};
+      props.fetchApiData(apiObj);
+      this.setState({showDetailsFlag: true});
+    }
+  }
+
+  toggleFullView = () => {
+    this.setState(
+      { isFullView: !this.state.isFullView },
+      () => {
+        if (this.state.isFullView) {
+          hideBodyScroll();
+        }
+        else {
+          showBodyScroll();
+        }
+      }
+    );
+  }
+
+  renderComponent(isDetails) {
+    const {props, state} = this,
+      extraProps = {
+        updateRoute: this.props.updateRoute,
+        showDetailsTable: this.toggleDetailsTable
+      },
+      childProps = {...props, search: state.search};
+
+    childProps.attributes = {...props.attributes};
+
+    if (state.isFullView) {
+      childProps.attributes.chartHeight = '75%';
+      if (childProps.chart && childProps.chart.height) {
+        childProps.chart = {...props.chart, height: '75%'};
+      }
+    }
+
+    const componentStyle = isDetails ? { display: 'none' } : {};
+    if (!props.isDetailsView) {
+      return (
+        <div style={componentStyle}>
+          {React.cloneElement(props.children, {...childProps, ...extraProps})}
+        </div>
+      );
+    }
+    return null;
+  }
+
+  getView() {
+    const { props, state } = this;
+    let cardStyle = { ...styles.wrap, ...props.attributes.style };
 
     if (!props.meta.showHeader) {
-      cardStyle = {...styles.childwrap, ...props.attributes.style};
+      cardStyle = { ...styles.childwrap, ...props.attributes.style };
     }
 
-    let tempCardStyle = cardStyle;
-
-    if (props.meta.hideComponent && (!props.data)) {
-      tempCardStyle = {display: 'none'};
+    if (state.isFullView) {
+      cardStyle = props.type && (props.type.startsWith('charts/') || props.type.startsWith('maps/'))
+                    ? { ...cardStyle, ...styles.fullViewChart }
+                    : { ...cardStyle, ...styles.fullView };
     }
 
-    cardStyle = tempCardStyle;
+    let isDetails = state.showDetailsFlag;
 
-    return (
-      <div style={cardStyle} id={props.id}>
-        {props.isFetching ? <Loader /> : null}
+    if (props.isDetailsView === true) {
+      isDetails = props.isDetailsView;
+    }
 
-        {
-          props.meta.showHeader
-          ? this.getHeader()
+    const isComponentError = props.isError && (props.meta.showErrorMessage !== false) && !isDetails,
+      isDetailsError = props.detailsIsError && isDetails;
+
+    return <div style={cardStyle} id={props.id}>
+      {
+        props.isFetching || props.detailsIsFetching
+          ? <Loader />
           : null
-        }
+      }
 
-        {
-          props.isError && (props.meta.showErrorMessage !== false)
+      {
+        props.meta.showHeader
+          ? <ParentCardHeader
+            {...props}
+            showComponentIconFlag={state.showComponentIconFlag}
+            search={state.search}
+            getData={this.getData}
+            updateSearch={this.updateSearch}
+            toggleDetailsTable={this.toggleDetailsTable}
+            history={this.props.history}
+            hideDetails={props.hideDetails}
+            toggleFullView={this.toggleFullView}
+            isFullView={state.isFullView} />
+          : null
+      }
+
+      {
+        isComponentError
           ? this.getErrorElement()
-          : React.cloneElement(props.children, {...childProps, updateRoute: this.props.updateRoute})
-        }
-      </div>
+          : this.renderComponent(isDetails)
+      }
+
+      {
+        isDetails
+          ? isDetailsError
+            ? this.getErrorElement()
+            : <div style={{ marginLeft: '-30px', marginRight: '-30px' }}>
+              {this.getDetailsTable()}
+            </div>
+          : null
+      }
+    </div>;
+  }
+
+  render() {
+    return (
+      this.state.isFullView
+        ? <div style={styles.fullViewWrap}>{this.getView()}</div>
+        : this.getView()
     );
   }
 }
 
 ParentCard.contextTypes = {
-  muiTheme: React.PropTypes.object,
   store: React.PropTypes.object
 };
 
 function mapStateToProps(state, ownProps) {
-  const {apiData} = state;
+  const {apiData, details} = state;
 
   let data = null,
     isFetching = false,
     isError = false,
     errorData = null,
-    eventData = null;
+    eventData = null,
+    detailsIsFetching: false,
+    detailsIsError: false,
+    detailsData: null,
+    detailsErrorData: null;
 
-  if (apiData.hasIn(['components', ownProps.id])) {
-    const propsById = apiData.getIn(['components', ownProps.id]);
+  if (apiData.has(ownProps.id)) {
+    const propsById = apiData.get(ownProps.id);
 
-    data = propsById.get('data');
+    if (ownProps.isDetailsView) {
+      detailsData = propsById.get('data');
+    }
+    else {
+      data = propsById.get('data');
+    }
     isFetching = propsById.get('isFetching');
     isError = propsById.get('isError');
     errorData = propsById.get('errorData');
     eventData = propsById.get('eventData');
   }
 
-  const duration = apiData.get('duration');
+  if (details.has(ownProps.id)) {
+    const detailsById = details.get(ownProps.id);
+    detailsIsFetching = detailsById.get('isFetching');
+    detailsIsError = detailsById.get('isError');
+    detailsData = detailsById.get('data');
+    detailsErrorData = detailsById.get('errorData');
+  }
+
+  const duration = state.duration;
 
   return {
     data,
@@ -494,10 +506,14 @@ function mapStateToProps(state, ownProps) {
     isError,
     errorData,
     duration,
-    eventData
+    eventData,
+    detailsIsFetching,
+    detailsIsError,
+    detailsData,
+    detailsErrorData
   };
 }
 
 export default connect(mapStateToProps, {
-  fetchApiData, updateRoute, removeComponent, broadcastEvent
+  fetchApiData, updateRoute, removeComponent, broadcastEvent, fetchNextSetOfData
 })(ParentCard);

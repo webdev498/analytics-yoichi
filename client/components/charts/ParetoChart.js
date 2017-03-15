@@ -1,39 +1,30 @@
 import React, {PropTypes} from 'react';
-import {Colors} from '../../../commons/colors';
-import {
-  getIndexFromColumnName,
-  isUndefined
-} from '../../../commons/utils/utils';
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
+import { getIndexFromColumnName } from '../../../commons/utils/utils';
+import { getQueryParamsForDetails } from '../../utils/utils';
+import { DEFAULT_CHART_OPTIONS } from 'Constants';
 
-const chart = {
-  'labelFontSize': '11',
-  'showAxisLines': '1',
-  'showLabels': '1',
-  'showPercentInTooltip': '1',
-  'showValues': '1',
-  'showYAxisValues': '1',
-  'theme': 'zune',
-  'xAxisNameFontSize': '13',
-  'yAxisNameFontSize': '13',
-  'xAxisNamePadding': '20',
-  'yAxisNamePadding': '20',
-  'lineColor': Colors.coral,
-  'showXAxisLine': '0',
-  'showYAxisLine': '0',
-  'divLineIsDashed': '0',
-  'showsYAxisLine': '0',
-  'divLineAlpha': '20',
-  'chartLeftMargin': '0',
-  'chartRightMargin': '0',
-  'chartBottomMargin': '0',
-  'numDivLines': '6',
-  'baseFont': 'Open Sans, sans-serif',
-  'baseFontColor': Colors.grape,
-  'paletteColors': Colors.defaultGraphPalette,
-  'decimals': '2',
-  'slantLabels': '1'
-};
+const chart = Object.assign({}, DEFAULT_CHART_OPTIONS, {
+  showAxisLines: '1',
+  showLabels: '1',
+  chartTopMargin: 10,
+  showPercentInTooltip: '1',
+  showValues: '1',
+  showYAxisValues: '1',
+  xAxisNameFontSize: '13',
+  yAxisNameFontSize: '13',
+  xAxisNamePadding: '20',
+  yAxisNamePadding: '20',
+  showXAxisLine: '0',
+  showYAxisLine: '0',
+  divLineIsDashed: '0',
+  showsYAxisLine: '0',
+  divLineAlpha: '20',
+  chartLeftMargin: '0',
+  chartRightMargin: '0',
+  chartBottomMargin: '0',
+  numDivLines: '6',
+  decimals: '2'
+});
 
 export function generateDataSource(data, chartOptions, fieldMapping, updateChartOptions) {
   const graphBars = [];
@@ -62,7 +53,7 @@ export function generateDataSource(data, chartOptions, fieldMapping, updateChart
     const xValue = rows[i][x],
       yValue = rows[i][y],
       barObject = {
-        label: xValue || 'Other',
+        label: xValue === false || xValue ? xValue : 'Other',
         value: yValue
       };
 
@@ -85,49 +76,10 @@ export function generateDataSource(data, chartOptions, fieldMapping, updateChart
   };
 };
 
-function getDataPlotClickUrl(props, dataObj) {
-  let parameters = {
-    data: props.data,
-    duration: props.duration,
-    dataObj: dataObj,
-    queryParamsArray: props.kibana.queryParams,
-    pathParams: props.kibana.pathParams
-  };
-
-  return generateClickThroughUrl(parameters);
-}
-
 class ParetoChart extends React.Component {
   static propTypes = {
-    attributes: PropTypes.object
-  }
-
-  constructor(props) {
-    super(props);
-    this.handleGraphClick = this.handleGraphClick.bind(this);
-  }
-
-  handleGraphClick(dataObj) {
-    const {props} = this,
-      {clickData} = props;
-
-    let filterText = '';
-    if (clickData.filterText.startsWith(':')) {
-      filterText = dataObj.toolText.split(',')[0];
-    }
-
-    if (props.history.isActive(clickData.page)) {
-      props.broadcastEvent(clickData.tableId, {data: filterText, type: 'updateSearch'});
-    }
-    else {
-      // this is to enable to call the broadcastEvent when user is on some other page other than '/alerts'
-      //  so that this event can be called after the page load
-      window.sessionStorage.broadcastEvent = JSON.stringify({
-        id: clickData.tableId,
-        data: {data: filterText, type: 'updateSearch'}
-      });
-      props.history.push(clickData.page);
-    }
+    attributes: PropTypes.object.isRequired,
+    showDetailsTable: PropTypes.func
   }
 
   renderChart(props) {
@@ -139,10 +91,8 @@ class ParetoChart extends React.Component {
       return;
     }
 
-    const {data, chartOptions, updateChartOptions, chartData} = props,
-      fieldMapping = chartData.fieldMapping,
-      {clickThrough} = this.context,
-      handleGraphClick = this.handleGraphClick;
+    const {data, chartOptions, updateChartOptions, chartData, showDetailsTable, details} = props,
+      fieldMapping = chartData.fieldMapping;
 
     FusionCharts.ready(function() {
       const mapProps = props.attributes;
@@ -157,15 +107,8 @@ class ParetoChart extends React.Component {
         dataSource: generateDataSource(data, chartOptions, fieldMapping, updateChartOptions),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            if (props.kibana) {
-              const url = getDataPlotClickUrl(props, dataObj);
-              if (url !== '' && !isUndefined(url)) {
-                clickThrough(url);
-              }
-            }
-            else if (props.clickData) {
-              handleGraphClick(dataObj);
-            }
+            let queryParams = getQueryParamsForDetails(details.meta.queryParams, dataObj);
+            showDetailsTable(queryParams);
           }
         }
       });
@@ -180,9 +123,5 @@ class ParetoChart extends React.Component {
     );
   }
 }
-
-ParetoChart.contextTypes = {
-  clickThrough: React.PropTypes.func
-};
 
 export default ParetoChart;

@@ -1,10 +1,10 @@
 import {
   REQUEST_ACTIONS_LIST,
   RECEIVE_ACTIONS_LIST,
-  ERROR_ACTIONS_LIST
+  ERROR_ACTIONS_LIST,
+  actionsUrl
 } from 'Constants';
 
-import {baseUrl} from 'config';
 import {fetchData} from 'utils/utils';
 
 export function actionsListRequest() {
@@ -29,12 +29,11 @@ export function actionsListError(json, errorData) {
 
 export function fetchActionsList() {
   return function(dispatch, getState) {
-    const cookies = getState().auth.cookies,
-      url = `${baseUrl}/api/analytics/actions/list?mediaType=json`;
+    const cookies = getState().auth.cookies;
 
     dispatch(actionsListRequest());
 
-    return fetchData(url, cookies, dispatch)
+    return fetchData(actionsUrl, cookies, dispatch)
     .then(json => {
       dispatch(actionsListRecieve(json));
     })

@@ -1,10 +1,8 @@
 import React from 'react';
 import {Colors} from '../../../commons/colors';
+import { DEFAULT_FONT } from 'Constants';
 
-import {
-  firstCharCapitalize,
-  formatDateInLocalTimeZone
-} from '../../../commons/utils/utils';
+import { firstCharCapitalize, formatDateInLocalTimeZone } from '../../../commons/utils/utils';
 
 function displayEdgeAsDashLine(type) {
   let dashes = false;
@@ -58,7 +56,7 @@ export function createEdgeObject(dataEdge, edgesInSameDirection) {
       label: dataEdge.label ? dataEdge.label + '\n\n\n' : '',
       title: dataEdge.label ? dataEdge.label : '',
       font: {
-        face: 'Open Sans',
+        face: DEFAULT_FONT,
         color: Colors.pebble,
         size: '11',
         align: 'left'
@@ -69,7 +67,7 @@ export function createEdgeObject(dataEdge, edgesInSameDirection) {
       },
       color: {
         color: Colors.pebble,
-        highlight: Colors.turquoise
+        highlight: Colors.bar
       },
       edgeDetails: [],
       actionData: dataEdge.actionData ? dataEdge.actionData : {}

@@ -1,12 +1,9 @@
 import React, {PropTypes} from 'react';
 import moment from 'moment';
-import {Colors} from '../../../commons/colors';
-import {
-  getIndexFromColumnName
-} from '../../../commons/utils/utils';
-import {
-  calculateDateDisplayFormat
-} from '../../../commons/utils/dateUtils';
+import { Colors, StandardChartPalette } from '../../../commons/colors';
+import { getIndexFromColumnName } from '../../../commons/utils/utils';
+import { calculateDateDisplayFormat } from '../../../commons/utils/dateUtils';
+import { DEFAULT_FONT } from 'Constants';
 
 export function generateDataSource(data, chartOptions, fieldMapping, duration) {
   const graphBars = [];
@@ -51,33 +48,34 @@ export function generateDataSource(data, chartOptions, fieldMapping, duration) {
 
   return {
     chart: Object.assign({
-      'labelFontSize': '11',
-      'showAxisLines': '1',
-      'showLabels': '1',
-      'showPercentInTooltip': '1',
-      'showValues': '0',
-      'showYAxisValues': '1',
-      'theme': 'zune',
-      'xAxisNameFontSize': '13',
-      'yAxisNameFontSize': '13',
-      'xAxisNamePadding': '20',
-      'yAxisNamePadding': '20',
-      'lineColor': Colors.coral,
-      'showXAxisLine': '0',
-      'showYAxisLine': '0',
-      'divLineIsDashed': '0',
-      'showsYAxisLine': '0',
-      'divLineAlpha': '20',
-      'chartLeftMargin': '0',
-      'chartRightMargin': '0',
-      'chartBottomMargin': '0',
-      'numDivLines': '6',
-      'baseFont': 'Open Sans, sans-serif',
-      'baseFontColor': Colors.pebble,
-      'paletteColors': Colors.defaultGraphPalette,
-      'decimals': '2',
-      'labelDisplay': 'wrap',
-      'slantLabels': '1'
+      labelFontSize: '11',
+      showAxisLines: '1',
+      showLabels: '1',
+      showPercentInTooltip: '1',
+      showValues: '0',
+      showYAxisValues: '1',
+      theme: 'zune',
+      xAxisNameFontSize: '13',
+      yAxisNameFontSize: '13',
+      xAxisNamePadding: '20',
+      yAxisNamePadding: '20',
+      lineColor: Colors.coral,
+      showXAxisLine: '0',
+      showYAxisLine: '0',
+      divLineIsDashed: '0',
+      showsYAxisLine: '0',
+      divLineAlpha: '20',
+      chartLeftMargin: '0',
+      chartRightMargin: '0',
+      chartBottomMargin: '0',
+      numDivLines: '6',
+      baseFont: DEFAULT_FONT,
+      baseFontColor: Colors.pebble,
+      paletteColors: StandardChartPalette,
+      decimals: '2',
+      labelDisplay: 'wrap',
+      slantLabels: '1',
+      toolTipSepChar: ' | '
     }, chartOptions),
     data: graphBars
   };

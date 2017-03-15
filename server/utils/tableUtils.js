@@ -10,7 +10,7 @@ import {
 } from '../../commons/utils/utils';
 
 import {getCountryName} from '../../commons/utils/countryUtils';
-import {generateClickThroughUrl} from './kibanaUtils';
+import {generateDetailsParameters} from '../../commons/utils/detailsUtils';
 
 export function processData(data, tableJson, url) {
   const {fieldMapping, nestedResult, emptyValueMessage} = tableJson.data;
@@ -18,53 +18,54 @@ export function processData(data, tableJson, url) {
 
   let rawData = generateRawData(fieldMapping, data);
 
-  for (let i = 0; i < fieldMapping.length; i++) {
-    let tableData = fieldMapping[i],
-      {rows, columns} = rawData[tableData.reportId],
+  fieldMapping.forEach((tableData) => {
+    let {rows, columns} = rawData[tableData.reportId],
       columnText = [];
 
-    for (let j = 0, rowsLen = rows.length; j < rowsLen; j++) {
+    rows.forEach((row, rowIndex) => {
       let rowObject = {columns: []};
 
       // Calculate column index from API response
-      for (let k = 0; k < tableData.columns.length; k++) {
-        let columnType = tableData.columns[k].type,
-          columnData = tableData.columns[k].data,
+      tableData.columns.forEach((tableColumns, columnIndex) => {
+        let columnType = tableColumns.type,
+          columnData = tableColumns.data,
           rowColumnDetails = {
             columnType,
             columnData,
             columns,
-            dataRows: rows[j],
+            dataRows: row,
             columnText,
             nestedResult,
             emptyValueMessage,
-            columnIndex: k
+            columnIndex
           },
           rowDetails = {
             columnType,
-            columnData: tableData.columns[k],
+            columnData: tableColumns,
             columnText: getDataBasedOnResponse(rowColumnDetails),
-            rowNumber: j,
-            row: rows[j]
+            rowNumber: rowIndex,
+            row
           };
 
         rowObject = generateRowObject(rowDetails, rowObject);
-        if (tableJson.kibana) {
+        if (tableJson.details) {
           let parameters = {
             data,
             duration: getParameterByName('window', url),
-            queryParamsArray: tableJson.kibana.queryParams,
-            currentRowNumber: j,
+            queryParamsArray: tableJson.details.meta.queryParams ? tableJson.details.meta.queryParams : {},
+            currentRowNumber: rowIndex,
             nestedResult,
-            pathParams: tableJson.kibana.pathParams
+            pathParams: tableJson.details.pathParams
           };
-          rowObject.rowClickUrl = generateClickThroughUrl(parameters);
+          rowObject.dataObj = {
+            queryParams: generateDetailsParameters(parameters)
+          };
         }
         columnText = [];
-      }
+      });
       tableDataSource.push(rowObject);
-    }
-  }
+    });
+  });
 
   return tableDataSource;
 }
@@ -80,7 +81,7 @@ export function getDataBasedOnResponse(rowColumnDetails) {
         columnType,
         columnData: columnData[i],
         dataRows,
-        columnText: columnText
+        columnText
       };
       columnText = getDataBySingleColumnResponse(columnDetails);
     }
@@ -111,60 +112,44 @@ export function getDataBasedOnResponse(rowColumnDetails) {
 export function generateRowObject(rowDetails, rowObject) {
   let {
       columnType,
-      columnData: {header, style, attributes},
+      columnData,
       columnText,
       rowNumber,
-      row,
       ellipsis
     } = rowDetails,
-    rowObj = {
+    {header, style, chart, headingStyle, inverse} = columnData;
+
+  if (chart) {
+    let tempId = chart.id;
+    chart = Object.assign({}, chart, {id: tempId + rowNumber});
+  }
+
+  let rowObj = {
       type: columnType,
       name: header,
+      rowNumber,
+      chart,
       style,
+      headingStyle,
       ellipsis
-    };
-  switch (columnType) {
-    case 'chart':
-      let {id, chartType, chartWidth, chartHeight, chartOptions} = attributes;
-      rowObj = Object.assign(rowObj, {
-        data: columnText,
-        chartId: id + rowNumber,
-        chartType,
-        chartWidth,
-        chartHeight,
-        chartOptions,
-        row
-      });
-      columnText = '';
-      rowObject.columns.push(rowObj);
-      break;
-    case 'text':
-      rowObj = Object.assign(rowObj, {
-        data: columnText
-      });
-      columnText = '';
-      rowObject.columns.push(rowObj);
-      break;
-    case 'durationWidget':
-      let sortValue = msToTime(columnText);
-      sortValue = sortValue.timeString;
-      rowObj = Object.assign(rowObj, {
-        data: columnText,
-        sortValue
-      });
-      columnText = '';
-      rowObject.columns.push(rowObj);
-      break;
-    case 'scoreWidget':
-      rowObj = Object.assign(rowObj, {
-        data: columnText
-      });
-      columnText = '';
-      rowObject.columns.push(rowObj);
-      break;
-    default:
-      break;
+    },
+    sortValueDefault = columnText[0] ? columnText[0].value : '',
+    sortValue = '';
+
+  if (inverse) {
+    rowObj = Object.assign({}, rowObj, {inverse: true});
   }
+
+  columnText.forEach((column, index) => {
+    sortValue += ' ' + column.value;
+  });
+
+  rowObj = Object.assign(rowObj, {
+    data: columnText,
+    sortValue: columnType === 'durationWidget' ? (msToTime(sortValueDefault)).timeString : sortValue
+  });
+  columnText = [];
+  rowObject.columns.push(rowObj);
   return rowObject;
 }
 
@@ -272,8 +257,9 @@ export function appendColumnText(fieldName, displayName, fieldValue, columnText)
       });
     }
     else if (name === 'port') {
-      if (columnText[columnText.length - 1].value) {
-        columnText[columnText.length - 1].value = columnText[columnText.length - 1].value + ':' + fieldValue;
+      const val = columnText[columnText.length - 1];
+      if (val && val.value) {
+        val.value = columnText[columnText.length - 1].value + ':' + fieldValue;
       }
     }
     else if (name === 'country') {

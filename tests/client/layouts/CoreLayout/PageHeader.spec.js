@@ -74,10 +74,9 @@ describe('<PageHeader />', () => {
     expect(component.type).to.equal(AppBar);
 
     const children = component.props.children;
-    expect(children.length).to.equal(3);
+    expect(children.length).to.equal(2);
 
-    const [menu, dropDown] = children;
-    expect(menu.type).to.equal(MenuItem);
+    const [dropDown] = children;
     expect(dropDown.type).to.equal(DropDownMenu);
   });
 
@@ -102,31 +101,13 @@ describe('<PageHeader />', () => {
     expect(component.state().showMenu).to.be.true;
   });
 
-  it('should show BackToSummary button and on click should hide kibana', () => {
-    let {component} = setupPageHeader(undefined, true, true),
-      menu = component.ref('backBtn');
-
-    expect(component.prop('title')).to.equal('rank');
-    expect(component.prop('showKibana')).to.be.true;
-
-    expect(menu.type()).to.equal(MenuItem);
-    expect(menu.text()).to.equal('Back to Summary');
-    expect(menu.childAt(0)).to.have.style('display');
-    expect(menu.childAt(0)).to.not.have.style('display', 'none');
-
-    menu.simulate('click');
-    // console.log(component.prop('hideKibana').callCount);
-    // expect(menu.childAt(0)).to.have.style('display', 'none');
-    // expect(component.prop('hideKibana')).to.be.true;
-  });
-
   describe('timeRange dropDown', function() {
-    it('should have dropdown with 7 children', () => {
+    it('should have dropdown with 8 children', () => {
       let {component} = setupPageHeaderShallow(undefined, false),
-        dropDown = component.childAt(1);
+        dropDown = component.childAt(0);
 
       expect(dropDown.type()).to.equal(DropDownMenu);
-      expect(dropDown.children().length).to.equal(7);
+      expect(dropDown.children().length).to.equal(8);
       expect(dropDown.childAt(0).type()).to.equal(MenuItem);
       expect(dropDown.childAt(1).type()).to.equal(MenuItem);
       expect(dropDown.childAt(2).type()).to.equal(MenuItem);
@@ -134,7 +115,8 @@ describe('<PageHeader />', () => {
       expect(dropDown.childAt(4).type()).to.equal(MenuItem);
       expect(dropDown.childAt(5).type()).to.equal(MenuItem);
       expect(dropDown.childAt(6).type()).to.equal(MenuItem);
-      expect(dropDown.find(MenuItem).length).to.equal(7);
+      expect(dropDown.childAt(7).type()).to.equal(MenuItem);
+      expect(dropDown.find(MenuItem).length).to.equal(8);
     });
 
     it('should call time range on click', () => {

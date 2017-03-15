@@ -17,7 +17,7 @@ import {createEdgeObject} from './GraphEdge';
 import {getIcon} from './GraphUtils';
 
 import Loader from 'components/Loader';
-import ContextualMenu from 'components/ContextualMenu';
+import ContextualMenu from './ContextualMenu';
 
 import './_network.scss';
 
@@ -125,39 +125,17 @@ function isNodeOrEdgeAlreadyExists(array, id) {
   return exists;
 }
 
-function displayActionAsSelected(actionsCount, actionId) {
-  for (let j = 0; j < actionsCount; j++) {
-    let tempId = 'action' + j;
-    let downarrowId = 'downarrow' + j;
-
-    if (tempId === actionId) {
-      document.getElementById(tempId).style.backgroundColor = Colors.selectedActionBG;
-      if (document.getElementById(downarrowId) !== undefined &&
-        document.getElementById(downarrowId) !== null) {
-        document.getElementById(downarrowId).style.backgroundColor = Colors.selectedActionBG;
-      }
-    }
-    else {
-      document.getElementById(tempId).style.backgroundColor = 'transparent';
-      if (document.getElementById(downarrowId) !== undefined &&
-        document.getElementById(downarrowId) !== null) {
-        document.getElementById(downarrowId).style.backgroundColor = 'transparent';
-      }
-    }
-  }
-}
-
 function displayNotificationMessage(message, actionId) {
   let position = getPosition(document.getElementById(actionId));
   document.getElementById('notification-message').innerHTML = message;
-  document.getElementById('notification-message').style.top = (position.y - 85) + 'px';
+  document.getElementById('notification-message').style.top = (position.y - 95) + 'px';
   ANIMATIONS.fadeIn(document.getElementById('notification-message'), {
     duration: 2,
     complete: function() {
       document.getElementById('notification-message').style.display = 'block';
 
       ANIMATIONS.fadeOut(document.getElementById('notification-message'), {
-        duration: 3000,
+        duration: 2000,
         complete: function() {
           document.getElementById('notification-message').style.display = 'none';
         }
@@ -204,7 +182,8 @@ class NetworkGraph extends React.Component {
       selectedNodesForExtendingGraph: [],
       actionsData: [],
       loaderText: '',
-      loadAgain: true
+      loadAgain: true,
+      sourceDetails: null
     };
 
     this.deselectNode = this.deselectNode.bind(this);
@@ -231,10 +210,8 @@ class NetworkGraph extends React.Component {
     if (nextProps.eventData && (nextProps.eventData !== props.eventData)) {
       const {id} = nextProps.eventData;
 
-      if (id) {
-        this.deselectNodes(this.network);
-        this.network.setSelection({nodes: [], edges: []});
-      }
+      this.deselectNodes(this.network);
+      this.network.setSelection({nodes: [], edges: []});
 
       if (this.nodeObjects[id]) {
         let nodeDetails = {
@@ -384,7 +361,6 @@ class NetworkGraph extends React.Component {
   }
 
   deselectNodes(network) {
-    let i = 0;
     for (let obj in this.nodeObjects) {
       let deselectedNode = this.nodeObjects[obj],
         node = network.body.nodes[deselectedNode.id];
@@ -393,11 +369,8 @@ class NetworkGraph extends React.Component {
         image: getIcon(deselectedNode.type, deselectedNode.status, 'INACTIVE')
       });
 
-      if (i === 0) {
-        this.deselect(deselectedNode);
-        this.toggleHighlightAnomalyChart(deselectedNode, false);
-      }
-      i++;
+      this.deselect(deselectedNode);
+      this.toggleHighlightAnomalyChart({id: ''}, false);
     }
   }
 
@@ -425,9 +398,10 @@ class NetworkGraph extends React.Component {
         selectedNodeDetails: '',
         actions: '',
         selectedNode: '',
-        selectedNodesForExtendingGraph: []
+        selectedNodesForExtendingGraph: [],
+        sourceDetails: null
       });
-      document.getElementById('actions').innerHTML = '';
+      // document.getElementById('actions').innerHTML = '';
       // document.getElementById('refreshData').style.marginLeft = 'auto';
     }
   }
@@ -517,7 +491,8 @@ class NetworkGraph extends React.Component {
       notNodeId: notNodeId
     };
 
-    this.ContextualMenu.getContextMenu(sourceDetails);
+    this.setState({ sourceDetails });
+    // this.ContextualMenu.getContextMenu(sourceDetails);
 
     let selectedNodesForExtendingGraph = [{
       nodeID: nodeID,
@@ -560,7 +535,8 @@ class NetworkGraph extends React.Component {
       notNodeId
     };
 
-    this.ContextualMenu.getContextMenu(sourceDetails);
+    this.setState({ sourceDetails });
+    // this.ContextualMenu.getContextMenu(sourceDetails);
 
     let states = {
       loadAgain: false,
@@ -609,16 +585,16 @@ class NetworkGraph extends React.Component {
       }
 
       let details = {
-        network: network,
-        actionId: actionId,
-        reportId: reportId,
-        nodeID: nodeID,
-        timeWindow: timeWindow,
-        parameters: parameters,
-        selectedNodesForExtendingGraph: selectedNodesForExtendingGraph,
-        contextMenuType: contextMenuType,
-        actionsCount: actionsCount,
-        actionType: actionType
+        network,
+        actionId,
+        reportId,
+        nodeID,
+        timeWindow,
+        parameters,
+        selectedNodesForExtendingGraph,
+        contextMenuType,
+        actionsCount,
+        actionType
       };
 
       this.fetchExtendedNodes(details);
@@ -668,8 +644,6 @@ class NetworkGraph extends React.Component {
         isFetching: false
       });
     }
-
-    displayActionAsSelected(actionsCount, actionId);
   }
 
   fetchData(details) {
@@ -711,7 +685,7 @@ class NetworkGraph extends React.Component {
         }, params)
       };
 
-      props.fetchApiData(props.timelineId, apiObj, {}, {});
+      props.fetchApiData({id: props.timelineId, api: apiObj, params: {}, options: {}});
 
       selectedNodesForExtendingGraph.push({
         'nodeID': nodeID,
@@ -901,10 +875,11 @@ class NetworkGraph extends React.Component {
             actions: '',
             selectedNode: '',
             selectedNodesForExtendingGraph: [],
-            previousNodesEdges: previousNodesEdges
+            previousNodesEdges: previousNodesEdges,
+            sourceDetails: null
           });
 
-          document.getElementById('actions').innerHTML = '';
+          // document.getElementById('actions').innerHTML = '';
           if (action === 'undo') {
             undoGraphCount--;
           }
@@ -1053,8 +1028,8 @@ class NetworkGraph extends React.Component {
         {
           state.actionsData && state.actionsData.length > 0
           ? <ContextualMenu
-            ref={(ref) => this.ContextualMenu = ref}
             showContextMenu={state.showContextMenu}
+            sourceDetails={state.sourceDetails}
             nodeObjects={this.nodeObjects}
             edgeObjects={this.edgeObjects}
             alertDate={this.state.alertDate}

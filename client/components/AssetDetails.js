@@ -8,7 +8,8 @@ import ScoreWidget from 'components/widgets/ScoreWidget';
 import FontIcon from 'material-ui/FontIcon';
 import {Colors} from '../../commons/colors';
 
-import {formatBytes, getColor} from '../../commons/utils/utils';
+import {formatBytes} from '../../commons/utils/utils';
+import {getColor} from '../../commons/utils/colorUtils';
 import {getCountryName} from '../../commons/utils/countryUtils';
 import {getArrowIcon} from '../../commons/utils/graphUtils';
 
@@ -23,11 +24,13 @@ const styles = {
     width: '45px',
     lineHeight: '45px',
     fontSize: '20px',
-    marginRight: '10px'
+    marginRight: '10px',
+    border: 'none',
+    boxShadow: 'none'
   },
   scoreDetails: {
     display: 'flex',
-    marginTop: '33px',
+    marginTop: '30px',
     cursor: 'pointer'
   },
   scoreDesc: {
@@ -133,7 +136,14 @@ class AssetDetail extends React.Component {
   }
 
   getChangeElement(change) {
-    const formattedChange = parseFloat(change).toFixed(2);
+    let formattedChange;
+    if (typeof change === 'number') {
+      formattedChange = parseFloat(change).toFixed(2);
+    }
+    else {
+      formattedChange = 0;
+    }
+
     return (
       <span style={styles.change}>
         <span style={styles.percent}>{Math.abs(formattedChange)} %</span>
@@ -304,7 +314,7 @@ class AssetDetail extends React.Component {
     return (
       <div>
         <div style={styles.scoreDetails} onClick={this.toggleChart('radarChartOpen')}>
-          <ScoreWidget scoreValue={assetDetail.risk.score} style={styles.rankScore} />
+          <ScoreWidget scoreValue={assetDetail.risk.score} style={styles.rankScore} hideArrow />
           <div style={styles.scoreDesc}>
             <h3 style={{...styles.title, ...styles.scoreTitle}}>Score</h3>
             <FontIcon style={iconStyle} className='material-icons'>

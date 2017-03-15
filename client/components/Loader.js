@@ -8,7 +8,7 @@ const style = {
   top: 0,
   bottom: 0,
   display: 'flex',
-  zIndex: 100,
+  zIndex: 2,
   backgroundColor: 'rgba(0,0,0, 0.3)'
 };
 

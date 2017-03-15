@@ -4,146 +4,208 @@
       {
         "meta": {
           "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_alert_count_time_shifted"
-            },
-            "queryParams": {
-              "window": ""
-            }
-          }
+          "api": null
         },
-        "name": "MetricsCard",
         "attributes": {
-          "countStyle": {
-            "color": "#F69275"
-          },
           "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
+            "width": "100%",
+            "backgroundColor": "transparent"
           }
         },
-        "id": "1",
-        "type": "MetricsCard",
-        "title": "High Priority Anomalies",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": "",
-          "page": "/alerts"
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_malware_count_time_shifted"
+        "id": "metricsBar",
+        "type": "MetricsBar",
+        "childrenComponent": [
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_alert_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
             },
-            "queryParams": {
-              "window": ""
-            }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#F69275"
-          },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
-          }
-        },
-        "id": "2",
-        "type": "MetricsCard",
-        "title": "High Priority Malware",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": "malware",
-          "page": "/alerts"
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_event_count_time_shifted"
+            "attributes": {
+              "countStyle": {
+                "color": "#f37133"
+              },
+              "style": {
+                "borderTop": "5px solid #f37133",
+                "marginRight": "1px",
+                "width": "25%"
+              }
             },
-            "queryParams": {
-              "window": ""
+            "id": "1",
+            "type": "MetricsCard",
+            "title": "High Priority Anomalies",
+            "clickData": {
+              "tableId": "RecentAnomalies",
+              "filterText": "",
+              "page": "/alerts"
             }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
-          }
-        },
-        "id": "3",
-        "type": "MetricsCard",
-        "title": "Events Processed",
-        "kibana": {
-          "pathParams": [
-            "traffic-details"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
-          }
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_asset_count_time_shifted"
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_malware_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
             },
-            "queryParams": {
-              "window": ""
+            "attributes": {
+              "countStyle": {
+                "color": "#f37133"
+              },
+              "style": {
+                "borderTop": "5px solid #f37133",
+                "marginRight": "1px",
+                "width": "25%"
+              }
+            },
+            "id": "2",
+            "type": "MetricsCard",
+            "title": "High Priority Malware",
+            "clickData": {
+              "tableId": "RecentAnomalies",
+              "filterText": "malware",
+              "page": "/alerts"
             }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_event_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
+            },
+            "attributes": {
+              "countStyle": {
+                "color": "#03C5ED"
+              },
+              "style": {
+                "borderTop": "5px solid #03C5ED",
+                "marginRight": "1px",
+                "width": "25%"
+              }
+            },
+            "details": {
+              "itemsPerPage": 20,
+              "meta": {
+                "showHeader": true,
+                "showSearch": true,
+                "showBack": true,
+                "showClose": true,
+                "api": {
+                  "path": "/api/analytics/reporting/details/{reportId}",
+                  "pathParams": {
+                    "reportId": "taf_event_count_time_shifted"
+                  },
+                  "queryParams": {
+                    "count": 100
+                  }
+                },
+                "title": "Events Processed"
+              },
+              "attributes": {
+                "header": {
+                  "titleWrap": {
+                    "alignItems": "center",
+                    "display": "inline-flex"
+                  }
+                },
+                "style": {
+                  "marginLeft": "30px",
+                  "marginRight": "30px",
+                  "marginTop": "30px"
+                }
+              },
+              "id": "details-view"
+            },
+            "id": "3",
+            "type": "MetricsCard",
+            "title": "Events Processed"
+          },
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_asset_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
+            },
+            "attributes": {
+              "countStyle": {
+                "color": "#03C5ED"
+              },
+              "style": {
+                "borderTop": "5px solid #03C5ED",
+                "marginRight": "1px",
+                "width": "25%"
+              }
+            },
+            "details": {
+              "itemsPerPage": 20,
+              "meta": {
+                "showHeader": true,
+                "showSearch": true,
+                "showBack": true,
+                "showClose": true,
+                "api": {
+                  "path": "/api/analytics/reporting/details/{reportId}",
+                  "pathParams": {
+                    "reportId": "taf_asset_count_time_shifted"
+                  },
+                  "queryParams": {
+                    "count": 100
+                  }
+                },
+                "title": "Assets Monitored"
+              },
+              "attributes": {
+                "header": {
+                  "titleWrap": {
+                    "alignItems": "center",
+                    "display": "inline-flex"
+                  }
+                },
+                "style": {
+                  "marginLeft": "30px",
+                  "marginRight": "30px",
+                  "marginTop": "30px"
+                }
+              },
+              "id": "details-view"
+            },
+            "id": "4",
+            "type": "MetricsCard",
+            "title": "Assets Monitored"
           }
-        },
-        "id": "4",
-        "type": "MetricsCard",
-        "title": "Assets Monitored",
-        "kibana": {
-          "pathParams": [
-            "assets-all"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
-          }
-        }
+        ]
       }
     ],
     [
       {
         "chartOptions": {
-          "paletteColors": "#C9EDDF, #60E2DC",
+          "paletteColors": "#adecf9, #03c5ed",
           "yAxisName": "INCOMING BANDWIDTH",
           "xAxisName": "TIME",
           "lineThickness": "2",
@@ -181,6 +243,7 @@
         },
         "meta": {
           "subTitle": "(in bytes)",
+          "showDetails": false,
           "showHeader": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
@@ -198,7 +261,8 @@
             "display": "none"
           },
           "style": {
-            "marginRight": "33px",
+            "marginLeft": "30px",
+            "marginRight": "30px",
             "width": "50%"
           },
           "id": "HistogramChart1"
@@ -208,7 +272,7 @@
       },
       {
         "chartOptions": {
-          "paletteColors": "#C9EDDF, #60E2DC",
+          "paletteColors": "#adecf9, #03c5ed",
           "yAxisName": "OUTGOING BANDWIDTH",
           "xAxisName": "TIME",
           "lineThickness": "2",
@@ -247,6 +311,7 @@
         "meta": {
           "subTitle": "(in bytes)",
           "showHeader": true,
+          "showDetails": false,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -263,7 +328,8 @@
             "display": "none"
           },
           "style": {
-            "width": "50%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "id": "HistogramChart2"
         },
@@ -274,7 +340,7 @@
     [
       {
         "chartOptions": {
-          "paletteColors": "#C9EDDF, #60E2DC",
+          "paletteColors": "#adecf9, #03c5ed",
           "yAxisName": "NO. OF CONNECTIONS",
           "xAxisName": "TIME",
           "lineThickness": "2",
@@ -312,6 +378,7 @@
         },
         "meta": {
           "showHeader": true,
+          "showDetails": false,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -328,8 +395,9 @@
             "display": "none"
           },
           "style": {
-            "marginRight": "33px",
-            "width": "100%"
+            "marginLeft": "30px",
+            "marginRight": "30px",
+            "width": "50%"
           },
           "id": "HistogramChart3"
         },
@@ -339,7 +407,7 @@
       {
         "chartOptions": {
           "showValues": "1",
-          "paletteColors": "#2bd8d0",
+          "paletteColors": "#03C5ED",
           "showLabels": "1",
           "chartRightMargin": "0"
         },
@@ -377,9 +445,20 @@
             "display": "none"
           },
           "style": {
-            "width": "100%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "id": "TopConnectionsByProtocol"
+        },
+        "details": {
+          "meta": {
+            "queryParams": {
+              "protocol.service": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
         },
         "id": "top-connections-by-protocol",
         "type": "charts/HorizontalBarChart"
@@ -389,6 +468,7 @@
       {
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -400,15 +480,19 @@
           },
           "title": "Longest Connections"
         },
-        "name": "ReactableTable",
         "attributes": {
           "style": {
-            "width": "100%"
+            "width": "100%",
+            "marginLeft": "30px",
+            "marginRight": "30px"
           },
           "id": "LongestConnections"
         },
+        "details": {
+          "itemsPerPage": 5
+        },
         "id": "longest-connections",
-        "type": "ReactableTable"
+        "type": "Reactable"
       }
     ]
   ]

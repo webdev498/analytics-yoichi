@@ -52,3 +52,50 @@ export function autoScrollTo(id, decreasePositionBy) {
   let position = getPosition(document.getElementById(id));
   window.scrollTo(0, position.y - decreasePositionBy);
 }
+
+export function getQueryParamsForDetails(fields, dataObj) {
+  let parameters = Object.assign({}, fields);
+
+  if (dataObj.toolText) {
+    let toolTexts = dataObj.toolText.split(' |');
+    for (let parameter in parameters) {
+      let value = toolTexts[parameters[parameter].toolTextIndex];
+      if (parameter === 'date') {
+        value = new Date(value).toISOString();
+        value = value.replace('Z', '');
+      }
+      parameters[parameter].value = value;
+    }
+  }
+  else if (dataObj.shortLabel) {
+    for (let parameter in parameters) {
+      parameters[parameter].value = dataObj.shortLabel;
+    }
+  }
+  return parameters;
+}
+
+export function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+};
+
+export function hideBodyScroll() {
+  // hides the scroll from the body element when details are shown.
+  document.body.style.overflow = 'hidden';
+}
+
+export function showBodyScroll() {
+  // hides the scroll from the body element when details are shown.
+  document.body.style.overflow = '';
+}

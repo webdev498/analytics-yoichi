@@ -4,7 +4,6 @@ export const PebbleColor = GrapeColor;
 export const SmokeColor = '#cbcbd1';
 export const CloudColor = '#e5e5ea';// f0f0f2
 export const ArcticColor = '#ffffff';
-export const TurquoiseColor = '#2bd8d0';
 
 export const CherryColor = '#ef5976';
 export const CoralColor = '#F69275';
@@ -17,55 +16,80 @@ export const BlackColor = '#000000';
 export const NavigationColor = 'rgba(255, 255, 255, 0.54)';
 export const SliderColor = 'rgba(36,41,61, 0.25)';
 
-export const SearchColor = '#363E51';
+export const BarColor = '#03c5ed';
+export const BarColorShade1 = '#1bcbef';
+export const BarColorShade2 = '#35d1f1';
+export const BarColorShade3 = '#4ed6f2';
+export const BarColorShade4 = '#6adff7';
+export const BarColorShade5 = '#7fe2f6';
+export const BarColorShade6 = '#99e9f9';
+export const BarColorShade7 = '#adecf9';
+export const BarColorShade8 = '#d4f5fc';
+export const BarColorShade9 = '#eafbfe';
+
+export const OrangeColor = '#f3763a';
+export const OrangeColorShade1 = '#f47d44';
+export const OrangeColorShade2 = '#f58a57';
+export const OrangeColorShade3 = '#f6996c';
+export const OrangeColorShade4 = '#f8a984';
+export const OrangeColorShade5 = '#f9bda0';
+export const OrangeColorShade6 = '#fbceb8';
+export const OrangeColorShade7 = '#fcdccd';
+export const OrangeColorShade8 = '#fdebe2';
+export const OrangeColorShade9 = '#fef5f1';
+
+export const CloudColorShade0 = '#e5e5ea';
+export const CloudColorShade1 = 'rgb(68, 76, 99)';
+export const CloudColorShade2 = '#F7F7F9';
+// export const CloudColorShade3 = `rgba($GarnetColor, 0.3)`;
+export const CloudColorShade4 = '#DFDFE3';
+export const CloudColorShade5 = '#CBCBD1';
+export const CloudColorShade6 = '#EAEAED';
+export const CloudColorShade7 = '#888D9A';
+export const CloudColorShade8 = '#E1E1E5';
+export const CloudColorShade9 = '#FAFAFB';
 
 export const AreaSparkLineChartColor = {
-  'area': '#BFEFEE',
-  'border': '#59DED9'
+  area: '#adecf9',
+  border: '#03c5ed'
 };
 
 export const DurationWidgetColor = {
-  'hour': '#9BE9E7',
-  'min': '#B9EEED',
-  'sec': '#D9F2F3'
+  hour: BarColorShade5,
+  min: BarColorShade6,
+  sec: BarColorShade7
 };
 
-export const WorldmapLegendsColor = {
-  'secure': [
-    TurquoiseColor,
-    '#51DFD8',
-    '#71E5DF',
-    '#97ECE8',
-    '#BAF2F0',
-    '#DBF8F7'
+export const Worldmap = {
+  secure: [
+    BarColor,
+    BarColorShade1,
+    BarColorShade2,
+    BarColorShade3,
+    BarColorShade4,
+    BarColorShade5
   ],
-  'malicious': [
-    CoralColor,
-    '#F7A48B',
-    '#F9B6A2',
-    '#F8CABB',
-    '#FCDBD2',
-    '#FEEDE8'
+  malicious: [
+    OrangeColor,
+    OrangeColorShade1,
+    OrangeColorShade2,
+    OrangeColorShade3,
+    OrangeColorShade4,
+    OrangeColorShade5
   ]
 };
 
 export const SubHeadingBGColor = '#F7F7F9';
 
-export const AxisColor = '#DADADA';
+export const DefaultGraphPaletteColors = `${BarColor},${BarColorShade1},${BarColorShade2},\
+${BarColorShade3},${BarColorShade4},${BarColorShade5},${BarColorShade6},${BarColorShade7},\
+${BarColorShade8},${BarColorShade9}`;
 
-export const DefaultGraphPaletteColors =
-  '#2bd8d0,#3ad7c9,#46d6c4,#57d5bd,#67d3b6,#79d2ae,#8ad1a7,#9acfa0,#a8ce9a,#b2cd96';
-
-export const TimelineBarColors = [
-  '#2AD8D0',
-  '#CAEDEB'
-];
-
-export const DefaultCanvasBGColors = '#EBFBFB,' + WhiteColor;
+export const DefaultCanvasBGColors = `${BarColorShade9},${WhiteColor}`;
 
 export const NetworkNodeLabelColor = '#F2F2F4';
 
-export const LineChartPallete = `${CherryColor},${CoralColor},${MustardColor},${SeafoamColor},${TurquoiseColor}`;
+export const LineChartPallete = `${CherryColor},${CoralColor},${MustardColor},${SeafoamColor}`;
 
 export const contextBGColor = '#EBEBEF';
 
@@ -75,14 +99,30 @@ export const notificationMessageBGColor = '#EBEBEF';
 
 export const CloudColorShades = ['#EEEEF1'];
 
+export const Alerts = {
+  high: '#e72b44',
+  medium: '#f37133',
+  low: '#feb821'
+};
+
+export const StandardChartPalette = `${BarColorShade7}, ${BarColor}`;
+
+export const TextColor = GrapeColor;
+export const BorderColor = CloudColor;
+export const ShadowColor = SmokeColor;
+export const IconBackgroundColor = '#3e465b';
+
 export const Colors = {
+  text: TextColor,
+  border: BorderColor,
+  shadow: ShadowColor,
+  iconBackground: IconBackgroundColor,
   garnet: GarnetColor,
   grape: GrapeColor,
   pebble: PebbleColor,
   smoke: SmokeColor,
   cloud: CloudColor,
   arctic: ArcticColor,
-  turquoise: TurquoiseColor,
   cherry: CherryColor,
   coral: CoralColor,
   mustard: MustardColor,
@@ -96,38 +136,11 @@ export const Colors = {
   subHeadingBG: SubHeadingBGColor,
   defaultGraphPalette: DefaultGraphPaletteColors,
   defaultCanvasBG: DefaultCanvasBGColors,
-  worldmapLegends: WorldmapLegendsColor,
-  axis: AxisColor,
-  timelineBar: TimelineBarColors,
+  worldmap: Worldmap,
   networkNodeLabel: NetworkNodeLabelColor,
   contextBG: contextBGColor,
   selectedActionBG: selectedActionBGColor,
   notificationMessageBG: notificationMessageBGColor,
   cloudShades: CloudColorShades,
-  search: SearchColor
-};
-
-export const PrimaryPalette = {
-  garnet: GarnetColor,
-  grape: GrapeColor,
-  pebble: PebbleColor,
-  smoke: SmokeColor,
-  cloud: CloudColor,
-  arctic: ArcticColor,
-  turquoise: TurquoiseColor
-};
-
-export const SecondaryPalette = {
-  cherry: CherryColor,
-  coral: CoralColor,
-  mustard: MustardColor,
-  seafoam: SeafoamColor
-};
-
-export const tertiaryPalette = {
-  mustard: MustardColor,
-  coral: CoralColor,
-  cherry: CherryColor,
-  seafoam: SeafoamColor,
-  turquoise: TurquoiseColor
+  bar: BarColor
 };

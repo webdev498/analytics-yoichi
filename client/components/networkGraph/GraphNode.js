@@ -1,5 +1,6 @@
 import React from 'react';
 import {Colors} from '../../../commons/colors';
+import { DEFAULT_FONT } from 'Constants';
 
 import {
   firstCharCapitalize,
@@ -252,10 +253,12 @@ function handleNodeMetaData(metadata, nodeObject) {
           }
           if (whatIsIt(metadata[metadataType]) === 'Array') {
             let metadataArray = metadata[metadataType];
+            nodeObject.title += newLine2 + '<b>' + firstCharCapitalize(metadataType) + '</b>:';
             nodeObject.nodeDetails.push(
               <li key={metadataType}><b>{firstCharCapitalize(metadataType)}:</b></li>
             );
             metadataArray.forEach((value, index) => {
+              nodeObject.title += newLine2 + value;
               nodeObject.nodeDetails.push(
                 <li key={metadataType + index}>{index + 1}. {value}</li>
               );
@@ -310,7 +313,7 @@ export default class GraphNode {
       actions: (!isNull(node.actions) && !isUndefined(node.actions)) ? node.actions : [],
       borderWidth: '0',
       font: {
-        face: 'Open Sans',
+        face: DEFAULT_FONT,
         color: Colors.pebble,
         size: '11',
         align: 'left'
@@ -318,7 +321,7 @@ export default class GraphNode {
       shape: 'image',
       color: {
         color: Colors.networkNodeLabel,
-        highlight: Colors.turquoise
+        highlight: Colors.bar
       },
       actionData: node.actionData ? node.actionData : {}
     };
@@ -358,7 +361,7 @@ export function createNodeObject(node) {
     actions: (!isNull(node.actions) && !isUndefined(node.actions)) ? node.actions : [],
     borderWidth: '0',
     font: {
-      face: 'Open Sans',
+      face: DEFAULT_FONT,
       color: Colors.pebble,
       size: '11',
       align: 'left'
@@ -366,7 +369,7 @@ export function createNodeObject(node) {
     shape: 'image',
     color: {
       color: Colors.networkNodeLabel,
-      highlight: Colors.turquoise
+      highlight: Colors.bar
     },
     actionData: node.actionData ? node.actionData : {}
   };

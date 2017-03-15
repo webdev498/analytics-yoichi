@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import Header from './PageHeader';
 import Sidebar from './Sidebar';
 import PageContent from './PageContent';
-import Kibana from 'components/Kibana';
+import ParentCard from 'containers/ParentCard';
+import {fetchNextSetOfData} from 'actions/parentCard';
 
 import { fetchUserData, logout } from 'actions/auth';
 import { fetchActionsList } from 'actions/actionsList';
@@ -12,18 +13,18 @@ import Loader from 'components/Loader';
 import {Colors} from '../../../commons/colors';
 import 'styles/core.scss';
 
-const openKibanaInNewWindow = window.global && window.global.openKibanaInNewWindow;
+import { hideBodyScroll, showBodyScroll } from 'utils/utils';
 
 const styles = {
-  kibana: {
-    backgroundColor: Colors.arctic,
-    padding: '5px 5px 0 5px',
+  details: {
+    backgroundColor: Colors.cloud,
     position: 'fixed',
     top: '64px',
     left: '72px',
     bottom: 0,
     right: 0,
-    zIndex: 1
+    zIndex: 3,
+    overflow: 'auto'
   },
   base: {
     paddingLeft: '72px',
@@ -63,14 +64,16 @@ export class CoreLayout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showKibana: false,
+      showDetails: false,
       showFullSidebar: false,
       sidebarWidth: {width: '72px'},
       sidebar: props.auth.sidebar,
-      showSearch: false
+      showSearch: false,
+      isFullView: false,
+      elm: null
     };
 
-    this.hideKibana = this.hideKibana.bind(this);
+    this.hideDetails = this.hideDetails.bind(this);
     this.mouseOver = this.mouseOver.bind(this);
     this.mouseOut = this.mouseOut.bind(this);
   }
@@ -78,25 +81,23 @@ export class CoreLayout extends React.Component {
   getChildContext() {
     const that = this;
     return {
-      clickThrough(url) {
+      clickThrough(input) {
         that.setState({
-          url,
-          showKibana: true
+          input,
+          showDetails: true
         });
 
-        // hides the scroll from the body element when kibana is shown.
-        document.body.style.overflow = 'hidden';
+        hideBodyScroll();
       }
     };
   }
 
-  hideKibana() {
+  hideDetails() {
     this.setState({
-      showKibana: false
+      showDetails: false
     });
 
-    // shows the scroll of the body element when kibana is hidden.
-    document.body.style.overflow = '';
+    showBodyScroll();
   }
 
   mouseOver() {
@@ -120,7 +121,7 @@ export class CoreLayout extends React.Component {
     this.props.fetchActionsList();
 
     this.context.router.listen(() => {
-      this.hideKibana();
+      this.hideDetails();
       if (this.state.showSearch) {
         this.toggleSearch();
       }
@@ -138,24 +139,77 @@ export class CoreLayout extends React.Component {
     }
   }
 
-  render() {
-    const {props, state} = this,
-      {showKibana} = this.state;
+  getDetailsInput() {
+    const {state: {showDetails, input}} = this;
+    let detailsInput = input;
+    if (showDetails && detailsInput && detailsInput.details) {
+      detailsInput.details.meta.api.queryParams = Object.assign({},
+        detailsInput.details.meta.api.queryParams, {
+          start: detailsInput.data.interval.from,
+          end: detailsInput.data.interval.to
+        });
 
-    let kibanaUrl = showKibana ? this.state.url : '';
+      let apiObj = {
+        id: detailsInput.details.id,
+        api: detailsInput.details.meta.api,
+        params: {},
+        options: {},
+        isDetails: true
+      };
+
+      detailsInput = Object.assign({}, detailsInput.details, {
+        details: detailsInput.details,
+        apiObj,
+        fetchNextSetOfData,
+        hideDetails: this.hideDetails,
+        isDetailsView: true
+      });
+    }
+    else {
+      detailsInput = {};
+    }
+
+    return detailsInput;
+  }
+
+  getFullView = () => {
+    const { elm } = this.state,
+      {props} = elm,
+      updatedProps = Object.assign({}, elm.props, {
+        id: `${props.id}FullView`
+      });
+
+    updatedProps.attributes = {
+      ...updatedProps.attributes,
+      id: `${props.attributes.id}-full-view`,
+      style: {
+        width: '100%',
+        height: 'auto'
+      }
+    };
 
     return (
-      <div>
-        <Header
-          title='RANK'
-          showKibana={showKibana}
-          hideKibana={this.hideKibana}
-          params={props.params} />
+      <div style={{...styles.details, padding: '30px'}}>
+        <ParentCard {...updatedProps}>
+          {React.cloneElement(updatedProps.children)}
+        </ParentCard>
+      </div>
+    );
+  }
+
+  render() {
+    const {props, state} = this,
+      { showDetails, input } = state;
+
+    let detailsInput = this.getDetailsInput();
+
+    return (
+      <div style={styles.wrap}>
+        <Header params={props.params} />
 
         <Sidebar
           sidebar={this.state.sidebar}
           location={props.location}
-          hideKibana={this.hideKibana}
           toggleSearch={this.toggleSearch}
           showSearch={state.showSearch} />
 
@@ -170,15 +224,11 @@ export class CoreLayout extends React.Component {
           }
 
           {
-            showKibana && kibanaUrl !== ''
+            showDetails && input.details
             ? (
-              openKibanaInNewWindow
-              ? window.open(kibanaUrl)
-              : (
-                <div style={styles.kibana}>
-                  <Kibana url={this.state.url} />
-                </div>
-              )
+              <div style={styles.details}>
+                <ParentCard {...detailsInput} />
+              </div>
             )
             : null
           }

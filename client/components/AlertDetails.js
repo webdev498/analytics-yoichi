@@ -23,7 +23,7 @@ const styles = {
   },
   error: {
     textAlign: 'center',
-    marginBottom: '33px'
+    marginBottom: '30px'
   }
 };
 

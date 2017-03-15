@@ -6,7 +6,7 @@ export function calculateDateDisplayFormat(timeWindow) {
   if (timeWindow === '1h' || timeWindow === '6h' || timeWindow === '12h' || timeWindow === '24h') {
     dateDisplayFormat = 'HH:mm';
   }
-  else if (timeWindow === '48h' || timeWindow === '1w' || timeWindow === '1mo') {
+  else if (timeWindow === '48h' || timeWindow === '1w' || timeWindow === '1mo' || timeWindow === '2mo') {
     dateDisplayFormat = 'ddd, D MMM';
   }
   return dateDisplayFormat;
@@ -17,7 +17,7 @@ export function calculateDateDisplayFormatForHistogram(timeWindow) {
   if (timeWindow === '1h' || timeWindow === '6h' || timeWindow === '12h' || timeWindow === '24h') {
     dateDisplayFormat = 'ddd, D HH:mm';
   }
-  else if (timeWindow === '48h' || timeWindow === '1w' || timeWindow === '1mo') {
+  else if (timeWindow === '48h' || timeWindow === '1w' || timeWindow === '1mo' || timeWindow === '2mo') {
     dateDisplayFormat = 'ddd, D MMM HH:mm';
   }
   return dateDisplayFormat;

@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {fakeServer, spy} from 'sinon';
-import {Map, fromJS} from 'immutable';
+import {Map} from 'immutable';
 
 import {
   REQUEST_API_DATA,
@@ -9,19 +9,26 @@ import {
   ERROR_API_DATA,
   TIME_INTERVAL_UPDATE,
   PARENT_CARD_EVENT,
-  REMOVE_COMPONENT
+  REMOVE_COMPONENT,
+  REQUEST_DETAILS_API_DATA,
+  RECEIVE_DETAILS_API_DATA,
+  UPDATE_DETAILS_API_DATA,
+  ERROR_DETAILS_API_DATA,
+  REMOVE_DETAILS_COMPONENT
 } from 'Constants';
 
 import {
   requestApiData,
   receiveApiData,
   errorApiData,
+  updateDetailsApiData,
   changeTimeRange,
   componentEvent,
   removeComponentWithId,
   getUrl,
   callApi,
   fetchApiData,
+  fetchNextSetOfData,
   updateApiData,
   broadcastEvent,
   removeComponent
@@ -40,42 +47,112 @@ function getApiObj(path, query, pathParams) {
   };
 }
 
-describe('parentCard Redux Actions', () => {
-  it('should return the state for REQUEST_API_DATA', () => {
-    const id = 'testId',
-      api = {test: 'value'},
-      requestApiState = requestApiData(id, api);
+function getOffset() {
+  const temp = new Date();
+  return temp.getTimezoneOffset();
+}
 
-    expect(requestApiState).to.be.an.object;
-    expect(requestApiState).to.have.a.property('type', REQUEST_API_DATA);
-    expect(requestApiState).to.have.a.property('id', id);
-    expect(requestApiState).to.have.a.property('api', api);
+describe('ParentCard Actions', () => {
+  context('requestApiData function', () => {
+    it('should return the action for REQUEST_API_DATA', () => {
+      const id = 'testId',
+        api = { test: 'value' },
+        requestApiState = requestApiData(id, api);
+
+      expect(requestApiState).to.be.an.object;
+      expect(requestApiState).to.have.a.property('type', REQUEST_API_DATA);
+      expect(requestApiState).to.have.a.property('id', id);
+      expect(requestApiState).to.have.a.property('api', api);
+    });
+
+    it('should return the action for REQUEST_DETAILS_API_DATA', () => {
+      const id = 'testId',
+        api = { test: 'value' },
+        requestApiState = requestApiData(id, api, true);
+
+      expect(requestApiState).to.be.an.object;
+      expect(requestApiState).to.have.a.property('type', REQUEST_DETAILS_API_DATA);
+      expect(requestApiState).to.have.a.property('id', id);
+      expect(requestApiState).to.have.a.property('api', api);
+    });
   });
 
-  it('should return the state for RECEIVE_API_DATA', () => {
-    const id = 'testId',
-      data = {test: 'value'},
-      responseApiState = receiveApiData(id, data);
+  context('receiveApiData function', () => {
+    it('should return the action for RECEIVE_API_DATA', () => {
+      const id = 'testId',
+        data = { test: 'value' },
+        responseApiState = receiveApiData(id, data);
 
-    expect(responseApiState).to.be.an.object;
-    expect(responseApiState).to.have.a.property('type', RECEIVE_API_DATA);
-    expect(responseApiState).to.have.a.property('id', id);
-    expect(responseApiState).to.have.a.property('data', data);
+      expect(responseApiState).to.be.an.object;
+      expect(responseApiState).to.have.a.property('type', RECEIVE_API_DATA);
+      expect(responseApiState).to.have.a.property('id', id);
+      expect(responseApiState).to.have.a.property('data', data);
+    });
+
+    it('should return the action for RECEIVE_DETAILS_API_DATA', () => {
+      const id = 'testId',
+        data = { test: 'value' },
+        responseApiState = receiveApiData(id, data, true);
+
+      expect(responseApiState).to.be.an.object;
+      expect(responseApiState).to.have.a.property('type', RECEIVE_DETAILS_API_DATA);
+      expect(responseApiState).to.have.a.property('id', id);
+      expect(responseApiState).to.have.a.property('data', data);
+    });
   });
 
-  it('should return the state for ERROR_API_DATA', () => {
+  context('errorApiData function', () => {
+    it('should return the action for ERROR_API_DATA', () => {
+      const id = 'testId',
+        errorData = { test: 'value' },
+        api = { test2: 'value2' },
+        errorApiState = errorApiData(id, errorData, api);
+
+      expect(errorApiState).to.be.an.object;
+      expect(errorApiState).to.have.a.property('type', ERROR_API_DATA);
+      expect(errorApiState).to.have.a.property('id', id);
+      expect(errorApiState).to.have.a.property('errorData', errorData);
+    });
+
+    it('should return the action for ERROR_DETAILS_API_DATA', () => {
+      const id = 'testId',
+        errorData = { test: 'value' },
+        api = { test2: 'value2' },
+        errorApiState = errorApiData(id, errorData, api, true);
+
+      expect(errorApiState).to.be.an.object;
+      expect(errorApiState).to.have.a.property('type', ERROR_DETAILS_API_DATA);
+      expect(errorApiState).to.have.a.property('id', id);
+      expect(errorApiState).to.have.a.property('errorData', errorData);
+    });
+  });
+
+  context('updateDetailsApiData function', () => {
+    it('should return the action for UPDATE_DETAILS_API_DATA', () => {
+      const id = 'testId',
+        data = { test: 'value' },
+        responseApiState = updateDetailsApiData(id, data);
+
+      expect(responseApiState).to.be.an.object;
+      expect(responseApiState).to.have.a.property('type', UPDATE_DETAILS_API_DATA);
+      expect(responseApiState).to.have.a.property('id', id);
+      expect(responseApiState).to.have.a.property('data', data);
+    });
+  });
+
+  it('should return the action for ERROR_DETAILS_API_DATA', () => {
     const id = 'testId',
-      errorData = {test: 'value'},
-      api = {test2: 'value2'},
-      errorApiState = errorApiData(id, errorData, api);
+      errorData = { test: 'value' },
+      api = { test2: 'value2' },
+      errorApiState = errorApiData(id, errorData, api, true);
 
     expect(errorApiState).to.be.an.object;
-    expect(errorApiState).to.have.a.property('type', ERROR_API_DATA);
+    expect(errorApiState).to.have.a.property('type', ERROR_DETAILS_API_DATA);
     expect(errorApiState).to.have.a.property('id', id);
     expect(errorApiState).to.have.a.property('errorData', errorData);
   });
 
-  it('should return the state for TIME_INTERVAL_UPDATE', () => {
+  it('should return the action for TIME_INTERVAL_UPDATE', () => {
     const data = {duration: '1d'},
       changeTimeState = changeTimeRange(data);
 
@@ -84,7 +161,7 @@ describe('parentCard Redux Actions', () => {
     expect(changeTimeState).to.have.a.property('data', data);
   });
 
-  it('should return the state for PARENT_CARD_EVENT', () => {
+  it('should return the action for PARENT_CARD_EVENT', () => {
     const id = 'testId',
       data = {test: 'value'},
       parentCardEventState = componentEvent(id, data);
@@ -95,10 +172,10 @@ describe('parentCard Redux Actions', () => {
     expect(parentCardEventState).to.have.a.property('eventData', data);
   });
 
-  it('should return the state for REMOVE_COMPONENT', () => {
+  it('should return the action for REMOVE_COMPONENT', () => {
     const id = 'testId',
       data = {test: 'value'},
-      removeComponentState = removeComponentWithId(id, data);
+      [removeComponentState] = removeComponentWithId(id, data);
 
     expect(removeComponentState).to.be.an.object;
     expect(removeComponentState).to.have.a.property('id', id);
@@ -191,6 +268,44 @@ describe('parentCard Redux Actions', () => {
         api = getApiObj('/api/alert', query),
         url = getUrl(api, '1d', routerParams),
         str = `${baseUrl}/api/alert?date=${routerParams.date}&window=1d&${routerParams.type}=${routerParams.assetId}`;
+
+      expect(url).to.equal(str);
+    });
+
+    it('should return url with customParams substited with corresponding values', () => {
+      const api = {
+          path: '/api/session/activity/live',
+          pathParams: {
+            assetId: ':pathParam',
+            type: ':pathParam'
+          },
+          queryParams: {
+            window: '',
+            offset: ':customParam'
+          }
+        },
+        routerParams = { type: 'test', assetId: 'testId' },
+        url = getUrl(api, '1d', routerParams),
+        str = `${baseUrl}/api/session/activity/live?window=1d&offset=${getOffset()}`;
+
+      expect(url).to.equal(str);
+    });
+
+    it('should return url with empty string for customParams if it is not defined', () => {
+      const api = {
+          path: '/api/session/activity/live',
+          pathParams: {
+            assetId: ':pathParam',
+            type: ':pathParam'
+          },
+          queryParams: {
+            window: '',
+            test: ':customParam'
+          }
+        },
+        routerParams = { type: 'test', assetId: 'testId' },
+        url = getUrl(api, '1d', routerParams),
+        str = `${baseUrl}/api/session/activity/live?window=1d&test=`;
 
       expect(url).to.equal(str);
     });
@@ -305,7 +420,7 @@ describe('parentCard Redux Actions', () => {
   });
 
   context('fetchApiData function', () => {
-    let server, id, apiData, auth, store;
+    let server, id, apiData, auth, store, input;
 
     const api = {
         path: '/api/{reportId}',
@@ -319,9 +434,10 @@ describe('parentCard Redux Actions', () => {
     beforeEach(function() {
       server = fakeServer.create();
       id = 'testId';
-      apiData = fromJS({duration: '1h', components: {}});
+      apiData = Map({});
       auth = { cookies: { access_token: '', token_type: '' } };
       store = mockStore({ apiData, auth });
+      input = { id, api, params, options: {} };
     });
 
     afterEach(function() {
@@ -331,7 +447,7 @@ describe('parentCard Redux Actions', () => {
     it('should dispatch REQUEST_API_DATA state', () => {
       server.respondWith('GET', `${baseUrl}/api/test`, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
 
-      const dispatchCall = store.dispatch(fetchApiData(id, api, params, {})),
+      const dispatchCall = store.dispatch(fetchApiData(input)),
         actions = store.getActions(),
         requestAction = actions[0];
 
@@ -347,7 +463,7 @@ describe('parentCard Redux Actions', () => {
     it('should dispatch RECEIVE_API_DATA state, after REQUEST_API_DATA', () => {
       server.respondWith('GET', `${baseUrl}/api/test`, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
 
-      const dispatchCall = store.dispatch(fetchApiData(id, api, params, {}))
+      const dispatchCall = store.dispatch(fetchApiData(input))
         .then(res => {
           const actions = store.getActions(),
             requestAction = actions[0],
@@ -371,7 +487,7 @@ describe('parentCard Redux Actions', () => {
     it('should dispatch ERROR_API_DATA state, after REQUEST_API_DATA', () => {
       server.respondWith('GET', `${baseUrl}/api/test`, [ 400, { 'Content-Type': 'application/json' }, jsonRes ]);
 
-      const dispatchCall = store.dispatch(fetchApiData(id, api, params, {}))
+      const dispatchCall = store.dispatch(fetchApiData(input))
         .then(res => {
           const actions = store.getActions(),
             requestAction = actions[0],
@@ -392,29 +508,107 @@ describe('parentCard Redux Actions', () => {
       server.respond();
       return dispatchCall;
     });
+
+    it('should call multiple apis, and dispatch RECEIVE_API_DATA and REQUEST_API_DATA if all apis are successful', () => {
+      input.api = [
+        api,
+        Object.assign({}, api, {pathParams: { reportId: 'test1' }}),
+        Object.assign({}, api, {pathParams: { reportId: 'test2' }})
+      ];
+
+      server.respondWith('GET', `${baseUrl}/api/test`, [200, { 'Content-Type': 'application/json' }, jsonRes]);
+      server.respondWith('GET', `${baseUrl}/api/test1`, [200, { 'Content-Type': 'application/json' }, jsonRes]);
+      server.respondWith('GET', `${baseUrl}/api/test2`, [200, { 'Content-Type': 'application/json' }, jsonRes]);
+
+      const dispatchCall = store.dispatch(fetchApiData(input))
+        .then(res => {
+          const actions = store.getActions(),
+            requestAction = actions[0],
+            responseAction = actions[1];
+
+          expect(actions).to.have.length(2);
+
+          expect(requestAction).to.have.a.property('type', 'REQUEST_API_DATA');
+          expect(requestAction).to.have.a.property('id', id);
+          expect(requestAction).to.have.a.property('api');
+
+          expect(responseAction).to.have.a.property('type', 'RECEIVE_API_DATA');
+          expect(responseAction).to.have.a.property('id', id);
+          expect(responseAction).to.have.a.property('data');
+        });
+
+      server.respond();
+      return dispatchCall;
+    });
+
+    it('should dispatch ERROR_API_DATA and REQUEST_API_DATA, if any of the multiple apis are not successful', () => {
+      server.respondWith('GET', `${baseUrl}/api/test`, [403, { 'Content-Type': 'application/json' }, jsonRes]);
+      server.respondWith('GET', `${baseUrl}/api/test1`, [404, { 'Content-Type': 'application/json' }, jsonRes]);
+      server.respondWith('GET', `${baseUrl}/api/test2`, [200, { 'Content-Type': 'application/json' }, jsonRes]);
+
+      const dispatchCall = store.dispatch(fetchApiData(input))
+        .then(res => {
+          const actions = store.getActions(),
+            requestAction = actions[0],
+            errorAction = actions[1];
+
+          expect(actions).to.have.length(2);
+          expect(requestAction).to.have.a.property('type', 'REQUEST_API_DATA');
+          expect(requestAction).to.have.a.property('id', id);
+          expect(requestAction).to.have.a.property('api');
+
+          expect(errorAction).to.have.a.property('type', 'ERROR_API_DATA');
+          expect(errorAction).to.have.a.property('id', id);
+          expect(errorAction).to.have.a.property('errorData');
+          expect(errorAction).to.have.a.property('api');
+        });
+
+      server.respond();
+      return dispatchCall;
+    });
   });
 
   context('updateApiData function', () => {
-    let apiData, auth, store;
+    let apiData, auth, store, duration;
     beforeEach(function() {
-      apiData = fromJS({duration: '1h', components: {}});
+      apiData = Map({});
       auth = { cookies: { access_token: '', token_type: '' } };
+      duration = '1h';
     });
 
     it('should do nothing if duration is not updated', () => {
-      store = mockStore({ apiData, auth });
+      store = mockStore({ apiData, auth, duration });
       store.dispatch(updateApiData({param: '1h'}, {}));
       const actions = store.getActions();
       expect(actions).to.have.length(0);
     });
 
-    it('should do update duration', () => {
-      store = mockStore({ apiData, auth });
+    it('should only update duration', () => {
+      store = mockStore({ apiData, auth, duration });
       store.dispatch(updateApiData({param: '1d'}, {}));
       const actions = store.getActions();
       expect(actions).to.have.length(1);
       expect(actions[0]).to.have.a.property('type', 'TIME_INTERVAL_UPDATE');
       expect(actions[0]).to.have.a.property('data', '1d');
+    });
+
+    it('should not dispatch api calls if loadOnce is set to true', () => {
+      const api = { path: '/api/{reportId}', pathParams: { reportId: 'test' }, queryParams: {}, loadOnce: true },
+        id = 'a1',
+        dataMap = Map({ id, data: {}, api });
+
+      let data = Map({});
+
+      data = data.set(id, dataMap);
+
+      store = mockStore({ apiData: data, auth });
+      store.dispatch(updateApiData({ param: '1d' }, {}));
+
+      const actions = store.getActions();
+      console.log(actions);
+      // expect(actions).to.have.length(3);
+      // expect(actions[1]).to.have.a.property('type', 'REQUEST_API_DATA');
+      // expect(actions[1]).to.have.a.property('id', id);
     });
 
     it('should request data for all the components with api object', () => {
@@ -424,13 +618,10 @@ describe('parentCard Redux Actions', () => {
         dataMap1 = Map({ id, data: {}, api }),
         dataMap2 = Map({ id: id2, data: {}, api });
 
-      let data = fromJS({
-        duration: '1h',
-        components: {}
-      });
+      let data = Map({});
 
-      data = data.updateIn(['components'], val => val.set(id, dataMap1));
-      data = data.updateIn(['components'], val => val.set(id2, dataMap2));
+      data = data.set(id, dataMap1);
+      data = data.set(id2, dataMap2);
 
       store = mockStore({ apiData: data, auth });
       store.dispatch(updateApiData({param: '1d'}, {}));
@@ -442,17 +633,41 @@ describe('parentCard Redux Actions', () => {
       expect(actions[2]).to.have.a.property('type', 'REQUEST_API_DATA');
       expect(actions[2]).to.have.a.property('id', id2);
     });
+
+    it('should request data for all the details with api object', () => {
+      const api = { path: '/api/{reportId}', pathParams: { reportId: 'test' }, queryParams: {from: 100} },
+        id = 'a1',
+        id2 = 'a2',
+        dataMap1 = Map({ id, data: {}, api }),
+        dataMap2 = Map({ id: id2, data: {}, api });
+
+      let data = Map({});
+
+      data = data.set(id, dataMap1);
+      data = data.set(id2, dataMap2);
+
+      store = mockStore({ details: data, auth });
+      store.dispatch(updateApiData({ param: '1d' }, {}));
+
+      const actions = store.getActions();
+      expect(actions).to.have.length(3);
+      expect(actions[1]).to.have.a.property('type', 'REQUEST_DETAILS_API_DATA');
+      expect(actions[1]).to.have.a.property('id', id);
+      expect(actions[2]).to.have.a.property('type', 'REQUEST_DETAILS_API_DATA');
+      expect(actions[2]).to.have.a.property('id', id2);
+    });
   });
 
   context('broadcastEvent function', () => {
-    let auth;
+    let auth, duration;
     beforeEach(function() {
       auth = { cookies: { access_token: '', token_type: '' } };
+      duration = '1h';
     });
 
     it('should do nothing if there are no components', () => {
-      let apiData = fromJS({duration: '1h', components: {}}),
-        store = mockStore({ apiData, auth });
+      let apiData = Map({}),
+        store = mockStore({ apiData, auth, duration });
 
       store.dispatch(broadcastEvent('testId', {data: 'test'}));
       const actions = store.getActions();
@@ -462,8 +677,8 @@ describe('parentCard Redux Actions', () => {
     it('should do nothing if the specified id is not in the list of components', () => {
       const api = null, id = 'a1', dataMap = Map({ id, data: {}, api });
 
-      let data = fromJS({ duration: '1h', components: {} });
-      data = data.updateIn(['components'], val => val.set(id, dataMap));
+      let data = Map({});
+      data = data.set(id, dataMap);
 
       let store = mockStore({ apiData: data, auth });
       store.dispatch(broadcastEvent('testId', {data: 'test'}));
@@ -475,8 +690,8 @@ describe('parentCard Redux Actions', () => {
     it('should dispatch PARENT_CARD_EVENT if the id is available in list of components', () => {
       const api = null, id = 'testId', dataMap = Map({ id, data: {}, api });
 
-      let data = fromJS({ duration: '1h', components: {} });
-      data = data.updateIn(['components'], val => val.set(id, dataMap));
+      let data = Map({});
+      data = data.set(id, dataMap);
 
       let store = mockStore({ apiData: data, auth });
       store.dispatch(broadcastEvent(id, {data: 'test'}));
@@ -491,16 +706,68 @@ describe('parentCard Redux Actions', () => {
 
   context('removeComponent function', () => {
     it('should dispatch REMOVE_COMPONENT', () => {
-      const apiData = fromJS({duration: '1h', components: {}}),
+      const apiData = Map({}),
         auth = { cookies: { access_token: '', token_type: '' } },
-        store = mockStore({ apiData, auth }),
+        store = mockStore({ apiData, auth, duration: '1h' }),
         id = 'testId';
 
       store.dispatch(removeComponent(id));
       const actions = store.getActions();
-      expect(actions).to.have.length(1);
+      expect(actions).to.have.length(2);
       expect(actions[0]).to.have.a.property('type', REMOVE_COMPONENT);
       expect(actions[0]).to.have.a.property('id', id);
+      expect(actions[1]).to.have.a.property('type', REMOVE_DETAILS_COMPONENT);
+      expect(actions[1]).to.have.a.property('id', id);
+    });
+  });
+
+  context('fetchNextSetOfData function', () => {
+    let server, id, apiData, auth, store, input;
+
+    const api = {
+        path: '/api/{reportId}',
+        pathParams: { reportId: 'test' },
+        queryParams: {}
+      },
+      params = {},
+      json = { total: 0, next: -1, rows: [], columns: [] },
+      jsonRes = JSON.stringify(json);
+
+    beforeEach(function() {
+      server = fakeServer.create();
+      id = 'testId';
+      apiData = Map({});
+      auth = { cookies: { access_token: '', token_type: '' } };
+      store = mockStore({ apiData, auth });
+      input = { id, api, params, options: {}, isDetails: true };
+    });
+
+    afterEach(function() {
+      server.restore();
+    });
+
+    it('should dispatch REQUEST_DETAILS_API_DATA and UPDATE_DETAILS_API_DATA action in sequence', () => {
+      server.respondWith('GET', `${baseUrl}/api/test`, [ 200, { 'Content-Type': 'application/json' }, jsonRes ]);
+
+      const dispatchCall = store.dispatch(fetchNextSetOfData(input))
+        .then(res => {
+          const actions = store.getActions(),
+            requestAction = actions[0],
+            updateAction = actions[1];
+
+          expect(actions).to.have.length(2);
+
+          expect(requestAction).to.have.a.property('type', 'REQUEST_DETAILS_API_DATA');
+          expect(requestAction).to.have.a.property('id', id);
+          expect(requestAction).to.have.a.property('api');
+
+          expect(updateAction).to.have.a.property('type', 'UPDATE_DETAILS_API_DATA');
+          expect(updateAction).to.have.a.property('id', id);
+          expect(updateAction).to.have.a.property('data');
+        });
+
+      server.respond();
+      return dispatchCall;
     });
   });
 });

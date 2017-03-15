@@ -1,27 +1,29 @@
 import React, {PropTypes} from 'react';
 import {Colors} from '../../../commons/colors';
 import {formatDate} from '../../../commons/utils/dateUtils';
+import { DEFAULT_FONT } from 'Constants';
 
 const chart = {
-  'baseFont': 'Open Sans, sans-serif',
-  'captionFontSize': '14',
-  'subcaptionFontSize': '14',
-  'subcaptionFontBold': '0',
-  'bgcolor': '#ffffff',
-  'showBorder': '0',
-  'showShadow': '0',
-  'showCanvasBorder': '0',
-  'usePlotGradientColor': '0',
-  'legendBorderAlpha': '0',
-  'legendShadow': '0',
-  'showAxisLines': '0',
-  'showAlternateHGridColor': '0',
-  'divLineAlpha': '50',
-  'divLineColor': Colors.cloud,
-  'divLineThickness': '1',
-  'xAxisName': 'Day',
-  'showValues': '0',
-  'paletteColors': Colors.LineChartPallete
+  baseFont: DEFAULT_FONT,
+  captionFontSize: '14',
+  subcaptionFontSize: '14',
+  subcaptionFontBold: '0',
+  bgcolor: '#ffffff',
+  showBorder: '0',
+  showShadow: '0',
+  showCanvasBorder: '0',
+  usePlotGradientColor: '0',
+  legendBorderAlpha: '0',
+  legendShadow: '0',
+  showAxisLines: '0',
+  showAlternateHGridColor: '0',
+  divLineAlpha: '50',
+  divLineColor: Colors.cloud,
+  divLineThickness: '1',
+  xAxisName: 'Day',
+  showValues: '0',
+  paletteColors: Colors.LineChartPallete,
+  toolTipSepChar: ' | '
 };
 
 function getIndex(obj, columns) {

@@ -4,7 +4,12 @@ import {
   ERROR_API_DATA,
   TIME_INTERVAL_UPDATE,
   PARENT_CARD_EVENT,
-  REMOVE_COMPONENT
+  REMOVE_COMPONENT,
+  REQUEST_DETAILS_API_DATA,
+  RECEIVE_DETAILS_API_DATA,
+  UPDATE_DETAILS_API_DATA,
+  ERROR_DETAILS_API_DATA,
+  REMOVE_DETAILS_COMPONENT
 } from 'Constants';
 
 import {baseUrl} from 'config';
@@ -12,29 +17,35 @@ import {logoutUtil} from './auth';
 
 let cookies = {};
 
-export function requestApiData(id, api) {
-  return {
-    type: REQUEST_API_DATA,
-    id,
-    api
-  };
+export function requestApiData(id, api, isDetails) {
+  if (isDetails) {
+    return { type: REQUEST_DETAILS_API_DATA, id, api };
+  }
+  else {
+    return { type: REQUEST_API_DATA, id, api };
+  }
 }
 
-export function receiveApiData(id, data) {
-  return {
-    type: RECEIVE_API_DATA,
-    data,
-    id
-  };
+export function receiveApiData(id, data, isDetails) {
+  if (isDetails) {
+    return { type: RECEIVE_DETAILS_API_DATA, data, id };
+  }
+  else {
+    return { type: RECEIVE_API_DATA, data, id };
+  }
 }
 
-export function errorApiData(id, errorData, api) {
-  return {
-    type: ERROR_API_DATA,
-    errorData,
-    id,
-    api
-  };
+export function updateDetailsApiData(id, data) {
+  return { type: UPDATE_DETAILS_API_DATA, data, id };
+}
+
+export function errorApiData(id, errorData, api, isDetails) {
+  if (isDetails) {
+    return { type: ERROR_DETAILS_API_DATA, errorData, id, api };
+  }
+  else {
+    return { type: ERROR_API_DATA, errorData, id, api };
+  }
 }
 
 export function changeTimeRange(timeRange) {
@@ -53,10 +64,7 @@ export function componentEvent(id, eventData) {
 }
 
 export function removeComponentWithId(id) {
-  return {
-    type: REMOVE_COMPONENT,
-    id
-  };
+  return [{ type: REMOVE_COMPONENT, id }, { type: REMOVE_DETAILS_COMPONENT, id }];
 }
 
 function getQuery(key) {
@@ -143,7 +151,6 @@ export function callApi(api, duration, params, options, dispatch) {
     body = options && JSON.stringify(options.body);
 
   const url = getUrl(api, duration, params);
-  if (!url) return;
 
   return fetch(url, {
     method: api.method || 'GET',
@@ -165,16 +172,17 @@ export function callApi(api, duration, params, options, dispatch) {
   });
 }
 
-export function fetchApiData(id, api, params, options) {
+export function fetchApiData(input) {
+  const {id, api, params, options, isDetails} = input;
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch method as an argument to the function,
   // thus making it able to dispatch actions itself.
 
   return function(dispatch, getState) {
-    const currentDuration = getState().apiData.get('duration');
+    const currentDuration = getState().duration;
 
     cookies = getState().auth.cookies;
-    dispatch(requestApiData(id, api));
+    dispatch(requestApiData(id, api, isDetails));
 
     if (Array.isArray(api)) {
       const arr = api.map(apiObj => callApi(apiObj, currentDuration, params, options, dispatch));
@@ -189,22 +197,41 @@ export function fetchApiData(id, api, params, options) {
           json[apiId].options = options;
         });
 
-        dispatch(receiveApiData(id, {json, api}));
+        dispatch(receiveApiData(id, {json, api}, isDetails));
       })
       .catch(ex => {
-        dispatch(errorApiData(id, ex, api));
+        dispatch(errorApiData(id, ex, api, isDetails));
       });
     }
     else {
       return callApi(api, currentDuration, params, options, dispatch)
       .then(json => {
         json.options = options;
-        dispatch(receiveApiData(id, {json, api}));
+        dispatch(receiveApiData(id, {json, api}, isDetails));
       })
       .catch(ex => {
-        dispatch(errorApiData(id, ex, api));
+        dispatch(errorApiData(id, ex, api, isDetails));
       });
     }
+  };
+}
+
+// This function is used to fetch next set of data for server side pagination
+export function fetchNextSetOfData(apiObj, prevData) {
+  return function(dispatch, getState) {
+    const {id, api, params, options, isDetails} = apiObj,
+      currentDuration = getState().apiData.get('duration');
+
+    dispatch(requestApiData(id, api, isDetails));
+
+    return callApi(api, currentDuration, params, options, dispatch)
+    .then(json => {
+      json.options = options;
+      dispatch(updateDetailsApiData(id, {json, api, prevData}));
+    })
+    .catch(ex => {
+      dispatch(errorApiData(id, ex, api, isDetails));
+    });
   };
 }
 
@@ -212,15 +239,14 @@ export function fetchApiData(id, api, params, options) {
 // when time range is changed.
 export function updateApiData(newDuration, params) {
   return function(dispatch, getState) {
-    const {apiData} = getState();
-
-    const currentDuration = apiData.get('duration');
+    const {apiData, details, duration} = getState();
+    const currentDuration = duration;
 
     if (currentDuration !== newDuration.param) {
       dispatch(changeTimeRange(newDuration.param));
 
-      if (apiData && apiData.has('components')) {
-        const components = apiData.get('components');
+      if (apiData) {
+        const components = apiData;
         components.forEach(component => {
           const id = component.get('id');
           const api = component.get('api');
@@ -232,7 +258,23 @@ export function updateApiData(newDuration, params) {
             return;
           }
 
-          fetchApiData(id, api, params, options)(dispatch, getState);
+          fetchApiData({id, api, params, options, isDetails: false})(dispatch, getState);
+        });
+      }
+
+      if (details) {
+        details.forEach(component => {
+          const id = component.get('id');
+          const api = component.get('api');
+          const options = component.get('data') && component.get('data').options;
+
+          delete api.queryParams.end;
+          delete api.queryParams.start;
+          if (api.queryParams.from) {
+            delete api.queryParams.from;
+          }
+          api.queryParams.window = '';
+          fetchApiData({id, api, params, options, isDetails: true})(dispatch, getState);
         });
       }
     }
@@ -243,8 +285,8 @@ export function broadcastEvent(id, eventData) {
   return function(dispatch, getState) {
     const {apiData} = getState();
 
-    if (apiData && apiData.has('components')) {
-      const components = apiData.get('components');
+    if (apiData) {
+      const components = apiData;
 
       components.forEach(component => {
         const componentId = component.get('id');
@@ -258,6 +300,8 @@ export function broadcastEvent(id, eventData) {
 
 export function removeComponent(id) {
   return function(dispatch) {
-    dispatch(removeComponentWithId(id));
+    removeComponentWithId(id).forEach(component => {
+      dispatch(component);
+    });
   };
 }

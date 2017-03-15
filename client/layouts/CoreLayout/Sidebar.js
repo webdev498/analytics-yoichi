@@ -51,7 +51,7 @@ const styles = {
     fontSize: '13px'
   },
   active: {
-    color: Colors.turquoise,
+    color: Colors.bar,
     backgroundColor: Colors.grape
   }
 };

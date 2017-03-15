@@ -2,154 +2,156 @@ import React, {PropTypes} from 'react';
 import ParentCard from 'containers/ParentCard';
 
 const protocolChart = {
-  'header': {
-    'style': {
-      'paddingBottom': 0
+  header: {
+    style: {
+      paddingBottom: 0
     },
-    'title': {
-      'fontSize': '13px',
-      'fontWeight': 600,
-      'textTransform': 'capitalize'
+    title: {
+      fontSize: '13px',
+      fontWeight: 600,
+      textTransform: 'capitalize'
     }
   },
-  'id': 'connections-by-protocol',
-  'type': 'charts/HorizontalBarChart',
-  'meta': {
-    'showHeader': true,
-    'showRefresh': false,
-    'api': {
-      'path': '/api/analytics/reporting/execute/{reportId}',
-      'pathParams': {
-        'reportId': 'taf_asset_top_connections_by_protocol'
+  id: 'connections-by-protocol',
+  type: 'charts/HorizontalBarChart',
+  meta: {
+    showHeader: true,
+    showRefresh: false,
+    showFullScreen: false,
+    api: {
+      path: '/api/analytics/reporting/execute/{reportId}',
+      pathParams: {
+        reportId: 'taf_asset_top_connections_by_protocol'
       },
-      'queryParams': {
+      queryParams: {
         'type:pathParam': 'assetId:pathParam',
-        'window': ''
+        window: ''
       }
     },
-    'title': 'Connections By Protocol'
+    title: 'Connections By Protocol'
   },
-  'attributes': {
-    'chartCaption': {
-      'display': 'none'
+  attributes: {
+    chartCaption: {
+      display: 'none'
     },
-    'chartWidth': '100%',
-    'chartHeight': '200px',
-    'style': {
-      'width': '100%',
-      'padding': 0,
-      'boxShadow': 'none'
+    chartWidth: '100%',
+    chartHeight: '200px',
+    style: {
+      width: '100%',
+      padding: 0,
+      boxShadow: 'none'
     },
-    'header': {
-      'style': {
-        'paddingBottom': 0
+    header: {
+      style: {
+        paddingBottom: 0
       },
-      'title': {
-        'fontSize': '13px',
-        'fontWeight': 600,
-        'textTransform': 'capitalize'
+      title: {
+        fontSize: '13px',
+        fontWeight: 600,
+        textTransform: 'capitalize'
       }
     },
-    'id': 'connections-by-protocol-chart'
+    id: 'connections-by-protocol-chart'
   },
-  'chartOptions': {
-    'showValues': '1',
-    'showLabels': '1',
-    'chartRightMargin': '0',
-    'divLineThickness': '2'
+  chartOptions: {
+    showValues: '1',
+    showLabels: '1',
+    chartRightMargin: '0',
+    divLineThickness: '2'
   },
-  'chart': {
-    'showAnnotations': false
+  chart: {
+    showAnnotations: false
   },
-  'chartData': {
-    'showTrendLines': false,
-    'fieldMapping': [
+  chartData: {
+    showTrendLines: false,
+    fieldMapping: [
       {
-        'reportId': 'taf_connections_by_protocol',
-        'columns': [
+        reportId: 'taf_connections_by_protocol',
+        columns: [
           'protocol.service',
           'date'
         ]
       }
     ],
-    'multipleReportIds': false
+    multipleReportIds: false
   }
 };
 
 const userCharts = [
   {
-    'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
-      'xAxisName': 'Machines',
-      'divLineThickness': '2',
-      'showYAxisValues': '1',
-      'xAxisNameFontSize': '10',
-      'yAxisNameFontSize': '10',
-      'labelFontSize': '9',
-      'drawAnchors': '1',
-      'anchorRadius': '1',
-      'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+    chartOptions: {
+      paletteColors: '#03c5ed,#adecf9',
+      xAxisName: 'Machines',
+      divLineThickness: '2',
+      showYAxisValues: '1',
+      xAxisNameFontSize: '10',
+      yAxisNameFontSize: '10',
+      labelFontSize: '9',
+      drawAnchors: '1',
+      anchorRadius: '1',
+      showlegend: '0',
+      outCnvBaseFontSize: '9'
     },
-    'chartData': {
-      'fieldMapping': [
+    chartData: {
+      fieldMapping: [
         {
-          'columns': [ {
+          columns: [ {
             columnType: 'DIMENSION'
           } ],
-          'axis': 'x'
+          axis: 'x'
         },
         {
-          'seriesname': 'Current Logins',
-          'reportId': 'taf_asset_successful_logins_by_user_on_machines_time_shifted',
-          'columns': [ {
+          seriesname: 'Current Logins',
+          reportId: 'taf_asset_successful_logins_by_user_on_machines_time_shifted',
+          columns: [ {
             columnType: 'MEASURE',
             key: 0
           } ],
-          'axis': 'y'
+          axis: 'y'
         },
         {
-          'seriesname': 'Historic Logins',
-          'reportId': 'taf_asset_successful_logins_by_user_on_machines_time_shifted',
-          'columns': [ {
+          seriesname: 'Historic Logins',
+          reportId: 'taf_asset_successful_logins_by_user_on_machines_time_shifted',
+          columns: [ {
             columnType: 'MEASURE',
             key: 1
           } ],
-          'axis': 'y'
+          axis: 'y'
         }
       ]
     },
-    'meta': {
-      'showHeader': true,
-      'showRefresh': false,
-      'api': {
-        'path': '/api/analytics/reporting/execute/{reportId}',
-        'pathParams': {
-          'reportId': 'taf_asset_successful_logins_by_user_on_machines_time_shifted'
+    meta: {
+      showHeader: true,
+      showRefresh: false,
+      showFullScreen: false,
+      api: {
+        path: '/api/analytics/reporting/execute/{reportId}',
+        pathParams: {
+          reportId: 'taf_asset_successful_logins_by_user_on_machines_time_shifted'
         },
-        'queryParams': {
-          'window': '',
-          'timeShift': '',
-          'asset': 'assetId:pathParam'
+        queryParams: {
+          window: '',
+          timeShift: '',
+          asset: 'assetId:pathParam'
         }
       },
-      'title': 'Successful Logins by User'
+      title: 'Successful Logins by User'
     },
-    'attributes': {
-      'chartHeight': '200',
-      'chartCaption': {
-        'display': 'none'
+    attributes: {
+      chartHeight: '200',
+      chartCaption: {
+        display: 'none'
       },
-      'style': {
-        'width': '100%',
-        'minHeight': '100px',
-        'padding': 0,
-        'boxShadow': 'none',
-        'marginBottom': '35px'
+      style: {
+        width: '100%',
+        minHeight: '100px',
+        padding: 0,
+        boxShadow: 'none',
+        marginBottom: '35px'
       },
-      'header': {
-        'style': {
-          'paddingBottom': 0
+      header: {
+        style: {
+          paddingBottom: 0
         },
         'title': {
           'fontSize': '13px',
@@ -204,129 +206,131 @@ const userCharts = [
         }
       ]
     },
-    'meta': {
-      'showHeader': true,
-      'showRefresh': false,
-      'api': {
-        'path': '/api/analytics/reporting/execute/{reportId}',
-        'pathParams': {
-          'reportId': 'taf_asset_failed_logins_by_user_on_machines_time_shifted'
+    meta: {
+      showHeader: true,
+      showRefresh: false,
+      showFullScreen: false,
+      api: {
+        path: '/api/analytics/reporting/execute/{reportId}',
+        pathParams: {
+          reportId: 'taf_asset_failed_logins_by_user_on_machines_time_shifted'
         },
-        'queryParams': {
-          'window': '',
-          'timeShift': '',
-          'asset': 'assetId:pathParam'
+        queryParams: {
+          window: '',
+          timeShift: '',
+          asset: 'assetId:pathParam'
         }
       },
-      'title': 'Failed Logins by User'
+      title: 'Failed Logins by User'
     },
-    'attributes': {
-      'chartHeight': '200',
-      'chartCaption': {
-        'display': 'none'
+    attributes: {
+      chartHeight: '200',
+      chartCaption: {
+        display: 'none'
       },
-      'style': {
-        'width': '100%',
-        'minHeight': '100px',
-        'padding': 0,
-        'boxShadow': 'none',
-        'marginBottom': '35px'
+      style: {
+        width: '100%',
+        minHeight: '100px',
+        padding: 0,
+        boxShadow: 'none',
+        marginBottom: '35px'
       },
-      'header': {
-        'style': {
-          'paddingBottom': 0
+      header: {
+        style: {
+          paddingBottom: 0
         },
-        'title': {
-          'fontSize': '13px',
-          'fontWeight': 600,
-          'textTransform': 'capitalize'
+        title: {
+          fontSize: '13px',
+          fontWeight: 600,
+          textTransform: 'capitalize'
         }
       },
-      'id': 'failed-login-count-chart'
+      id: 'failed-login-count-chart'
     },
-    'id': 'FailedLoginCount',
-    'type': 'charts/MultiSeriesColumn2d'
+    id: 'FailedLoginCount',
+    type: 'charts/MultiSeriesColumn2d'
   },
   {
-    'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
-      'xAxisName': 'TIME',
-      'lineThickness': '1',
-      'drawAnchors': '0',
-      'divLineThickness': '2',
-      'showYAxisValues': '1',
-      'xAxisNameFontSize': '10',
-      'yAxisNameFontSize': '10',
-      'labelFontSize': '9',
-      'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+    chartOptions: {
+      paletteColors: '#03c5ed,#adecf9',
+      xAxisName: 'TIME',
+      lineThickness: '1',
+      drawAnchors: '0',
+      divLineThickness: '2',
+      showYAxisValues: '1',
+      xAxisNameFontSize: '10',
+      yAxisNameFontSize: '10',
+      labelFontSize: '9',
+      showlegend: '0',
+      outCnvBaseFontSize: '9'
     },
-    'chartData': {
-      'fieldMapping': [
+    chartData: {
+      fieldMapping: [
         {
-          'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted',
-          'columns': [ 'date' ],
-          'axis': 'x'
+          reportId: 'taf_asset_all_successful_logins_by_user_time_shifted',
+          columns: [ 'date' ],
+          axis: 'x'
         },
         {
-          'seriesname': 'Current Logins',
-          'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted',
-          'columns': [ 'count[0]' ],
-          'renderas': 'Line',
-          'axis': 'y'
+          seriesname: 'Current Logins',
+          reportId: 'taf_asset_all_successful_logins_by_user_time_shifted',
+          columns: [ 'count[0]' ],
+          renderas: 'Line',
+          axis: 'y'
         },
         {
-          'seriesname': 'Historic Logins',
-          'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted',
-          'columns': [ 'count[1]' ],
-          'renderas': 'Area',
-          'axis': 'y'
+          seriesname: 'Historic Logins',
+          reportId: 'taf_asset_all_successful_logins_by_user_time_shifted',
+          columns: [ 'count[1]' ],
+          renderas: 'Area',
+          axis: 'y'
         }
       ],
-      'combinedResult': true
+      combinedResult: true
     },
-    'meta': {
-      'showHeader': true,
-      'showRefresh': false,
-      'api': {
-        'path': '/api/analytics/reporting/execute/{reportId}',
-        'pathParams': {
-          'reportId': 'taf_asset_all_successful_logins_by_user_time_shifted'
+    meta: {
+      showHeader: true,
+      showRefresh: false,
+      showFullScreen: false,
+      api: {
+        path: '/api/analytics/reporting/execute/{reportId}',
+        pathParams: {
+          reportId: 'taf_asset_all_successful_logins_by_user_time_shifted'
         },
-        'queryParams': {
-          'window': '',
-          'timeShift': '',
-          'asset': 'assetId:pathParam'
+        queryParams: {
+          window: '',
+          timeShift: '',
+          asset: 'assetId:pathParam'
         }
       },
-      'title': 'Successful logins by Time'
+      title: 'Successful logins by Time'
     },
-    'attributes': {
-      'chartHeight': '200',
-      'chartCaption': {
-        'display': 'none'
+    attributes: {
+      chartHeight: '200',
+      chartCaption: {
+        display: 'none'
       },
-      'style': {
-        'width': '100%',
-        'minHeight': '100px',
-        'padding': 0,
-        'boxShadow': 'none',
-        'marginBottom': '35px'
+      style: {
+        width: '100%',
+        minHeight: '100px',
+        padding: 0,
+        boxShadow: 'none',
+        marginBottom: '35px'
       },
-      'header': {
-        'style': {
-          'paddingBottom': 0
+      header: {
+        style: {
+          paddingBottom: 0
         },
-        'title': {
-          'fontSize': '13px',
-          'fontWeight': 600,
-          'textTransform': 'capitalize'
+        title: {
+          fontSize: '13px',
+          fontWeight: 600,
+          textTransform: 'capitalize'
         }
       },
-      'id': 'successful-logins-by-user'
+      id: 'successful-logins-by-user'
     },
-    'id': 'SuccessfulLoginsByUser',
-    'type': 'charts/MultiSeriesCombiChart'
+    id: 'SuccessfulLoginsByUser',
+    type: 'charts/MultiSeriesCombiChart'
   },
   {
     'chartOptions': {
@@ -366,197 +370,200 @@ const userCharts = [
       ],
       'combinedResult': true
     },
-    'meta': {
-      'showHeader': true,
-      'showRefresh': false,
-      'api': {
-        'path': '/api/analytics/reporting/execute/{reportId}',
-        'pathParams': {
-          'reportId': 'taf_asset_all_failed_logins_by_user_time_shifted'
+    meta: {
+      showHeader: true,
+      showRefresh: false,
+      showFullScreen: false,
+      api: {
+        path: '/api/analytics/reporting/execute/{reportId}',
+        pathParams: {
+          reportId: 'taf_asset_all_failed_logins_by_user_time_shifted'
         },
-        'queryParams': {
-          'window': '',
-          'timeShift': '',
-          'asset': 'assetId:pathParam'
+        queryParams: {
+          window: '',
+          timeShift: '',
+          asset: 'assetId:pathParam'
         }
       },
-      'title': 'Failed logins by Time'
+      title: 'Failed logins by Time'
     },
-    'attributes': {
-      'chartHeight': '200',
-      'chartCaption': {
-        'display': 'none'
+    attributes: {
+      chartHeight: '200',
+      chartCaption: {
+        display: 'none'
       },
-      'style': {
-        'width': '100%',
-        'minHeight': '100px',
-        'padding': 0,
-        'boxShadow': 'none',
-        'marginBottom': '35px'
+      style: {
+        width: '100%',
+        minHeight: '100px',
+        padding: 0,
+        boxShadow: 'none',
+        marginBottom: '35px'
       },
-      'header': {
-        'style': {
-          'paddingBottom': 0
+      header: {
+        style: {
+          paddingBottom: 0
         },
-        'title': {
-          'fontSize': '13px',
-          'fontWeight': 600,
-          'textTransform': 'capitalize'
+        title: {
+          fontSize: '13px',
+          fontWeight: 600,
+          textTransform: 'capitalize'
         }
       },
-      'id': 'failed-logins-by-user'
+      id: 'failed-logins-by-user'
     },
-    'id': 'FailedLoginsByUser',
-    'type': 'charts/MultiSeriesCombiChart'
+    id: 'FailedLoginsByUser',
+    type: 'charts/MultiSeriesCombiChart'
   },
   protocolChart
 ];
 
 const machineCharts = [
   {
-    'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
-      'xAxisName': 'Users',
-      'divLineThickness': '2',
-      'showYAxisValues': '1',
-      'xAxisNameFontSize': '10',
-      'yAxisNameFontSize': '10',
-      'labelFontSize': '9',
-      'drawAnchors': '1',
-      'anchorRadius': '1',
-      'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+    chartOptions: {
+      paletteColors: '#03c5ed,#adecf9',
+      xAxisName: 'Users',
+      divLineThickness: '2',
+      showYAxisValues: '1',
+      xAxisNameFontSize: '10',
+      yAxisNameFontSize: '10',
+      labelFontSize: '9',
+      drawAnchors: '1',
+      anchorRadius: '1',
+      showlegend: '0',
+      outCnvBaseFontSize: '9'
     },
-    'chartData': {
-      'fieldMapping': [
+    chartData: {
+      fieldMapping: [
         {
-          'columns': [ {
+          columns: [ {
             columnType: 'DIMENSION'
           } ],
-          'axis': 'x'
+          axis: 'x'
         },
         {
-          'seriesname': 'Current Logins',
-          'reportId': 'taf_asset_successful_logins_on_machine_by_users_time_shifted',
-          'columns': [ {
+          seriesname: 'Current Logins',
+          reportId: 'taf_asset_successful_logins_on_machine_by_users_time_shifted',
+          columns: [ {
             columnType: 'MEASURE',
             key: 0
           } ],
-          'axis': 'y'
+          axis: 'y'
         },
         {
-          'seriesname': 'Historic Logins',
-          'reportId': 'taf_asset_successful_logins_on_machine_by_users_time_shifted',
-          'columns': [ {
+          seriesname: 'Historic Logins',
+          reportId: 'taf_asset_successful_logins_on_machine_by_users_time_shifted',
+          columns: [ {
             columnType: 'MEASURE',
             key: 1
           } ],
-          'axis': 'y'
+          axis: 'y'
         }
       ]
     },
-    'meta': {
-      'showHeader': true,
-      'showRefresh': false,
-      'api': {
-        'path': '/api/analytics/reporting/execute/{reportId}',
-        'pathParams': {
-          'reportId': 'taf_asset_successful_logins_on_machine_by_users_time_shifted'
+    meta: {
+      showHeader: true,
+      showRefresh: false,
+      showFullScreen: false,
+      api: {
+        path: '/api/analytics/reporting/execute/{reportId}',
+        pathParams: {
+          reportId: 'taf_asset_successful_logins_on_machine_by_users_time_shifted'
         },
-        'queryParams': {
-          'window': '',
-          'timeShift': '',
-          'asset': 'assetId:pathParam'
+        queryParams: {
+          window: '',
+          timeShift: '',
+          asset: 'assetId:pathParam'
         }
       },
-      'title': 'Successful Logins on Machine'
+      title: 'Successful Logins on Machine'
     },
-    'attributes': {
-      'chartHeight': '200',
-      'chartCaption': {
-        'display': 'none'
+    attributes: {
+      chartHeight: '200',
+      chartCaption: {
+        display: 'none'
       },
-      'style': {
-        'width': '100%',
-        'minHeight': '100px',
-        'padding': 0,
-        'boxShadow': 'none',
-        'marginBottom': '35px'
+      style: {
+        width: '100%',
+        minHeight: '100px',
+        padding: 0,
+        boxShadow: 'none',
+        marginBottom: '35px'
       },
-      'header': {
-        'style': {
-          'paddingBottom': 0
+      header: {
+        style: {
+          paddingBottom: 0
         },
-        'title': {
-          'fontSize': '13px',
-          'fontWeight': 600,
-          'textTransform': 'capitalize'
+        title: {
+          fontSize: '13px',
+          fontWeight: 600,
+          textTransform: 'capitalize'
         }
       },
-      'id': 'success-login-count-chart'
+      id: 'success-login-count-chart'
     },
-    'id': 'success-login-count',
-    'type': 'charts/MultiSeriesColumn2d'
+    id: 'success-login-count',
+    type: 'charts/MultiSeriesColumn2d'
   },
   {
-    'chartOptions': {
-      'paletteColors': '#ef5976, #F69275',
-      'xAxisName': 'Users',
-      'divLineThickness': '2',
-      'showYAxisValues': '1',
-      'xAxisNameFontSize': '10',
-      'yAxisNameFontSize': '10',
-      'labelFontSize': '9',
-      'drawAnchors': '1',
-      'anchorRadius': '1',
-      'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+    chartOptions: {
+      paletteColors: '#ef5976, #F69275',
+      xAxisName: 'Users',
+      divLineThickness: '2',
+      showYAxisValues: '1',
+      xAxisNameFontSize: '10',
+      yAxisNameFontSize: '10',
+      labelFontSize: '9',
+      drawAnchors: '1',
+      anchorRadius: '1',
+      showlegend: '0',
+      outCnvBaseFontSize: '9'
     },
-    'chartData': {
-      'fieldMapping': [
+    chartData: {
+      fieldMapping: [
         {
-          'columns': [ {
+          columns: [ {
             columnType: 'DIMENSION'
           } ],
-          'axis': 'x'
+          axis: 'x'
         },
         {
-          'seriesname': 'Current Logins',
-          'reportId': 'taf_asset_failed_logins_on_machine_by_users_time_shifted',
-          'columns': [ {
+          seriesname: 'Current Logins',
+          reportId: 'taf_asset_failed_logins_on_machine_by_users_time_shifted',
+          columns: [ {
             columnType: 'MEASURE',
             key: 0
           } ],
-          'axis': 'y'
+          axis: 'y'
         },
         {
-          'seriesname': 'Historic Logins',
-          'reportId': 'taf_asset_failed_logins_on_machine_by_users_time_shifted',
-          'columns': [ {
+          seriesname: 'Historic Logins',
+          reportId: 'taf_asset_failed_logins_on_machine_by_users_time_shifted',
+          columns: [ {
             columnType: 'MEASURE',
             key: 1
           } ],
-          'axis': 'y'
+          axis: 'y'
         }
       ]
     },
-    'meta': {
-      'showHeader': true,
-      'showRefresh': false,
-      'api': {
-        'path': '/api/analytics/reporting/execute/{reportId}',
-        'pathParams': {
-          'reportId': 'taf_asset_failed_logins_on_machine_by_users_time_shifted'
+    meta: {
+      showHeader: true,
+      showRefresh: false,
+      showFullScreen: false,
+      api: {
+        path: '/api/analytics/reporting/execute/{reportId}',
+        pathParams: {
+          reportId: 'taf_asset_failed_logins_on_machine_by_users_time_shifted'
         },
-        'queryParams': {
-          'window': '',
-          'timeShift': '',
-          'asset': 'assetId:pathParam'
+        queryParams: {
+          window: '',
+          timeShift: '',
+          asset: 'assetId:pathParam'
         }
       },
-      'title': 'Failed Logins on Machine'
+      title: 'Failed Logins on Machine'
     },
-    'attributes': {
+    attributes: {
       'chartHeight': '200',
       'chartCaption': {
         'display': 'none'
@@ -584,85 +591,86 @@ const machineCharts = [
     'type': 'charts/MultiSeriesColumn2d'
   },
   {
-    'chartOptions': {
-      'paletteColors': '#60E2DC, #C9EDDF',
-      'xAxisName': 'TIME',
-      'lineThickness': '1',
-      'drawAnchors': '0',
-      'divLineThickness': '2',
-      'showYAxisValues': '1',
-      'xAxisNameFontSize': '10',
-      'yAxisNameFontSize': '10',
-      'labelFontSize': '9',
-      'showlegend': '0',
-      'outCnvBaseFontSize': '9'
+    chartOptions: {
+      paletteColors: '#03c5ed,#adecf9',
+      xAxisName: 'TIME',
+      lineThickness: '1',
+      drawAnchors: '0',
+      divLineThickness: '2',
+      showYAxisValues: '1',
+      xAxisNameFontSize: '10',
+      yAxisNameFontSize: '10',
+      labelFontSize: '9',
+      showlegend: '0',
+      outCnvBaseFontSize: '9'
     },
-    'chartData': {
-      'fieldMapping': [
+    chartData: {
+      fieldMapping: [
         {
-          'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted',
-          'columns': [ 'date' ],
-          'axis': 'x'
+          reportId: 'taf_asset_all_successful_logins_by_machine_time_shifted',
+          columns: [ 'date' ],
+          axis: 'x'
         },
         {
-          'seriesname': 'Current Logins',
-          'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted',
-          'columns': [ 'count[0]' ],
-          'renderas': 'Line',
-          'axis': 'y'
+          seriesname: 'Current Logins',
+          reportId: 'taf_asset_all_successful_logins_by_machine_time_shifted',
+          columns: [ 'count[0]' ],
+          renderas: 'Line',
+          axis: 'y'
         },
         {
-          'seriesname': 'Historic Logins',
-          'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted',
-          'columns': [ 'count[1]' ],
-          'renderas': 'Area',
-          'axis': 'y'
+          seriesname: 'Historic Logins',
+          reportId: 'taf_asset_all_successful_logins_by_machine_time_shifted',
+          columns: [ 'count[1]' ],
+          renderas: 'Area',
+          axis: 'y'
         }
       ],
-      'combinedResult': true
+      combinedResult: true
     },
-    'meta': {
-      'showHeader': true,
-      'showRefresh': false,
-      'api': {
-        'path': '/api/analytics/reporting/execute/{reportId}',
-        'pathParams': {
-          'reportId': 'taf_asset_all_successful_logins_by_machine_time_shifted'
+    meta: {
+      showHeader: true,
+      showRefresh: false,
+      showFullScreen: false,
+      api: {
+        path: '/api/analytics/reporting/execute/{reportId}',
+        pathParams: {
+          reportId: 'taf_asset_all_successful_logins_by_machine_time_shifted'
         },
-        'queryParams': {
-          'window': '',
-          'timeShift': '',
-          'asset': 'assetId:pathParam'
+        queryParams: {
+          window: '',
+          timeShift: '',
+          asset: 'assetId:pathParam'
         }
       },
-      'title': 'Successful logins by Time'
+      title: 'Successful logins by Time'
     },
-    'attributes': {
-      'chartHeight': '200',
-      'chartCaption': {
-        'display': 'none'
+    attributes: {
+      chartHeight: '200',
+      chartCaption: {
+        display: 'none'
       },
-      'style': {
-        'width': '100%',
-        'minHeight': '100px',
-        'padding': 0,
-        'boxShadow': 'none',
-        'marginBottom': '35px'
+      style: {
+        width: '100%',
+        minHeight: '100px',
+        padding: 0,
+        boxShadow: 'none',
+        marginBottom: '35px'
       },
-      'header': {
-        'style': {
-          'paddingBottom': 0
+      header: {
+        style: {
+          paddingBottom: 0
         },
-        'title': {
-          'fontSize': '13px',
-          'fontWeight': 600,
-          'textTransform': 'capitalize'
+        title: {
+          fontSize: '13px',
+          fontWeight: 600,
+          textTransform: 'capitalize'
         }
       },
-      'id': 'successful-logins-by-user'
+      id: 'successful-logins-by-user'
     },
-    'id': 'SuccessfulLoginsByUser',
-    'type': 'charts/MultiSeriesCombiChart'
+    id: 'SuccessfulLoginsByUser',
+    type: 'charts/MultiSeriesCombiChart'
   },
   {
     'chartOptions': {
@@ -705,6 +713,7 @@ const machineCharts = [
     'meta': {
       'showHeader': true,
       'showRefresh': false,
+      showFullScreen: false,
       'api': {
         'path': '/api/analytics/reporting/execute/{reportId}',
         'pathParams': {

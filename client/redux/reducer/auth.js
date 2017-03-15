@@ -1,4 +1,9 @@
-import {USER_DETAILS_LOADING, USER_DETAILS_LOADED, USER_DETAILS_ERROR, SET_COOKIES} from 'Constants';
+import {
+  USER_DETAILS_LOADING,
+  USER_DETAILS_LOADED,
+  USER_DETAILS_ERROR,
+  SET_COOKIES
+} from 'Constants';
 
 const initialState = {
   isLoading: true,
@@ -6,7 +11,7 @@ const initialState = {
   sidebar: []
 };
 
-export default function reducer(state = initialState, action = {}) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case USER_DETAILS_LOADING: {
       return Object.assign({}, state, {

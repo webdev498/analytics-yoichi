@@ -4,178 +4,212 @@
       {
         "meta": {
           "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_alert_count_time_shifted"
-            },
-            "queryParams": {
-              "window": ""
-            }
-          }
+          "api": null
         },
-        "name": "MetricsCard",
         "attributes": {
-          "countStyle": {
-            "color": "#F69275"
-          },
           "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
+            "width": "100%",
+            "backgroundColor": "transparent"
           }
         },
-        "id": "1",
-        "type": "MetricsCard",
-        "title": "High Priority Anomalies",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": "",
-          "page": "/alerts"
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_malware_count_time_shifted"
+        "id": "metricsBar",
+        "type": "MetricsBar",
+        "childrenComponent": [
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_alert_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
             },
-            "queryParams": {
-              "window": ""
-            }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#F69275"
-          },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #F69275"
-          }
-        },
-        "id": "2",
-        "type": "MetricsCard",
-        "title": "High Priority Malware",
-        "clickData": {
-          "tableId": "RecentAnomalies",
-          "filterText": "malware",
-          "page": "/alerts"
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_event_count_time_shifted"
+            "attributes": {
+              "countStyle": {
+                "color": "#f37133"
+              },
+              "style": {
+                "borderTop": "5px solid #f37133",
+                "marginRight": "1px",
+                "width": "25%"
+              }
             },
-            "queryParams": {
-              "window": ""
+            "id": "1",
+            "type": "MetricsCard",
+            "title": "High Priority Anomalies",
+            "clickData": {
+              "tableId": "RecentAnomalies",
+              "filterText": "",
+              "page": "/alerts"
             }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
-          }
-        },
-        "id": "3",
-        "type": "MetricsCard",
-        "title": "Events Processed",
-        "kibana": {
-          "pathParams": [
-            "traffic-details"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
-          }
-        }
-      },
-      {
-        "meta": {
-          "showHeader": false,
-          "api": {
-            "path": "/api/analytics/reporting/execute/{reportId}",
-            "pathParams": {
-              "reportId": "taf_asset_count_time_shifted"
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_malware_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
             },
-            "queryParams": {
-              "window": ""
+            "attributes": {
+              "countStyle": {
+                "color": "#f37133"
+              },
+              "style": {
+                "borderTop": "5px solid #f37133",
+                "marginRight": "1px",
+                "width": "25%"
+              }
+            },
+            "id": "2",
+            "type": "MetricsCard",
+            "title": "High Priority Malware",
+            "clickData": {
+              "tableId": "RecentAnomalies",
+              "filterText": "malware",
+              "page": "/alerts"
             }
-          }
-        },
-        "name": "MetricsCard",
-        "attributes": {
-          "countStyle": {
-            "color": "#2bd8d0"
           },
-          "style": {
-            "marginRight": "3px",
-            "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_event_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
+            },
+            "attributes": {
+              "countStyle": {
+                "color": "#03C5ED"
+              },
+              "style": {
+                "borderTop": "5px solid #03C5ED",
+                "marginRight": "1px",
+                "width": "25%"
+              }
+            },
+            "details": {
+              "itemsPerPage": 20,
+              "meta": {
+                "showHeader": true,
+                "showSearch": true,
+                "showBack": true,
+                "showClose": true,
+                "api": {
+                  "path": "/api/analytics/reporting/details/{reportId}",
+                  "pathParams": {
+                    "reportId": "taf_event_count_time_shifted"
+                  },
+                  "queryParams": {
+                    "count": 100
+                  }
+                },
+                "title": "Events Processed"
+              },
+              "attributes": {
+                "header": {
+                  "titleWrap": {
+                    "alignItems": "center",
+                    "display": "inline-flex"
+                  }
+                },
+                "style": {
+                  "marginLeft": "30px",
+                  "marginRight": "30px",
+                  "marginTop": "30px"
+                }
+              },
+              "id": "details-view"
+            },
+            "id": "3",
+            "type": "MetricsCard",
+            "title": "Events Processed"
+          },
+          {
+            "meta": {
+              "showHeader": false,
+              "api": {
+                "path": "/api/analytics/reporting/execute/{reportId}",
+                "pathParams": {
+                  "reportId": "taf_asset_count_time_shifted"
+                },
+                "queryParams": {
+                  "window": ""
+                }
+              }
+            },
+            "attributes": {
+              "countStyle": {
+                "color": "#03C5ED"
+              },
+              "style": {
+                "borderTop": "5px solid #03C5ED",
+                "marginRight": "1px",
+                "width": "25%"
+              }
+            },
+            "details": {
+              "itemsPerPage": 20,
+              "meta": {
+                "showHeader": true,
+                "showSearch": true,
+                "showBack": true,
+                "showClose": true,
+                "api": {
+                  "path": "/api/analytics/reporting/details/{reportId}",
+                  "pathParams": {
+                    "reportId": "taf_asset_count_time_shifted"
+                  },
+                  "queryParams": {
+                    "count": 100
+                  }
+                },
+                "title": "Assets Monitored"
+              },
+              "attributes": {
+                "header": {
+                  "titleWrap": {
+                    "alignItems": "center",
+                    "display": "inline-flex"
+                  }
+                },
+                "style": {
+                  "marginLeft": "30px",
+                  "marginRight": "30px",
+                  "marginTop": "30px"
+                }
+              },
+              "id": "details-view"
+            },
+            "id": "4",
+            "type": "MetricsCard",
+            "title": "Assets Monitored"
           }
-        },
-        "id": "4",
-        "type": "MetricsCard",
-        "title": "Assets Monitored",
-        "kibana": {
-          "pathParams": [
-            "assets-all"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": ""
-          }
-        }
+        ]
       }
     ],
     [
       {
-        "chartOptions": {},
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_asset_count_time_shifted",
-              "columns": [
-                "0.0"
-              ]
-            },
-            {
-              "reportId": "taf_total_usage",
-              "columns": [
-                "date"
-              ]
-            },
-            {
-              "reportId": "taf_top_talkers_connections",
-              "columns": [
-                "connections"
-              ]
-            }
-          ]
-        },
         "meta": {
           "showHeader": true,
-          "legend": [
-            "Connections",
-            "Used by",
-            "Assets"
-          ],
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+              "reportId": "dash_top_connections"
             },
             "queryParams": {
               "timeShift": "",
@@ -186,8 +220,9 @@
         },
         "attributes": {
           "style": {
-            "marginRight": "33px",
-            "width": "100%"
+            "marginLeft": "30px",
+            "marginRight": "30px",
+            "width": "50%"
           },
           "id": "PieChartConnections"
         },
@@ -232,7 +267,7 @@
               "line": [
                 {
                   "dashed": "1",
-                  "color": "#f69275",
+                  "color": "#f37133",
                   "valueOnRight": "1",
                   "dashLen": "4",
                   "dashGap": "2"
@@ -242,12 +277,25 @@
           ],
           "multipleReportIds": true
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "reportId": "taf_top_talkers_connections",
+            "queryParams": {
+              "source.name": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_asset_count_time_shifted"
             },
             "queryParams": {
               "timeShift": "",
@@ -261,59 +309,23 @@
             "display": "none"
           },
           "style": {
-            "width": "100%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "id": "HorizontalBarChartConnections"
         },
         "id": "horizontal-bar-chart-connections",
-        "type": "charts/HorizontalBarChart",
-        "kibana": {
-          "pathParams": [
-            "ip-connection-details"
-          ],
-          "queryParams": {
-            "fromAndToBasedOnToday": "",
-            "xAxisValueAsItIs": "ip"
-          }
-        }
+        "type": "charts/HorizontalBarChart"
       }
     ],
     [
       {
-        "chartOptions": {},
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_asset_count_time_shifted",
-              "columns": [
-                "0.0"
-              ]
-            },
-            {
-              "reportId": "taf_total_usage",
-              "columns": [
-                "bandwidth"
-              ]
-            },
-            {
-              "reportId": "taf_top_talkers_bandwidth",
-              "columns": [
-                "bandwidth"
-              ]
-            }
-          ]
-        },
         "meta": {
           "showHeader": true,
-          "legend": [
-            "Bandwidth ",
-            "Used by",
-            "Assets"
-          ],
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+              "reportId": "dash_top_bandwidth"
             },
             "queryParams": {
               "timeShift": "",
@@ -324,8 +336,9 @@
         },
         "attributes": {
           "style": {
-            "marginRight": "33px",
-            "width": "100%"
+            "marginLeft": "30px",
+            "marginRight": "30px",
+            "width": "50%"
           },
           "id": "PieChartBandwidth"
         },
@@ -370,7 +383,7 @@
               "line": [
                 {
                   "dashed": "1",
-                  "color": "#f69275",
+                  "color": "#f37133",
                   "valueOnRight": "1",
                   "dashLen": "4",
                   "dashGap": "2"
@@ -380,12 +393,25 @@
           ],
           "multipleReportIds": true
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "reportId": "taf_top_talkers_bandwidth",
+            "queryParams": {
+              "source.name": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "meta": {
           "showHeader": true,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "taf_total_usage,taf_top_talkers_connections,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
+              "reportId": "taf_total_usage,taf_top_talkers_bandwidth,taf_asset_count_time_shifted"
             },
             "queryParams": {
               "timeShift": "",
@@ -399,7 +425,8 @@
             "display": "none"
           },
           "style": {
-            "width": "100%"
+            "width": "50%",
+            "marginRight": "30px"
           },
           "id": "HorizontalBarChartBandwidth"
         },

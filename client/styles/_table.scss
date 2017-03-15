@@ -1,33 +1,32 @@
-.threatTable table {
-  text-align: left;
-  width:100% !important;
+@import 'variable';
+
+.threatTable {
+  table {
+    text-align: left;
+    width:100% !important;
+  }
+
+  td {
+    font-size: 13px;
+    padding: 15px;
+    color: $GrapeColor;
+    vertical-align: top;
+    line-height: 17px;
+  }
+
+  th {
+    padding: 10px;
+    padding-bottom: 16px;
+    font-size: 13px;
+    background: $WhiteColor;
+    color: $GrapeColor;
+    text-align: left;
+    cursor: pointer;
+    font-weight: normal;
+  }
  }
 
-.threatTable th {
-  padding: 10px;
-  padding-bottom: 16px;
-  font-size: 13px;
-  background: $WhiteColor;
-  color: $GrapeColor;
-  text-align: left;
-  cursor: pointer;
-  font-weight: normal;
- }
-
-// TODO remove this.
-// this is a hack to hide a column that is not to be shown.
- .reactable-th-c {
-   display: none;
- }
-
-.threatTable td {
-  font-size: 13px;
-  padding: 15px;
-  color: $GrapeColor;
-  vertical-align: top;
- }
-
-.threatTable .reactable-page-button, .reactable-previous-page, .reactable-next-page {
+.threatTable .reactable-page-button {
   margin-left: 5px;
   margin-right: 2px;
   margin-bottom: 6px;
@@ -44,7 +43,6 @@
   margin-right: 2px;
   margin-bottom: 6px;
   padding: 3px;
-  width: 55px;
   float: left;
   cursor: pointer;
   color: $GrapeColor;
@@ -58,7 +56,6 @@
   margin-right: 2px;
   margin-bottom: 6px;
   padding: 3px;
-  width: 75px;
   float: left;
   cursor: pointer;
   color: $GrapeColor;
@@ -142,17 +139,6 @@ background-color: $WhiteColor !important;
   padding: 5px;
 }
 
-.searchText {
-  width: 50%;
-  background: $CloudColorShade2;
-  border: 0px;
-  height:35px;
-  padding-left:12px;
-  padding-right: 40px;
-  font-size:13px;
-  margin-left:46px;
-}
-
 input:focus {
   outline: none;
 }
@@ -176,7 +162,7 @@ input:focus {
   border-radius: 4px;
   display: inline-block;
   font-size: 13px;
-  font-family: "Open Sans";
+  font-family: $DefaultFont;
 }
 .pagination > li {
   display: inline;

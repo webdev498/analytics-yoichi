@@ -1,19 +1,12 @@
 import React from 'react';
 
-import {
-  createRenderer
-} from 'react-addons-test-utils';
+import { createRenderer } from 'react-addons-test-utils';
 
 import { mount, shallow } from 'enzyme';
 import {spy} from 'sinon';
 
-import NetworkGraph, {
-  generateDataFromAssetDetails,
-  createNodeObject,
-  createEdgeObject
-} from 'components/NetworkGraph';
+import NetworkGraph, { generateDataFromAssetDetails } from 'components/networkGraph';
 import Loader from 'components/Loader';
-import {Colors} from '../../../commons/colors';
 import {wrapThemeProvider} from '../../testUtils';
 
 let props = {
@@ -151,118 +144,6 @@ describe('<NetworkGraph />', () => {
     const wrapper = mountNetworkGraph(true);
     wrapper.setState({ isFetching: true });
     expect(wrapper.find(Loader)).to.exist;
-  });
-
-  it('Should create node object correctly', () => {
-    const component = renderNetworkGraph();
-    expect(component.props().data).to.be.defined;
-    expect(component.props().data).to.not.be.an('array');
-    let dataNode = {
-        id: '121.18.238.109',
-        label: '121.18.238.109',
-        type: 'machine',
-        metadata: {},
-        actionData: {
-          owner: 'RankSoftwareInc.com'
-        },
-        nodeId: '121.18.238.109',
-        nodeTypeDisplay: 'Machine'
-      },
-      nodeObject = {
-        id: '121.18.238.109',
-        notNodeId: '121.18.238.109',
-        type: 'machine',
-        label: '  121.18.238.109',
-        title: '<b>Machine:</b> 121.18.238.109',
-        nodeDetails: [],
-        actions: [],
-        borderWidth: '0',
-        font: {
-          face: 'Open Sans',
-          color: Colors.pebble,
-          size: '11',
-          align: 'left'
-        },
-        shape: 'image',
-        color: {
-          color: Colors.networkNodeLabel,
-          highlight: Colors.turquoise
-        },
-        actionData: {
-          owner: 'RankSoftwareInc.com'
-        },
-        metadata: {},
-        status: 'safe',
-        image: '/img/Node-safe-INACTIVE/machine-safe.png'
-      };
-
-    // expect(createNodeObject(dataNode)).to.deep.equal(nodeObject);
-  });
-
-  it('Should create edge object correctly', () => {
-    const component = renderNetworkGraph();
-    expect(component.props().data).to.be.defined;
-    expect(component.props().data).to.not.be.an('array');
-    let dataEdge = {
-        id: 'conn',
-        source: '192.168.2.11',
-        target: '192.168.2.12',
-        label: 'conn',
-        actionData: {},
-        metadata: {}
-      },
-      edgeObject = {
-        id: 'conn',
-        notNodeId: 'conn',
-        type: [],
-        from: '192.168.2.11',
-        to: '192.168.2.12',
-        arrows: {
-          to: {
-            scaleFactor: 0.5
-          },
-          arrowStrikethrough: false
-        },
-        label: 'conn\n\n\n',
-        title: 'conn',
-        font: {
-          face: 'Open Sans',
-          color: Colors.pebble,
-          size: '11',
-          align: 'left'
-        },
-        length: 1000,
-        smooth: {
-          type: 'discrete'
-        },
-        color: {
-          color: Colors.pebble,
-          highlight: Colors.turquoise
-        },
-        edgeDetails: [],
-        actionData: {},
-        metadata: {}
-      },
-      edgesTypes = [];
-
-    edgesTypes.push(
-      <li key='1'>conn</li>
-    );
-
-    edgeObject.edgeDetails.push(
-      <ul className='no-list-style'>
-        <li key='edgeType'><b>Edge Type:</b>
-          <ol style={{padding: 0}}>
-            {edgesTypes}
-          </ol>
-        </li>
-        <li key='source'><b>Source:</b> 192.168.2.11</li>
-        <li key='target'><b>Target:</b> 192.168.2.12</li>
-      </ul>
-    );
-
-    // This is failing, need to check this again.
-    // expect(createEdgeObject(dataEdge, [])).to.deep.equal(edgeObject);
   });
 
   it('if edge type is ioc then, it should display as dash line', () => {

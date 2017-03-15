@@ -5,44 +5,44 @@ import {
   calculateDateDisplayFormat,
   calculateDateDisplayFormatForHistogram
 } from '../../../commons/utils/dateUtils';
-import {
-  generateRawData,
-  isUndefined
-} from '../../../commons/utils/utils';
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
+
+import { generateRawData, isUndefined } from '../../../commons/utils/utils';
+import { getQueryParamsForDetails } from '../../utils/utils';
+import { DEFAULT_FONT } from 'Constants';
 
 const chart = {
-  'showvalues': '0',
-  'decimals': '3',
-  'sFormatNumberScale': '1',
-  'setadaptiveymin': '1',
-  'setadaptivesymin': '1',
-  'showborder': '0',
-  'theme': 'zune',
-  'numDivLines': '6',
-  'showAxisLines': '1',
-  'showYAxisValues': '1',
-  'labelDisplay': 'wrap',
-  'rotateLabels': '1',
-  'xAxisName': 'TIME',
-  'scrollHeight': '4',
-  'xAxisNameFontSize': '13',
-  'yAxisNameFontSize': '13',
-  'slantLabels': '1',
-  'labelFontSize': '11',
-  'xAxisNamePadding': '20',
-  'yAxisNamePadding': '20',
-  'showXAxisLine': '1',
-  'showYAxisLine': '0',
-  'divLineIsDashed': '0',
-  'divLineAlpha': '20',
-  'chartLeftMargin': '0',
-  'chartRightMargin': '0',
-  'chartBottomMargin': '0',
-  'baseFont': 'Open Sans, sans-serif',
-  'baseFontColor': Colors.grape,
-  'paletteColors': Colors.defaultGraphPalette,
-  'xAxisLineColor': Colors.axis
+  showvalues: '0',
+  decimals: '3',
+  sFormatNumberScale: '1',
+  setadaptiveymin: '1',
+  setadaptivesymin: '1',
+  showborder: '0',
+  theme: 'zune',
+  numDivLines: '6',
+  showAxisLines: '1',
+  showYAxisValues: '1',
+  labelDisplay: 'wrap',
+  rotateLabels: '1',
+  xAxisName: 'TIME',
+  scrollHeight: '4',
+  xAxisNameFontSize: '13',
+  yAxisNameFontSize: '13',
+  slantLabels: '1',
+  labelFontSize: '11',
+  xAxisNamePadding: '20',
+  yAxisNamePadding: '20',
+  showXAxisLine: '1',
+  showYAxisLine: '0',
+  divLineIsDashed: '0',
+  divLineAlpha: '20',
+  chartLeftMargin: '0',
+  chartRightMargin: '0',
+  chartBottomMargin: '0',
+  baseFont: DEFAULT_FONT,
+  baseFontColor: Colors.grape,
+  paletteColors: Colors.defaultGraphPalette,
+  xAxisLineColor: Colors.axis,
+  toolTipSepChar: ' | '
 };
 
 export function getXindex(currentChartDataColumn, columns) {
@@ -105,7 +105,7 @@ export function generateCategoryArray(rows, index, dateDisplayFormat) {
   for (let d = 0, rowsLen = rows.length; d < rowsLen; d++) {
     let utcTime = moment.utc(rows[d][index]).format('YYYY-MM-DD HH:mm:ss.SSS'),
       localTime = moment.utc(utcTime).toDate();
-    localTime = moment(localTime).format('D MMM YYYY HH:mm');
+    localTime = moment(localTime).format('D MMM YYYY HH:mm:ss.SSS');
 
     let localTimeNew = moment.utc(rows[d][index]).toDate();
     localTimeNew = moment(localTimeNew).format(dateDisplayFormat);
@@ -292,20 +292,20 @@ export function generateChartDataSource(rawData, props) {
   let annotationItems = [];
   if (!isUndefined(props.meta.subTitle)) {
     let yPadding = '370';
-    if (props.duration === '1w' || props.duration === '1mo') {
+    if (props.duration === '1w' || props.duration === '1mo' || props.duration === '2mo') {
       yPadding = '378';
     }
     annotationItems = annotationItems.concat([
       {
-        'id': 'unit',
-        'type': 'text',
-        'text': props.meta.subTitle,
-        'x': '$chartEndX - 633',
-        'y': '$chartEndY - ' + yPadding,
-        'fontSize': '11',
-        'color': Colors.pebble,
-        'font': 'Open Sans, sans-serif',
-        'rotateText': 'left'
+        id: 'unit',
+        type: 'text',
+        text: props.meta.subTitle,
+        x: '$chartEndX - 633',
+        y: '$chartEndY - ' + yPadding,
+        fontSize: '11',
+        color: Colors.pebble,
+        font: DEFAULT_FONT,
+        rotateText: 'left'
       }
     ]);
   }
@@ -326,21 +326,6 @@ export function generateChartDataSource(rawData, props) {
   return dataSourceObject;
 }
 
-export function getDataPlotClickUrl(props, dataObj) {
-  if (!props.kibana) {
-    return;
-  }
-  let parameters = {
-    data: props.data,
-    duration: props.duration,
-    dataObj: dataObj,
-    queryParamsArray: props.kibana.queryParams,
-    pathParams: props.kibana.pathParams
-  };
-
-  return generateClickThroughUrl(parameters);
-}
-
 class MultiSeriesCombiChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
@@ -354,9 +339,8 @@ class MultiSeriesCombiChart extends React.Component {
       return;
     }
 
-    const {data, attributes} = props,
+    const {data, attributes, showDetailsTable, details} = props,
       fieldMapping = props.chartData.fieldMapping,
-      {clickThrough} = this.context,
       rawData = generateRawData(fieldMapping, data);
 
     FusionCharts.ready(function() {
@@ -370,10 +354,8 @@ class MultiSeriesCombiChart extends React.Component {
         dataSource: generateChartDataSource(rawData, props),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            const url = getDataPlotClickUrl(props, dataObj);
-            if (url !== '' && !isUndefined(url)) {
-              clickThrough(url);
-            }
+            let queryParams = getQueryParamsForDetails(details.meta.queryParams, dataObj);
+            showDetailsTable(queryParams);
           }
         }
       });

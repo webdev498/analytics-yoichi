@@ -104,10 +104,6 @@ describe('CoreLayout', () => {
 
       expect(loader.type).to.equal(Loader);
     });
-
-    it('should show kibana', () => {
-
-    });
   });
 
   describe('PageContent file', () => {

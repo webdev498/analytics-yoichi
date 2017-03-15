@@ -20,9 +20,9 @@ class ScatterChart extends React.Component {
         'drawline': '0',
         'anchorsides': '0',
         'anchorradius': '6',
-        'color': Colors.turquoise,
-        'anchorbgcolor': Colors.turquoise,
-        'anchorbordercolor': Colors.turquoise,
+        'color': Colors.bar,
+        'anchorbgcolor': Colors.bar,
+        'anchorbordercolor': Colors.bar,
         'seriesname': ''
       };
 
@@ -63,7 +63,8 @@ class ScatterChart extends React.Component {
       'canvasBgRatio': '30,70',
       'canvasBgAngle': '280',
       'xAxisLineColor': Colors.axis,
-      'yaxislinecolor': Colors.axis
+      'yaxislinecolor': Colors.axis,
+      'toolTipSepChar': ' | '
     }, chart.options);
 
     if (dataSet.length > 0) {

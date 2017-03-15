@@ -1,11 +1,17 @@
 import {baseUrl} from './config';
+import { Colors } from '../commons/colors';
 
 export const REQUEST_API_DATA = 'REQUEST_API_DATA';
 export const RECEIVE_API_DATA = 'RECEIVE_API_DATA';
 export const ERROR_API_DATA = 'ERROR_API_DATA';
-export const UPDATE_API_DATA = 'UPDATE_API_DATA';
 export const PARENT_CARD_EVENT = 'PARENT_CARD_EVENT';
 export const REMOVE_COMPONENT = 'REMOVE_COMPONENT';
+
+export const REQUEST_DETAILS_API_DATA = 'REQUEST_DETAILS_API_DATA';
+export const RECEIVE_DETAILS_API_DATA = 'RECEIVE_DETAILS_API_DATA';
+export const UPDATE_DETAILS_API_DATA = 'UPDATE_DETAILS_API_DATA';
+export const ERROR_DETAILS_API_DATA = 'ERROR_DETAILS_API_DATA';
+export const REMOVE_DETAILS_COMPONENT = 'REMOVE_DETAILS_COMPONENT';
 
 export const TIME_INTERVAL_UPDATE = 'TIME_INTERVAL_UPDATE';
 
@@ -32,18 +38,23 @@ export const HIGH_SCORE_RANGE = [65, 100];
 
 export const profileUrl = `${baseUrl}/api/user/profile`;
 export const defaultLayoutPath = `${baseUrl}/api/layout/summary-page`;
+export const actionsUrl = `${baseUrl}/api/analytics/actions/list?mediaType=json`;
 
-export const CHART_COLORS = [
-  '2BD8D0',
-  '6CD3B4',
-  'B6CD94',
-  'FCC875',
-  '05E9F5',
-  '003300',
-  'FF66FF',
-  '999999',
-  '009999',
-  '66CDAA'
-];
+export const DETAILS_BASE_URL = `/api/analytics/reporting/details`;
 
-export const DEFAULT_FONT = 'Open Sans, sans-serif';
+export const DEFAULT_FONT = 'Roboto, sans-serif';
+
+export const DEFAULT_CHART_OPTIONS = Object.freeze({
+  theme: 'zune',
+  lineColor: Colors.coral,
+  showBorder: 0,
+  chartTopMargin: 0,
+  chartBottomMargin: 0,
+  chartLeftMargin: 0,
+  chartRightMargin: 0,
+  baseFont: DEFAULT_FONT,
+  baseFontColor: Colors.grape,
+  paletteColors: Colors.defaultGraphPalette,
+  slantLabels: 1,
+  toolTipSepChar: ' | '
+});

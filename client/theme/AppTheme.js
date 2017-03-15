@@ -1,7 +1,8 @@
 import {Colors} from '../../commons/colors';
+import { DEFAULT_FONT } from 'Constants';
 
 const AppTheme = {
-  fontFamily: '"Open Sans", sans-serif',
+  fontFamily: DEFAULT_FONT,
   palette: {
     primary1Color: Colors.garnet,
     primary2Color: Colors.cherry,

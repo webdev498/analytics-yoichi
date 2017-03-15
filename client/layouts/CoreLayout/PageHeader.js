@@ -19,10 +19,7 @@ import { connect } from 'react-redux';
 import {Colors} from '../../../commons/colors';
 import { Link } from 'react-router';
 
-
 const muiTheme = getMuiTheme(AppTheme);
-
-const openKibanaInNewWindow = window.global && window.global.openKibanaInNewWindow;
 
 const TimeRanges = [
   {
@@ -52,6 +49,10 @@ const TimeRanges = [
   {
     text: '1 Month',
     param: '1mo'
+  },
+  {
+    text: '2 Month',
+    param: '2mo'
   }
 ];
 
@@ -128,11 +129,8 @@ export class PageHeader extends React.Component {
   }
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
     updateApiData: PropTypes.func.isRequired,
-    hideKibana: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
-    showKibana: PropTypes.bool.isRequired,
     params: PropTypes.object.isRequired,
     duration: PropTypes.string.isRequired
   }
@@ -156,16 +154,10 @@ export class PageHeader extends React.Component {
     const {props} = this,
       name = props.auth.user ? props.auth.user.name : '';
 
-    let kibanaStyle = {display: 'none'};
-
-    if (props.showKibana) {
-      kibanaStyle = {...styles.menuStyle, color: Colors.navigation};
-    }
-
     const title = (
       <div style={styles.logoWrap}>
         <Link to='/' style={styles.label}>
-          <img src='/rank-logo.png' style={styles.rankLogo} alt='Rank Logo' />
+          <img src='/rank-logo.png' style={styles.rankLogo} alt='Logo' />
         </Link>
         <div style={styles.label}>
           <Image imageUrl='/client-logo.png'
@@ -179,17 +171,6 @@ export class PageHeader extends React.Component {
       <AppBar title={title}
         style={{...styles.appBar, ...props.style}}
         showMenuIconButton={false}>
-
-        {
-          openKibanaInNewWindow
-          ? null
-          : <MenuItem
-            ref='backBtn'
-            style={{...kibanaStyle}}
-            onClick={this.props.hideKibana}>
-            Back to Summary
-          </MenuItem>
-        }
 
         <DropDownMenu
           ref='dropDown'
@@ -242,7 +223,7 @@ PageHeader.childContextTypes = {
 };
 
 function mapStateToProps(state) {
-  return { auth: state.auth, duration: state.apiData.get('duration') };
+  return { auth: state.auth, duration: state.duration };
 }
 
 export default connect(mapStateToProps, {

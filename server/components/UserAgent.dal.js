@@ -12,7 +12,7 @@ function processData(rawData) {
         let connection = row[userAgentLen][userAgent][0];
         connections += connection;
         userAgent = userAgent !== '' ? userAgent : '< empty >';
-        details += userAgent + ', ' + connection + '{br}';
+        details += userAgent + ' | ' + connection + '{br}';
       }
 
       dataPoint.x = parseInt(userAgentLen);

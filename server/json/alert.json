@@ -6,6 +6,7 @@
           "showHeader": true,
           "showRefresh": false,
           "showBackButton": true,
+          "showFullScreen": false,
           "api": {
             "path": "/api/alert/{alertId}",
             "pathParams": {
@@ -16,13 +17,14 @@
               "window": ""
             }
           },
-          "title": "Alert Detail"
+          "title": "Anomaly Details"
         },
-        "name": "AlertDetail",
         "attributes": {
           "style": {
             "backgroundColor": "#ffffff",
             "width": "250px",
+            "marginTop": "30px",
+            "marginLeft": "30px",
             "flex": "0 0 250px"
           }
         },
@@ -32,6 +34,7 @@
       {
         "meta": {
           "showHeader": true,
+          "showFullScreen": false,
           "api": {
             "path": "/api/analytics/graph/{alertId}",
             "pathParams": {
@@ -44,8 +47,15 @@
           "title": "Overview"
         },
         "attributes": {
+          "header": {
+            "style": {
+              "paddingRight": "50px"
+            }
+          },
           "style": {
             "width": "100%",
+            "marginTop": "30px",
+            "marginRight": "30px",
             "backgroundSize": "20px 20px",
             "backgroundImage": "linear-gradient(to right, #F1F1F3 1px, transparent 1px), linear-gradient(to bottom, #F1F1F3 1px, #FAFAFB 1px)"
           },
@@ -75,10 +85,11 @@
             }
           }
         },
-        "name": "AlertTimeline",
         "attributes": {
           "style": {
-            "width": "100%"
+            "width": "100%",
+            "marginLeft": "30px",
+            "marginRight": "30px"
           }
         },
         "id": "alert-timeline",

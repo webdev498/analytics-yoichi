@@ -1,6 +1,53 @@
 import React from 'react';
 import moment from 'moment';
-import {Colors} from '../colors';
+
+const timeParams = {
+  '1h': {
+    diffInMin: 5,
+    functionName: 'hour',
+    diffInUnits: 1
+  },
+  '6h': {
+    diffInMin: 15,
+    functionName: 'hour',
+    diffInUnits: 6
+  },
+  '12h': {
+    diffInMin: 30,
+    functionName: 'hour',
+    diffInUnits: 12
+  },
+  '24h': {
+    diffInMin: 60,
+    functionName: 'date',
+    diffInUnits: 1
+  },
+  '48h': {
+    diffInMin: 120,
+    functionName: 'date',
+    diffInUnits: 2
+  },
+  '1d': {
+    diffInMin: 60,
+    functionName: 'date',
+    diffInUnits: 1
+  },
+  '1w': {
+    diffInMin: 1440,
+    functionName: 'date',
+    diffInUnits: 7
+  },
+  '1mo': {
+    diffInMin: 10080,
+    functionName: 'month',
+    diffInUnits: 1
+  },
+  '2mo': {
+    diffInMin: 20160,
+    functionName: 'month',
+    diffInUnits: 2
+  }
+};
 
 // Function to convert milliseconds to time
 export function msToTime(duration) {
@@ -128,6 +175,7 @@ export function translateTimeWindow(window) {
   else if (window === '1 day') return '1d';
   else if (window === '1 week') return '1w';
   else if (window === '1 month') return '1mo';
+  else if (window === '2 month') return '2mo';
 
   else if (window === '1h') return '1 hour';
   else if (window === '6h') return '6 hour';
@@ -137,6 +185,7 @@ export function translateTimeWindow(window) {
   else if (window === '1d') return '1 day';
   else if (window === '1w') return '1 week';
   else if (window === '1mo') return '1 month';
+  else if (window === '2mo') return '2 month';
   else return window;
 }
 
@@ -206,48 +255,6 @@ function getFromDate(params, todayDate, fromDate) {
 
 // Function to get from and to dates for the specific time window
 export function getTimePairFromWindow(timeWindow, dateString) {
-  const timeDifferences = {
-    '1h': {
-      diffInMin: 5,
-      functionName: 'hour',
-      diffInUnits: 1
-    },
-    '6h': {
-      diffInMin: 15,
-      functionName: 'hour',
-      diffInUnits: 6
-    },
-    '12h': {
-      diffInMin: 30,
-      functionName: 'hour',
-      diffInUnits: 12
-    },
-    '24h': {
-      diffInMin: 60,
-      functionName: 'date',
-      diffInUnits: 1
-    },
-    '48h': {
-      diffInMin: 120,
-      functionName: 'date',
-      diffInUnits: 2
-    },
-    '1d': {
-      diffInMin: 60,
-      functionName: 'date',
-      diffInUnits: 1
-    },
-    '1w': {
-      diffInMin: 1440,
-      functionName: 'date',
-      diffInUnits: 7
-    },
-    '1mo': {
-      diffInMin: 10080,
-      functionName: 'month',
-      diffInUnits: 1
-    }
-  };
   let dateString1 = '',
     dateString2 = '';
 
@@ -256,7 +263,7 @@ export function getTimePairFromWindow(timeWindow, dateString) {
     let dateParameter = new Date(Date.parse((dateString).toString()));
     dateString1 = formatDate(dateParameter);
 
-    let timeDifference = timeDifferences[timeWindow] ? timeDifferences[timeWindow].diffInMin : 5,
+    let timeDifference = timeParams[timeWindow] ? timeParams[timeWindow].diffInMin : 5,
       toDate = dateParameter;
     toDate.setMinutes(toDate.getMinutes() + timeDifference);
     dateString2 = formatDate(toDate);
@@ -265,72 +272,14 @@ export function getTimePairFromWindow(timeWindow, dateString) {
   else {
     let todayDate = new Date(),
       fromDate = todayDate;
-    fromDate = getFromDate(timeDifferences[timeWindow], todayDate, fromDate);
+    fromDate = getFromDate(timeParams[timeWindow], todayDate, fromDate);
     dateString1 = formatDate(new Date());
     dateString2 = formatDate(fromDate);
     return {fromDate: dateString2, toDate: dateString1};
   }
 }
 
-export function getColorRanges(secureConnectionsValues, maliciousConnectionsValues) {
-  const secureColors = [
-      '#2BD8D0',
-      '#51DFD8',
-      '#71E5DF',
-      '#97ECE8',
-      '#BAF2F0',
-      '#DBF8F7'
-    ],
-    maliciousColors = [
-      '#F69275',
-      '#F7A48B',
-      '#F9B6A2',
-      '#F8CABB',
-      '#FCDBD2',
-      '#FEEDE8'
-    ];
-  let secureMaxValue = Math.max.apply(Math, secureConnectionsValues),
-    maliciousMaxValue = Math.max.apply(Math, maliciousConnectionsValues),
-    secureMidValue = parseInt(secureMaxValue / 6) + 1,
-    maliciousMidValue = parseInt(maliciousMaxValue / 6) + 1,
-    minSecureRange = 1,
-    minMaliciousRange = 1,
-    colorIndex = 5,
-    secureColorRanges = [],
-    maliciousColorRanges = [];
 
-  for (let m = 0; m < 6; m++) {
-    let tempColorObj = {};
-    if (m === 0) {
-      tempColorObj.min = minSecureRange;
-    }
-    else {
-      tempColorObj.min = minSecureRange + 1;
-    }
-    tempColorObj.max = minSecureRange + secureMidValue;
-    minSecureRange = tempColorObj.max;
-    tempColorObj.color = secureColors[colorIndex];
-    secureColorRanges.push(tempColorObj);
-
-    tempColorObj = {};
-    if (m === 0) {
-      tempColorObj.min = minMaliciousRange;
-    }
-    else {
-      tempColorObj.min = minMaliciousRange + 1;
-    }
-    tempColorObj.max = minMaliciousRange + maliciousMidValue;
-    minMaliciousRange = tempColorObj.max;
-    tempColorObj.color = maliciousColors[colorIndex];
-    maliciousColorRanges.push(tempColorObj);
-
-    colorIndex--;
-  }
-  return {
-    secure: secureColorRanges,
-    malicious: maliciousColorRanges
-  };
-}
 
 function numberToReactElm(val, text, {numberStyle, textStyle} = {}) {
   return (
@@ -342,7 +291,7 @@ function numberToReactElm(val, text, {numberStyle, textStyle} = {}) {
 }
 
 export function formatBytes(bytes, decimals, {numberStyle, textStyle} = {}) {
-  if (bytes === '' || bytes === undefined) return '-';
+  if (bytes === '' || bytes === undefined || typeof bytes !== 'number') return '-';
 
   if (bytes === 0) {
     return numberStyle ? numberToReactElm(0, 'Byte', {numberStyle, textStyle}) : '0 Byte';
@@ -451,27 +400,6 @@ export function whatIsIt(object) {
   }
 }
 
-export function getColor(score, severity) {
-  let color = '';
-  if (!score) {
-    score = '';
-  }
-  if (!severity) {
-    severity = '';
-  }
-
-  if ((score !== '' && score >= 65) || severity.toLowerCase() === 'high') {
-    color = Colors.cherry;
-  }
-  else if ((score !== '' && score < 65 && score >= 35) || severity.toLowerCase() === 'medium') {
-    color = Colors.coral;
-  }
-  else if ((score !== '' && score < 35) || severity.toLowerCase() === 'low') {
-    color = Colors.mustard;
-  }
-  return color;
-}
-
 export function getFieldValue(data, fieldName) {
   if (fieldName.includes('.')) {
     let attributes = fieldName.split('.'),
@@ -511,7 +439,8 @@ export function getEventTypeString(typeName) {
     sysmon: 'Sysmon',
     report: 'Report',
     anomaly: 'Anomaly',
-    auth: 'Auth'
+    auth: 'Auth',
+    'resource-access': 'Resource Access'
   };
 
   return typeStrings[typeName] ? typeStrings[typeName] : typeName;
@@ -541,8 +470,8 @@ export function getDateTimeInLocalTimeZone(dateTime, format) {
 }
 
 export function displayEllipsis(str, range) {
-  let max = 250,
-    min = 120;
+  let max = 40,
+    min = 18;
   if (range) {
     max = range.max;
     min = range.min;
@@ -551,4 +480,22 @@ export function displayEllipsis(str, range) {
     return str.substr(0, min) + ' ... ' + str.substr(str.length - min, str.length);
   }
   return str;
+}
+
+// Function to get index/value from column name/index specified in layout JSON
+export function getColumnIndexOrValue(jsonColumns, apiColumns, data) {
+  let index = '';
+  jsonColumns.forEach((jsonColumn) => {
+    if (jsonColumn.type === 'name') {
+      apiColumns.forEach((apiColumn, colIndex) => {
+        if (jsonColumn.name === apiColumn.name) {
+          index = colIndex;
+        }
+      });
+    }
+    else if (jsonColumn.type === 'index') {
+      index = getIndexFromObjectName({fieldName: jsonColumn.name, dataArray: data});
+    }
+  });
+  return index;
 }

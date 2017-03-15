@@ -5,24 +5,27 @@ import {
   getColumnIndexArrayFromColumnName,
   getIndexFromColumnName,
   getIndexFromObjectName,
-  getColorRanges,
   isUndefined,
   kFormatter
 } from '../../../commons/utils/utils';
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
+
+import { getColorRanges } from '../../../commons/utils/colorUtils';
+import { getQueryParamsForDetails } from '../../utils/utils';
+
+import { DEFAULT_FONT } from 'Constants';
 
 const styles = {
   chartCaption: {
-    width: '100%',
-    fontFamily: 'Open Sans, sans-serif',
     fontSize: '14px',
-    fontWeight: '600',
     color: Colors.grape
   },
   minHeight: {
     minHeight: '150px'
   },
-  noData: {}
+  noData: {},
+  subTitle: {
+    fontSize: '12px'
+  }
 };
 
 export function generateDataArray(parameters) {
@@ -60,7 +63,7 @@ export function generateDataArray(parameters) {
           label: label1,
           value: rowsArray[d][columnIndexArray[1]],
           connection: connection,
-          toolText: rowsArray[d][columnIndexArray[0]] + ', ' + rowsArray[d][columnIndexArray[1]]
+          toolText: rowsArray[d][columnIndexArray[0]] + ' | ' + rowsArray[d][columnIndexArray[1]]
         };
 
         dataset.push(obj1);
@@ -82,15 +85,15 @@ export function generateDataArray(parameters) {
         else {
           annotationItems = annotationItems.concat([
             {
-              'id': 'datasetlabel' + d,
-              'type': 'text',
-              'text': kFormatter(obj1.value) + numberSuffix + ' ',
-              'align': 'left',
-              'x': '$chartEndX - 146',
-              'y': '$dataset.0.set.' + d + '.CenterY',
-              'fontSize': '11',
-              'color': Colors.grape,
-              'font': 'Open Sans, sans-serif'
+              id: 'datasetlabel' + d,
+              type: 'text',
+              text: kFormatter(obj1.value) + numberSuffix + ' ',
+              align: 'left',
+              x: '$chartEndX - 146',
+              y: '$dataset.0.set.' + d + '.CenterY',
+              fontSize: '11',
+              color: Colors.grape,
+              font: DEFAULT_FONT
             }
           ]);
         }
@@ -254,15 +257,15 @@ export function generateDataSource(rawData, chartOptions, chartData, chart) {
           for (let j = 0; j < dataset.length; j++) {
             annotationItems = annotationItems.concat([
               {
-                'id': 'datasetlabel' + j,
-                'type': 'text',
-                'text': dataset[j].label,
-                'align': 'left',
-                'x': '$chartEndX - 146',
-                'y': '$dataset.0.set.' + j + '.CenterY',
-                'fontSize': '11',
-                'color': Colors.grape,
-                'font': 'Open Sans, sans-serif'
+                id: 'datasetlabel' + j,
+                type: 'text',
+                text: dataset[j].label,
+                align: 'left',
+                x: '$chartEndX - 146',
+                y: '$dataset.0.set.' + j + '.CenterY',
+                fontSize: '11',
+                color: Colors.grape,
+                font: DEFAULT_FONT
               }
             ]);
 
@@ -361,8 +364,9 @@ export function generateDataSource(rawData, chartOptions, chartData, chart) {
       'yAxisNameFontSize': '14',
       'labelFontSize': '11',
       'numDivLines': '4',
-      'baseFont': 'Open Sans, sans-serif',
-      'baseFontColor': Colors.grape
+      'baseFont': DEFAULT_FONT,
+      'baseFontColor': Colors.grape,
+      'toolTipSepChar': ' | '
     }, chartOptions)
   };
 
@@ -392,22 +396,6 @@ export function generateDataSource(rawData, chartOptions, chartData, chart) {
   return dataSourceObject;
 }
 
-function getDataPlotClickUrl(props, dataObj) {
-  if (!props.kibana) {
-    return;
-  }
-
-  let parameters = {
-    data: props.data,
-    duration: props.duration,
-    dataObj: dataObj,
-    queryParamsArray: props.kibana.queryParams,
-    pathParams: props.kibana.pathParams
-  };
-
-  return generateClickThroughUrl(parameters);
-}
-
 class HorizontalBarChart extends React.Component {
   static propTypes = {
     attributes: PropTypes.object,
@@ -415,38 +403,13 @@ class HorizontalBarChart extends React.Component {
   }
 
   renderChart(props) {
-    if (!props.data) {
-      // styles.noData = {
-      //   display: 'none'
-      // };
-      return;
-    }
-
-    // if (props.data.rows && props.data.rows.length === 0) {
-    //   styles.noData = {
-    //     display: 'none'
-    //   };
-    //   return;
-    // }
-
-    // if (props.data && props.chartData &&
-    //   props.chartData.fieldMapping &&
-    //   props.chartData.fieldMapping[0] &&
-    //   props.chartData.fieldMapping[0].reportId &&
-    //   props.data[props.chartData.fieldMapping[0].reportId].rows &&
-    //   props.data[props.chartData.fieldMapping[0].reportId].rows.length === 0) {
-    //   styles.noData = {
-    //     display: 'none'
-    //   };
-    //   return;
-    // }
+    if (!props.data) return;
 
     styles.noData = {};
 
     const data = props.data,
       fieldMapping = props.chartData.fieldMapping,
-      {chartOptions, chartData, chart} = props,
-      {clickThrough} = this.context;
+      {chartOptions, chartData, chart, showDetailsTable, details} = props;
 
     let rawData = {};
     rawData = generateRawData(fieldMapping, data);
@@ -462,10 +425,8 @@ class HorizontalBarChart extends React.Component {
         dataSource: generateDataSource(rawData, chartOptions, chartData, chart),
         events: {
           dataplotClick: function(eventObj, dataObj) {
-            const url = getDataPlotClickUrl(props, dataObj);
-            if (url !== '' && !isUndefined(url)) {
-              clickThrough(url);
-            }
+            let queryParams = getQueryParamsForDetails(details.meta.queryParams, dataObj);
+            showDetailsTable && showDetailsTable(queryParams);
           }
         }
       });
@@ -477,20 +438,21 @@ class HorizontalBarChart extends React.Component {
     const {props} = this;
     this.renderChart(props);
 
+    let chartStyle = props.chart && props.chart.style ? props.chart.style : {};
+
     return (
       <div style={{...props.attributes.chartBorder, ...styles.noData}}>
-        <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>{props.meta.title}
-          <span style={{fontSize: '12px', fontWeight: 'normal'}}> {props.meta.subTitle}</span>
-        </div>
-        <div id={props.attributes.id} style={{...{width: '100%'}, ...styles.minHeight}}>
-        </div>
+        {
+          props.loadAsLegend
+          ? <div style={{...styles.chartCaption, ...props.attributes.chartCaption}}>{props.meta.title}
+            <span style={styles.subTitle}> {props.meta.subTitle}</span>
+          </div>
+          : null
+        }
+        <div id={props.attributes.id} style={{...styles.minHeight, ...chartStyle}} />
       </div>
     );
   }
 }
-
-HorizontalBarChart.contextTypes = {
-  clickThrough: React.PropTypes.func
-};
 
 export default HorizontalBarChart;

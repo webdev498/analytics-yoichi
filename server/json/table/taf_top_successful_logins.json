@@ -26,12 +26,12 @@
                 "fieldName": "count"
               }
             ],
-            "attributes": {
-              "chartWidth": "100%",
-              "chartType": "area2d",
+            "chart": {
+              "width": "100%",
+              "height": "120",
+              "type": "area2d",
               "id": "SuccessfulLogins",
-              "chartHeight": "120",
-              "chartOptions": {
+              "options": {
                 "labelFontSize": "9"
               }
             },
@@ -47,14 +47,12 @@
     "nestedResult": true,
     "emptyValueMessage": "(Empty)"
   },
-  "kibana": {
-    "pathParams": [
-      "login-details"
-    ],
-    "queryParams": {
-      "fromAndToBasedOnToday": "",
-      "user": "data.login.user:fieldName",
-      "status": "success"
+  "details": {
+    "meta": {
+      "queryParams": {
+        "data.login.user": "data.login.user:fieldName",
+        "status": "success"
+      }
     }
   }
 }

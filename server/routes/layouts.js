@@ -1,18 +1,9 @@
 import https from 'https';
 import fetch from 'node-fetch';
 import {serverBaseUrl} from '../../serverEnv';
+import {readFileThunk} from '../utils/utils';
 
-const fs = require('fs');
 const path = require('path');
-
-const readFileThunk = function(src) {
-  return new Promise(function(resolve, reject) {
-    fs.readFile(src, {}, function(err, data) {
-      if (err) return reject(err);
-      resolve(data);
-    });
-  });
-};
 
 const agent = new https.Agent({ rejectUnauthorized: false });
 export default async function layoutRoutes(ctx, next) {

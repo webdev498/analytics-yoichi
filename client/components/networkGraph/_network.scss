@@ -1,4 +1,5 @@
 @import '../../styles/color';
+@import '../../styles/variable';
 
 .vis-network-tooltip {
   position: absolute;
@@ -6,7 +7,7 @@
   padding: 5px;
   white-space: nowrap;
 
-  font-family: 'Open Sans';
+  font-family: $DefaultFont;
   font-size: 14px;
   color: #24293D;
   background-color: $CloudColor;

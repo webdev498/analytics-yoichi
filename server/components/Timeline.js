@@ -371,8 +371,8 @@ function getRDP(row) {
   const info = {
     id: getValue(row.id),
     Date: getValue(row.date),
-    sourceDest: getSourceDestination(row),
     display: {
+      sourceDest: getSourceDestination(row),
       Type: {
         displayKey: true,
         value: getEventTypeString(row.type)
@@ -539,6 +539,70 @@ function getOther(row, url) {
   return info;
 }
 
+function getDyConn(row) {
+  const {data: {dyconn}} = row,
+    info = {
+      id: getValue(row.id),
+      Date: getValue(row.date),
+      display: {
+        sourceDest: getSourceDestination(row),
+        Type: {
+          displayKey: true,
+          value: getEventTypeString(row.type)
+        },
+        Service: {
+          displayKey: true,
+          value: getValue(dyconn.service)
+        },
+        State: {
+          displayKey: true,
+          value: getValue(dyconn.state)
+        },
+        'Requested Bytes': {
+          displayKey: true,
+          value: getValue(dyconn.reqBytes) !== '' ? formatBytes(dyconn.reqBytes, 2) : ''
+        },
+        'Response Bytes': {
+          displayKey: true,
+          value: getValue(dyconn.respBytes) !== '' ? formatBytes(dyconn.respBytes, 2) : ''
+        },
+        Duration: {
+          displayKey: true,
+          value: getValue(dyconn.duration) !== '' ? msToTime(dyconn.duration).timeString : ''
+        }
+      }
+    };
+
+  return info;
+}
+
+function getResourceAccess(row) {
+	  let info = {
+	      Date: getValue(row.date),
+	      display: {
+	        sourceDest: getSourceDestination(row),
+	        Type: {
+	          displayKey: true,
+	          value: getEventTypeString(row.type)
+	        },
+	        User: {
+	          displayKey: true,
+	          value: getValue(row.source.assets[0].info.displayName)
+	        },
+	        Resource: {
+		          displayKey: true,
+		          value: getValue(row.data['resource-access'].resources[0].info.displayName)
+		    },
+	        Operation: {
+		          displayKey: true,
+		          value: getValue(row.data['resource-access'].operation)
+		    }
+	      }
+	    };
+
+	  return info;
+	}
+
 function getDetails(row, url) {
   switch (row.type.toLowerCase()) {
     case 'conn':
@@ -571,6 +635,10 @@ function getDetails(row, url) {
       return getAuth(row);
     case 'dhcp':
       return getDhcp(row);
+    case 'dyconn':
+      return getDyConn(row);
+    case 'resource-access':
+        return getResourceAccess(row);  
     default:
       return getOther(row, url);
   }

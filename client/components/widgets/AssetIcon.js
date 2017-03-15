@@ -10,7 +10,7 @@ const styles = {
   imgWrap: {
     fontSize: '24px',
     fontWeight: '100',
-    backgroundColor: Colors.smoke,
+    backgroundColor: Colors.iconBackground,
     color: Colors.white,
     height: '45px',
     width: '45px',

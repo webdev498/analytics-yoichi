@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Colors} from '../../commons/colors';
 import {getArrowIcon} from '../../commons/utils/graphUtils';
 
-import {generateClickThroughUrl} from 'utils/kibanaUtils';
+import 'styles/_metricsCard.scss';
 
 const styles = {
   card: {
-    padding: '33px 33px 20px 33px'
+    padding: '30px 30px 16px 30px'
   },
   wrapStyle: {
     display: 'flex'
@@ -15,20 +15,42 @@ const styles = {
     fontSize: '35px',
     lineHeight: '35px'
   },
-  text: {
+  title: {
     fontSize: '21px',
     lineHeight: '21px',
     fontWeight: 'normal',
     margin: 0,
-    marginBottom: '13px'
+    marginBottom: '15px'
+  },
+  detailsWrap: {
+    display: 'flex',
+    marginTop: '15px',
+    color: Colors.grape
   },
   details: {
-    paddingTop: '5px',
-    fontSize: '13px',
+    display: 'inline-block',
+    fontSize: '12px',
     marginLeft: 'auto',
     cursor: 'pointer',
-    color: Colors.grape,
-    textAlign: 'right'
+    textAlign: 'right',
+    height: '26px',
+    textTransform: 'uppercase',
+    lineHeight: '26px',
+    backgroundColor: Colors.cloud,
+    paddingLeft: '8px',
+    borderRadius: '4px 0 0 4px'
+  },
+  iconWrap: {
+    display: 'inline-block',
+    cursor: 'pointer',
+    height: '26px',
+    backgroundColor: Colors.cloud,
+    borderRadius: '0 4px 4px 0'
+  },
+  detailsIcon: {
+    fontSize: '20px',
+    lineHeight: '26px',
+    transform: 'rotate(-90deg)'
   },
   percentageWrap: {
     marginLeft: 'auto',
@@ -66,44 +88,34 @@ function getIcon(data) {
 }
 
 class MetricsCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  static propTypes = {
+    clickData: PropTypes.object
+  }
+
   handleClick() {
-    const {props} = this,
-      {kibana, clickData} = props,
-      dataObj = {};
-
-    if (kibana) {
-      if (props.kibana.queryParams) {
-        dataObj.datasetName = 'high';
-      }
-
-      let parameters = {
-        data: props.data,
-        duration: props.duration,
-        dataObj,
-        queryParamsArray: props.kibana.queryParams,
-        pathParams: props.kibana.pathParams
-      };
-
-      return () => {
-        this.context.clickThrough(generateClickThroughUrl(parameters));
-      };
-    }
+    const {props, props: {clickData}} = this;
 
     if (clickData) {
-      return () => {
-        if (props.history.isActive(clickData.page)) {
-          props.broadcastEvent(clickData.tableId, {data: clickData.filterText, type: 'updateSearch'});
-        }
-        else {
-          // this is to enable to call the broadcastEvent when user is on some other page other than '/alerts'
-          //  so that this event can be called after the page load
-          window.sessionStorage.broadcastEvent = JSON.stringify({
-            id: clickData.tableId,
-            data: {data: clickData.filterText, type: 'updateSearch'}
-          });
-          props.history.push(clickData.page);
-        }
-      };
+      if (props.history.isActive(clickData.page)) {
+        props.broadcastEvent(clickData.tableId, {data: clickData.filterText, type: 'updateSearch'});
+      }
+      else {
+        // this is to enable to call the broadcastEvent when user is on some other page other than '/alerts'
+        //  so that this event can be called after the page load
+        window.sessionStorage.broadcastEvent = JSON.stringify({
+          id: clickData.tableId,
+          data: {data: clickData.filterText, type: 'updateSearch'}
+        });
+        props.history.push(clickData.page);
+      }
+    }
+    else {
+      this.context.clickThrough(props);
     }
   }
 
@@ -111,8 +123,8 @@ class MetricsCard extends React.Component {
     const { props } = this;
 
     return (
-      <div style={styles.card}>
-        <h3 style={styles.text}>{props.title}</h3>
+      <div style={styles.card} className='metric-card'>
+        <h3 style={styles.title}>{props.title}</h3>
 
         <div style={styles.wrapStyle}>
           <div style={{...styles.countStyle, ...props.attributes.countStyle}}>
@@ -126,9 +138,14 @@ class MetricsCard extends React.Component {
           </div>
         </div>
 
-        <div style={styles.details}
-          onClick={this.handleClick()}>
-          View details
+        <div style={styles.detailsWrap}
+          onClick={this.handleClick}>
+          <span style={styles.details}>View details</span>
+          <span style={styles.iconWrap}>
+            <i style={styles.detailsIcon} className='material-icons'>
+                arrow_drop_down
+            </i>
+          </span>
         </div>
       </div>
     );

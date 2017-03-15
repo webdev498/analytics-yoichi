@@ -13,10 +13,13 @@ import {
   receivePageData,
   errorPageData,
   getUrl,
-  fetchLayoutData
+  fetchLayoutData,
+  fetchSearchData,
+  updateRoute
 } from 'actions/core';
 
 import {baseUrl} from 'config';
+import { getSearchUrl } from 'utils/utils';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
@@ -129,7 +132,7 @@ describe('corelayout Redux Actions', () => {
 
     it('should dispatch ERROR_LAYOUT_DATA with error "Json not loaded correctly from server"', () => {
       const id = '/';
-      server.respondWith('GET', defaultLayoutPath, [ 200, { 'Content-Type': 'application/json' }, '' ]);
+      server.respondWith('GET', defaultLayoutPath, [ 200, { 'Content-Type': 'application/json' }, '{"layout": [],}' ]);
       const apiObj = store.dispatch(fetchLayoutData(id))
         .then(res => {
           const actions = store.getActions();
@@ -167,20 +170,35 @@ describe('corelayout Redux Actions', () => {
   });
 
   context('fetchSearchData function', function() {
-    // it('should call search url', () => {
-    //   const server = fakeServer.create(),
-    //     auth = { cookies: { access_token: '', token_type: '' } },
-    //     json = {},
-    //     jsonRes = JSON.stringify(json),
-    //     query = 'hello';
+    it('should call search url', () => {
+      const server = fakeServer.create(),
+        auth = { cookies: { access_token: '', token_type: '' } },
+        json = {},
+        jsonRes = JSON.stringify(json),
+        query = 'hello';
 
-    //   server.respondWith('GET', getSearchUrl(query), function(req) {
-    //     return [ 200, { 'Content-Type': 'application/json' }, jsonRes ];
-    //   });
+      server.respondWith('GET', getSearchUrl(query), function(req) {
+        const headers = req.requestHeaders;
+        expect(headers).to.have.a.property('authorization');
+        expect(headers.authorization).to.be.a('string');
+        expect(req.url).to.equal('/api/analytics/reporting/execute/taf_search_assets?term=hello');
+        req.respond(200, { 'Content-Type': 'application/json' }, jsonRes);
+      });
 
-    //   const apiObj = fetchSearchData(auth, query);
-    //   server.respond();
-    //   return apiObj;
-    // });
+      const apiObj = fetchSearchData(auth, query);
+      server.respond();
+      return apiObj;
+    });
+  });
+
+  context('updateRoute function', function() {
+    it('should should dispatch push for react router', () => {
+      const store = mockStore({});
+      store.dispatch(updateRoute('/logout'));
+
+      const actions = store.getActions();
+      expect(actions).to.have.length(1);
+      expect(actions[0]).to.have.a.property('type', '@@router/CALL_HISTORY_METHOD');
+    });
   });
 });

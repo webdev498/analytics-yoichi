@@ -14,6 +14,10 @@ import {autoScrollTo} from 'utils/utils';
 import { TIMELINE_CARD, CONTEXTUAL_MENU_CARD } from 'Constants';
 
 const styles = {
+  dateStyle: {
+    marginRight: '22px',
+    marginTop: '19px'
+  },
   dateSpan: {
     fontSize: '12px',
     color: Colors.grape
@@ -26,7 +30,7 @@ const styles = {
   }
 };
 
-function getTabObj(tabs, timelineType, currentTab) {
+export function getTabObj(tabs, timelineType, currentTab) {
   let tabObj = {};
   for (let tab in tabs) {
     if (tab === currentTab) {
@@ -194,7 +198,7 @@ class Timeline extends React.Component {
       paddingLeft = (card === TIMELINE_CARD) ? '0px' : '10px';
 
     return (
-      <div style={{ width: '85px', paddingLeft }}>
+      <div style={{ ...styles.dateStyle, paddingLeft }}>
         <span style={styles.dateSpan}>
           {dateTime.date}<br />{dateTime.time}
         </span>
@@ -261,12 +265,11 @@ class Timeline extends React.Component {
     let api = Object.assign({}, props.meta.api, this.getApiObj(pageNumber, type)),
       options = props.options ? props.options : {};
 
-    props.fetchApiData(props.id, api, params, options);
+    props.fetchApiData({id: props.id, api, params, options});
     this.pagination = {
       isPaginated: true,
       pageNumber: pageNumber
     };
-    this.toggleHighlightNetworkNode('invalid_id');
   }
 
   getApiObj(pageNumber, type) {
@@ -390,7 +393,7 @@ class Timeline extends React.Component {
         <div style={{
           width: '450px',
           position: 'absolute',
-          top: tabs && tabNames.length > 1 ? 182 : 0,
+          top: tabs && tabNames.length > 1 ? 132 : 0,
           right: 0,
           bottom: 0,
           zIndex: 1
@@ -420,7 +423,7 @@ class Timeline extends React.Component {
         machine: ''
       };
       this.getContextualMenuApiObj(details);
-      this.toggleHighlightNetworkNode('invalid_id');
+      this.toggleHighlightNetworkNode('');
     };
   }
 
@@ -499,10 +502,7 @@ class Timeline extends React.Component {
 
     if (state.rows && state.rows.length > 0) {
       return (
-        <div style={
-            attributes.otherStyles.flex && state.selectedCardId !== ''
-            ? attributes.otherStyles.flex : {}
-          }>
+        <div style={attributes.otherStyles.flex && state.selectedCardId !== '' ? attributes.otherStyles.flex : {}}>
           {this.displayCard()}
           {
             state.selectedCardId !== ''

@@ -156,7 +156,8 @@
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.13.0",
     "whatwg-fetch": "^0.11.0",
-    "yargs": "^4.8.1"
+    "yargs": "^4.8.1",
+    "autotrack": "1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.0.0",
@@ -167,6 +168,7 @@
     "chai-enzyme": "^0.5.0",
     "chai-immutable": "^1.6.0",
     "cheerio": "^0.22.0",
+    "clone": "^2.1.0",
     "codecov": "^1.0.1",
     "enzyme": "^2.3.0",
     "es6-promise": "^4.0.5",
