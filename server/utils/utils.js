@@ -36,7 +36,7 @@ export function getDalJsonFileNamesOnce() {
 
 getDalJsonFileNamesOnce();
 
-export function getUrl(ctx) {
+export async function getUrl(ctx) {
   let url = serverBaseUrl + ctx.url;
 
   // This 'if' condition is added becasue it replaces the report id only if we used 'dash_' reportId.

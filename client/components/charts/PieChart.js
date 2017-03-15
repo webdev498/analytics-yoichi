@@ -6,7 +6,7 @@ const styles = {
   pieWrap: {
     width: '100%',
     display: 'flex',
-    flexWrap: 'wrap',
+    // flexWrap: 'wrap',
     alignItems: 'center',
     margin: '0px',
     justifyContent: 'center',
@@ -41,9 +41,10 @@ const chartOptions = {
   decimals: 0,
   paletteColors: Colors.cloud + ',' + Colors.bar,
   theme: 'fint',
-  chartLeftMargin: 30,
-  chartRightMargin: 30,
-  chartBottomMargin: 30,
+  chartTopMargin: 0,
+  chartLeftMargin: 0,
+  chartRightMargin: 0,
+  chartBottomMargin: 0,
   bgcolor: Colors.white,
   showValues: 0,
   startingAngle: 90,
@@ -94,8 +95,8 @@ class PieChart extends React.Component {
       let fusioncharts = new FusionCharts({
         type: 'doughnut2d',
         renderAt: attributes.id,
-        width: 380,
-        height: 380,
+        width: 310,
+        height: 310,
         dataFormat: 'json',
         containerBackgroundOpacity: '0',
         dataSource
@@ -120,10 +121,10 @@ class PieChart extends React.Component {
 
     return (
       <div style={styles.pieWrap}>
-        <div id={attributes.id} style={{marginLeft: '-50px'}}>
+        <div id={attributes.id} style={{marginLeft: '-20px'}}>
           {this.renderChart(pieProps)}
         </div>
-        <div style={{paddingRight: '25px'}}>
+        <div style={{paddingLeft: '20px', paddingRight: '20px'}}>
           <PercentageWidget iconName='desktop_mac' percentage={pieProps.assetPercentage} />
         </div>
         <div>
