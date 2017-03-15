@@ -83,8 +83,8 @@ class PieChart extends React.Component {
                 type: 'text',
                 text: piePercentage + '%',
                 color: Colors.white,
-                x: 210,
-                y: 95
+                x: 180,
+                y: 75
               }
             ]
           }
