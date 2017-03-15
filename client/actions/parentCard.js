@@ -151,7 +151,6 @@ export function callApi(api, duration, params, options, dispatch) {
     body = options && JSON.stringify(options.body);
 
   const url = getUrl(api, duration, params);
-  if (!url) return;
 
   return fetch(url, {
     method: api.method || 'GET',
@@ -225,7 +224,7 @@ export function fetchNextSetOfData(apiObj, prevData) {
 
     dispatch(requestApiData(id, api, isDetails));
 
-    callApi(api, currentDuration, params, options, dispatch)
+    return callApi(api, currentDuration, params, options, dispatch)
     .then(json => {
       json.options = options;
       dispatch(updateDetailsApiData(id, {json, api, prevData}));

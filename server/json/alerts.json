@@ -227,7 +227,7 @@
           "id": "RecentAnomalies"
         },
         "id": "RecentAnomalies",
-        "type": "ReactableTable",
+        "type": "Reactable",
         "openAlertDetails": true
       },
       {
@@ -255,7 +255,7 @@
           "id": "high-risk-assets"
         },
         "id": "high-risk-assets",
-        "type": "ReactableTable",
+        "type": "Reactable",
         "openAssetDetails": true
       }
     ],

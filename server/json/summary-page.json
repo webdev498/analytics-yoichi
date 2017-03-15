@@ -650,9 +650,20 @@
           ],
           "multipleReportIds": true
         },
+        "details": {
+          "meta": {
+            "reportId": "taf_top_talkers_bandwidth",
+            "queryParams": {
+              "source.name": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "meta": {
           "showHeader": true,
-          "showDetails": false,
+          "showDetailsIcon": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
@@ -840,7 +851,6 @@
           },
           "title": "Least Used Software Details"
         },
-        "name": "ReactableTable",
         "attributes": {
           "style": {
             "marginLeft": "30px",
@@ -873,7 +883,6 @@
           },
           "title": "Successful Logins"
         },
-        "name": "ReactableTable",
         "attributes": {
           "style": {
             "marginRight": "30px",
@@ -905,7 +914,6 @@
           },
           "title": "Failed Logins"
         },
-        "name": "ReactableTable",
         "attributes": {
           "style": {
             "width": "33%",

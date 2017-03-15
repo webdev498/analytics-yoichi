@@ -14,7 +14,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -47,7 +46,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -80,15 +78,14 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#03C5ED"
           },
           "style": {
             "marginRight": "3px",
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #03C5ED"
           }
         },
         "details": {
@@ -141,14 +138,13 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#03C5ED"
           },
           "style": {
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #03C5ED"
           }
         },
         "details": {
@@ -257,7 +253,7 @@
         "chartOptions": {
           "xAxisname": "TIME",
           "yAxisname": "COUNT",
-          "paletteColors": "#adecf9, #03c5ed"
+          "showCumulativeLine": ""
         },
         "chartData": {
           "fieldMapping": [
@@ -311,7 +307,6 @@
         "chartOptions": {
           "xAxisname": "USER",
           "yAxisname": "# ACCESS",
-          "paletteColors": "#03C5ED",
           "showCumulativeLine": "0"
         },
         "chartData": {
@@ -319,7 +314,7 @@
             {
               "reportId": "taf_ct_iam_failed_by_un",
               "columns": [
-                "data.aws.userArn"
+                "data.cloudtrail.userIdentity.userName"
               ],
               "axis": "x"
             },
@@ -356,6 +351,17 @@
             "labelFontSize": "9"
           },
           "id": "failun"
+        },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.cloudtrail.userIdentity.userName": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
         },
         "id": "fail-un",
         "type": "charts/ParetoChart"
@@ -413,6 +419,17 @@
           },
           "id": "mfa"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.cloudtrail.additionalEventData.MFAUsed": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "mfa-used",
         "type": "charts/ParetoChart"
       },
@@ -466,6 +483,17 @@
           },
           "id": "nomfa"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.aws.userArn": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "no-mfa",
         "type": "charts/ParetoChart"
       }
@@ -498,8 +526,14 @@
           ]
         },
         "details": {
+          "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_ct_iam_success_country"
+            "reportId": "taf_ct_iam_success_country",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {
@@ -565,8 +599,14 @@
           ]
         },
         "details": {
+          "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_ct_iam_failed_country"
+            "reportId": "taf_ct_iam_failed_country",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {
@@ -604,7 +644,7 @@
         "id": "fail-map",
         "type": "maps/WorldMap"
       }
-    ],    
+    ],
     [
       {
         "meta": {

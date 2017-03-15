@@ -6,7 +6,7 @@
   "data": {
     "fieldMapping": [
       {
-        "reportId": "taf_ct_event_by_ua",
+        "reportId": "taf_aws_event_by_ua",
         "columns": [
           {
             "data": [
@@ -27,12 +27,12 @@
                 "fieldName": "type"
               }
             ],
-            "attributes": {
-              "chartWidth": "100%",
-              "chartType": "area2d",
+            "chart": {
+              "width": "100%",
+              "type": "area2d",
               "id": "least-connection",
-              "chartHeight": "90",
-              "chartOptions": {
+              "height": "90",
+              "options": {
                 "labelFontSize": "9"
               }
             },
@@ -49,8 +49,10 @@
     "emptyValueMessage": "(Empty)"
   },
   "details": {
-    "queryParams": {
-      "data.aws.userAgent": "data.aws.userAgent:fieldName"
+    "meta":{
+      "queryParams": {
+        "data.aws.userAgent": "data.aws.userAgent:fieldName"
+      }
     }
   }
 }

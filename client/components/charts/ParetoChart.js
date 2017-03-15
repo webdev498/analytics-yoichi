@@ -53,7 +53,7 @@ export function generateDataSource(data, chartOptions, fieldMapping, updateChart
     const xValue = rows[i][x],
       yValue = rows[i][y],
       barObject = {
-        label: xValue || 'Other',
+        label: xValue === false || xValue ? xValue : 'Other',
         value: yValue
       };
 

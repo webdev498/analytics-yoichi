@@ -28,7 +28,6 @@
                 }
               }
             },
-            "name": "MetricsCard",
             "attributes": {
               "countStyle": {
                 "color": "#f37133"
@@ -61,7 +60,6 @@
                 }
               }
             },
-            "name": "MetricsCard",
             "attributes": {
               "countStyle": {
                 "color": "#f37133"

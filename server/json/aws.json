@@ -14,7 +14,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -47,7 +46,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -80,15 +78,14 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#03C5ED"
           },
           "style": {
             "marginRight": "3px",
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #03C5ED"
           }
         },
         "details": {
@@ -141,14 +138,13 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#03C5ED"
           },
           "style": {
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #03C5ED"
           }
         },
         "details": {
@@ -191,35 +187,12 @@
     ],
     [
       {
-        "chartOptions": {},
-        "chartData": {
-          "fieldMapping": [
-            {
-              "reportId": "taf_ct_total",
-              "columns": [
-                "date"
-              ]
-            },
-            {
-              "reportId": "taf_ct_events_by_user",
-              "columns": [
-                "data.aws.userArn"
-              ]
-            },
-            {
-              "reportId": "taf_ct_most_active_user",
-              "columns": [
-                "date"
-              ]
-            }
-          ]
-        },
         "meta": {
           "showHeader": true,
           "api": {
             "path": "/api/analytics/reporting/execute/{reportId}",
             "pathParams": {
-              "reportId": "dash_most_active_cloudtrail_users"
+              "reportId": "taf_ct_events_by_user,taf_ct_most_active_user,taf_ct_total"
             },
             "queryParams": {
               "timeShift": "",
@@ -243,8 +216,6 @@
         "chartOptions": {
           "showValues": "1",
           "showLabels": "1",
-          "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
         "chartData": {
@@ -284,6 +255,17 @@
           },
           "id": "freqreq"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.aws.userArn": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "freq-req",
         "type": "charts/HorizontalBarChart"
       }
@@ -291,10 +273,6 @@
     [
      {
         "chartOptions": {
-          "xAxisname": "SERVICE",
-          "yAxisname": "# EVENTS",
-          "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
         "chartData": {
@@ -340,6 +318,17 @@
             "labelFontSize": "9"
           },
           "id": "lfreqreq"
+        },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.cloudtrail.eventSource": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
         },
         "id": "l-freq-req",
         "type": "charts/ParetoChart"
@@ -410,6 +399,17 @@
     ],
     [
       {
+        "details": {
+          "itemsPerPage": 7,
+          "meta": {
+            "reportId": "taf_ct_event_by_country",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
+          }
+        },
         "chartOptions": {},
         "chartData": {
           "fieldMapping": [
@@ -434,11 +434,6 @@
               "connection": "secure"
             }
           ]
-        },
-        "details": {
-          "meta": {
-            "reportId": "taf_ct_event_by_country"
-          }
         },
         "meta": {
           "subTitle": "NUMBER OF EVENTS BY COUNTRY",

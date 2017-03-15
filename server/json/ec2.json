@@ -14,7 +14,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -47,7 +46,6 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
             "color": "#F69275"
@@ -80,15 +78,14 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#03C5ED"
           },
           "style": {
             "marginRight": "3px",
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #03C5ED"
           }
         },
         "details": {
@@ -141,14 +138,13 @@
             }
           }
         },
-        "name": "MetricsCard",
         "attributes": {
           "countStyle": {
-            "color": "#2bd8d0"
+            "color": "#03C5ED"
           },
           "style": {
             "width": "25%",
-            "borderTop": "6px solid #2bd8d0"
+            "borderTop": "6px solid #03C5ED"
           }
         },
         "details": {
@@ -320,8 +316,6 @@
         "chartOptions": {
           "xAxisname": "REGION",
           "yAxisname": "EVENTS",
-          "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
         "chartData": {
@@ -368,6 +362,17 @@
           },
           "id": "region"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.cloudtrail.awsRegion": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "awsregion",
         "type": "charts/ParetoChart"
       },
@@ -375,8 +380,6 @@
         "chartOptions": {
           "xAxisname": "USER AGENT",
           "yAxisname": "EVENTS",
-          "baseFont": "Open Sans, sans-serif",
-          "paletteColors": "#60E2DC",
           "showCumulativeLine": "0"
         },
         "chartData": {
@@ -422,6 +425,17 @@
           },
           "id": "ua"
         },
+        "details": {
+          "itemsPerPage": 5,
+          "meta": {
+            "queryParams": {
+              "data.aws.userAgent": {
+                "toolTextIndex": 0,
+                "value": ""
+              }
+            }
+          }
+        },
         "id": "useragent",
         "type": "charts/ParetoChart"
       }
@@ -454,8 +468,14 @@
           ]
         },
         "details": {
+          "itemsPerPage": 7,
           "meta": {
-            "reportId": "taf_ct_ec2_event_by_country"
+            "reportId": "taf_ct_ec2_event_by_country",
+            "queryParams": {
+              "source.country": {
+                "value": ""
+              }
+            }
           }
         },
         "meta": {

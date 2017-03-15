@@ -5,6 +5,8 @@ import {whatIsIt} from '../../../commons/utils/utils';
 import Reactable from 'reactable';
 const {Table, Tr, Td} = Reactable;
 
+import './_details.scss';
+
 const styles = {
     wrap: {
       backgroundColor: Colors.white,
@@ -20,8 +22,6 @@ const styles = {
     }
   },
   fetchLimit = 100;
-
-import './_table.scss';
 
 export default class DetailsTable extends React.Component {
   static propTypes = {

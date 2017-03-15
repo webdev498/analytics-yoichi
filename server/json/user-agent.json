@@ -28,7 +28,6 @@
                 }
               }
             },
-            "name": "MetricsCard",
             "attributes": {
               "countStyle": {
                 "color": "#f37133"
@@ -61,7 +60,6 @@
                 }
               }
             },
-            "name": "MetricsCard",
             "attributes": {
               "countStyle": {
                 "color": "#f37133"
@@ -94,7 +92,6 @@
                 }
               }
             },
-            "name": "MetricsCard",
             "attributes": {
               "countStyle": {
                 "color": "#03C5ED"
@@ -155,7 +152,6 @@
                 }
               }
             },
-            "name": "MetricsCard",
             "attributes": {
               "countStyle": {
                 "color": "#03C5ED"
@@ -292,7 +288,6 @@
           },
           "title": "Shortest User Agents"
         },
-        "name": "ReactableTable",
         "attributes": {
           "style": {
             "width": "100%",

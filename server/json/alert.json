@@ -6,6 +6,7 @@
           "showHeader": true,
           "showRefresh": false,
           "showBackButton": true,
+          "showFullScreen": false,
           "api": {
             "path": "/api/alert/{alertId}",
             "pathParams": {
@@ -18,7 +19,6 @@
           },
           "title": "Anomaly Details"
         },
-        "name": "AlertDetail",
         "attributes": {
           "style": {
             "backgroundColor": "#ffffff",
@@ -34,6 +34,7 @@
       {
         "meta": {
           "showHeader": true,
+          "showFullScreen": false,
           "api": {
             "path": "/api/analytics/graph/{alertId}",
             "pathParams": {
@@ -84,7 +85,6 @@
             }
           }
         },
-        "name": "AlertTimeline",
         "attributes": {
           "style": {
             "width": "100%",

@@ -7,7 +7,7 @@ import ParentCardHeader from 'components/ParentCardHeader';
 
 import {fetchApiData, removeComponent, broadcastEvent, fetchNextSetOfData} from 'actions/parentCard';
 import {Colors} from '../../commons/colors';
-import {autoScrollTo} from 'utils/utils';
+import { autoScrollTo, hideBodyScroll, showBodyScroll } from 'utils/utils';
 import {updateRoute} from 'actions/core';
 
 import {DETAILS_BASE_URL} from 'Constants';
@@ -32,7 +32,26 @@ const styles = {
     fontWeight: '600',
     textAlign: 'center'
   },
-  detailsTable: {}
+  fullViewWrap: {
+    backgroundColor: Colors.cloud,
+    position: 'fixed',
+    top: '64px',
+    left: '72px',
+    bottom: 0,
+    right: 0,
+    zIndex: 3,
+    overflow: 'auto'
+  },
+  fullView: {
+    margin: '30px',
+    width: 'auto',
+    height: 'auto'
+  },
+  fullViewChart: {
+    margin: '30px',
+    width: 'auto',
+    height: '95%'
+  }
 };
 
 function getParamsAndReportId(props, dataObj, durationUpdated) {
@@ -100,7 +119,8 @@ export class ParentCard extends React.Component {
     this.state = {
       search: '',
       showDetailsFlag: false,
-      showComponentIconFlag: false
+      showComponentIconFlag: false,
+      isFullView: false
     };
 
     this.detailsApiObj = {};
@@ -119,7 +139,8 @@ export class ParentCard extends React.Component {
     details: PropTypes.object,
     detailsData: PropTypes.object,
     attributes: PropTypes.object,
-    duration: PropTypes.string.isRequired
+    duration: PropTypes.string.isRequired,
+    toggleFullView: PropTypes.func
   }
 
   getData(dataObj) {
@@ -183,10 +204,17 @@ export class ParentCard extends React.Component {
 
   getDetailsTable() {
     const {detailsData, details, fetchNextSetOfData, updateRoute} = this.props;
+    let detailsObj = {...details};
+
+    // during fullView show 20 rows on details view.
+    if (this.state.isFullView) {
+      detailsObj.itemsPerPage = 20;
+    }
+
     return <DetailsTable
       style={styles.detailsTable}
       detailsData={detailsData}
-      details={details}
+      details={detailsObj}
       search={this.state.search}
       apiObj={this.detailsApiObj}
       fetchNextSetOfData={fetchNextSetOfData}
@@ -315,19 +343,38 @@ export class ParentCard extends React.Component {
     }
   }
 
+  toggleFullView = () => {
+    this.setState(
+      { isFullView: !this.state.isFullView },
+      () => {
+        if (this.state.isFullView) {
+          hideBodyScroll();
+        }
+        else {
+          showBodyScroll();
+        }
+      }
+    );
+  }
+
   renderComponent(isDetails) {
     const {props, state} = this,
-      childProps = Object.assign({}, props, {search: state.search}),
       extraProps = {
         updateRoute: this.props.updateRoute,
         showDetailsTable: this.toggleDetailsTable
-      };
+      },
+      childProps = {...props, search: state.search};
 
-    let componentStyle = {};
-    if (isDetails) {
-      componentStyle = {display: 'none'};
+    childProps.attributes = {...props.attributes};
+
+    if (state.isFullView) {
+      childProps.attributes.chartHeight = '75%';
+      if (childProps.chart && childProps.chart.height) {
+        childProps.chart = {...props.chart, height: '75%'};
+      }
     }
 
+    const componentStyle = isDetails ? { display: 'none' } : {};
     if (!props.isDetailsView) {
       return (
         <div style={componentStyle}>
@@ -338,21 +385,19 @@ export class ParentCard extends React.Component {
     return null;
   }
 
-  render() {
-    const {props, state} = this;
-    let cardStyle = {...styles.wrap, ...props.attributes.style};
+  getView() {
+    const { props, state } = this;
+    let cardStyle = { ...styles.wrap, ...props.attributes.style };
 
     if (!props.meta.showHeader) {
-      cardStyle = {...styles.childwrap, ...props.attributes.style};
+      cardStyle = { ...styles.childwrap, ...props.attributes.style };
     }
 
-    let tempCardStyle = cardStyle;
-
-    if (props.meta.hideComponent && (!props.data)) {
-      tempCardStyle = {display: 'none'};
+    if (state.isFullView) {
+      cardStyle = props.type && (props.type.startsWith('charts/') || props.type.startsWith('maps/'))
+                    ? { ...cardStyle, ...styles.fullViewChart }
+                    : { ...cardStyle, ...styles.fullView };
     }
-
-    cardStyle = tempCardStyle;
 
     let isDetails = state.showDetailsFlag;
 
@@ -363,16 +408,15 @@ export class ParentCard extends React.Component {
     const isComponentError = props.isError && (props.meta.showErrorMessage !== false) && !isDetails,
       isDetailsError = props.detailsIsError && isDetails;
 
-    return (
-      <div style={cardStyle} id={props.id}>
-        {
-          props.isFetching || props.detailsIsFetching
+    return <div style={cardStyle} id={props.id}>
+      {
+        props.isFetching || props.detailsIsFetching
           ? <Loader />
           : null
-        }
+      }
 
-        {
-          props.meta.showHeader
+      {
+        props.meta.showHeader
           ? <ParentCardHeader
             {...props}
             showComponentIconFlag={state.showComponentIconFlag}
@@ -381,26 +425,35 @@ export class ParentCard extends React.Component {
             updateSearch={this.updateSearch}
             toggleDetailsTable={this.toggleDetailsTable}
             history={this.props.history}
-            hideDetails={props.hideDetails} />
+            hideDetails={props.hideDetails}
+            toggleFullView={this.toggleFullView}
+            isFullView={state.isFullView} />
           : null
-        }
+      }
 
-        {
-          isComponentError
+      {
+        isComponentError
           ? this.getErrorElement()
           : this.renderComponent(isDetails)
-        }
+      }
 
-        {
-          isDetails
+      {
+        isDetails
           ? isDetailsError
             ? this.getErrorElement()
-            : <div style={{marginLeft: '-30px', marginRight: '-30px'}}>
-              { this.getDetailsTable()}
+            : <div style={{ marginLeft: '-30px', marginRight: '-30px' }}>
+              {this.getDetailsTable()}
             </div>
           : null
-        }
-      </div>
+      }
+    </div>;
+  }
+
+  render() {
+    return (
+      this.state.isFullView
+        ? <div style={styles.fullViewWrap}>{this.getView()}</div>
+        : this.getView()
     );
   }
 }

@@ -60,6 +60,7 @@ const timeline = {
           'meta': {
             'showHeader': true,
             'title': 'Timeline',
+            'showFullScreen': false,
             'api': {
               'path': '/api/alert/traffic',
               'pathParams': {},
@@ -98,6 +99,7 @@ const timeline = {
           'type': 'Timeline',
           'meta': {
             'showHeader': true,
+            'showFullScreen': false,
             'title': 'Timeline',
             'api': {
               'path': '/api/anomaly/{alertId}/timeline',
