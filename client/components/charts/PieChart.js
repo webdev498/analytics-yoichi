@@ -49,7 +49,8 @@ const chartOptions = {
   showValues: 0,
   startingAngle: 90,
   enableRotation: 0,
-  enableSlicing: 0
+  enableSlicing: 0,
+  animation: 0
 };
 
 class PieChart extends React.Component {
