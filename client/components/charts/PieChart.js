@@ -6,7 +6,6 @@ const styles = {
   pieWrap: {
     width: '100%',
     display: 'flex',
-    // flexWrap: 'wrap',
     alignItems: 'center',
     margin: '0px',
     justifyContent: 'center',
