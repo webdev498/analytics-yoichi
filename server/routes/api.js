@@ -12,11 +12,11 @@ import table from '../components/Table.dal';
 import userAgent from '../components/UserAgent.dal';
 import pieChart from '../components/PieChart.dal';
 
-import {timelineApi} from './api/timeline';
-import {tableApi} from './api/table';
-import {heatMapApi} from './api/heatMap';
-import {userAgentApi} from './api/userAgent';
-import {pieChartApi} from './api/pieChart';
+import {timelineApi} from '../json/api/timeline';
+import {tableApi} from '../json/api/table';
+import {heatMapApi} from '../json/api/heatMap';
+import {userAgentApi} from '../json/api/userAgent';
+import {pieChartApi} from '../json/api/pieChart';
 
 import {getUrl} from '../utils/utils';
 
