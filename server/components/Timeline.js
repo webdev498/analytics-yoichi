@@ -546,6 +546,7 @@ function getOther(row, url) {
     id: getValue(row.id),
     Type: getEventTypeString(row.type),
     Date: getValue(row.date),
+    json: row,
     display: {}
   };
 

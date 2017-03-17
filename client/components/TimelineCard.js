@@ -4,6 +4,7 @@ import { Colors, BarColorShade3, BarColorShade5 } from '../../commons/colors';
 import {getColor} from '../../commons/utils/colorUtils';
 import {getCountryName} from '../../commons/utils/countryUtils';
 import MultiSeriesCombiChart from 'components/charts/MultiSeriesCombiChart';
+import ObjectInspector from 'react-object-inspector';
 
 let styles = {
   list: {
@@ -104,30 +105,42 @@ class TimelineCard extends React.Component {
       return;
     }
 
-    return (
-      Object.keys(data.display).map((key, index) => {
-        if (key === 'sourceDest') {
-          return this.getSourceDestination(data);
-        }
-        else if (key === 'summary') {
-          return (
-            <li style={{...styles.listItem}} key='summary'>
-              {
-                data.display.summary.Internal
-                ? this.displayInOutSummary(data.display.summary.Internal, 'Internal')
-                : null
-              }
-              {
-                data.display.summary.External
-                ? this.displayInOutSummary(data.display.summary.External, 'External')
-                : null
-              }
-            </li>
-          );
-        }
-        return this.displayDetails(key, index, data);
-      })
-    );
+    if (Object.keys(data.display).length === 0 && data.display.constructor === Object) {
+      return (
+        <li style={{...styles.listItem}}>
+          <div>Type: {data.Type}</div>
+          <div style={{paddingTop: '10px'}}>
+            <ObjectInspector data={data.json} />
+          </div>
+        </li>
+      );
+    }
+    else {
+      return (
+        Object.keys(data.display).map((key, index) => {
+          if (key === 'sourceDest') {
+            return this.getSourceDestination(data);
+          }
+          else if (key === 'summary') {
+            return (
+              <li style={{...styles.listItem}} key='summary'>
+                {
+                  data.display.summary.Internal
+                  ? this.displayInOutSummary(data.display.summary.Internal, 'Internal')
+                  : null
+                }
+                {
+                  data.display.summary.External
+                  ? this.displayInOutSummary(data.display.summary.External, 'External')
+                  : null
+                }
+              </li>
+            );
+          }
+          return this.displayDetails(key, index, data);
+        })
+      );
+    }
   }
 
   displayDetails(key, index, data) {
