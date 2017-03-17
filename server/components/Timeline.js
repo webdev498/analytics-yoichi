@@ -352,6 +352,10 @@ function getAnomaly(row) {
       Date: getValue(row.date),
       chart: anomaly.context ? getSingleChartData(anomaly.context) : {},
       isIconDisplay: true,
+      icon: {
+        type: 'anomaly',
+        name: getValue(anomaly.impact)
+      },
       display: {
         Impact: {
           displayKey: false,
@@ -417,13 +421,13 @@ function getAuth(row) {
 
 function getInOutSessionSummary(type, row) {
   let info = {},
-    data = row.session[type + '-summary'];
-  type = type === 'in' ? 'Internal' : 'External';
+    data = row.session[type];
+  type = type === 'internal' ? 'Internal' : 'External';
   if (data) {
     info[type] = {
       IncomingBandwidth: getValue(data.incomingBandwidth) !== '' ? formatBytes(data.incomingBandwidth, 2) : '0 Bytes',
       OutgoingBandwidth: getValue(data.outgoingBandwidth) !== '' ? formatBytes(data.outgoingBandwidth, 2) : '0 Bytes',
-      Machines: getValue(data.machines) !== '' ? data.machines : '0',
+      Machines: data.machines ? data.machines.length : '0',
       Connections: getValue(data.connections) !== '' ? data.connections : '0'
     };
   }
@@ -449,7 +453,12 @@ function getSession(row, info, url) {
       }
     });
     info = Object.assign({}, info, {
-      User: getValue(row.user)
+      User: getValue(row.user),
+      isIconDisplay: true,
+      icon: {
+        type: 'machine',
+        name: 'desktop_mac'
+      }
     });
   }
 
@@ -460,8 +469,17 @@ function getSession(row, info, url) {
         value: getValue(row.user)
       }
     });
+    let userInitial = getValue(row.user);
+    if (userInitial !== '') {
+      userInitial = userInitial.charAt(0);
+    }
     info = Object.assign({}, info, {
-      Machine: getValue(row.machine)
+      Machine: getValue(row.machine),
+      isIconDisplay: true,
+      icon: {
+        type: 'user',
+        name: userInitial.toUpperCase()
+      }
     });
   }
 
@@ -476,8 +494,8 @@ function getSession(row, info, url) {
     }
   });
 
-  let inSummary = getInOutSessionSummary('in', row),
-    outSummary = getInOutSessionSummary('out', row);
+  let inSummary = getInOutSessionSummary('internal', row),
+    outSummary = getInOutSessionSummary('external', row);
 
   info.display = Object.assign({}, info.display, {
     summary: Object.assign({}, inSummary, outSummary)
@@ -638,7 +656,7 @@ function getDetails(row, url) {
     case 'dyconn':
       return getDyConn(row);
     case 'resource-access':
-        return getResourceAccess(row);  
+        return getResourceAccess(row);
     default:
       return getOther(row, url);
   }

@@ -29,6 +29,21 @@ let styles = {
     fontSize: '14px',
     overflowWrap: 'break-word',
     marginBottom: '20px'
+  },
+  icon: {
+    fontSize: '24px'
+  },
+  imgWrap: {
+    fontSize: '24px',
+    fontWeight: '100',
+    backgroundColor: Colors.iconBackground,
+    color: Colors.white,
+    height: '45px',
+    width: '45px',
+    lineHeight: '45px',
+    borderRadius: '50%',
+    textAlign: 'center',
+    marginRight: '10px'
   }
 };
 
@@ -116,27 +131,13 @@ class TimelineCard extends React.Component {
   }
 
   displayDetails(key, index, data) {
-    let {props} = this;
-
     let fontWeight = (index === 0) ? 'bold' : '',
       currentDetails = data.display[key];
 
     if (currentDetails.value !== '') {
       return (
-        <li style={{...styles.listItem}} key={`desc${index}`}>
-          <div style={{fontWeight, ...this.displayFlex}}>
-            {data.isIconDisplay ? this.displayIcon(index, currentDetails.value) : null}
-            <div style={{ paddingLeft: data.isIconDisplay ? index === 0 ? '10px' : '40px' : '0px' }}>
-              {currentDetails.displayKey ? key + ':' : ''} {currentDetails.value}
-            </div>
-            {
-              this.isLoadDetails && index === 0
-              ? props.selectedCardId !== '' && props.selectedCardId === props.data.id
-                ? getDetailsArrow(true)
-                : getDetailsArrow(false)
-              : null
-            }
-          </div>
+        <li style={{...styles.listItem, fontWeight}} key={`desc${index}`}>
+          {currentDetails.displayKey ? key + ':' : ''} {currentDetails.value}
         </li>
       );
     }
@@ -146,7 +147,7 @@ class TimelineCard extends React.Component {
   displayInOutSummary(data, type) {
     return (
       <div style={{display: 'flex', alignItems: 'center', width: '100%'}}>
-        <div style={{width: '20%'}}>{type}:</div>
+        <div style={{width: '20%', whiteSpace: 'nowrap'}}>{type}:</div>
         <div><img src='/img/incoming-bandwidth.png' /></div>
         <div style={{width: '20%'}}>{data.IncomingBandwidth}</div>
         <div><img src='/img/outgoing-bandwidth.png' /></div>
@@ -243,26 +244,25 @@ class TimelineCard extends React.Component {
     };
   }
 
-  displayIcon(index, value) {
-    if (index === 0) {
-      value = value.toLowerCase();
-      return (
-        <div>
-          {
-            (value.includes('snoop'))
-            ? <img src='/img/anomaly/snoop.png' />
-            : (value.includes('exfiltration') || value.includes('exfiltrate'))
-              ? <img src='/img/anomaly/exfiltration.png' />
-              : (value.includes('command and control'))
-                ? <img src='/img/anomaly/command-control.png' />
-                : null
-          }
-        </div>
-      );
-    }
-    else {
-      return (<div />);
-    }
+  displayIcon(icon) {
+    let value = icon.name.toLowerCase();
+    return (
+      <div>
+        {
+          (value.includes('snoop'))
+          ? <img src='/img/anomaly/snoop.png' />
+          : (value.includes('exfiltration') || value.includes('exfiltrate'))
+            ? <img src='/img/anomaly/exfiltration.png' />
+            : (value.includes('command and control'))
+              ? <img src='/img/anomaly/command-control.png' />
+              : icon.type === 'machine'
+                ? <i style={{...styles.imgWrap, ...styles.icon}} className='material-icons'>{icon.name}</i>
+                : icon.type === 'user'
+                  ? <div style={styles.imgWrap}>{icon.name}</div>
+                  : null
+        }
+      </div>
+    );
   }
 
   getAnomalyChart() {
@@ -342,7 +342,7 @@ class TimelineCard extends React.Component {
     const alertStyle = this.getAlertBorder(data);
 
     if (props.data.chart) {
-      styles.list = Object.assign({}, styles.list, {paddingLeft: '20px'});
+      styles.list = Object.assign({}, styles.list, {paddingLeft: '15px'});
     }
 
     let selectedCardStyle = { boxShadow: 'none' };
@@ -381,10 +381,17 @@ class TimelineCard extends React.Component {
             ? this.getAnomalyChart(props.data.chart)
             : null
           }
-
+          {data.isIconDisplay ? this.displayIcon(data.icon) : null}
           <ul className='no-list-style' style={styles.list}>
             {this.getDetails(props.data)}
           </ul>
+          {
+            this.isLoadDetails
+            ? props.selectedCardId !== '' && props.selectedCardId === props.data.id
+              ? getDetailsArrow(true)
+              : getDetailsArrow(false)
+            : null
+          }
         </div>
       </Card>
     );
