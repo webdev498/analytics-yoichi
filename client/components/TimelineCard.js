@@ -147,6 +147,13 @@ class TimelineCard extends React.Component {
     let fontWeight = (index === 0) ? 'bold' : '',
       currentDetails = data.display[key];
 
+    if (data.isIconDisplay && index === 1) {
+      styles.listItem = Object.assign({}, styles.listItem, {paddingTop: '5px'});
+    }
+    else {
+      styles.listItem = Object.assign({}, styles.listItem, {paddingTop: '0px'});
+    }
+
     if (currentDetails.value !== '') {
       return (
         <li style={{...styles.listItem, fontWeight}} key={`desc${index}`}>

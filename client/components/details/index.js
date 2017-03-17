@@ -5,6 +5,8 @@ import {whatIsIt} from '../../../commons/utils/utils';
 import Reactable from 'reactable';
 const {Table, Tr, Td} = Reactable;
 
+import ObjectInspector from 'react-object-inspector';
+
 import './_details.scss';
 
 const styles = {
@@ -149,7 +151,7 @@ export default class DetailsTable extends React.Component {
 
   getValue(value) {
     if (whatIsIt(value) === 'Object' || whatIsIt(value) === 'Array') {
-      return JSON.stringify(value);
+      return (<ObjectInspector data={value} />); // JSON.stringify(value);
     }
     return value;
   }
