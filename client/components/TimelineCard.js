@@ -4,7 +4,6 @@ import { Colors, BarColorShade3, BarColorShade5 } from '../../commons/colors';
 import {getColor} from '../../commons/utils/colorUtils';
 import {getCountryName} from '../../commons/utils/countryUtils';
 import MultiSeriesCombiChart from 'components/charts/MultiSeriesCombiChart';
-import ObjectInspector from 'react-object-inspector';
 
 let styles = {
   list: {
@@ -109,9 +108,6 @@ class TimelineCard extends React.Component {
       return (
         <li style={{...styles.listItem}}>
           <div>Type: {data.Type}</div>
-          <div style={{paddingTop: '10px'}}>
-            <ObjectInspector data={data.json} />
-          </div>
         </li>
       );
     }
