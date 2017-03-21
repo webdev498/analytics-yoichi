@@ -613,6 +613,9 @@
           "numberSuffix": "%",
           "chartRightMargin": "0"
         },
+        "chart": {
+          "showAnnotations": false
+        },
         "chartData": {
           "showTrendLines": true,
           "fieldMapping": [
