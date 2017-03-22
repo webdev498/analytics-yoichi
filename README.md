@@ -32,7 +32,7 @@ window.global = {
 Requirements
 ------------
 
-* node `^4.2.0`
+* node `^6.4.0`
 * npm `^3.0.0`
 * bower
 
